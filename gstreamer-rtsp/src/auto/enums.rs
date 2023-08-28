@@ -51,6 +51,7 @@ impl FromGlib<ffi::GstRTSPAuthMethod> for RTSPAuthMethod {
 
 impl StaticType for RTSPAuthMethod {
     #[inline]
+    #[doc(alias = "gst_rtsp_auth_method_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtsp_auth_method_get_type()) }
     }
@@ -62,7 +63,7 @@ impl glib::HasParamSpec for RTSPAuthMethod {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -150,6 +151,7 @@ impl FromGlib<ffi::GstRTSPFamily> for RTSPFamily {
 
 impl StaticType for RTSPFamily {
     #[inline]
+    #[doc(alias = "gst_rtsp_family_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtsp_family_get_type()) }
     }
@@ -161,7 +163,7 @@ impl glib::HasParamSpec for RTSPFamily {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -595,6 +597,7 @@ impl FromGlib<ffi::GstRTSPHeaderField> for RTSPHeaderField {
 
 impl StaticType for RTSPHeaderField {
     #[inline]
+    #[doc(alias = "gst_rtsp_header_field_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtsp_header_field_get_type()) }
     }
@@ -606,7 +609,7 @@ impl glib::HasParamSpec for RTSPHeaderField {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -706,6 +709,7 @@ impl FromGlib<ffi::GstRTSPMsgType> for RTSPMsgType {
 
 impl StaticType for RTSPMsgType {
     #[inline]
+    #[doc(alias = "gst_rtsp_msg_type_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtsp_msg_type_get_type()) }
     }
@@ -717,7 +721,7 @@ impl glib::HasParamSpec for RTSPMsgType {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -813,6 +817,7 @@ impl FromGlib<ffi::GstRTSPRangeUnit> for RTSPRangeUnit {
 
 impl StaticType for RTSPRangeUnit {
     #[inline]
+    #[doc(alias = "gst_rtsp_range_unit_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtsp_range_unit_get_type()) }
     }
@@ -824,7 +829,7 @@ impl glib::HasParamSpec for RTSPRangeUnit {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -970,6 +975,7 @@ impl FromGlib<ffi::GstRTSPResult> for RTSPResult {
 
 impl StaticType for RTSPResult {
     #[inline]
+    #[doc(alias = "gst_rtsp_result_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtsp_result_get_type()) }
     }
@@ -981,7 +987,7 @@ impl glib::HasParamSpec for RTSPResult {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -1081,6 +1087,7 @@ impl FromGlib<ffi::GstRTSPState> for RTSPState {
 
 impl StaticType for RTSPState {
     #[inline]
+    #[doc(alias = "gst_rtsp_state_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtsp_state_get_type()) }
     }
@@ -1092,7 +1099,7 @@ impl glib::HasParamSpec for RTSPState {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -1358,6 +1365,7 @@ impl FromGlib<ffi::GstRTSPStatusCode> for RTSPStatusCode {
 
 impl StaticType for RTSPStatusCode {
     #[inline]
+    #[doc(alias = "gst_rtsp_status_code_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtsp_status_code_get_type()) }
     }
@@ -1369,7 +1377,7 @@ impl glib::HasParamSpec for RTSPStatusCode {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -1465,6 +1473,7 @@ impl FromGlib<ffi::GstRTSPTimeType> for RTSPTimeType {
 
 impl StaticType for RTSPTimeType {
     #[inline]
+    #[doc(alias = "gst_rtsp_time_type_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtsp_time_type_get_type()) }
     }
@@ -1476,7 +1485,7 @@ impl glib::HasParamSpec for RTSPTimeType {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 

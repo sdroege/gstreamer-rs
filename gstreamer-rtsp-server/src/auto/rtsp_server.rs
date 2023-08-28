@@ -11,7 +11,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, mem::transmute, ptr};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "GstRTSPServer")]
@@ -114,7 +114,7 @@ pub trait RTSPServerExt: IsA<RTSPServer> + sealed::Sealed + 'static {
         cancellable: Option<&impl IsA<gio::Cancellable>>,
     ) -> Result<gio::Socket, glib::Error> {
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let ret = ffi::gst_rtsp_server_create_socket(
                 self.as_ref().to_glib_none().0,
                 cancellable.map(|p| p.as_ref()).to_glib_none().0,
@@ -134,7 +134,7 @@ pub trait RTSPServerExt: IsA<RTSPServer> + sealed::Sealed + 'static {
         cancellable: Option<&impl IsA<gio::Cancellable>>,
     ) -> Result<glib::Source, glib::Error> {
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let ret = ffi::gst_rtsp_server_create_source(
                 self.as_ref().to_glib_none().0,
                 cancellable.map(|p| p.as_ref()).to_glib_none().0,
@@ -360,7 +360,7 @@ pub trait RTSPServerExt: IsA<RTSPServer> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"client-connected\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     client_connected_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -389,7 +389,7 @@ pub trait RTSPServerExt: IsA<RTSPServer> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::address\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_address_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -418,7 +418,7 @@ pub trait RTSPServerExt: IsA<RTSPServer> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::backlog\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_backlog_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -447,7 +447,7 @@ pub trait RTSPServerExt: IsA<RTSPServer> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::bound-port\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_bound_port_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -476,7 +476,7 @@ pub trait RTSPServerExt: IsA<RTSPServer> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::content-length-limit\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_content_length_limit_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -505,7 +505,7 @@ pub trait RTSPServerExt: IsA<RTSPServer> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::mount-points\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_mount_points_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -534,7 +534,7 @@ pub trait RTSPServerExt: IsA<RTSPServer> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::service\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_service_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -563,7 +563,7 @@ pub trait RTSPServerExt: IsA<RTSPServer> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::session-pool\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_session_pool_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

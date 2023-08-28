@@ -8,7 +8,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "GstVideoAggregatorPad")]
@@ -95,7 +95,7 @@ pub trait VideoAggregatorPadExt: IsA<VideoAggregatorPad> + sealed::Sealed + 'sta
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::max-last-buffer-repeat\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_max_last_buffer_repeat_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -124,7 +124,7 @@ pub trait VideoAggregatorPadExt: IsA<VideoAggregatorPad> + sealed::Sealed + 'sta
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::repeat-after-eos\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_repeat_after_eos_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -150,7 +150,7 @@ pub trait VideoAggregatorPadExt: IsA<VideoAggregatorPad> + sealed::Sealed + 'sta
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::zorder\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_zorder_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

@@ -191,10 +191,9 @@ pub use self::flags::StreamType;
 mod alias;
 pub use self::alias::ClockTimeDiff;
 
-pub mod functions;
+pub(crate) mod functions;
 
-#[doc(hidden)]
-pub mod traits {
+pub(crate) mod traits {
     pub use super::allocator::AllocatorExt;
     pub use super::bin::GstBinExt;
     pub use super::buffer_pool::BufferPoolExt;

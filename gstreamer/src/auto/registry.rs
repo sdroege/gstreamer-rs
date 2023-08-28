@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "GstRegistry")]
@@ -166,7 +166,7 @@ impl Registry {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"feature-added\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     feature_added_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -194,7 +194,7 @@ impl Registry {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"plugin-added\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     plugin_added_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

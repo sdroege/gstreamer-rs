@@ -15,10 +15,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-#[cfg(feature = "v1_18")]
-#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-use std::ptr;
-use std::{boxed::Box as Box_, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "GESClip")]
@@ -59,7 +56,7 @@ pub trait ClipExt: IsA<Clip> + sealed::Sealed + 'static {
         track: &impl IsA<Track>,
     ) -> Result<TrackElement, glib::Error> {
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let ret = ffi::ges_clip_add_child_to_track(
                 self.as_ref().to_glib_none().0,
                 child.as_ref().to_glib_none().0,
@@ -79,7 +76,7 @@ pub trait ClipExt: IsA<Clip> + sealed::Sealed + 'static {
     #[doc(alias = "ges_clip_add_top_effect")]
     fn add_top_effect(&self, effect: &impl IsA<BaseEffect>, index: i32) -> Result<(), glib::Error> {
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let is_ok = ffi::ges_clip_add_top_effect(
                 self.as_ref().to_glib_none().0,
                 effect.as_ref().to_glib_none().0,
@@ -150,7 +147,7 @@ pub trait ClipExt: IsA<Clip> + sealed::Sealed + 'static {
         timeline_time: impl Into<Option<gst::ClockTime>>,
     ) -> Result<Option<gst::ClockTime>, glib::Error> {
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let ret = ffi::ges_clip_get_internal_time_from_timeline_time(
                 self.as_ref().to_glib_none().0,
                 child.as_ref().to_glib_none().0,
@@ -191,7 +188,7 @@ pub trait ClipExt: IsA<Clip> + sealed::Sealed + 'static {
         internal_time: impl Into<Option<gst::ClockTime>>,
     ) -> Result<Option<gst::ClockTime>, glib::Error> {
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let ret = ffi::ges_clip_get_timeline_time_from_internal_time(
                 self.as_ref().to_glib_none().0,
                 child.as_ref().to_glib_none().0,
@@ -215,7 +212,7 @@ pub trait ClipExt: IsA<Clip> + sealed::Sealed + 'static {
         frame_number: FrameNumber,
     ) -> Result<Option<gst::ClockTime>, glib::Error> {
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let ret = ffi::ges_clip_get_timeline_time_from_source_frame(
                 self.as_ref().to_glib_none().0,
                 frame_number,
@@ -279,7 +276,7 @@ pub trait ClipExt: IsA<Clip> + sealed::Sealed + 'static {
     #[doc(alias = "ges_clip_move_to_layer_full")]
     fn move_to_layer_full(&self, layer: &impl IsA<Layer>) -> Result<(), glib::Error> {
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let is_ok = ffi::ges_clip_move_to_layer_full(
                 self.as_ref().to_glib_none().0,
                 layer.as_ref().to_glib_none().0,
@@ -299,7 +296,7 @@ pub trait ClipExt: IsA<Clip> + sealed::Sealed + 'static {
     #[doc(alias = "ges_clip_remove_top_effect")]
     fn remove_top_effect(&self, effect: &impl IsA<BaseEffect>) -> Result<(), glib::Error> {
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let is_ok = ffi::ges_clip_remove_top_effect(
                 self.as_ref().to_glib_none().0,
                 effect.as_ref().to_glib_none().0,
@@ -351,7 +348,7 @@ pub trait ClipExt: IsA<Clip> + sealed::Sealed + 'static {
         newindex: u32,
     ) -> Result<(), glib::Error> {
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let is_ok = ffi::ges_clip_set_top_effect_index_full(
                 self.as_ref().to_glib_none().0,
                 effect.as_ref().to_glib_none().0,
@@ -401,7 +398,7 @@ pub trait ClipExt: IsA<Clip> + sealed::Sealed + 'static {
     #[doc(alias = "ges_clip_split_full")]
     fn split_full(&self, position: u64) -> Result<Option<Clip>, glib::Error> {
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let ret =
                 ffi::ges_clip_split_full(self.as_ref().to_glib_none().0, position, &mut error);
             if error.is_null() {
@@ -429,7 +426,7 @@ pub trait ClipExt: IsA<Clip> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::duration-limit\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_duration_limit_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -452,7 +449,7 @@ pub trait ClipExt: IsA<Clip> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::layer\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_layer_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -478,7 +475,7 @@ pub trait ClipExt: IsA<Clip> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::supported-formats\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_supported_formats_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

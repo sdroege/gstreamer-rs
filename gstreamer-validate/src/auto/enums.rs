@@ -4,7 +4,6 @@
 // DO NOT EDIT
 
 use glib::{prelude::*, translate::*, GStr};
-use std::fmt;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -50,9 +49,9 @@ impl ReportLevel {
     }
 }
 
-impl fmt::Display for ReportLevel {
+impl std::fmt::Display for ReportLevel {
     #[inline]
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         f.write_str(&self.name())
     }
 }
@@ -97,6 +96,7 @@ impl FromGlib<ffi::GstValidateReportLevel> for ReportLevel {
 
 impl StaticType for ReportLevel {
     #[inline]
+    #[doc(alias = "gst_validate_report_level_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_validate_report_level_get_type()) }
     }
@@ -108,7 +108,7 @@ impl glib::HasParamSpec for ReportLevel {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -216,6 +216,7 @@ impl FromGlib<ffi::GstValidateReportingDetails> for ReportingDetails {
 
 impl StaticType for ReportingDetails {
     #[inline]
+    #[doc(alias = "gst_validate_reporting_details_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_validate_reporting_details_get_type()) }
     }
@@ -227,7 +228,7 @@ impl glib::HasParamSpec for ReportingDetails {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 

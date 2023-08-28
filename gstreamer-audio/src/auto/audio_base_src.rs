@@ -8,7 +8,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "GstAudioBaseSrc")]
@@ -119,7 +119,7 @@ pub trait AudioBaseSrcExt: IsA<AudioBaseSrc> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::actual-buffer-time\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_actual_buffer_time_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -148,7 +148,7 @@ pub trait AudioBaseSrcExt: IsA<AudioBaseSrc> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::actual-latency-time\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_actual_latency_time_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -177,7 +177,7 @@ pub trait AudioBaseSrcExt: IsA<AudioBaseSrc> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::buffer-time\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_buffer_time_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -206,7 +206,7 @@ pub trait AudioBaseSrcExt: IsA<AudioBaseSrc> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::latency-time\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_latency_time_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -235,7 +235,7 @@ pub trait AudioBaseSrcExt: IsA<AudioBaseSrc> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::provide-clock\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_provide_clock_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -264,7 +264,7 @@ pub trait AudioBaseSrcExt: IsA<AudioBaseSrc> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::slave-method\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_slave_method_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

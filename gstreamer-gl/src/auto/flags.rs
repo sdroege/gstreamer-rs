@@ -4,7 +4,6 @@
 // DO NOT EDIT
 
 use glib::{bitflags::bitflags, prelude::*, translate::*};
-use std::fmt;
 
 bitflags! {
     #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
@@ -36,9 +35,9 @@ impl GLAPI {
     }
 }
 
-impl fmt::Display for GLAPI {
+impl std::fmt::Display for GLAPI {
     #[inline]
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         f.write_str(&self.to_str())
     }
 }
@@ -64,6 +63,7 @@ impl FromGlib<ffi::GstGLAPI> for GLAPI {
 
 impl StaticType for GLAPI {
     #[inline]
+    #[doc(alias = "gst_gl_api_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_gl_api_get_type()) }
     }
@@ -75,7 +75,7 @@ impl glib::HasParamSpec for GLAPI {
     type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name| Self::ParamSpec::builder(name)
+        Self::ParamSpec::builder
     }
 }
 
@@ -172,6 +172,7 @@ impl FromGlib<ffi::GstGLConfigSurfaceType> for GLConfigSurfaceType {
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl StaticType for GLConfigSurfaceType {
     #[inline]
+    #[doc(alias = "gst_gl_config_surface_type_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_gl_config_surface_type_get_type()) }
     }
@@ -185,7 +186,7 @@ impl glib::HasParamSpec for GLConfigSurfaceType {
     type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name| Self::ParamSpec::builder(name)
+        Self::ParamSpec::builder
     }
 }
 
@@ -295,6 +296,7 @@ impl FromGlib<ffi::GstGLDisplayType> for GLDisplayType {
 
 impl StaticType for GLDisplayType {
     #[inline]
+    #[doc(alias = "gst_gl_display_type_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_gl_display_type_get_type()) }
     }
@@ -306,7 +308,7 @@ impl glib::HasParamSpec for GLDisplayType {
     type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name| Self::ParamSpec::builder(name)
+        Self::ParamSpec::builder
     }
 }
 
@@ -384,9 +386,9 @@ impl GLPlatform {
     }
 }
 
-impl fmt::Display for GLPlatform {
+impl std::fmt::Display for GLPlatform {
     #[inline]
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         f.write_str(&self.to_str())
     }
 }
@@ -412,6 +414,7 @@ impl FromGlib<ffi::GstGLPlatform> for GLPlatform {
 
 impl StaticType for GLPlatform {
     #[inline]
+    #[doc(alias = "gst_gl_platform_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_gl_platform_get_type()) }
     }
@@ -423,7 +426,7 @@ impl glib::HasParamSpec for GLPlatform {
     type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name| Self::ParamSpec::builder(name)
+        Self::ParamSpec::builder
     }
 }
 
@@ -514,6 +517,7 @@ impl FromGlib<ffi::GstGLSLProfile> for GLSLProfile {
 
 impl StaticType for GLSLProfile {
     #[inline]
+    #[doc(alias = "gst_glsl_profile_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_glsl_profile_get_type()) }
     }
@@ -525,7 +529,7 @@ impl glib::HasParamSpec for GLSLProfile {
     type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name| Self::ParamSpec::builder(name)
+        Self::ParamSpec::builder
     }
 }
 

@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, mem, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "GstAudioEncoder")]
@@ -120,8 +120,8 @@ pub trait AudioEncoderExt: IsA<AudioEncoder> + sealed::Sealed + 'static {
     #[doc(alias = "get_latency")]
     fn latency(&self) -> (gst::ClockTime, Option<gst::ClockTime>) {
         unsafe {
-            let mut min = mem::MaybeUninit::uninit();
-            let mut max = mem::MaybeUninit::uninit();
+            let mut min = std::mem::MaybeUninit::uninit();
+            let mut max = std::mem::MaybeUninit::uninit();
             ffi::gst_audio_encoder_get_latency(
                 self.as_ref().to_glib_none().0,
                 min.as_mut_ptr(),
@@ -323,7 +323,7 @@ pub trait AudioEncoderExt: IsA<AudioEncoder> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::hard-resync\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_hard_resync_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -352,7 +352,7 @@ pub trait AudioEncoderExt: IsA<AudioEncoder> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::mark-granule\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_mark_granule_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -381,7 +381,7 @@ pub trait AudioEncoderExt: IsA<AudioEncoder> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::perfect-timestamp\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_perfect_timestamp_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -410,7 +410,7 @@ pub trait AudioEncoderExt: IsA<AudioEncoder> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::tolerance\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_tolerance_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

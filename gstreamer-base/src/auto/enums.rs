@@ -61,6 +61,7 @@ impl FromGlib<ffi::GstAggregatorStartTimeSelection> for AggregatorStartTimeSelec
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 impl StaticType for AggregatorStartTimeSelection {
     #[inline]
+    #[doc(alias = "gst_aggregator_start_time_selection_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_aggregator_start_time_selection_get_type()) }
     }
@@ -74,7 +75,7 @@ impl glib::HasParamSpec for AggregatorStartTimeSelection {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 

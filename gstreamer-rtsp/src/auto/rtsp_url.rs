@@ -5,7 +5,6 @@
 
 use crate::RTSPResult;
 use glib::translate::*;
-use std::ptr;
 
 glib::wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -56,7 +55,7 @@ impl RTSPUrl {
     pub fn parse(urlstr: &str) -> (RTSPResult, Option<RTSPUrl>) {
         assert_initialized_main_thread!();
         unsafe {
-            let mut url = ptr::null_mut();
+            let mut url = std::ptr::null_mut();
             let ret = from_glib(ffi::gst_rtsp_url_parse(urlstr.to_glib_none().0, &mut url));
             (ret, from_glib_full(url))
         }

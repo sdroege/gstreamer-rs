@@ -4,7 +4,6 @@
 // DO NOT EDIT
 
 use glib::{prelude::*, translate::*};
-use std::fmt;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -56,6 +55,7 @@ impl FromGlib<ffi::GstAudioDitherMethod> for AudioDitherMethod {
 
 impl StaticType for AudioDitherMethod {
     #[inline]
+    #[doc(alias = "gst_audio_dither_method_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_audio_dither_method_get_type()) }
     }
@@ -67,7 +67,7 @@ impl glib::HasParamSpec for AudioDitherMethod {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -189,9 +189,9 @@ impl AudioFormat {
     }
 }
 
-impl fmt::Display for AudioFormat {
+impl std::fmt::Display for AudioFormat {
     #[inline]
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         f.write_str(&self.to_str())
     }
 }
@@ -284,6 +284,7 @@ impl FromGlib<ffi::GstAudioFormat> for AudioFormat {
 
 impl StaticType for AudioFormat {
     #[inline]
+    #[doc(alias = "gst_audio_format_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_audio_format_get_type()) }
     }
@@ -295,7 +296,7 @@ impl glib::HasParamSpec for AudioFormat {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -379,6 +380,7 @@ impl FromGlib<ffi::GstAudioLayout> for AudioLayout {
 
 impl StaticType for AudioLayout {
     #[inline]
+    #[doc(alias = "gst_audio_layout_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_audio_layout_get_type()) }
     }
@@ -390,7 +392,7 @@ impl glib::HasParamSpec for AudioLayout {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -486,6 +488,7 @@ impl FromGlib<ffi::GstAudioNoiseShapingMethod> for AudioNoiseShapingMethod {
 
 impl StaticType for AudioNoiseShapingMethod {
     #[inline]
+    #[doc(alias = "gst_audio_noise_shaping_method_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_audio_noise_shaping_method_get_type()) }
     }
@@ -497,7 +500,7 @@ impl glib::HasParamSpec for AudioNoiseShapingMethod {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -593,6 +596,7 @@ impl FromGlib<ffi::GstAudioResamplerMethod> for AudioResamplerMethod {
 
 impl StaticType for AudioResamplerMethod {
     #[inline]
+    #[doc(alias = "gst_audio_resampler_method_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_audio_resampler_method_get_type()) }
     }
@@ -604,7 +608,7 @@ impl glib::HasParamSpec for AudioResamplerMethod {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -746,6 +750,7 @@ impl FromGlib<ffi::GstAudioRingBufferFormatType> for AudioRingBufferFormatType {
 
 impl StaticType for AudioRingBufferFormatType {
     #[inline]
+    #[doc(alias = "gst_audio_ring_buffer_format_type_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_audio_ring_buffer_format_type_get_type()) }
     }
@@ -757,7 +762,7 @@ impl glib::HasParamSpec for AudioRingBufferFormatType {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 

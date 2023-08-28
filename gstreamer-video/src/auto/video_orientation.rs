@@ -4,7 +4,6 @@
 // DO NOT EDIT
 
 use glib::{prelude::*, translate::*};
-use std::mem;
 
 glib::wrapper! {
     #[doc(alias = "GstVideoOrientation")]
@@ -32,7 +31,7 @@ pub trait VideoOrientationExt: IsA<VideoOrientation> + sealed::Sealed + 'static 
     #[doc(alias = "get_hcenter")]
     fn hcenter(&self) -> Option<i32> {
         unsafe {
-            let mut center = mem::MaybeUninit::uninit();
+            let mut center = std::mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_video_orientation_get_hcenter(
                 self.as_ref().to_glib_none().0,
                 center.as_mut_ptr(),
@@ -49,7 +48,7 @@ pub trait VideoOrientationExt: IsA<VideoOrientation> + sealed::Sealed + 'static 
     #[doc(alias = "get_hflip")]
     fn hflip(&self) -> Option<bool> {
         unsafe {
-            let mut flip = mem::MaybeUninit::uninit();
+            let mut flip = std::mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_video_orientation_get_hflip(
                 self.as_ref().to_glib_none().0,
                 flip.as_mut_ptr(),
@@ -66,7 +65,7 @@ pub trait VideoOrientationExt: IsA<VideoOrientation> + sealed::Sealed + 'static 
     #[doc(alias = "get_vcenter")]
     fn vcenter(&self) -> Option<i32> {
         unsafe {
-            let mut center = mem::MaybeUninit::uninit();
+            let mut center = std::mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_video_orientation_get_vcenter(
                 self.as_ref().to_glib_none().0,
                 center.as_mut_ptr(),
@@ -83,7 +82,7 @@ pub trait VideoOrientationExt: IsA<VideoOrientation> + sealed::Sealed + 'static 
     #[doc(alias = "get_vflip")]
     fn vflip(&self) -> Option<bool> {
         unsafe {
-            let mut flip = mem::MaybeUninit::uninit();
+            let mut flip = std::mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_video_orientation_get_vflip(
                 self.as_ref().to_glib_none().0,
                 flip.as_mut_ptr(),

@@ -5,7 +5,6 @@
 
 use crate::{GLContext, GLSLProfile};
 use glib::{prelude::*, translate::*};
-use std::mem;
 
 #[cfg(feature = "v1_20")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
@@ -72,6 +71,7 @@ impl FromGlib<ffi::GstGLConfigCaveat> for GLConfigCaveat {
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl StaticType for GLConfigCaveat {
     #[inline]
+    #[doc(alias = "gst_gl_config_caveat_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_gl_config_caveat_get_type()) }
     }
@@ -85,7 +85,7 @@ impl glib::HasParamSpec for GLConfigCaveat {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -217,6 +217,7 @@ impl glib::error::ErrorDomain for GLContextError {
 
 impl StaticType for GLContextError {
     #[inline]
+    #[doc(alias = "gst_gl_context_error_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_gl_context_error_get_type()) }
     }
@@ -228,7 +229,7 @@ impl glib::HasParamSpec for GLContextError {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -360,8 +361,8 @@ impl GLFormat {
     pub fn type_from_sized_gl_format(self) -> (GLFormat, u32) {
         assert_initialized_main_thread!();
         unsafe {
-            let mut unsized_format = mem::MaybeUninit::uninit();
-            let mut gl_type = mem::MaybeUninit::uninit();
+            let mut unsized_format = std::mem::MaybeUninit::uninit();
+            let mut gl_type = std::mem::MaybeUninit::uninit();
             ffi::gst_gl_format_type_from_sized_gl_format(
                 self.into_glib(),
                 unsized_format.as_mut_ptr(),
@@ -443,6 +444,7 @@ impl FromGlib<ffi::GstGLFormat> for GLFormat {
 
 impl StaticType for GLFormat {
     #[inline]
+    #[doc(alias = "gst_gl_format_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_gl_format_get_type()) }
     }
@@ -454,7 +456,7 @@ impl glib::HasParamSpec for GLFormat {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -542,6 +544,7 @@ impl FromGlib<ffi::GstGLQueryType> for GLQueryType {
 
 impl StaticType for GLQueryType {
     #[inline]
+    #[doc(alias = "gst_gl_query_type_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_gl_query_type_get_type()) }
     }
@@ -553,7 +556,7 @@ impl glib::HasParamSpec for GLQueryType {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -664,6 +667,7 @@ impl glib::error::ErrorDomain for GLSLError {
 
 impl StaticType for GLSLError {
     #[inline]
+    #[doc(alias = "gst_glsl_error_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_glsl_error_get_type()) }
     }
@@ -675,7 +679,7 @@ impl glib::HasParamSpec for GLSLError {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -770,8 +774,8 @@ impl GLSLVersion {
     pub fn profile_from_string(string: &str) -> Option<(GLSLVersion, GLSLProfile)> {
         assert_initialized_main_thread!();
         unsafe {
-            let mut version_ret = mem::MaybeUninit::uninit();
-            let mut profile_ret = mem::MaybeUninit::uninit();
+            let mut version_ret = std::mem::MaybeUninit::uninit();
+            let mut profile_ret = std::mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_glsl_version_profile_from_string(
                 string.to_glib_none().0,
                 version_ret.as_mut_ptr(),
@@ -865,6 +869,7 @@ impl FromGlib<ffi::GstGLSLVersion> for GLSLVersion {
 
 impl StaticType for GLSLVersion {
     #[inline]
+    #[doc(alias = "gst_glsl_version_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_glsl_version_get_type()) }
     }
@@ -876,7 +881,7 @@ impl glib::HasParamSpec for GLSLVersion {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -964,6 +969,7 @@ impl FromGlib<ffi::GstGLStereoDownmix> for GLStereoDownmix {
 
 impl StaticType for GLStereoDownmix {
     #[inline]
+    #[doc(alias = "gst_gl_stereo_downmix_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_gl_stereo_downmix_get_type()) }
     }
@@ -975,7 +981,7 @@ impl glib::HasParamSpec for GLStereoDownmix {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -1104,6 +1110,7 @@ impl FromGlib<ffi::GstGLTextureTarget> for GLTextureTarget {
 
 impl StaticType for GLTextureTarget {
     #[inline]
+    #[doc(alias = "gst_gl_texture_target_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_gl_texture_target_get_type()) }
     }
@@ -1115,7 +1122,7 @@ impl glib::HasParamSpec for GLTextureTarget {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -1211,6 +1218,7 @@ impl FromGlib<ffi::GstGLUploadReturn> for GLUploadReturn {
 
 impl StaticType for GLUploadReturn {
     #[inline]
+    #[doc(alias = "gst_gl_upload_return_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_gl_upload_return_get_type()) }
     }
@@ -1222,7 +1230,7 @@ impl glib::HasParamSpec for GLUploadReturn {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -1334,6 +1342,7 @@ impl glib::error::ErrorDomain for GLWindowError {
 
 impl StaticType for GLWindowError {
     #[inline]
+    #[doc(alias = "gst_gl_window_error_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_gl_window_error_get_type()) }
     }
@@ -1345,7 +1354,7 @@ impl glib::HasParamSpec for GLWindowError {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 

@@ -10,7 +10,7 @@ use glib::signal::{connect_raw, SignalHandlerId};
 use glib::{prelude::*, translate::*};
 #[cfg(feature = "v1_20")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-use std::{boxed::Box as Box_, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "GstEncodingProfile")]
@@ -223,7 +223,7 @@ pub trait EncodingProfileExt: IsA<EncodingProfile> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::element-properties\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_element_properties_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

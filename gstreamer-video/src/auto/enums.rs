@@ -4,7 +4,6 @@
 // DO NOT EDIT
 
 use glib::{prelude::*, translate::*, GStr};
-use std::fmt;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -48,6 +47,7 @@ impl FromGlib<ffi::GstColorBalanceType> for ColorBalanceType {
 
 impl StaticType for ColorBalanceType {
     #[inline]
+    #[doc(alias = "gst_color_balance_type_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_color_balance_type_get_type()) }
     }
@@ -59,7 +59,7 @@ impl glib::HasParamSpec for ColorBalanceType {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -194,6 +194,7 @@ impl FromGlib<ffi::GstNavigationCommand> for NavigationCommand {
 
 impl StaticType for NavigationCommand {
     #[inline]
+    #[doc(alias = "gst_navigation_command_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_navigation_command_get_type()) }
     }
@@ -205,7 +206,7 @@ impl glib::HasParamSpec for NavigationCommand {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -355,6 +356,7 @@ impl FromGlib<ffi::GstNavigationEventType> for NavigationEventType {
 
 impl StaticType for NavigationEventType {
     #[inline]
+    #[doc(alias = "gst_navigation_event_type_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_navigation_event_type_get_type()) }
     }
@@ -366,7 +368,7 @@ impl glib::HasParamSpec for NavigationEventType {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -462,6 +464,7 @@ impl FromGlib<ffi::GstNavigationMessageType> for NavigationMessageType {
 
 impl StaticType for NavigationMessageType {
     #[inline]
+    #[doc(alias = "gst_navigation_message_type_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_navigation_message_type_get_type()) }
     }
@@ -473,7 +476,7 @@ impl glib::HasParamSpec for NavigationMessageType {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -561,6 +564,7 @@ impl FromGlib<ffi::GstNavigationQueryType> for NavigationQueryType {
 
 impl StaticType for NavigationQueryType {
     #[inline]
+    #[doc(alias = "gst_navigation_query_type_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_navigation_query_type_get_type()) }
     }
@@ -572,7 +576,7 @@ impl glib::HasParamSpec for NavigationQueryType {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -668,6 +672,7 @@ impl FromGlib<ffi::GstVideoAFDSpec> for VideoAFDSpec {
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 impl StaticType for VideoAFDSpec {
     #[inline]
+    #[doc(alias = "gst_video_afd_spec_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_afd_spec_get_type()) }
     }
@@ -681,7 +686,7 @@ impl glib::HasParamSpec for VideoAFDSpec {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -817,6 +822,7 @@ impl FromGlib<ffi::GstVideoAFDValue> for VideoAFDValue {
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 impl StaticType for VideoAFDValue {
     #[inline]
+    #[doc(alias = "gst_video_afd_value_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_afd_value_get_type()) }
     }
@@ -830,7 +836,7 @@ impl glib::HasParamSpec for VideoAFDValue {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -926,6 +932,7 @@ impl FromGlib<ffi::GstVideoAlphaMode> for VideoAlphaMode {
 
 impl StaticType for VideoAlphaMode {
     #[inline]
+    #[doc(alias = "gst_video_alpha_mode_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_alpha_mode_get_type()) }
     }
@@ -937,7 +944,7 @@ impl glib::HasParamSpec for VideoAlphaMode {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -1051,6 +1058,7 @@ impl FromGlib<ffi::GstVideoCaptionType> for VideoCaptionType {
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl StaticType for VideoCaptionType {
     #[inline]
+    #[doc(alias = "gst_video_caption_type_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_caption_type_get_type()) }
     }
@@ -1064,7 +1072,7 @@ impl glib::HasParamSpec for VideoCaptionType {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -1164,6 +1172,7 @@ impl FromGlib<ffi::GstVideoChromaMode> for VideoChromaMode {
 
 impl StaticType for VideoChromaMode {
     #[inline]
+    #[doc(alias = "gst_video_chroma_mode_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_chroma_mode_get_type()) }
     }
@@ -1175,7 +1184,7 @@ impl glib::HasParamSpec for VideoChromaMode {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -1297,6 +1306,7 @@ impl FromGlib<ffi::GstVideoColorMatrix> for VideoColorMatrix {
 
 impl StaticType for VideoColorMatrix {
     #[inline]
+    #[doc(alias = "gst_video_color_matrix_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_color_matrix_get_type()) }
     }
@@ -1308,7 +1318,7 @@ impl glib::HasParamSpec for VideoColorMatrix {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -1487,6 +1497,7 @@ impl FromGlib<ffi::GstVideoColorPrimaries> for VideoColorPrimaries {
 
 impl StaticType for VideoColorPrimaries {
     #[inline]
+    #[doc(alias = "gst_video_color_primaries_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_color_primaries_get_type()) }
     }
@@ -1498,7 +1509,7 @@ impl glib::HasParamSpec for VideoColorPrimaries {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -1594,6 +1605,7 @@ impl FromGlib<ffi::GstVideoDitherMethod> for VideoDitherMethod {
 
 impl StaticType for VideoDitherMethod {
     #[inline]
+    #[doc(alias = "gst_video_dither_method_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_dither_method_get_type()) }
     }
@@ -1605,7 +1617,7 @@ impl glib::HasParamSpec for VideoDitherMethod {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -1673,9 +1685,9 @@ impl VideoFieldOrder {
     }
 }
 
-impl fmt::Display for VideoFieldOrder {
+impl std::fmt::Display for VideoFieldOrder {
     #[inline]
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         f.write_str(&self.to_str())
     }
 }
@@ -1712,6 +1724,7 @@ impl FromGlib<ffi::GstVideoFieldOrder> for VideoFieldOrder {
 
 impl StaticType for VideoFieldOrder {
     #[inline]
+    #[doc(alias = "gst_video_field_order_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_field_order_get_type()) }
     }
@@ -1723,7 +1736,7 @@ impl glib::HasParamSpec for VideoFieldOrder {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -2161,9 +2174,9 @@ impl VideoFormat {
     }
 }
 
-impl fmt::Display for VideoFormat {
+impl std::fmt::Display for VideoFormat {
     #[inline]
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         f.write_str(&self.to_str())
     }
 }
@@ -2554,6 +2567,7 @@ impl FromGlib<ffi::GstVideoFormat> for VideoFormat {
 
 impl StaticType for VideoFormat {
     #[inline]
+    #[doc(alias = "gst_video_format_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_format_get_type()) }
     }
@@ -2565,7 +2579,7 @@ impl glib::HasParamSpec for VideoFormat {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -2649,6 +2663,7 @@ impl FromGlib<ffi::GstVideoGammaMode> for VideoGammaMode {
 
 impl StaticType for VideoGammaMode {
     #[inline]
+    #[doc(alias = "gst_video_gamma_mode_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_gamma_mode_get_type()) }
     }
@@ -2660,7 +2675,7 @@ impl glib::HasParamSpec for VideoGammaMode {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -2744,9 +2759,9 @@ impl VideoInterlaceMode {
     }
 }
 
-impl fmt::Display for VideoInterlaceMode {
+impl std::fmt::Display for VideoInterlaceMode {
     #[inline]
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         f.write_str(&self.to_str())
     }
 }
@@ -2789,6 +2804,7 @@ impl FromGlib<ffi::GstVideoInterlaceMode> for VideoInterlaceMode {
 
 impl StaticType for VideoInterlaceMode {
     #[inline]
+    #[doc(alias = "gst_video_interlace_mode_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_interlace_mode_get_type()) }
     }
@@ -2800,7 +2816,7 @@ impl glib::HasParamSpec for VideoInterlaceMode {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -2892,6 +2908,7 @@ impl FromGlib<ffi::GstVideoMatrixMode> for VideoMatrixMode {
 
 impl StaticType for VideoMatrixMode {
     #[inline]
+    #[doc(alias = "gst_video_matrix_mode_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_matrix_mode_get_type()) }
     }
@@ -2903,7 +2920,7 @@ impl glib::HasParamSpec for VideoMatrixMode {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -3023,6 +3040,7 @@ impl FromGlib<ffi::GstVideoMultiviewFramePacking> for VideoMultiviewFramePacking
 
 impl StaticType for VideoMultiviewFramePacking {
     #[inline]
+    #[doc(alias = "gst_video_multiview_frame_packing_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_multiview_frame_packing_get_type()) }
     }
@@ -3034,7 +3052,7 @@ impl glib::HasParamSpec for VideoMultiviewFramePacking {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -3182,6 +3200,7 @@ impl FromGlib<ffi::GstVideoMultiviewMode> for VideoMultiviewMode {
 
 impl StaticType for VideoMultiviewMode {
     #[inline]
+    #[doc(alias = "gst_video_multiview_mode_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_multiview_mode_get_type()) }
     }
@@ -3193,7 +3212,7 @@ impl glib::HasParamSpec for VideoMultiviewMode {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -3309,6 +3328,7 @@ impl FromGlib<ffi::GstVideoOrientationMethod> for VideoOrientationMethod {
 
 impl StaticType for VideoOrientationMethod {
     #[inline]
+    #[doc(alias = "gst_video_orientation_method_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_orientation_method_get_type()) }
     }
@@ -3320,7 +3340,7 @@ impl glib::HasParamSpec for VideoOrientationMethod {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -3408,6 +3428,7 @@ impl FromGlib<ffi::GstVideoPrimariesMode> for VideoPrimariesMode {
 
 impl StaticType for VideoPrimariesMode {
     #[inline]
+    #[doc(alias = "gst_video_primaries_mode_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_primaries_mode_get_type()) }
     }
@@ -3419,7 +3440,7 @@ impl glib::HasParamSpec for VideoPrimariesMode {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -3515,6 +3536,7 @@ impl FromGlib<ffi::GstVideoResamplerMethod> for VideoResamplerMethod {
 
 impl StaticType for VideoResamplerMethod {
     #[inline]
+    #[doc(alias = "gst_video_resampler_method_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_resampler_method_get_type()) }
     }
@@ -3526,7 +3548,7 @@ impl glib::HasParamSpec for VideoResamplerMethod {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -3618,6 +3640,7 @@ impl FromGlib<ffi::GstVideoTileMode> for VideoTileMode {
 
 impl StaticType for VideoTileMode {
     #[inline]
+    #[doc(alias = "gst_video_tile_mode_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_tile_mode_get_type()) }
     }
@@ -3629,7 +3652,7 @@ impl glib::HasParamSpec for VideoTileMode {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -3836,6 +3859,7 @@ impl FromGlib<ffi::GstVideoTransferFunction> for VideoTransferFunction {
 
 impl StaticType for VideoTransferFunction {
     #[inline]
+    #[doc(alias = "gst_video_transfer_function_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_transfer_function_get_type()) }
     }
@@ -3847,7 +3871,7 @@ impl glib::HasParamSpec for VideoTransferFunction {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 

@@ -53,8 +53,7 @@ pub use self::flags::AudioFlags;
 pub use self::flags::AudioFormatFlags;
 pub use self::flags::AudioPackFlags;
 
-#[doc(hidden)]
-pub mod traits {
+pub(crate) mod traits {
     pub use super::audio_aggregator::AudioAggregatorExt;
     pub use super::audio_aggregator_convert_pad::AudioAggregatorConvertPadExt;
     pub use super::audio_aggregator_pad::AudioAggregatorPadExt;

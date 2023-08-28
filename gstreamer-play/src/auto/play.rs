@@ -12,7 +12,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "GstPlay")]
@@ -433,7 +433,7 @@ impl Play {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::audio-video-offset\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_audio_video_offset_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -461,7 +461,7 @@ impl Play {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::current-audio-track\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_current_audio_track_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -489,7 +489,7 @@ impl Play {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::current-subtitle-track\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_current_subtitle_track_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -517,7 +517,7 @@ impl Play {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::current-video-track\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_current_video_track_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -543,7 +543,7 @@ impl Play {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::duration\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_duration_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -569,7 +569,7 @@ impl Play {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::media-info\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_media_info_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -595,7 +595,7 @@ impl Play {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::mute\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_mute_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -621,7 +621,7 @@ impl Play {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::pipeline\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_pipeline_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -647,7 +647,7 @@ impl Play {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::position\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_position_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -673,7 +673,7 @@ impl Play {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::rate\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_rate_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -701,7 +701,7 @@ impl Play {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::subtitle-video-offset\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_subtitle_video_offset_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -727,7 +727,7 @@ impl Play {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::suburi\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_suburi_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -753,7 +753,7 @@ impl Play {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::uri\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_uri_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -781,7 +781,7 @@ impl Play {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::video-multiview-flags\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_video_multiview_flags_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -809,7 +809,7 @@ impl Play {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::video-multiview-mode\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_video_multiview_mode_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -837,7 +837,7 @@ impl Play {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::video-renderer\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_video_renderer_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -863,7 +863,7 @@ impl Play {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::volume\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_volume_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

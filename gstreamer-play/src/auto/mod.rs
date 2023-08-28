@@ -40,8 +40,7 @@ pub(crate) use self::enums::PlayMessage;
 pub use self::enums::PlaySnapshotFormat;
 pub use self::enums::PlayState;
 
-#[doc(hidden)]
-pub mod traits {
+pub(crate) mod traits {
     pub use super::play_stream_info::PlayStreamInfoExt;
     pub use super::play_video_renderer::PlayVideoRendererExt;
 }

@@ -5,7 +5,6 @@
 
 use crate::{ClockTime, Object};
 use glib::{prelude::*, translate::*};
-use std::mem;
 
 glib::wrapper! {
     #[doc(alias = "GstControlSource")]
@@ -33,7 +32,7 @@ pub trait ControlSourceExt: IsA<ControlSource> + sealed::Sealed + 'static {
     #[doc(alias = "control_source_get_value")]
     fn value(&self, timestamp: ClockTime) -> Option<f64> {
         unsafe {
-            let mut value = mem::MaybeUninit::uninit();
+            let mut value = std::mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_control_source_get_value(
                 self.as_ref().to_glib_none().0,
                 timestamp.into_glib(),

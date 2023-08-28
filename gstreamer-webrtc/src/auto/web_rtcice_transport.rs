@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "GstWebRTCICETransport")]
@@ -96,7 +96,7 @@ impl WebRTCICETransport {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"on-new-candidate\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     on_new_candidate_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -123,7 +123,7 @@ impl WebRTCICETransport {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"on-selected-candidate-pair-change\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     on_selected_candidate_pair_change_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -151,7 +151,7 @@ impl WebRTCICETransport {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::gathering-state\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_gathering_state_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -179,7 +179,7 @@ impl WebRTCICETransport {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::state\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_state_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

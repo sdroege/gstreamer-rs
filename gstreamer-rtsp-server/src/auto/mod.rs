@@ -72,8 +72,7 @@ mod flags;
 pub use self::flags::RTSPAddressFlags;
 pub use self::flags::RTSPTransportMode;
 
-#[doc(hidden)]
-pub mod traits {
+pub(crate) mod traits {
     pub use super::rtsp_address_pool::RTSPAddressPoolExt;
     pub use super::rtsp_auth::RTSPAuthExt;
     pub use super::rtsp_client::RTSPClientExt;

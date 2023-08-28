@@ -5,7 +5,6 @@
 
 use crate::URIType;
 use glib::{prelude::*, translate::*};
-use std::ptr;
 
 glib::wrapper! {
     #[doc(alias = "GstURIHandler")]
@@ -58,7 +57,7 @@ pub trait URIHandlerExt: IsA<URIHandler> + sealed::Sealed + 'static {
     #[doc(alias = "gst_uri_handler_set_uri")]
     fn set_uri(&self, uri: &str) -> Result<(), glib::Error> {
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let is_ok = ffi::gst_uri_handler_set_uri(
                 self.as_ref().to_glib_none().0,
                 uri.to_glib_none().0,

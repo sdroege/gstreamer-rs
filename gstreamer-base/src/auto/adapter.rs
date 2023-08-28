@@ -4,7 +4,6 @@
 // DO NOT EDIT
 
 use glib::translate::*;
-use std::mem;
 
 glib::wrapper! {
     #[doc(alias = "GstAdapter")]
@@ -57,7 +56,7 @@ impl Adapter {
     #[doc(alias = "gst_adapter_prev_dts")]
     pub fn prev_dts(&self) -> (Option<gst::ClockTime>, u64) {
         unsafe {
-            let mut distance = mem::MaybeUninit::uninit();
+            let mut distance = std::mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_adapter_prev_dts(
                 self.to_glib_none().0,
                 distance.as_mut_ptr(),
@@ -69,7 +68,7 @@ impl Adapter {
     #[doc(alias = "gst_adapter_prev_dts_at_offset")]
     pub fn prev_dts_at_offset(&self, offset: usize) -> (Option<gst::ClockTime>, u64) {
         unsafe {
-            let mut distance = mem::MaybeUninit::uninit();
+            let mut distance = std::mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_adapter_prev_dts_at_offset(
                 self.to_glib_none().0,
                 offset,
@@ -82,7 +81,7 @@ impl Adapter {
     #[doc(alias = "gst_adapter_prev_offset")]
     pub fn prev_offset(&self) -> (u64, u64) {
         unsafe {
-            let mut distance = mem::MaybeUninit::uninit();
+            let mut distance = std::mem::MaybeUninit::uninit();
             let ret = ffi::gst_adapter_prev_offset(self.to_glib_none().0, distance.as_mut_ptr());
             (ret, distance.assume_init())
         }
@@ -91,7 +90,7 @@ impl Adapter {
     #[doc(alias = "gst_adapter_prev_pts")]
     pub fn prev_pts(&self) -> (Option<gst::ClockTime>, u64) {
         unsafe {
-            let mut distance = mem::MaybeUninit::uninit();
+            let mut distance = std::mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_adapter_prev_pts(
                 self.to_glib_none().0,
                 distance.as_mut_ptr(),
@@ -103,7 +102,7 @@ impl Adapter {
     #[doc(alias = "gst_adapter_prev_pts_at_offset")]
     pub fn prev_pts_at_offset(&self, offset: usize) -> (Option<gst::ClockTime>, u64) {
         unsafe {
-            let mut distance = mem::MaybeUninit::uninit();
+            let mut distance = std::mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_adapter_prev_pts_at_offset(
                 self.to_glib_none().0,
                 offset,

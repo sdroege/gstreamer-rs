@@ -8,7 +8,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "GstPtpClock")]
@@ -68,7 +68,7 @@ impl PtpClock {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::grandmaster-clock-id\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_grandmaster_clock_id_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -96,7 +96,7 @@ impl PtpClock {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::internal-clock\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_internal_clock_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -124,7 +124,7 @@ impl PtpClock {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::master-clock-id\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_master_clock_id_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

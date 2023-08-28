@@ -42,8 +42,7 @@ pub use self::enums::PlayerError;
 pub use self::enums::PlayerSnapshotFormat;
 pub use self::enums::PlayerState;
 
-#[doc(hidden)]
-pub mod traits {
+pub(crate) mod traits {
     pub use super::player_signal_dispatcher::PlayerSignalDispatcherExt;
     pub use super::player_stream_info::PlayerStreamInfoExt;
     pub use super::player_video_renderer::PlayerVideoRendererExt;

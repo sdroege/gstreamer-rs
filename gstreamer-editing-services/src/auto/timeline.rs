@@ -15,7 +15,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, mem::transmute, ptr};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "GESTimeline")]
@@ -46,7 +46,7 @@ impl Timeline {
     pub fn from_uri(uri: &str) -> Result<Timeline, glib::Error> {
         assert_initialized_main_thread!();
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let ret = ffi::ges_timeline_new_from_uri(uri.to_glib_none().0, &mut error);
             if error.is_null() {
                 Ok(from_glib_none(ret))
@@ -289,7 +289,7 @@ pub trait TimelineExt: IsA<Timeline> + sealed::Sealed + 'static {
     #[doc(alias = "ges_timeline_load_from_uri")]
     fn load_from_uri(&self, uri: &str) -> Result<(), glib::Error> {
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let is_ok = ffi::ges_timeline_load_from_uri(
                 self.as_ref().to_glib_none().0,
                 uri.to_glib_none().0,
@@ -375,7 +375,7 @@ pub trait TimelineExt: IsA<Timeline> + sealed::Sealed + 'static {
         overwrite: bool,
     ) -> Result<(), glib::Error> {
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let is_ok = ffi::ges_timeline_save_to_uri(
                 self.as_ref().to_glib_none().0,
                 uri.to_glib_none().0,
@@ -435,7 +435,7 @@ pub trait TimelineExt: IsA<Timeline> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"commited\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     commited_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -464,7 +464,7 @@ pub trait TimelineExt: IsA<Timeline> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"group-added\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     group_added_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -498,7 +498,7 @@ pub trait TimelineExt: IsA<Timeline> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"layer-added\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     layer_added_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -527,7 +527,7 @@ pub trait TimelineExt: IsA<Timeline> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"layer-removed\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     layer_removed_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -566,7 +566,7 @@ pub trait TimelineExt: IsA<Timeline> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"select-element-track\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     select_element_track_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -607,7 +607,7 @@ pub trait TimelineExt: IsA<Timeline> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"snapping-ended\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     snapping_ended_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -643,7 +643,7 @@ pub trait TimelineExt: IsA<Timeline> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"snapping-started\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     snapping_started_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -672,7 +672,7 @@ pub trait TimelineExt: IsA<Timeline> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"track-added\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     track_added_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -701,7 +701,7 @@ pub trait TimelineExt: IsA<Timeline> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"track-removed\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     track_removed_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -727,7 +727,7 @@ pub trait TimelineExt: IsA<Timeline> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::auto-transition\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_auto_transition_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -750,7 +750,7 @@ pub trait TimelineExt: IsA<Timeline> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::duration\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_duration_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -776,7 +776,7 @@ pub trait TimelineExt: IsA<Timeline> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::snapping-distance\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_snapping_distance_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

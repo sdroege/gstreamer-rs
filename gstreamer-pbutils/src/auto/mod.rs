@@ -52,10 +52,9 @@ pub use self::flags::DiscovererSerializeFlags;
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub use self::flags::PbUtilsCapsDescriptionFlags;
 
-pub mod functions;
+pub(crate) mod functions;
 
-#[doc(hidden)]
-pub mod traits {
+pub(crate) mod traits {
     pub use super::audio_visualizer::AudioVisualizerExt;
     pub use super::discoverer_stream_info::DiscovererStreamInfoExt;
     pub use super::encoding_profile::EncodingProfileExt;

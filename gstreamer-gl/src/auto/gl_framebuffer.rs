@@ -5,7 +5,6 @@
 
 use crate::{GLBaseMemory, GLContext};
 use glib::{prelude::*, translate::*};
-use std::mem;
 
 glib::wrapper! {
     #[doc(alias = "GstGLFramebuffer")]
@@ -76,8 +75,8 @@ pub trait GLFramebufferExt: IsA<GLFramebuffer> + sealed::Sealed + 'static {
     #[doc(alias = "get_effective_dimensions")]
     fn effective_dimensions(&self) -> (u32, u32) {
         unsafe {
-            let mut width = mem::MaybeUninit::uninit();
-            let mut height = mem::MaybeUninit::uninit();
+            let mut width = std::mem::MaybeUninit::uninit();
+            let mut height = std::mem::MaybeUninit::uninit();
             ffi::gst_gl_framebuffer_get_effective_dimensions(
                 self.as_ref().to_glib_none().0,
                 width.as_mut_ptr(),

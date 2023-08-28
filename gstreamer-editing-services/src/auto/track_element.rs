@@ -10,7 +10,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, mem, mem::transmute, ptr};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "GESTrackElement")]
@@ -243,7 +243,7 @@ pub trait TrackElementExt: IsA<TrackElement> + sealed::Sealed + 'static {
     #[doc(alias = "ges_track_element_list_children_properties")]
     fn list_children_properties(&self) -> Vec<glib::ParamSpec> {
         unsafe {
-            let mut n_properties = mem::MaybeUninit::uninit();
+            let mut n_properties = std::mem::MaybeUninit::uninit();
             let ret = FromGlibContainer::from_glib_full_num(
                 ffi::ges_track_element_list_children_properties(
                     self.as_ref().to_glib_none().0,
@@ -258,8 +258,8 @@ pub trait TrackElementExt: IsA<TrackElement> + sealed::Sealed + 'static {
     #[doc(alias = "ges_track_element_lookup_child")]
     fn lookup_child(&self, prop_name: &str) -> Option<(gst::Element, glib::ParamSpec)> {
         unsafe {
-            let mut element = ptr::null_mut();
-            let mut pspec = ptr::null_mut();
+            let mut element = std::ptr::null_mut();
+            let mut pspec = std::ptr::null_mut();
             let ret = from_glib(ffi::ges_track_element_lookup_child(
                 self.as_ref().to_glib_none().0,
                 prop_name.to_glib_none().0,
@@ -411,7 +411,7 @@ pub trait TrackElementExt: IsA<TrackElement> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"control-binding-added\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     control_binding_added_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -443,7 +443,7 @@ pub trait TrackElementExt: IsA<TrackElement> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"control-binding-removed\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     control_binding_removed_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -466,7 +466,7 @@ pub trait TrackElementExt: IsA<TrackElement> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::active\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_active_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -497,7 +497,7 @@ pub trait TrackElementExt: IsA<TrackElement> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::auto-clamp-control-sources\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_auto_clamp_control_sources_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -525,7 +525,7 @@ pub trait TrackElementExt: IsA<TrackElement> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::has-internal-source\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_has_internal_source_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -548,7 +548,7 @@ pub trait TrackElementExt: IsA<TrackElement> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::track\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_track_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -574,7 +574,7 @@ pub trait TrackElementExt: IsA<TrackElement> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::track-type\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_track_type_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

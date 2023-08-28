@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "GstTriggerControlSource")]
@@ -76,7 +76,7 @@ pub trait TriggerControlSourceExt: IsA<TriggerControlSource> + sealed::Sealed + 
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::tolerance\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_tolerance_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

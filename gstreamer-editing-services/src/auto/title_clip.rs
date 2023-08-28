@@ -13,7 +13,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "GESTitleClip")]
@@ -220,7 +220,7 @@ pub trait TitleClipExt: IsA<TitleClip> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::background\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_background_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -244,7 +244,7 @@ pub trait TitleClipExt: IsA<TitleClip> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::color\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_color_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -268,7 +268,7 @@ pub trait TitleClipExt: IsA<TitleClip> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::font-desc\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_font_desc_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -295,7 +295,7 @@ pub trait TitleClipExt: IsA<TitleClip> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::halignment\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_halignment_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -319,7 +319,7 @@ pub trait TitleClipExt: IsA<TitleClip> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::text\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_text_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -346,7 +346,7 @@ pub trait TitleClipExt: IsA<TitleClip> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::valignment\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_valignment_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -370,7 +370,7 @@ pub trait TitleClipExt: IsA<TitleClip> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::xpos\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_xpos_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -394,7 +394,7 @@ pub trait TitleClipExt: IsA<TitleClip> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::ypos\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_ypos_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

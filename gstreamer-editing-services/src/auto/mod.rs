@@ -213,8 +213,7 @@ pub use self::flags::TrackType;
 mod alias;
 pub use self::alias::FrameNumber;
 
-#[doc(hidden)]
-pub mod traits {
+pub(crate) mod traits {
     pub use super::asset::AssetExt;
     pub use super::audio_test_source::AudioTestSourceExt;
     pub use super::audio_uri_source::AudioUriSourceExt;

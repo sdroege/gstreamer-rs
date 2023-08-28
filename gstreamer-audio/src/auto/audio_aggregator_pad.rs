@@ -12,7 +12,7 @@ use glib::{
 };
 #[cfg(feature = "v1_20")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-use std::{boxed::Box as Box_, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "GstAudioAggregatorPad")]
@@ -73,7 +73,7 @@ pub trait AudioAggregatorPadExt: IsA<AudioAggregatorPad> + sealed::Sealed + 'sta
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::qos-messages\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_qos_messages_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

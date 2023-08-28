@@ -13,10 +13,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-#[cfg(feature = "v1_18")]
-#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-use std::ptr;
-use std::{boxed::Box as Box_, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "GESLayer")]
@@ -83,7 +80,7 @@ pub trait LayerExt: IsA<Layer> + sealed::Sealed + 'static {
         track_types: TrackType,
     ) -> Result<Clip, glib::Error> {
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let ret = ffi::ges_layer_add_asset_full(
                 self.as_ref().to_glib_none().0,
                 asset.as_ref().to_glib_none().0,
@@ -119,7 +116,7 @@ pub trait LayerExt: IsA<Layer> + sealed::Sealed + 'static {
     #[doc(alias = "ges_layer_add_clip_full")]
     fn add_clip_full(&self, clip: &impl IsA<Clip>) -> Result<(), glib::Error> {
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let is_ok = ffi::ges_layer_add_clip_full(
                 self.as_ref().to_glib_none().0,
                 clip.as_ref().to_glib_none().0,
@@ -289,7 +286,7 @@ pub trait LayerExt: IsA<Layer> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"clip-added\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     clip_added_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -315,7 +312,7 @@ pub trait LayerExt: IsA<Layer> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"clip-removed\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     clip_removed_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -341,7 +338,7 @@ pub trait LayerExt: IsA<Layer> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::auto-transition\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_auto_transition_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -365,7 +362,7 @@ pub trait LayerExt: IsA<Layer> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::priority\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_priority_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

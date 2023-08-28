@@ -5,7 +5,6 @@
 
 use crate::EncodingTarget;
 use glib::translate::*;
-use std::mem;
 
 #[doc(alias = "gst_codec_utils_aac_get_channels")]
 pub fn codec_utils_aac_get_channels(audio_config: &[u8]) -> u32 {
@@ -234,10 +233,10 @@ pub fn pb_utils_get_source_description(protocol: &str) -> glib::GString {
 pub fn plugins_base_version() -> (u32, u32, u32, u32) {
     skip_assert_initialized!();
     unsafe {
-        let mut major = mem::MaybeUninit::uninit();
-        let mut minor = mem::MaybeUninit::uninit();
-        let mut micro = mem::MaybeUninit::uninit();
-        let mut nano = mem::MaybeUninit::uninit();
+        let mut major = std::mem::MaybeUninit::uninit();
+        let mut minor = std::mem::MaybeUninit::uninit();
+        let mut micro = std::mem::MaybeUninit::uninit();
+        let mut nano = std::mem::MaybeUninit::uninit();
         ffi::gst_plugins_base_version(
             major.as_mut_ptr(),
             minor.as_mut_ptr(),

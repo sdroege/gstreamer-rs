@@ -7,9 +7,6 @@
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 use glib::GStr;
 use glib::{prelude::*, translate::*};
-#[cfg(feature = "v1_16")]
-#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
-use std::fmt;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -137,9 +134,9 @@ impl Edge {
 
 #[cfg(feature = "v1_16")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
-impl fmt::Display for Edge {
+impl std::fmt::Display for Edge {
     #[inline]
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         f.write_str(&self.name())
     }
 }
@@ -176,6 +173,7 @@ impl FromGlib<ffi::GESEdge> for Edge {
 
 impl StaticType for Edge {
     #[inline]
+    #[doc(alias = "ges_edge_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::ges_edge_get_type()) }
     }
@@ -187,7 +185,7 @@ impl glib::HasParamSpec for Edge {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -263,9 +261,9 @@ impl EditMode {
 
 #[cfg(feature = "v1_18")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-impl fmt::Display for EditMode {
+impl std::fmt::Display for EditMode {
     #[inline]
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         f.write_str(&self.name())
     }
 }
@@ -306,6 +304,7 @@ impl FromGlib<ffi::GESEditMode> for EditMode {
 
 impl StaticType for EditMode {
     #[inline]
+    #[doc(alias = "ges_edit_mode_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::ges_edit_mode_get_type()) }
     }
@@ -317,7 +316,7 @@ impl glib::HasParamSpec for EditMode {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -481,6 +480,7 @@ impl FromGlib<ffi::GESTextHAlign> for TextHAlign {
 
 impl StaticType for TextHAlign {
     #[inline]
+    #[doc(alias = "ges_text_halign_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::ges_text_halign_get_type()) }
     }
@@ -492,7 +492,7 @@ impl glib::HasParamSpec for TextHAlign {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -592,6 +592,7 @@ impl FromGlib<ffi::GESTextVAlign> for TextVAlign {
 
 impl StaticType for TextVAlign {
     #[inline]
+    #[doc(alias = "ges_text_valign_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::ges_text_valign_get_type()) }
     }
@@ -603,7 +604,7 @@ impl glib::HasParamSpec for TextVAlign {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -973,6 +974,7 @@ impl FromGlib<ffi::GESVideoStandardTransitionType> for VideoStandardTransitionTy
 
 impl StaticType for VideoStandardTransitionType {
     #[inline]
+    #[doc(alias = "ges_video_standard_transition_type_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::ges_video_standard_transition_type_get_type()) }
     }
@@ -984,7 +986,7 @@ impl glib::HasParamSpec for VideoStandardTransitionType {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -1130,6 +1132,7 @@ impl FromGlib<ffi::GESVideoTestPattern> for VideoTestPattern {
 
 impl StaticType for VideoTestPattern {
     #[inline]
+    #[doc(alias = "ges_video_test_pattern_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::ges_video_test_pattern_get_type()) }
     }
@@ -1141,7 +1144,7 @@ impl glib::HasParamSpec for VideoTestPattern {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 

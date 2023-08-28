@@ -35,10 +35,9 @@ pub use self::enums::AggregatorStartTimeSelection;
 mod flags;
 pub use self::flags::BaseParseFrameFlags;
 
-pub mod functions;
+pub(crate) mod functions;
 
-#[doc(hidden)]
-pub mod traits {
+pub(crate) mod traits {
     pub use super::aggregator::AggregatorExt;
     pub use super::aggregator_pad::AggregatorPadExt;
     pub use super::base_parse::BaseParseExt;

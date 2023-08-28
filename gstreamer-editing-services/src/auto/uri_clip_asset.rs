@@ -12,7 +12,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, mem::transmute, ptr};
+use std::boxed::Box as Box_;
 
 #[cfg(feature = "v1_18")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
@@ -54,7 +54,7 @@ impl UriClipAsset {
     pub fn request_sync(uri: &str) -> Result<UriClipAsset, glib::Error> {
         assert_initialized_main_thread!();
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let ret = ffi::ges_uri_clip_asset_request_sync(uri.to_glib_none().0, &mut error);
             if error.is_null() {
                 Ok(from_glib_full(ret))
@@ -159,7 +159,7 @@ pub trait UriClipAssetExt: IsA<UriClipAsset> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::duration\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_duration_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -190,7 +190,7 @@ pub trait UriClipAssetExt: IsA<UriClipAsset> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::is-nested-timeline\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_is_nested_timeline_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

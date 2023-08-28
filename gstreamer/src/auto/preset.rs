@@ -4,7 +4,6 @@
 // DO NOT EDIT
 
 use glib::{prelude::*, translate::*};
-use std::ptr;
 
 glib::wrapper! {
     #[doc(alias = "GstPreset")]
@@ -63,7 +62,7 @@ pub trait PresetExt: IsA<Preset> + sealed::Sealed + 'static {
     #[doc(alias = "get_meta")]
     fn meta(&self, name: &str, tag: &str) -> Option<glib::GString> {
         unsafe {
-            let mut value = ptr::null_mut();
+            let mut value = std::ptr::null_mut();
             let ret = from_glib(ffi::gst_preset_get_meta(
                 self.as_ref().to_glib_none().0,
                 name.to_glib_none().0,

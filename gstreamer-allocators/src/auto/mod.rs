@@ -30,14 +30,13 @@ pub use self::phys_memory_allocator::PhysMemoryAllocator;
 mod flags;
 pub use self::flags::FdMemoryFlags;
 
-pub mod functions;
+pub(crate) mod functions;
 
 mod constants;
 pub use self::constants::ALLOCATOR_DMABUF;
 pub use self::constants::ALLOCATOR_FD;
 pub use self::constants::CAPS_FEATURE_MEMORY_DMABUF;
 
-#[doc(hidden)]
-pub mod traits {
+pub(crate) mod traits {
     pub use super::phys_memory_allocator::PhysMemoryAllocatorExt;
 }

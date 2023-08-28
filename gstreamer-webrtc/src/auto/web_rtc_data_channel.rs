@@ -9,10 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-#[cfg(feature = "v1_22")]
-#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
-use std::ptr;
-use std::{boxed::Box as Box_, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "GstWebRTCDataChannel")]
@@ -43,7 +40,7 @@ impl WebRTCDataChannel {
     #[doc(alias = "gst_webrtc_data_channel_send_data_full")]
     pub fn send_data_full(&self, data: Option<&glib::Bytes>) -> Result<(), glib::Error> {
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let is_ok = ffi::gst_webrtc_data_channel_send_data_full(
                 self.to_glib_none().0,
                 data.to_glib_none().0,
@@ -70,7 +67,7 @@ impl WebRTCDataChannel {
     #[doc(alias = "gst_webrtc_data_channel_send_string_full")]
     pub fn send_string_full(&self, str: Option<&str>) -> Result<(), glib::Error> {
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let is_ok = ffi::gst_webrtc_data_channel_send_string_full(
                 self.to_glib_none().0,
                 str.to_glib_none().0,
@@ -157,7 +154,7 @@ impl WebRTCDataChannel {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"close\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     close_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -188,7 +185,7 @@ impl WebRTCDataChannel {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"on-buffered-amount-low\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     on_buffered_amount_low_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -212,7 +209,7 @@ impl WebRTCDataChannel {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"on-close\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     on_close_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -240,7 +237,7 @@ impl WebRTCDataChannel {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"on-error\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     on_error_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -273,7 +270,7 @@ impl WebRTCDataChannel {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"on-message-data\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     on_message_data_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -307,7 +304,7 @@ impl WebRTCDataChannel {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"on-message-string\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     on_message_string_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -331,7 +328,7 @@ impl WebRTCDataChannel {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"on-open\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     on_open_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -364,7 +361,7 @@ impl WebRTCDataChannel {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"send-data\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     send_data_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -402,7 +399,7 @@ impl WebRTCDataChannel {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"send-string\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     send_string_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -434,7 +431,7 @@ impl WebRTCDataChannel {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::buffered-amount\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_buffered_amount_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -462,7 +459,7 @@ impl WebRTCDataChannel {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::buffered-amount-low-threshold\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_buffered_amount_low_threshold_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -490,7 +487,7 @@ impl WebRTCDataChannel {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::ready-state\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_ready_state_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

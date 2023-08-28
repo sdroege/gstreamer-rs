@@ -9,10 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-#[cfg(feature = "v1_18")]
-#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-use std::ptr;
-use std::{boxed::Box as Box_, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "GESTrack")]
@@ -57,7 +54,7 @@ pub trait GESTrackExt: IsA<Track> + sealed::Sealed + 'static {
     #[doc(alias = "ges_track_add_element_full")]
     fn add_element_full(&self, object: &impl IsA<TrackElement>) -> Result<(), glib::Error> {
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let is_ok = ffi::ges_track_add_element_full(
                 self.as_ref().to_glib_none().0,
                 object.as_ref().to_glib_none().0,
@@ -138,7 +135,7 @@ pub trait GESTrackExt: IsA<Track> + sealed::Sealed + 'static {
     #[doc(alias = "ges_track_remove_element_full")]
     fn remove_element_full(&self, object: &impl IsA<TrackElement>) -> Result<(), glib::Error> {
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let is_ok = ffi::ges_track_remove_element_full(
                 self.as_ref().to_glib_none().0,
                 object.as_ref().to_glib_none().0,
@@ -235,7 +232,7 @@ pub trait GESTrackExt: IsA<Track> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"commited\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     commited_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -267,7 +264,7 @@ pub trait GESTrackExt: IsA<Track> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"track-element-added\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     track_element_added_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -299,7 +296,7 @@ pub trait GESTrackExt: IsA<Track> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"track-element-removed\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     track_element_removed_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -322,7 +319,7 @@ pub trait GESTrackExt: IsA<Track> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::duration\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_duration_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -347,7 +344,7 @@ pub trait GESTrackExt: IsA<Track> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::id\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_id_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -370,7 +367,7 @@ pub trait GESTrackExt: IsA<Track> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::mixing\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_mixing_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -396,7 +393,7 @@ pub trait GESTrackExt: IsA<Track> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::restriction-caps\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_restriction_caps_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

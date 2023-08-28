@@ -12,10 +12,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-#[cfg(feature = "v1_18")]
-#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-use std::mem;
-use std::{boxed::Box as Box_, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "GESClipAsset")]
@@ -58,8 +55,8 @@ pub trait ClipAssetExt: IsA<ClipAsset> + sealed::Sealed + 'static {
     #[doc(alias = "get_natural_framerate")]
     fn natural_framerate(&self) -> Option<(i32, i32)> {
         unsafe {
-            let mut framerate_n = mem::MaybeUninit::uninit();
-            let mut framerate_d = mem::MaybeUninit::uninit();
+            let mut framerate_n = std::mem::MaybeUninit::uninit();
+            let mut framerate_d = std::mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::ges_clip_asset_get_natural_framerate(
                 self.as_ref().to_glib_none().0,
                 framerate_n.as_mut_ptr(),
@@ -114,7 +111,7 @@ pub trait ClipAssetExt: IsA<ClipAsset> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::supported-formats\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_supported_formats_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

@@ -4,7 +4,6 @@
 // DO NOT EDIT
 
 use glib::{prelude::*, translate::*, GStr};
-use std::fmt;
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -34,9 +33,9 @@ impl PlayerColorBalanceType {
     }
 }
 
-impl fmt::Display for PlayerColorBalanceType {
+impl std::fmt::Display for PlayerColorBalanceType {
     #[inline]
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         f.write_str(&self.name())
     }
 }
@@ -75,6 +74,7 @@ impl FromGlib<ffi::GstPlayerColorBalanceType> for PlayerColorBalanceType {
 
 impl StaticType for PlayerColorBalanceType {
     #[inline]
+    #[doc(alias = "gst_player_color_balance_type_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_player_color_balance_type_get_type()) }
     }
@@ -86,7 +86,7 @@ impl glib::HasParamSpec for PlayerColorBalanceType {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -150,9 +150,9 @@ impl PlayerError {
     }
 }
 
-impl fmt::Display for PlayerError {
+impl std::fmt::Display for PlayerError {
     #[inline]
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         f.write_str(&self.name())
     }
 }
@@ -209,6 +209,7 @@ impl glib::error::ErrorDomain for PlayerError {
 
 impl StaticType for PlayerError {
     #[inline]
+    #[doc(alias = "gst_player_error_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_player_error_get_type()) }
     }
@@ -220,7 +221,7 @@ impl glib::HasParamSpec for PlayerError {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -342,9 +343,9 @@ impl PlayerState {
     }
 }
 
-impl fmt::Display for PlayerState {
+impl std::fmt::Display for PlayerState {
     #[inline]
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         f.write_str(&self.name())
     }
 }
@@ -383,6 +384,7 @@ impl FromGlib<ffi::GstPlayerState> for PlayerState {
 
 impl StaticType for PlayerState {
     #[inline]
+    #[doc(alias = "gst_player_state_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_player_state_get_type()) }
     }
@@ -394,7 +396,7 @@ impl glib::HasParamSpec for PlayerState {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 

@@ -47,8 +47,7 @@ pub use self::flags::IssueFlags;
 mod alias;
 pub use self::alias::IssueId;
 
-#[doc(hidden)]
-pub mod traits {
+pub(crate) mod traits {
     pub use super::bin_monitor::BinMonitorExt;
     pub use super::monitor::MonitorExt;
     pub use super::reporter::ReporterExt;

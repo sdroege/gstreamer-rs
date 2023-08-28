@@ -13,7 +13,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, mem, mem::transmute, ptr};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "GstElement")]
@@ -35,7 +35,7 @@ impl Element {
     ) -> Result<Element, glib::Error> {
         assert_initialized_main_thread!();
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let ret = ffi::gst_element_make_from_uri(
                 type_.into_glib(),
                 uri.to_glib_none().0,
@@ -286,8 +286,8 @@ pub trait ElementExt: IsA<Element> + sealed::Sealed + 'static {
         timeout: impl Into<Option<ClockTime>>,
     ) -> (Result<StateChangeSuccess, StateChangeError>, State, State) {
         unsafe {
-            let mut state = mem::MaybeUninit::uninit();
-            let mut pending = mem::MaybeUninit::uninit();
+            let mut state = std::mem::MaybeUninit::uninit();
+            let mut pending = std::mem::MaybeUninit::uninit();
             let ret = try_from_glib(ffi::gst_element_get_state(
                 self.as_ref().to_glib_none().0,
                 state.as_mut_ptr(),
@@ -511,7 +511,7 @@ pub trait ElementExt: IsA<Element> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"no-more-pads\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     no_more_pads_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -543,7 +543,7 @@ pub trait ElementExt: IsA<Element> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"pad-added\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     pad_added_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -575,7 +575,7 @@ pub trait ElementExt: IsA<Element> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"pad-removed\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     pad_removed_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

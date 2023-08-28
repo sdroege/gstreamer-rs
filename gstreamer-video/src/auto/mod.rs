@@ -112,8 +112,7 @@ pub use self::flags::VideoOverlayFormatFlags;
 pub use self::flags::VideoPackFlags;
 pub use self::flags::VideoTimeCodeFlags;
 
-#[doc(hidden)]
-pub mod traits {
+pub(crate) mod traits {
     pub use super::color_balance::ColorBalanceExt;
     pub use super::color_balance_channel::ColorBalanceChannelExt;
     pub use super::navigation::NavigationExt;

@@ -5,7 +5,6 @@
 
 use crate::{GLDisplay, GLSLProfile, GLSLVersion};
 use glib::{prelude::*, translate::*};
-use std::mem;
 
 #[doc(alias = "gst_gl_check_extension")]
 pub fn gl_check_extension(name: &str, ext: &str) -> bool {
@@ -50,8 +49,8 @@ pub fn gl_element_propagate_display_context(
 pub fn glsl_string_get_version_profile(s: &str) -> Option<(GLSLVersion, GLSLProfile)> {
     assert_initialized_main_thread!();
     unsafe {
-        let mut version = mem::MaybeUninit::uninit();
-        let mut profile = mem::MaybeUninit::uninit();
+        let mut version = std::mem::MaybeUninit::uninit();
+        let mut profile = std::mem::MaybeUninit::uninit();
         let ret = from_glib(ffi::gst_glsl_string_get_version_profile(
             s.to_glib_none().0,
             version.as_mut_ptr(),

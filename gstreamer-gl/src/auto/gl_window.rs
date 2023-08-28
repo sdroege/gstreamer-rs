@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, mem, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "GstGLWindow")]
@@ -71,8 +71,8 @@ pub trait GLWindowExt: IsA<GLWindow> + sealed::Sealed + 'static {
     #[doc(alias = "get_surface_dimensions")]
     fn surface_dimensions(&self) -> (u32, u32) {
         unsafe {
-            let mut width = mem::MaybeUninit::uninit();
-            let mut height = mem::MaybeUninit::uninit();
+            let mut width = std::mem::MaybeUninit::uninit();
+            let mut height = std::mem::MaybeUninit::uninit();
             ffi::gst_gl_window_get_surface_dimensions(
                 self.as_ref().to_glib_none().0,
                 width.as_mut_ptr(),
@@ -232,7 +232,7 @@ pub trait GLWindowExt: IsA<GLWindow> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"key-event\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     key_event_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -270,7 +270,7 @@ pub trait GLWindowExt: IsA<GLWindow> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"mouse-event\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     mouse_event_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -310,7 +310,7 @@ pub trait GLWindowExt: IsA<GLWindow> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"scroll-event\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     scroll_event_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -340,7 +340,7 @@ pub trait GLWindowExt: IsA<GLWindow> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"window-handle-changed\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     window_handle_changed_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

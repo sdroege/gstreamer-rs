@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, mem::transmute, ptr};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "GstWebRTCICE")]
@@ -130,8 +130,8 @@ pub trait WebRTCICEExt: IsA<WebRTCICE> + sealed::Sealed + 'static {
         stream: &impl IsA<WebRTCICEStream>,
     ) -> Option<(WebRTCICECandidateStats, WebRTCICECandidateStats)> {
         unsafe {
-            let mut local_stats = ptr::null_mut();
-            let mut remote_stats = ptr::null_mut();
+            let mut local_stats = std::ptr::null_mut();
+            let mut remote_stats = std::ptr::null_mut();
             let ret = from_glib(ffi::gst_webrtc_ice_get_selected_pair(
                 self.as_ref().to_glib_none().0,
                 stream.as_ref().to_glib_none().0,
@@ -346,7 +346,7 @@ pub trait WebRTCICEExt: IsA<WebRTCICE> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"add-local-ip-address\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     add_local_ip_address_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -381,7 +381,7 @@ pub trait WebRTCICEExt: IsA<WebRTCICE> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::max-rtp-port\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_max_rtp_port_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -412,7 +412,7 @@ pub trait WebRTCICEExt: IsA<WebRTCICE> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::min-rtp-port\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_min_rtp_port_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

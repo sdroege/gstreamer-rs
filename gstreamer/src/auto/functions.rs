@@ -5,7 +5,6 @@
 
 use crate::{Bin, ClockTime, DebugGraphDetails, DebugLevel, Element, StackTraceFlags};
 use glib::{prelude::*, translate::*};
-use std::{mem, ptr};
 
 #[doc(alias = "gst_debug_add_ring_buffer_logger")]
 pub fn debug_add_ring_buffer_logger(max_size_per_thread: u32, thread_timeout: u32) {
@@ -172,7 +171,7 @@ pub fn parse_bin_from_description(
 ) -> Result<Bin, glib::Error> {
     assert_initialized_main_thread!();
     unsafe {
-        let mut error = ptr::null_mut();
+        let mut error = std::ptr::null_mut();
         let ret = ffi::gst_parse_bin_from_description(
             bin_description.to_glib_none().0,
             ghost_unlinked_pads.into_glib(),
@@ -190,7 +189,7 @@ pub fn parse_bin_from_description(
 pub fn parse_launch(pipeline_description: &str) -> Result<Element, glib::Error> {
     assert_initialized_main_thread!();
     unsafe {
-        let mut error = ptr::null_mut();
+        let mut error = std::ptr::null_mut();
         let ret = ffi::gst_parse_launch(pipeline_description.to_glib_none().0, &mut error);
         if error.is_null() {
             Ok(from_glib_none(ret))
@@ -204,7 +203,7 @@ pub fn parse_launch(pipeline_description: &str) -> Result<Element, glib::Error> 
 pub fn parse_launchv(argv: &[&str]) -> Result<Element, glib::Error> {
     assert_initialized_main_thread!();
     unsafe {
-        let mut error = ptr::null_mut();
+        let mut error = std::ptr::null_mut();
         let ret = ffi::gst_parse_launchv(argv.to_glib_none().0, &mut error);
         if error.is_null() {
             Ok(from_glib_none(ret))
@@ -232,10 +231,10 @@ pub fn util_get_timestamp() -> ClockTime {
 pub fn version() -> (u32, u32, u32, u32) {
     skip_assert_initialized!();
     unsafe {
-        let mut major = mem::MaybeUninit::uninit();
-        let mut minor = mem::MaybeUninit::uninit();
-        let mut micro = mem::MaybeUninit::uninit();
-        let mut nano = mem::MaybeUninit::uninit();
+        let mut major = std::mem::MaybeUninit::uninit();
+        let mut minor = std::mem::MaybeUninit::uninit();
+        let mut micro = std::mem::MaybeUninit::uninit();
+        let mut nano = std::mem::MaybeUninit::uninit();
         ffi::gst_version(
             major.as_mut_ptr(),
             minor.as_mut_ptr(),

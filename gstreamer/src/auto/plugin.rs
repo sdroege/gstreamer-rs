@@ -5,7 +5,6 @@
 
 use crate::{Object, PluginDependencyFlags, Structure};
 use glib::translate::*;
-use std::{fmt, ptr};
 
 glib::wrapper! {
     #[doc(alias = "GstPlugin")]
@@ -146,7 +145,7 @@ impl Plugin {
     pub fn load_file(filename: impl AsRef<std::path::Path>) -> Result<Plugin, glib::Error> {
         assert_initialized_main_thread!();
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let ret = ffi::gst_plugin_load_file(filename.as_ref().to_glib_none().0, &mut error);
             if error.is_null() {
                 Ok(from_glib_full(ret))
@@ -157,9 +156,9 @@ impl Plugin {
     }
 }
 
-impl fmt::Display for Plugin {
+impl std::fmt::Display for Plugin {
     #[inline]
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         f.write_str(&self.plugin_name())
     }
 }

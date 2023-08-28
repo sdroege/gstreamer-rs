@@ -11,7 +11,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "GstRTPBaseDepayload")]
@@ -207,7 +207,7 @@ pub trait RTPBaseDepayloadExt: IsA<RTPBaseDepayload> + sealed::Sealed + 'static 
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"add-extension\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     add_extension_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -243,7 +243,7 @@ pub trait RTPBaseDepayloadExt: IsA<RTPBaseDepayload> + sealed::Sealed + 'static 
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"clear-extensions\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     clear_extensions_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -291,7 +291,7 @@ pub trait RTPBaseDepayloadExt: IsA<RTPBaseDepayload> + sealed::Sealed + 'static 
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"request-extension\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     request_extension_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -322,7 +322,7 @@ pub trait RTPBaseDepayloadExt: IsA<RTPBaseDepayload> + sealed::Sealed + 'static 
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::auto-header-extension\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_auto_header_extension_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -353,7 +353,7 @@ pub trait RTPBaseDepayloadExt: IsA<RTPBaseDepayload> + sealed::Sealed + 'static 
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::max-reorder\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_max_reorder_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -384,7 +384,7 @@ pub trait RTPBaseDepayloadExt: IsA<RTPBaseDepayload> + sealed::Sealed + 'static 
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::source-info\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_source_info_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -410,7 +410,7 @@ pub trait RTPBaseDepayloadExt: IsA<RTPBaseDepayload> + sealed::Sealed + 'static 
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::stats\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_stats_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

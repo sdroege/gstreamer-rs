@@ -5,7 +5,6 @@
 
 use crate::RTSPMediaFactory;
 use glib::{prelude::*, translate::*};
-use std::mem;
 
 glib::wrapper! {
     #[doc(alias = "GstRTSPMountPoints")]
@@ -67,7 +66,7 @@ pub trait RTSPMountPointsExt: IsA<RTSPMountPoints> + sealed::Sealed + 'static {
     #[doc(alias = "match")]
     fn match_(&self, path: &str) -> (RTSPMediaFactory, i32) {
         unsafe {
-            let mut matched = mem::MaybeUninit::uninit();
+            let mut matched = std::mem::MaybeUninit::uninit();
             let ret = from_glib_full(ffi::gst_rtsp_mount_points_match(
                 self.as_ref().to_glib_none().0,
                 path.to_glib_none().0,

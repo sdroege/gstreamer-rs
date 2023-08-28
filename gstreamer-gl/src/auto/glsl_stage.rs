@@ -5,7 +5,6 @@
 
 use crate::{GLContext, GLSLProfile, GLSLVersion};
 use glib::{prelude::*, translate::*};
-use std::ptr;
 
 glib::wrapper! {
     #[doc(alias = "GstGLSLStage")]
@@ -95,7 +94,7 @@ impl GLSLStage {
     #[doc(alias = "gst_glsl_stage_compile")]
     pub fn compile(&self) -> Result<(), glib::Error> {
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let is_ok = ffi::gst_glsl_stage_compile(self.to_glib_none().0, &mut error);
             debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {

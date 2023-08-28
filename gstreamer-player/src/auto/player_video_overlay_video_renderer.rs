@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, mem, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "GstPlayerVideoOverlayVideoRenderer")]
@@ -32,10 +32,10 @@ impl PlayerVideoOverlayVideoRenderer {
     #[doc(alias = "get_render_rectangle")]
     pub fn render_rectangle(&self) -> (i32, i32, i32, i32) {
         unsafe {
-            let mut x = mem::MaybeUninit::uninit();
-            let mut y = mem::MaybeUninit::uninit();
-            let mut width = mem::MaybeUninit::uninit();
-            let mut height = mem::MaybeUninit::uninit();
+            let mut x = std::mem::MaybeUninit::uninit();
+            let mut y = std::mem::MaybeUninit::uninit();
+            let mut width = std::mem::MaybeUninit::uninit();
+            let mut height = std::mem::MaybeUninit::uninit();
             ffi::gst_player_video_overlay_video_renderer_get_render_rectangle(
                 self.to_glib_none().0,
                 x.as_mut_ptr(),
@@ -95,7 +95,7 @@ impl PlayerVideoOverlayVideoRenderer {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::video-sink\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_video_sink_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -123,7 +123,7 @@ impl PlayerVideoOverlayVideoRenderer {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::window-handle\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_window_handle_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

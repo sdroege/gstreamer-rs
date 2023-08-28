@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, mem, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "GstClock")]
@@ -85,7 +85,7 @@ pub trait ClockExt: IsA<Clock> + sealed::Sealed + 'static {
     #[doc(alias = "gst_clock_add_observation")]
     fn add_observation(&self, slave: ClockTime, master: ClockTime) -> Option<f64> {
         unsafe {
-            let mut r_squared = mem::MaybeUninit::uninit();
+            let mut r_squared = std::mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_clock_add_observation(
                 self.as_ref().to_glib_none().0,
                 slave.into_glib(),
@@ -107,11 +107,11 @@ pub trait ClockExt: IsA<Clock> + sealed::Sealed + 'static {
         master: ClockTime,
     ) -> Option<(f64, ClockTime, ClockTime, ClockTime, ClockTime)> {
         unsafe {
-            let mut r_squared = mem::MaybeUninit::uninit();
-            let mut internal = mem::MaybeUninit::uninit();
-            let mut external = mem::MaybeUninit::uninit();
-            let mut rate_num = mem::MaybeUninit::uninit();
-            let mut rate_denom = mem::MaybeUninit::uninit();
+            let mut r_squared = std::mem::MaybeUninit::uninit();
+            let mut internal = std::mem::MaybeUninit::uninit();
+            let mut external = std::mem::MaybeUninit::uninit();
+            let mut rate_num = std::mem::MaybeUninit::uninit();
+            let mut rate_denom = std::mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_clock_add_observation_unapplied(
                 self.as_ref().to_glib_none().0,
                 slave.into_glib(),
@@ -150,10 +150,10 @@ pub trait ClockExt: IsA<Clock> + sealed::Sealed + 'static {
     #[doc(alias = "get_calibration")]
     fn calibration(&self) -> (ClockTime, ClockTime, ClockTime, ClockTime) {
         unsafe {
-            let mut internal = mem::MaybeUninit::uninit();
-            let mut external = mem::MaybeUninit::uninit();
-            let mut rate_num = mem::MaybeUninit::uninit();
-            let mut rate_denom = mem::MaybeUninit::uninit();
+            let mut internal = std::mem::MaybeUninit::uninit();
+            let mut external = std::mem::MaybeUninit::uninit();
+            let mut rate_num = std::mem::MaybeUninit::uninit();
+            let mut rate_denom = std::mem::MaybeUninit::uninit();
             ffi::gst_clock_get_calibration(
                 self.as_ref().to_glib_none().0,
                 internal.as_mut_ptr(),
@@ -340,7 +340,7 @@ pub trait ClockExt: IsA<Clock> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"synced\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     synced_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -369,7 +369,7 @@ pub trait ClockExt: IsA<Clock> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::timeout\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_timeout_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -398,7 +398,7 @@ pub trait ClockExt: IsA<Clock> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::window-size\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_window_size_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -427,7 +427,7 @@ pub trait ClockExt: IsA<Clock> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::window-threshold\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_window_threshold_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

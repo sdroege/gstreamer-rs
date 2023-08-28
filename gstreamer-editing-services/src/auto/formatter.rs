@@ -6,7 +6,6 @@
 
 use crate::{Asset, Extractable, Timeline};
 use glib::{prelude::*, translate::*};
-use std::ptr;
 
 glib::wrapper! {
     #[doc(alias = "GESFormatter")]
@@ -24,7 +23,7 @@ impl Formatter {
     pub fn can_load_uri(uri: &str) -> Result<(), glib::Error> {
         assert_initialized_main_thread!();
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let is_ok = ffi::ges_formatter_can_load_uri(uri.to_glib_none().0, &mut error);
             debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
@@ -39,7 +38,7 @@ impl Formatter {
     pub fn can_save_uri(uri: &str) -> Result<(), glib::Error> {
         assert_initialized_main_thread!();
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let is_ok = ffi::ges_formatter_can_save_uri(uri.to_glib_none().0, &mut error);
             debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
@@ -70,7 +69,7 @@ pub trait FormatterExt: IsA<Formatter> + sealed::Sealed + 'static {
     #[doc(alias = "ges_formatter_load_from_uri")]
     fn load_from_uri(&self, timeline: &impl IsA<Timeline>, uri: &str) -> Result<(), glib::Error> {
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let is_ok = ffi::ges_formatter_load_from_uri(
                 self.as_ref().to_glib_none().0,
                 timeline.as_ref().to_glib_none().0,
@@ -96,7 +95,7 @@ pub trait FormatterExt: IsA<Formatter> + sealed::Sealed + 'static {
         overwrite: bool,
     ) -> Result<(), glib::Error> {
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let is_ok = ffi::ges_formatter_save_to_uri(
                 self.as_ref().to_glib_none().0,
                 timeline.as_ref().to_glib_none().0,

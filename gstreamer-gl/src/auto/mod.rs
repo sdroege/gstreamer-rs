@@ -84,7 +84,7 @@ pub use self::flags::GLPlatform;
 pub use self::flags::GLSLProfile;
 pub use self::flags::GLAPI;
 
-pub mod functions;
+pub(crate) mod functions;
 
 mod constants;
 pub use self::constants::BUFFER_POOL_OPTION_GL_SYNC_META;
@@ -116,8 +116,7 @@ pub use self::constants::GL_TEXTURE_TARGET_2D_STR;
 pub use self::constants::GL_TEXTURE_TARGET_EXTERNAL_OES_STR;
 pub use self::constants::GL_TEXTURE_TARGET_RECTANGLE_STR;
 
-#[doc(hidden)]
-pub mod traits {
+pub(crate) mod traits {
     pub use super::gl_base_filter::GLBaseFilterExt;
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]

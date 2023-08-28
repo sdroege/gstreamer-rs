@@ -203,6 +203,7 @@ impl FromGlib<ffi::GstRTSPPublishClockMode> for RTSPPublishClockMode {
 
 impl StaticType for RTSPPublishClockMode {
     #[inline]
+    #[doc(alias = "gst_rtsp_publish_clock_mode_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtsp_publish_clock_mode_get_type()) }
     }
@@ -214,7 +215,7 @@ impl glib::HasParamSpec for RTSPPublishClockMode {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -302,6 +303,7 @@ impl FromGlib<ffi::GstRTSPSuspendMode> for RTSPSuspendMode {
 
 impl StaticType for RTSPSuspendMode {
     #[inline]
+    #[doc(alias = "gst_rtsp_suspend_mode_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtsp_suspend_mode_get_type()) }
     }
@@ -313,7 +315,7 @@ impl glib::HasParamSpec for RTSPSuspendMode {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 

@@ -5,7 +5,6 @@
 
 use crate::Object;
 use glib::{prelude::*, translate::*};
-use std::ptr;
 
 glib::wrapper! {
     #[doc(alias = "GstTaskPool")]
@@ -51,7 +50,7 @@ pub trait TaskPoolExt: IsA<TaskPool> + sealed::Sealed + 'static {
     #[doc(alias = "gst_task_pool_prepare")]
     fn prepare(&self) -> Result<(), glib::Error> {
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let _ = ffi::gst_task_pool_prepare(self.as_ref().to_glib_none().0, &mut error);
             if error.is_null() {
                 Ok(())

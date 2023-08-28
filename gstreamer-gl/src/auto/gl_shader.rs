@@ -12,7 +12,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, mem::transmute, ptr};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "GstGLShader")]
@@ -34,7 +34,7 @@ impl GLShader {
     pub fn new_default(context: &impl IsA<GLContext>) -> Result<GLShader, glib::Error> {
         skip_assert_initialized!();
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let ret = ffi::gst_gl_shader_new_default(context.as_ref().to_glib_none().0, &mut error);
             if error.is_null() {
                 Ok(from_glib_full(ret))
@@ -100,7 +100,7 @@ impl GLShader {
     #[doc(alias = "gst_gl_shader_compile_attach_stage")]
     pub fn compile_attach_stage(&self, stage: &GLSLStage) -> Result<(), glib::Error> {
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let is_ok = ffi::gst_gl_shader_compile_attach_stage(
                 self.to_glib_none().0,
                 stage.to_glib_none().0,
@@ -151,7 +151,7 @@ impl GLShader {
     #[doc(alias = "gst_gl_shader_link")]
     pub fn link(&self) -> Result<(), glib::Error> {
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let is_ok = ffi::gst_gl_shader_link(self.to_glib_none().0, &mut error);
             debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
@@ -442,7 +442,7 @@ impl GLShader {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::linked\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_linked_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

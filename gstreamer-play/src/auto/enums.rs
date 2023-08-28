@@ -5,7 +5,6 @@
 
 use crate::PlayMediaInfo;
 use glib::{prelude::*, translate::*, GStr};
-use std::{fmt, mem, ptr};
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -35,9 +34,9 @@ impl PlayColorBalanceType {
     }
 }
 
-impl fmt::Display for PlayColorBalanceType {
+impl std::fmt::Display for PlayColorBalanceType {
     #[inline]
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         f.write_str(&self.name())
     }
 }
@@ -76,6 +75,7 @@ impl FromGlib<ffi::GstPlayColorBalanceType> for PlayColorBalanceType {
 
 impl StaticType for PlayColorBalanceType {
     #[inline]
+    #[doc(alias = "gst_play_color_balance_type_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_play_color_balance_type_get_type()) }
     }
@@ -87,7 +87,7 @@ impl glib::HasParamSpec for PlayColorBalanceType {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -151,9 +151,9 @@ impl PlayError {
     }
 }
 
-impl fmt::Display for PlayError {
+impl std::fmt::Display for PlayError {
     #[inline]
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         f.write_str(&self.name())
     }
 }
@@ -210,6 +210,7 @@ impl glib::error::ErrorDomain for PlayError {
 
 impl StaticType for PlayError {
     #[inline]
+    #[doc(alias = "gst_play_error_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_play_error_get_type()) }
     }
@@ -221,7 +222,7 @@ impl glib::HasParamSpec for PlayError {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -312,7 +313,7 @@ impl PlayMessage {
     pub fn parse_buffering_percent(msg: &gst::Message) -> u32 {
         assert_initialized_main_thread!();
         unsafe {
-            let mut percent = mem::MaybeUninit::uninit();
+            let mut percent = std::mem::MaybeUninit::uninit();
             ffi::gst_play_message_parse_buffering_percent(
                 msg.to_glib_none().0,
                 percent.as_mut_ptr(),
@@ -325,7 +326,7 @@ impl PlayMessage {
     pub fn parse_duration_updated(msg: &gst::Message) -> Option<gst::ClockTime> {
         assert_initialized_main_thread!();
         unsafe {
-            let mut duration = mem::MaybeUninit::uninit();
+            let mut duration = std::mem::MaybeUninit::uninit();
             ffi::gst_play_message_parse_duration_updated(
                 msg.to_glib_none().0,
                 duration.as_mut_ptr(),
@@ -338,8 +339,8 @@ impl PlayMessage {
     pub fn parse_error(msg: &gst::Message) -> (glib::Error, Option<gst::Structure>) {
         assert_initialized_main_thread!();
         unsafe {
-            let mut error = ptr::null_mut();
-            let mut details = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
+            let mut details = std::ptr::null_mut();
             ffi::gst_play_message_parse_error(msg.to_glib_none().0, &mut error, &mut details);
             (from_glib_full(error), from_glib_full(details))
         }
@@ -349,7 +350,7 @@ impl PlayMessage {
     pub fn parse_media_info_updated(msg: &gst::Message) -> PlayMediaInfo {
         assert_initialized_main_thread!();
         unsafe {
-            let mut info = ptr::null_mut();
+            let mut info = std::ptr::null_mut();
             ffi::gst_play_message_parse_media_info_updated(msg.to_glib_none().0, &mut info);
             from_glib_full(info)
         }
@@ -359,7 +360,7 @@ impl PlayMessage {
     pub fn parse_muted_changed(msg: &gst::Message) -> bool {
         assert_initialized_main_thread!();
         unsafe {
-            let mut muted = mem::MaybeUninit::uninit();
+            let mut muted = std::mem::MaybeUninit::uninit();
             ffi::gst_play_message_parse_muted_changed(msg.to_glib_none().0, muted.as_mut_ptr());
             from_glib(muted.assume_init())
         }
@@ -369,7 +370,7 @@ impl PlayMessage {
     pub fn parse_position_updated(msg: &gst::Message) -> Option<gst::ClockTime> {
         assert_initialized_main_thread!();
         unsafe {
-            let mut position = mem::MaybeUninit::uninit();
+            let mut position = std::mem::MaybeUninit::uninit();
             ffi::gst_play_message_parse_position_updated(
                 msg.to_glib_none().0,
                 position.as_mut_ptr(),
@@ -382,7 +383,7 @@ impl PlayMessage {
     pub fn parse_state_changed(msg: &gst::Message) -> PlayState {
         assert_initialized_main_thread!();
         unsafe {
-            let mut state = mem::MaybeUninit::uninit();
+            let mut state = std::mem::MaybeUninit::uninit();
             ffi::gst_play_message_parse_state_changed(msg.to_glib_none().0, state.as_mut_ptr());
             from_glib(state.assume_init())
         }
@@ -392,7 +393,7 @@ impl PlayMessage {
     pub fn parse_type(msg: &gst::Message) -> PlayMessage {
         assert_initialized_main_thread!();
         unsafe {
-            let mut type_ = mem::MaybeUninit::uninit();
+            let mut type_ = std::mem::MaybeUninit::uninit();
             ffi::gst_play_message_parse_type(msg.to_glib_none().0, type_.as_mut_ptr());
             from_glib(type_.assume_init())
         }
@@ -402,8 +403,8 @@ impl PlayMessage {
     pub fn parse_video_dimensions_changed(msg: &gst::Message) -> (u32, u32) {
         assert_initialized_main_thread!();
         unsafe {
-            let mut width = mem::MaybeUninit::uninit();
-            let mut height = mem::MaybeUninit::uninit();
+            let mut width = std::mem::MaybeUninit::uninit();
+            let mut height = std::mem::MaybeUninit::uninit();
             ffi::gst_play_message_parse_video_dimensions_changed(
                 msg.to_glib_none().0,
                 width.as_mut_ptr(),
@@ -417,7 +418,7 @@ impl PlayMessage {
     pub fn parse_volume_changed(msg: &gst::Message) -> f64 {
         assert_initialized_main_thread!();
         unsafe {
-            let mut volume = mem::MaybeUninit::uninit();
+            let mut volume = std::mem::MaybeUninit::uninit();
             ffi::gst_play_message_parse_volume_changed(msg.to_glib_none().0, volume.as_mut_ptr());
             volume.assume_init()
         }
@@ -427,17 +428,17 @@ impl PlayMessage {
     pub fn parse_warning(msg: &gst::Message) -> (glib::Error, Option<gst::Structure>) {
         assert_initialized_main_thread!();
         unsafe {
-            let mut error = ptr::null_mut();
-            let mut details = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
+            let mut details = std::ptr::null_mut();
             ffi::gst_play_message_parse_warning(msg.to_glib_none().0, &mut error, &mut details);
             (from_glib_full(error), from_glib_full(details))
         }
     }
 }
 
-impl fmt::Display for PlayMessage {
+impl std::fmt::Display for PlayMessage {
     #[inline]
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         f.write_str(&self.name())
     }
 }
@@ -492,6 +493,7 @@ impl FromGlib<ffi::GstPlayMessage> for PlayMessage {
 
 impl StaticType for PlayMessage {
     #[inline]
+    #[doc(alias = "gst_play_message_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_play_message_get_type()) }
     }
@@ -503,7 +505,7 @@ impl glib::HasParamSpec for PlayMessage {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -625,9 +627,9 @@ impl PlayState {
     }
 }
 
-impl fmt::Display for PlayState {
+impl std::fmt::Display for PlayState {
     #[inline]
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         f.write_str(&self.name())
     }
 }
@@ -666,6 +668,7 @@ impl FromGlib<ffi::GstPlayState> for PlayState {
 
 impl StaticType for PlayState {
     #[inline]
+    #[doc(alias = "gst_play_state_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_play_state_get_type()) }
     }
@@ -677,7 +680,7 @@ impl glib::HasParamSpec for PlayState {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 

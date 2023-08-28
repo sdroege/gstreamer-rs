@@ -5,7 +5,6 @@
 
 use crate::{RTSPMedia, RTSPStreamTransport};
 use glib::{prelude::*, translate::*};
-use std::mem;
 
 glib::wrapper! {
     #[doc(alias = "GstRTSPSessionMedia")]
@@ -105,7 +104,7 @@ pub trait RTSPSessionMediaExt: IsA<RTSPSessionMedia> + sealed::Sealed + 'static 
     #[doc(alias = "gst_rtsp_session_media_matches")]
     fn matches(&self, path: &str) -> Option<i32> {
         unsafe {
-            let mut matched = mem::MaybeUninit::uninit();
+            let mut matched = std::mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_rtsp_session_media_matches(
                 self.as_ref().to_glib_none().0,
                 path.to_glib_none().0,

@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "GstDeviceProvider")]
@@ -177,7 +177,7 @@ pub trait DeviceProviderExt: IsA<DeviceProvider> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"provider-hidden\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     provider_hidden_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -209,7 +209,7 @@ pub trait DeviceProviderExt: IsA<DeviceProvider> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"provider-unhidden\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     provider_unhidden_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

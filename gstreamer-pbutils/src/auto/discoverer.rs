@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, mem::transmute, ptr};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "GstDiscoverer")]
@@ -25,7 +25,7 @@ impl Discoverer {
     pub fn new(timeout: gst::ClockTime) -> Result<Discoverer, glib::Error> {
         assert_initialized_main_thread!();
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let ret = ffi::gst_discoverer_new(timeout.into_glib(), &mut error);
             if error.is_null() {
                 Ok(from_glib_full(ret))
@@ -38,7 +38,7 @@ impl Discoverer {
     #[doc(alias = "gst_discoverer_discover_uri")]
     pub fn discover_uri(&self, uri: &str) -> Result<DiscovererInfo, glib::Error> {
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let ret = ffi::gst_discoverer_discover_uri(
                 self.to_glib_none().0,
                 uri.to_glib_none().0,
@@ -119,7 +119,7 @@ impl Discoverer {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"discovered\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     discovered_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -141,7 +141,7 @@ impl Discoverer {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"finished\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     finished_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -177,7 +177,7 @@ impl Discoverer {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"load-serialized-info\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     load_serialized_info_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -205,7 +205,7 @@ impl Discoverer {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"source-setup\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     source_setup_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -227,7 +227,7 @@ impl Discoverer {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"starting\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     starting_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -257,7 +257,7 @@ impl Discoverer {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::use-cache\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_use_cache_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

@@ -8,7 +8,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "GstAppSink")]
@@ -199,7 +199,7 @@ impl AppSink {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::buffer-list\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_buffer_list_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -225,7 +225,7 @@ impl AppSink {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::caps\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_caps_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -251,7 +251,7 @@ impl AppSink {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::drop\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_drop_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -277,7 +277,7 @@ impl AppSink {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::eos\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_eos_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -305,7 +305,7 @@ impl AppSink {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::max-buffers\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_max_buffers_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -333,7 +333,7 @@ impl AppSink {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::wait-on-eos\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_wait_on_eos_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "GstValidateScenario")]
@@ -125,7 +125,7 @@ pub trait ScenarioExt: IsA<Scenario> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"action-done\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     action_done_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -147,7 +147,7 @@ pub trait ScenarioExt: IsA<Scenario> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"done\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     done_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -173,7 +173,7 @@ pub trait ScenarioExt: IsA<Scenario> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::execute-on-idle\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_execute_on_idle_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -199,7 +199,7 @@ pub trait ScenarioExt: IsA<Scenario> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::handles-states\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_handles_states_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

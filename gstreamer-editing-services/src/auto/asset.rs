@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, mem::transmute, pin::Pin, ptr};
+use std::{boxed::Box as Box_, pin::Pin};
 
 glib::wrapper! {
     #[doc(alias = "GESAsset")]
@@ -41,7 +41,7 @@ impl Asset {
     ) -> Result<Option<Asset>, glib::Error> {
         assert_initialized_main_thread!();
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let ret = ffi::ges_asset_request(
                 extractable_type.into_glib(),
                 id.to_glib_none().0,
@@ -83,7 +83,7 @@ impl Asset {
             res: *mut gio::ffi::GAsyncResult,
             user_data: glib::ffi::gpointer,
         ) {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let ret = ffi::ges_asset_request_finish(res, &mut error);
             let result = if error.is_null() {
                 Ok(from_glib_full(ret))
@@ -138,7 +138,7 @@ pub trait AssetExt: IsA<Asset> + sealed::Sealed + 'static {
     #[doc(alias = "ges_asset_extract")]
     fn extract(&self) -> Result<Extractable, glib::Error> {
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let ret = ffi::ges_asset_extract(self.as_ref().to_glib_none().0, &mut error);
             if error.is_null() {
                 Ok(from_glib_none(ret))
@@ -241,7 +241,7 @@ pub trait AssetExt: IsA<Asset> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::proxy\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_proxy_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -270,7 +270,7 @@ pub trait AssetExt: IsA<Asset> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::proxy-target\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_proxy_target_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

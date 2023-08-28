@@ -5,7 +5,6 @@
 
 use crate::{GLDisplay, GLPlatform, GLSLProfile, GLSLVersion, GLWindow, GLAPI};
 use glib::{prelude::*, translate::*};
-use std::{mem, ptr};
 
 glib::wrapper! {
     #[doc(alias = "GstGLContext")]
@@ -37,8 +36,8 @@ impl GLContext {
     pub fn current_gl_api(platform: GLPlatform) -> (GLAPI, u32, u32) {
         assert_initialized_main_thread!();
         unsafe {
-            let mut major = mem::MaybeUninit::uninit();
-            let mut minor = mem::MaybeUninit::uninit();
+            let mut major = std::mem::MaybeUninit::uninit();
+            let mut minor = std::mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_gl_context_get_current_gl_api(
                 platform.into_glib(),
                 major.as_mut_ptr(),
@@ -127,7 +126,7 @@ pub trait GLContextExt: IsA<GLContext> + sealed::Sealed + 'static {
     #[doc(alias = "gst_gl_context_create")]
     fn create(&self, other_context: Option<&impl IsA<GLContext>>) -> Result<(), glib::Error> {
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let is_ok = ffi::gst_gl_context_create(
                 self.as_ref().to_glib_none().0,
                 other_context.map(|p| p.as_ref()).to_glib_none().0,
@@ -152,7 +151,7 @@ pub trait GLContextExt: IsA<GLContext> + sealed::Sealed + 'static {
     #[doc(alias = "gst_gl_context_fill_info")]
     fn fill_info(&self) -> Result<(), glib::Error> {
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let is_ok = ffi::gst_gl_context_fill_info(self.as_ref().to_glib_none().0, &mut error);
             debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
@@ -209,8 +208,8 @@ pub trait GLContextExt: IsA<GLContext> + sealed::Sealed + 'static {
     #[doc(alias = "get_gl_platform_version")]
     fn gl_platform_version(&self) -> (i32, i32) {
         unsafe {
-            let mut major = mem::MaybeUninit::uninit();
-            let mut minor = mem::MaybeUninit::uninit();
+            let mut major = std::mem::MaybeUninit::uninit();
+            let mut minor = std::mem::MaybeUninit::uninit();
             ffi::gst_gl_context_get_gl_platform_version(
                 self.as_ref().to_glib_none().0,
                 major.as_mut_ptr(),
@@ -224,8 +223,8 @@ pub trait GLContextExt: IsA<GLContext> + sealed::Sealed + 'static {
     #[doc(alias = "get_gl_version")]
     fn gl_version(&self) -> (i32, i32) {
         unsafe {
-            let mut maj = mem::MaybeUninit::uninit();
-            let mut min = mem::MaybeUninit::uninit();
+            let mut maj = std::mem::MaybeUninit::uninit();
+            let mut min = std::mem::MaybeUninit::uninit();
             ffi::gst_gl_context_get_gl_version(
                 self.as_ref().to_glib_none().0,
                 maj.as_mut_ptr(),

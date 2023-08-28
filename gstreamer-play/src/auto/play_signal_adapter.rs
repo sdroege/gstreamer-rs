@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "GstPlaySignalAdapter")]
@@ -72,7 +72,7 @@ impl PlaySignalAdapter {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"buffering\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     buffering_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -96,7 +96,7 @@ impl PlaySignalAdapter {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"end-of-stream\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     end_of_stream_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -131,7 +131,7 @@ impl PlaySignalAdapter {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"error\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     error_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -159,7 +159,7 @@ impl PlaySignalAdapter {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"media-info-updated\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     media_info_updated_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -187,7 +187,7 @@ impl PlaySignalAdapter {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"mute-changed\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     mute_changed_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -215,7 +215,7 @@ impl PlaySignalAdapter {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"state-changed\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     state_changed_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -243,7 +243,7 @@ impl PlaySignalAdapter {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"uri-loaded\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     uri_loaded_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -272,7 +272,7 @@ impl PlaySignalAdapter {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"video-dimensions-changed\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     video_dimensions_changed_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -300,7 +300,7 @@ impl PlaySignalAdapter {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"volume-changed\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     volume_changed_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -335,7 +335,7 @@ impl PlaySignalAdapter {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"warning\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     warning_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -363,7 +363,7 @@ impl PlaySignalAdapter {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::play\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_play_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

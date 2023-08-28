@@ -10,7 +10,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "GESContainer")]
@@ -138,7 +138,7 @@ pub trait GESContainerExt: IsA<Container> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"child-added\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     child_added_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -170,7 +170,7 @@ pub trait GESContainerExt: IsA<Container> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"child-removed\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     child_removed_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -193,7 +193,7 @@ pub trait GESContainerExt: IsA<Container> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::height\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_height_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

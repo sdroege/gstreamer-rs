@@ -8,7 +8,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "GstARGBControlBinding")]
@@ -116,7 +116,7 @@ pub trait ARGBControlBindingExt: IsA<ARGBControlBinding> + sealed::Sealed + 'sta
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::control-source-a\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_control_source_a_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -145,7 +145,7 @@ pub trait ARGBControlBindingExt: IsA<ARGBControlBinding> + sealed::Sealed + 'sta
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::control-source-b\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_control_source_b_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -174,7 +174,7 @@ pub trait ARGBControlBindingExt: IsA<ARGBControlBinding> + sealed::Sealed + 'sta
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::control-source-g\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_control_source_g_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -203,7 +203,7 @@ pub trait ARGBControlBindingExt: IsA<ARGBControlBinding> + sealed::Sealed + 'sta
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::control-source-r\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_control_source_r_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "GstRTSPMediaFactoryURI")]
@@ -93,7 +93,7 @@ pub trait RTSPMediaFactoryURIExt: IsA<RTSPMediaFactoryURI> + sealed::Sealed + 's
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::uri\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_uri_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -122,7 +122,7 @@ pub trait RTSPMediaFactoryURIExt: IsA<RTSPMediaFactoryURI> + sealed::Sealed + 's
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::use-gstpay\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_use_gstpay_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

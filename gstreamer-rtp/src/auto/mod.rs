@@ -36,7 +36,7 @@ pub use self::flags::RTPHeaderExtensionDirection;
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub use self::flags::RTPHeaderExtensionFlags;
 
-pub mod functions;
+pub(crate) mod functions;
 
 mod constants;
 pub use self::constants::RTP_HDREXT_BASE;
@@ -80,8 +80,7 @@ pub use self::constants::RTP_PAYLOAD_QCELP_STRING;
 pub use self::constants::RTP_PAYLOAD_TS41_STRING;
 pub use self::constants::RTP_PAYLOAD_TS48_STRING;
 
-#[doc(hidden)]
-pub mod traits {
+pub(crate) mod traits {
     pub use super::rtp_base_depayload::RTPBaseDepayloadExt;
     pub use super::rtp_base_payload::RTPBasePayloadExt;
     #[cfg(feature = "v1_20")]

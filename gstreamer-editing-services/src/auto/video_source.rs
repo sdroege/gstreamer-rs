@@ -8,9 +8,6 @@ use glib::prelude::*;
 #[cfg(feature = "v1_18")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 use glib::translate::*;
-#[cfg(feature = "v1_18")]
-#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
-use std::mem;
 
 glib::wrapper! {
     #[doc(alias = "GESVideoSource")]
@@ -37,8 +34,8 @@ pub trait VideoSourceExt: IsA<VideoSource> + sealed::Sealed + 'static {
     #[doc(alias = "get_natural_size")]
     fn natural_size(&self) -> Option<(i32, i32)> {
         unsafe {
-            let mut width = mem::MaybeUninit::uninit();
-            let mut height = mem::MaybeUninit::uninit();
+            let mut width = std::mem::MaybeUninit::uninit();
+            let mut height = std::mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::ges_video_source_get_natural_size(
                 self.as_ref().to_glib_none().0,
                 width.as_mut_ptr(),

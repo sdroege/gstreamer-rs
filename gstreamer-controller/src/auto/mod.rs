@@ -28,8 +28,7 @@ mod enums;
 pub use self::enums::InterpolationMode;
 pub use self::enums::LFOWaveform;
 
-#[doc(hidden)]
-pub mod traits {
+pub(crate) mod traits {
     pub use super::argb_control_binding::ARGBControlBindingExt;
     pub use super::direct_control_binding::DirectControlBindingExt;
     pub use super::interpolation_control_source::InterpolationControlSourceExt;

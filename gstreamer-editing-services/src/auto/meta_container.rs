@@ -12,7 +12,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, mem, mem::transmute, ptr};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "GESMetaContainer")]
@@ -46,8 +46,8 @@ pub trait MetaContainerExt: IsA<MetaContainer> + sealed::Sealed + 'static {
     #[doc(alias = "ges_meta_container_check_meta_registered")]
     fn check_meta_registered(&self, meta_item: &str) -> Option<(MetaFlag, glib::types::Type)> {
         unsafe {
-            let mut flags = mem::MaybeUninit::uninit();
-            let mut type_ = mem::MaybeUninit::uninit();
+            let mut flags = std::mem::MaybeUninit::uninit();
+            let mut type_ = std::mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::ges_meta_container_check_meta_registered(
                 self.as_ref().to_glib_none().0,
                 meta_item.to_glib_none().0,
@@ -95,7 +95,7 @@ pub trait MetaContainerExt: IsA<MetaContainer> + sealed::Sealed + 'static {
     #[doc(alias = "get_boolean")]
     fn boolean(&self, meta_item: &str) -> Option<bool> {
         unsafe {
-            let mut dest = mem::MaybeUninit::uninit();
+            let mut dest = std::mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::ges_meta_container_get_boolean(
                 self.as_ref().to_glib_none().0,
                 meta_item.to_glib_none().0,
@@ -113,7 +113,7 @@ pub trait MetaContainerExt: IsA<MetaContainer> + sealed::Sealed + 'static {
     #[doc(alias = "get_date")]
     fn date(&self, meta_item: &str) -> Option<glib::Date> {
         unsafe {
-            let mut dest = ptr::null_mut();
+            let mut dest = std::ptr::null_mut();
             let ret = from_glib(ffi::ges_meta_container_get_date(
                 self.as_ref().to_glib_none().0,
                 meta_item.to_glib_none().0,
@@ -131,7 +131,7 @@ pub trait MetaContainerExt: IsA<MetaContainer> + sealed::Sealed + 'static {
     #[doc(alias = "get_date_time")]
     fn date_time(&self, meta_item: &str) -> Option<gst::DateTime> {
         unsafe {
-            let mut dest = ptr::null_mut();
+            let mut dest = std::ptr::null_mut();
             let ret = from_glib(ffi::ges_meta_container_get_date_time(
                 self.as_ref().to_glib_none().0,
                 meta_item.to_glib_none().0,
@@ -149,7 +149,7 @@ pub trait MetaContainerExt: IsA<MetaContainer> + sealed::Sealed + 'static {
     #[doc(alias = "get_double")]
     fn double(&self, meta_item: &str) -> Option<f64> {
         unsafe {
-            let mut dest = mem::MaybeUninit::uninit();
+            let mut dest = std::mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::ges_meta_container_get_double(
                 self.as_ref().to_glib_none().0,
                 meta_item.to_glib_none().0,
@@ -167,7 +167,7 @@ pub trait MetaContainerExt: IsA<MetaContainer> + sealed::Sealed + 'static {
     #[doc(alias = "get_float")]
     fn float(&self, meta_item: &str) -> Option<f32> {
         unsafe {
-            let mut dest = mem::MaybeUninit::uninit();
+            let mut dest = std::mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::ges_meta_container_get_float(
                 self.as_ref().to_glib_none().0,
                 meta_item.to_glib_none().0,
@@ -185,7 +185,7 @@ pub trait MetaContainerExt: IsA<MetaContainer> + sealed::Sealed + 'static {
     #[doc(alias = "get_int")]
     fn int(&self, meta_item: &str) -> Option<i32> {
         unsafe {
-            let mut dest = mem::MaybeUninit::uninit();
+            let mut dest = std::mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::ges_meta_container_get_int(
                 self.as_ref().to_glib_none().0,
                 meta_item.to_glib_none().0,
@@ -203,7 +203,7 @@ pub trait MetaContainerExt: IsA<MetaContainer> + sealed::Sealed + 'static {
     #[doc(alias = "get_int64")]
     fn int64(&self, meta_item: &str) -> Option<i64> {
         unsafe {
-            let mut dest = mem::MaybeUninit::uninit();
+            let mut dest = std::mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::ges_meta_container_get_int64(
                 self.as_ref().to_glib_none().0,
                 meta_item.to_glib_none().0,
@@ -256,7 +256,7 @@ pub trait MetaContainerExt: IsA<MetaContainer> + sealed::Sealed + 'static {
     #[doc(alias = "get_uint")]
     fn uint(&self, meta_item: &str) -> Option<u32> {
         unsafe {
-            let mut dest = mem::MaybeUninit::uninit();
+            let mut dest = std::mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::ges_meta_container_get_uint(
                 self.as_ref().to_glib_none().0,
                 meta_item.to_glib_none().0,
@@ -274,7 +274,7 @@ pub trait MetaContainerExt: IsA<MetaContainer> + sealed::Sealed + 'static {
     #[doc(alias = "get_uint64")]
     fn uint64(&self, meta_item: &str) -> Option<u64> {
         unsafe {
-            let mut dest = mem::MaybeUninit::uninit();
+            let mut dest = std::mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::ges_meta_container_get_uint64(
                 self.as_ref().to_glib_none().0,
                 meta_item.to_glib_none().0,
@@ -620,7 +620,7 @@ pub trait MetaContainerExt: IsA<MetaContainer> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 signal_name.as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_meta_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

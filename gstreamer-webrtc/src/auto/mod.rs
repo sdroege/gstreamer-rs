@@ -93,8 +93,7 @@ pub use self::enums::WebRTCSDPType;
 pub use self::enums::WebRTCSignalingState;
 pub use self::enums::WebRTCStatsType;
 
-#[doc(hidden)]
-pub mod traits {
+pub(crate) mod traits {
     #[cfg(feature = "v1_22")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub use super::web_rtcice::WebRTCICEExt;

@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, mem::transmute};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "GstStreamVolume")]
@@ -93,7 +93,7 @@ pub trait StreamVolumeExt: IsA<StreamVolume> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::mute\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_mute_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -119,7 +119,7 @@ pub trait StreamVolumeExt: IsA<StreamVolume> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::volume\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_volume_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

@@ -5,7 +5,6 @@
 
 use crate::GLContext;
 use glib::{prelude::*, translate::*};
-use std::ptr;
 
 glib::wrapper! {
     #[doc(alias = "GstGLUpload")]
@@ -27,8 +26,8 @@ impl GLUpload {
     #[doc(alias = "get_caps")]
     pub fn caps(&self) -> (gst::Caps, gst::Caps) {
         unsafe {
-            let mut in_caps = ptr::null_mut();
-            let mut out_caps = ptr::null_mut();
+            let mut in_caps = std::ptr::null_mut();
+            let mut out_caps = std::ptr::null_mut();
             ffi::gst_gl_upload_get_caps(self.to_glib_none().0, &mut in_caps, &mut out_caps);
             (from_glib_full(in_caps), from_glib_full(out_caps))
         }

@@ -5,7 +5,6 @@
 
 use crate::EncodingProfile;
 use glib::translate::*;
-use std::{fmt, ptr};
 
 glib::wrapper! {
     #[doc(alias = "GstEncodingTarget")]
@@ -90,7 +89,7 @@ impl EncodingTarget {
     #[doc(alias = "gst_encoding_target_save")]
     pub fn save(&self) -> Result<(), glib::Error> {
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let is_ok = ffi::gst_encoding_target_save(self.to_glib_none().0, &mut error);
             debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
@@ -104,7 +103,7 @@ impl EncodingTarget {
     #[doc(alias = "gst_encoding_target_save_to_file")]
     pub fn save_to_file(&self, filepath: impl AsRef<std::path::Path>) -> Result<(), glib::Error> {
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let is_ok = ffi::gst_encoding_target_save_to_file(
                 self.to_glib_none().0,
                 filepath.as_ref().to_glib_none().0,
@@ -123,7 +122,7 @@ impl EncodingTarget {
     pub fn load(name: &str, category: Option<&str>) -> Result<EncodingTarget, glib::Error> {
         assert_initialized_main_thread!();
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let ret = ffi::gst_encoding_target_load(
                 name.to_glib_none().0,
                 category.to_glib_none().0,
@@ -143,7 +142,7 @@ impl EncodingTarget {
     ) -> Result<EncodingTarget, glib::Error> {
         assert_initialized_main_thread!();
         unsafe {
-            let mut error = ptr::null_mut();
+            let mut error = std::ptr::null_mut();
             let ret = ffi::gst_encoding_target_load_from_file(
                 filepath.as_ref().to_glib_none().0,
                 &mut error,
@@ -157,9 +156,9 @@ impl EncodingTarget {
     }
 }
 
-impl fmt::Display for EncodingTarget {
+impl std::fmt::Display for EncodingTarget {
     #[inline]
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
         f.write_str(&self.name())
     }
 }
