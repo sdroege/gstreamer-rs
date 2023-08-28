@@ -21,7 +21,7 @@ macro_rules! skip_assert_initialized {
 }
 
 mod auto;
-pub use crate::auto::{functions::*, *};
+pub use crate::auto::*;
 
 pub mod functions;
 pub use crate::functions::*;

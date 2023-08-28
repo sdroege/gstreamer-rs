@@ -28,7 +28,7 @@ macro_rules! skip_assert_initialized {
 }
 
 mod auto;
-pub use crate::auto::{functions::*, *};
+pub use crate::auto::*;
 
 #[cfg(feature = "v1_20")]
 mod element_properties;

@@ -7,9 +7,9 @@ use glib::{prelude::*, translate::*};
 #[cfg(feature = "v1_18")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 use crate::Tracer;
-use crate::{
-    auto::functions::parse_bin_from_description, Bin, Element, Object, ParseContext, ParseFlags,
-};
+use crate::{Bin, Element, Object, ParseContext, ParseFlags};
+
+pub use crate::auto::functions::*;
 
 pub fn parse_bin_from_description_with_name(
     bin_description: &str,

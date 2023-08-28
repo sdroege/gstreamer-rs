@@ -21,7 +21,7 @@ macro_rules! skip_assert_initialized {
 }
 
 mod auto;
-pub use crate::auto::{functions::*, *};
+pub use crate::auto::*;
 
 #[cfg(feature = "serde")]
 mod flag_serde;
@@ -57,4 +57,8 @@ pub mod prelude {
     pub use crate::{
         auto::traits::*, rtp_base_depayload::RTPBaseDepayloadExtManual, rtp_buffer::RTPBufferExt,
     };
+}
+
+pub mod functions {
+    pub use super::auto::functions::*;
 }

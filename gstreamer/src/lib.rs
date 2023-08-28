@@ -41,7 +41,7 @@ macro_rules! skip_assert_initialized {
 #[allow(clippy::needless_borrow)]
 #[allow(clippy::let_unit_value)]
 mod auto;
-pub use crate::auto::{functions::*, *};
+pub use crate::auto::*;
 
 #[macro_use]
 #[cfg(feature = "serde")]

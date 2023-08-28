@@ -2,6 +2,7 @@
 
 use std::mem;
 
+pub use crate::auto::functions::*;
 use glib::{prelude::*, translate::*};
 
 #[doc(alias = "gst_type_find_helper_for_data")]

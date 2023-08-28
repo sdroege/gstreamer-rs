@@ -2,6 +2,7 @@
 
 use std::{mem, ptr};
 
+pub use crate::auto::functions::*;
 use glib::translate::*;
 
 pub unsafe trait CodecTag<'a>: gst::Tag<'a, TagType = &'a str> {}
