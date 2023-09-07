@@ -1,3 +1,8 @@
+exclude = [
+    "examples",
+    "tutorials",
+]
+
 [advisories]
 db-path = "~/.cargo/advisory-db"
 db-urls = ["https://github.com/rustsec/advisory-db"]
@@ -8,16 +13,7 @@ ignore = []
 
 [licenses]
 unlicensed = "deny"
-allow = [
-  "Apache-2.0",
-]
-deny = [
-  "GPL-1.0",
-  "GPL-2.0",
-  "GPL-3.0",
-  "AGPL-1.0",
-  "AGPL-3.0",
-]
+default = "deny"
 copyleft = "deny"
 allow-osi-fsf-free = "either"
 confidence-threshold = 0.8
@@ -26,14 +22,6 @@ confidence-threshold = 0.8
 multiple-versions = "deny"
 wildcards = "allow"
 highlight = "all"
-
-# Various cocoa crates are in the middle of updating to newer versions
-[[bans.skip]]
-name = "foreign-types"
-version = "0.3"
-[[bans.skip]]
-name = "foreign-types-shared"
-version = "0.1"
 
 [sources]
 unknown-registry = "deny"
@@ -45,9 +33,4 @@ allow-git = [
 # Various crates depend on an older version of syn
 [[bans.skip]]
 name = "syn"
-version = "1.0"
-
-# Various crates depend on an older version of bitflags
-[[bans.skip]]
-name = "bitflags"
 version = "1.0"
