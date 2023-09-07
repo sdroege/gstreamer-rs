@@ -366,7 +366,7 @@ deny:
   rules:
     - if: $CI_PIPELINE_SOURCE == "schedule"
   script:
-    - cargo deny --color=always check
+    - cargo deny --color=always --workspace --all-features check all
 
 gir-checks:
   variables:
