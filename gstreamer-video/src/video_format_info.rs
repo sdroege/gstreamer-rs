@@ -395,48 +395,21 @@ impl Ord for VideoFormatInfo {
     fn cmp(&self, other: &Self) -> Ordering {
         self.n_components()
             .cmp(&other.n_components())
-            .then_with(|| self.depth().cmp(other.depth()))
-            .then_with(|| self.w_sub().cmp(other.w_sub()).reverse())
-            .then_with(|| self.h_sub().cmp(other.h_sub()).reverse())
-            .then_with(|| self.n_planes().cmp(&other.n_planes()))
+            .reverse()
+            .then_with(|| self.depth().cmp(other.depth()).reverse())
+            .then_with(|| self.w_sub().cmp(other.w_sub()))
+            .then_with(|| self.h_sub().cmp(other.h_sub()))
+            .then_with(|| self.n_planes().cmp(&other.n_planes()).reverse())
             .then_with(|| {
-                // Format using native endianness is considered as bigger
+                // Format using native endianness is considered smaller
+                let native_endianness = [crate::VideoFormat::Ayuv64, crate::VideoFormat::Argb64];
+                let want_le = cfg!(target_endian = "little");
+
                 match (
-                    self.flags().contains(crate::VideoFormatFlags::LE),
-                    other.flags().contains(crate::VideoFormatFlags::LE),
-                ) {
-                    (true, false) => {
-                        // a LE, b BE
-                        #[cfg(target_endian = "little")]
-                        {
-                            Ordering::Greater
-                        }
-                        #[cfg(target_endian = "big")]
-                        {
-                            Ordering::Less
-                        }
-                    }
-                    (false, true) => {
-                        // a BE, b LE
-                        #[cfg(target_endian = "little")]
-                        {
-                            Ordering::Less
-                        }
-                        #[cfg(target_endian = "big")]
-                        {
-                            Ordering::Greater
-                        }
-                    }
-                    _ => Ordering::Equal,
-                }
-            })
-            .then_with(|| self.pixel_stride().cmp(other.pixel_stride()))
-            .then_with(|| self.poffset().cmp(other.poffset()))
-            .then_with(|| {
-                // Prefer non-complex formats
-                match (
-                    self.flags().contains(crate::VideoFormatFlags::COMPLEX),
-                    other.flags().contains(crate::VideoFormatFlags::COMPLEX),
+                    self.flags().contains(crate::VideoFormatFlags::LE) == want_le
+                        || native_endianness.contains(&self.format()),
+                    other.flags().contains(crate::VideoFormatFlags::LE) == want_le
+                        || native_endianness.contains(&other.format()),
                 ) {
                     (true, false) => Ordering::Less,
                     (false, true) => Ordering::Greater,
@@ -444,32 +417,56 @@ impl Ord for VideoFormatInfo {
                 }
             })
             .then_with(|| {
-                // tiebreaker: YUV > RGB
+                // Prefer non-complex formats
+                match (
+                    self.flags().contains(crate::VideoFormatFlags::COMPLEX),
+                    other.flags().contains(crate::VideoFormatFlags::COMPLEX),
+                ) {
+                    (true, false) => Ordering::Greater,
+                    (false, true) => Ordering::Less,
+                    _ => Ordering::Equal,
+                }
+            })
+            .then_with(|| {
+                // Prefer RGB over YUV
                 if self.flags().contains(crate::VideoFormatFlags::RGB)
                     && other.flags().contains(crate::VideoFormatFlags::YUV)
                 {
-                    Ordering::Less
+                    Ordering::Greater
                 } else if self.flags().contains(crate::VideoFormatFlags::YUV)
                     && other.flags().contains(crate::VideoFormatFlags::RGB)
                 {
-                    Ordering::Greater
+                    Ordering::Less
                 } else {
                     Ordering::Equal
                 }
             })
             .then_with(|| {
-                // Manual tiebreaker
-                match (self.format(), other.format()) {
-                    // I420 is more commonly used in GStreamer
-                    (crate::VideoFormat::I420, crate::VideoFormat::Yv12) => Ordering::Greater,
-                    (crate::VideoFormat::Yv12, crate::VideoFormat::I420) => Ordering::Less,
-                    _ => Ordering::Equal,
+                // Prefer xRGB and permutations over RGB and permutations
+                let xrgb = [
+                    crate::VideoFormat::Xrgb,
+                    crate::VideoFormat::Xbgr,
+                    crate::VideoFormat::Rgbx,
+                    crate::VideoFormat::Bgrx,
+                ];
+                let rgb = [crate::VideoFormat::Rgb, crate::VideoFormat::Bgr];
+
+                if xrgb.contains(&self.format()) && rgb.contains(&other.format()) {
+                    Ordering::Less
+                } else if rgb.contains(&self.format()) && xrgb.contains(&other.format()) {
+                    Ordering::Greater
+                } else {
+                    Ordering::Equal
                 }
             })
+            .then_with(|| self.pixel_stride().cmp(other.pixel_stride()))
+            .then_with(|| self.poffset().cmp(other.poffset()))
             .then_with(|| {
                 // tie, sort by name
                 self.name().cmp(other.name())
             })
+            // and reverse the whole ordering so that "better quality" > "lower quality"
+            .reverse()
     }
 }
 
