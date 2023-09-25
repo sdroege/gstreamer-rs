@@ -35,7 +35,7 @@ pango = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "0.18", versio
 pangocairo = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "0.18", version = "0.18", optional = true }
 glutin = { version = "0.29", optional = true }
 image = { version = "0.24", optional = true, default-features = false, features = ["png", "jpeg"] }
-memmap2 = { version = "0.7", optional = true }
+memmap2 = { version = "0.8", optional = true }
 memfd = { version = "0.6", optional = true }
 uds = { version = "0.4", optional = true }
 
