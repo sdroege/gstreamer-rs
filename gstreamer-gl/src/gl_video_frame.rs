@@ -6,6 +6,7 @@ use glib::translate::{from_glib, Borrowed, ToGlibPtr};
 use gst_video::VideoFrameExt;
 
 pub enum Readable {}
+pub enum Writable {}
 
 // TODO: implement copy for videoframes. This would need to go through all the individual
 //   memoryies and copy them. Some GL textures can be copied, others cannot.
@@ -157,6 +158,63 @@ impl GLVideoFrame<Readable> {
     }
 }
 
+impl GLVideoFrame<Writable> {
+    #[inline]
+    pub fn from_buffer_writable(
+        buffer: gst::Buffer,
+        info: &gst_video::VideoInfo,
+    ) -> Result<Self, gst::Buffer> {
+        skip_assert_initialized!();
+
+        let n_mem = match buffer_n_gl_memory(buffer.as_ref()) {
+            Some(n) => n,
+            None => return Err(buffer),
+        };
+
+        // FIXME: planes are not memories, in multiview use case,
+        // number of memories = planes * views, but the raw memory is
+        // not exposed in videoframe
+        if n_mem != info.n_planes() {
+            return Err(buffer);
+        }
+
+        unsafe {
+            let mut frame = mem::MaybeUninit::uninit();
+            let res: bool = from_glib(gst_video::ffi::gst_video_frame_map(
+                frame.as_mut_ptr(),
+                info.to_glib_none().0 as *mut _,
+                buffer.to_glib_none().0,
+                gst_video::ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF
+                    | gst::ffi::GST_MAP_READ
+                    | gst::ffi::GST_MAP_WRITE
+                    | ffi::GST_MAP_GL as u32,
+            ));
+
+            if !res {
+                Err(buffer)
+            } else {
+                let mut frame = frame.assume_init();
+                // Reset size/stride/offset to 0 as the memory pointers
+                // are the GL texture ID and accessing them would read
+                // random memory.
+                frame.info.size = 0;
+                frame.info.stride.fill(0);
+                frame.info.offset.fill(0);
+                Ok(Self {
+                    frame,
+                    buffer,
+                    phantom: PhantomData,
+                })
+            }
+        }
+    }
+
+    #[inline]
+    pub fn buffer_mut(&mut self) -> &mut gst::BufferRef {
+        unsafe { gst::BufferRef::from_mut_ptr(self.frame.buffer) }
+    }
+}
+
 pub struct GLVideoFrameRef<T> {
     frame: gst_video::ffi::GstVideoFrame,
     unmap: bool,
@@ -289,6 +347,102 @@ impl<'a> GLVideoFrameRef<&'a gst::BufferRef> {
             let ptr = (*self.as_ptr()).data[idx as usize] as *const u32;
             Some(*ptr)
         }
+    }
+}
+
+impl<'a> GLVideoFrameRef<&'a mut gst::BufferRef> {
+    #[inline]
+    pub unsafe fn from_glib_borrow_mut(frame: *mut gst_video::ffi::GstVideoFrame) -> Self {
+        debug_assert!(!frame.is_null());
+
+        let frame = ptr::read(frame);
+        Self {
+            frame,
+            unmap: false,
+            phantom: PhantomData,
+        }
+    }
+
+    #[inline]
+    pub unsafe fn from_glib_full_mut(frame: gst_video::ffi::GstVideoFrame) -> Self {
+        Self {
+            frame,
+            unmap: true,
+            phantom: PhantomData,
+        }
+    }
+
+    #[inline]
+    pub fn from_buffer_ref_writable<'b>(
+        buffer: &'a mut gst::BufferRef,
+        info: &'b gst_video::VideoInfo,
+    ) -> Result<GLVideoFrameRef<&'a mut gst::BufferRef>, glib::error::BoolError> {
+        skip_assert_initialized!();
+
+        let n_mem = match buffer_n_gl_memory(buffer) {
+            Some(n) => n,
+            None => return Err(glib::bool_error!("Memory is not a GstGLMemory")),
+        };
+
+        // FIXME: planes are not memories, in multiview use case,
+        // number of memories = planes * views, but the raw memory is
+        // not exposed in videoframe
+        if n_mem != info.n_planes() {
+            return Err(glib::bool_error!(
+                "Number of planes and memories is not matching"
+            ));
+        }
+
+        unsafe {
+            let mut frame = mem::MaybeUninit::uninit();
+            let res: bool = from_glib(gst_video::ffi::gst_video_frame_map(
+                frame.as_mut_ptr(),
+                info.to_glib_none().0 as *mut _,
+                buffer.as_mut_ptr(),
+                gst_video::ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF
+                    | gst::ffi::GST_MAP_READ
+                    | gst::ffi::GST_MAP_WRITE
+                    | ffi::GST_MAP_GL as u32,
+            ));
+
+            if !res {
+                Err(glib::bool_error!(
+                    "Failed to fill in the values of GstVideoFrame"
+                ))
+            } else {
+                let mut frame = frame.assume_init();
+                // Reset size/stride/offset to 0 as the memory pointers
+                // are the GL texture ID and accessing them would read
+                // random memory.
+                frame.info.size = 0;
+                frame.info.stride.fill(0);
+                frame.info.offset.fill(0);
+                Ok(Self {
+                    frame,
+                    unmap: true,
+                    phantom: PhantomData,
+                })
+            }
+        }
+    }
+
+    #[inline]
+    pub fn buffer_mut(&mut self) -> &mut gst::BufferRef {
+        unsafe { gst::BufferRef::from_mut_ptr(self.frame.buffer) }
+    }
+
+    #[inline]
+    pub fn as_mut_ptr(&mut self) -> *mut gst_video::ffi::GstVideoFrame {
+        &mut self.frame
+    }
+}
+
+impl<'a> std::ops::Deref for GLVideoFrameRef<&'a mut gst::BufferRef> {
+    type Target = GLVideoFrameRef<&'a gst::BufferRef>;
+
+    #[inline]
+    fn deref(&self) -> &Self::Target {
+        unsafe { &*(self as *const Self as *const Self::Target) }
     }
 }
 
