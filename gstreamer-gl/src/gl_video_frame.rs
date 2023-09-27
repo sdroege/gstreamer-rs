@@ -2,6 +2,7 @@
 
 use std::{marker::PhantomData, mem, ptr};
 
+use crate::GLMemoryRef;
 use glib::translate::{from_glib, Borrowed, ToGlibPtr};
 use gst_video::VideoFrameExt;
 
@@ -43,9 +44,32 @@ impl<T> VideoFrameExt for GLVideoFrame<T> {
 }
 
 impl<T> GLVideoFrame<T> {
+    #[inline]
     #[doc(alias = "get_texture_id")]
     pub fn texture_id(&self, idx: u32) -> Option<u32> {
         self.as_video_frame_gl_ref().texture_id(idx)
+    }
+
+    pub fn memory(&self, idx: u32) -> Option<&GLMemoryRef> {
+        if idx >= buffer_n_gl_memory(self.buffer())? {
+            return None;
+        }
+
+        unsafe {
+            let ptr = (*self.as_ptr()).map[idx as usize].memory as _;
+            Some(GLMemoryRef::from_ptr(ptr))
+        }
+    }
+
+    pub fn memory_mut(&self, idx: u32) -> Option<&mut GLMemoryRef> {
+        if idx >= buffer_n_gl_memory(self.buffer())? {
+            return None;
+        }
+
+        unsafe {
+            let ptr = (*self.as_ptr()).map[idx as usize].memory as _;
+            Some(GLMemoryRef::from_mut_ptr(ptr))
+        }
     }
 
     #[inline]
@@ -348,6 +372,17 @@ impl<'a> GLVideoFrameRef<&'a gst::BufferRef> {
             Some(*ptr)
         }
     }
+
+    pub fn memory(&self, idx: u32) -> Option<&GLMemoryRef> {
+        if idx >= buffer_n_gl_memory(self.buffer())? {
+            return None;
+        }
+
+        unsafe {
+            let ptr = (*self.as_ptr()).map[idx as usize].memory as _;
+            Some(GLMemoryRef::from_ptr(ptr))
+        }
+    }
 }
 
 impl<'a> GLVideoFrameRef<&'a mut gst::BufferRef> {
@@ -434,6 +469,17 @@ impl<'a> GLVideoFrameRef<&'a mut gst::BufferRef> {
     #[inline]
     pub fn as_mut_ptr(&mut self) -> *mut gst_video::ffi::GstVideoFrame {
         &mut self.frame
+    }
+
+    pub fn memory_mut(&self, idx: u32) -> Option<&mut GLMemoryRef> {
+        if idx >= buffer_n_gl_memory(self.buffer())? {
+            return None;
+        }
+
+        unsafe {
+            let ptr = (*self.as_ptr()).map[idx as usize].memory as _;
+            Some(GLMemoryRef::from_mut_ptr(ptr))
+        }
     }
 }
 
