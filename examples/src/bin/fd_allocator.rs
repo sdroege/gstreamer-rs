@@ -364,7 +364,7 @@ mod video_filter {
         use glib::once_cell::sync::Lazy;
         use gst::{subclass::prelude::*, PadDirection, PadPresence, PadTemplate};
         use gst_app::gst_base::subclass::BaseTransformMode;
-        use gst_video::{subclass::prelude::*, VideoFrameRef};
+        use gst_video::{prelude::*, subclass::prelude::*, VideoFrameRef};
         use memmap2::MmapMut;
 
         static CAT: Lazy<gst::DebugCategory> = Lazy::new(|| {

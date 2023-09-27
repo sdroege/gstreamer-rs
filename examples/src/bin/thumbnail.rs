@@ -10,6 +10,7 @@
 use anyhow::Error;
 use derive_more::{Display, Error};
 use gst::{element_error, prelude::*};
+use gst_video::prelude::*;
 
 #[path = "../examples-common.rs"]
 mod examples_common;

@@ -60,7 +60,7 @@ mod video_info_dma_drm;
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
 pub use crate::video_info_dma_drm::*;
 pub mod video_frame;
-pub use crate::video_frame::{VideoFrame, VideoFrameRef};
+pub use crate::video_frame::{VideoFrame, VideoFrameExt, VideoFrameRef};
 mod video_overlay;
 pub use crate::video_overlay::is_video_overlay_prepare_window_handle_message;
 
@@ -151,6 +151,7 @@ pub mod prelude {
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub use crate::video_aggregator_pad::VideoAggregatorPadExtManual;
+    pub use crate::VideoFrameExt;
     pub use crate::{
         auto::traits::*, video_buffer_pool::VideoBufferPoolConfig,
         video_decoder::VideoDecoderExtManual, video_encoder::VideoEncoderExtManual,

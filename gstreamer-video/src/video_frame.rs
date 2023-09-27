@@ -27,22 +27,147 @@ impl<T> fmt::Debug for VideoFrame<T> {
     }
 }
 
-impl<T> VideoFrame<T> {
+pub trait VideoFrameExt {
+    fn id(&self) -> i32;
+    fn info(&self) -> &crate::VideoInfo;
+    fn flags(&self) -> crate::VideoFrameFlags;
+
     #[inline]
-    pub fn info(&self) -> &crate::VideoInfo {
+    fn format(&self) -> crate::VideoFormat {
+        self.info().format()
+    }
+
+    #[inline]
+    fn format_info(&self) -> crate::VideoFormatInfo {
+        self.info().format_info()
+    }
+
+    #[inline]
+    fn width(&self) -> u32 {
+        self.info().width()
+    }
+
+    #[inline]
+    fn height(&self) -> u32 {
+        self.info().height()
+    }
+
+    #[inline]
+    fn size(&self) -> usize {
+        self.info().size()
+    }
+
+    #[inline]
+    fn is_interlaced(&self) -> bool {
+        self.flags().contains(crate::VideoFrameFlags::INTERLACED)
+    }
+
+    #[inline]
+    fn is_tff(&self) -> bool {
+        self.flags().contains(crate::VideoFrameFlags::TFF)
+    }
+
+    #[inline]
+    fn is_rff(&self) -> bool {
+        self.flags().contains(crate::VideoFrameFlags::RFF)
+    }
+
+    #[inline]
+    fn is_onefield(&self) -> bool {
+        self.flags().contains(crate::VideoFrameFlags::ONEFIELD)
+    }
+
+    #[inline]
+    fn is_bottom_field(&self) -> bool {
+        self.flags().contains(crate::VideoFrameFlags::ONEFIELD)
+            && !self.flags().contains(crate::VideoFrameFlags::TFF)
+    }
+
+    #[inline]
+    fn is_top_field(&self) -> bool {
+        self.flags().contains(crate::VideoFrameFlags::ONEFIELD)
+            && self.flags().contains(crate::VideoFrameFlags::TFF)
+    }
+
+    #[inline]
+    fn n_planes(&self) -> u32 {
+        self.info().n_planes()
+    }
+
+    #[inline]
+    fn n_components(&self) -> u32 {
+        self.info().n_components()
+    }
+
+    #[inline]
+    fn plane_stride(&self) -> &[i32] {
+        self.info().stride()
+    }
+
+    #[inline]
+    fn plane_offset(&self) -> &[usize] {
+        self.info().offset()
+    }
+
+    #[inline]
+    fn comp_depth(&self, component: u32) -> u32 {
+        self.info().comp_depth(component as u8)
+    }
+
+    #[inline]
+    fn comp_height(&self, component: u32) -> u32 {
+        self.info().comp_height(component as u8)
+    }
+
+    #[inline]
+    fn comp_width(&self, component: u32) -> u32 {
+        self.info().comp_width(component as u8)
+    }
+
+    #[inline]
+    fn comp_offset(&self, component: u32) -> usize {
+        self.info().comp_offset(component as u8)
+    }
+
+    #[inline]
+    fn comp_poffset(&self, component: u32) -> u32 {
+        self.info().comp_poffset(component as u8)
+    }
+
+    #[inline]
+    fn comp_pstride(&self, component: u32) -> i32 {
+        self.info().comp_pstride(component as u8)
+    }
+
+    #[inline]
+    fn comp_stride(&self, component: u32) -> i32 {
+        self.info().comp_stride(component as u8)
+    }
+
+    #[inline]
+    fn comp_plane(&self, component: u32) -> u32 {
+        self.info().comp_plane(component as u8)
+    }
+}
+
+impl<T> VideoFrameExt for VideoFrame<T> {
+    #[inline]
+    fn info(&self) -> &crate::VideoInfo {
         unsafe { &*(&self.frame.info as *const ffi::GstVideoInfo as *const crate::VideoInfo) }
     }
 
     #[inline]
-    pub fn flags(&self) -> crate::VideoFrameFlags {
+    fn flags(&self) -> crate::VideoFrameFlags {
         unsafe { from_glib(self.frame.flags) }
     }
 
     #[inline]
-    pub fn id(&self) -> i32 {
+    fn id(&self) -> i32 {
         self.frame.id
     }
+}
 
+impl<T> VideoFrame<T> {
     #[inline]
     pub fn into_buffer(self) -> gst::Buffer {
         unsafe {
@@ -88,130 +213,13 @@ impl<T> VideoFrame<T> {
     }
 
     #[inline]
-    pub fn format(&self) -> crate::VideoFormat {
-        self.info().format()
-    }
-
-    #[inline]
-    pub fn format_info(&self) -> crate::VideoFormatInfo {
-        self.info().format_info()
-    }
-
-    #[inline]
-    pub fn width(&self) -> u32 {
-        self.info().width()
-    }
-
-    #[inline]
-    pub fn height(&self) -> u32 {
-        self.info().height()
-    }
-
-    #[inline]
-    pub fn size(&self) -> usize {
-        self.info().size()
-    }
-
-    #[inline]
-    pub fn is_interlaced(&self) -> bool {
-        self.flags().contains(crate::VideoFrameFlags::INTERLACED)
-    }
-
-    #[inline]
-    pub fn is_tff(&self) -> bool {
-        self.flags().contains(crate::VideoFrameFlags::TFF)
-    }
-
-    #[inline]
-    pub fn is_rff(&self) -> bool {
-        self.flags().contains(crate::VideoFrameFlags::RFF)
-    }
-
-    #[inline]
-    pub fn is_onefield(&self) -> bool {
-        self.flags().contains(crate::VideoFrameFlags::ONEFIELD)
-    }
-
-    #[inline]
-    pub fn is_bottom_field(&self) -> bool {
-        self.flags().contains(crate::VideoFrameFlags::ONEFIELD)
-            && !self.flags().contains(crate::VideoFrameFlags::TFF)
-    }
-
-    #[inline]
-    pub fn is_top_field(&self) -> bool {
-        self.flags().contains(crate::VideoFrameFlags::ONEFIELD)
-            && self.flags().contains(crate::VideoFrameFlags::TFF)
-    }
-
-    #[inline]
-    pub fn n_planes(&self) -> u32 {
-        self.info().n_planes()
-    }
-
-    #[inline]
-    pub fn n_components(&self) -> u32 {
-        self.info().n_components()
-    }
-
-    #[inline]
-    pub fn plane_stride(&self) -> &[i32] {
-        self.info().stride()
-    }
-
-    #[inline]
-    pub fn plane_offset(&self) -> &[usize] {
-        self.info().offset()
-    }
-
-    #[inline]
     pub fn comp_data(&self, component: u32) -> Result<&[u8], glib::BoolError> {
         let poffset = self.info().comp_poffset(component as u8) as usize;
         Ok(&self.plane_data(self.format_info().plane()[component as usize])?[poffset..])
     }
 
     #[inline]
-    pub fn comp_depth(&self, component: u32) -> u32 {
-        self.info().comp_depth(component as u8)
-    }
-
-    #[inline]
-    pub fn comp_height(&self, component: u32) -> u32 {
-        self.info().comp_height(component as u8)
-    }
-
-    #[inline]
-    pub fn comp_width(&self, component: u32) -> u32 {
-        self.info().comp_width(component as u8)
-    }
-
-    #[inline]
-    pub fn comp_offset(&self, component: u32) -> usize {
-        self.info().comp_offset(component as u8)
-    }
-
-    #[inline]
-    pub fn comp_poffset(&self, component: u32) -> u32 {
-        self.info().comp_poffset(component as u8)
-    }
-
-    #[inline]
-    pub fn comp_pstride(&self, component: u32) -> i32 {
-        self.info().comp_pstride(component as u8)
-    }
-
-    #[inline]
-    pub fn comp_stride(&self, component: u32) -> i32 {
-        self.info().comp_stride(component as u8)
-    }
-
-    #[inline]
-    pub fn comp_plane(&self, component: u32) -> u32 {
-        self.info().comp_plane(component as u8)
-    }
-
-    #[inline]
-    pub fn buffer(&self) -> &gst::BufferRef {
+    fn buffer(&self) -> &gst::BufferRef {
         unsafe { gst::BufferRef::from_ptr(self.frame.buffer) }
     }
 
@@ -516,22 +524,24 @@ impl<T> fmt::Debug for VideoFrameRef<T> {
     }
 }
 
-impl<T> VideoFrameRef<T> {
+impl<T> VideoFrameExt for VideoFrameRef<T> {
     #[inline]
-    pub fn info(&self) -> &crate::VideoInfo {
+    fn info(&self) -> &crate::VideoInfo {
         unsafe { &*(&self.frame.info as *const ffi::GstVideoInfo as *const crate::VideoInfo) }
     }
 
     #[inline]
-    pub fn flags(&self) -> crate::VideoFrameFlags {
+    fn flags(&self) -> crate::VideoFrameFlags {
         unsafe { from_glib(self.frame.flags) }
     }
 
     #[inline]
-    pub fn id(&self) -> i32 {
+    fn id(&self) -> i32 {
         self.frame.id
     }
+}
 
+impl<T> VideoFrameRef<T> {
     #[doc(alias = "gst_video_frame_copy")]
     pub fn copy(
         &self,
@@ -569,126 +579,9 @@ impl<T> VideoFrameRef<T> {
         }
     }
 
-    #[inline]
-    pub fn format(&self) -> crate::VideoFormat {
-        self.info().format()
-    }
-
-    #[inline]
-    pub fn format_info(&self) -> crate::VideoFormatInfo {
-        self.info().format_info()
-    }
-
-    #[inline]
-    pub fn width(&self) -> u32 {
-        self.info().width()
-    }
-
-    #[inline]
-    pub fn height(&self) -> u32 {
-        self.info().height()
-    }
-
-    #[inline]
-    pub fn size(&self) -> usize {
-        self.info().size()
-    }
-
-    #[inline]
-    pub fn is_interlaced(&self) -> bool {
-        self.flags().contains(crate::VideoFrameFlags::INTERLACED)
-    }
-
-    #[inline]
-    pub fn is_tff(&self) -> bool {
-        self.flags().contains(crate::VideoFrameFlags::TFF)
-    }
-
-    #[inline]
-    pub fn is_rff(&self) -> bool {
-        self.flags().contains(crate::VideoFrameFlags::RFF)
-    }
-
-    #[inline]
-    pub fn is_onefield(&self) -> bool {
-        self.flags().contains(crate::VideoFrameFlags::ONEFIELD)
-    }
-
-    #[inline]
-    pub fn is_bottom_field(&self) -> bool {
-        self.flags().contains(crate::VideoFrameFlags::ONEFIELD)
-            && !self.flags().contains(crate::VideoFrameFlags::TFF)
-    }
-
-    #[inline]
-    pub fn is_top_field(&self) -> bool {
-        self.flags().contains(crate::VideoFrameFlags::ONEFIELD)
-            && self.flags().contains(crate::VideoFrameFlags::TFF)
-    }
-
-    #[inline]
-    pub fn n_planes(&self) -> u32 {
-        self.info().n_planes()
-    }
-
-    #[inline]
-    pub fn n_components(&self) -> u32 {
-        self.info().n_components()
-    }
-
-    #[inline]
-    pub fn plane_stride(&self) -> &[i32] {
-        self.info().stride()
-    }
-
-    #[inline]
-    pub fn plane_offset(&self) -> &[usize] {
-        self.info().offset()
-    }
-
     pub fn comp_data(&self, component: u32) -> Result<&[u8], glib::BoolError> {
         let poffset = self.info().comp_poffset(component as u8) as usize;
         Ok(&self.plane_data(self.format_info().plane()[component as usize])?[poffset..])
-    }
-
-    #[inline]
-    pub fn comp_depth(&self, component: u32) -> u32 {
-        self.info().comp_depth(component as u8)
-    }
-
-    #[inline]
-    pub fn comp_height(&self, component: u32) -> u32 {
-        self.info().comp_height(component as u8)
-    }
-
-    #[inline]
-    pub fn comp_width(&self, component: u32) -> u32 {
-        self.info().comp_width(component as u8)
-    }
-
-    #[inline]
-    pub fn comp_offset(&self, component: u32) -> usize {
-        self.info().comp_offset(component as u8)
-    }
-
-    #[inline]
-    pub fn comp_poffset(&self, component: u32) -> u32 {
-        self.info().comp_poffset(component as u8)
-    }
-
-    #[inline]
-    pub fn comp_pstride(&self, component: u32) -> i32 {
-        self.info().comp_pstride(component as u8)
-    }
-
-    #[inline]
-    pub fn comp_stride(&self, component: u32) -> i32 {
-        self.info().comp_stride(component as u8)
-    }
-
-    #[inline]
-    pub fn comp_plane(&self, component: u32) -> u32 {
-        self.info().comp_plane(component as u8)
     }
 
     pub fn plane_data(&self, plane: u32) -> Result<&[u8], glib::BoolError> {
