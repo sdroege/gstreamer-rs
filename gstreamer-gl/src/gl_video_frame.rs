@@ -1,52 +1,117 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use std::mem;
+use std::{marker::PhantomData, mem, ptr};
 
-use glib::translate::{from_glib, ToGlibPtr};
-use gst_video::video_frame::Readable;
+use glib::translate::{from_glib, Borrowed, ToGlibPtr};
+use gst_video::VideoFrameExt;
 
-pub trait VideoFrameGLExt {
-    fn from_buffer_readable_gl(
-        buffer: gst::Buffer,
-        info: &gst_video::VideoInfo,
-    ) -> Result<gst_video::VideoFrame<Readable>, gst::Buffer>;
+pub enum Readable {}
 
-    fn from_buffer_ref_readable_gl<'a>(
-        buffer: &'a gst::BufferRef,
-        info: &gst_video::VideoInfo,
-    ) -> Result<gst_video::VideoFrameRef<&'a gst::BufferRef>, glib::error::BoolError>;
+// TODO: implement copy for videoframes. This would need to go through all the individual
+//   memoryies and copy them. Some GL textures can be copied, others cannot.
 
+pub struct GLVideoFrame<T> {
+    frame: gst_video::ffi::GstVideoFrame,
+    buffer: gst::Buffer,
+    phantom: PhantomData<T>,
+}
+
+unsafe impl<T> Send for GLVideoFrame<T> {}
+unsafe impl<T> Sync for GLVideoFrame<T> {}
+
+// TODO implement Debug for GLVideoFrame
+
+impl<T> VideoFrameExt for GLVideoFrame<T> {
+    #[inline]
+    fn info(&self) -> &gst_video::VideoInfo {
+        unsafe {
+            &*(&self.frame.info as *const gst_video::ffi::GstVideoInfo
+                as *const gst_video::VideoInfo)
+        }
+    }
+
+    #[inline]
+    fn flags(&self) -> gst_video::VideoFrameFlags {
+        unsafe { from_glib(self.frame.flags) }
+    }
+
+    #[inline]
+    fn id(&self) -> i32 {
+        self.frame.id
+    }
+}
+
+impl<T> GLVideoFrame<T> {
     #[doc(alias = "get_texture_id")]
-    fn texture_id(&self, idx: u32) -> Option<u32>;
+    pub fn texture_id(&self, idx: u32) -> Option<u32> {
+        self.as_video_frame_gl_ref().texture_id(idx)
+    }
+
+    #[inline]
+    pub fn into_buffer(self) -> gst::Buffer {
+        unsafe {
+            let mut s = mem::ManuallyDrop::new(self);
+            let buffer = ptr::read(&s.buffer);
+            gst_video::ffi::gst_video_frame_unmap(&mut s.frame);
+            buffer
+        }
+    }
+
+    #[inline]
+    pub fn buffer(&self) -> &gst::BufferRef {
+        unsafe { gst::BufferRef::from_ptr(self.frame.buffer) }
+    }
+
+    #[inline]
+    pub unsafe fn from_glib_full(frame: gst_video::ffi::GstVideoFrame) -> Self {
+        let buffer = gst::Buffer::from_glib_none(frame.buffer);
+        Self {
+            frame,
+            buffer,
+            phantom: PhantomData,
+        }
+    }
+
+    #[inline]
+    pub fn as_ptr(&self) -> *const gst_video::ffi::GstVideoFrame {
+        &self.frame
+    }
+
+    #[inline]
+    pub fn into_raw(self) -> gst_video::ffi::GstVideoFrame {
+        unsafe {
+            let mut s = mem::ManuallyDrop::new(self);
+            ptr::drop_in_place(&mut s.buffer);
+            s.frame
+        }
+    }
+
+    #[inline]
+    pub fn as_video_frame_gl_ref(&self) -> GLVideoFrameRef<&gst::BufferRef> {
+        let frame = unsafe { ptr::read(&self.frame) };
+        GLVideoFrameRef {
+            frame,
+            unmap: false,
+            phantom: PhantomData,
+        }
+    }
 }
 
-impl VideoFrameGLExt for gst_video::VideoFrame<Readable> {
-    fn from_buffer_readable_gl(
-        buffer: gst::Buffer,
-        info: &gst_video::VideoInfo,
-    ) -> Result<gst_video::VideoFrame<Readable>, gst::Buffer> {
-        skip_assert_initialized!();
-        gst_video::VideoFrameRef::<&gst::BufferRef>::from_buffer_readable_gl(buffer, info)
-    }
-
-    fn from_buffer_ref_readable_gl<'a>(
-        buffer: &'a gst::BufferRef,
-        info: &gst_video::VideoInfo,
-    ) -> Result<gst_video::VideoFrameRef<&'a gst::BufferRef>, glib::error::BoolError> {
-        skip_assert_initialized!();
-        gst_video::VideoFrameRef::<&gst::BufferRef>::from_buffer_ref_readable_gl(buffer, info)
-    }
-
-    fn texture_id(&self, idx: u32) -> Option<u32> {
-        self.as_video_frame_ref().texture_id(idx)
+impl<T> Drop for GLVideoFrame<T> {
+    #[inline]
+    fn drop(&mut self) {
+        unsafe {
+            gst_video::ffi::gst_video_frame_unmap(&mut self.frame);
+        }
     }
 }
 
-impl<'a> VideoFrameGLExt for gst_video::VideoFrameRef<&'a gst::BufferRef> {
-    fn from_buffer_readable_gl(
+impl GLVideoFrame<Readable> {
+    #[inline]
+    pub fn from_buffer_readable(
         buffer: gst::Buffer,
         info: &gst_video::VideoInfo,
-    ) -> Result<gst_video::VideoFrame<Readable>, gst::Buffer> {
+    ) -> Result<Self, gst::Buffer> {
         skip_assert_initialized!();
 
         let n_mem = match buffer_n_gl_memory(buffer.as_ref()) {
@@ -82,15 +147,80 @@ impl<'a> VideoFrameGLExt for gst_video::VideoFrameRef<&'a gst::BufferRef> {
                 frame.info.size = 0;
                 frame.info.stride.fill(0);
                 frame.info.offset.fill(0);
-                Ok(gst_video::VideoFrame::from_glib_full(frame))
+                Ok(Self {
+                    frame,
+                    buffer,
+                    phantom: PhantomData,
+                })
             }
         }
     }
+}
 
-    fn from_buffer_ref_readable_gl<'b>(
-        buffer: &'b gst::BufferRef,
-        info: &gst_video::VideoInfo,
-    ) -> Result<gst_video::VideoFrameRef<&'b gst::BufferRef>, glib::error::BoolError> {
+pub struct GLVideoFrameRef<T> {
+    frame: gst_video::ffi::GstVideoFrame,
+    unmap: bool,
+    phantom: PhantomData<T>,
+}
+
+unsafe impl<T> Send for GLVideoFrameRef<T> {}
+unsafe impl<T> Sync for GLVideoFrameRef<T> {}
+
+impl<T> VideoFrameExt for GLVideoFrameRef<T> {
+    #[inline]
+    fn info(&self) -> &gst_video::VideoInfo {
+        unsafe {
+            &*(&self.frame.info as *const gst_video::ffi::GstVideoInfo
+                as *const gst_video::VideoInfo)
+        }
+    }
+
+    #[inline]
+    fn flags(&self) -> gst_video::VideoFrameFlags {
+        unsafe { from_glib(self.frame.flags) }
+    }
+
+    #[inline]
+    fn id(&self) -> i32 {
+        self.frame.id
+    }
+}
+// TODO implement Debug for GLVideoFrameRef
+//
+impl<T> GLVideoFrameRef<T> {
+    #[inline]
+    pub fn as_ptr(&self) -> *const gst_video::ffi::GstVideoFrame {
+        &self.frame
+    }
+}
+
+impl<'a> GLVideoFrameRef<&'a gst::BufferRef> {
+    #[inline]
+    pub unsafe fn from_glib_borrow(frame: *const gst_video::ffi::GstVideoFrame) -> Borrowed<Self> {
+        debug_assert!(!frame.is_null());
+
+        let frame = ptr::read(frame);
+        Borrowed::new(Self {
+            frame,
+            unmap: false,
+            phantom: PhantomData,
+        })
+    }
+
+    #[inline]
+    pub unsafe fn from_glib_full(frame: gst_video::ffi::GstVideoFrame) -> Self {
+        Self {
+            frame,
+            unmap: true,
+            phantom: PhantomData,
+        }
+    }
+
+    #[inline]
+    pub fn from_buffer_ref_readable<'b>(
+        buffer: &'a gst::BufferRef,
+        info: &'b gst_video::VideoInfo,
+    ) -> Result<GLVideoFrameRef<&'a gst::BufferRef>, glib::error::BoolError> {
         skip_assert_initialized!();
 
         let n_mem = match buffer_n_gl_memory(buffer) {
@@ -130,12 +260,20 @@ impl<'a> VideoFrameGLExt for gst_video::VideoFrameRef<&'a gst::BufferRef> {
                 frame.info.size = 0;
                 frame.info.stride.fill(0);
                 frame.info.offset.fill(0);
-                Ok(gst_video::VideoFrameRef::from_glib_full(frame))
+                Ok(Self {
+                    frame,
+                    unmap: true,
+                    phantom: PhantomData,
+                })
             }
         }
     }
 
-    fn texture_id(&self, idx: u32) -> Option<u32> {
+    pub fn buffer(&self) -> &gst::BufferRef {
+        unsafe { gst::BufferRef::from_ptr(self.frame.buffer) }
+    }
+
+    pub fn texture_id(&self, idx: u32) -> Option<u32> {
         let len = buffer_n_gl_memory(self.buffer())?;
 
         if idx >= len {
@@ -150,6 +288,17 @@ impl<'a> VideoFrameGLExt for gst_video::VideoFrameRef<&'a gst::BufferRef> {
         unsafe {
             let ptr = (*self.as_ptr()).data[idx as usize] as *const u32;
             Some(*ptr)
+        }
+    }
+}
+
+impl<T> Drop for GLVideoFrameRef<T> {
+    #[inline]
+    fn drop(&mut self) {
+        unsafe {
+            if self.unmap {
+                gst_video::ffi::gst_video_frame_unmap(&mut self.frame);
+            }
         }
     }
 }

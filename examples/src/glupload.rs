@@ -611,7 +611,7 @@ pub(crate) fn main_loop(app: App) -> Result<(), Error> {
 
     let gl = load(&app.windowed_context);
 
-    let mut curr_frame: Option<gst_video::VideoFrame<gst_video::video_frame::Readable>> = None;
+    let mut curr_frame: Option<gst_gl::GLVideoFrame<gst_gl::gl_video_frame::Readable>> = None;
 
     let App {
         bus,
@@ -651,7 +651,7 @@ pub(crate) fn main_loop(app: App) -> Result<(), Error> {
             glutin::event::Event::RedrawRequested(_) => needs_redraw = true,
             // Receive a frame
             glutin::event::Event::UserEvent(Message::Frame(info, buffer)) => {
-                if let Ok(frame) = gst_video::VideoFrame::from_buffer_readable_gl(buffer, &info) {
+                if let Ok(frame) = gst_gl::GLVideoFrame::from_buffer_readable(buffer, &info) {
                     curr_frame = Some(frame);
                     needs_redraw = true;
                 }
