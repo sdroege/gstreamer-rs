@@ -300,8 +300,7 @@ manual_traits = ["GLContextExtManual"]
 
     [[object.function]]
     name = "thread_add"
-    # unimplemented GLContextThreadFunc
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "get_thread"
