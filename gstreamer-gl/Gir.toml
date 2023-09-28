@@ -415,6 +415,7 @@ status = "generate"
 [[object]]
 name = "GstGL.GLFramebuffer"
 status = "generate"
+manual_traits = ["GLFramebufferExtManual"]
 
     [[object.function]]
     name = "attach"
@@ -423,8 +424,7 @@ status = "generate"
 
     [[object.function]]
     name = "draw_to_texture"
-    # needs to be manually implemented for correct types/mutability
-    ignore = true
+    manual = true
 
 [[object]]
 name = "GstGL.GLOverlayCompositor"

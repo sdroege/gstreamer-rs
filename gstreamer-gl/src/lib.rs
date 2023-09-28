@@ -42,6 +42,7 @@ mod gl_base_memory;
 pub use self::gl_base_memory::*;
 mod gl_memory;
 pub use crate::gl_memory::*;
+mod gl_framebuffer;
 mod gl_memory_pbo;
 pub use crate::gl_memory_pbo::*;
 
@@ -53,7 +54,8 @@ pub mod prelude {
 
     pub use crate::{
         auto::traits::*, context::ContextGLExt, gl_context::GLContextExtManual,
-        gl_display::GLDisplayExtManual, gl_video_frame::VideoFrameGLExt,
+        gl_display::GLDisplayExtManual, gl_framebuffer::GLFramebufferExtManual,
+        gl_video_frame::VideoFrameGLExt,
     };
 }
 
