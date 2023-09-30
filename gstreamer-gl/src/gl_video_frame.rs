@@ -4,7 +4,7 @@ use std::{marker::PhantomData, mem, ptr};
 
 use crate::GLMemoryRef;
 use glib::translate::{from_glib, Borrowed, ToGlibPtr};
-use gst_video::VideoFrameExt;
+use gst_video::{video_frame::IsVideoFrame, VideoFrameExt};
 
 pub enum Readable {}
 pub enum Writable {}
@@ -23,23 +23,10 @@ unsafe impl<T> Sync for GLVideoFrame<T> {}
 
 // TODO implement Debug for GLVideoFrame
 
-impl<T> VideoFrameExt for GLVideoFrame<T> {
+impl<T> IsVideoFrame for GLVideoFrame<T> {
     #[inline]
-    fn info(&self) -> &gst_video::VideoInfo {
-        unsafe {
-            &*(&self.frame.info as *const gst_video::ffi::GstVideoInfo
-                as *const gst_video::VideoInfo)
-        }
-    }
-
-    #[inline]
-    fn flags(&self) -> gst_video::VideoFrameFlags {
-        unsafe { from_glib(self.frame.flags) }
-    }
-
-    #[inline]
-    fn id(&self) -> i32 {
-        self.frame.id
+    fn as_non_null_ptr(&self) -> std::ptr::NonNull<gst_video::ffi::GstVideoFrame> {
+        std::ptr::NonNull::from(&self.frame)
     }
 }
 
@@ -83,11 +70,6 @@ impl<T> GLVideoFrame<T> {
     }
 
     #[inline]
-    pub fn buffer(&self) -> &gst::BufferRef {
-        unsafe { gst::BufferRef::from_ptr(self.frame.buffer) }
-    }
-
-    #[inline]
     pub unsafe fn from_glib_full(frame: gst_video::ffi::GstVideoFrame) -> Self {
         let buffer = gst::Buffer::from_glib_none(frame.buffer);
         Self {
@@ -95,11 +77,6 @@ impl<T> GLVideoFrame<T> {
             buffer,
             phantom: PhantomData,
         }
-    }
-
-    #[inline]
-    pub fn as_ptr(&self) -> *const gst_video::ffi::GstVideoFrame {
-        &self.frame
     }
 
     #[inline]
@@ -248,33 +225,13 @@ pub struct GLVideoFrameRef<T> {
 unsafe impl<T> Send for GLVideoFrameRef<T> {}
 unsafe impl<T> Sync for GLVideoFrameRef<T> {}
 
-impl<T> VideoFrameExt for GLVideoFrameRef<T> {
+impl<T> IsVideoFrame for GLVideoFrameRef<T> {
     #[inline]
-    fn info(&self) -> &gst_video::VideoInfo {
-        unsafe {
-            &*(&self.frame.info as *const gst_video::ffi::GstVideoInfo
-                as *const gst_video::VideoInfo)
-        }
-    }
-
-    #[inline]
-    fn flags(&self) -> gst_video::VideoFrameFlags {
-        unsafe { from_glib(self.frame.flags) }
-    }
-
-    #[inline]
-    fn id(&self) -> i32 {
-        self.frame.id
+    fn as_non_null_ptr(&self) -> std::ptr::NonNull<gst_video::ffi::GstVideoFrame> {
+        std::ptr::NonNull::from(&self.frame)
     }
 }
 // TODO implement Debug for GLVideoFrameRef
-//
-impl<T> GLVideoFrameRef<T> {
-    #[inline]
-    pub fn as_ptr(&self) -> *const gst_video::ffi::GstVideoFrame {
-        &self.frame
-    }
-}
 
 impl<'a> GLVideoFrameRef<&'a gst::BufferRef> {
     #[inline]
@@ -349,10 +306,6 @@ impl<'a> GLVideoFrameRef<&'a gst::BufferRef> {
                 })
             }
         }
-    }
-
-    pub fn buffer(&self) -> &gst::BufferRef {
-        unsafe { gst::BufferRef::from_ptr(self.frame.buffer) }
     }
 
     pub fn texture_id(&self, idx: u32) -> Option<u32> {

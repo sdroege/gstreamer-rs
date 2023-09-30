@@ -2,6 +2,7 @@
 
 use std::{ops, ptr};
 
+use crate::VideoFrameExt;
 use glib::translate::*;
 
 #[derive(Debug)]

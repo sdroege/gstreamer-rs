@@ -7,6 +7,17 @@ use glib::translate::{from_glib, from_glib_none, Borrowed, ToGlibPtr};
 pub enum Readable {}
 pub enum Writable {}
 
+pub trait IsVideoFrame {
+    fn as_non_null_ptr(&self) -> std::ptr::NonNull<ffi::GstVideoFrame>;
+}
+
+impl<T> IsVideoFrame for VideoFrame<T> {
+    #[inline]
+    fn as_non_null_ptr(&self) -> std::ptr::NonNull<ffi::GstVideoFrame> {
+        std::ptr::NonNull::from(&self.frame)
+    }
+}
+
 pub struct VideoFrame<T> {
     frame: ffi::GstVideoFrame,
     buffer: gst::Buffer,
@@ -27,10 +38,40 @@ impl<T> fmt::Debug for VideoFrame<T> {
     }
 }
 
-pub trait VideoFrameExt {
-    fn id(&self) -> i32;
-    fn info(&self) -> &crate::VideoInfo;
-    fn flags(&self) -> crate::VideoFrameFlags;
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsVideoFrame> Sealed for T {}
+}
+
+pub trait VideoFrameExt: sealed::Sealed + IsVideoFrame {
+    #[inline]
+    fn as_ptr(&self) -> *const ffi::GstVideoFrame {
+        self.as_non_null_ptr().as_ptr() as _
+    }
+
+    #[inline]
+    fn info(&self) -> &crate::VideoInfo {
+        unsafe {
+            let frame = self.as_non_null_ptr().as_ref();
+            let info = &frame.info as *const ffi::GstVideoInfo as *const crate::VideoInfo;
+            &*info
+        }
+    }
+
+    #[inline]
+    fn flags(&self) -> crate::VideoFrameFlags {
+        unsafe { from_glib(self.as_non_null_ptr().as_ref().flags) }
+    }
+
+    #[inline]
+    fn id(&self) -> i32 {
+        unsafe { self.as_non_null_ptr().as_ref().id }
+    }
+
+    #[inline]
+    fn buffer(&self) -> &gst::BufferRef {
+        unsafe { gst::BufferRef::from_ptr(self.as_non_null_ptr().as_ref().buffer) }
+    }
 
     #[inline]
     fn format(&self) -> crate::VideoFormat {
@@ -150,22 +191,7 @@ pub trait VideoFrameExt {
     }
 }
 
-impl<T> VideoFrameExt for VideoFrame<T> {
-    #[inline]
-    fn info(&self) -> &crate::VideoInfo {
-        unsafe { &*(&self.frame.info as *const ffi::GstVideoInfo as *const crate::VideoInfo) }
-    }
-
-    #[inline]
-    fn flags(&self) -> crate::VideoFrameFlags {
-        unsafe { from_glib(self.frame.flags) }
-    }
-
-    #[inline]
-    fn id(&self) -> i32 {
-        self.frame.id
-    }
-}
+impl<O: IsVideoFrame> VideoFrameExt for O {}
 
 impl<T> VideoFrame<T> {
     #[inline]
@@ -219,7 +245,7 @@ impl<T> VideoFrame<T> {
     }
 
     #[inline]
-    fn buffer(&self) -> &gst::BufferRef {
+    pub fn buffer(&self) -> &gst::BufferRef {
         unsafe { gst::BufferRef::from_ptr(self.frame.buffer) }
     }
 
@@ -277,11 +303,6 @@ impl<T> VideoFrame<T> {
             unmap: false,
             phantom: PhantomData,
         }
-    }
-
-    #[inline]
-    pub fn as_ptr(&self) -> *const ffi::GstVideoFrame {
-        &self.frame
     }
 
     #[inline]
@@ -511,6 +532,13 @@ pub struct VideoFrameRef<T> {
     phantom: PhantomData<T>,
 }
 
+impl<T> IsVideoFrame for VideoFrameRef<T> {
+    #[inline]
+    fn as_non_null_ptr(&self) -> std::ptr::NonNull<ffi::GstVideoFrame> {
+        std::ptr::NonNull::from(&self.frame)
+    }
+}
+
 impl<T> fmt::Debug for VideoFrameRef<T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("VideoFrameRef")
@@ -521,23 +549,6 @@ impl<T> fmt::Debug for VideoFrameRef<T> {
             })
             .field("info", &self.info())
             .finish()
-    }
-}
-
-impl<T> VideoFrameExt for VideoFrameRef<T> {
-    #[inline]
-    fn info(&self) -> &crate::VideoInfo {
-        unsafe { &*(&self.frame.info as *const ffi::GstVideoInfo as *const crate::VideoInfo) }
-    }
-
-    #[inline]
-    fn flags(&self) -> crate::VideoFrameFlags {
-        unsafe { from_glib(self.frame.flags) }
-    }
-
-    #[inline]
-    fn id(&self) -> i32 {
-        self.frame.id
     }
 }
 
@@ -618,11 +629,6 @@ impl<T> VideoFrameRef<T> {
                 (w * h) as usize,
             ))
         }
-    }
-
-    #[inline]
-    pub fn as_ptr(&self) -> *const ffi::GstVideoFrame {
-        &self.frame
     }
 }
 
@@ -710,11 +716,6 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
                 })
             }
         }
-    }
-
-    #[inline]
-    pub fn buffer(&self) -> &gst::BufferRef {
-        unsafe { gst::BufferRef::from_ptr(self.frame.buffer) }
     }
 }
 
