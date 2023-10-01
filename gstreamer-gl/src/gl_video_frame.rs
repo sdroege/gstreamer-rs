@@ -1,6 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use std::{marker::PhantomData, mem, ptr};
+use std::{fmt::Debug, marker::PhantomData, mem, ptr};
 
 use crate::GLMemoryRef;
 use glib::translate::{from_glib, Borrowed, ToGlibPtr};
@@ -9,8 +9,8 @@ use gst_video::{video_frame::IsVideoFrame, VideoFrameExt};
 pub enum Readable {}
 pub enum Writable {}
 
-// TODO: implement copy for videoframes. This would need to go through all the individual
-//   memories and copy them. Some GL textures can be copied, others cannot.
+// TODO: implement copy for videoframes. This would need to go through all the individual memories
+//       and copy them. Some GL textures can be copied, others cannot.
 
 pub trait IsGLVideoFrame: IsVideoFrame + Sized {}
 
@@ -80,8 +80,6 @@ pub struct GLVideoFrame<T> {
 unsafe impl<T> Send for GLVideoFrame<T> {}
 unsafe impl<T> Sync for GLVideoFrame<T> {}
 
-// TODO implement Debug for GLVideoFrame
-
 impl<T> IsVideoFrame for GLVideoFrame<T> {
     #[inline]
     fn as_raw(&self) -> &gst_video::ffi::GstVideoFrame {
@@ -90,6 +88,17 @@ impl<T> IsVideoFrame for GLVideoFrame<T> {
 }
 
 impl<T> IsGLVideoFrame for GLVideoFrame<T> {}
+
+impl<T> Debug for GLVideoFrame<T> {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        f.debug_struct("GLVideoFrame")
+            .field("flags", &self.flags())
+            .field("id", &self.id())
+            .field("buffer", &self.buffer())
+            .field("info", &self.info())
+            .finish()
+    }
+}
 
 impl<T> GLVideoFrame<T> {
     #[inline]
@@ -272,7 +281,18 @@ impl<T> IsVideoFrame for GLVideoFrameRef<T> {
 
 impl<T> IsGLVideoFrame for GLVideoFrameRef<T> {}
 
-// TODO implement Debug for GLVideoFrameRef
+impl<T> Debug for GLVideoFrameRef<T> {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        f.debug_struct("GLVideoFrameRef")
+            .field("flags", &self.flags())
+            .field("id", &self.id())
+            .field("buffer", &unsafe {
+                gst::BufferRef::from_ptr(self.frame.buffer)
+            })
+            .field("info", &self.info())
+            .finish()
+    }
+}
 
 impl<'a> GLVideoFrameRef<&'a gst::BufferRef> {
     #[inline]
