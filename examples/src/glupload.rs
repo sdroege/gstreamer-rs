@@ -667,7 +667,7 @@ pub(crate) fn main_loop(app: App) -> Result<(), Error> {
             if let Some(frame) = curr_frame.as_ref() {
                 let sync_meta = frame.buffer().meta::<gst_gl::GLSyncMeta>().unwrap();
                 sync_meta.wait(&shared_context);
-                if let Some(texture) = frame.texture_id(0) {
+                if let Ok(texture) = frame.texture_id(0) {
                     gl.draw_frame(texture as gl::types::GLuint);
                 }
             }

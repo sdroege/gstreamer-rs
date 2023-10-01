@@ -8,13 +8,13 @@ pub enum Readable {}
 pub enum Writable {}
 
 pub trait IsVideoFrame {
-    fn as_non_null_ptr(&self) -> std::ptr::NonNull<ffi::GstVideoFrame>;
+    fn as_raw(&self) -> &ffi::GstVideoFrame;
 }
 
 impl<T> IsVideoFrame for VideoFrame<T> {
     #[inline]
-    fn as_non_null_ptr(&self) -> std::ptr::NonNull<ffi::GstVideoFrame> {
-        std::ptr::NonNull::from(&self.frame)
+    fn as_raw(&self) -> &ffi::GstVideoFrame {
+        &self.frame
     }
 }
 
@@ -46,13 +46,13 @@ mod sealed {
 pub trait VideoFrameExt: sealed::Sealed + IsVideoFrame {
     #[inline]
     fn as_ptr(&self) -> *const ffi::GstVideoFrame {
-        self.as_non_null_ptr().as_ptr() as _
+        self.as_raw() as _
     }
 
     #[inline]
     fn info(&self) -> &crate::VideoInfo {
         unsafe {
-            let frame = self.as_non_null_ptr().as_ref();
+            let frame = self.as_raw();
             let info = &frame.info as *const ffi::GstVideoInfo as *const crate::VideoInfo;
             &*info
         }
@@ -60,17 +60,17 @@ pub trait VideoFrameExt: sealed::Sealed + IsVideoFrame {
 
     #[inline]
     fn flags(&self) -> crate::VideoFrameFlags {
-        unsafe { from_glib(self.as_non_null_ptr().as_ref().flags) }
+        unsafe { from_glib(self.as_raw().flags) }
     }
 
     #[inline]
     fn id(&self) -> i32 {
-        unsafe { self.as_non_null_ptr().as_ref().id }
+        self.as_raw().id
     }
 
     #[inline]
     fn buffer(&self) -> &gst::BufferRef {
-        unsafe { gst::BufferRef::from_ptr(self.as_non_null_ptr().as_ref().buffer) }
+        unsafe { gst::BufferRef::from_ptr(self.as_raw().buffer) }
     }
 
     #[inline]
@@ -534,8 +534,8 @@ pub struct VideoFrameRef<T> {
 
 impl<T> IsVideoFrame for VideoFrameRef<T> {
     #[inline]
-    fn as_non_null_ptr(&self) -> std::ptr::NonNull<ffi::GstVideoFrame> {
-        std::ptr::NonNull::from(&self.frame)
+    fn as_raw(&self) -> &ffi::GstVideoFrame {
+        &self.frame
     }
 }
 

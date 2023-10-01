@@ -38,7 +38,7 @@ mod gl_display;
 mod gl_sync_meta;
 pub mod gl_video_frame;
 pub use crate::gl_sync_meta::*;
-pub use crate::gl_video_frame::{GLVideoFrame, GLVideoFrameRef, Readable};
+pub use crate::gl_video_frame::{GLVideoFrame, GLVideoFrameExt, GLVideoFrameRef};
 mod gl_base_memory;
 pub use self::gl_base_memory::*;
 mod gl_memory;
@@ -56,6 +56,7 @@ pub mod prelude {
     pub use crate::{
         auto::traits::*, context::ContextGLExt, gl_context::GLContextExtManual,
         gl_display::GLDisplayExtManual, gl_framebuffer::GLFramebufferExtManual,
+        gl_video_frame::GLVideoFrameExt, gl_video_frame::IsGLVideoFrame,
     };
 }
 

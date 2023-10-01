@@ -10,7 +10,66 @@ pub enum Readable {}
 pub enum Writable {}
 
 // TODO: implement copy for videoframes. This would need to go through all the individual
-//   memoryies and copy them. Some GL textures can be copied, others cannot.
+//   memories and copy them. Some GL textures can be copied, others cannot.
+
+pub trait IsGLVideoFrame: IsVideoFrame + Sized {}
+
+mod sealed {
+    pub trait Sealed {}
+    impl<T: super::IsGLVideoFrame> Sealed for T {}
+}
+
+pub trait GLVideoFrameExt: sealed::Sealed + IsGLVideoFrame {
+    #[inline]
+    fn memory(&self, idx: u32) -> Result<&GLMemoryRef, glib::BoolError> {
+        if idx >= self.info().n_planes() {
+            return Err(glib::bool_error!(
+                "Memory index higher than number of memories"
+            ));
+        }
+
+        unsafe {
+            let ptr = self.as_raw().map[idx as usize].memory;
+            if ffi::gst_is_gl_memory(ptr) == glib::ffi::GTRUE {
+                Ok(GLMemoryRef::from_ptr(ptr as _))
+            } else {
+                Err(glib::bool_error!("Memory is not a GLMemory"))
+            }
+        }
+    }
+
+    #[inline]
+    #[doc(alias = "get_texture_id")]
+    fn texture_id(&self, idx: u32) -> Result<u32, glib::BoolError> {
+        Ok(self.memory(idx)?.texture_id())
+    }
+
+    #[inline]
+    #[doc(alias = "get_texture_format")]
+    fn texture_format(&self, idx: u32) -> Result<crate::GLFormat, glib::BoolError> {
+        Ok(self.memory(idx)?.texture_format())
+    }
+
+    #[inline]
+    #[doc(alias = "get_texture_height")]
+    fn texture_height(&self, idx: u32) -> Result<i32, glib::BoolError> {
+        Ok(self.memory(idx)?.texture_height())
+    }
+
+    #[inline]
+    #[doc(alias = "get_texture_target")]
+    fn texture_target(&self, idx: u32) -> Result<crate::GLTextureTarget, glib::BoolError> {
+        Ok(self.memory(idx)?.texture_target())
+    }
+
+    #[inline]
+    #[doc(alias = "get_texture_width")]
+    fn texture_width(&self, idx: u32) -> Result<i32, glib::BoolError> {
+        Ok(self.memory(idx)?.texture_width())
+    }
+}
+
+impl<O: IsGLVideoFrame> GLVideoFrameExt for O {}
 
 pub struct GLVideoFrame<T> {
     frame: gst_video::ffi::GstVideoFrame,
@@ -25,40 +84,14 @@ unsafe impl<T> Sync for GLVideoFrame<T> {}
 
 impl<T> IsVideoFrame for GLVideoFrame<T> {
     #[inline]
-    fn as_non_null_ptr(&self) -> std::ptr::NonNull<gst_video::ffi::GstVideoFrame> {
-        std::ptr::NonNull::from(&self.frame)
+    fn as_raw(&self) -> &gst_video::ffi::GstVideoFrame {
+        &self.frame
     }
 }
 
+impl<T> IsGLVideoFrame for GLVideoFrame<T> {}
+
 impl<T> GLVideoFrame<T> {
-    #[inline]
-    #[doc(alias = "get_texture_id")]
-    pub fn texture_id(&self, idx: u32) -> Option<u32> {
-        self.as_video_frame_gl_ref().texture_id(idx)
-    }
-
-    pub fn memory(&self, idx: u32) -> Option<&GLMemoryRef> {
-        if idx >= buffer_n_gl_memory(self.buffer())? {
-            return None;
-        }
-
-        unsafe {
-            let ptr = (*self.as_ptr()).map[idx as usize].memory as _;
-            Some(GLMemoryRef::from_ptr(ptr))
-        }
-    }
-
-    pub fn memory_mut(&self, idx: u32) -> Option<&mut GLMemoryRef> {
-        if idx >= buffer_n_gl_memory(self.buffer())? {
-            return None;
-        }
-
-        unsafe {
-            let ptr = (*self.as_ptr()).map[idx as usize].memory as _;
-            Some(GLMemoryRef::from_mut_ptr(ptr))
-        }
-    }
-
     #[inline]
     pub fn into_buffer(self) -> gst::Buffer {
         unsafe {
@@ -211,6 +244,11 @@ impl GLVideoFrame<Writable> {
     }
 
     #[inline]
+    pub fn memory_mut(&self, idx: u32) -> Result<&mut GLMemoryRef, glib::BoolError> {
+        unsafe { Ok(GLMemoryRef::from_mut_ptr(self.memory(idx)?.as_ptr() as _)) }
+    }
+
+    #[inline]
     pub fn buffer_mut(&mut self) -> &mut gst::BufferRef {
         unsafe { gst::BufferRef::from_mut_ptr(self.frame.buffer) }
     }
@@ -227,10 +265,13 @@ unsafe impl<T> Sync for GLVideoFrameRef<T> {}
 
 impl<T> IsVideoFrame for GLVideoFrameRef<T> {
     #[inline]
-    fn as_non_null_ptr(&self) -> std::ptr::NonNull<gst_video::ffi::GstVideoFrame> {
-        std::ptr::NonNull::from(&self.frame)
+    fn as_raw(&self) -> &gst_video::ffi::GstVideoFrame {
+        &self.frame
     }
 }
+
+impl<T> IsGLVideoFrame for GLVideoFrameRef<T> {}
+
 // TODO implement Debug for GLVideoFrameRef
 
 impl<'a> GLVideoFrameRef<&'a gst::BufferRef> {
@@ -305,35 +346,6 @@ impl<'a> GLVideoFrameRef<&'a gst::BufferRef> {
                     phantom: PhantomData,
                 })
             }
-        }
-    }
-
-    pub fn texture_id(&self, idx: u32) -> Option<u32> {
-        let len = buffer_n_gl_memory(self.buffer())?;
-
-        if idx >= len {
-            return None;
-        }
-
-        // FIXME: planes are not memories
-        if idx > self.n_planes() {
-            return None;
-        }
-
-        unsafe {
-            let ptr = (*self.as_ptr()).data[idx as usize] as *const u32;
-            Some(*ptr)
-        }
-    }
-
-    pub fn memory(&self, idx: u32) -> Option<&GLMemoryRef> {
-        if idx >= buffer_n_gl_memory(self.buffer())? {
-            return None;
-        }
-
-        unsafe {
-            let ptr = (*self.as_ptr()).map[idx as usize].memory as _;
-            Some(GLMemoryRef::from_ptr(ptr))
         }
     }
 }
@@ -424,15 +436,9 @@ impl<'a> GLVideoFrameRef<&'a mut gst::BufferRef> {
         &mut self.frame
     }
 
-    pub fn memory_mut(&self, idx: u32) -> Option<&mut GLMemoryRef> {
-        if idx >= buffer_n_gl_memory(self.buffer())? {
-            return None;
-        }
-
-        unsafe {
-            let ptr = (*self.as_ptr()).map[idx as usize].memory as _;
-            Some(GLMemoryRef::from_mut_ptr(ptr))
-        }
+    #[inline]
+    pub fn memory_mut(&self, idx: u32) -> Result<&mut GLMemoryRef, glib::BoolError> {
+        unsafe { Ok(GLMemoryRef::from_mut_ptr(self.memory(idx)?.as_ptr() as _)) }
     }
 }
 
