@@ -661,6 +661,20 @@ impl CustomMeta {
         }
     }
 
+    #[doc(alias = "gst_meta_register_simple")]
+    pub fn register_simple(name: &str) {
+        assert_initialized_main_thread!();
+        unsafe {
+            ffi::gst_meta_register_custom(
+                name.to_glib_none().0,
+                ptr::null_mut(),
+                None,
+                ptr::null_mut(),
+                None,
+            );
+        }
+    }
+
     #[doc(alias = "gst_buffer_add_custom_meta")]
     pub fn add<'a>(
         buffer: &'a mut BufferRef,
