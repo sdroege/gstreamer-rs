@@ -793,6 +793,13 @@ extern "C" {
     //=========================================================================
     // GstRTSPConnection
     //=========================================================================
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_rtsp_connection_add_extra_http_request_header(
+        conn: *mut GstRTSPConnection,
+        key: *const c_char,
+        value: *const c_char,
+    );
     pub fn gst_rtsp_connection_clear_auth_params(conn: *mut GstRTSPConnection);
     pub fn gst_rtsp_connection_close(conn: *mut GstRTSPConnection) -> GstRTSPResult;
     pub fn gst_rtsp_connection_connect(

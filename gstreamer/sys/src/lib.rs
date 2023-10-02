@@ -1629,12 +1629,14 @@ impl ::std::fmt::Debug for GstControlSourceClass {
 #[repr(C)]
 pub struct GstCustomMeta {
     pub meta: GstMeta,
+    pub structure: *mut GstStructure,
 }
 
 impl ::std::fmt::Debug for GstCustomMeta {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstCustomMeta @ {self:p}"))
             .field("meta", &self.meta)
+            .field("structure", &self.structure)
             .finish()
     }
 }
@@ -5767,6 +5769,9 @@ extern "C" {
         user_data: gpointer,
         destroy_data: glib::GDestroyNotify,
     ) -> *const GstMetaInfo;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_meta_register_custom_simple(name: *const c_char) -> *const GstMetaInfo;
 
     //=========================================================================
     // GstMetaInfo

@@ -382,6 +382,12 @@ pub const GST_VIDEO_FORMAT_A420_16LE: GstVideoFormat = 129;
 #[cfg(feature = "v1_24")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
 pub const GST_VIDEO_FORMAT_A420_16BE: GstVideoFormat = 130;
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+pub const GST_VIDEO_FORMAT_GBR_16LE: GstVideoFormat = 131;
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+pub const GST_VIDEO_FORMAT_GBR_16BE: GstVideoFormat = 132;
 
 pub type GstVideoGLTextureOrientation = c_int;
 pub const GST_VIDEO_GL_TEXTURE_ORIENTATION_X_NORMAL_Y_NORMAL: GstVideoGLTextureOrientation = 0;

@@ -215,6 +215,12 @@ extern "C" {
     pub fn gst_app_sink_get_drop(appsink: *mut GstAppSink) -> gboolean;
     pub fn gst_app_sink_get_emit_signals(appsink: *mut GstAppSink) -> gboolean;
     pub fn gst_app_sink_get_max_buffers(appsink: *mut GstAppSink) -> c_uint;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_app_sink_get_max_bytes(appsink: *mut GstAppSink) -> u64;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_app_sink_get_max_time(appsink: *mut GstAppSink) -> gst::GstClockTime;
     pub fn gst_app_sink_get_wait_on_eos(appsink: *mut GstAppSink) -> gboolean;
     pub fn gst_app_sink_is_eos(appsink: *mut GstAppSink) -> gboolean;
     #[cfg(feature = "v1_20")]
@@ -233,6 +239,12 @@ extern "C" {
     pub fn gst_app_sink_set_drop(appsink: *mut GstAppSink, drop: gboolean);
     pub fn gst_app_sink_set_emit_signals(appsink: *mut GstAppSink, emit: gboolean);
     pub fn gst_app_sink_set_max_buffers(appsink: *mut GstAppSink, max: c_uint);
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_app_sink_set_max_bytes(appsink: *mut GstAppSink, max: u64);
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_app_sink_set_max_time(appsink: *mut GstAppSink, max: gst::GstClockTime);
     pub fn gst_app_sink_set_wait_on_eos(appsink: *mut GstAppSink, wait: gboolean);
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
