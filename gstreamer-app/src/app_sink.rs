@@ -1163,6 +1163,24 @@ impl AppSinkBuilder {
         }
     }
 
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn max_time(self, max_time: Option<gst::ClockTime>) -> Self {
+        Self {
+            builder: self.builder.property("max-time", max_time),
+            ..self
+        }
+    }
+
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn max_bytes(self, max_bytes: u64) -> Self {
+        Self {
+            builder: self.builder.property("max-bytes", max_bytes),
+            ..self
+        }
+    }
+
     pub fn name(self, name: impl Into<glib::GString>) -> Self {
         Self {
             builder: self.builder.property("name", name.into()),
