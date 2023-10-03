@@ -48,6 +48,22 @@ impl AppSink {
         unsafe { ffi::gst_app_sink_get_max_buffers(self.to_glib_none().0) }
     }
 
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "gst_app_sink_get_max_bytes")]
+    #[doc(alias = "get_max_bytes")]
+    pub fn max_bytes(&self) -> u64 {
+        unsafe { ffi::gst_app_sink_get_max_bytes(self.to_glib_none().0) }
+    }
+
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "gst_app_sink_get_max_time")]
+    #[doc(alias = "get_max_time")]
+    pub fn max_time(&self) -> Option<gst::ClockTime> {
+        unsafe { from_glib(ffi::gst_app_sink_get_max_time(self.to_glib_none().0)) }
+    }
+
     #[doc(alias = "gst_app_sink_get_wait_on_eos")]
     #[doc(alias = "get_wait_on_eos")]
     pub fn is_wait_on_eos(&self) -> bool {
@@ -118,6 +134,24 @@ impl AppSink {
     pub fn set_max_buffers(&self, max: u32) {
         unsafe {
             ffi::gst_app_sink_set_max_buffers(self.to_glib_none().0, max);
+        }
+    }
+
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "gst_app_sink_set_max_bytes")]
+    pub fn set_max_bytes(&self, max: u64) {
+        unsafe {
+            ffi::gst_app_sink_set_max_bytes(self.to_glib_none().0, max);
+        }
+    }
+
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "gst_app_sink_set_max_time")]
+    pub fn set_max_time(&self, max: impl Into<Option<gst::ClockTime>>) {
+        unsafe {
+            ffi::gst_app_sink_set_max_time(self.to_glib_none().0, max.into().into_glib());
         }
     }
 
@@ -307,6 +341,64 @@ impl AppSink {
                 b"notify::max-buffers\0".as_ptr() as *const _,
                 Some(transmute::<_, unsafe extern "C" fn()>(
                     notify_max_buffers_trampoline::<F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "max-bytes")]
+    pub fn connect_max_bytes_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_max_bytes_trampoline<
+            F: Fn(&AppSink) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstAppSink,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::max-bytes\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_max_bytes_trampoline::<F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "max-time")]
+    pub fn connect_max_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_max_time_trampoline<F: Fn(&AppSink) + Send + Sync + 'static>(
+            this: *mut ffi::GstAppSink,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::max-time\0".as_ptr() as *const _,
+                Some(transmute::<_, unsafe extern "C" fn()>(
+                    notify_max_time_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

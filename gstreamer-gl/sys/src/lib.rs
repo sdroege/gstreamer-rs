@@ -2942,9 +2942,20 @@ extern "C" {
     pub fn gst_buffer_pool_config_get_gl_allocation_params(
         config: *mut gst::GstStructure,
     ) -> *mut GstGLAllocationParams;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_buffer_pool_config_get_gl_min_free_queue_size(
+        config: *mut gst::GstStructure,
+    ) -> c_uint;
     pub fn gst_buffer_pool_config_set_gl_allocation_params(
         config: *mut gst::GstStructure,
         params: *const GstGLAllocationParams,
+    );
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_buffer_pool_config_set_gl_min_free_queue_size(
+        config: *mut gst::GstStructure,
+        queue_size: c_uint,
     );
     pub fn gst_context_get_gl_display(
         context: *mut gst::GstContext,

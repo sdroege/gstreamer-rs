@@ -1706,6 +1706,22 @@ extern "C" {
     pub fn gst_queue_array_pop_head_struct(array: *mut GstQueueArray) -> gpointer;
     pub fn gst_queue_array_pop_tail(array: *mut GstQueueArray) -> gpointer;
     pub fn gst_queue_array_pop_tail_struct(array: *mut GstQueueArray) -> gpointer;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_queue_array_push_sorted(
+        array: *mut GstQueueArray,
+        data: gpointer,
+        func: glib::GCompareDataFunc,
+        user_data: gpointer,
+    );
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_queue_array_push_sorted_struct(
+        array: *mut GstQueueArray,
+        p_struct: gpointer,
+        func: glib::GCompareDataFunc,
+        user_data: gpointer,
+    );
     pub fn gst_queue_array_push_tail(array: *mut GstQueueArray, data: gpointer);
     pub fn gst_queue_array_push_tail_struct(array: *mut GstQueueArray, p_struct: gpointer);
     #[cfg(feature = "v1_16")]
@@ -1713,6 +1729,13 @@ extern "C" {
     pub fn gst_queue_array_set_clear_func(
         array: *mut GstQueueArray,
         clear_func: glib::GDestroyNotify,
+    );
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_queue_array_sort(
+        array: *mut GstQueueArray,
+        compare_func: glib::GCompareDataFunc,
+        user_data: gpointer,
     );
     pub fn gst_queue_array_new(initial_size: c_uint) -> *mut GstQueueArray;
     pub fn gst_queue_array_new_for_struct(
