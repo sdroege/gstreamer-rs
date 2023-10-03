@@ -80,7 +80,7 @@ impl<F: FnMut(&Task) + Send + 'static> TaskBuilder<F> {
 
             (*func_ptr).1 = task.to_glib_none().0;
 
-            let lock = self.lock.unwrap_or_else(TaskLock::new);
+            let lock = self.lock.unwrap_or_default();
             ffi::gst_task_set_lock(task.to_glib_none().0, mut_override(&lock.0 .0));
             task.set_data("gstreamer-rs-task-lock", Arc::clone(&lock.0));
 

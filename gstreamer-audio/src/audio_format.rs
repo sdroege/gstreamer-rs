@@ -148,13 +148,14 @@ impl str::FromStr for crate::AudioFormat {
 }
 
 impl PartialOrd for crate::AudioFormat {
+    #[inline]
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        crate::AudioFormatInfo::from_format(*self)
-            .partial_cmp(&crate::AudioFormatInfo::from_format(*other))
+        Some(self.cmp(other))
     }
 }
 
 impl Ord for crate::AudioFormat {
+    #[inline]
     fn cmp(&self, other: &Self) -> std::cmp::Ordering {
         crate::AudioFormatInfo::from_format(*self).cmp(&crate::AudioFormatInfo::from_format(*other))
     }

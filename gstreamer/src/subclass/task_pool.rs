@@ -215,7 +215,7 @@ impl Eq for TaskPoolFunction {}
 
 impl PartialOrd for TaskPoolFunction {
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        self.as_ptr().partial_cmp(&other.as_ptr())
+        Some(self.cmp(other))
     }
 }
 

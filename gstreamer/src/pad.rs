@@ -2047,7 +2047,6 @@ mod tests {
 
         {
             let buffers = buffers.clone();
-            let flow_override = flow_override;
             pad.add_probe(crate::PadProbeType::BUFFER, move |_, info| {
                 if let Some(PadProbeData::Buffer(buffer)) = info.data.take() {
                     let mut buffers = buffers.lock().unwrap();
