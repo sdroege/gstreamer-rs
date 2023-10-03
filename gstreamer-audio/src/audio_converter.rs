@@ -160,7 +160,7 @@ impl AudioConverterConfig {
                     })
                     .collect::<Vec<_>>()
             })
-            .unwrap_or_else(Vec::new)
+            .unwrap_or_default()
     }
 
     #[cfg(feature = "v1_22")]

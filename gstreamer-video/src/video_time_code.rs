@@ -461,7 +461,7 @@ impl Eq for ValidVideoTimeCode {}
 impl PartialOrd for ValidVideoTimeCode {
     #[inline]
     fn partial_cmp(&self, other: &Self) -> Option<cmp::Ordering> {
-        self.compare(other).partial_cmp(&0)
+        Some(self.cmp(other))
     }
 }
 

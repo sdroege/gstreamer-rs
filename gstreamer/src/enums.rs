@@ -483,7 +483,7 @@ impl Eq for crate::TypeFindProbability {}
 impl PartialOrd for crate::TypeFindProbability {
     #[inline]
     fn partial_cmp(&self, other: &Self) -> Option<cmp::Ordering> {
-        (self.into_glib() as u32).partial_cmp(&(other.into_glib() as u32))
+        Some(self.cmp(other))
     }
 }
 
@@ -542,7 +542,7 @@ impl Eq for crate::Rank {}
 impl PartialOrd for crate::Rank {
     #[inline]
     fn partial_cmp(&self, other: &Self) -> Option<cmp::Ordering> {
-        (self.into_glib() as u32).partial_cmp(&(other.into_glib() as u32))
+        Some(self.cmp(other))
     }
 }
 

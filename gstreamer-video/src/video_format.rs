@@ -305,13 +305,14 @@ impl str::FromStr for crate::VideoFormat {
 }
 
 impl PartialOrd for crate::VideoFormat {
+    #[inline]
     fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        crate::VideoFormatInfo::from_format(*self)
-            .partial_cmp(&crate::VideoFormatInfo::from_format(*other))
+        Some(self.cmp(other))
     }
 }
 
 impl Ord for crate::VideoFormat {
+    #[inline]
     fn cmp(&self, other: &Self) -> std::cmp::Ordering {
         crate::VideoFormatInfo::from_format(*self).cmp(&crate::VideoFormatInfo::from_format(*other))
     }
