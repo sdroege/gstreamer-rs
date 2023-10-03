@@ -320,7 +320,9 @@ impl StreamProducer {
         drop(consumers);
 
         if needs_keyframe_request {
-            appsink.send_event(
+            // Do not use `gst_element_send_event()` as it takes the state lock which may lead to dead locks.
+            let pad = appsink.static_pad("sink").unwrap();
+            pad.push_event(
                 gst_video::UpstreamForceKeyUnitEvent::builder()
                     .all_headers(true)
                     .build(),
