@@ -136,7 +136,9 @@ impl StreamProducer {
                     if let Some(gst::PadProbeData::Event(ref ev)) = info.data {
                         if gst_video::UpstreamForceKeyUnitEvent::parse(ev).is_ok() {
                             gst::debug!(CAT, obj: &appsink,  "Requesting keyframe");
-                            let _ = appsink.send_event(ev.clone());
+                            // Do not use `gst_element_send_event()` as it takes the state lock which may lead to dead locks.
+                            let pad = appsink.static_pad("sink").unwrap();
+                            let _ = pad.push_event(ev.clone());
                         }
                     }
 
@@ -311,7 +313,9 @@ impl<'a> From<&'a gst_app::AppSink> for StreamProducer {
                     drop(consumers);
 
                     if needs_keyframe_request {
-                        appsink.send_event(
+                        // Do not use `gst_element_send_event()` as it takes the state lock which may lead to dead locks.
+                        let pad = appsink.static_pad("sink").unwrap();
+                        pad.push_event(
                             gst_video::UpstreamForceKeyUnitEvent::builder()
                                 .all_headers(true)
                                 .build(),
