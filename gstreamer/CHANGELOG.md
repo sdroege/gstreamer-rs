@@ -5,6 +5,19 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.21.1] - 2023-10-04
+### Changed
+- Update GStreamer gir files to latest (upcoming) 1.24 APIs.
+
+### Fixed
+- Use correct media links in the tutorials code.
+- Fix a couple of new 1.72/1.73 clippy warnings.
+- Fix description of gstreamer-validate crate.
+- Copyright/license files for the gstreamer-gl were added.
+- Ordering of raw video formats follows the rules of latest libgstvideo now.
+- Fix potential deadlock in `gst_utils::StreamProducer` when sending
+  force-keyunit events.
+
 ## [0.21.0] - 2023-08-08
 ### Changed
 - Minimum supported Rust version is updated to 1.70.0.
@@ -1558,7 +1571,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.21.0...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.21.1...HEAD
+[0.21.1]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.21.0...0.21.1
 [0.21.0]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.20.7...0.21.0
 [0.20.7]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.20.6...0.20.7
 [0.20.6]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.20.5...0.20.6
