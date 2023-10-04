@@ -7,24 +7,6 @@ use crate::{GLDisplay, GLSLProfile, GLSLVersion};
 use glib::{prelude::*, translate::*};
 use std::mem;
 
-#[cfg(feature = "v1_24")]
-#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
-#[doc(alias = "gst_buffer_pool_config_get_gl_min_free_queue_size")]
-pub fn buffer_pool_config_get_gl_min_free_queue_size(config: &gst::Structure) -> u32 {
-    assert_initialized_main_thread!();
-    unsafe { ffi::gst_buffer_pool_config_get_gl_min_free_queue_size(config.to_glib_none().0) }
-}
-
-#[cfg(feature = "v1_24")]
-#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
-#[doc(alias = "gst_buffer_pool_config_set_gl_min_free_queue_size")]
-pub fn buffer_pool_config_set_gl_min_free_queue_size(config: &gst::Structure, queue_size: u32) {
-    assert_initialized_main_thread!();
-    unsafe {
-        ffi::gst_buffer_pool_config_set_gl_min_free_queue_size(config.to_glib_none().0, queue_size);
-    }
-}
-
 #[doc(alias = "gst_gl_check_extension")]
 pub fn gl_check_extension(name: &str, ext: &str) -> bool {
     assert_initialized_main_thread!();

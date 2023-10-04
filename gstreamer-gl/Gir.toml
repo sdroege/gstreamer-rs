@@ -120,6 +120,12 @@ status = "generate"
     [[object.function]]
     name = "buffer_pool_config_set_gl_allocation_params"
     ignore = true
+    [[object.function]]
+    name = "buffer_pool_config_get_gl_min_free_queue_size"
+    ignore = true
+    [[object.function]]
+    name = "buffer_pool_config_set_gl_min_free_queue_size"
+    ignore = true
 
     # Needs manual binding to be an extension on gst_video::VideoAffineTransformationMeta
     [[object.function]]
