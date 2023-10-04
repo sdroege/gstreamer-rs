@@ -1,6 +1,6 @@
 [package]
 name = "gstreamer-controller"
-version = "0.21.0"
+version = "0.21.1"
 authors = ["Alexey Galakhov <agalakhov@gmail.com>", "Sebastian Dröge <sebastian@centricular.com>"]
 categories = ["api-bindings", "multimedia"]
 description = "Rust bindings for GStreamer Controller library"
