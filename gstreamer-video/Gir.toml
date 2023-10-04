@@ -27,6 +27,8 @@ generate = [
     "GstVideo.VideoAFDValue",
     "GstVideo.VideoAggregatorParallelConvertPad",
     "GstVideo.VideoAlphaMode",
+    "GstVideo.VideoAncillaryDID",
+    "GstVideo.VideoAncillaryDID16",
     "GstVideo.VideoBufferPool",
     "GstVideo.VideoChromaMode",
     "GstVideo.VideoDecoderRequestSyncPointFlags",
@@ -67,6 +69,7 @@ manual = [
     "GstBase.AggregatorPad",
     "GstBase.BaseSink",
     "GstBase.BaseTransform",
+    "GstVideo.VideoAncillary",
     "GstVideo.VideoCodecFrame",
     "GstVideo.VideoCodecState",
     "GstVideo.VideoColorimetry",
@@ -77,6 +80,8 @@ manual = [
     "GstVideo.VideoMeta",
     "GstVideo.VideoTimeCode",
     "GstVideo.VideoTimeCodeInterval",
+    "GstVideo.VideoVBIEncoder",
+    "GstVideo.VideoVBIParser",
 ]
 
 [[object]]

@@ -76,6 +76,12 @@ pub use self::enums::VideoAFDValue;
 pub use self::enums::VideoAlphaMode;
 #[cfg(feature = "v1_16")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+pub use self::enums::VideoAncillaryDID;
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+pub use self::enums::VideoAncillaryDID16;
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 pub use self::enums::VideoCaptionType;
 pub use self::enums::VideoChromaMode;
 pub use self::enums::VideoColorMatrix;
