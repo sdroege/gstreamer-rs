@@ -990,6 +990,294 @@ impl From<VideoAlphaMode> for glib::Value {
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstVideoAncillaryDID")]
+pub enum VideoAncillaryDID {
+    #[doc(alias = "GST_VIDEO_ANCILLARY_DID_UNDEFINED")]
+    Undefined,
+    #[doc(alias = "GST_VIDEO_ANCILLARY_DID_DELETION")]
+    Deletion,
+    #[doc(alias = "GST_VIDEO_ANCILLARY_DID_HANC_3G_AUDIO_DATA_FIRST")]
+    Hanc3gAudioDataFirst,
+    #[doc(alias = "GST_VIDEO_ANCILLARY_DID_HANC_3G_AUDIO_DATA_LAST")]
+    Hanc3gAudioDataLast,
+    #[doc(alias = "GST_VIDEO_ANCILLARY_DID_HANC_HDTV_AUDIO_DATA_FIRST")]
+    HancHdtvAudioDataFirst,
+    #[doc(alias = "GST_VIDEO_ANCILLARY_DID_HANC_HDTV_AUDIO_DATA_LAST")]
+    HancHdtvAudioDataLast,
+    #[doc(alias = "GST_VIDEO_ANCILLARY_DID_HANC_SDTV_AUDIO_DATA_1_FIRST")]
+    HancSdtvAudioData1First,
+    #[doc(alias = "GST_VIDEO_ANCILLARY_DID_HANC_SDTV_AUDIO_DATA_1_LAST")]
+    HancSdtvAudioData1Last,
+    #[doc(alias = "GST_VIDEO_ANCILLARY_DID_CAMERA_POSITION")]
+    CameraPosition,
+    #[doc(alias = "GST_VIDEO_ANCILLARY_DID_HANC_ERROR_DETECTION")]
+    HancErrorDetection,
+    #[doc(alias = "GST_VIDEO_ANCILLARY_DID_HANC_SDTV_AUDIO_DATA_2_FIRST")]
+    HancSdtvAudioData2First,
+    #[doc(alias = "GST_VIDEO_ANCILLARY_DID_HANC_SDTV_AUDIO_DATA_2_LAST")]
+    HancSdtvAudioData2Last,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+#[doc(hidden)]
+impl IntoGlib for VideoAncillaryDID {
+    type GlibType = ffi::GstVideoAncillaryDID;
+
+    #[inline]
+    fn into_glib(self) -> ffi::GstVideoAncillaryDID {
+        match self {
+            Self::Undefined => ffi::GST_VIDEO_ANCILLARY_DID_UNDEFINED,
+            Self::Deletion => ffi::GST_VIDEO_ANCILLARY_DID_DELETION,
+            Self::Hanc3gAudioDataFirst => ffi::GST_VIDEO_ANCILLARY_DID_HANC_3G_AUDIO_DATA_FIRST,
+            Self::Hanc3gAudioDataLast => ffi::GST_VIDEO_ANCILLARY_DID_HANC_3G_AUDIO_DATA_LAST,
+            Self::HancHdtvAudioDataFirst => ffi::GST_VIDEO_ANCILLARY_DID_HANC_HDTV_AUDIO_DATA_FIRST,
+            Self::HancHdtvAudioDataLast => ffi::GST_VIDEO_ANCILLARY_DID_HANC_HDTV_AUDIO_DATA_LAST,
+            Self::HancSdtvAudioData1First => {
+                ffi::GST_VIDEO_ANCILLARY_DID_HANC_SDTV_AUDIO_DATA_1_FIRST
+            }
+            Self::HancSdtvAudioData1Last => {
+                ffi::GST_VIDEO_ANCILLARY_DID_HANC_SDTV_AUDIO_DATA_1_LAST
+            }
+            Self::CameraPosition => ffi::GST_VIDEO_ANCILLARY_DID_CAMERA_POSITION,
+            Self::HancErrorDetection => ffi::GST_VIDEO_ANCILLARY_DID_HANC_ERROR_DETECTION,
+            Self::HancSdtvAudioData2First => {
+                ffi::GST_VIDEO_ANCILLARY_DID_HANC_SDTV_AUDIO_DATA_2_FIRST
+            }
+            Self::HancSdtvAudioData2Last => {
+                ffi::GST_VIDEO_ANCILLARY_DID_HANC_SDTV_AUDIO_DATA_2_LAST
+            }
+            Self::__Unknown(value) => value,
+        }
+    }
+}
+
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+#[doc(hidden)]
+impl FromGlib<ffi::GstVideoAncillaryDID> for VideoAncillaryDID {
+    #[inline]
+    unsafe fn from_glib(value: ffi::GstVideoAncillaryDID) -> Self {
+        skip_assert_initialized!();
+
+        match value {
+            ffi::GST_VIDEO_ANCILLARY_DID_UNDEFINED => Self::Undefined,
+            ffi::GST_VIDEO_ANCILLARY_DID_DELETION => Self::Deletion,
+            ffi::GST_VIDEO_ANCILLARY_DID_HANC_3G_AUDIO_DATA_FIRST => Self::Hanc3gAudioDataFirst,
+            ffi::GST_VIDEO_ANCILLARY_DID_HANC_3G_AUDIO_DATA_LAST => Self::Hanc3gAudioDataLast,
+            ffi::GST_VIDEO_ANCILLARY_DID_HANC_HDTV_AUDIO_DATA_FIRST => Self::HancHdtvAudioDataFirst,
+            ffi::GST_VIDEO_ANCILLARY_DID_HANC_HDTV_AUDIO_DATA_LAST => Self::HancHdtvAudioDataLast,
+            ffi::GST_VIDEO_ANCILLARY_DID_HANC_SDTV_AUDIO_DATA_1_FIRST => {
+                Self::HancSdtvAudioData1First
+            }
+            ffi::GST_VIDEO_ANCILLARY_DID_HANC_SDTV_AUDIO_DATA_1_LAST => {
+                Self::HancSdtvAudioData1Last
+            }
+            ffi::GST_VIDEO_ANCILLARY_DID_CAMERA_POSITION => Self::CameraPosition,
+            ffi::GST_VIDEO_ANCILLARY_DID_HANC_ERROR_DETECTION => Self::HancErrorDetection,
+            ffi::GST_VIDEO_ANCILLARY_DID_HANC_SDTV_AUDIO_DATA_2_FIRST => {
+                Self::HancSdtvAudioData2First
+            }
+            ffi::GST_VIDEO_ANCILLARY_DID_HANC_SDTV_AUDIO_DATA_2_LAST => {
+                Self::HancSdtvAudioData2Last
+            }
+            value => Self::__Unknown(value),
+        }
+    }
+}
+
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+impl StaticType for VideoAncillaryDID {
+    #[inline]
+    #[doc(alias = "gst_video_ancillary_did_get_type")]
+    fn static_type() -> glib::Type {
+        unsafe { from_glib(ffi::gst_video_ancillary_did_get_type()) }
+    }
+}
+
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+impl glib::HasParamSpec for VideoAncillaryDID {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        Self::ParamSpec::builder_with_default
+    }
+}
+
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+impl glib::value::ValueType for VideoAncillaryDID {
+    type Type = Self;
+}
+
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+unsafe impl<'a> glib::value::FromValue<'a> for VideoAncillaryDID {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    #[inline]
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+impl ToValue for VideoAncillaryDID {
+    #[inline]
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    #[inline]
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+impl From<VideoAncillaryDID> for glib::Value {
+    #[inline]
+    fn from(v: VideoAncillaryDID) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+#[doc(alias = "GstVideoAncillaryDID16")]
+pub enum VideoAncillaryDID16 {
+    #[doc(alias = "GST_VIDEO_ANCILLARY_DID16_S334_EIA_708")]
+    S334Eia708,
+    #[doc(alias = "GST_VIDEO_ANCILLARY_DID16_S334_EIA_608")]
+    S334Eia608,
+    #[doc(alias = "GST_VIDEO_ANCILLARY_DID16_S2016_3_AFD_BAR")]
+    S20163AfdBar,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+#[doc(hidden)]
+impl IntoGlib for VideoAncillaryDID16 {
+    type GlibType = ffi::GstVideoAncillaryDID16;
+
+    #[inline]
+    fn into_glib(self) -> ffi::GstVideoAncillaryDID16 {
+        match self {
+            Self::S334Eia708 => ffi::GST_VIDEO_ANCILLARY_DID16_S334_EIA_708,
+            Self::S334Eia608 => ffi::GST_VIDEO_ANCILLARY_DID16_S334_EIA_608,
+            Self::S20163AfdBar => ffi::GST_VIDEO_ANCILLARY_DID16_S2016_3_AFD_BAR,
+            Self::__Unknown(value) => value,
+        }
+    }
+}
+
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+#[doc(hidden)]
+impl FromGlib<ffi::GstVideoAncillaryDID16> for VideoAncillaryDID16 {
+    #[inline]
+    unsafe fn from_glib(value: ffi::GstVideoAncillaryDID16) -> Self {
+        skip_assert_initialized!();
+
+        match value {
+            ffi::GST_VIDEO_ANCILLARY_DID16_S334_EIA_708 => Self::S334Eia708,
+            ffi::GST_VIDEO_ANCILLARY_DID16_S334_EIA_608 => Self::S334Eia608,
+            ffi::GST_VIDEO_ANCILLARY_DID16_S2016_3_AFD_BAR => Self::S20163AfdBar,
+            value => Self::__Unknown(value),
+        }
+    }
+}
+
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+impl StaticType for VideoAncillaryDID16 {
+    #[inline]
+    #[doc(alias = "gst_video_ancillary_di_d16_get_type")]
+    fn static_type() -> glib::Type {
+        unsafe { from_glib(ffi::gst_video_ancillary_di_d16_get_type()) }
+    }
+}
+
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+impl glib::HasParamSpec for VideoAncillaryDID16 {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        Self::ParamSpec::builder_with_default
+    }
+}
+
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+impl glib::value::ValueType for VideoAncillaryDID16 {
+    type Type = Self;
+}
+
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+unsafe impl<'a> glib::value::FromValue<'a> for VideoAncillaryDID16 {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    #[inline]
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+impl ToValue for VideoAncillaryDID16 {
+    #[inline]
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    #[inline]
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+impl From<VideoAncillaryDID16> for glib::Value {
+    #[inline]
+    fn from(v: VideoAncillaryDID16) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 #[doc(alias = "GstVideoCaptionType")]
 pub enum VideoCaptionType {
     #[doc(alias = "GST_VIDEO_CAPTION_TYPE_UNKNOWN")]
