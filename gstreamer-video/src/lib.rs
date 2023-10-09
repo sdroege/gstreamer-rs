@@ -133,6 +133,27 @@ mod video_aggregator_convert_pad;
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 mod video_aggregator_pad;
 
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+mod video_vbi;
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+pub use video_vbi::*;
+
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+mod video_vbi_encoder;
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+pub use video_vbi_encoder::*;
+
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+mod video_vbi_parser;
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+pub use video_vbi_parser::*;
+
 pub const VIDEO_ENCODER_FLOW_NEED_DATA: gst::FlowSuccess = gst::FlowSuccess::CustomSuccess;
 pub const VIDEO_DECODER_FLOW_NEED_DATA: gst::FlowSuccess = gst::FlowSuccess::CustomSuccess;
 

@@ -22,6 +22,7 @@ gst = { package = "gstreamer", path = "../gstreamer", version = "0.21" }
 gst-base = { package = "gstreamer-base", path = "../gstreamer-base", version = "0.21" }
 futures-channel = "0.3"
 serde = { version = "1.0", optional = true, features = ["derive"] }
+thiserror = "1.0.49"
 
 [dev-dependencies]
 itertools = "0.11"
