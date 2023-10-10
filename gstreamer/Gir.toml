@@ -56,6 +56,7 @@ manual = [
     "Gst.CapsFeatures",
     "Gst.DebugCategory",
     "Gst.DebugMessage",
+    "Gst.ElementClass", # for docs only
     "Gst.Segment",
     "Gst.StaticCaps",
     "Gst.StaticPadTemplate",
