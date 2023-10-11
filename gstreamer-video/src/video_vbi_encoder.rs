@@ -47,7 +47,10 @@ impl VideoAFDDescriptionMode {
 
 impl VideoVBIEncoder {
     #[doc(alias = "gst_video_vbi_encoder_new")]
-    fn try_new(format: VideoFormat, pixel_width: u32) -> Result<VideoVBIEncoder, VideoVBIError> {
+    pub fn try_new(
+        format: VideoFormat,
+        pixel_width: u32,
+    ) -> Result<VideoVBIEncoder, VideoVBIError> {
         skip_assert_initialized!();
         let res: Option<VideoVBIEncoderInner> = unsafe {
             from_glib_full(ffi::gst_video_vbi_encoder_new(
