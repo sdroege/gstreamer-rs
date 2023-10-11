@@ -39,16 +39,9 @@ pub trait DeviceProviderExtManual: sealed::Sealed + IsA<DeviceProvider> + 'stati
     #[doc(alias = "gst_device_provider_class_get_metadata")]
     fn metadata<'a>(&self, key: &str) -> Option<&'a str> {
         unsafe {
-            let klass = (*(self.as_ptr() as *mut glib::gobject_ffi::GTypeInstance)).g_class
-                as *mut ffi::GstDeviceProviderClass;
-
-            let ptr = ffi::gst_device_provider_class_get_metadata(klass, key.to_glib_none().0);
-
-            if ptr.is_null() {
-                None
-            } else {
-                Some(CStr::from_ptr(ptr).to_str().unwrap())
-            }
+            self.unsafe_cast_ref::<DeviceProvider>()
+                .class()
+                .metadata(key)
         }
     }
 
@@ -64,3 +57,29 @@ pub trait DeviceProviderExtManual: sealed::Sealed + IsA<DeviceProvider> + 'stati
 }
 
 impl<O: IsA<DeviceProvider>> DeviceProviderExtManual for O {}
+
+pub unsafe trait DeviceProviderClassExt {
+    #[doc(alias = "get_metadata")]
+    #[doc(alias = "gst_device_provider_class_get_metadata")]
+    fn metadata<'a>(&self, key: &str) -> Option<&'a str> {
+        unsafe {
+            let klass = self as *const _ as *const ffi::GstDeviceProviderClass;
+
+            let ptr = ffi::gst_device_provider_class_get_metadata(
+                mut_override(klass),
+                key.to_glib_none().0,
+            );
+
+            if ptr.is_null() {
+                None
+            } else {
+                Some(CStr::from_ptr(ptr).to_str().unwrap())
+            }
+        }
+    }
+}
+
+unsafe impl<T: IsA<DeviceProvider> + glib::object::IsClass> DeviceProviderClassExt
+    for glib::object::Class<T>
+{
+}

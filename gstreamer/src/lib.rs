@@ -317,7 +317,7 @@ pub mod prelude {
         child_proxy::ChildProxyExtManual,
         clock::ClockExtManual,
         device_monitor::DeviceMonitorExtManual,
-        device_provider::DeviceProviderExtManual,
+        device_provider::{DeviceProviderClassExt, DeviceProviderExtManual},
         element::{ElementClassExt, ElementExtManual},
         format::prelude::*,
         gobject::GObjectExtManualGst,
