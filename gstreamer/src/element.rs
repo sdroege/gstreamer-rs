@@ -110,11 +110,7 @@ pub trait ElementExtManual: sealed::Sealed + IsA<Element> + 'static {
     #[doc(alias = "get_element_class")]
     #[inline]
     fn element_class(&self) -> &glib::Class<Element> {
-        unsafe {
-            let klass = (*(self.as_ptr() as *mut glib::gobject_ffi::GTypeInstance)).g_class
-                as *const glib::Class<Element>;
-            &*klass
-        }
+        unsafe { self.unsafe_cast_ref::<Element>().class() }
     }
 
     #[doc(alias = "get_current_state")]
