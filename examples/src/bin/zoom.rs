@@ -96,7 +96,7 @@ fn example_main() {
     mixer_src_pad.add_probe(gst::PadProbeType::EVENT_UPSTREAM, move |_, probe_info| {
         let mixer_sink_pad = mixer_sink_pad_weak.upgrade().unwrap();
 
-        let Some(gst::PadProbeData::Event(ref ev)) = probe_info.data else {
+        let Some(ev) = probe_info.event() else {
             return gst::PadProbeReturn::Ok;
         };
 

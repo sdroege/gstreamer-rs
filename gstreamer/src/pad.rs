@@ -56,6 +56,64 @@ pub struct PadProbeInfo<'a> {
     pub flow_res: Result<FlowSuccess, FlowError>,
 }
 
+impl<'a> PadProbeInfo<'a> {
+    pub fn buffer(&self) -> Option<&Buffer> {
+        match self.data {
+            Some(PadProbeData::Buffer(ref buffer)) => Some(buffer),
+            _ => None,
+        }
+    }
+
+    pub fn buffer_mut(&mut self) -> Option<&mut Buffer> {
+        match self.data {
+            Some(PadProbeData::Buffer(ref mut buffer)) => Some(buffer),
+            _ => None,
+        }
+    }
+
+    pub fn buffer_list(&self) -> Option<&BufferList> {
+        match self.data {
+            Some(PadProbeData::BufferList(ref buffer_list)) => Some(buffer_list),
+            _ => None,
+        }
+    }
+
+    pub fn buffer_list_mut(&mut self) -> Option<&mut BufferList> {
+        match self.data {
+            Some(PadProbeData::BufferList(ref mut buffer_list)) => Some(buffer_list),
+            _ => None,
+        }
+    }
+
+    pub fn query(&self) -> Option<&QueryRef> {
+        match self.data {
+            Some(PadProbeData::Query(ref query)) => Some(*query),
+            _ => None,
+        }
+    }
+
+    pub fn query_mut(&mut self) -> Option<&mut QueryRef> {
+        match self.data {
+            Some(PadProbeData::Query(ref mut query)) => Some(*query),
+            _ => None,
+        }
+    }
+
+    pub fn event(&self) -> Option<&Event> {
+        match self.data {
+            Some(PadProbeData::Event(ref event)) => Some(event),
+            _ => None,
+        }
+    }
+
+    pub fn event_mut(&mut self) -> Option<&mut Event> {
+        match self.data {
+            Some(PadProbeData::Event(ref mut event)) => Some(event),
+            _ => None,
+        }
+    }
+}
+
 #[derive(Debug)]
 pub enum PadProbeData<'a> {
     Buffer(Buffer),
