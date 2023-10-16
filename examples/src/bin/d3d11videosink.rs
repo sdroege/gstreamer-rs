@@ -305,19 +305,18 @@ fn main() -> Result<()> {
     let sinkpad = videosink.static_pad("sink").unwrap();
     let overlay_context_weak = Arc::downgrade(&overlay_context);
     sinkpad.add_probe(gst::PadProbeType::BUFFER, move |_, probe_info| {
-        if let Some(gst::PadProbeData::Buffer(_)) = probe_info.data {
-            let overlay_context = overlay_context_weak.upgrade().unwrap();
-            let mut context = overlay_context.lock().unwrap();
-            context.timestamp_queue.push_back(SystemTime::now());
-            // Updates framerate per 10 frames
-            if context.timestamp_queue.len() >= 10 {
-                let now = context.timestamp_queue.back().unwrap();
-                let front = context.timestamp_queue.front().unwrap();
-                let duration = now.duration_since(*front).unwrap().as_millis() as f32;
-                context.avg_fps = 1000f32 * (context.timestamp_queue.len() - 1) as f32 / duration;
-                context.timestamp_queue.clear();
-            }
+        let overlay_context = overlay_context_weak.upgrade().unwrap();
+        let mut context = overlay_context.lock().unwrap();
+        context.timestamp_queue.push_back(SystemTime::now());
+        // Updates framerate per 10 frames
+        if context.timestamp_queue.len() >= 10 {
+            let now = context.timestamp_queue.back().unwrap();
+            let front = context.timestamp_queue.front().unwrap();
+            let duration = now.duration_since(*front).unwrap().as_millis() as f32;
+            context.avg_fps = 1000f32 * (context.timestamp_queue.len() - 1) as f32 / duration;
+            context.timestamp_queue.clear();
         }
+
         gst::PadProbeReturn::Ok
     });
 

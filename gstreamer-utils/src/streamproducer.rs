@@ -196,11 +196,13 @@ impl StreamProducer {
             .add_probe(
                 gst::PadProbeType::EVENT_UPSTREAM,
                 glib::clone!(@weak appsink, @weak consumer => @default-panic, move |_pad, info| {
-                    if let Some(gst::PadProbeData::Event(ref ev)) = info.data {
-                        if gst_video::UpstreamForceKeyUnitEvent::parse(ev).is_ok() {
-                            gst::debug!(CAT, obj: &appsink,  "Requesting keyframe");
-                            let _ = appsink.send_event(ev.clone());
-                        }
+                    let Some(event) = info.event() else {
+                        return gst::PadProbeReturn::Ok;
+                    };
+
+                    if gst_video::UpstreamForceKeyUnitEvent::parse(event).is_ok() {
+                        gst::debug!(CAT, obj: &appsink,  "Requesting keyframe");
+                        let _ = appsink.send_event(event.clone());
                     }
 
                     gst::PadProbeReturn::Ok
@@ -486,14 +488,18 @@ impl<'a> From<&'a gst_app::AppSink> for StreamProducer {
         sinkpad.add_probe(
             gst::PadProbeType::EVENT_UPSTREAM,
             glib::clone!(@strong consumers => move |_pad, info| {
-                if let Some(gst::PadProbeData::Event(ref ev)) = info.data {
-                    if let gst::EventView::Latency(ev) = ev.view() {
-                        let latency = ev.latency();
-                        let mut consumers = consumers.lock().unwrap();
-                        consumers.current_latency = Some(latency);
-                        consumers.latency_updated = true;
-                    }
-                }
+                let Some(event) = info.event() else {
+                    return gst::PadProbeReturn::Ok;
+                };
+
+                let gst::EventView::Latency(event) = event.view() else {
+                    return gst::PadProbeReturn::Ok;
+                };
+
+                let latency = event.latency();
+                let mut consumers = consumers.lock().unwrap();
+                consumers.current_latency = Some(latency);
+
                 gst::PadProbeReturn::Ok
             }),
         );

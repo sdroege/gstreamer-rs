@@ -75,31 +75,33 @@ fn example_main() {
     // Add a pad probe on the sink pad and catch the custom event we sent, then send
     // an EOS event on the pipeline.
     sinkpad.add_probe(gst::PadProbeType::EVENT_DOWNSTREAM, move |_, probe_info| {
-        match probe_info.data {
-            Some(gst::PadProbeData::Event(ref ev))
-                if ev.type_() == gst::EventType::CustomDownstream =>
-            {
-                if let Some(custom_event) = ExampleCustomEvent::parse(ev) {
-                    if let Some(pipeline) = pipeline_weak.upgrade() {
-                        if custom_event.send_eos {
-                            /* Send EOS event to shut down the pipeline, but from an async callback, as we're
-                             * in a pad probe blocking the stream thread here... */
-                            println!("Got custom event with send_eos=true. Sending EOS");
-                            let ev = gst::event::Eos::new();
-                            let pipeline_weak = pipeline_weak.clone();
-                            pipeline.call_async(move |_| {
-                                if let Some(pipeline) = pipeline_weak.upgrade() {
-                                    pipeline.send_event(ev);
-                                }
-                            });
-                        } else {
-                            println!("Got custom event, with send_eos=false. Ignoring");
-                        }
-                    }
+        let Some(event) = probe_info.event() else {
+            return gst::PadProbeReturn::Ok;
+        };
+
+        let Some(custom_event) = ExampleCustomEvent::parse(event) else {
+            return gst::PadProbeReturn::Ok;
+        };
+
+        let Some(pipeline) = pipeline_weak.upgrade() else {
+            return gst::PadProbeReturn::Ok;
+        };
+
+        if custom_event.send_eos {
+            /* Send EOS event to shut down the pipeline, but from an async callback, as we're
+             * in a pad probe blocking the stream thread here... */
+            println!("Got custom event with send_eos=true. Sending EOS");
+            let ev = gst::event::Eos::new();
+            let pipeline_weak = pipeline_weak.clone();
+            pipeline.call_async(move |_| {
+                if let Some(pipeline) = pipeline_weak.upgrade() {
+                    pipeline.send_event(ev);
                 }
-            }
-            _ => (),
+            });
+        } else {
+            println!("Got custom event, with send_eos=false. Ignoring");
         }
+
         gst::PadProbeReturn::Ok
     });
 
