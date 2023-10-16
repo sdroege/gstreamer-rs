@@ -535,9 +535,9 @@ impl ReferenceTimestampMeta {
         unsafe { CapsRef::from_ptr(self.0.reference) }
     }
 
-    #[doc(alias = "get_parent_owned")]
+    #[doc(alias = "get_reference_owned")]
     #[inline]
-    pub fn parent_owned(&self) -> Caps {
+    pub fn reference_owned(&self) -> Caps {
         unsafe { from_glib_none(self.0.reference) }
     }
 
