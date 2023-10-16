@@ -17,20 +17,8 @@ pub unsafe trait MetaAPI: Sync + Send + Sized {
 }
 
 pub trait MetaAPIExt: MetaAPI {
+    #[inline]
     #[doc(alias = "gst_meta_api_type_has_tag")]
-    fn has_tag(&self, tag: glib::Quark) -> bool;
-
-    #[doc(alias = "gst_meta_api_type_get_tags")]
-    fn tags(&self) -> &[glib::GStringPtr];
-
-    unsafe fn from_ptr(buffer: &BufferRef, ptr: *const Self::GstType) -> MetaRef<Self>;
-    unsafe fn from_mut_ptr<T>(
-        buffer: &mut BufferRef,
-        ptr: *mut Self::GstType,
-    ) -> MetaRefMut<Self, T>;
-}
-
-impl<A: MetaAPI> MetaAPIExt for A {
     fn has_tag(&self, tag: glib::Quark) -> bool {
         unsafe {
             from_glib(ffi::gst_meta_api_type_has_tag(
@@ -40,6 +28,8 @@ impl<A: MetaAPI> MetaAPIExt for A {
         }
     }
 
+    #[inline]
+    #[doc(alias = "gst_meta_api_type_get_tags")]
     fn tags(&self) -> &[glib::GStringPtr] {
         unsafe {
             glib::StrV::from_glib_borrow(ffi::gst_meta_api_type_get_tags(
@@ -88,6 +78,8 @@ impl<A: MetaAPI> MetaAPIExt for A {
         }
     }
 }
+
+impl<A: MetaAPI> MetaAPIExt for A {}
 
 #[cfg(feature = "v1_16")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
