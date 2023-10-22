@@ -165,10 +165,10 @@ pub static VIDEO_FORMATS_ALL: Lazy<Box<[crate::VideoFormat]>> = Lazy::new(|| {
             crate::VideoFormat::I42010be,
             crate::VideoFormat::I42010le,
             crate::VideoFormat::P01010be,
+            crate::VideoFormat::P01010le,
             #[cfg(feature = "v1_16")]
             crate::VideoFormat::Nv1210le40,
             crate::VideoFormat::Nv1210le32,
-            crate::VideoFormat::P01010le,
             crate::VideoFormat::Y444,
             crate::VideoFormat::Gbr,
             crate::VideoFormat::Nv24,
