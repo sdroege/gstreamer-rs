@@ -134,6 +134,8 @@ pub mod event;
 pub use crate::event::{Event, EventRef, EventView, GroupId, Seqnum};
 pub mod context;
 pub use crate::context::{Context, ContextRef};
+mod rank;
+pub use crate::rank::Rank;
 mod static_caps;
 pub use crate::static_caps::*;
 mod static_pad_template;

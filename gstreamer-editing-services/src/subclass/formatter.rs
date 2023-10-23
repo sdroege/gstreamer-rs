@@ -336,7 +336,7 @@ mod tests {
             None,
             None,
             1.0,
-            gst::Rank::Primary,
+            gst::Rank::PRIMARY,
         );
 
         let proj = crate::Project::new(Some("ges:test:"));

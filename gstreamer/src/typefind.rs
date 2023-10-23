@@ -281,7 +281,7 @@ mod tests {
         TypeFind::register(
             None,
             "test_typefind",
-            crate::Rank::Primary,
+            crate::Rank::PRIMARY,
             None,
             Some(&Caps::builder("test/test").build()),
             |typefind| {

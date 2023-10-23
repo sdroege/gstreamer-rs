@@ -58,6 +58,7 @@ manual = [
     "Gst.DebugMessage",
     "Gst.DeviceProviderClass", # for docs only
     "Gst.ElementClass", # for docs only
+    "Gst.Rank",
     "Gst.Segment",
     "Gst.StaticCaps",
     "Gst.StaticPadTemplate",
@@ -2057,15 +2058,6 @@ manual_traits = ["ProxyPadExtManual"]
 name = "Gst.Query"
 status = "manual"
 ref_mode = "ref"
-
-[[object]]
-name = "Gst.Rank"
-status = "generate"
-    [[object.derive]]
-    name = "serde::Serialize, serde::Deserialize"
-    cfg_condition = "feature = \"serde\""
-    [[object.derive]]
-    name = "Debug"
 
 [[object]]
 name = "Gst.Registry"

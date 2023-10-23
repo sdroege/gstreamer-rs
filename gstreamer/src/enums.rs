@@ -530,65 +530,6 @@ impl ops::SubAssign<u32> for crate::TypeFindProbability {
     }
 }
 
-impl PartialEq for crate::Rank {
-    #[inline]
-    fn eq(&self, other: &crate::Rank) -> bool {
-        (self.into_glib() as u32).eq(&(other.into_glib() as u32))
-    }
-}
-
-impl Eq for crate::Rank {}
-
-impl PartialOrd for crate::Rank {
-    #[inline]
-    fn partial_cmp(&self, other: &Self) -> Option<cmp::Ordering> {
-        Some(self.cmp(other))
-    }
-}
-
-impl Ord for crate::Rank {
-    #[inline]
-    fn cmp(&self, other: &Self) -> cmp::Ordering {
-        (self.into_glib() as u32).cmp(&(other.into_glib() as u32))
-    }
-}
-
-impl ops::Add<u32> for crate::Rank {
-    type Output = crate::Rank;
-
-    #[inline]
-    fn add(self, rhs: u32) -> crate::Rank {
-        let res = (self.into_glib() as u32).saturating_add(rhs);
-        unsafe { from_glib(res as i32) }
-    }
-}
-
-impl ops::AddAssign<u32> for crate::Rank {
-    #[inline]
-    fn add_assign(&mut self, rhs: u32) {
-        let res = (self.into_glib() as u32).saturating_add(rhs);
-        *self = unsafe { from_glib(res as i32) };
-    }
-}
-
-impl ops::Sub<u32> for crate::Rank {
-    type Output = crate::Rank;
-
-    #[inline]
-    fn sub(self, rhs: u32) -> crate::Rank {
-        let res = (self.into_glib() as u32).saturating_sub(rhs);
-        unsafe { from_glib(res as i32) }
-    }
-}
-
-impl ops::SubAssign<u32> for crate::Rank {
-    #[inline]
-    fn sub_assign(&mut self, rhs: u32) {
-        let res = (self.into_glib() as u32).saturating_sub(rhs);
-        *self = unsafe { from_glib(res as i32) };
-    }
-}
-
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash, Error)]
 #[must_use]
 pub enum TagError {
