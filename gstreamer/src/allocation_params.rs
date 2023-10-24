@@ -14,6 +14,16 @@ pub struct AllocationParams(ffi::GstAllocationParams);
 unsafe impl Send for AllocationParams {}
 unsafe impl Sync for AllocationParams {}
 
+impl Default for AllocationParams {
+    fn default() -> Self {
+        unsafe {
+            let mut params = mem::MaybeUninit::uninit();
+            ffi::gst_allocation_params_init(params.as_mut_ptr());
+            AllocationParams(params.assume_init())
+        }
+    }
+}
+
 impl AllocationParams {
     #[doc(alias = "get_flags")]
     #[inline]
