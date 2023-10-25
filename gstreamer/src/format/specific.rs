@@ -67,6 +67,14 @@ impl_format_value_traits!(Buffers, Buffers, Buffers, u64);
 option_glib_newtype_from_to!(Buffers, Buffers::OFFSET_NONE);
 glib_newtype_display!(Buffers, DisplayableOptionBuffers, Format::Buffers);
 
+impl TryFrom<Buffers> for usize {
+    type Error = std::num::TryFromIntError;
+
+    fn try_from(value: Buffers) -> Result<Self, Self::Error> {
+        value.0.try_into()
+    }
+}
+
 // FIXME `functions in traits cannot be const` (rustc 1.64.0)
 // rustdoc-stripper-ignore-next
 /// `Buffers` formatted value constructor trait.
@@ -142,6 +150,14 @@ impl_signed_int_into_signed!(Bytes, u64);
 impl_format_value_traits!(Bytes, Bytes, Bytes, u64);
 option_glib_newtype_from_to!(Bytes, u64::MAX);
 glib_newtype_display!(Bytes, DisplayableOptionBytes, Format::Bytes);
+
+impl TryFrom<Bytes> for usize {
+    type Error = std::num::TryFromIntError;
+
+    fn try_from(value: Bytes) -> Result<Self, Self::Error> {
+        value.0.try_into()
+    }
+}
 
 // FIXME `functions in traits cannot be const` (rustc 1.64.0)
 // rustdoc-stripper-ignore-next
@@ -239,6 +255,14 @@ impl_signed_int_into_signed!(Default, u64);
 impl_format_value_traits!(Default, Default, Default, u64);
 option_glib_newtype_from_to!(Default, u64::MAX);
 glib_newtype_display!(Default, DisplayableOptionDefault, Format::Default);
+
+impl TryFrom<Default> for usize {
+    type Error = std::num::TryFromIntError;
+
+    fn try_from(value: Default) -> Result<Self, Self::Error> {
+        value.0.try_into()
+    }
+}
 
 // FIXME `functions in traits cannot be const` (rustc 1.64.0)
 // rustdoc-stripper-ignore-next

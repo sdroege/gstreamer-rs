@@ -281,6 +281,12 @@ macro_rules! impl_common_ops_for_newtype_uint(
             }
         }
 
+        impl From<$typ> for $inner {
+            fn from(v: $typ) -> $inner {
+                v.0
+            }
+        }
+
         impl_trait_op_same!($typ, Add, add, AddAssign, add_assign);
         impl_trait_op_same!($typ, Sub, sub, SubAssign, sub_assign);
         impl std::ops::Div for $typ {
