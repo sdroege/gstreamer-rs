@@ -74,6 +74,14 @@ impl TryFromGlib<i64> for Other {
     }
 }
 
+impl TryFrom<Other> for usize {
+    type Error = std::num::TryFromIntError;
+
+    fn try_from(value: Other) -> Result<Self, Self::Error> {
+        value.0.try_into()
+    }
+}
+
 // FIXME `functions in traits cannot be const` (rustc 1.64.0)
 // rustdoc-stripper-ignore-next
 /// `Other` formatted value constructor trait.
