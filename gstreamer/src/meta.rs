@@ -221,6 +221,11 @@ impl<'a, T> MetaRef<'a, T> {
     }
 
     #[inline]
+    pub fn upcast_ref(&self) -> &MetaRef<'a, Meta> {
+        unsafe { &*(self as *const MetaRef<'a, T> as *const MetaRef<'a, Meta>) }
+    }
+
+    #[inline]
     pub fn as_ptr(&self) -> *const T::GstType
     where
         T: MetaAPI,
@@ -294,6 +299,16 @@ impl<'a, T, U> MetaRefMut<'a, T, U> {
             let meta = self.meta as *const _ as *const ffi::GstMeta;
             ffi::gst_meta_get_seqnum(meta)
         }
+    }
+
+    #[inline]
+    pub fn upcast_ref(&self) -> &MetaRef<'a, Meta> {
+        unsafe { &*(self as *const MetaRefMut<'a, T, U> as *const MetaRef<'a, Meta>) }
+    }
+
+    #[inline]
+    pub fn upcast_mut(&mut self) -> &MetaRefMut<'a, Meta, U> {
+        unsafe { &mut *(self as *mut MetaRefMut<'a, T, U> as *mut MetaRefMut<'a, Meta, U>) }
     }
 
     #[inline]
