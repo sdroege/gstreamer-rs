@@ -143,6 +143,13 @@ impl<'a, T> AsRef<MetaRef<'a, T>> for MetaRef<'a, T> {
     }
 }
 
+impl<'a, T> AsRef<T> for MetaRef<'a, T> {
+    #[inline]
+    fn as_ref(&self) -> &T {
+        self.meta
+    }
+}
+
 impl<'a, T, U> ops::Deref for MetaRefMut<'a, T, U> {
     type Target = T;
 
@@ -163,6 +170,13 @@ impl<'a, T, U> AsRef<MetaRef<'a, T>> for MetaRefMut<'a, T, U> {
     #[inline]
     fn as_ref(&self) -> &MetaRef<'a, T> {
         unsafe { &*(self as *const MetaRefMut<'a, T, U> as *const MetaRef<'a, T>) }
+    }
+}
+
+impl<'a, T, U> AsMut<T> for MetaRefMut<'a, T, U> {
+    #[inline]
+    fn as_mut(&mut self) -> &mut T {
+        self.meta
     }
 }
 
