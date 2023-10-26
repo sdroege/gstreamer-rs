@@ -18,27 +18,6 @@ pub unsafe trait MetaAPI: Sync + Send + Sized {
 
 pub trait MetaAPIExt: MetaAPI {
     #[inline]
-    #[doc(alias = "gst_meta_api_type_has_tag")]
-    fn has_tag(&self, tag: glib::Quark) -> bool {
-        unsafe {
-            from_glib(ffi::gst_meta_api_type_has_tag(
-                Self::meta_api().into_glib(),
-                tag.into_glib(),
-            ))
-        }
-    }
-
-    #[inline]
-    #[doc(alias = "gst_meta_api_type_get_tags")]
-    fn tags(&self) -> &[glib::GStringPtr] {
-        unsafe {
-            glib::StrV::from_glib_borrow(ffi::gst_meta_api_type_get_tags(
-                Self::meta_api().into_glib(),
-            ))
-        }
-    }
-
-    #[inline]
     unsafe fn from_ptr(buffer: &BufferRef, ptr: *const Self::GstType) -> MetaRef<Self> {
         debug_assert!(!ptr.is_null());
 
@@ -213,6 +192,25 @@ impl<'a, T> MetaRef<'a, T> {
     }
 
     #[inline]
+    #[doc(alias = "gst_meta_api_type_has_tag")]
+    pub fn has_tag(&self, tag: glib::Quark) -> bool {
+        unsafe {
+            from_glib(ffi::gst_meta_api_type_has_tag(
+                self.api().into_glib(),
+                tag.into_glib(),
+            ))
+        }
+    }
+
+    #[inline]
+    #[doc(alias = "gst_meta_api_type_get_tags")]
+    pub fn tags(&self) -> &[glib::GStringPtr] {
+        unsafe {
+            glib::StrV::from_glib_borrow(ffi::gst_meta_api_type_get_tags(self.api().into_glib()))
+        }
+    }
+
+    #[inline]
     pub fn upcast_ref(&self) -> &MetaRef<'a, Meta> {
         unsafe { &*(self as *const MetaRef<'a, T> as *const MetaRef<'a, Meta>) }
     }
@@ -290,6 +288,25 @@ impl<'a, T, U> MetaRefMut<'a, T, U> {
         unsafe {
             let meta = self.meta as *const _ as *const ffi::GstMeta;
             ffi::gst_meta_get_seqnum(meta)
+        }
+    }
+
+    #[inline]
+    #[doc(alias = "gst_meta_api_type_has_tag")]
+    pub fn has_tag(&self, tag: glib::Quark) -> bool {
+        unsafe {
+            from_glib(ffi::gst_meta_api_type_has_tag(
+                self.api().into_glib(),
+                tag.into_glib(),
+            ))
+        }
+    }
+
+    #[inline]
+    #[doc(alias = "gst_meta_api_type_get_tags")]
+    pub fn tags(&self) -> &[glib::GStringPtr] {
+        unsafe {
+            glib::StrV::from_glib_borrow(ffi::gst_meta_api_type_get_tags(self.api().into_glib()))
         }
     }
 
@@ -824,6 +841,8 @@ mod tests {
             assert!(!metas[0].has_tag(glib::Quark::from_str("video")));
             assert!(metas[0].has_tag(glib::Quark::from_str("memory-reference")));
             assert_eq!(metas[0].tags().len(), 1);
+
+            assert_eq!(metas[0].tags(), metas[0].upcast_ref().tags());
         }
 
         {
