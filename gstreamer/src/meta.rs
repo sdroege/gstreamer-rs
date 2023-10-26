@@ -385,19 +385,6 @@ pub struct Meta(ffi::GstMeta);
 unsafe impl Send for Meta {}
 unsafe impl Sync for Meta {}
 
-impl Meta {
-    #[doc(alias = "get_api")]
-    #[inline]
-    fn api(&self) -> glib::Type {
-        unsafe { glib::Type::from_glib((*self.0.info).api) }
-    }
-
-    #[inline]
-    pub fn flags(&self) -> crate::MetaFlags {
-        unsafe { from_glib(self.0.flags) }
-    }
-}
-
 unsafe impl MetaAPI for Meta {
     type GstType = ffi::GstMeta;
 
@@ -409,7 +396,15 @@ unsafe impl MetaAPI for Meta {
 
 impl fmt::Debug for Meta {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.debug_struct("Meta").field("api", &self.api()).finish()
+        f.debug_struct("Meta")
+            .field("api", &unsafe { glib::Type::from_glib((*self.0.info).api) })
+            .field("type", &unsafe {
+                glib::Type::from_glib((*self.0.info).type_)
+            })
+            .field("flags", &unsafe {
+                crate::MetaFlags::from_glib(self.0.flags)
+            })
+            .finish()
     }
 }
 
