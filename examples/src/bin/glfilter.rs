@@ -1,5 +1,7 @@
 #![allow(clippy::non_send_fields_in_send_ty)]
 
+use anyhow::Result;
+
 #[path = "../glupload.rs"]
 mod glupload;
 use glupload::*;
@@ -161,14 +163,12 @@ mod mirror {
     }
 }
 
-fn example_main() {
+fn example_main() -> Result<()> {
     gst::init().unwrap();
     let glfilter = mirror::GLMirrorFilter::new(Some("foo"));
-    App::new(Some(glfilter.as_ref()))
-        .and_then(main_loop)
-        .unwrap_or_else(|e| eprintln!("Error! {e}"))
+    App::new(Some(glfilter.as_ref())).and_then(main_loop)
 }
 
-fn main() {
-    examples_common::run(example_main);
+fn main() -> Result<()> {
+    examples_common::run(example_main)
 }
