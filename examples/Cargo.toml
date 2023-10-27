@@ -26,17 +26,20 @@ gst-rtsp-server = { package = "gstreamer-rtsp-server", path = "../gstreamer-rtsp
 gst-allocators = { package = "gstreamer-allocators", path = "../gstreamer-allocators", version = "0.21", optional = true }
 gio = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "0.18", version = "0.18", optional = true }
 anyhow = "1.0"
-derive_more = "0.99.5"
-futures = "0.3"
 byte-slice-cast = "1"
 cairo-rs = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "0.18", version = "0.18", features=["use_glib"], optional = true }
+derive_more = "0.99.5"
+futures = "0.3"
+glutin = { version = "0.31", optional = true, default-features = false }
+glutin-winit = { version = "0.4", optional = true, default-features = false }
+image = { version = "0.24", optional = true, default-features = false, features = ["png", "jpeg"] }
+memfd = { version = "0.6", optional = true }
+memmap2 = { version = "0.9", optional = true }
 pango = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "0.18", version = "0.18", optional = true }
 pangocairo = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "0.18", version = "0.18", optional = true }
-glutin = { version = "0.29", optional = true }
-image = { version = "0.24", optional = true, default-features = false, features = ["png", "jpeg"] }
-memmap2 = { version = "0.9", optional = true }
-memfd = { version = "0.6", optional = true }
+raw-window-handle = { version = "0.5", optional = true }
 uds = { version = "0.4", optional = true }
+winit = { version = "0.29", optional = true, default-features = false, features = ["rwh_05"] }
 
 [target.'cfg(windows)'.dependencies]
 windows = { version = "0.51", features=["Win32_Graphics_Direct3D11",
@@ -57,9 +60,9 @@ rtsp-server = ["gst-rtsp-server", "gst-rtsp", "gst-sdp"]
 rtsp-server-record = ["gst-rtsp-server", "gst-rtsp", "gio"]
 pango-cairo = ["pango", "pangocairo", "cairo-rs"]
 overlay-composition = ["pango", "pangocairo", "cairo-rs"]
-gl = ["gst-gl", "gl_generator", "glutin"]
-gst-gl-x11 = ["dep:gst-gl-x11"]
-gst-gl-egl = ["dep:gst-gl-egl"]
+gl = ["dep:gst-gl", "dep:gl_generator", "dep:glutin", "dep:glutin-winit", "dep:winit", "dep:raw-window-handle"]
+gst-gl-x11 = ["dep:gst-gl-x11", "glutin-winit?/glx"] # glx turns on x11
+gst-gl-egl = ["dep:gst-gl-egl", "glutin-winit?/egl", "glutin-winit?/x11", "glutin-winit?/wayland"] # Use X11 or Wayland via EGL
 allocators = ["gst-allocators", "memmap2", "memfd", "uds"]
 
 [[bin]]
