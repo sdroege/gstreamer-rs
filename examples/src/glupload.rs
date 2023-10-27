@@ -1,15 +1,30 @@
-// This example demonstrates how to output GL textures, within an
-// EGL/X11 context provided by the application, and render those
-// textures in the GL application.
+//! This example demonstrates how to output GL textures, within an EGL/X11 context provided by the
+//! application, and render those textures in the GL application.
+//!
+//! This example follow common patterns from `glutin`:
+//! <https://github.com/rust-windowing/glutin/blob/master/glutin_examples/src/lib.rs>
 
 // {videotestsrc} - { glsinkbin }
 
-use std::{ffi::CStr, mem, ptr, sync};
+use std::{
+    ffi::{CStr, CString},
+    mem,
+    num::NonZeroU32,
+    ptr,
+};
 
-use anyhow::Error;
+use anyhow::{Context, Result};
 use derive_more::{Display, Error};
+use glutin::{
+    config::GetGlConfig as _,
+    context::AsRawContext as _,
+    display::{AsRawDisplay as _, GetGlDisplay as _},
+    prelude::*,
+};
+use glutin_winit::GlWindow as _;
 use gst::element_error;
 use gst_gl::prelude::*;
+use raw_window_handle::HasRawWindowHandle as _;
 
 #[derive(Debug, Display, Error)]
 #[display(fmt = "Received error from {src}: {error} (debug: {debug:?})")]
@@ -171,7 +186,7 @@ impl Gl {
         }
     }
 
-    fn resize(&self, size: glutin::dpi::PhysicalSize<u32>) {
+    fn resize(&self, size: winit::dpi::PhysicalSize<u32>) {
         unsafe {
             self.gl
                 .Viewport(0, 0, size.width as i32, size.height as i32);
@@ -179,14 +194,17 @@ impl Gl {
     }
 }
 
-fn load(gl_context: &glutin::WindowedContext<glutin::PossiblyCurrent>) -> Gl {
-    let gl = gl::Gl::load_with(|ptr| gl_context.get_proc_address(ptr) as *const _);
+fn load(gl_display: &impl glutin::display::GlDisplay) -> Gl {
+    let gl = gl::Gl::load_with(|symbol| {
+        let symbol = CString::new(symbol).unwrap();
+        gl_display.get_proc_address(&symbol).cast()
+    });
 
     let version = unsafe {
-        let data = CStr::from_ptr(gl.GetString(gl::VERSION) as *const _)
-            .to_bytes()
-            .to_vec();
-        String::from_utf8(data).unwrap()
+        let version = gl.GetString(gl::VERSION);
+        assert!(!version.is_null());
+        let version = CStr::from_ptr(version.cast());
+        version.to_string_lossy()
     };
 
     println!("OpenGL version {version}");
@@ -313,140 +331,199 @@ pub(crate) struct App {
     pipeline: gst::Pipeline,
     appsink: gst_app::AppSink,
     bus: gst::Bus,
-    event_loop: glutin::event_loop::EventLoop<Message>,
-    windowed_context: glutin::WindowedContext<glutin::PossiblyCurrent>,
+    event_loop: winit::event_loop::EventLoop<Message>,
+    window: Option<winit::window::Window>,
+    not_current_gl_context: Option<glutin::context::NotCurrentContext>,
     shared_context: gst_gl::GLContext,
 }
 
 impl App {
-    pub(crate) fn new(gl_element: Option<&gst::Element>) -> Result<App, Error> {
+    pub(crate) fn new(gl_element: Option<&gst::Element>) -> Result<App> {
         gst::init()?;
 
         let (pipeline, appsink) = App::create_pipeline(gl_element)?;
         let bus = pipeline
             .bus()
-            .expect("Pipeline without bus. Shouldn't happen!");
+            .context("Pipeline without bus. Shouldn't happen!")?;
 
-        let event_loop = glutin::event_loop::EventLoopBuilder::with_user_event().build();
-        let window = glutin::window::WindowBuilder::new().with_title("GL rendering");
-        let windowed_context = glutin::ContextBuilder::new()
-            .with_vsync(true)
-            .build_windowed(window, &event_loop)?;
+        let event_loop = winit::event_loop::EventLoopBuilder::with_user_event().build()?;
 
-        let windowed_context = unsafe { windowed_context.make_current().map_err(|(_, err)| err)? };
+        // Only Windows requires the window to be present before creating a `glutin::Display`. Other
+        // platforms don't really need one (and on Android, none exists until `Event::Resumed`).
+        let window_builder = cfg!(windows).then(|| {
+            winit::window::WindowBuilder::new()
+                .with_transparent(true)
+                .with_title("GL rendering")
+        });
 
-        #[cfg(any(feature = "gst-gl-x11"))]
-        let inner_window = windowed_context.window();
+        let display_builder =
+            glutin_winit::DisplayBuilder::new().with_window_builder(window_builder);
+        // XXX on macOS/cgl only one config can be queried at a time. If transparency is needed,
+        // add .with_transparency(true) to ConfigTemplateBuilder.  EGL on X11 doesn't support
+        // transparency at all.
+        let template = glutin::config::ConfigTemplateBuilder::new().with_alpha_size(8);
+        let (window, gl_config) = display_builder
+            .build(&event_loop, template, |configs| {
+                configs
+                    .reduce(|current, new_config| {
+                        let prefer_transparency =
+                            new_config.supports_transparency().unwrap_or(false)
+                                & !current.supports_transparency().unwrap_or(false);
 
-        let shared_context: gst_gl::GLContext;
-        if cfg!(target_os = "linux") {
-            #[cfg(any(feature = "gst-gl-x11"))]
-            use glutin::platform::unix::WindowExtUnix;
-            use glutin::platform::{unix::RawHandle, ContextTraitExt};
-
-            let api = App::map_gl_api(windowed_context.get_api());
-
-            let (gl_context, gl_display, platform) = match unsafe { windowed_context.raw_handle() }
-            {
-                #[cfg(any(feature = "gst-gl-egl"))]
-                RawHandle::Egl(egl_context) => {
-                    let gl_display =
-                        if let Some(display) = unsafe { windowed_context.get_egl_display() } {
-                            unsafe { gst_gl_egl::GLDisplayEGL::with_egl_display(display as usize) }
-                                .unwrap()
+                        if prefer_transparency || new_config.num_samples() > current.num_samples() {
+                            new_config
                         } else {
-                            panic!("EGL window without EGL Display")
-                        };
-
-                    (
-                        egl_context as usize,
-                        gl_display.upcast::<gst_gl::GLDisplay>(),
-                        gst_gl::GLPlatform::EGL,
-                    )
-                }
-                #[cfg(feature = "gst-gl-x11")]
-                RawHandle::Glx(glx_context) => {
-                    let gl_display = if let Some(display) = inner_window.xlib_display() {
-                        unsafe { gst_gl_x11::GLDisplayX11::with_display(display as usize) }.unwrap()
-                    } else {
-                        panic!("X11 window without X Display")
-                    };
-
-                    (
-                        glx_context as usize,
-                        gl_display.upcast::<gst_gl::GLDisplay>(),
-                        gst_gl::GLPlatform::GLX,
-                    )
-                }
-                #[allow(unreachable_patterns)]
-                handler => panic!("Unsupported platform: {handler:?}."),
-            };
-
-            shared_context =
-                unsafe { gst_gl::GLContext::new_wrapped(&gl_display, gl_context, platform, api) }
-                    .unwrap();
-
-            shared_context
-                .activate(true)
-                .expect("Couldn't activate wrapped GL context");
-
-            shared_context.fill_info()?;
-
-            let gl_context = shared_context.clone();
-            let event_proxy = sync::Mutex::new(event_loop.create_proxy());
-
-            #[allow(clippy::single_match)]
-            bus.set_sync_handler(move |_, msg| {
-                match msg.view() {
-                    gst::MessageView::NeedContext(ctxt) => {
-                        let context_type = ctxt.context_type();
-                        if context_type == *gst_gl::GL_DISPLAY_CONTEXT_TYPE {
-                            if let Some(el) =
-                                msg.src().map(|s| s.downcast_ref::<gst::Element>().unwrap())
-                            {
-                                let context = gst::Context::new(context_type, true);
-                                context.set_gl_display(&gl_display);
-                                el.set_context(&context);
-                            }
+                            current
                         }
-                        if context_type == "gst.gl.app_context" {
-                            if let Some(el) =
-                                msg.src().map(|s| s.downcast_ref::<gst::Element>().unwrap())
-                            {
-                                let mut context = gst::Context::new(context_type, true);
-                                {
-                                    let context = context.get_mut().unwrap();
-                                    let s = context.structure_mut();
-                                    s.set("context", &gl_context);
-                                }
-                                el.set_context(&context);
-                            }
+                    })
+                    .unwrap()
+            })
+            .expect("Failed to build display");
+        println!(
+            "Picked a config with {} samples and transparency {}. Pixel format: {:?}",
+            gl_config.num_samples(),
+            gl_config.supports_transparency().unwrap_or(false),
+            gl_config.color_buffer_type()
+        );
+        println!("Config supports GL API(s) {:?}", gl_config.api());
+
+        // XXX The display could be obtained from any object created by it, so we can query it from
+        // the config.
+        let gl_display = gl_config.display();
+        let raw_gl_display = gl_display.raw_display();
+
+        println!("Using raw display connection {:?}", raw_gl_display);
+
+        let raw_window_handle = window.as_ref().map(|window| window.raw_window_handle());
+
+        // The context creation part. It can be created before surface and that's how
+        // it's expected in multithreaded + multiwindow operation mode, since you
+        // can send NotCurrentContext, but not Surface.
+        let context_attributes =
+            glutin::context::ContextAttributesBuilder::new().build(raw_window_handle);
+
+        // Since glutin by default tries to create OpenGL core context, which may not be
+        // present we should try gles.
+        let fallback_context_attributes = glutin::context::ContextAttributesBuilder::new()
+            .with_context_api(glutin::context::ContextApi::Gles(None))
+            .build(raw_window_handle);
+
+        // There are also some old devices that support neither modern OpenGL nor GLES.
+        // To support these we can try and create a 2.1 context.
+        let legacy_context_attributes = glutin::context::ContextAttributesBuilder::new()
+            .with_context_api(glutin::context::ContextApi::OpenGl(Some(
+                glutin::context::Version::new(2, 1),
+            )))
+            .build(raw_window_handle);
+
+        let not_current_gl_context = unsafe {
+            gl_display
+                .create_context(&gl_config, &context_attributes)
+                .or_else(|_| {
+                    gl_display
+                        .create_context(&gl_config, &fallback_context_attributes)
+                        .or_else(|_| {
+                            gl_display.create_context(&gl_config, &legacy_context_attributes)
+                        })
+                })
+        }
+        .context("failed to create context")?;
+
+        let raw_gl_context = not_current_gl_context.raw_context();
+
+        println!("Using raw GL context {:?}", raw_gl_context);
+
+        #[cfg(not(target_os = "linux"))]
+        compile_error!("This example only has Linux support");
+
+        let api = App::map_gl_api(gl_config.api());
+
+        let (raw_gl_context, gst_gl_display, platform) = match (raw_gl_display, raw_gl_context) {
+            #[cfg(feature = "gst-gl-egl")]
+            (
+                glutin::display::RawDisplay::Egl(egl_display),
+                glutin::context::RawContext::Egl(egl_context),
+            ) => {
+                let gl_display =
+                    unsafe { gst_gl_egl::GLDisplayEGL::with_egl_display(egl_display as usize) }
+                        .context("Failed to create GLDisplayEGL from raw `EGLDisplay`")?
+                        .upcast::<gst_gl::GLDisplay>();
+
+                (egl_context as usize, gl_display, gst_gl::GLPlatform::EGL)
+            }
+            #[cfg(feature = "gst-gl-x11")]
+            (
+                glutin::display::RawDisplay::Glx(glx_display),
+                glutin::context::RawContext::Glx(glx_context),
+            ) => {
+                let gl_display =
+                    unsafe { gst_gl_x11::GLDisplayX11::with_display(glx_display as usize) }
+                        .context("Failed to create GLDisplayX11 from raw X11 `Display`")?
+                        .upcast::<gst_gl::GLDisplay>();
+                (glx_context as usize, gl_display, gst_gl::GLPlatform::GLX)
+            }
+            #[allow(unreachable_patterns)]
+            handler => anyhow::bail!("Unsupported platform: {handler:?}."),
+        };
+
+        let shared_context = unsafe {
+            gst_gl::GLContext::new_wrapped(&gst_gl_display, raw_gl_context, platform, api)
+        }
+        .context("Couldn't wrap GL context")?;
+
+        let gl_context = shared_context.clone();
+        let event_proxy = event_loop.create_proxy();
+
+        #[allow(clippy::single_match)]
+        bus.set_sync_handler(move |_, msg| {
+            match msg.view() {
+                gst::MessageView::NeedContext(ctxt) => {
+                    let context_type = ctxt.context_type();
+                    if context_type == *gst_gl::GL_DISPLAY_CONTEXT_TYPE {
+                        if let Some(el) =
+                            msg.src().map(|s| s.downcast_ref::<gst::Element>().unwrap())
+                        {
+                            let context = gst::Context::new(context_type, true);
+                            context.set_gl_display(&gst_gl_display);
+                            el.set_context(&context);
                         }
                     }
-                    _ => (),
+                    if context_type == "gst.gl.app_context" {
+                        if let Some(el) =
+                            msg.src().map(|s| s.downcast_ref::<gst::Element>().unwrap())
+                        {
+                            let mut context = gst::Context::new(context_type, true);
+                            {
+                                let context = context.get_mut().unwrap();
+                                let s = context.structure_mut();
+                                s.set("context", &gl_context);
+                            }
+                            el.set_context(&context);
+                        }
+                    }
                 }
+                _ => (),
+            }
 
-                if let Err(e) = event_proxy.lock().unwrap().send_event(Message::BusEvent) {
-                    eprintln!("Failed to send BusEvent to event proxy: {e}")
-                }
+            if let Err(e) = event_proxy.send_event(Message::BusEvent) {
+                eprintln!("Failed to send BusEvent to event proxy: {e}")
+            }
 
-                gst::BusSyncReply::Pass
-            });
-        } else {
-            panic!("This example only has Linux support");
-        }
+            gst::BusSyncReply::Pass
+        });
 
         Ok(App {
             pipeline,
             appsink,
             bus,
             event_loop,
-            windowed_context,
+            window,
+            not_current_gl_context: Some(not_current_gl_context),
             shared_context,
         })
     }
 
-    fn setup(&self, event_loop: &glutin::event_loop::EventLoop<Message>) -> Result<(), Error> {
+    fn setup(&self, event_loop: &winit::event_loop::EventLoop<Message>) -> Result<()> {
         let event_proxy = event_loop.create_proxy();
         self.appsink.set_callbacks(
             gst_app::AppSinkCallbacks::builder()
@@ -510,22 +587,33 @@ impl App {
                 .build(),
         );
 
-        self.pipeline.set_state(gst::State::Playing)?;
-
         Ok(())
     }
 
-    fn map_gl_api(api: glutin::Api) -> gst_gl::GLAPI {
-        match api {
-            glutin::Api::OpenGl => gst_gl::GLAPI::OPENGL3,
-            glutin::Api::OpenGlEs => gst_gl::GLAPI::GLES2,
-            _ => gst_gl::GLAPI::empty(),
-        }
+    /// Converts from <https://docs.rs/glutin/latest/glutin/config/struct.Api.html> to
+    /// <https://gstreamer.freedesktop.org/documentation/gl/gstglapi.html?gi-language=c#GstGLAPI>.
+    fn map_gl_api(api: glutin::config::Api) -> gst_gl::GLAPI {
+        use glutin::config::Api;
+        use gst_gl::GLAPI;
+
+        let mut gst_gl_api = GLAPI::empty();
+        // In gstreamer:
+        // GLAPI::OPENGL: Desktop OpenGL up to and including 3.1. The compatibility profile when the OpenGL version is >= 3.2
+        // GLAPI::OPENGL3: Desktop OpenGL >= 3.2 core profile
+        // In glutin, API::OPENGL is set for every context API, except EGL where it is set based on
+        // EGL_RENDERABLE_TYPE containing EGL_OPENGL_BIT:
+        // https://registry.khronos.org/EGL/sdk/docs/man/html/eglChooseConfig.xhtml
+        gst_gl_api.set(GLAPI::OPENGL | GLAPI::OPENGL3, api.contains(Api::OPENGL));
+        gst_gl_api.set(GLAPI::GLES1, api.contains(Api::GLES1));
+        // OpenGL ES 2.x and 3.x
+        gst_gl_api.set(GLAPI::GLES2, api.intersects(Api::GLES2 | Api::GLES3));
+
+        gst_gl_api
     }
 
     fn create_pipeline(
         gl_element: Option<&gst::Element>,
-    ) -> Result<(gst::Pipeline, gst_app::AppSink), Error> {
+    ) -> Result<(gst::Pipeline, gst_app::AppSink)> {
         let pipeline = gst::Pipeline::default();
         let src = gst::ElementFactory::make("videotestsrc").build()?;
 
@@ -565,7 +653,7 @@ impl App {
         }
     }
 
-    fn handle_messages(bus: &gst::Bus) -> Result<(), Error> {
+    fn handle_messages(bus: &gst::Bus) -> Result<()> {
         use gst::MessageView;
 
         for msg in bus.iter() {
@@ -590,77 +678,143 @@ impl App {
     }
 }
 
-pub(crate) fn main_loop(app: App) -> Result<(), Error> {
+pub(crate) fn main_loop(app: App) -> Result<()> {
     app.setup(&app.event_loop)?;
 
-    println!(
-        "Pixel format of the window's GL context {:?}",
-        app.windowed_context.get_pixel_format()
-    );
-
-    let gl = load(&app.windowed_context);
-
-    let mut curr_frame: Option<gst_gl::GLVideoFrame<gst_gl::gl_video_frame::Readable>> = None;
-
     let App {
+        pipeline,
         bus,
         event_loop,
-        pipeline,
+        mut window,
+        mut not_current_gl_context,
         shared_context,
-        windowed_context,
         ..
     } = app;
 
-    event_loop.run(move |event, _, cf| {
-        *cf = glutin::event_loop::ControlFlow::Wait;
+    let mut curr_frame: Option<gst_gl::GLVideoFrame<gst_gl::gl_video_frame::Readable>> = None;
+
+    let mut running_state = None::<(
+        Gl,
+        glutin::context::PossiblyCurrentContext,
+        glutin::surface::Surface<glutin::surface::WindowSurface>,
+    )>;
+
+    Ok(event_loop.run(move |event, window_target| {
+        window_target.set_control_flow(winit::event_loop::ControlFlow::Wait);
 
         let mut needs_redraw = false;
         match event {
-            glutin::event::Event::LoopDestroyed => {
+            winit::event::Event::LoopExiting => {
                 pipeline.send_event(gst::event::Eos::new());
                 pipeline.set_state(gst::State::Null).unwrap();
             }
-            glutin::event::Event::WindowEvent { event, .. } => match event {
-                glutin::event::WindowEvent::CloseRequested
-                | glutin::event::WindowEvent::KeyboardInput {
-                    input:
-                        glutin::event::KeyboardInput {
-                            state: glutin::event::ElementState::Released,
-                            virtual_keycode: Some(glutin::event::VirtualKeyCode::Escape),
+            winit::event::Event::WindowEvent { event, .. } => match event {
+                winit::event::WindowEvent::CloseRequested
+                | winit::event::WindowEvent::KeyboardInput {
+                    event:
+                        winit::event::KeyEvent {
+                            state: winit::event::ElementState::Released,
+                            logical_key:
+                                winit::keyboard::Key::Named(winit::keyboard::NamedKey::Escape),
                             ..
                         },
                     ..
-                } => *cf = glutin::event_loop::ControlFlow::Exit,
-                glutin::event::WindowEvent::Resized(physical_size) => {
-                    windowed_context.resize(physical_size);
-                    gl.resize(physical_size);
+                } => window_target.exit(),
+                winit::event::WindowEvent::Resized(size) => {
+                    // Some platforms like EGL require resizing GL surface to update the size
+                    // Notable platforms here are Wayland and macOS, other don't require it
+                    // and the function is no-op, but it's wise to resize it for portability
+                    // reasons.
+                    if let Some((gl, gl_context, gl_surface)) = &running_state {
+                        gl_surface.resize(
+                            gl_context,
+                            // XXX Ignore minimizing
+                            NonZeroU32::new(size.width).unwrap(),
+                            NonZeroU32::new(size.height).unwrap(),
+                        );
+                        gl.resize(size);
+                    }
                 }
+                winit::event::WindowEvent::RedrawRequested => needs_redraw = true,
                 _ => (),
             },
-            glutin::event::Event::RedrawRequested(_) => needs_redraw = true,
             // Receive a frame
-            glutin::event::Event::UserEvent(Message::Frame(info, buffer)) => {
+            winit::event::Event::UserEvent(Message::Frame(info, buffer)) => {
                 if let Ok(frame) = gst_gl::GLVideoFrame::from_buffer_readable(buffer, &info) {
                     curr_frame = Some(frame);
                     needs_redraw = true;
                 }
             }
             // Handle all pending messages when we are awaken by set_sync_handler
-            glutin::event::Event::UserEvent(Message::BusEvent) => {
+            winit::event::Event::UserEvent(Message::BusEvent) => {
                 App::handle_messages(&bus).unwrap();
+            }
+            winit::event::Event::Resumed => {
+                let not_current_gl_context = not_current_gl_context
+                    .take()
+                    .expect("There must be a NotCurrentContext prior to Event::Resumed");
+
+                let gl_config = not_current_gl_context.config();
+                let gl_display = gl_config.display();
+
+                let window = window.get_or_insert_with(|| {
+                    let window_builder = winit::window::WindowBuilder::new().with_transparent(true);
+                    glutin_winit::finalize_window(window_target, window_builder, &gl_config)
+                        .unwrap()
+                });
+
+                let attrs = window.build_surface_attributes(<_>::default());
+                let gl_surface = unsafe {
+                    gl_config
+                        .display()
+                        .create_window_surface(&gl_config, &attrs)
+                        .unwrap()
+                };
+
+                // Make it current.
+                let gl_context = not_current_gl_context.make_current(&gl_surface).unwrap();
+
+                // Tell GStreamer that the context has been made current (for borrowed contexts,
+                // this does not try to make it current again)
+                shared_context.activate(true).unwrap();
+
+                shared_context
+                    .fill_info()
+                    .expect("Couldn't fill context info");
+
+                // The context needs to be current for the Renderer to set up shaders and buffers.
+                // It also performs function loading, which needs a current context on WGL.
+                let gl = load(&gl_display);
+
+                // Try setting vsync.
+                if let Err(res) = gl_surface.set_swap_interval(
+                    &gl_context,
+                    glutin::surface::SwapInterval::Wait(std::num::NonZeroU32::new(1).unwrap()),
+                ) {
+                    eprintln!("Error setting vsync: {res:?}");
+                }
+
+                pipeline.set_state(gst::State::Playing).unwrap();
+
+                assert!(running_state
+                    .replace((gl, gl_context, gl_surface))
+                    .is_none());
             }
             _ => (),
         }
 
         if needs_redraw {
-            if let Some(frame) = curr_frame.as_ref() {
-                let sync_meta = frame.buffer().meta::<gst_gl::GLSyncMeta>().unwrap();
-                sync_meta.wait(&shared_context);
-                if let Ok(texture) = frame.texture_id(0) {
-                    gl.draw_frame(texture as gl::types::GLuint);
+            if let Some((gl, gl_context, gl_surface)) = &running_state {
+                if let Some(frame) = curr_frame.as_ref() {
+                    let sync_meta = frame.buffer().meta::<gst_gl::GLSyncMeta>().unwrap();
+                    sync_meta.wait(&shared_context);
+                    if let Ok(texture) = frame.texture_id(0) {
+                        gl.draw_frame(texture as gl::types::GLuint);
+                    }
                 }
+
+                gl_surface.swap_buffers(gl_context).unwrap();
             }
-            windowed_context.swap_buffers().unwrap();
         }
-    })
+    })?)
 }
