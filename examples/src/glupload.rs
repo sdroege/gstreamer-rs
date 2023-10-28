@@ -360,13 +360,27 @@ impl App {
 
                     #[cfg(feature = "gst-gl-wayland")]
                     if let Some(display) = inner_window.wayland_display() {
-                        gl_display = Some(
+                        let gl_display = gl_display.insert(
                             unsafe {
                                 gst_gl_wayland::GLDisplayWayland::with_display(display as usize)
                             }
                             .unwrap()
                             .upcast::<gst_gl::GLDisplay>(),
-                        )
+                        );
+
+                        // If using a Wayland display, resolving that to an EGL display _should_
+                        // result in the same handle that glutin found (both via eglGetPlatformDisplay(EXT)()).
+                        #[cfg(feature = "gst-gl-egl")]
+                        {
+                            let gl_display =
+                                gst_gl_egl::GLDisplayEGL::from_gl_display(gl_display).unwrap();
+                            assert_eq!(
+                                unsafe { windowed_context.get_egl_display() }
+                                    .expect("Wayland clients use EGL"),
+                                gl_display.handle() as *const std::ffi::c_void,
+                                "GLDisplayWayland must use the same EGLDisplay as glutin!"
+                            );
+                        }
                     };
 
                     (
