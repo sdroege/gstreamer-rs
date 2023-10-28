@@ -346,7 +346,7 @@ status = "generate"
     [[object.function]]
     name = "get_handle"
     # return handle
-    ignore = true
+    manual = true
 
     [[object.function]]
     name = "get_gl_context_for_thread"

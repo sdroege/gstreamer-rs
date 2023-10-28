@@ -9,6 +9,12 @@ mod sealed {
 }
 
 pub trait GLDisplayExtManual: sealed::Sealed + IsA<GLDisplay> + 'static {
+    #[doc(alias = "gst_gl_display_get_handle")]
+    #[doc(alias = "get_handle")]
+    fn handle(&self) -> usize {
+        unsafe { ffi::gst_gl_display_get_handle(self.as_ref().to_glib_none().0) }
+    }
+
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     #[doc(alias = "gst_gl_display_ensure_context")]
