@@ -26,12 +26,6 @@ impl GLDisplayEGL {
         }
     }
 
-    //#[doc(alias = "gst_gl_display_egl_new_with_egl_display")]
-    //#[doc(alias = "new_with_egl_display")]
-    //pub fn with_egl_display(display: /*Unimplemented*/Option<Basic: Pointer>) -> GLDisplayEGL {
-    //    unsafe { TODO: call ffi:gst_gl_display_egl_new_with_egl_display() }
-    //}
-
     #[doc(alias = "gst_gl_display_egl_from_gl_display")]
     pub fn from_gl_display(display: &impl IsA<gst_gl::GLDisplay>) -> Option<GLDisplayEGL> {
         assert_initialized_main_thread!();
@@ -41,12 +35,6 @@ impl GLDisplayEGL {
             ))
         }
     }
-
-    //#[doc(alias = "gst_gl_display_egl_get_from_native")]
-    //#[doc(alias = "get_from_native")]
-    //pub fn from_native(type_: /*Ignored*/gst_gl::GLDisplayType, display: /*Unimplemented*/Basic: UIntPtr) -> /*Unimplemented*/Option<Basic: Pointer> {
-    //    unsafe { TODO: call ffi:gst_gl_display_egl_get_from_native() }
-    //}
 }
 
 unsafe impl Send for GLDisplayEGL {}

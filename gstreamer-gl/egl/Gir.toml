@@ -59,3 +59,11 @@ status = "generate"
     name = "new"
         [object.function.return]
         nullable_return_is_error = "Failed to create EGL display"
+
+    [[object.function]]
+    name = "new_with_egl_display"
+    manual = true
+
+    [[object.function]]
+    name = "get_from_native"
+    manual = true
