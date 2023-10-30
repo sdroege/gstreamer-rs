@@ -165,9 +165,8 @@ fn main() {
     appsrc.set_callbacks(
         gst_app::AppSrcCallbacks::builder()
             .need_data(move |_, _size| {
-                let data = match data_weak.upgrade() {
-                    Some(data) => data,
-                    None => return,
+                let Some(data) = data_weak.upgrade() else {
+                    return;
                 };
                 let mut d = data.lock().unwrap();
 
@@ -176,9 +175,8 @@ fn main() {
 
                     let data_weak = Arc::downgrade(&data);
                     d.source_id = Some(glib::source::idle_add(move || {
-                        let data = match data_weak.upgrade() {
-                            Some(data) => data,
-                            None => return glib::ControlFlow::Break,
+                        let Some(data) = data_weak.upgrade() else {
+                            return glib::ControlFlow::Break;
                         };
 
                         let (appsrc, buffer) = {
@@ -224,9 +222,8 @@ fn main() {
                 }
             })
             .enough_data(move |_| {
-                let data = match data_weak2.upgrade() {
-                    Some(data) => data,
-                    None => return,
+                let Some(data) = data_weak2.upgrade() else {
+                    return;
                 };
 
                 let mut data = data.lock().unwrap();
@@ -242,9 +239,8 @@ fn main() {
     appsink.set_callbacks(
         gst_app::AppSinkCallbacks::builder()
             .new_sample(move |_| {
-                let data = match data_weak.upgrade() {
-                    Some(data) => data,
-                    None => return Ok(gst::FlowSuccess::Ok),
+                let Some(data) = data_weak.upgrade() else {
+                    return Ok(gst::FlowSuccess::Ok);
                 };
 
                 let appsink = {

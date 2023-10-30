@@ -90,9 +90,8 @@ fn example_main() -> Result<(), Error> {
     decodebin.connect_pad_added(move |dbin, src_pad| {
         // Here we temporarily retrieve a strong reference on the pipeline from the weak one
         // we moved into this callback.
-        let pipeline = match pipeline_weak.upgrade() {
-            Some(pipeline) => pipeline,
-            None => return,
+        let Some(pipeline) = pipeline_weak.upgrade() else {
+            return;
         };
 
         // Try to detect whether the raw stream decodebin provided us with

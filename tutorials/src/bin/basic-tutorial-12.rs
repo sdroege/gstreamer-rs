@@ -24,9 +24,8 @@ fn tutorial_main() -> Result<(), Error> {
     let bus = pipeline.bus().expect("Pipeline has no bus");
     let _bus_watch = bus
         .add_watch(move |_, msg| {
-            let pipeline = match pipeline_weak.upgrade() {
-                Some(pipeline) => pipeline,
-                None => return glib::ControlFlow::Continue,
+            let Some(pipeline) = pipeline_weak.upgrade() else {
+                return glib::ControlFlow::Continue;
             };
             let main_loop = &main_loop_clone;
             match msg.view() {

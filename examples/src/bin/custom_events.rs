@@ -115,9 +115,8 @@ fn example_main() {
         glib::timeout_add_seconds(2 + i as u32, move || {
             // Here we temporarily retrieve a strong reference on the pipeline from the weak one
             // we moved into this callback.
-            let pipeline = match pipeline_weak.upgrade() {
-                Some(pipeline) => pipeline,
-                None => return glib::ControlFlow::Break,
+            let Some(pipeline) = pipeline_weak.upgrade() else {
+                return glib::ControlFlow::Break;
             };
             println!("Sending custom event to the pipeline with send_eos={send_eos}");
             let ev = ExampleCustomEvent::new(*send_eos);

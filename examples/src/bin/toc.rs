@@ -52,9 +52,8 @@ fn example_main() {
     decodebin.connect_pad_added(move |_, src_pad| {
         // Here we temporarily retrieve a strong reference on the pipeline from the weak one
         // we moved into this callback.
-        let pipeline = match pipeline_weak.upgrade() {
-            Some(pipeline) => pipeline,
-            None => return,
+        let Some(pipeline) = pipeline_weak.upgrade() else {
+            return;
         };
 
         // In this example, we are only interested about parsing the ToC, so

@@ -82,9 +82,8 @@ fn tutorial_main() -> Result<(), Error> {
 
                         let data_weak = Arc::downgrade(data);
                         d.source_id = Some(glib::source::idle_add(move || {
-                            let data = match data_weak.upgrade() {
-                                Some(data) => data,
-                                None => return glib::ControlFlow::Break,
+                            let Some(data) = data_weak.upgrade() else {
+                                return glib::ControlFlow::Break;
                             };
 
                             let (appsrc, buffer) = {
