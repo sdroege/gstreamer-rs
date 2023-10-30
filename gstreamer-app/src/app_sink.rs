@@ -1254,9 +1254,8 @@ impl Stream for AppSinkStream {
     fn poll_next(self: Pin<&mut Self>, context: &mut Context) -> Poll<Option<Self::Item>> {
         let mut waker = self.waker_reference.lock().unwrap();
 
-        let app_sink = match self.app_sink.upgrade() {
-            Some(app_sink) => app_sink,
-            None => return Poll::Ready(None),
+        let Some(app_sink) = self.app_sink.upgrade() else {
+            return Poll::Ready(None);
         };
 
         app_sink

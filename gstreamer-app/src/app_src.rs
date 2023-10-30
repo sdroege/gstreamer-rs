@@ -588,9 +588,8 @@ impl Sink<gst::Sample> for AppSrcSink {
     fn poll_ready(self: Pin<&mut Self>, context: &mut Context) -> Poll<Result<(), Self::Error>> {
         let mut waker = self.waker_reference.lock().unwrap();
 
-        let app_src = match self.app_src.upgrade() {
-            Some(app_src) => app_src,
-            None => return Poll::Ready(Err(gst::FlowError::Eos)),
+        let Some(app_src) = self.app_src.upgrade() else {
+            return Poll::Ready(Err(gst::FlowError::Eos));
         };
 
         let current_level_bytes = app_src.current_level_bytes();
@@ -606,9 +605,8 @@ impl Sink<gst::Sample> for AppSrcSink {
     }
 
     fn start_send(self: Pin<&mut Self>, sample: gst::Sample) -> Result<(), Self::Error> {
-        let app_src = match self.app_src.upgrade() {
-            Some(app_src) => app_src,
-            None => return Err(gst::FlowError::Eos),
+        let Some(app_src) = self.app_src.upgrade() else {
+            return Err(gst::FlowError::Eos);
         };
 
         app_src.push_sample(&sample)?;
@@ -621,9 +619,8 @@ impl Sink<gst::Sample> for AppSrcSink {
     }
 
     fn poll_close(self: Pin<&mut Self>, _: &mut Context) -> Poll<Result<(), Self::Error>> {
-        let app_src = match self.app_src.upgrade() {
-            Some(app_src) => app_src,
-            None => return Poll::Ready(Ok(())),
+        let Some(app_src) = self.app_src.upgrade() else {
+            return Poll::Ready(Ok(()));
         };
 
         app_src.end_of_stream()?;

@@ -56,9 +56,8 @@ fn tutorial_main() -> Result<(), Error> {
             use gst::MessageView;
 
             let buffering_level = &buffering_level_clone;
-            let pipeline = match pipeline_weak.upgrade() {
-                Some(pipeline) => pipeline,
-                None => return glib::ControlFlow::Break,
+            let Some(pipeline) = pipeline_weak.upgrade() else {
+                return glib::ControlFlow::Break;
             };
             let main_loop = &main_loop_clone;
             match msg.view() {
@@ -116,9 +115,8 @@ fn tutorial_main() -> Result<(), Error> {
     let timeout_id = glib::timeout_add_seconds(1, move || {
         use gst::{format::Percent, GenericFormattedValue as GFV};
 
-        let pipeline = match pipeline_weak_.upgrade() {
-            Some(pipeline) => pipeline,
-            None => return glib::ControlFlow::Break,
+        let Some(pipeline) = pipeline_weak_.upgrade() else {
+            return glib::ControlFlow::Break;
         };
         let mut graph = vec![b' '; GRAPH_LENGTH];
         let mut buffering = gst::query::Buffering::new(gst::Format::Percent);

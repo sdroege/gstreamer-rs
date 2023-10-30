@@ -203,9 +203,8 @@ fn example_main() -> Result<(), Error> {
 
     let depay_weak = depay.downgrade();
     rtpbin.connect_pad_added(move |rtpbin, src_pad| {
-        let depay = match depay_weak.upgrade() {
-            Some(depay) => depay,
-            None => return,
+        let Some(depay) = depay_weak.upgrade() else {
+            return;
         };
 
         match connect_rtpbin_srcpad(src_pad, &depay) {

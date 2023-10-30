@@ -50,9 +50,8 @@ fn example_main() {
     let timeout_id = glib::timeout_add_seconds(1, move || {
         // Here we temporarily retrieve a strong reference on the pipeline from the weak one
         // we moved into this callback.
-        let pipeline = match pipeline_weak.upgrade() {
-            Some(pipeline) => pipeline,
-            None => return glib::ControlFlow::Continue,
+        let Some(pipeline) = pipeline_weak.upgrade() else {
+            return glib::ControlFlow::Break;
         };
 
         //let pos = pipeline.query_position(gst::Format::Time).unwrap_or(-1);
