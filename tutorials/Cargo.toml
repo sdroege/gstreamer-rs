@@ -16,6 +16,8 @@ gst-pbutils = { package = "gstreamer-pbutils", path = "../gstreamer-pbutils", ve
 byte-slice-cast = "1"
 anyhow = "1"
 termion = { version = "2", optional = true }
+async-channel = "2.0.0"
+futures = "0.3"
 
 [target.'cfg(target_os = "macos")'.dependencies]
 cocoa = "0.25"
