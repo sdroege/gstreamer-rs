@@ -65,7 +65,7 @@ fn send_seek_event(pipeline: &Element, rate: f64) -> bool {
 }
 
 // This is where we get the user input from the terminal.
-fn handle_keyboard(ready_tx: glib::Sender<Command>) {
+fn handle_keyboard(ready_tx: async_channel::Sender<Command>) {
     // We set the terminal in "raw mode" so that we can get the keys without waiting for the user
     // to press return.
     let _stdout = io::stdout().into_raw_mode().unwrap();
@@ -84,7 +84,7 @@ fn handle_keyboard(ready_tx: glib::Sender<Command>) {
                 _ => continue,
             };
             ready_tx
-                .send(command)
+                .send_blocking(command)
                 .expect("failed to send data through channel");
             if command == Command::Quit {
                 break;
@@ -116,7 +116,7 @@ USAGE: Choose one of the following options, then press enter:
     let _guard = main_context.acquire().unwrap();
 
     // Build the channel to get the terminal inputs from a different thread.
-    let (ready_tx, ready_rx) = glib::MainContext::channel(glib::Priority::DEFAULT);
+    let (ready_tx, ready_rx) = async_channel::bounded(5);
 
     thread::spawn(move || handle_keyboard(ready_tx));
 
@@ -135,51 +135,52 @@ USAGE: Choose one of the following options, then press enter:
     let mut playing = true;
     let mut rate = 1.;
 
-    ready_rx.attach(Some(&main_loop.context()), move |command: Command| {
-        let pipeline = match pipeline_weak.upgrade() {
-            Some(pipeline) => pipeline,
-            None => return glib::ControlFlow::Continue,
-        };
-        match command {
-            Command::PlayPause => {
-                let status = if playing {
-                    let _ = pipeline.set_state(State::Paused);
-                    "PAUSE"
-                } else {
-                    let _ = pipeline.set_state(State::Playing);
-                    "PLAYING"
-                };
-                playing = !playing;
-                println!("Setting state to {status}\r");
-            }
-            Command::DataRateUp => {
-                if send_seek_event(&pipeline, rate * 2.) {
-                    rate *= 2.;
+    main_context.spawn_local(async move {
+        while let Ok(command) = ready_rx.recv().await {
+            let Some(pipeline) = pipeline_weak.upgrade() else {
+                break;
+            };
+
+            match command {
+                Command::PlayPause => {
+                    let status = if playing {
+                        let _ = pipeline.set_state(State::Paused);
+                        "PAUSE"
+                    } else {
+                        let _ = pipeline.set_state(State::Playing);
+                        "PLAYING"
+                    };
+                    playing = !playing;
+                    println!("Setting state to {status}\r");
                 }
-            }
-            Command::DataRateDown => {
-                if send_seek_event(&pipeline, rate / 2.) {
-                    rate /= 2.;
+                Command::DataRateUp => {
+                    if send_seek_event(&pipeline, rate * 2.) {
+                        rate *= 2.;
+                    }
                 }
-            }
-            Command::ReverseRate => {
-                if send_seek_event(&pipeline, rate * -1.) {
-                    rate *= -1.;
+                Command::DataRateDown => {
+                    if send_seek_event(&pipeline, rate / 2.) {
+                        rate /= 2.;
+                    }
                 }
-            }
-            Command::NextFrame => {
-                if let Some(video_sink) = pipeline.property::<Option<Element>>("video-sink") {
-                    // Send the event
-                    let step = Step::new(gst::format::Buffers::ONE, rate.abs(), true, false);
-                    video_sink.send_event(step);
-                    println!("Stepping one frame\r");
+                Command::ReverseRate => {
+                    if send_seek_event(&pipeline, rate * -1.) {
+                        rate *= -1.;
+                    }
                 }
-            }
-            Command::Quit => {
-                main_loop_clone.quit();
+                Command::NextFrame => {
+                    if let Some(video_sink) = pipeline.property::<Option<Element>>("video-sink") {
+                        // Send the event
+                        let step = Step::new(gst::format::Buffers::ONE, rate.abs(), true, false);
+                        video_sink.send_event(step);
+                        println!("Stepping one frame\r");
+                    }
+                }
+                Command::Quit => {
+                    main_loop_clone.quit();
+                }
             }
         }
-        glib::ControlFlow::Continue
     });
 
     main_loop.run();

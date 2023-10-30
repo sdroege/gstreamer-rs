@@ -15,7 +15,7 @@ enum Command {
     Quit,
 }
 
-fn handle_keyboard(ready_tx: glib::Sender<Command>) {
+fn handle_keyboard(ready_tx: async_channel::Sender<Command>) {
     let mut stdin = termion::async_stdin().keys();
 
     loop {
@@ -36,7 +36,7 @@ fn handle_keyboard(ready_tx: glib::Sender<Command>) {
                 _ => continue,
             };
             ready_tx
-                .send(command.clone())
+                .send_blocking(command.clone())
                 .expect("Failed to send command to the main thread.");
             if command == Command::Quit {
                 break;
@@ -104,7 +104,7 @@ fn tutorial_main() -> Result<(), Error> {
     let _guard = main_context.acquire().unwrap();
 
     // Build the channel to get the terminal inputs from a different thread.
-    let (ready_tx, ready_rx) = glib::MainContext::channel(glib::Priority::DEFAULT);
+    let (ready_tx, ready_rx) = async_channel::bounded(5);
 
     // Start the keyboard handling thread
     thread::spawn(move || handle_keyboard(ready_tx));
@@ -121,61 +121,65 @@ fn tutorial_main() -> Result<(), Error> {
     // Start playing
     pipeline.set_state(gst::State::Playing)?;
 
-    ready_rx.attach(Some(&main_loop.context()), move |command: Command| {
-        let pipeline = match pipeline_weak.upgrade() {
-            Some(pipeline) => pipeline,
-            None => return glib::ControlFlow::Continue,
-        };
+    main_context.spawn_local(async move {
+        while let Ok(command) = ready_rx.recv().await {
+            let Some(pipeline) = pipeline_weak.upgrade() else {
+                break;
+            };
 
-        match command {
-            Command::UpdateChannel(ref name, increase) => {
-                let balance = pipeline
-                    .dynamic_cast_ref::<gst_video::ColorBalance>()
-                    .unwrap();
-                update_color_channel(name, increase, balance);
-                print_current_values(&pipeline);
-            }
-            Command::Quit => {
-                main_loop_clone.quit();
+            match command {
+                Command::UpdateChannel(ref name, increase) => {
+                    let balance = pipeline
+                        .dynamic_cast_ref::<gst_video::ColorBalance>()
+                        .unwrap();
+                    update_color_channel(name, increase, balance);
+                    print_current_values(&pipeline);
+                }
+                Command::Quit => {
+                    main_loop_clone.quit();
+                }
             }
         }
-        glib::ControlFlow::Continue
     });
 
     // Handle bus errors / EOS correctly
     let main_loop_clone = main_loop.clone();
     let bus = pipeline.bus().unwrap();
+    let mut bus_stream = bus.stream();
     let pipeline_weak = pipeline.downgrade();
-    let _bus_watch = bus.add_watch(move |_bus, message| {
-        use gst::MessageView;
+    main_context.spawn_local(async move {
+        use futures::prelude::*;
 
-        let pipeline = match pipeline_weak.upgrade() {
-            Some(pipeline) => pipeline,
-            None => return glib::ControlFlow::Continue,
-        };
+        while let Some(message) = bus_stream.next().await {
+            use gst::MessageView;
 
-        match message.view() {
-            MessageView::Error(err) => {
-                eprintln!(
-                    "Error received from element {:?} {}",
-                    err.src().map(|s| s.path_string()),
-                    err.error()
-                );
-                eprintln!("Debugging information: {:?}", err.debug());
-                main_loop_clone.quit();
-                glib::ControlFlow::Break
+            let Some(pipeline) = pipeline_weak.upgrade() else {
+                break;
+            };
+
+            match message.view() {
+                MessageView::Error(err) => {
+                    eprintln!(
+                        "Error received from element {:?} {}",
+                        err.src().map(|s| s.path_string()),
+                        err.error()
+                    );
+                    eprintln!("Debugging information: {:?}", err.debug());
+                    main_loop_clone.quit();
+                    break;
+                }
+                MessageView::Eos(..) => {
+                    println!("Reached end of stream");
+                    pipeline
+                        .set_state(gst::State::Ready)
+                        .expect("Unable to set the pipeline to the `Ready` state");
+                    main_loop_clone.quit();
+                    break;
+                }
+                _ => (),
             }
-            MessageView::Eos(..) => {
-                println!("Reached end of stream");
-                pipeline
-                    .set_state(gst::State::Ready)
-                    .expect("Unable to set the pipeline to the `Ready` state");
-                main_loop_clone.quit();
-                glib::ControlFlow::Break
-            }
-            _ => glib::ControlFlow::Continue,
         }
-    })?;
+    });
 
     // Print initial values for all channels
     print_current_values(&pipeline);
