@@ -332,12 +332,12 @@ impl App {
 
         let windowed_context = unsafe { windowed_context.make_current().map_err(|(_, err)| err)? };
 
-        #[cfg(any(feature = "gst-gl-x11", feature = "gst-gl-wayland"))]
+        #[cfg(any(feature = "gst-gl-x11"))]
         let inner_window = windowed_context.window();
 
         let shared_context: gst_gl::GLContext;
         if cfg!(target_os = "linux") {
-            #[cfg(any(feature = "gst-gl-x11", feature = "gst-gl-wayland"))]
+            #[cfg(any(feature = "gst-gl-x11"))]
             use glutin::platform::unix::WindowExtUnix;
             use glutin::platform::{unix::RawHandle, ContextTraitExt};
 
@@ -345,47 +345,19 @@ impl App {
 
             let (gl_context, gl_display, platform) = match unsafe { windowed_context.raw_handle() }
             {
-                #[cfg(any(feature = "gst-gl-egl", feature = "gst-gl-wayland"))]
+                #[cfg(any(feature = "gst-gl-egl"))]
                 RawHandle::Egl(egl_context) => {
-                    let mut gl_display = None;
-
-                    #[cfg(feature = "gst-gl-egl")]
-                    if let Some(display) = unsafe { windowed_context.get_egl_display() } {
-                        gl_display = Some(
+                    let gl_display =
+                        if let Some(display) = unsafe { windowed_context.get_egl_display() } {
                             unsafe { gst_gl_egl::GLDisplayEGL::with_egl_display(display as usize) }
                                 .unwrap()
-                                .upcast::<gst_gl::GLDisplay>(),
-                        )
-                    };
-
-                    #[cfg(feature = "gst-gl-wayland")]
-                    if let Some(display) = inner_window.wayland_display() {
-                        let gl_display = gl_display.insert(
-                            unsafe {
-                                gst_gl_wayland::GLDisplayWayland::with_display(display as usize)
-                            }
-                            .unwrap()
-                            .upcast::<gst_gl::GLDisplay>(),
-                        );
-
-                        // If using a Wayland display, resolving that to an EGL display _should_
-                        // result in the same handle that glutin found (both via eglGetPlatformDisplay(EXT)()).
-                        #[cfg(feature = "gst-gl-egl")]
-                        {
-                            let gl_display =
-                                gst_gl_egl::GLDisplayEGL::from_gl_display(gl_display).unwrap();
-                            assert_eq!(
-                                unsafe { windowed_context.get_egl_display() }
-                                    .expect("Wayland clients use EGL"),
-                                gl_display.handle() as *const std::ffi::c_void,
-                                "GLDisplayWayland must use the same EGLDisplay as glutin!"
-                            );
-                        }
-                    };
+                        } else {
+                            panic!("EGL window without EGL Display")
+                        };
 
                     (
                         egl_context as usize,
-                        gl_display.expect("Could not retrieve GLDisplay through EGL context and/or Wayland display"),
+                        gl_display.upcast::<gst_gl::GLDisplay>(),
                         gst_gl::GLPlatform::EGL,
                     )
                 }
@@ -394,7 +366,7 @@ impl App {
                     let gl_display = if let Some(display) = inner_window.xlib_display() {
                         unsafe { gst_gl_x11::GLDisplayX11::with_display(display as usize) }.unwrap()
                     } else {
-                        panic!("X11 window without X Display");
+                        panic!("X11 window without X Display")
                     };
 
                     (
