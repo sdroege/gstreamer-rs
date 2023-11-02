@@ -11,7 +11,6 @@ glib = { git = "https://github.com/gtk-rs/gtk-rs-core" }
 gst = { package = "gstreamer", path = "../gstreamer" }
 gst-gl = { package = "gstreamer-gl", path = "../gstreamer-gl", optional = true }
 gst-gl-egl = { package = "gstreamer-gl-egl", path = "../gstreamer-gl/egl", optional = true }
-gst-gl-wayland = { package = "gstreamer-gl-wayland", path = "../gstreamer-gl/wayland", optional = true }
 gst-gl-x11 = { package = "gstreamer-gl-x11", path = "../gstreamer-gl/x11", optional = true }
 gst-app = { package = "gstreamer-app", path = "../gstreamer-app" }
 gst-audio = { package = "gstreamer-audio", path = "../gstreamer-audio" }
@@ -61,7 +60,6 @@ overlay-composition = ["pango", "pangocairo", "cairo-rs"]
 gl = ["gst-gl", "gl_generator", "glutin"]
 gst-gl-x11 = ["dep:gst-gl-x11"]
 gst-gl-egl = ["dep:gst-gl-egl"]
-gst-gl-wayland = ["dep:gst-gl-wayland"]
 allocators = ["gst-allocators", "memmap2", "memfd", "uds"]
 
 [[bin]]
