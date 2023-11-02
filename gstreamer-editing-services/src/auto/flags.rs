@@ -46,6 +46,7 @@ impl FromGlib<ffi::GESMarkerFlags> for MarkerFlags {
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl StaticType for MarkerFlags {
     #[inline]
+    #[doc(alias = "ges_marker_flags_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::ges_marker_flags_get_type()) }
     }
@@ -59,7 +60,7 @@ impl glib::HasParamSpec for MarkerFlags {
     type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name| Self::ParamSpec::builder(name)
+        Self::ParamSpec::builder
     }
 }
 
@@ -143,6 +144,7 @@ impl FromGlib<ffi::GESMetaFlag> for MetaFlag {
 
 impl StaticType for MetaFlag {
     #[inline]
+    #[doc(alias = "ges_meta_flag_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::ges_meta_flag_get_type()) }
     }
@@ -154,7 +156,7 @@ impl glib::HasParamSpec for MetaFlag {
     type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name| Self::ParamSpec::builder(name)
+        Self::ParamSpec::builder
     }
 }
 
@@ -234,6 +236,7 @@ impl FromGlib<ffi::GESPipelineFlags> for PipelineFlags {
 
 impl StaticType for PipelineFlags {
     #[inline]
+    #[doc(alias = "ges_pipeline_flags_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::ges_pipeline_flags_get_type()) }
     }
@@ -245,7 +248,7 @@ impl glib::HasParamSpec for PipelineFlags {
     type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name| Self::ParamSpec::builder(name)
+        Self::ParamSpec::builder
     }
 }
 
@@ -344,6 +347,7 @@ impl FromGlib<ffi::GESTrackType> for TrackType {
 
 impl StaticType for TrackType {
     #[inline]
+    #[doc(alias = "ges_track_type_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::ges_track_type_get_type()) }
     }
@@ -355,7 +359,7 @@ impl glib::HasParamSpec for TrackType {
     type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name| Self::ParamSpec::builder(name)
+        Self::ParamSpec::builder
     }
 }
 

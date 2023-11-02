@@ -64,6 +64,7 @@ impl FromGlib<ffi::GstWebRTCBundlePolicy> for WebRTCBundlePolicy {
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl StaticType for WebRTCBundlePolicy {
     #[inline]
+    #[doc(alias = "gst_webrtc_bundle_policy_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_webrtc_bundle_policy_get_type()) }
     }
@@ -77,7 +78,7 @@ impl glib::HasParamSpec for WebRTCBundlePolicy {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -177,6 +178,7 @@ impl FromGlib<ffi::GstWebRTCDTLSSetup> for WebRTCDTLSSetup {
 
 impl StaticType for WebRTCDTLSSetup {
     #[inline]
+    #[doc(alias = "gst_webrtc_dtls_setup_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_webrtc_dtls_setup_get_type()) }
     }
@@ -188,7 +190,7 @@ impl glib::HasParamSpec for WebRTCDTLSSetup {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -284,6 +286,7 @@ impl FromGlib<ffi::GstWebRTCDTLSTransportState> for WebRTCDTLSTransportState {
 
 impl StaticType for WebRTCDTLSTransportState {
     #[inline]
+    #[doc(alias = "gst_webrtc_dtls_transport_state_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_webrtc_dtls_transport_state_get_type()) }
     }
@@ -295,7 +298,7 @@ impl glib::HasParamSpec for WebRTCDTLSTransportState {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -395,6 +398,7 @@ impl FromGlib<ffi::GstWebRTCDataChannelState> for WebRTCDataChannelState {
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl StaticType for WebRTCDataChannelState {
     #[inline]
+    #[doc(alias = "gst_webrtc_data_channel_state_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_webrtc_data_channel_state_get_type()) }
     }
@@ -408,7 +412,7 @@ impl glib::HasParamSpec for WebRTCDataChannelState {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -581,6 +585,7 @@ impl glib::error::ErrorDomain for WebRTCError {
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl StaticType for WebRTCError {
     #[inline]
+    #[doc(alias = "gst_webrtc_error_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_webrtc_error_get_type()) }
     }
@@ -594,7 +599,7 @@ impl glib::HasParamSpec for WebRTCError {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -694,6 +699,7 @@ impl FromGlib<ffi::GstWebRTCFECType> for WebRTCFECType {
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_14_1")))]
 impl StaticType for WebRTCFECType {
     #[inline]
+    #[doc(alias = "gst_webrtc_fec_type_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_webrtc_fec_type_get_type()) }
     }
@@ -707,7 +713,7 @@ impl glib::HasParamSpec for WebRTCFECType {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -799,6 +805,7 @@ impl FromGlib<ffi::GstWebRTCICEComponent> for WebRTCICEComponent {
 
 impl StaticType for WebRTCICEComponent {
     #[inline]
+    #[doc(alias = "gst_webrtc_ice_component_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_webrtc_ice_component_get_type()) }
     }
@@ -810,7 +817,7 @@ impl glib::HasParamSpec for WebRTCICEComponent {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -914,6 +921,7 @@ impl FromGlib<ffi::GstWebRTCICEConnectionState> for WebRTCICEConnectionState {
 
 impl StaticType for WebRTCICEConnectionState {
     #[inline]
+    #[doc(alias = "gst_webrtc_ice_connection_state_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_webrtc_ice_connection_state_get_type()) }
     }
@@ -925,7 +933,7 @@ impl glib::HasParamSpec for WebRTCICEConnectionState {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -1013,6 +1021,7 @@ impl FromGlib<ffi::GstWebRTCICEGatheringState> for WebRTCICEGatheringState {
 
 impl StaticType for WebRTCICEGatheringState {
     #[inline]
+    #[doc(alias = "gst_webrtc_ice_gathering_state_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_webrtc_ice_gathering_state_get_type()) }
     }
@@ -1024,7 +1033,7 @@ impl glib::HasParamSpec for WebRTCICEGatheringState {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -1108,6 +1117,7 @@ impl FromGlib<ffi::GstWebRTCICERole> for WebRTCICERole {
 
 impl StaticType for WebRTCICERole {
     #[inline]
+    #[doc(alias = "gst_webrtc_ice_role_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_webrtc_ice_role_get_type()) }
     }
@@ -1119,7 +1129,7 @@ impl glib::HasParamSpec for WebRTCICERole {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -1211,6 +1221,7 @@ impl FromGlib<ffi::GstWebRTCICETransportPolicy> for WebRTCICETransportPolicy {
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl StaticType for WebRTCICETransportPolicy {
     #[inline]
+    #[doc(alias = "gst_webrtc_ice_transport_policy_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_webrtc_ice_transport_policy_get_type()) }
     }
@@ -1224,7 +1235,7 @@ impl glib::HasParamSpec for WebRTCICETransportPolicy {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -1328,6 +1339,7 @@ impl FromGlib<ffi::GstWebRTCKind> for WebRTCKind {
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl StaticType for WebRTCKind {
     #[inline]
+    #[doc(alias = "gst_webrtc_kind_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_webrtc_kind_get_type()) }
     }
@@ -1341,7 +1353,7 @@ impl glib::HasParamSpec for WebRTCKind {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -1449,6 +1461,7 @@ impl FromGlib<ffi::GstWebRTCPeerConnectionState> for WebRTCPeerConnectionState {
 
 impl StaticType for WebRTCPeerConnectionState {
     #[inline]
+    #[doc(alias = "gst_webrtc_peer_connection_state_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_webrtc_peer_connection_state_get_type()) }
     }
@@ -1460,7 +1473,7 @@ impl glib::HasParamSpec for WebRTCPeerConnectionState {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -1560,6 +1573,7 @@ impl FromGlib<ffi::GstWebRTCPriorityType> for WebRTCPriorityType {
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl StaticType for WebRTCPriorityType {
     #[inline]
+    #[doc(alias = "gst_webrtc_priority_type_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_webrtc_priority_type_get_type()) }
     }
@@ -1573,7 +1587,7 @@ impl glib::HasParamSpec for WebRTCPriorityType {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -1677,6 +1691,7 @@ impl FromGlib<ffi::GstWebRTCRTPTransceiverDirection> for WebRTCRTPTransceiverDir
 
 impl StaticType for WebRTCRTPTransceiverDirection {
     #[inline]
+    #[doc(alias = "gst_webrtc_rtp_transceiver_direction_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_webrtc_rtp_transceiver_direction_get_type()) }
     }
@@ -1688,7 +1703,7 @@ impl glib::HasParamSpec for WebRTCRTPTransceiverDirection {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -1788,6 +1803,7 @@ impl FromGlib<ffi::GstWebRTCSCTPTransportState> for WebRTCSCTPTransportState {
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl StaticType for WebRTCSCTPTransportState {
     #[inline]
+    #[doc(alias = "gst_webrtc_sctp_transport_state_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_webrtc_sctp_transport_state_get_type()) }
     }
@@ -1801,7 +1817,7 @@ impl glib::HasParamSpec for WebRTCSCTPTransportState {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -1920,6 +1936,7 @@ impl FromGlib<ffi::GstWebRTCSDPType> for WebRTCSDPType {
 
 impl StaticType for WebRTCSDPType {
     #[inline]
+    #[doc(alias = "gst_webrtc_sdp_type_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_webrtc_sdp_type_get_type()) }
     }
@@ -1931,7 +1948,7 @@ impl glib::HasParamSpec for WebRTCSDPType {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -2031,6 +2048,7 @@ impl FromGlib<ffi::GstWebRTCSignalingState> for WebRTCSignalingState {
 
 impl StaticType for WebRTCSignalingState {
     #[inline]
+    #[doc(alias = "gst_webrtc_signaling_state_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_webrtc_signaling_state_get_type()) }
     }
@@ -2042,7 +2060,7 @@ impl glib::HasParamSpec for WebRTCSignalingState {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -2172,6 +2190,7 @@ impl FromGlib<ffi::GstWebRTCStatsType> for WebRTCStatsType {
 
 impl StaticType for WebRTCStatsType {
     #[inline]
+    #[doc(alias = "gst_webrtc_stats_type_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_webrtc_stats_type_get_type()) }
     }
@@ -2183,7 +2202,7 @@ impl glib::HasParamSpec for WebRTCStatsType {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 

@@ -59,6 +59,7 @@ impl FromGlib<ffi::GstAppLeakyType> for AppLeakyType {
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl StaticType for AppLeakyType {
     #[inline]
+    #[doc(alias = "gst_app_leaky_type_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_app_leaky_type_get_type()) }
     }
@@ -72,7 +73,7 @@ impl glib::HasParamSpec for AppLeakyType {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -168,6 +169,7 @@ impl FromGlib<ffi::GstAppStreamType> for AppStreamType {
 
 impl StaticType for AppStreamType {
     #[inline]
+    #[doc(alias = "gst_app_stream_type_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_app_stream_type_get_type()) }
     }
@@ -179,7 +181,7 @@ impl glib::HasParamSpec for AppStreamType {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 

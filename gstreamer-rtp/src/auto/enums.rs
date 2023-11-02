@@ -75,6 +75,7 @@ impl FromGlib<ffi::GstRTCPFBType> for RTCPFBType {
 
 impl StaticType for RTCPFBType {
     #[inline]
+    #[doc(alias = "gst_rtcpfb_type_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtcpfb_type_get_type()) }
     }
@@ -86,7 +87,7 @@ impl glib::HasParamSpec for RTCPFBType {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -256,6 +257,7 @@ impl FromGlib<ffi::GstRTCPSDESType> for RTCPSDESType {
 
 impl StaticType for RTCPSDESType {
     #[inline]
+    #[doc(alias = "gst_rtcpsdes_type_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtcpsdes_type_get_type()) }
     }
@@ -267,7 +269,7 @@ impl glib::HasParamSpec for RTCPSDESType {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -379,6 +381,7 @@ impl FromGlib<ffi::GstRTCPType> for RTCPType {
 
 impl StaticType for RTCPType {
     #[inline]
+    #[doc(alias = "gst_rtcp_type_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtcp_type_get_type()) }
     }
@@ -390,7 +393,7 @@ impl glib::HasParamSpec for RTCPType {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -506,6 +509,7 @@ impl FromGlib<ffi::GstRTCPXRType> for RTCPXRType {
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl StaticType for RTCPXRType {
     #[inline]
+    #[doc(alias = "gst_rtcpxr_type_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtcpxr_type_get_type()) }
     }
@@ -519,7 +523,7 @@ impl glib::HasParamSpec for RTCPXRType {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -705,6 +709,7 @@ impl FromGlib<ffi::GstRTPPayload> for RTPPayload {
 
 impl StaticType for RTPPayload {
     #[inline]
+    #[doc(alias = "gst_rtp_payload_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtp_payload_get_type()) }
     }
@@ -716,7 +721,7 @@ impl glib::HasParamSpec for RTPPayload {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -812,6 +817,7 @@ impl FromGlib<ffi::GstRTPProfile> for RTPProfile {
 
 impl StaticType for RTPProfile {
     #[inline]
+    #[doc(alias = "gst_rtp_profile_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtp_profile_get_type()) }
     }
@@ -823,7 +829,7 @@ impl glib::HasParamSpec for RTPProfile {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 

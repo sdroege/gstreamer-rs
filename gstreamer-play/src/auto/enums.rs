@@ -76,6 +76,7 @@ impl FromGlib<ffi::GstPlayColorBalanceType> for PlayColorBalanceType {
 
 impl StaticType for PlayColorBalanceType {
     #[inline]
+    #[doc(alias = "gst_play_color_balance_type_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_play_color_balance_type_get_type()) }
     }
@@ -87,7 +88,7 @@ impl glib::HasParamSpec for PlayColorBalanceType {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -210,6 +211,7 @@ impl glib::error::ErrorDomain for PlayError {
 
 impl StaticType for PlayError {
     #[inline]
+    #[doc(alias = "gst_play_error_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_play_error_get_type()) }
     }
@@ -221,7 +223,7 @@ impl glib::HasParamSpec for PlayError {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -492,6 +494,7 @@ impl FromGlib<ffi::GstPlayMessage> for PlayMessage {
 
 impl StaticType for PlayMessage {
     #[inline]
+    #[doc(alias = "gst_play_message_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_play_message_get_type()) }
     }
@@ -503,7 +506,7 @@ impl glib::HasParamSpec for PlayMessage {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -666,6 +669,7 @@ impl FromGlib<ffi::GstPlayState> for PlayState {
 
 impl StaticType for PlayState {
     #[inline]
+    #[doc(alias = "gst_play_state_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_play_state_get_type()) }
     }
@@ -677,7 +681,7 @@ impl glib::HasParamSpec for PlayState {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 

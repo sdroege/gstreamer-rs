@@ -75,6 +75,7 @@ impl FromGlib<ffi::GstPlayerColorBalanceType> for PlayerColorBalanceType {
 
 impl StaticType for PlayerColorBalanceType {
     #[inline]
+    #[doc(alias = "gst_player_color_balance_type_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_player_color_balance_type_get_type()) }
     }
@@ -86,7 +87,7 @@ impl glib::HasParamSpec for PlayerColorBalanceType {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -209,6 +210,7 @@ impl glib::error::ErrorDomain for PlayerError {
 
 impl StaticType for PlayerError {
     #[inline]
+    #[doc(alias = "gst_player_error_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_player_error_get_type()) }
     }
@@ -220,7 +222,7 @@ impl glib::HasParamSpec for PlayerError {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -383,6 +385,7 @@ impl FromGlib<ffi::GstPlayerState> for PlayerState {
 
 impl StaticType for PlayerState {
     #[inline]
+    #[doc(alias = "gst_player_state_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_player_state_get_type()) }
     }
@@ -394,7 +397,7 @@ impl glib::HasParamSpec for PlayerState {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 

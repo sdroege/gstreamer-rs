@@ -74,6 +74,7 @@ impl FromGlib<ffi::GstNavigationModifierType> for NavigationModifierType {
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 impl StaticType for NavigationModifierType {
     #[inline]
+    #[doc(alias = "gst_navigation_modifier_type_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_navigation_modifier_type_get_type()) }
     }
@@ -87,7 +88,7 @@ impl glib::HasParamSpec for NavigationModifierType {
     type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name| Self::ParamSpec::builder(name)
+        Self::ParamSpec::builder
     }
 }
 
@@ -189,6 +190,7 @@ impl FromGlib<ffi::GstVideoBufferFlags> for VideoBufferFlags {
 
 impl StaticType for VideoBufferFlags {
     #[inline]
+    #[doc(alias = "gst_video_buffer_flags_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_buffer_flags_get_type()) }
     }
@@ -200,7 +202,7 @@ impl glib::HasParamSpec for VideoBufferFlags {
     type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name| Self::ParamSpec::builder(name)
+        Self::ParamSpec::builder
     }
 }
 
@@ -303,6 +305,7 @@ impl FromGlib<ffi::GstVideoChromaSite> for VideoChromaSite {
 
 impl StaticType for VideoChromaSite {
     #[inline]
+    #[doc(alias = "gst_video_chroma_site_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_chroma_site_get_type()) }
     }
@@ -314,7 +317,7 @@ impl glib::HasParamSpec for VideoChromaSite {
     type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name| Self::ParamSpec::builder(name)
+        Self::ParamSpec::builder
     }
 }
 
@@ -398,6 +401,7 @@ impl FromGlib<ffi::GstVideoCodecFrameFlags> for VideoCodecFrameFlags {
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl StaticType for VideoCodecFrameFlags {
     #[inline]
+    #[doc(alias = "gst_video_codec_frame_flags_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_codec_frame_flags_get_type()) }
     }
@@ -411,7 +415,7 @@ impl glib::HasParamSpec for VideoCodecFrameFlags {
     type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name| Self::ParamSpec::builder(name)
+        Self::ParamSpec::builder
     }
 }
 
@@ -501,6 +505,7 @@ impl FromGlib<ffi::GstVideoDecoderRequestSyncPointFlags> for VideoDecoderRequest
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl StaticType for VideoDecoderRequestSyncPointFlags {
     #[inline]
+    #[doc(alias = "gst_video_decoder_request_sync_point_flags_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_decoder_request_sync_point_flags_get_type()) }
     }
@@ -514,7 +519,7 @@ impl glib::HasParamSpec for VideoDecoderRequestSyncPointFlags {
     type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name| Self::ParamSpec::builder(name)
+        Self::ParamSpec::builder
     }
 }
 
@@ -596,6 +601,7 @@ impl FromGlib<ffi::GstVideoFlags> for VideoFlags {
 
 impl StaticType for VideoFlags {
     #[inline]
+    #[doc(alias = "gst_video_flags_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_flags_get_type()) }
     }
@@ -607,7 +613,7 @@ impl glib::HasParamSpec for VideoFlags {
     type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name| Self::ParamSpec::builder(name)
+        Self::ParamSpec::builder
     }
 }
 
@@ -699,6 +705,7 @@ impl FromGlib<ffi::GstVideoFormatFlags> for VideoFormatFlags {
 
 impl StaticType for VideoFormatFlags {
     #[inline]
+    #[doc(alias = "gst_video_format_flags_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_format_flags_get_type()) }
     }
@@ -710,7 +717,7 @@ impl glib::HasParamSpec for VideoFormatFlags {
     type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name| Self::ParamSpec::builder(name)
+        Self::ParamSpec::builder
     }
 }
 
@@ -800,6 +807,7 @@ impl FromGlib<ffi::GstVideoFrameFlags> for VideoFrameFlags {
 
 impl StaticType for VideoFrameFlags {
     #[inline]
+    #[doc(alias = "gst_video_frame_flags_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_frame_flags_get_type()) }
     }
@@ -811,7 +819,7 @@ impl glib::HasParamSpec for VideoFrameFlags {
     type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name| Self::ParamSpec::builder(name)
+        Self::ParamSpec::builder
     }
 }
 
@@ -895,6 +903,7 @@ impl FromGlib<ffi::GstVideoMultiviewFlags> for VideoMultiviewFlags {
 
 impl StaticType for VideoMultiviewFlags {
     #[inline]
+    #[doc(alias = "gst_video_multiview_flags_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_multiview_flags_get_type()) }
     }
@@ -906,7 +915,7 @@ impl glib::HasParamSpec for VideoMultiviewFlags {
     type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name| Self::ParamSpec::builder(name)
+        Self::ParamSpec::builder
     }
 }
 
@@ -982,6 +991,7 @@ impl FromGlib<ffi::GstVideoOverlayFormatFlags> for VideoOverlayFormatFlags {
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 impl StaticType for VideoOverlayFormatFlags {
     #[inline]
+    #[doc(alias = "gst_video_overlay_format_flags_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_overlay_format_flags_get_type()) }
     }
@@ -995,7 +1005,7 @@ impl glib::HasParamSpec for VideoOverlayFormatFlags {
     type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name| Self::ParamSpec::builder(name)
+        Self::ParamSpec::builder
     }
 }
 
@@ -1077,6 +1087,7 @@ impl FromGlib<ffi::GstVideoPackFlags> for VideoPackFlags {
 
 impl StaticType for VideoPackFlags {
     #[inline]
+    #[doc(alias = "gst_video_pack_flags_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_pack_flags_get_type()) }
     }
@@ -1088,7 +1099,7 @@ impl glib::HasParamSpec for VideoPackFlags {
     type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name| Self::ParamSpec::builder(name)
+        Self::ParamSpec::builder
     }
 }
 
@@ -1164,6 +1175,7 @@ impl FromGlib<ffi::GstVideoTimeCodeFlags> for VideoTimeCodeFlags {
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 impl StaticType for VideoTimeCodeFlags {
     #[inline]
+    #[doc(alias = "gst_video_time_code_flags_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_video_time_code_flags_get_type()) }
     }
@@ -1177,7 +1189,7 @@ impl glib::HasParamSpec for VideoTimeCodeFlags {
     type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name| Self::ParamSpec::builder(name)
+        Self::ParamSpec::builder
     }
 }
 

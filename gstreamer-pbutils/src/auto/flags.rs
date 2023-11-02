@@ -39,6 +39,7 @@ impl FromGlib<ffi::GstDiscovererSerializeFlags> for DiscovererSerializeFlags {
 
 impl StaticType for DiscovererSerializeFlags {
     #[inline]
+    #[doc(alias = "gst_discoverer_serialize_flags_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_discoverer_serialize_flags_get_type()) }
     }
@@ -50,7 +51,7 @@ impl glib::HasParamSpec for DiscovererSerializeFlags {
     type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name| Self::ParamSpec::builder(name)
+        Self::ParamSpec::builder
     }
 }
 
@@ -146,6 +147,7 @@ impl FromGlib<ffi::GstPbUtilsCapsDescriptionFlags> for PbUtilsCapsDescriptionFla
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl StaticType for PbUtilsCapsDescriptionFlags {
     #[inline]
+    #[doc(alias = "gst_pb_utils_caps_description_flags_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_pb_utils_caps_description_flags_get_type()) }
     }
@@ -159,7 +161,7 @@ impl glib::HasParamSpec for PbUtilsCapsDescriptionFlags {
     type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name| Self::ParamSpec::builder(name)
+        Self::ParamSpec::builder
     }
 }
 

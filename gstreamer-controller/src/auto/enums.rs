@@ -55,6 +55,7 @@ impl FromGlib<ffi::GstInterpolationMode> for InterpolationMode {
 
 impl StaticType for InterpolationMode {
     #[inline]
+    #[doc(alias = "gst_interpolation_mode_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_interpolation_mode_get_type()) }
     }
@@ -66,7 +67,7 @@ impl glib::HasParamSpec for InterpolationMode {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -162,6 +163,7 @@ impl FromGlib<ffi::GstLFOWaveform> for LFOWaveform {
 
 impl StaticType for LFOWaveform {
     #[inline]
+    #[doc(alias = "gst_lfo_waveform_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_lfo_waveform_get_type()) }
     }
@@ -173,7 +175,7 @@ impl glib::HasParamSpec for LFOWaveform {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 

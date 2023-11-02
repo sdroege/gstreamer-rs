@@ -37,6 +37,7 @@ impl FromGlib<ffi::GstRTPBufferFlags> for RTPBufferFlags {
 
 impl StaticType for RTPBufferFlags {
     #[inline]
+    #[doc(alias = "gst_rtp_buffer_flags_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtp_buffer_flags_get_type()) }
     }
@@ -48,7 +49,7 @@ impl glib::HasParamSpec for RTPBufferFlags {
     type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name| Self::ParamSpec::builder(name)
+        Self::ParamSpec::builder
     }
 }
 
@@ -120,6 +121,7 @@ impl FromGlib<ffi::GstRTPBufferMapFlags> for RTPBufferMapFlags {
 
 impl StaticType for RTPBufferMapFlags {
     #[inline]
+    #[doc(alias = "gst_rtp_buffer_map_flags_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtp_buffer_map_flags_get_type()) }
     }
@@ -131,7 +133,7 @@ impl glib::HasParamSpec for RTPBufferMapFlags {
     type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name| Self::ParamSpec::builder(name)
+        Self::ParamSpec::builder
     }
 }
 
@@ -219,6 +221,7 @@ impl FromGlib<ffi::GstRTPHeaderExtensionDirection> for RTPHeaderExtensionDirecti
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl StaticType for RTPHeaderExtensionDirection {
     #[inline]
+    #[doc(alias = "gst_rtp_header_extension_direction_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtp_header_extension_direction_get_type()) }
     }
@@ -232,7 +235,7 @@ impl glib::HasParamSpec for RTPHeaderExtensionDirection {
     type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name| Self::ParamSpec::builder(name)
+        Self::ParamSpec::builder
     }
 }
 
@@ -322,6 +325,7 @@ impl FromGlib<ffi::GstRTPHeaderExtensionFlags> for RTPHeaderExtensionFlags {
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 impl StaticType for RTPHeaderExtensionFlags {
     #[inline]
+    #[doc(alias = "gst_rtp_header_extension_flags_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtp_header_extension_flags_get_type()) }
     }
@@ -335,7 +339,7 @@ impl glib::HasParamSpec for RTPHeaderExtensionFlags {
     type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name| Self::ParamSpec::builder(name)
+        Self::ParamSpec::builder
     }
 }
 

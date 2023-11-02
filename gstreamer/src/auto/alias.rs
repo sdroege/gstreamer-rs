@@ -6,4 +6,5 @@
 #[allow(unused_imports)]
 use crate::auto::*;
 
+#[doc(alias = "GstClockTimeDiff")]
 pub type ClockTimeDiff = i64;

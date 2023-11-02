@@ -37,6 +37,7 @@ impl FromGlib<ffi::GstRTSPEvent> for RTSPEvent {
 
 impl StaticType for RTSPEvent {
     #[inline]
+    #[doc(alias = "gst_rtsp_event_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtsp_event_get_type()) }
     }
@@ -48,7 +49,7 @@ impl glib::HasParamSpec for RTSPEvent {
     type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name| Self::ParamSpec::builder(name)
+        Self::ParamSpec::builder
     }
 }
 
@@ -128,6 +129,7 @@ impl FromGlib<ffi::GstRTSPLowerTrans> for RTSPLowerTrans {
 
 impl StaticType for RTSPLowerTrans {
     #[inline]
+    #[doc(alias = "gst_rtsp_lower_trans_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtsp_lower_trans_get_type()) }
     }
@@ -139,7 +141,7 @@ impl glib::HasParamSpec for RTSPLowerTrans {
     type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name| Self::ParamSpec::builder(name)
+        Self::ParamSpec::builder
     }
 }
 
@@ -243,6 +245,7 @@ impl FromGlib<ffi::GstRTSPMethod> for RTSPMethod {
 
 impl StaticType for RTSPMethod {
     #[inline]
+    #[doc(alias = "gst_rtsp_method_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtsp_method_get_type()) }
     }
@@ -254,7 +257,7 @@ impl glib::HasParamSpec for RTSPMethod {
     type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name| Self::ParamSpec::builder(name)
+        Self::ParamSpec::builder
     }
 }
 
@@ -332,6 +335,7 @@ impl FromGlib<ffi::GstRTSPProfile> for RTSPProfile {
 
 impl StaticType for RTSPProfile {
     #[inline]
+    #[doc(alias = "gst_rtsp_profile_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtsp_profile_get_type()) }
     }
@@ -343,7 +347,7 @@ impl glib::HasParamSpec for RTSPProfile {
     type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name| Self::ParamSpec::builder(name)
+        Self::ParamSpec::builder
     }
 }
 
@@ -417,6 +421,7 @@ impl FromGlib<ffi::GstRTSPTransMode> for RTSPTransMode {
 
 impl StaticType for RTSPTransMode {
     #[inline]
+    #[doc(alias = "gst_rtsp_trans_mode_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtsp_trans_mode_get_type()) }
     }
@@ -428,7 +433,7 @@ impl glib::HasParamSpec for RTSPTransMode {
     type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name| Self::ParamSpec::builder(name)
+        Self::ParamSpec::builder
     }
 }
 

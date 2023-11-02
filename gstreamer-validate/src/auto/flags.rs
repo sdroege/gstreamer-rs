@@ -57,6 +57,7 @@ impl FromGlib<ffi::GstValidateActionTypeFlags> for ActionTypeFlags {
 
 impl StaticType for ActionTypeFlags {
     #[inline]
+    #[doc(alias = "gst_validate_action_type_flags_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_validate_action_type_flags_get_type()) }
     }
@@ -68,7 +69,7 @@ impl glib::HasParamSpec for ActionTypeFlags {
     type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name| Self::ParamSpec::builder(name)
+        Self::ParamSpec::builder
     }
 }
 
@@ -146,6 +147,7 @@ impl FromGlib<ffi::GstValidateIssueFlags> for IssueFlags {
 
 impl StaticType for IssueFlags {
     #[inline]
+    #[doc(alias = "gst_validate_issue_flags_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_validate_issue_flags_get_type()) }
     }
@@ -157,7 +159,7 @@ impl glib::HasParamSpec for IssueFlags {
     type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name| Self::ParamSpec::builder(name)
+        Self::ParamSpec::builder
     }
 }
 

@@ -35,6 +35,7 @@ impl FromGlib<ffi::GstAudioFlags> for AudioFlags {
 
 impl StaticType for AudioFlags {
     #[inline]
+    #[doc(alias = "gst_audio_flags_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_audio_flags_get_type()) }
     }
@@ -46,7 +47,7 @@ impl glib::HasParamSpec for AudioFlags {
     type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name| Self::ParamSpec::builder(name)
+        Self::ParamSpec::builder
     }
 }
 
@@ -126,6 +127,7 @@ impl FromGlib<ffi::GstAudioFormatFlags> for AudioFormatFlags {
 
 impl StaticType for AudioFormatFlags {
     #[inline]
+    #[doc(alias = "gst_audio_format_flags_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_audio_format_flags_get_type()) }
     }
@@ -137,7 +139,7 @@ impl glib::HasParamSpec for AudioFormatFlags {
     type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name| Self::ParamSpec::builder(name)
+        Self::ParamSpec::builder
     }
 }
 
@@ -209,6 +211,7 @@ impl FromGlib<ffi::GstAudioPackFlags> for AudioPackFlags {
 
 impl StaticType for AudioPackFlags {
     #[inline]
+    #[doc(alias = "gst_audio_pack_flags_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_audio_pack_flags_get_type()) }
     }
@@ -220,7 +223,7 @@ impl glib::HasParamSpec for AudioPackFlags {
     type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name| Self::ParamSpec::builder(name)
+        Self::ParamSpec::builder
     }
 }
 

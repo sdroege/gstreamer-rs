@@ -79,6 +79,7 @@ impl FromGlib<ffi::GstAudioVisualizerShader> for AudioVisualizerShader {
 
 impl StaticType for AudioVisualizerShader {
     #[inline]
+    #[doc(alias = "gst_audio_visualizer_shader_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_audio_visualizer_shader_get_type()) }
     }
@@ -90,7 +91,7 @@ impl glib::HasParamSpec for AudioVisualizerShader {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 
@@ -190,6 +191,7 @@ impl FromGlib<ffi::GstDiscovererResult> for DiscovererResult {
 
 impl StaticType for DiscovererResult {
     #[inline]
+    #[doc(alias = "gst_discoverer_result_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_discoverer_result_get_type()) }
     }
@@ -201,7 +203,7 @@ impl glib::HasParamSpec for DiscovererResult {
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name, default_value| Self::ParamSpec::builder_with_default(name, default_value)
+        Self::ParamSpec::builder_with_default
     }
 }
 

@@ -73,6 +73,7 @@ impl FromGlib<ffi::GstRTSPTransportMode> for RTSPTransportMode {
 
 impl StaticType for RTSPTransportMode {
     #[inline]
+    #[doc(alias = "gst_rtsp_transport_mode_get_type")]
     fn static_type() -> glib::Type {
         unsafe { from_glib(ffi::gst_rtsp_transport_mode_get_type()) }
     }
@@ -84,7 +85,7 @@ impl glib::HasParamSpec for RTSPTransportMode {
     type BuilderFn = fn(&str) -> glib::ParamSpecFlagsBuilder<Self>;
 
     fn param_spec_builder() -> Self::BuilderFn {
-        |name| Self::ParamSpec::builder(name)
+        Self::ParamSpec::builder
     }
 }
 
