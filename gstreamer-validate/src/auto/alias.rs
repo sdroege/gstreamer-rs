@@ -6,4 +6,5 @@
 #[allow(unused_imports)]
 use crate::auto::*;
 
+#[doc(alias = "GstValidateIssueId")]
 pub type IssueId = glib::Quark;
