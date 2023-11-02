@@ -206,9 +206,10 @@ fn load(gl_context: &glutin::WindowedContext<glutin::PossiblyCurrent>) -> Gl {
         gl.LinkProgram(program);
 
         {
-            let mut success: gl::types::GLint = 1;
-            gl.GetProgramiv(fs, gl::LINK_STATUS, &mut success);
-            assert!(success != 0);
+            let mut success = 1;
+            gl.GetProgramiv(program, gl::LINK_STATUS, &mut success);
+            assert_ne!(success, 0);
+            assert_eq!(gl.GetError(), 0);
         }
 
         let attr_position = gl.GetAttribLocation(program, b"a_position\0".as_ptr() as *const _);
@@ -278,6 +279,8 @@ fn load(gl_context: &glutin::WindowedContext<glutin::PossiblyCurrent>) -> Gl {
 
         gl.BindBuffer(gl::ELEMENT_ARRAY_BUFFER, 0);
         gl.BindBuffer(gl::ARRAY_BUFFER, 0);
+
+        assert_eq!(gl.GetError(), 0);
 
         (
             program,
