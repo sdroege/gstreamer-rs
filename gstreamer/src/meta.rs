@@ -255,28 +255,17 @@ impl<'a, T, U> MetaRefMut<'a, T, U> {
     #[doc(alias = "get_api")]
     #[inline]
     pub fn api(&self) -> glib::Type {
-        unsafe {
-            let meta = self.meta as *const _ as *const ffi::GstMeta;
-            let info = (*meta).info;
-            glib::Type::from_glib((*info).api)
-        }
+        self.as_meta_ref().api()
     }
 
     #[inline]
     pub fn flags(&self) -> crate::MetaFlags {
-        unsafe {
-            let meta = self.meta as *const _ as *const ffi::GstMeta;
-            from_glib((*meta).flags)
-        }
+        self.as_meta_ref().flags()
     }
 
     #[inline]
     pub fn type_(&self) -> glib::Type {
-        unsafe {
-            let meta = self.meta as *const _ as *const ffi::GstMeta;
-            let info = (*meta).info;
-            glib::Type::from_glib((*info).type_)
-        }
+        self.as_meta_ref().type_()
     }
 
     #[cfg(feature = "v1_16")]
@@ -284,30 +273,20 @@ impl<'a, T, U> MetaRefMut<'a, T, U> {
     #[doc(alias = "get_seqnum")]
     #[doc(alias = "gst_meta_get_seqnum")]
     #[inline]
-    pub fn seqnum(&self) -> u64 {
-        unsafe {
-            let meta = self.meta as *const _ as *const ffi::GstMeta;
-            ffi::gst_meta_get_seqnum(meta)
-        }
+    pub fn seqnum(&self) -> MetaSeqnum {
+        self.as_meta_ref().seqnum()
     }
 
     #[inline]
     #[doc(alias = "gst_meta_api_type_has_tag")]
     pub fn has_tag(&self, tag: glib::Quark) -> bool {
-        unsafe {
-            from_glib(ffi::gst_meta_api_type_has_tag(
-                self.api().into_glib(),
-                tag.into_glib(),
-            ))
-        }
+        self.as_meta_ref().has_tag(tag)
     }
 
     #[inline]
     #[doc(alias = "gst_meta_api_type_get_tags")]
     pub fn tags<'b>(&self) -> &'b [glib::GStringPtr] {
-        unsafe {
-            glib::StrV::from_glib_borrow(ffi::gst_meta_api_type_get_tags(self.api().into_glib()))
-        }
+        self.as_meta_ref().tags()
     }
 
     #[inline]
@@ -318,6 +297,14 @@ impl<'a, T, U> MetaRefMut<'a, T, U> {
     #[inline]
     pub fn upcast_mut(&mut self) -> &MetaRefMut<'a, Meta, U> {
         unsafe { &mut *(self as *mut MetaRefMut<'a, T, U> as *mut MetaRefMut<'a, Meta, U>) }
+    }
+
+    #[inline]
+    pub fn as_meta_ref(&self) -> MetaRef<T> {
+        MetaRef {
+            meta: self.meta,
+            buffer: self.buffer,
+        }
     }
 
     #[inline]
