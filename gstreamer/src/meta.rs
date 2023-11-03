@@ -215,6 +215,47 @@ impl<'a, T> MetaRef<'a, T> {
         unsafe { &*(self as *const MetaRef<'a, T> as *const MetaRef<'a, Meta>) }
     }
 
+    pub fn copy(
+        &self,
+        buffer: &mut BufferRef,
+        region: bool,
+        offset: usize,
+        size: Option<usize>,
+    ) -> Result<(), glib::BoolError>
+    where
+        T: MetaAPI,
+    {
+        use glib::once_cell::sync::Lazy;
+
+        static TRANSFORM_COPY: Lazy<glib::Quark> = Lazy::new(|| glib::Quark::from_str("gst-copy"));
+
+        unsafe {
+            let info = *(*self.upcast_ref().as_ptr()).info;
+            let Some(transform_func) = info.transform_func else {
+                return Err(glib::bool_error!(
+                    "Can't copy meta without transform function"
+                ));
+            };
+
+            let mut copy_data = ffi::GstMetaTransformCopy {
+                region: region.into_glib(),
+                offset,
+                size: size.unwrap_or(usize::MAX),
+            };
+
+            glib::result_from_gboolean!(
+                transform_func(
+                    buffer.as_mut_ptr(),
+                    mut_override(self.upcast_ref().as_ptr()),
+                    mut_override(self.buffer.as_ptr()),
+                    TRANSFORM_COPY.into_glib(),
+                    &mut copy_data as *mut _ as *mut _,
+                ),
+                "Failed to copy meta"
+            )
+        }
+    }
+
     #[inline]
     pub fn as_ptr(&self) -> *const T::GstType
     where
@@ -305,6 +346,19 @@ impl<'a, T, U> MetaRefMut<'a, T, U> {
             meta: self.meta,
             buffer: self.buffer,
         }
+    }
+
+    pub fn copy(
+        &self,
+        buffer: &mut BufferRef,
+        region: bool,
+        offset: usize,
+        size: Option<usize>,
+    ) -> Result<(), glib::BoolError>
+    where
+        T: MetaAPI,
+    {
+        self.as_meta_ref().copy(buffer, region, offset, size)
     }
 
     #[inline]
@@ -863,5 +917,33 @@ mod tests {
         }
 
         assert!(buffer.meta::<ParentBufferMeta>().is_none());
+    }
+
+    #[test]
+    fn test_copy_reference_timestamp_meta() {
+        crate::init().unwrap();
+
+        let caps = crate::Caps::new_empty_simple("timestamp/x-ntp");
+        let mut buffer = crate::Buffer::new();
+        {
+            ReferenceTimestampMeta::add(
+                buffer.get_mut().unwrap(),
+                &caps,
+                crate::ClockTime::from_seconds(1),
+                crate::ClockTime::NONE,
+            );
+        }
+
+        let mut buffer_dest = crate::Buffer::new();
+        {
+            let meta = buffer.meta::<ReferenceTimestampMeta>().unwrap();
+            let buffer_dest = buffer_dest.get_mut().unwrap();
+            meta.copy(buffer_dest, false, 0, None).unwrap();
+        }
+
+        let meta = buffer_dest.meta::<ReferenceTimestampMeta>().unwrap();
+        assert_eq!(meta.reference(), &caps);
+        assert_eq!(meta.timestamp(), crate::ClockTime::from_seconds(1));
+        assert_eq!(meta.duration(), crate::ClockTime::NONE);
     }
 }
