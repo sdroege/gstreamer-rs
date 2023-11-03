@@ -204,7 +204,7 @@ impl<'a, T> MetaRef<'a, T> {
 
     #[inline]
     #[doc(alias = "gst_meta_api_type_get_tags")]
-    pub fn tags(&self) -> &[glib::GStringPtr] {
+    pub fn tags<'b>(&self) -> &'b [glib::GStringPtr] {
         unsafe {
             glib::StrV::from_glib_borrow(ffi::gst_meta_api_type_get_tags(self.api().into_glib()))
         }
@@ -304,7 +304,7 @@ impl<'a, T, U> MetaRefMut<'a, T, U> {
 
     #[inline]
     #[doc(alias = "gst_meta_api_type_get_tags")]
-    pub fn tags(&self) -> &[glib::GStringPtr] {
+    pub fn tags<'b>(&self) -> &'b [glib::GStringPtr] {
         unsafe {
             glib::StrV::from_glib_borrow(ffi::gst_meta_api_type_get_tags(self.api().into_glib()))
         }
