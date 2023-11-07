@@ -32,6 +32,7 @@ pretty-hex = "0.3"
 thiserror = "1"
 smallvec = { version = "1.0", features = ["write"] }
 itertools = "0.11"
+pin-project-lite = "0.2"
 
 [dev-dependencies]
 ron = "0.8"

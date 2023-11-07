@@ -1,6 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use std::{borrow::Cow, sync::atomic};
+use std::{borrow::Cow, future::Future, sync::atomic};
 
 use glib::{subclass::prelude::*, translate::*};
 
@@ -294,6 +294,18 @@ pub trait ElementImplExt: sealed::Sealed + ObjectSubclass {
         panic_to_error!(self, fallback(), { f(self) })
     }
 
+    fn catch_panic_future<R, F: FnOnce() -> R, G: Future<Output = R>>(
+        &self,
+        fallback: F,
+        fut: G,
+    ) -> CatchPanic<Self, F, G> {
+        CatchPanic {
+            self_: self.ref_counted().downgrade(),
+            fallback: Some(fallback),
+            fut,
+        }
+    }
+
     fn catch_panic_pad_function<R, F: FnOnce(&Self) -> R, G: FnOnce() -> R>(
         parent: Option<&crate::Object>,
         fallback: G,
@@ -315,6 +327,44 @@ pub trait ElementImplExt: sealed::Sealed + ObjectSubclass {
 }
 
 impl<T: ElementImpl> ElementImplExt for T {}
+
+pin_project_lite::pin_project! {
+    #[must_use = "futures do nothing unless you `.await` or poll them"]
+    pub struct CatchPanic<T: glib::subclass::types::ObjectSubclass, F, G> {
+        self_: glib::subclass::ObjectImplWeakRef<T>,
+        fallback: Option<F>,
+        #[pin]
+        fut: G,
+    }
+}
+
+impl<R, T: ElementImpl, F: FnOnce() -> R, G: Future<Output = R>> Future for CatchPanic<T, F, G> {
+    type Output = R;
+
+    fn poll(
+        self: std::pin::Pin<&mut Self>,
+        cx: &mut std::task::Context<'_>,
+    ) -> std::task::Poll<Self::Output> {
+        let this = self.project();
+
+        let Some(self_) = this.self_.upgrade() else {
+            return std::task::Poll::Ready((this
+                .fallback
+                .take()
+                .expect("Future polled after resolving"))(
+            ));
+        };
+
+        panic_to_error!(
+            &*self_,
+            std::task::Poll::Ready(this.fallback.take().expect("Future polled after resolving")()),
+            {
+                let fut = this.fut;
+                fut.poll(cx)
+            }
+        )
+    }
+}
 
 unsafe impl<T: ElementImpl> IsSubclassable<T> for Element {
     fn class_init(klass: &mut glib::Class<Self>) {
