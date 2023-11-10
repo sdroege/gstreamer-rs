@@ -251,11 +251,19 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
             alignment: align_of::<GstPhysMemoryAllocatorInterface>(),
         },
     ),
+    (
+        "GstShmAllocatorClass",
+        Layout {
+            size: size_of::<GstShmAllocatorClass>(),
+            alignment: align_of::<GstShmAllocatorClass>(),
+        },
+    ),
 ];
 
 const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("GST_ALLOCATOR_DMABUF", "dmabuf"),
     ("GST_ALLOCATOR_FD", "fd"),
+    ("GST_ALLOCATOR_SHM", "shm"),
     ("GST_CAPS_FEATURE_MEMORY_DMABUF", "memory:DMABuf"),
     ("(guint) GST_FD_MEMORY_FLAG_DONT_CLOSE", "4"),
     ("(guint) GST_FD_MEMORY_FLAG_KEEP_MAPPED", "1"),

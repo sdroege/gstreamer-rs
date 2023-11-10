@@ -152,6 +152,36 @@ impl DiscovererManager {
 
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "source-setup")]
+    pub fn connect_source_setup<F: Fn(&Self, &gst::Element) + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn source_setup_trampoline<
+            F: Fn(&DiscovererManager, &gst::Element) + 'static,
+        >(
+            this: *mut ffi::GESDiscovererManager,
+            source: *mut gst::ffi::GstElement,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this), &from_glib_borrow(source))
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"source-setup\0".as_ptr() as *const _,
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                    source_setup_trampoline::<F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     #[doc(alias = "timeout")]
     pub fn connect_timeout_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn notify_timeout_trampoline<F: Fn(&DiscovererManager) + 'static>(

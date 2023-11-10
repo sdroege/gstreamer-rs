@@ -118,6 +118,30 @@ pub trait RTSPMediaFactoryExt: IsA<RTSPMediaFactory> + sealed::Sealed + 'static 
         unsafe { ffi::gst_rtsp_media_factory_get_dscp_qos(self.as_ref().to_glib_none().0) }
     }
 
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "gst_rtsp_media_factory_get_ensure_keyunit_on_start")]
+    #[doc(alias = "get_ensure_keyunit_on_start")]
+    fn is_ensure_keyunit_on_start(&self) -> bool {
+        unsafe {
+            from_glib(ffi::gst_rtsp_media_factory_get_ensure_keyunit_on_start(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "gst_rtsp_media_factory_get_ensure_keyunit_on_start_timeout")]
+    #[doc(alias = "get_ensure_keyunit_on_start_timeout")]
+    fn ensure_keyunit_on_start_timeout(&self) -> u32 {
+        unsafe {
+            ffi::gst_rtsp_media_factory_get_ensure_keyunit_on_start_timeout(
+                self.as_ref().to_glib_none().0,
+            )
+        }
+    }
+
     #[doc(alias = "gst_rtsp_media_factory_get_latency")]
     #[doc(alias = "get_latency")]
     fn latency(&self) -> u32 {
@@ -345,6 +369,30 @@ pub trait RTSPMediaFactoryExt: IsA<RTSPMediaFactory> + sealed::Sealed + 'static 
             ffi::gst_rtsp_media_factory_set_enable_rtcp(
                 self.as_ref().to_glib_none().0,
                 enable.into_glib(),
+            );
+        }
+    }
+
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "gst_rtsp_media_factory_set_ensure_keyunit_on_start")]
+    fn set_ensure_keyunit_on_start(&self, ensure_keyunit_on_start: bool) {
+        unsafe {
+            ffi::gst_rtsp_media_factory_set_ensure_keyunit_on_start(
+                self.as_ref().to_glib_none().0,
+                ensure_keyunit_on_start.into_glib(),
+            );
+        }
+    }
+
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "gst_rtsp_media_factory_set_ensure_keyunit_on_start_timeout")]
+    fn set_ensure_keyunit_on_start_timeout(&self, timeout: u32) {
+        unsafe {
+            ffi::gst_rtsp_media_factory_set_ensure_keyunit_on_start_timeout(
+                self.as_ref().to_glib_none().0,
+                timeout,
             );
         }
     }
@@ -730,6 +778,68 @@ pub trait RTSPMediaFactoryExt: IsA<RTSPMediaFactory> + sealed::Sealed + 'static 
                 b"notify::enable-rtcp\0".as_ptr() as *const _,
                 Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
                     notify_enable_rtcp_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "ensure-keyunit-on-start")]
+    fn connect_ensure_keyunit_on_start_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_ensure_keyunit_on_start_trampoline<
+            P: IsA<RTSPMediaFactory>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstRTSPMediaFactory,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(RTSPMediaFactory::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::ensure-keyunit-on-start\0".as_ptr() as *const _,
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                    notify_ensure_keyunit_on_start_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "ensure-keyunit-on-start-timeout")]
+    fn connect_ensure_keyunit_on_start_timeout_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_ensure_keyunit_on_start_timeout_trampoline<
+            P: IsA<RTSPMediaFactory>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstRTSPMediaFactory,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(RTSPMediaFactory::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::ensure-keyunit-on-start-timeout\0".as_ptr() as *const _,
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                    notify_ensure_keyunit_on_start_timeout_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

@@ -829,6 +829,7 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(guint) GST_GL_DISPLAY_TYPE_EAGL", "512"),
     ("(guint) GST_GL_DISPLAY_TYPE_EGL", "32"),
     ("(guint) GST_GL_DISPLAY_TYPE_EGL_DEVICE", "256"),
+    ("(guint) GST_GL_DISPLAY_TYPE_EGL_SURFACELESS", "4096"),
     ("(guint) GST_GL_DISPLAY_TYPE_GBM", "128"),
     ("(guint) GST_GL_DISPLAY_TYPE_NONE", "0"),
     ("(guint) GST_GL_DISPLAY_TYPE_VIV_FB", "64"),

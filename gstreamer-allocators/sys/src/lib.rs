@@ -24,6 +24,7 @@ use glib::{gboolean, gconstpointer, gpointer, GType};
 // Constants
 pub const GST_ALLOCATOR_DMABUF: &[u8] = b"dmabuf\0";
 pub const GST_ALLOCATOR_FD: &[u8] = b"fd\0";
+pub const GST_ALLOCATOR_SHM: &[u8] = b"shm\0";
 pub const GST_CAPS_FEATURE_MEMORY_DMABUF: &[u8] = b"memory:DMABuf\0";
 
 // Flags
@@ -93,6 +94,20 @@ impl ::std::fmt::Debug for GstPhysMemoryAllocatorInterface {
     }
 }
 
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstShmAllocatorClass {
+    pub parent_class: GstFdAllocatorClass,
+}
+
+impl ::std::fmt::Debug for GstShmAllocatorClass {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstShmAllocatorClass @ {self:p}"))
+            .field("parent_class", &self.parent_class)
+            .finish()
+    }
+}
+
 // Classes
 #[repr(C)]
 pub struct GstDRMDumbAllocator {
@@ -132,6 +147,19 @@ impl ::std::fmt::Debug for GstFdAllocator {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstFdAllocator @ {self:p}"))
             .field("parent", &self.parent)
+            .finish()
+    }
+}
+
+#[repr(C)]
+pub struct GstShmAllocator {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
+
+impl ::std::fmt::Debug for GstShmAllocator {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstShmAllocator @ {self:p}"))
             .finish()
     }
 }
@@ -210,6 +238,19 @@ extern "C" {
         size: size_t,
         flags: GstFdMemoryFlags,
     ) -> *mut gst::GstMemory;
+
+    //=========================================================================
+    // GstShmAllocator
+    //=========================================================================
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_shm_allocator_get_type() -> GType;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_shm_allocator_get() -> *mut gst::GstAllocator;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_shm_allocator_init_once();
 
     //=========================================================================
     // GstPhysMemoryAllocator

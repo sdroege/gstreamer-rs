@@ -195,6 +195,9 @@ pub const GST_GL_DISPLAY_TYPE_WINRT: GstGLDisplayType = 1024;
 #[cfg(feature = "v1_20")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub const GST_GL_DISPLAY_TYPE_ANDROID: GstGLDisplayType = 2048;
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+pub const GST_GL_DISPLAY_TYPE_EGL_SURFACELESS: GstGLDisplayType = 4096;
 pub const GST_GL_DISPLAY_TYPE_ANY: GstGLDisplayType = 4294967295;
 
 pub type GstGLPlatform = c_uint;
@@ -2771,6 +2774,14 @@ extern "C" {
     pub fn gst_gl_upload_get_type() -> GType;
     pub fn gst_gl_upload_new(context: *mut GstGLContext) -> *mut GstGLUpload;
     pub fn gst_gl_upload_get_input_template_caps() -> *mut gst::GstCaps;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_gl_upload_fixate_caps(
+        upload: *mut GstGLUpload,
+        direction: gst::GstPadDirection,
+        caps: *mut gst::GstCaps,
+        othercaps: *mut gst::GstCaps,
+    ) -> *mut gst::GstCaps;
     pub fn gst_gl_upload_get_caps(
         upload: *mut GstGLUpload,
         in_caps: *mut *mut gst::GstCaps,

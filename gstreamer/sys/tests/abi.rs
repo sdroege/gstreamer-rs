@@ -1474,6 +1474,7 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
 const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(guint) GST_ALLOCATOR_FLAG_CUSTOM_ALLOC", "16"),
     ("(guint) GST_ALLOCATOR_FLAG_LAST", "1048576"),
+    ("(guint) GST_ALLOCATOR_FLAG_NO_COPY", "32"),
     ("GST_ALLOCATOR_SYSMEM", "SystemMemory"),
     ("(guint) GST_BIN_FLAG_LAST", "524288"),
     ("(guint) GST_BIN_FLAG_NO_RESYNC", "16384"),

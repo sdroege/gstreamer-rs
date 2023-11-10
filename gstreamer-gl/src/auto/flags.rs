@@ -272,6 +272,10 @@ bitflags! {
         #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
         #[doc(alias = "GST_GL_DISPLAY_TYPE_ANDROID")]
         const ANDROID = ffi::GST_GL_DISPLAY_TYPE_ANDROID as _;
+        #[cfg(feature = "v1_24")]
+        #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+        #[doc(alias = "GST_GL_DISPLAY_TYPE_EGL_SURFACELESS")]
+        const EGL_SURFACELESS = ffi::GST_GL_DISPLAY_TYPE_EGL_SURFACELESS as _;
     }
 }
 
