@@ -202,7 +202,9 @@ impl StreamProducer {
 
                     if gst_video::UpstreamForceKeyUnitEvent::parse(event).is_ok() {
                         gst::debug!(CAT, obj: &appsink,  "Requesting keyframe");
-                        let _ = appsink.send_event(event.clone());
+                        // Do not use `gst_element_send_event()` as it takes the state lock which may lead to dead locks.
+                        let pad = appsink.static_pad("sink").unwrap();
+                        let _ = pad.push_event(event.clone());
                     }
 
                     gst::PadProbeReturn::Ok
