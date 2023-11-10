@@ -94,3 +94,15 @@ status = "generate"
     [[object.function]]
     name = "alloc"
     manual = true
+
+[[object]]
+name = "GstAllocators.ShmAllocator"
+status = "generate"
+cfg_condition = "unix"
+    [[object.function]]
+    name = "get"
+    manual = true
+    [[object.function]]
+    name = "once_init"
+    manual = true
+

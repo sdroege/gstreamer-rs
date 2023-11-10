@@ -27,6 +27,17 @@ pub use self::fd_allocator::FdAllocator;
 mod phys_memory_allocator;
 pub use self::phys_memory_allocator::PhysMemoryAllocator;
 
+#[cfg(unix)]
+#[cfg_attr(docsrs, doc(cfg(unix)))]
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+mod shm_allocator;
+#[cfg(unix)]
+#[cfg_attr(docsrs, doc(cfg(unix)))]
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+pub use self::shm_allocator::ShmAllocator;
+
 mod flags;
 pub use self::flags::FdMemoryFlags;
 
