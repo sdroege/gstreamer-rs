@@ -67,3 +67,8 @@ status = "generate"
     [[object.function]]
     name = "get_from_native"
     manual = true
+
+    [[object.function]]
+    name = "new_surfaceless"
+        [object.function.return]
+        nullable_return_is_error = "Failed to create surfaceless EGL display"
