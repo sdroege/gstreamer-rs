@@ -22,6 +22,8 @@ external_libraries = [
 ignore = [
     "GstVideo.VIDEO_FORMATS_ALL",
     "GstVideo.VIDEO_FORMATS_ALL_STR",
+    "GstVideo.VIDEO_FORMATS_ANY",
+    "GstVideo.VIDEO_FORMATS_ANY_STR",
     "GstVideo.VIDEO_DMA_DRM_CAPS_MAKE",
 ]
 
