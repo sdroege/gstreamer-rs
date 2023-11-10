@@ -44,6 +44,10 @@ mod drm_dumb_allocator;
 #[cfg_attr(docsrs, doc(cfg(all(feature = "v1_24", target_os = "linux"))))]
 pub use drm_dumb_allocator::*;
 
+#[cfg(any(all(feature = "v1_24", unix), docsrs))]
+#[cfg_attr(docsrs, doc(cfg(all(feature = "v1_24", unix))))]
+mod shm_allocator;
+
 mod phys_memory;
 pub use phys_memory::*;
 
