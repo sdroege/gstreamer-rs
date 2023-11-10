@@ -46,12 +46,12 @@ mod tests {
             crate::GLConfigSurfaceType::all(),
             "\"window+pbuffer+pixmap\""
         );
-        #[cfg(feature = "v1_20")]
+        #[cfg(feature = "v1_24")]
         check_serialize!(
             crate::GLDisplayType::all(),
             concat!(
                 "\"x11+wayland+cocoa+win32+dispmanx+egl+viv-fb+gbm+egl-device",
-                "+eagl+winrt+android\""
+                "+eagl+winrt+android+egl-surfaceless\""
             )
         );
         check_serialize!(crate::GLPlatform::all(), "\"egl+glx+wgl+cgl+eagl\"");
@@ -73,13 +73,13 @@ mod tests {
             crate::GLConfigSurfaceType::all(),
             "\"none+window+pbuffer+pixmap\""
         );
-        #[cfg(feature = "v1_20")]
+        #[cfg(feature = "v1_24")]
         check_deserialize!(
             crate::GLDisplayType,
             crate::GLDisplayType::all(),
             concat!(
                 "\"x11+wayland+cocoa+win32+dispmanx+egl+viv-fb+gbm+egl-device",
-                "+eagl+winrt+android\""
+                "+eagl+winrt+android+egl-surfaceless\""
             )
         );
         check_deserialize!(
