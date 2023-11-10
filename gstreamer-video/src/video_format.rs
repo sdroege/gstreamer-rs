@@ -209,6 +209,18 @@ pub static VIDEO_FORMATS_ALL: Lazy<Box<[crate::VideoFormat]>> = Lazy::new(|| {
     }
 });
 
+#[cfg(feature = "v1_24")]
+pub static VIDEO_FORMATS_ANY: Lazy<Box<[crate::VideoFormat]>> = Lazy::new(|| unsafe {
+    let mut len: u32 = 0;
+    let mut res = Vec::with_capacity(len as usize);
+    let formats = ffi::gst_video_formats_any(&mut len);
+    for i in 0..len {
+        let format = formats.offset(i as isize);
+        res.push(from_glib(*format));
+    }
+    res.into_boxed_slice()
+});
+
 #[derive(PartialEq, Eq, Copy, Clone, Debug, Hash)]
 pub enum VideoEndianness {
     Unknown,
@@ -284,6 +296,11 @@ impl crate::VideoFormat {
 
     pub fn iter_raw() -> VideoFormatIterator {
         VideoFormatIterator::default()
+    }
+
+    #[cfg(feature = "v1_24")]
+    pub fn iter_any() -> impl Iterator<Item = crate::VideoFormat> {
+        VIDEO_FORMATS_ANY.iter().copied()
     }
 }
 
