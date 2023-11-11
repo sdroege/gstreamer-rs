@@ -1,6 +1,6 @@
 [package]
 name = "gstreamer-video"
-version = "0.21.1"
+version = "0.21.2"
 authors = ["Sebastian Dröge <sebastian@centricular.com>"]
 categories = ["api-bindings", "multimedia"]
 description = "Rust bindings for GStreamer Video library"
@@ -16,7 +16,7 @@ rust-version = "1.70"
 [dependencies]
 libc = "0.2"
 cfg-if = "1.0"
-ffi = { package = "gstreamer-video-sys", path = "sys", version = "0.21.1" }
+ffi = { package = "gstreamer-video-sys", path = "sys", version = "0.21.2" }
 glib = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "0.18", version = "0.18" }
 gst = { package = "gstreamer", path = "../gstreamer", version = "0.21" }
 gst-base = { package = "gstreamer-base", path = "../gstreamer-base", version = "0.21" }
