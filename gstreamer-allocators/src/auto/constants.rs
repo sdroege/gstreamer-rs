@@ -11,6 +11,11 @@ pub static ALLOCATOR_DMABUF: &GStr =
 #[doc(alias = "GST_ALLOCATOR_FD")]
 pub static ALLOCATOR_FD: &GStr =
     unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_ALLOCATOR_FD) };
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+#[doc(alias = "GST_ALLOCATOR_SHM")]
+pub static ALLOCATOR_SHM: &GStr =
+    unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_ALLOCATOR_SHM) };
 #[doc(alias = "GST_CAPS_FEATURE_MEMORY_DMABUF")]
 pub static CAPS_FEATURE_MEMORY_DMABUF: &GStr =
     unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_CAPS_FEATURE_MEMORY_DMABUF) };

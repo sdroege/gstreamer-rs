@@ -4602,6 +4602,9 @@ extern "C" {
         all_headers: *mut gboolean,
         count: *mut c_uint,
     ) -> gboolean;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_video_formats_any(len: *mut c_uint) -> *const GstVideoFormat;
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_video_formats_raw(len: *mut c_uint) -> *const GstVideoFormat;

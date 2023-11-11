@@ -23,6 +23,25 @@ impl GLUpload {
         unsafe { from_glib_full(ffi::gst_gl_upload_new(context.as_ref().to_glib_none().0)) }
     }
 
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "gst_gl_upload_fixate_caps")]
+    pub fn fixate_caps(
+        &self,
+        direction: gst::PadDirection,
+        caps: &gst::Caps,
+        othercaps: gst::Caps,
+    ) -> gst::Caps {
+        unsafe {
+            from_glib_full(ffi::gst_gl_upload_fixate_caps(
+                self.to_glib_none().0,
+                direction.into_glib(),
+                caps.to_glib_none().0,
+                othercaps.into_glib_ptr(),
+            ))
+        }
+    }
+
     #[doc(alias = "gst_gl_upload_get_caps")]
     #[doc(alias = "get_caps")]
     pub fn caps(&self) -> (gst::Caps, gst::Caps) {

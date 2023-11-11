@@ -67,6 +67,9 @@ extern "C" {
     //=========================================================================
     pub fn gst_gl_display_egl_get_type() -> GType;
     pub fn gst_gl_display_egl_new() -> *mut GstGLDisplayEGL;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_gl_display_egl_new_surfaceless() -> *mut GstGLDisplayEGL;
     pub fn gst_gl_display_egl_new_with_egl_display(display: gpointer) -> *mut GstGLDisplayEGL;
     pub fn gst_gl_display_egl_from_gl_display(
         display: *mut gst_gl::GstGLDisplay,

@@ -1595,6 +1595,12 @@ extern "C" {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_rtsp_media_get_dscp_qos(media: *mut GstRTSPMedia) -> c_int;
     pub fn gst_rtsp_media_get_element(media: *mut GstRTSPMedia) -> *mut gst::GstElement;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_rtsp_media_get_ensure_keyunit_on_start(media: *mut GstRTSPMedia) -> gboolean;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_rtsp_media_get_ensure_keyunit_on_start_timeout(media: *mut GstRTSPMedia) -> c_uint;
     pub fn gst_rtsp_media_get_latency(media: *mut GstRTSPMedia) -> c_uint;
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
@@ -1694,6 +1700,18 @@ extern "C" {
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_rtsp_media_set_dscp_qos(media: *mut GstRTSPMedia, dscp_qos: c_int);
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_rtsp_media_set_ensure_keyunit_on_start(
+        media: *mut GstRTSPMedia,
+        ensure_keyunit_on_start: gboolean,
+    );
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_rtsp_media_set_ensure_keyunit_on_start_timeout(
+        media: *mut GstRTSPMedia,
+        timeout: c_uint,
+    );
     pub fn gst_rtsp_media_set_eos_shutdown(media: *mut GstRTSPMedia, eos_shutdown: gboolean);
     pub fn gst_rtsp_media_set_latency(media: *mut GstRTSPMedia, latency: c_uint);
     #[cfg(feature = "v1_16")]
@@ -1792,6 +1810,16 @@ extern "C" {
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_rtsp_media_factory_get_dscp_qos(factory: *mut GstRTSPMediaFactory) -> c_int;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_rtsp_media_factory_get_ensure_keyunit_on_start(
+        factory: *mut GstRTSPMediaFactory,
+    ) -> gboolean;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_rtsp_media_factory_get_ensure_keyunit_on_start_timeout(
+        factory: *mut GstRTSPMediaFactory,
+    ) -> c_uint;
     pub fn gst_rtsp_media_factory_get_latency(factory: *mut GstRTSPMediaFactory) -> c_uint;
     pub fn gst_rtsp_media_factory_get_launch(factory: *mut GstRTSPMediaFactory) -> *mut c_char;
     #[cfg(feature = "v1_16")]
@@ -1864,6 +1892,18 @@ extern "C" {
     pub fn gst_rtsp_media_factory_set_enable_rtcp(
         factory: *mut GstRTSPMediaFactory,
         enable: gboolean,
+    );
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_rtsp_media_factory_set_ensure_keyunit_on_start(
+        factory: *mut GstRTSPMediaFactory,
+        ensure_keyunit_on_start: gboolean,
+    );
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_rtsp_media_factory_set_ensure_keyunit_on_start_timeout(
+        factory: *mut GstRTSPMediaFactory,
+        timeout: c_uint,
     );
     pub fn gst_rtsp_media_factory_set_eos_shutdown(
         factory: *mut GstRTSPMediaFactory,

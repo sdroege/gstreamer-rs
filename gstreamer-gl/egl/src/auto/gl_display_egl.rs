@@ -26,6 +26,17 @@ impl GLDisplayEGL {
         }
     }
 
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "gst_gl_display_egl_new_surfaceless")]
+    pub fn new_surfaceless() -> Result<GLDisplayEGL, glib::BoolError> {
+        assert_initialized_main_thread!();
+        unsafe {
+            Option::<_>::from_glib_full(ffi::gst_gl_display_egl_new_surfaceless())
+                .ok_or_else(|| glib::bool_error!("Failed to create surfaceless EGL display"))
+        }
+    }
+
     #[doc(alias = "gst_gl_display_egl_from_gl_display")]
     pub fn from_gl_display(display: &impl IsA<gst_gl::GLDisplay>) -> Option<GLDisplayEGL> {
         assert_initialized_main_thread!();

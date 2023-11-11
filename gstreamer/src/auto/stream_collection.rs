@@ -45,7 +45,7 @@ impl StreamCollection {
 
     //#[doc(alias = "stream-notify")]
     //pub fn connect_stream_notify<Unsupported or ignored types>(&self, detail: Option<&str>, f: F) -> SignalHandlerId {
-    //    Ignored p0: GObject.ParamSpec
+    //    Ignored prop: GObject.ParamSpec
     //}
 }
 

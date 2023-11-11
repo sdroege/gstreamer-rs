@@ -607,6 +607,9 @@ pub const GST_VALUE_UNORDERED: c_int = 2;
 // Flags
 pub type GstAllocatorFlags = c_uint;
 pub const GST_ALLOCATOR_FLAG_CUSTOM_ALLOC: GstAllocatorFlags = 16;
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+pub const GST_ALLOCATOR_FLAG_NO_COPY: GstAllocatorFlags = 32;
 pub const GST_ALLOCATOR_FLAG_LAST: GstAllocatorFlags = 1048576;
 
 pub type GstBinFlags = c_uint;

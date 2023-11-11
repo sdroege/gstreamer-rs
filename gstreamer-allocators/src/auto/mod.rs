@@ -35,6 +35,9 @@ pub mod functions;
 mod constants;
 pub use self::constants::ALLOCATOR_DMABUF;
 pub use self::constants::ALLOCATOR_FD;
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+pub use self::constants::ALLOCATOR_SHM;
 pub use self::constants::CAPS_FEATURE_MEMORY_DMABUF;
 
 #[doc(hidden)]
