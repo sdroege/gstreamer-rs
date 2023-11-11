@@ -4,7 +4,6 @@
 // DO NOT EDIT
 
 use crate::FdAllocator;
-use glib::translate::*;
 
 glib::wrapper! {
     #[doc(alias = "GstShmAllocator")]
@@ -15,15 +14,7 @@ glib::wrapper! {
     }
 }
 
-impl ShmAllocator {
-    #[doc(alias = "gst_shm_allocator_init_once")]
-    pub fn init_once() {
-        assert_initialized_main_thread!();
-        unsafe {
-            ffi::gst_shm_allocator_init_once();
-        }
-    }
-}
+impl ShmAllocator {}
 
 unsafe impl Send for ShmAllocator {}
 unsafe impl Sync for ShmAllocator {}

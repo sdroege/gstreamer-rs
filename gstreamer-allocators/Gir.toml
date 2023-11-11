@@ -103,6 +103,6 @@ cfg_condition = "unix"
     name = "get"
     manual = true
     [[object.function]]
-    name = "once_init"
+    name = "init_once"
     manual = true
 
