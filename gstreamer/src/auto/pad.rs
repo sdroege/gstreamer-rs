@@ -495,10 +495,6 @@ pub trait PadExt: IsA<Pad> + sealed::Sealed + 'static {
         }
     }
 
-    fn caps(&self) -> Option<Caps> {
-        ObjectExt::property(self.as_ref(), "caps")
-    }
-
     #[doc(alias = "linked")]
     fn connect_linked<F: Fn(&Self, &Pad) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn linked_trampoline<

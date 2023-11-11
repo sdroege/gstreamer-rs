@@ -1761,6 +1761,11 @@ manual_traits = ["PadExtManual"]
     # Has a proper getter
     ignore = true
 
+    [[object.property]]
+    name = "caps"
+    # Same as `current_caps()`
+    generate = ["notify"]
+
 [[object]]
 name = "Gst.PadDirection"
 status = "generate"
