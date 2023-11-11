@@ -5,6 +5,32 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.21.2] - 2023-11-11
+### Changed
+- Update GStreamer gir files to latest (upcoming) 1.24 APIs.
+- Update to latest gir code generator from the gtk-rs 0.18 branch.
+
+### Fixed
+- Big endian video format order is correct again.
+- `gst::MetaRef::has_tags()` and `tags()` API actually works and works based
+  on the tags of the concrete meta instance.
+- `gst::MetaRef::tags()` returns strings with arbitrary lifetimes now because
+  they're statically stored anyway.
+- Fix another potential deadlock in `gst_utils::StreamProducer` when sending
+  force-keyunit events.
+
+### Added
+- Bindings for `gst_video::VBIEncoder` and `VBIParser`.
+- Accessors for the different `gst::PadProbeData` types on `PadProbeInfo`.
+- `Default` impl for `gst::AllocationParams`.
+- `From` / `TryFrom` implementations between formatted types (e.g.
+  `gst::Bytes`) and `usize`.
+- `gst::MetaRef::copy()` to copy metas from one buffer to another.
+- `gst::ElementImpl::catch_panic_future()` to wrap a `Future` in such a way
+  that panics are converted to GStreamer error messages and the element is
+  marked as unusable.
+ - `gst_gl::GLDisplay::handle()` to get a raw display handle.
+
 ## [0.21.1] - 2023-10-04
 ### Changed
 - Update GStreamer gir files to latest (upcoming) 1.24 APIs.
@@ -1571,7 +1597,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.21.1...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.21.2...HEAD
+[0.21.2]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.21.1...0.21.2
 [0.21.1]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.21.0...0.21.1
 [0.21.0]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.20.7...0.21.0
 [0.20.7]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.20.6...0.20.7
