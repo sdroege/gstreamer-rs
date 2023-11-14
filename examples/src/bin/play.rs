@@ -37,6 +37,11 @@ fn main_loop(uri: &str) -> Result<(), Error> {
             Err(_) => unreachable!(),
         }
     }
+
+    // Set the message bus to flushing to ensure that all pending messages are dropped and there
+    // are no further references to the play instance.
+    play.message_bus().set_flushing(true);
+
     result.map_err(|e| e.into())
 }
 
