@@ -504,6 +504,13 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "GESFrameCompositionMeta",
+        Layout {
+            size: size_of::<GESFrameCompositionMeta>(),
+            alignment: align_of::<GESFrameCompositionMeta>(),
+        },
+    ),
+    (
         "GESFrameNumber",
         Layout {
             size: size_of::<GESFrameNumber>(),

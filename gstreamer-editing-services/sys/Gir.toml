@@ -30,3 +30,10 @@ ignore = [
 [external_libraries]
 gstreamer="Gst"
 gstreamer_pbutils="GstPbutils"
+
+[[object]]
+name = "GES.*"
+status = "generate"
+    [[object.function]]
+    name = "frame_composition_meta_api_get_type"
+    version = "1.24"

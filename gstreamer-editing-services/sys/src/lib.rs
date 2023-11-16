@@ -870,6 +870,34 @@ pub type GESFormatterPrivate = *mut _GESFormatterPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
+pub struct GESFrameCompositionMeta {
+    pub meta: gst::GstMeta,
+    pub alpha: c_double,
+    pub posx: c_int,
+    pub posy: c_int,
+    pub height: c_int,
+    pub width: c_int,
+    pub zorder: c_uint,
+    pub operator: c_int,
+}
+
+impl ::std::fmt::Debug for GESFrameCompositionMeta {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GESFrameCompositionMeta @ {self:p}"))
+            .field("meta", &self.meta)
+            .field("alpha", &self.alpha)
+            .field("posx", &self.posx)
+            .field("posy", &self.posy)
+            .field("height", &self.height)
+            .field("width", &self.width)
+            .field("zorder", &self.zorder)
+            .field("operator", &self.operator)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
 pub struct GESGroupClass {
     pub parent_class: GESContainerClass,
     pub _ges_reserved: [gpointer; 4],
@@ -4395,10 +4423,18 @@ extern "C" {
     // Other functions
     //=========================================================================
     pub fn ges_add_missing_uri_relocation_uri(uri: *const c_char, recurse: gboolean) -> gboolean;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn ges_buffer_add_frame_composition_meta(
+        buffer: *mut gst::GstBuffer,
+    ) -> *mut GESFrameCompositionMeta;
     pub fn ges_deinit();
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_find_formatter_for_uri(uri: *const c_char) -> *mut GESAsset;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn ges_frame_composition_meta_api_get_type() -> GType;
     pub fn ges_init() -> gboolean;
     pub fn ges_init_check(
         argc: *mut c_int,

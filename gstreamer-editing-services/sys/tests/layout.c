@@ -51,6 +51,7 @@ int main() {
     printf("%s;%zu;%zu\n", "GESExtractableInterface", sizeof(GESExtractableInterface), alignof(GESExtractableInterface));
     printf("%s;%zu;%zu\n", "GESFormatter", sizeof(GESFormatter), alignof(GESFormatter));
     printf("%s;%zu;%zu\n", "GESFormatterClass", sizeof(GESFormatterClass), alignof(GESFormatterClass));
+    printf("%s;%zu;%zu\n", "GESFrameCompositionMeta", sizeof(GESFrameCompositionMeta), alignof(GESFrameCompositionMeta));
     printf("%s;%zu;%zu\n", "GESFrameNumber", sizeof(GESFrameNumber), alignof(GESFrameNumber));
     printf("%s;%zu;%zu\n", "GESGroup", sizeof(GESGroup), alignof(GESGroup));
     printf("%s;%zu;%zu\n", "GESGroupClass", sizeof(GESGroupClass), alignof(GESGroupClass));
