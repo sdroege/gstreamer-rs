@@ -56,6 +56,9 @@ macro_rules! skip_assert_initialized {
 mod auto;
 mod formatter;
 pub use crate::auto::*;
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+mod composition_meta;
 pub mod subclass;
 
 #[cfg(feature = "serde")]
@@ -74,5 +77,8 @@ pub mod prelude {
     pub use gst_pbutils::prelude::*;
 
     pub use crate::auto::traits::*;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub use crate::composition_meta::FrameCompositionMeta;
     pub use crate::formatter::FormatterExtManual;
 }
