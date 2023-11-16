@@ -323,6 +323,9 @@ extern "C" {
     pub fn gst_net_utils_set_socket_tos(socket: *mut gio::GSocket, qos_dscp: c_int) -> gboolean;
     pub fn gst_ptp_deinit();
     pub fn gst_ptp_init(clock_id: u64, interfaces: *mut *mut c_char) -> gboolean;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_ptp_init_full(config: *const gst::GstStructure) -> gboolean;
     pub fn gst_ptp_is_initialized() -> gboolean;
     pub fn gst_ptp_is_supported() -> gboolean;
     pub fn gst_ptp_statistics_callback_add(

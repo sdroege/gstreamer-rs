@@ -28,6 +28,26 @@ impl PtpClock {
         }
     }
 
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    // rustdoc-stripper-ignore-next
+    /// Initialize GStreamer PTP clock support
+    ///
+    /// This is automatically called once the first PTP clock instance is created.
+    #[doc(alias = "gst_ptp_init_full")]
+    pub fn init_full(s: &gst::StructureRef) -> Result<(), glib::BoolError> {
+        skip_assert_initialized!();
+        unsafe {
+            let res: bool = from_glib(ffi::gst_ptp_init_full(s.as_ptr()));
+
+            if res {
+                Ok(())
+            } else {
+                Err(glib::bool_error!("Failed to initialize PTP subsystem"))
+            }
+        }
+    }
+
     // rustdoc-stripper-ignore-next
     /// Deinitialize GStreamer PTP clock support
     ///
