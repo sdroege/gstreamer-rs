@@ -49,7 +49,7 @@ variables:
   WINDOWS_RUST_STABLE_IMAGE: "$CI_REGISTRY_IMAGE/windows:$GST_RS_IMG_TAG-main-$GST_RS_STABLE"
   WINDOWS_RUST_STABLE_UPSTREAM_IMAGE: "$CI_REGISTRY/$FDO_UPSTREAM_REPO/windows:$GST_RS_IMG_TAG-main-$GST_RS_STABLE"
 
-  RUST_DOCS_FLAGS: "--extern-html-root-url=muldiv=https://docs.rs/muldiv/1.0.0/muldiv/ -Z unstable-options --generate-link-to-definition"
+  RUST_DOCS_FLAGS: "--cfg docsrs --extern-html-root-url=muldiv=https://docs.rs/muldiv/1.0.0/muldiv/ -Z unstable-options --generate-link-to-definition"
   NAMESPACE: gstreamer
   # format is <branch>=<name>
   # the name is used in the URL
