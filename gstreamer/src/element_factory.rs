@@ -11,37 +11,6 @@ use crate::{
 };
 
 impl ElementFactory {
-    #[doc(alias = "gst_element_factory_create_with_properties")]
-    #[track_caller]
-    #[deprecated = "Use create() instead"]
-    pub fn create_with_properties(
-        &self,
-        properties: &[(&str, &dyn ToValue)],
-    ) -> Result<Element, glib::BoolError> {
-        let mut builder = self.create();
-        builder.properties = properties
-            .iter()
-            .map(|(name, value)| (*name, ValueOrStr::Value(value.to_value())))
-            .collect();
-        builder.build()
-    }
-
-    #[doc(alias = "gst_element_factory_make_with_properties")]
-    #[track_caller]
-    #[deprecated = "Use make() instead"]
-    pub fn make_with_properties(
-        factoryname: &str,
-        properties: &[(&str, &dyn ToValue)],
-    ) -> Result<Element, glib::BoolError> {
-        skip_assert_initialized!();
-        let mut builder = Self::make(factoryname);
-        builder.properties = properties
-            .iter()
-            .map(|(name, value)| (*name, ValueOrStr::Value(value.to_value())))
-            .collect();
-        builder.build()
-    }
-
     #[doc(alias = "gst_element_factory_create")]
     #[doc(alias = "gst_element_factory_create_with_properties")]
     #[track_caller]

@@ -12,7 +12,7 @@ use std::{
 use glib::{
     prelude::*,
     translate::*,
-    value::{FromValue, SendValue, ToSendValue},
+    value::{FromValue, SendValue},
     IntoGStr,
 };
 
@@ -63,19 +63,6 @@ impl Structure {
             debug_assert!(!ptr.is_null());
             Structure(ptr::NonNull::new_unchecked(ptr))
         }
-    }
-
-    #[doc(alias = "gst_structure_new")]
-    #[deprecated = "Use `Structure::builder()` or `Structure::new_empty()`"]
-    pub fn new(name: impl IntoGStr, values: &[(&str, &(dyn ToSendValue + Sync))]) -> Structure {
-        skip_assert_initialized!();
-        let mut structure = Structure::new_empty(name);
-
-        for &(f, v) in values {
-            structure.set_value(f, v.to_send_value());
-        }
-
-        structure
     }
 
     #[allow(clippy::should_implement_trait)]
@@ -1124,7 +1111,6 @@ mod tests {
     use super::*;
 
     #[test]
-    #[allow(deprecated)]
     fn new_set_get() {
         use glib::{value, Type};
 
@@ -1176,24 +1162,12 @@ mod tests {
         assert_eq!(v[2].0, "f3");
         assert_eq!(v[2].1.get::<i32>(), Ok(123i32));
 
-        let s2 = Structure::new("test", &[("f1", &"abc"), ("f2", &"bcd"), ("f3", &123i32)]);
-        assert_eq!(s, s2);
-    }
-
-    #[test]
-    fn test_builder() {
-        crate::init().unwrap();
-
-        let s = Structure::builder("test")
+        let s2 = Structure::builder("test")
             .field("f1", "abc")
             .field("f2", String::from("bcd"))
             .field("f3", 123i32)
             .build();
-
-        assert_eq!(s.name(), "test");
-        assert_eq!(s.get::<&str>("f1"), Ok("abc"));
-        assert_eq!(s.get::<&str>("f2"), Ok("bcd"));
-        assert_eq!(s.get::<i32>("f3"), Ok(123i32));
+        assert_eq!(s, s2);
     }
 
     #[test]

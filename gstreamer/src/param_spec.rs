@@ -48,25 +48,10 @@ impl FromGlibPtrFull<*mut gobject_ffi::GParamSpec> for ParamSpecFraction {
 }
 
 impl ParamSpecFraction {
+    #[doc(alias = "gst_param_spec_fraction")]
     pub fn builder(name: &str) -> ParamSpecFractionBuilder {
         assert_initialized_main_thread!();
         ParamSpecFractionBuilder::new(name)
-    }
-
-    #[deprecated = "Use builder() instead"]
-    #[allow(clippy::new_ret_no_self)]
-    #[doc(alias = "gst_param_spec_fraction")]
-    pub fn new<'a>(
-        name: &str,
-        nick: impl Into<Option<&'a str>>,
-        blurb: impl Into<Option<&'a str>>,
-        min: crate::Fraction,
-        max: crate::Fraction,
-        default: crate::Fraction,
-        flags: glib::ParamFlags,
-    ) -> glib::ParamSpec {
-        assert_initialized_main_thread!();
-        unsafe { Self::new_unchecked(name, nick, blurb, min, max, default, flags) }
     }
 
     unsafe fn new_unchecked<'a>(
@@ -259,24 +244,10 @@ impl FromGlibPtrFull<*mut gobject_ffi::GParamSpec> for ParamSpecArray {
 }
 
 impl ParamSpecArray {
+    #[doc(alias = "gst_param_spec_array")]
     pub fn builder(name: &str) -> ParamSpecArrayBuilder {
         assert_initialized_main_thread!();
         ParamSpecArrayBuilder::new(name)
-    }
-
-    #[allow(clippy::new_ret_no_self)]
-    #[doc(alias = "gst_param_spec_array")]
-    #[deprecated = "Use builder() instead"]
-    pub fn new<'a>(
-        name: &str,
-        nick: impl Into<Option<&'a str>>,
-        blurb: impl Into<Option<&'a str>>,
-        element_spec: Option<&glib::ParamSpec>,
-        flags: glib::ParamFlags,
-    ) -> glib::ParamSpec {
-        assert_initialized_main_thread!();
-
-        unsafe { Self::new_unchecked(name, nick, blurb, element_spec, flags) }
     }
 
     unsafe fn new_unchecked<'a>(
@@ -439,19 +410,8 @@ mod tests {
     use super::*;
 
     #[test]
-    #[allow(deprecated)]
     fn test_trait() {
         crate::init().unwrap();
-
-        let _pspec = ParamSpecFraction::new(
-            "foo",
-            "Foo",
-            "Foo Bar",
-            (0, 1).into(),
-            (100, 1).into(),
-            (1, 1).into(),
-            glib::ParamFlags::READWRITE,
-        );
 
         let _pspec = ParamSpecFraction::builder("foo")
             .nick("Foo")

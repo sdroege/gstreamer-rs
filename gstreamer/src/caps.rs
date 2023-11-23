@@ -49,19 +49,6 @@ impl Caps {
         unsafe { from_glib_full(ffi::gst_caps_new_any()) }
     }
 
-    #[doc(alias = "gst_caps_new_simple")]
-    #[deprecated = "Use `Caps::builder()` or `Caps::new_empty()`"]
-    #[allow(deprecated)]
-    pub fn new_simple(name: impl IntoGStr, values: &[(&str, &(dyn ToSendValue + Sync))]) -> Self {
-        skip_assert_initialized!();
-        let mut caps = Caps::new_empty();
-
-        let structure = Structure::new(name, values);
-        caps.get_mut().unwrap().append_structure(structure);
-
-        caps
-    }
-
     #[doc(alias = "gst_caps_new_empty_simple")]
     pub fn new_empty_simple(name: impl IntoGStr) -> Self {
         skip_assert_initialized!();
@@ -316,6 +303,7 @@ impl std::iter::Extend<Caps> for CapsRef {
 
 impl CapsRef {
     #[doc(alias = "gst_caps_set_value")]
+    #[doc(alias = "gst_caps_set_simple")]
     pub fn set(&mut self, name: impl IntoGStr, value: impl ToSendValue + Sync) {
         let value = value.to_send_value();
         self.set_value(name, value);
@@ -327,22 +315,6 @@ impl CapsRef {
             name.run_with_gstr(|name| {
                 ffi::gst_caps_set_value(self.as_mut_ptr(), name.as_ptr(), value.to_glib_none().0)
             });
-        }
-    }
-
-    #[doc(alias = "gst_caps_set_simple")]
-    #[deprecated = "Use `CapsRef::set()`"]
-    pub fn set_simple(&mut self, values: &[(&str, &(dyn ToSendValue + Sync))]) {
-        for &(name, value) in values {
-            let value = value.to_value();
-
-            unsafe {
-                ffi::gst_caps_set_value(
-                    self.as_mut_ptr(),
-                    name.to_glib_none().0,
-                    value.to_glib_none().0,
-                );
-            }
         }
     }
 
@@ -1158,42 +1130,21 @@ mod tests {
     use crate::{Array, Fraction};
 
     #[test]
-    #[allow(deprecated)]
-    fn test_simple() {
+    fn test_builder() {
         crate::init().unwrap();
 
-        let mut caps = Caps::new_simple(
-            "foo/bar",
-            &[
-                ("int", &12),
-                ("bool", &true),
-                ("string", &"bla"),
-                ("fraction", &Fraction::new(1, 2)),
-                ("array", &Array::new([1, 2])),
-            ],
-        );
+        let mut caps = Caps::builder("foo/bar")
+            .field("int", 12)
+            .field("bool", true)
+            .field("string", "bla")
+            .field("fraction", Fraction::new(1, 2))
+            .field("array", Array::new([1, 2]))
+            .build();
         assert_eq!(
             caps.to_string(),
             "foo/bar, int=(int)12, bool=(boolean)true, string=(string)bla, fraction=(fraction)1/2, array=(int)< 1, 2 >"
         );
 
-        {
-            let s = caps.structure(0).unwrap();
-            assert_eq!(
-                s,
-                Structure::new(
-                    "foo/bar",
-                    &[
-                        ("int", &12),
-                        ("bool", &true),
-                        ("string", &"bla"),
-                        ("fraction", &Fraction::new(1, 2)),
-                        ("array", &Array::new([1, 2])),
-                    ],
-                )
-                .as_ref()
-            );
-        }
         assert!(caps
             .features(0)
             .unwrap()
@@ -1207,23 +1158,6 @@ mod tests {
             .features(0)
             .unwrap()
             .is_equal(CapsFeatures::new(["foo:bla"]).as_ref()));
-    }
-
-    #[test]
-    fn test_builder() {
-        crate::init().unwrap();
-
-        let caps = Caps::builder("foo/bar")
-            .field("int", 12)
-            .field("bool", true)
-            .field("string", "bla")
-            .field("fraction", Fraction::new(1, 2))
-            .field("array", Array::new([1, 2]))
-            .build();
-        assert_eq!(
-            caps.to_string(),
-            "foo/bar, int=(int)12, bool=(boolean)true, string=(string)bla, fraction=(fraction)1/2, array=(int)< 1, 2 >"
-        );
 
         let caps = Caps::builder("foo/bar")
             .field("int", 12)
