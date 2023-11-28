@@ -1,0 +1,31 @@
+[package]
+name = "gstreamer-analytics"
+authors = ["Olivier Crête <olivier.crete@collabora.com>"]
+description = "Rust bindings for GStreamer Analytics library"
+license = "MIT OR Apache-2.0"
+readme = "README.md"
+documentation = "https://gstreamer.pages.freedesktop.org/gstreamer-rs/stable/latest/docs/gstreamer_analytics/"
+keywords = ["gstreamer", "multimedia", "audio", "video", "gnome"]
+version.workspace = true
+categories.workspace = true
+repository.workspace = true
+homepage.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+libc = "0.2"
+ffi = { package = "gstreamer-analytics-sys", path = "sys" }
+glib.workspace = true
+gst.workspace = true
+
+[dev-dependencies]
+gir-format-check = "0.1"
+
+[features]
+default = []
+
+[package.metadata.docs.rs]
+all-features = true
+rustc-args = ["--cfg", "docsrs"]
+rustdoc-args = ["--cfg", "docsrs", "--generate-link-to-definition"]

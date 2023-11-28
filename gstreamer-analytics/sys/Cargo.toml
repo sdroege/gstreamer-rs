@@ -1,0 +1,57 @@
+[build-dependencies]
+system-deps = "6"
+
+[dependencies]
+libc = "0.2"
+
+[dependencies.glib-sys]
+workspace = true
+
+[dependencies.gstreamer-sys]
+workspace = true
+
+[dev-dependencies]
+shell-words = "1.0.0"
+tempfile = "3"
+
+[lib]
+name = "gstreamer_analytics_sys"
+
+[package]
+authors = ["Olivier Crête <olivier.crete@collabora.com"]
+build = "build.rs"
+description = "FFI bindings to libgstanalytics-1.0"
+documentation = "https://gstreamer.pages.freedesktop.org/gstreamer-rs/stable/latest/docs/gstreamer_analytics_sys/"
+keywords = ["ffi", "gstreamer", "gnome", "multimedia"]
+license = "MIT"
+name = "gstreamer-analytics-sys"
+readme = "README.md"
+
+[package.version]
+workspace = true
+
+[package.categories]
+workspace = true
+
+[package.repository]
+workspace = true
+
+[package.homepage]
+workspace = true
+
+[package.edition]
+workspace = true
+
+[package.rust-version]
+workspace = true
+
+[package.metadata.docs.rs]
+all-features = true
+rustc-args = ["--cfg", "docsrs"]
+rustdoc-args = ["--cfg", "docsrs", "--generate-link-to-definition"]
+
+[package.metadata.system-deps.gstreamer_analytics_1_0]
+name = "gstreamer-analytics-1.0"
+version = "1.23"
+
+[features]

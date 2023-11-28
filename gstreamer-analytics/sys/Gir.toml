@@ -1,0 +1,48 @@
+[options]
+girs_directories = ["../../gir-files", "../../gst-gir-files"]
+library = "GstAnalytics"
+version = "1.0"
+min_cfg_version = "1.24"
+work_mode = "sys"
+single_version_file = true
+
+external_libraries = [
+    "GLib",
+]
+
+manual = [
+    "GObject.Object",
+    "Gst.Element",
+    "Gst.MiniObject",
+    "Gst.Object",
+]
+
+[external_libraries]
+gstreamer="Gst"
+
+[[object]]
+name = "GstAnalytics.RelationMeta"
+status = "generate"
+    [[object.function]]
+    name = "relation_meta_api_get_type"
+    version = "1.24"
+
+[[object]]
+name = "GstAnalytics.ClsMtd"
+status = "generate"
+boxed_inline = true
+
+[[object]]
+name = "GstAnalytics.TrackingMtd"
+status = "generate"
+boxed_inline = true
+
+[[object]]
+name = "GstAnalytics.ODMtd"
+status = "generate"
+boxed_inline = true
+
+[[object]]
+name = "GstAnalytics.Mtd"
+status = "generate"
+boxed_inline = true

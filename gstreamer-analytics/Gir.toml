@@ -1,0 +1,34 @@
+[options]
+girs_directories = ["../gir-files", "../gst-gir-files"]
+library = "GstAnalytics"
+version = "1.0"
+min_cfg_version = "1.24"
+work_mode = "normal"
+concurrency = "send+sync"
+generate_safety_asserts = true
+single_version_file = true
+generate_display_trait = false
+trust_return_value_nullability = true
+
+external_libraries = [
+    "GLib",
+    "GObject",
+    "Gst",
+]
+
+generate = [
+    "GstAnalytics.RelTypes"
+]
+
+manual = [
+    "GObject.Object",
+    "Gst.Element",
+    "Gst.MiniObject",
+    "Gst.Object"
+]
+
+
+[[object]]
+name = "Gst.Buffer"
+status = "manual"
+ref_mode = "ref"

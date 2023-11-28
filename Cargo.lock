@@ -882,6 +882,29 @@ dependencies = [
 ]
 
 [[package]]
+name = "gstreamer-analytics"
+version = "0.22.0"
+dependencies = [
+ "gir-format-check",
+ "glib",
+ "gstreamer",
+ "gstreamer-analytics-sys",
+ "libc",
+]
+
+[[package]]
+name = "gstreamer-analytics-sys"
+version = "0.22.0"
+dependencies = [
+ "glib-sys",
+ "gstreamer-sys",
+ "libc",
+ "shell-words",
+ "system-deps",
+ "tempfile",
+]
+
+[[package]]
 name = "gstreamer-app"
 version = "0.22.0"
 dependencies = [

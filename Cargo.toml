@@ -3,6 +3,7 @@ resolver = "2"
 
 default-members = [
   "gstreamer/sys",
+  "gstreamer-analytics/sys",
   "gstreamer-app/sys",
   "gstreamer-audio/sys",
   "gstreamer-base/sys",
@@ -22,6 +23,7 @@ default-members = [
   "gstreamer-video/sys",
   "gstreamer-webrtc/sys",
   "gstreamer",
+  "gstreamer-analytics",
   "gstreamer-app",
   "gstreamer-audio",
   "gstreamer-base",
@@ -47,6 +49,7 @@ default-members = [
 
 members = [
   "gstreamer/sys",
+  "gstreamer-analytics/sys",
   "gstreamer-app/sys",
   "gstreamer-audio/sys",
   "gstreamer-base/sys",
@@ -71,6 +74,7 @@ members = [
   "gstreamer-webrtc/sys",
   "gstreamer-allocators/sys",
   "gstreamer",
+  "gstreamer-analytics",
   "gstreamer-app",
   "gstreamer-audio",
   "gstreamer-base",

@@ -13,7 +13,7 @@ get_features() {
         gstreamer-audio|gstreamer-editing-services|gstreamer-gl|gstreamer-pbutils|gstreamer-rtp|gstreamer-rtsp|gstreamer-video|gstreamer)
             echo "--features=serde,v1_24"
             ;;
-        gstreamer-validate)
+        gstreamer-analytics)
             echo ""
             ;;
         *)
