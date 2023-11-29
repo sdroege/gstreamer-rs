@@ -31,7 +31,7 @@ mod auto;
 pub use crate::auto::*;
 
 #[cfg(feature = "v1_20")]
-mod element_properties;
+pub mod element_properties;
 #[cfg(feature = "v1_20")]
 pub use crate::element_properties::{ElementProperties, ElementPropertiesMapItem};
 
