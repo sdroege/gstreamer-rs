@@ -180,7 +180,7 @@ impl AudioMeta {
     #[doc(alias = "get_info")]
     #[inline]
     pub fn info(&self) -> crate::AudioInfo {
-        unsafe { from_glib_none(&self.0.info as *const _ as *mut ffi::GstAudioInfo) }
+        unsafe { from_glib_none(&self.0.info as *const _) }
     }
 
     #[doc(alias = "get_samples")]

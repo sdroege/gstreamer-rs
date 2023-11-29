@@ -2,7 +2,7 @@
 
 use std::{fmt, ptr};
 
-use glib::translate::{from_glib, from_glib_none, FromGlib, IntoGlib, IntoGlibPtr, ToGlibPtr};
+use glib::translate::*;
 use gst::prelude::*;
 
 #[repr(transparent)]
@@ -182,10 +182,7 @@ impl VideoMeta {
 
         unsafe {
             glib::result_from_gboolean!(
-                ffi::gst_video_meta_get_plane_size(
-                    &self.0 as *const _ as usize as *mut _,
-                    &mut plane_size,
-                ),
+                ffi::gst_video_meta_get_plane_size(mut_override(&self.0), &mut plane_size,),
                 "Failed to get plane size"
             )?;
         }
@@ -202,10 +199,7 @@ impl VideoMeta {
 
         unsafe {
             glib::result_from_gboolean!(
-                ffi::gst_video_meta_get_plane_height(
-                    &self.0 as *const _ as usize as *mut _,
-                    &mut plane_height,
-                ),
+                ffi::gst_video_meta_get_plane_height(mut_override(&self.0), &mut plane_height,),
                 "Failed to get plane height"
             )?;
         }

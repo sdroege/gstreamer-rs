@@ -133,7 +133,7 @@ pub trait VideoAggregatorImplExt: sealed::Sealed + ObjectSubclass {
                     None
                 } else {
                     Some((
-                        from_glib_none(mut_override(&info as *const ffi::GstVideoInfo)),
+                        from_glib_none(&info as *const ffi::GstVideoInfo),
                         from_glib(at_least_one_alpha),
                     ))
                 }

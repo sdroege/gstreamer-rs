@@ -2,9 +2,7 @@
 
 use std::{fmt, marker::PhantomData, mem, ops, ops::ControlFlow, ptr, slice, u64, usize};
 
-use glib::translate::{
-    from_glib, from_glib_full, FromGlib, FromGlibPtrFull, IntoGlib, IntoGlibPtr,
-};
+use glib::translate::*;
 
 use crate::{meta::*, BufferCursor, BufferFlags, BufferRefCursor, ClockTime, Memory, MemoryRef};
 
@@ -475,7 +473,7 @@ impl BufferRef {
             meta: *mut *mut ffi::GstMeta,
             user_data: glib::ffi::gpointer,
         ) -> glib::ffi::gboolean {
-            let func = user_data as *const _ as usize as *mut F;
+            let func = user_data as *mut F;
             let res = (*func)(Meta::from_ptr(BufferRef::from_ptr(buffer), *meta));
 
             matches!(res, ControlFlow::Continue(_)).into_glib()
@@ -485,9 +483,9 @@ impl BufferRef {
             let func_ptr: &F = &func;
 
             from_glib(ffi::gst_buffer_foreach_meta(
-                self.as_ptr() as *mut _,
+                mut_override(self.as_ptr()),
                 Some(trampoline::<F>),
-                func_ptr as *const _ as usize as *mut _,
+                func_ptr as *const _ as *mut _,
             ))
         }
     }
@@ -510,7 +508,7 @@ impl BufferRef {
             meta: *mut *mut ffi::GstMeta,
             user_data: glib::ffi::gpointer,
         ) -> glib::ffi::gboolean {
-            let func = user_data as *const _ as usize as *mut F;
+            let func = user_data as *mut F;
             let res = (*func)(Meta::from_mut_ptr(BufferRef::from_mut_ptr(buffer), *meta));
 
             let (cont, action) = match res {
@@ -529,9 +527,9 @@ impl BufferRef {
             let func_ptr: &F = &func;
 
             from_glib(ffi::gst_buffer_foreach_meta(
-                self.as_ptr() as *mut _,
+                mut_override(self.as_ptr()),
                 Some(trampoline::<F>),
-                func_ptr as *const _ as usize as *mut _,
+                func_ptr as *const _ as *mut _,
             ))
         }
     }

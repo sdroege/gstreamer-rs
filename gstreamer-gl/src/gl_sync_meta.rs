@@ -40,7 +40,7 @@ impl GLSyncMeta {
     pub fn set_sync_point(&self, context: &impl IsA<GLContext>) {
         unsafe {
             ffi::gst_gl_sync_meta_set_sync_point(
-                &self.0 as *const _ as *mut _,
+                mut_override(&self.0),
                 context.as_ref().to_glib_none().0,
             );
         }
@@ -49,10 +49,7 @@ impl GLSyncMeta {
     #[doc(alias = "gst_gl_sync_meta_wait")]
     pub fn wait(&self, context: &impl IsA<GLContext>) {
         unsafe {
-            ffi::gst_gl_sync_meta_wait(
-                &self.0 as *const _ as *mut _,
-                context.as_ref().to_glib_none().0,
-            );
+            ffi::gst_gl_sync_meta_wait(mut_override(&self.0), context.as_ref().to_glib_none().0);
         }
     }
 
@@ -60,7 +57,7 @@ impl GLSyncMeta {
     pub fn wait_cpu(&self, context: &impl IsA<GLContext>) {
         unsafe {
             ffi::gst_gl_sync_meta_wait_cpu(
-                &self.0 as *const _ as *mut _,
+                mut_override(&self.0),
                 context.as_ref().to_glib_none().0,
             );
         }

@@ -31,7 +31,7 @@ impl AudioRingBufferSpec {
     #[doc(alias = "get_audio_info")]
     #[inline]
     pub fn audio_info(&self) -> AudioInfo {
-        unsafe { AudioInfo::from_glib_none(mut_override(&self.0.info)) }
+        unsafe { AudioInfo::from_glib_none(&self.0.info as *const ffi::GstAudioInfo) }
     }
 
     #[doc(alias = "get_latency_time")]

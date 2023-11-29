@@ -17,7 +17,7 @@ impl Registry {
             user_data: glib::ffi::gpointer,
         ) -> glib::ffi::gboolean {
             let feature = from_glib_borrow(feature);
-            let callback: *mut P = user_data as *const _ as usize as *mut P;
+            let callback = user_data as *mut P;
             let res = (*callback)(&feature);
             res.into_glib()
         }
@@ -28,7 +28,7 @@ impl Registry {
                 self.to_glib_none().0,
                 filter,
                 first.into_glib(),
-                super_callback0 as *const _ as usize as *mut _,
+                super_callback0 as *const _ as *mut _,
             ))
         }
     }
@@ -77,7 +77,7 @@ impl Registry {
             user_data: glib::ffi::gpointer,
         ) -> glib::ffi::gboolean {
             let plugin = from_glib_borrow(plugin);
-            let callback: *mut P = user_data as *const _ as usize as *mut P;
+            let callback = user_data as *const _ as *mut P;
             let res = (*callback)(&plugin);
             res.into_glib()
         }
@@ -88,7 +88,7 @@ impl Registry {
                 self.to_glib_none().0,
                 filter,
                 first.into_glib(),
-                super_callback0 as *const _ as usize as *mut _,
+                super_callback0 as *const _ as *mut _,
             ))
         }
     }

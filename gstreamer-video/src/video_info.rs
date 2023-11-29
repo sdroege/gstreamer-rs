@@ -584,7 +584,7 @@ impl VideoInfo {
     #[doc(alias = "gst_video_info_to_caps")]
     pub fn to_caps(&self) -> Result<gst::Caps, glib::error::BoolError> {
         unsafe {
-            let result = from_glib_full(ffi::gst_video_info_to_caps(&self.0 as *const _ as *mut _));
+            let result = from_glib_full(ffi::gst_video_info_to_caps(mut_override(&self.0)));
             match result {
                 Some(c) => Ok(c),
                 None => Err(glib::bool_error!("Failed to create caps from VideoInfo")),
@@ -802,7 +802,7 @@ impl VideoInfo {
         unsafe {
             let mut dest_val = mem::MaybeUninit::uninit();
             if from_glib(ffi::gst_video_info_convert(
-                &self.0 as *const _ as *mut _,
+                mut_override(&self.0),
                 src_val.format().into_glib(),
                 src_val.into_raw_value(),
                 U::default_format().into_glib(),
@@ -824,7 +824,7 @@ impl VideoInfo {
         unsafe {
             let mut dest_val = mem::MaybeUninit::uninit();
             if from_glib(ffi::gst_video_info_convert(
-                &self.0 as *const _ as *mut _,
+                mut_override(&self.0),
                 src_val.format().into_glib(),
                 src_val.into_raw_value(),
                 dest_fmt.into_glib(),

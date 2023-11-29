@@ -124,7 +124,7 @@ impl VideoBufferPoolConfig for gst::BufferPoolConfigRef {
         unsafe {
             ffi::gst_buffer_pool_config_set_video_alignment(
                 self.as_mut().as_mut_ptr(),
-                &align.0 as *const _ as *mut _,
+                mut_override(&align.0),
             )
         }
     }

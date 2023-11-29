@@ -288,12 +288,11 @@ impl<O: IsA<VideoDecoder>> VideoDecoderExtManual for O {}
 impl HasStreamLock for VideoDecoder {
     fn stream_lock(&self) -> *mut glib::ffi::GRecMutex {
         let decoder_sys: *const ffi::GstVideoDecoder = self.to_glib_none().0;
-        unsafe { &(*decoder_sys).stream_lock as *const _ as usize as *mut _ }
+        unsafe { mut_override(&(*decoder_sys).stream_lock) }
     }
 
     fn element_as_ptr(&self) -> *const gst::ffi::GstElement {
-        let decoder_sys: *const ffi::GstVideoDecoder = self.to_glib_none().0;
-        decoder_sys as *const gst::ffi::GstElement
+        self.as_ptr() as *mut gst::ffi::GstElement
     }
 }
 

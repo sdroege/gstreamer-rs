@@ -109,7 +109,7 @@ impl BufferListRef {
             idx: u32,
             user_data: glib::ffi::gpointer,
         ) -> glib::ffi::gboolean {
-            let func = user_data as *const _ as usize as *mut F;
+            let func = user_data as *mut F;
             let res = (*func)(&Buffer::from_glib_borrow(*buffer), idx);
 
             matches!(res, ControlFlow::Continue(_)).into_glib()
@@ -121,7 +121,7 @@ impl BufferListRef {
             from_glib(ffi::gst_buffer_list_foreach(
                 self.as_ptr() as *mut _,
                 Some(trampoline::<F>),
-                func_ptr as *const _ as usize as *mut _,
+                func_ptr as *const _ as *mut _,
             ))
         }
     }
@@ -138,7 +138,7 @@ impl BufferListRef {
             idx: u32,
             user_data: glib::ffi::gpointer,
         ) -> glib::ffi::gboolean {
-            let func = user_data as *const _ as usize as *mut F;
+            let func = user_data as *mut F;
             let res = (*func)(
                 Buffer::from_glib_full(ptr::replace(
                     buffer as *mut *const ffi::GstBuffer,
@@ -170,7 +170,7 @@ impl BufferListRef {
             from_glib(ffi::gst_buffer_list_foreach(
                 self.as_ptr() as *mut _,
                 Some(trampoline::<F>),
-                func_ptr as *const _ as usize as *mut _,
+                func_ptr as *const _ as *mut _,
             ))
         }
     }

@@ -2,7 +2,7 @@
 
 use std::{fmt, ptr};
 
-use glib::translate::{from_glib_full, from_glib_none, mut_override, IntoGlibPtr, ToGlibPtr};
+use glib::translate::{from_glib_full, from_glib_none, IntoGlibPtr, ToGlibPtr};
 
 use crate::{
     format::FormattedValueIntrinsic, Buffer, BufferList, BufferListRef, BufferRef, Caps, CapsRef,
@@ -73,7 +73,7 @@ impl<'a> SampleBuilder<'a> {
                 self.buffer.to_glib_none().0,
                 self.caps.to_glib_none().0,
                 self.segment.to_glib_none().0,
-                mut_override(info),
+                info,
             ));
 
             if let Some(buffer_list) = self.buffer_list {

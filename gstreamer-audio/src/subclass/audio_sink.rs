@@ -135,7 +135,7 @@ pub trait AudioSinkImplExt: sealed::Sealed + ObjectSubclass {
                 Some(f) => f,
                 None => return Ok(-1),
             };
-            let buffer_ptr = buffer.as_ptr() as *const _ as *mut _;
+            let buffer_ptr = buffer.as_ptr() as glib::ffi::gpointer;
             let ret = f(
                 self.obj().unsafe_cast_ref::<AudioSink>().to_glib_none().0,
                 buffer_ptr,

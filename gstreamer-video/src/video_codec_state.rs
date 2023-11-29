@@ -97,8 +97,7 @@ impl<'a, T: VideoCodecStateContext<'a>> VideoCodecState<'a, T> {
     #[inline]
     pub fn info(&self) -> VideoInfo {
         unsafe {
-            let ptr = &((*self.as_mut_ptr()).info) as *const _ as usize as *mut _;
-            VideoInfo::from_glib_none(ptr)
+            VideoInfo::from_glib_none(&((*self.as_mut_ptr()).info) as *const ffi::GstVideoInfo)
         }
     }
 
