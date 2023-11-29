@@ -122,7 +122,7 @@ pub trait PadExt: IsA<Pad> + sealed::Sealed + 'static {
             user_data: glib::ffi::gpointer,
         ) -> glib::ffi::gboolean {
             let pad = from_glib_borrow(pad);
-            let callback: *mut P = user_data as *const _ as usize as *mut P;
+            let callback = user_data as *mut P;
             (*callback)(&pad).into_glib()
         }
         let forward = Some(forward_func::<P> as _);
@@ -131,7 +131,7 @@ pub trait PadExt: IsA<Pad> + sealed::Sealed + 'static {
             from_glib(ffi::gst_pad_forward(
                 self.as_ref().to_glib_none().0,
                 forward,
-                super_callback0 as *const _ as usize as *mut _,
+                super_callback0 as *const _ as *mut _,
             ))
         }
     }

@@ -77,7 +77,7 @@ pub trait MetaContainerExt: IsA<MetaContainer> + sealed::Sealed + 'static {
             let container = from_glib_borrow(container);
             let key: Borrowed<glib::GString> = from_glib_borrow(key);
             let value = from_glib_borrow(value);
-            let callback: *mut P = user_data as *const _ as usize as *mut P;
+            let callback = user_data as *mut P;
             (*callback)(&container, key.as_str(), &value)
         }
         let func = Some(func_func::<P> as _);
@@ -86,7 +86,7 @@ pub trait MetaContainerExt: IsA<MetaContainer> + sealed::Sealed + 'static {
             ffi::ges_meta_container_foreach(
                 self.as_ref().to_glib_none().0,
                 func,
-                super_callback0 as *const _ as usize as *mut _,
+                super_callback0 as *const _ as *mut _,
             );
         }
     }

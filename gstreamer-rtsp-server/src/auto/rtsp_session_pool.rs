@@ -75,9 +75,7 @@ pub trait RTSPSessionPoolExt: IsA<RTSPSessionPool> + sealed::Sealed + 'static {
         ) -> ffi::GstRTSPFilterResult {
             let pool = from_glib_borrow(pool);
             let session = from_glib_borrow(session);
-            let callback: *mut Option<
-                &mut dyn (FnMut(&RTSPSessionPool, &RTSPSession) -> RTSPFilterResult),
-            > = user_data as *const _ as usize
+            let callback = user_data
                 as *mut Option<
                     &mut dyn (FnMut(&RTSPSessionPool, &RTSPSession) -> RTSPFilterResult),
                 >;
@@ -100,7 +98,7 @@ pub trait RTSPSessionPoolExt: IsA<RTSPSessionPool> + sealed::Sealed + 'static {
             FromGlibPtrContainer::from_glib_full(ffi::gst_rtsp_session_pool_filter(
                 self.as_ref().to_glib_none().0,
                 func,
-                super_callback0 as *const _ as usize as *mut _,
+                super_callback0 as *const _ as *mut _,
             ))
         }
     }

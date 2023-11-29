@@ -889,9 +889,7 @@ pub trait RTSPStreamExt: IsA<RTSPStream> + sealed::Sealed + 'static {
         ) -> ffi::GstRTSPFilterResult {
             let stream = from_glib_borrow(stream);
             let trans = from_glib_borrow(trans);
-            let callback: *mut Option<
-                &mut dyn (FnMut(&RTSPStream, &RTSPStreamTransport) -> RTSPFilterResult),
-            > = user_data as *const _ as usize
+            let callback = user_data
                 as *mut Option<
                     &mut dyn (FnMut(&RTSPStream, &RTSPStreamTransport) -> RTSPFilterResult),
                 >;
@@ -914,7 +912,7 @@ pub trait RTSPStreamExt: IsA<RTSPStream> + sealed::Sealed + 'static {
             FromGlibPtrContainer::from_glib_full(ffi::gst_rtsp_stream_transport_filter(
                 self.as_ref().to_glib_none().0,
                 func,
-                super_callback0 as *const _ as usize as *mut _,
+                super_callback0 as *const _ as *mut _,
             ))
         }
     }

@@ -170,12 +170,12 @@ pub trait RTSPStreamTransportExt: IsA<RTSPStreamTransport> + sealed::Sealed + 's
     fn set_keepalive<P: Fn() + 'static>(&self, keep_alive: P) {
         let keep_alive_data: Box_<P> = Box_::new(keep_alive);
         unsafe extern "C" fn keep_alive_func<P: Fn() + 'static>(user_data: glib::ffi::gpointer) {
-            let callback: &P = &*(user_data as *mut _);
+            let callback = &*(user_data as *mut P);
             (*callback)()
         }
         let keep_alive = Some(keep_alive_func::<P> as _);
         unsafe extern "C" fn notify_func<P: Fn() + 'static>(data: glib::ffi::gpointer) {
-            let _callback: Box_<P> = Box_::from_raw(data as *mut _);
+            let _callback = Box_::from_raw(data as *mut P);
         }
         let destroy_call3 = Some(notify_func::<P> as _);
         let super_callback0: Box_<P> = keep_alive_data;
@@ -200,12 +200,12 @@ pub trait RTSPStreamTransportExt: IsA<RTSPStreamTransport> + sealed::Sealed + 's
     fn set_message_sent<P: Fn() + 'static>(&self, message_sent: P) {
         let message_sent_data: Box_<P> = Box_::new(message_sent);
         unsafe extern "C" fn message_sent_func<P: Fn() + 'static>(user_data: glib::ffi::gpointer) {
-            let callback: &P = &*(user_data as *mut _);
+            let callback = &*(user_data as *mut P);
             (*callback)()
         }
         let message_sent = Some(message_sent_func::<P> as _);
         unsafe extern "C" fn notify_func<P: Fn() + 'static>(data: glib::ffi::gpointer) {
-            let _callback: Box_<P> = Box_::from_raw(data as *mut _);
+            let _callback = Box_::from_raw(data as *mut P);
         }
         let destroy_call3 = Some(notify_func::<P> as _);
         let super_callback0: Box_<P> = message_sent_data;
@@ -229,14 +229,14 @@ pub trait RTSPStreamTransportExt: IsA<RTSPStreamTransport> + sealed::Sealed + 's
             user_data: glib::ffi::gpointer,
         ) {
             let trans = from_glib_borrow(trans);
-            let callback: &P = &*(user_data as *mut _);
+            let callback = &*(user_data as *mut P);
             (*callback)(&trans)
         }
         let message_sent = Some(message_sent_func::<P> as _);
         unsafe extern "C" fn notify_func<P: Fn(&RTSPStreamTransport) + 'static>(
             data: glib::ffi::gpointer,
         ) {
-            let _callback: Box_<P> = Box_::from_raw(data as *mut _);
+            let _callback = Box_::from_raw(data as *mut P);
         }
         let destroy_call3 = Some(notify_func::<P> as _);
         let super_callback0: Box_<P> = message_sent_data;

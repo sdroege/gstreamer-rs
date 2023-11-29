@@ -224,14 +224,14 @@ pub trait WebRTCICEExt: IsA<WebRTCICE> + sealed::Sealed + 'static {
         ) {
             let ice = from_glib_borrow(ice);
             let candidate: Borrowed<glib::GString> = from_glib_borrow(candidate);
-            let callback: &P = &*(user_data as *mut _);
+            let callback = &*(user_data as *mut P);
             (*callback)(&ice, stream_id, candidate.as_str())
         }
         let func = Some(func_func::<P> as _);
         unsafe extern "C" fn notify_func<P: Fn(&WebRTCICE, u32, &str) + Send + Sync + 'static>(
             data: glib::ffi::gpointer,
         ) {
-            let _callback: Box_<P> = Box_::from_raw(data as *mut _);
+            let _callback = Box_::from_raw(data as *mut P);
         }
         let destroy_call3 = Some(notify_func::<P> as _);
         let super_callback0: Box_<P> = func_data;

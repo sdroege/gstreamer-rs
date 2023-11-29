@@ -80,9 +80,7 @@ pub trait RTSPServerExt: IsA<RTSPServer> + sealed::Sealed + 'static {
         ) -> ffi::GstRTSPFilterResult {
             let server = from_glib_borrow(server);
             let client = from_glib_borrow(client);
-            let callback: *mut Option<
-                &mut dyn (FnMut(&RTSPServer, &RTSPClient) -> RTSPFilterResult),
-            > = user_data as *const _ as usize
+            let callback = user_data
                 as *mut Option<&mut dyn (FnMut(&RTSPServer, &RTSPClient) -> RTSPFilterResult)>;
             if let Some(ref mut callback) = *callback {
                 callback(&server, &client)
@@ -103,7 +101,7 @@ pub trait RTSPServerExt: IsA<RTSPServer> + sealed::Sealed + 'static {
             FromGlibPtrContainer::from_glib_full(ffi::gst_rtsp_server_client_filter(
                 self.as_ref().to_glib_none().0,
                 func,
-                super_callback0 as *const _ as usize as *mut _,
+                super_callback0 as *const _ as *mut _,
             ))
         }
     }

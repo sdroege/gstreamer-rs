@@ -68,7 +68,7 @@ pub trait GLFilterExt: IsA<GLFilter> + sealed::Sealed + 'static {
         ) -> glib::ffi::gboolean {
             let filter = from_glib_borrow(filter);
             let in_tex = from_glib_borrow(in_tex);
-            let callback: *mut P = user_data as *const _ as usize as *mut P;
+            let callback = user_data as *mut P;
             (*callback)(&filter, &in_tex).into_glib()
         }
         let func = Some(func_func::<P> as _);
@@ -80,7 +80,7 @@ pub trait GLFilterExt: IsA<GLFilter> + sealed::Sealed + 'static {
                     mut_override(input.to_glib_none().0),
                     mut_override(output.to_glib_none().0),
                     func,
-                    super_callback0 as *const _ as usize as *mut _
+                    super_callback0 as *const _ as *mut _
                 ),
                 "`func` returned `false`"
             )
