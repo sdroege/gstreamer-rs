@@ -5,6 +5,11 @@ use glib::translate::*;
 use crate::{Plugin, PluginFeature, Registry};
 
 impl Registry {
+    #[doc(alias = "gst_registry_update")]
+    pub fn update() -> Result<(), glib::BoolError> {
+        crate::auto::functions::update_registry()
+    }
+
     #[doc(alias = "gst_registry_feature_filter")]
     pub fn features_filtered<P: FnMut(&PluginFeature) -> bool>(
         &self,
