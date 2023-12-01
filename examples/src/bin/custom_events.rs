@@ -48,7 +48,7 @@ fn example_main() {
     let main_loop = glib::MainLoop::new(None, false);
 
     // This creates a pipeline by parsing the gst-launch pipeline syntax.
-    let pipeline = gst::parse_launch(
+    let pipeline = gst::parse::launch(
         "audiotestsrc name=src ! queue max-size-time=2000000000 ! fakesink name=sink sync=true",
     )
     .unwrap();

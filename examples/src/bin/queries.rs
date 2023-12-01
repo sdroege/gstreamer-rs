@@ -28,7 +28,7 @@ fn example_main() {
     let main_loop = glib::MainLoop::new(None, false);
 
     // Let GStreamer create a pipeline from the parsed launch syntax on the cli.
-    let pipeline = gst::parse_launch(&pipeline_str).unwrap();
+    let pipeline = gst::parse::launch(&pipeline_str).unwrap();
     let bus = pipeline.bus().unwrap();
 
     pipeline

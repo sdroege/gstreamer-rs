@@ -22,7 +22,7 @@ fn example_main() {
     // Parse the pipeline we want to probe from a static in-line string.
     // Here we give our audiotestsrc a name, so we can retrieve that element
     // from the resulting pipeline.
-    let pipeline = gst::parse_launch(&format!(
+    let pipeline = gst::parse::launch(&format!(
         "audiotestsrc name=src ! audio/x-raw,format={},channels=1 ! fakesink",
         gst_audio::AUDIO_FORMAT_S16
     ))

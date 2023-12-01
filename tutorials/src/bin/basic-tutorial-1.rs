@@ -9,7 +9,7 @@ fn tutorial_main() {
 
     // Build the pipeline
     let uri = "https://gstreamer.freedesktop.org/data/media/sintel_trailer-480p.webm";
-    let pipeline = gst::parse_launch(&format!("playbin uri={uri}")).unwrap();
+    let pipeline = gst::parse::launch(&format!("playbin uri={uri}")).unwrap();
 
     // Start playing
     pipeline

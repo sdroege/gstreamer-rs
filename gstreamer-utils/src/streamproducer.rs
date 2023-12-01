@@ -646,7 +646,7 @@ mod tests {
         StreamProducer,
     ) {
         let producer_pipe =
-            gst::parse_launch("appsrc name=producer_src ! appsink name=producer_sink")
+            gst::parse::launch("appsrc name=producer_src ! appsink name=producer_sink")
                 .unwrap()
                 .downcast::<gst::Pipeline>()
                 .unwrap();
@@ -678,7 +678,7 @@ mod tests {
 
     impl Consumer {
         fn new(id: &str) -> Self {
-            let pipeline = gst::parse_launch(&format!("appsrc name={id} ! appsink name=sink"))
+            let pipeline = gst::parse::launch(&format!("appsrc name={id} ! appsink name=sink"))
                 .unwrap()
                 .downcast::<gst::Pipeline>()
                 .unwrap();

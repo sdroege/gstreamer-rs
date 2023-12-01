@@ -122,7 +122,7 @@ USAGE: Choose one of the following options, then press enter:
 
     // Build the pipeline.
     let uri = "https://gstreamer.freedesktop.org/data/media/sintel_trailer-480p.webm";
-    let pipeline = gst::parse_launch(&format!("playbin uri={uri}"))?;
+    let pipeline = gst::parse::launch(&format!("playbin uri={uri}"))?;
 
     // Start playing.
     let _ = pipeline.set_state(State::Playing)?;

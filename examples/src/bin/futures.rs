@@ -42,7 +42,7 @@ fn example_main() {
     gst::init().unwrap();
 
     // Create a pipeline from the launch-syntax given on the cli.
-    let pipeline = gst::parse_launch(&pipeline_str).unwrap();
+    let pipeline = gst::parse::launch(&pipeline_str).unwrap();
     let bus = pipeline.bus().unwrap();
 
     pipeline

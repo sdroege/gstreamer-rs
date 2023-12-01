@@ -11,7 +11,7 @@ fn example_main() {
     gst::init().unwrap();
 
     // This creates a pipeline by parsing the gst-launch pipeline syntax.
-    let pipeline = gst::parse_launch(
+    let pipeline = gst::parse::launch(
         "videotestsrc name=src ! video/x-raw,width=640,height=480 ! compositor0.sink_0 \
          compositor ! video/x-raw,width=1280,height=720 ! videoconvert ! autovideosink",
     )

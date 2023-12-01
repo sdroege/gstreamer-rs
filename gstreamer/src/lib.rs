@@ -259,6 +259,8 @@ pub use crate::functions::*;
 mod utils;
 pub use crate::utils::ObjectLockGuard;
 
+pub mod parse;
+
 #[cfg(feature = "v1_18")]
 mod gtype;
 

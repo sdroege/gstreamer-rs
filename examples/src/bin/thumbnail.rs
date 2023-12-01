@@ -27,7 +27,7 @@ fn create_pipeline(uri: String, out_path: std::path::PathBuf) -> Result<gst::Pip
     gst::init()?;
 
     // Create our pipeline from a pipeline description string.
-    let pipeline = gst::parse_launch(&format!(
+    let pipeline = gst::parse::launch(&format!(
         "uridecodebin uri={uri} ! videoconvert ! appsink name=sink"
     ))?
     .downcast::<gst::Pipeline>()

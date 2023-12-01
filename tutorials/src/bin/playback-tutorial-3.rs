@@ -46,7 +46,7 @@ fn tutorial_main() -> Result<(), Error> {
     gst::init().unwrap();
 
     // Create the playbin element
-    let pipeline = gst::parse_launch("playbin uri=appsrc://").unwrap();
+    let pipeline = gst::parse::launch("playbin uri=appsrc://").unwrap();
 
     // This part is called when playbin has created the appsrc element,
     // so we have a chance to configure it.

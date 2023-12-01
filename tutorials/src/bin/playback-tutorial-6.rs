@@ -45,7 +45,7 @@ fn tutorial_main() -> Result<(), Error> {
     let vis_plugin = vis_factory.create().build().unwrap();
 
     // Build the pipeline
-    let pipeline = gst::parse_launch("playbin uri=http://radio.hbr1.com:19800/ambient.ogg")?;
+    let pipeline = gst::parse::launch("playbin uri=http://radio.hbr1.com:19800/ambient.ogg")?;
 
     // Set the visualization flag
     let flags = pipeline.property_value("flags");

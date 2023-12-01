@@ -12,7 +12,7 @@ fn tutorial_main() -> Result<(), Error> {
 
     // Build the pipeline
     let uri = "https://gstreamer.freedesktop.org/data/media/sintel_trailer-480p.webm";
-    let pipeline = gst::parse_launch(&format!("playbin uri={uri}"))?;
+    let pipeline = gst::parse::launch(&format!("playbin uri={uri}"))?;
 
     // Start playing
     let res = pipeline.set_state(gst::State::Playing)?;

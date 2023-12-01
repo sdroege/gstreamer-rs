@@ -30,7 +30,7 @@ fn example_main() {
     let main_loop = glib::MainLoop::new(None, false);
 
     // This creates a pipeline by parsing the gst-launch pipeline syntax.
-    let pipeline = gst::parse_launch("audiotestsrc ! fakesink").unwrap();
+    let pipeline = gst::parse::launch("audiotestsrc ! fakesink").unwrap();
     let bus = pipeline.bus().unwrap();
 
     pipeline

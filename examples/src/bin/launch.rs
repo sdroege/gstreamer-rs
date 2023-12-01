@@ -26,19 +26,22 @@ fn example_main() {
     // Especially GUIs should probably handle this case, to tell users that they need to
     // install the corresponding gstreamer plugins.
     let mut context = gst::ParseContext::new();
-    let pipeline =
-        match gst::parse_launch_full(&pipeline_str, Some(&mut context), gst::ParseFlags::empty()) {
-            Ok(pipeline) => pipeline,
-            Err(err) => {
-                if let Some(gst::ParseError::NoSuchElement) = err.kind::<gst::ParseError>() {
-                    println!("Missing element(s): {:?}", context.missing_elements());
-                } else {
-                    println!("Failed to parse pipeline: {err}");
-                }
-
-                process::exit(-1)
+    let pipeline = match gst::parse::launch_full(
+        &pipeline_str,
+        Some(&mut context),
+        gst::ParseFlags::empty(),
+    ) {
+        Ok(pipeline) => pipeline,
+        Err(err) => {
+            if let Some(gst::ParseError::NoSuchElement) = err.kind::<gst::ParseError>() {
+                println!("Missing element(s): {:?}", context.missing_elements());
+            } else {
+                println!("Failed to parse pipeline: {err}");
             }
-        };
+
+            process::exit(-1)
+        }
+    };
     let bus = pipeline.bus().unwrap();
 
     pipeline

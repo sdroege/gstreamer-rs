@@ -42,7 +42,7 @@ fn example_main() -> Result<(), Error> {
 
     // Parse the pipeline we want to probe from a static in-line string.
     let mut context = gst::ParseContext::new();
-    let pipeline = match gst::parse_launch_full(
+    let pipeline = match gst::parse::launch_full(
         "audiotestsrc wave=white-noise num-buffers=100 ! flacenc ! filesink location=test.flac",
         Some(&mut context),
         gst::ParseFlags::empty(),

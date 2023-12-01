@@ -83,7 +83,7 @@ fn example_main() {
 
     gst::init().unwrap();
 
-    let pipeline = gst::parse_launch(&format!(
+    let pipeline = gst::parse::launch(&format!(
         "compositor name=mix background=1 sink_0::xpos=0 sink_0::ypos=0 sink_0::zorder=0 sink_0::width={WIDTH} sink_0::height={HEIGHT} ! xvimagesink \
          videotestsrc  name=src ! video/x-raw,framerate=30/1,width={WIDTH},height={HEIGHT},pixel-aspect-ratio=1/1 ! queue ! mix.sink_0"
     )).unwrap().downcast::<gst::Pipeline>().unwrap();
