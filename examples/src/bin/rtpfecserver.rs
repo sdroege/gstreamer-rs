@@ -179,11 +179,7 @@ fn example_main() -> Result<(), Error> {
                 if let Some(element) = msg.src() {
                     if element == &pipeline && s.current() == gst::State::Playing {
                         eprintln!("PLAYING");
-                        gst::debug_bin_to_dot_file(
-                            &pipeline,
-                            gst::DebugGraphDetails::all(),
-                            "server-playing",
-                        );
+                        pipeline.debug_to_dot_file(gst::DebugGraphDetails::all(), "server-playing");
                     }
                 }
             }

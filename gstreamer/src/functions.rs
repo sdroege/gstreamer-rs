@@ -9,7 +9,11 @@ use glib::{prelude::*, translate::*};
 use crate::Tracer;
 use crate::{Bin, Element, Object, ParseContext, ParseFlags};
 
-pub use crate::auto::functions::*;
+// import only functions which do not have their own module as namespace
+pub use crate::auto::functions::{
+    main_executable_path, parse_bin_from_description, parse_launch, parse_launchv, update_registry,
+    util_get_timestamp, version, version_string,
+};
 
 pub fn parse_bin_from_description_with_name(
     bin_description: &str,

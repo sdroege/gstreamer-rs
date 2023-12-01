@@ -19,11 +19,11 @@ fn example_main() {
 
     /* Disable stdout debug, then configure the debug ringbuffer and enable
      * all debug */
-    gst::debug_remove_default_log_function();
+    gst::log::remove_default_log_function();
     /* Keep 1KB of logs per thread, removing old threads after 10 seconds */
-    gst::debug_add_ring_buffer_logger(1024, 10);
+    gst::log::add_ring_buffer_logger(1024, 10);
     /* Enable all debug categories */
-    gst::debug_set_default_threshold(gst::DebugLevel::Log);
+    gst::log::set_default_threshold(gst::DebugLevel::Log);
 
     let mut context = gst::ParseContext::new();
     let pipeline =
@@ -73,7 +73,7 @@ fn example_main() {
     gst::error!(gst::CAT_DEFAULT, "Hi from the debug log ringbuffer example");
 
     println!("Dumping debug logs\n");
-    for s in gst::debug_ring_buffer_logger_get_logs().iter() {
+    for s in gst::log::ring_buffer_logger_get_logs().iter() {
         println!("{s}\n------------------");
     }
 }

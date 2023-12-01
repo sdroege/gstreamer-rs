@@ -8,6 +8,22 @@ use libc::c_char;
 
 use crate::DebugLevel;
 
+// import and rename those so they are namespaced as log::*
+pub use crate::auto::functions::debug_add_ring_buffer_logger as add_ring_buffer_logger;
+pub use crate::auto::functions::debug_get_default_threshold as get_default_threshold;
+pub use crate::auto::functions::debug_get_stack_trace as get_stack_trace;
+pub use crate::auto::functions::debug_is_active as is_active;
+pub use crate::auto::functions::debug_is_colored as is_colored;
+pub use crate::auto::functions::debug_print_stack_trace as print_stack_trace;
+pub use crate::auto::functions::debug_remove_ring_buffer_logger as remove_ring_buffer_logger;
+pub use crate::auto::functions::debug_ring_buffer_logger_get_logs as ring_buffer_logger_get_logs;
+pub use crate::auto::functions::debug_set_active as set_active;
+pub use crate::auto::functions::debug_set_colored as set_colored;
+pub use crate::auto::functions::debug_set_default_threshold as set_default_threshold;
+pub use crate::auto::functions::debug_set_threshold_for_name as set_threshold_for_name;
+pub use crate::auto::functions::debug_set_threshold_from_string as set_threshold_from_string;
+pub use crate::auto::functions::debug_unset_threshold_for_name as unset_threshold_for_name;
+
 #[derive(PartialEq, Eq)]
 #[doc(alias = "GstDebugMessage")]
 pub struct DebugMessage(ptr::NonNull<ffi::GstDebugMessage>);
@@ -1185,7 +1201,7 @@ impl fmt::Display for LoggedObject {
 }
 
 #[doc(alias = "gst_debug_add_log_function")]
-pub fn debug_add_log_function<T>(function: T) -> DebugLogFunction
+pub fn add_log_function<T>(function: T) -> DebugLogFunction
 where
     T: Fn(
             DebugCategory,
@@ -1212,7 +1228,7 @@ where
     }
 }
 
-pub fn debug_remove_default_log_function() {
+pub fn remove_default_log_function() {
     skip_assert_initialized!();
     unsafe {
         ffi::gst_debug_remove_log_function(None);
@@ -1220,7 +1236,7 @@ pub fn debug_remove_default_log_function() {
 }
 
 #[doc(alias = "gst_debug_remove_log_function_by_data")]
-pub fn debug_remove_log_function(log_fn: DebugLogFunction) {
+pub fn remove_log_function(log_fn: DebugLogFunction) {
     skip_assert_initialized!();
     unsafe {
         ffi::gst_debug_remove_log_function_by_data(log_fn.0.as_ptr());
@@ -1328,13 +1344,13 @@ mod tests {
             let _ = sender.lock().unwrap().send(());
         };
 
-        debug_remove_default_log_function();
-        let log_fn = debug_add_log_function(handler);
+        remove_default_log_function();
+        let log_fn = add_log_function(handler);
         info!(cat, obj: &obj, "meh");
 
         receiver.recv().unwrap();
 
-        debug_remove_log_function(log_fn);
+        remove_log_function(log_fn);
 
         info!(cat, obj: &obj, "meh2");
         assert!(receiver.recv().is_err());

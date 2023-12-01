@@ -164,7 +164,7 @@ pub trait GstBinExtManual: sealed::Sealed + IsA<Bin> + 'static {
 
     #[doc(alias = "gst_debug_bin_to_dot_data")]
     fn debug_to_dot_data(&self, details: crate::DebugGraphDetails) -> GString {
-        crate::debug_bin_to_dot_data(self, details)
+        crate::auto::functions::debug_bin_to_dot_data(self, details)
     }
 
     #[doc(alias = "GST_DEBUG_BIN_TO_DOT_FILE")]
@@ -174,7 +174,7 @@ pub trait GstBinExtManual: sealed::Sealed + IsA<Bin> + 'static {
         details: crate::DebugGraphDetails,
         file_name: impl AsRef<path::Path>,
     ) {
-        crate::debug_bin_to_dot_file(self, details, file_name)
+        crate::auto::functions::debug_bin_to_dot_file(self, details, file_name)
     }
 
     #[doc(alias = "GST_DEBUG_BIN_TO_DOT_FILE_WITH_TS")]
@@ -184,7 +184,7 @@ pub trait GstBinExtManual: sealed::Sealed + IsA<Bin> + 'static {
         details: crate::DebugGraphDetails,
         file_name: impl AsRef<path::Path>,
     ) {
-        crate::debug_bin_to_dot_file_with_ts(self, details, file_name)
+        crate::auto::functions::debug_bin_to_dot_file_with_ts(self, details, file_name)
     }
 
     fn set_bin_flags(&self, flags: BinFlags) {

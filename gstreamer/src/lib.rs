@@ -50,8 +50,15 @@ mod serde_macros;
 pub use crate::serde_macros::*;
 
 #[macro_use]
-mod log;
-pub use crate::log::*;
+pub mod log;
+pub use crate::log::{
+    DebugCategory, DebugLogFunction, DebugMessage, LoggedObject, CAT_BUFFER, CAT_BUFFER_LIST,
+    CAT_BUS, CAT_CALL_TRACE, CAT_CAPS, CAT_CLOCK, CAT_CONTEXT, CAT_DEFAULT, CAT_ELEMENT_PADS,
+    CAT_ERROR_SYSTEM, CAT_EVENT, CAT_GST_INIT, CAT_LOCKING, CAT_MEMORY, CAT_MESSAGE, CAT_META,
+    CAT_NEGOTIATION, CAT_PADS, CAT_PARAMS, CAT_PARENTAGE, CAT_PERFORMANCE, CAT_PIPELINE,
+    CAT_PLUGIN_INFO, CAT_PLUGIN_LOADING, CAT_PROBE, CAT_PROPERTIES, CAT_QOS, CAT_REFCOUNTING,
+    CAT_REGISTRY, CAT_RUST, CAT_SCHEDULING, CAT_SIGNAL, CAT_STATES,
+};
 
 #[macro_use]
 mod error;
