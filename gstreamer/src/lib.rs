@@ -121,6 +121,7 @@ pub use crate::buffer::{
 mod buffer_cursor;
 pub use crate::buffer_cursor::{BufferCursor, BufferRefCursor};
 pub mod memory;
+mod memory_wrapped;
 pub use crate::memory::{MappedMemory, Memory, MemoryMap, MemoryRef};
 #[cfg(feature = "serde")]
 mod buffer_serde;

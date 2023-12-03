@@ -33,6 +33,7 @@ pub struct MappedBuffer<T> {
 
 impl Buffer {
     #[doc(alias = "gst_buffer_new")]
+    #[inline]
     pub fn new() -> Self {
         assert_initialized_main_thread!();
 
@@ -41,6 +42,7 @@ impl Buffer {
 
     #[doc(alias = "gst_buffer_new_allocate")]
     #[doc(alias = "gst_buffer_new_and_alloc")]
+    #[inline]
     pub fn with_size(size: usize) -> Result<Self, glib::BoolError> {
         assert_initialized_main_thread!();
 
@@ -54,55 +56,38 @@ impl Buffer {
         }
     }
 
-    unsafe extern "C" fn drop_box<T>(vec: glib::ffi::gpointer) {
-        let slice: Box<T> = Box::from_raw(vec as *mut T);
-        drop(slice);
-    }
-
+    #[doc(alias = "gst_buffer_new_wrapped")]
     #[doc(alias = "gst_buffer_new_wrapped_full")]
+    #[inline]
     pub fn from_mut_slice<T: AsMut<[u8]> + Send + 'static>(slice: T) -> Self {
         assert_initialized_main_thread!();
 
-        unsafe {
-            let mut b = Box::new(slice);
-            let (size, data) = {
-                let slice = (*b).as_mut();
-                (slice.len(), slice.as_mut_ptr())
-            };
-            let user_data = Box::into_raw(b);
-            from_glib_full(ffi::gst_buffer_new_wrapped_full(
-                0,
-                data as glib::ffi::gpointer,
-                size,
-                0,
-                size,
-                user_data as glib::ffi::gpointer,
-                Some(Self::drop_box::<T>),
-            ))
+        let mem = Memory::from_mut_slice(slice);
+        let mut buffer = Buffer::new();
+        {
+            let buffer = buffer.get_mut().unwrap();
+            buffer.append_memory(mem);
+            buffer.unset_flags(BufferFlags::TAG_MEMORY);
         }
+
+        buffer
     }
 
+    #[doc(alias = "gst_buffer_new_wrapped")]
     #[doc(alias = "gst_buffer_new_wrapped_full")]
+    #[inline]
     pub fn from_slice<T: AsRef<[u8]> + Send + 'static>(slice: T) -> Self {
         assert_initialized_main_thread!();
 
-        unsafe {
-            let b = Box::new(slice);
-            let (size, data) = {
-                let slice = (*b).as_ref();
-                (slice.len(), slice.as_ptr())
-            };
-            let user_data = Box::into_raw(b);
-            from_glib_full(ffi::gst_buffer_new_wrapped_full(
-                ffi::GST_MEMORY_FLAG_READONLY,
-                data as glib::ffi::gpointer,
-                size,
-                0,
-                size,
-                user_data as glib::ffi::gpointer,
-                Some(Self::drop_box::<T>),
-            ))
+        let mem = Memory::from_slice(slice);
+        let mut buffer = Buffer::new();
+        {
+            let buffer = buffer.get_mut().unwrap();
+            buffer.append_memory(mem);
+            buffer.unset_flags(BufferFlags::TAG_MEMORY);
         }
+
+        buffer
     }
 
     #[doc(alias = "gst_buffer_map")]

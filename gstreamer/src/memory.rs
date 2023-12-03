@@ -53,11 +53,7 @@ pub enum Readable {}
 pub enum Writable {}
 
 impl Memory {
-    unsafe extern "C" fn drop_box<T>(vec: glib::ffi::gpointer) {
-        let slice: Box<T> = Box::from_raw(vec as *mut T);
-        drop(slice);
-    }
-
+    #[inline]
     pub fn with_size(size: usize) -> Self {
         assert_initialized_main_thread!();
         unsafe {
@@ -69,6 +65,7 @@ impl Memory {
         }
     }
 
+    #[inline]
     pub fn with_size_and_params(size: usize, params: &AllocationParams) -> Self {
         assert_initialized_main_thread!();
         unsafe {
@@ -76,49 +73,6 @@ impl Memory {
                 ptr::null_mut(),
                 size,
                 params.as_ptr() as *mut _,
-            ))
-        }
-    }
-
-    pub fn from_slice<T: AsRef<[u8]> + Send + 'static>(slice: T) -> Self {
-        assert_initialized_main_thread!();
-        unsafe {
-            let b = Box::new(slice);
-            let (size, data) = {
-                let slice = (*b).as_ref();
-                (slice.len(), slice.as_ptr())
-            };
-            let user_data = Box::into_raw(b);
-            from_glib_full(ffi::gst_memory_new_wrapped(
-                ffi::GST_MEMORY_FLAG_READONLY,
-                data as glib::ffi::gpointer,
-                size,
-                0,
-                size,
-                user_data as glib::ffi::gpointer,
-                Some(Self::drop_box::<T>),
-            ))
-        }
-    }
-
-    pub fn from_mut_slice<T: AsMut<[u8]> + Send + 'static>(slice: T) -> Self {
-        assert_initialized_main_thread!();
-
-        unsafe {
-            let mut b = Box::new(slice);
-            let (size, data) = {
-                let slice = (*b).as_mut();
-                (slice.len(), slice.as_mut_ptr())
-            };
-            let user_data = Box::into_raw(b);
-            from_glib_full(ffi::gst_memory_new_wrapped(
-                0,
-                data as glib::ffi::gpointer,
-                size,
-                0,
-                size,
-                user_data as glib::ffi::gpointer,
-                Some(Self::drop_box::<T>),
             ))
         }
     }
@@ -946,6 +900,22 @@ mod tests {
         let mem = mem.into_memory();
         let map = mem.map_readable().unwrap();
         assert_eq!(map.as_slice(), &[1, 2, 3, 4]);
+    }
+
+    #[test]
+    fn test_share() {
+        crate::init().unwrap();
+
+        let mem = crate::Memory::from_slice(vec![1, 2, 3, 4]);
+        let sub = mem.share(1, Some(2));
+
+        let map = mem.map_readable().unwrap();
+        assert_eq!(map.as_slice(), &[1, 2, 3, 4]);
+        drop(map);
+
+        let map = sub.map_readable().unwrap();
+        assert_eq!(map.as_slice(), &[2, 3]);
+        drop(map);
     }
 
     #[test]
