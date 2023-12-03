@@ -470,6 +470,7 @@ name = "examples"
 version = "0.21.2"
 dependencies = [
  "anyhow",
+ "atomic_refcell",
  "byte-slice-cast",
  "cairo-rs",
  "cocoa",
