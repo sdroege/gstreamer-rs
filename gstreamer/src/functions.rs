@@ -10,7 +10,7 @@ use crate::Tracer;
 
 // import only functions which do not have their own module as namespace
 pub use crate::auto::functions::{
-    main_executable_path, util_get_timestamp, version, version_string,
+    main_executable_path, util_get_timestamp as get_timestamp, version, version_string,
 };
 
 #[doc(alias = "gst_calculate_linear_regression")]
