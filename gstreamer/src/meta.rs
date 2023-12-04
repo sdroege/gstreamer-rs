@@ -121,6 +121,15 @@ impl<'a, T> AsRef<T> for MetaRef<'a, T> {
     }
 }
 
+impl<'a, T: 'a> Clone for MetaRef<'a, T> {
+    fn clone(&self) -> Self {
+        MetaRef {
+            meta: self.meta,
+            buffer: self.buffer,
+        }
+    }
+}
+
 impl<'a, T, U> ops::Deref for MetaRefMut<'a, T, U> {
     type Target = T;
 
