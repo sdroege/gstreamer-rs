@@ -253,7 +253,7 @@ pub use pad_template::PadTemplateBuilder;
 pub mod param_spec;
 pub use crate::param_spec::{ParamSpecArray, ParamSpecFraction};
 
-pub mod functions;
+mod functions;
 pub use crate::functions::*;
 
 mod utils;
