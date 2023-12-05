@@ -1,12 +1,14 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::translate::*;
+use glib::{once_cell::sync::Lazy, translate::*};
 use gst_base::{prelude::*, subclass::prelude::*};
 
 use crate::{AudioFilter, AudioInfo};
 
 pub trait AudioFilterImpl: AudioFilterImplExt + BaseTransformImpl {
-    fn allowed_caps() -> &'static gst::Caps;
+    fn allowed_caps() -> &'static gst::Caps {
+        Self::parent_allowed_caps()
+    }
 
     fn setup(&self, info: &AudioInfo) -> Result<(), gst::LoggableError> {
         self.parent_setup(info)
@@ -36,6 +38,27 @@ pub trait AudioFilterImplExt: sealed::Sealed + ObjectSubclass {
                     )
                 })
                 .unwrap_or(Ok(()))
+        }
+    }
+
+    fn parent_allowed_caps() -> &'static gst::Caps {
+        unsafe {
+            let data = Self::type_data();
+            let parent_class = data.as_ref().parent_class() as *mut gst::ffi::GstElementClass;
+
+            let templ = gst::ffi::gst_element_class_get_pad_template(
+                parent_class,
+                glib::gstr!("sink").to_glib_none().0,
+            );
+
+            if templ.is_null() {
+                static ANY_AUDIO_CAPS: Lazy<gst::Caps> =
+                    Lazy::new(|| crate::AudioCapsBuilder::new().build());
+
+                return &ANY_AUDIO_CAPS;
+            }
+
+            &*(&(*templ).caps as *const *mut gst::ffi::GstCaps as *const gst::Caps)
         }
     }
 }
