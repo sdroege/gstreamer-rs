@@ -5,8 +5,10 @@ use std::{
     ptr::{self, addr_of},
 };
 
-use glib::translate::*;
-use gst_rtsp::RTSPUrl;
+use glib::{translate::*, ObjectType};
+use gst_rtsp::{rtsp_message::RTSPMessage, RTSPUrl};
+
+use crate::{RTSPClient, RTSPSession, RTSPToken};
 
 #[derive(Debug, PartialEq, Eq)]
 #[doc(alias = "GstRTSPContext")]
@@ -39,6 +41,87 @@ impl RTSPContext {
                 );
                 Some(uri)
             }
+        }
+    }
+
+    #[inline]
+    pub fn client(&self) -> Option<&RTSPClient> {
+        unsafe {
+            let ptr = self.0.as_ptr();
+            if (*ptr).client.is_null() {
+                None
+            } else {
+                let client = RTSPClient::from_glib_ptr_borrow(
+                    addr_of!((*ptr).client) as *const *const ffi::GstRTSPClient
+                );
+                Some(client)
+            }
+        }
+    }
+
+    #[inline]
+    pub fn request(&self) -> Option<&RTSPMessage> {
+        unsafe {
+            let ptr = self.0.as_ptr();
+            if (*ptr).request.is_null() {
+                None
+            } else {
+                let msg = RTSPMessage::from_glib_ptr_borrow(
+                    addr_of!((*ptr).request) as *const *const gst_rtsp::ffi::GstRTSPMessage
+                );
+                Some(msg)
+            }
+        }
+    }
+
+    #[inline]
+    pub fn response(&self) -> Option<&RTSPMessage> {
+        unsafe {
+            let ptr = self.0.as_ptr();
+            if (*ptr).response.is_null() {
+                None
+            } else {
+                let msg = RTSPMessage::from_glib_ptr_borrow(
+                    addr_of!((*ptr).response) as *const *const gst_rtsp::ffi::GstRTSPMessage
+                );
+                Some(msg)
+            }
+        }
+    }
+
+    #[inline]
+    pub fn session(&self) -> Option<&RTSPSession> {
+        unsafe {
+            let ptr = self.0.as_ptr();
+            if (*ptr).session.is_null() {
+                None
+            } else {
+                let sess = RTSPSession::from_glib_ptr_borrow(
+                    addr_of!((*ptr).session) as *const *const ffi::GstRTSPSession
+                );
+                Some(sess)
+            }
+        }
+    }
+
+    #[inline]
+    pub fn token(&self) -> Option<RTSPToken> {
+        unsafe {
+            let ptr = self.0.as_ptr();
+            if (*ptr).token.is_null() {
+                None
+            } else {
+                let token = RTSPToken::from_glib_none((*ptr).token as *const ffi::GstRTSPToken);
+                Some(token)
+            }
+        }
+    }
+
+    #[cfg(feature = "v1_22")]
+    #[doc(alias = "gst_rtsp_context_set_token")]
+    pub fn set_token(&self, token: RTSPToken) {
+        unsafe {
+            ffi::gst_rtsp_context_set_token(self.0.as_ptr(), token.into_glib_ptr());
         }
     }
 

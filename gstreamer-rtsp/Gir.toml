@@ -50,6 +50,11 @@ status = "manual"
 ref_mode = "ref"
 
 [[object]]
+name = "GstRtsp.RTSPAuthCredential"
+status = "generate"
+concurrency = "send"
+
+[[object]]
 name = "GstRtsp.RTSPAuthParam"
 status = "generate"
 concurrency = "send"

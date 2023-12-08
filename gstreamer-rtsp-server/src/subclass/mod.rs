@@ -2,6 +2,7 @@
 
 #![allow(clippy::cast_ptr_alignment)]
 
+mod rtsp_auth;
 mod rtsp_client;
 mod rtsp_media;
 mod rtsp_media_factory;
@@ -20,6 +21,7 @@ pub mod prelude {
     pub use gst::subclass::prelude::*;
 
     pub use super::{
+        rtsp_auth::{RTSPAuthImpl, RTSPAuthImplExt},
         rtsp_client::{RTSPClientImpl, RTSPClientImplExt},
         rtsp_media::{RTSPMediaImpl, RTSPMediaImplExt},
         rtsp_media_factory::{RTSPMediaFactoryImpl, RTSPMediaFactoryImplExt},

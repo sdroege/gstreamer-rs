@@ -27,6 +27,9 @@ pub use crate::auto::*;
 #[cfg(feature = "serde")]
 mod flag_serde;
 
+pub mod rtsp_auth_credential;
+pub mod rtsp_message;
+
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst_rtsp::prelude::*" without getting conflicts
 pub mod prelude {

@@ -3,6 +3,9 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
+mod rtsp_auth_credential;
+pub use self::rtsp_auth_credential::RTSPAuthCredential;
+
 mod rtsp_auth_param;
 pub use self::rtsp_auth_param::RTSPAuthParam;
 

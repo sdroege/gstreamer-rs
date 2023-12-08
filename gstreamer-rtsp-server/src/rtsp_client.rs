@@ -1,8 +1,8 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+use crate::{RTSPClient, RTSPSession};
 use glib::{prelude::*, source::SourceId, translate::*};
-
-use crate::RTSPClient;
+use gst_rtsp::rtsp_message::RTSPMessage;
 
 mod sealed {
     pub trait Sealed {}
@@ -16,6 +16,21 @@ pub trait RTSPClientExtManual: sealed::Sealed + IsA<RTSPClient> + 'static {
             from_glib(ffi::gst_rtsp_client_attach(
                 self.as_ref().to_glib_none().0,
                 context.to_glib_none().0,
+            ))
+        }
+    }
+
+    #[doc(alias = "gst_rtsp_client_send_message")]
+    fn send_message(
+        &self,
+        message: &RTSPMessage,
+        session: Option<&RTSPSession>,
+    ) -> gst_rtsp::RTSPResult {
+        unsafe {
+            from_glib(ffi::gst_rtsp_client_send_message(
+                self.as_ref().to_glib_none().0,
+                session.to_glib_none().0,
+                message.to_glib_none().0,
             ))
         }
     }
