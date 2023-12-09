@@ -60,6 +60,8 @@ unsafe impl ClassStruct for Class {
     type Type = imp::IirFilter;
 }
 
+/// This allows directly using `Class` as e.g. `gst_audio::AudioFilterClass` or
+/// `gst_base::BaseTransformClass` without having to cast.
 impl std::ops::Deref for Class {
     type Target = glib::Class<<<Self as ClassStruct>::Type as ObjectSubclass>::ParentType>;
 
@@ -68,6 +70,8 @@ impl std::ops::Deref for Class {
     }
 }
 
+/// Overrides the virtual methods with the actual implementation of the subclass as is provided by
+/// the subclass' implementation of the `Impl` trait.
 unsafe impl<T: IirFilterImpl> IsSubclassable<T> for IirFilter {
     fn class_init(class: &mut glib::Class<Self>) {
         Self::parent_class_init::<T>(class);

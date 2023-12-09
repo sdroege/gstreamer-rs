@@ -121,6 +121,11 @@ impl AudioFilterImpl for Lowpass {}
 // Implement of IirFilter virtual methods
 impl IirFilterImpl for Lowpass {
     fn set_rate(&self, rate: u32) {
+        // Could call
+        //   self.parent_set_rate(rate);
+        // here but chaining up is not necessary if the base class doesn't require that
+        // or if the behaviour of the parent class should be completely overridden.
+
         self.state.lock().unwrap().rate = Some(rate);
         self.calculate_coeffs();
     }
