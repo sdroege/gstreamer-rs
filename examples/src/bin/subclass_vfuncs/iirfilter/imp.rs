@@ -45,6 +45,8 @@ impl ObjectSubclass for IirFilter {
     type ParentType = gst_audio::AudioFilter;
     type Class = super::Class;
 
+    // Here we set default implementations for all the virtual methods.
+    // This is mandatory for all virtual methods that are not `Option`s.
     fn class_init(class: &mut Self::Class) {
         class.set_rate = |obj, rate| obj.imp().set_rate_default(rate);
     }
