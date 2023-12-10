@@ -1299,7 +1299,7 @@ where
                     passed_buffer.set_size(copied_size);
                 }
 
-                match new_buffer.copy_into(passed_buffer, crate::BUFFER_COPY_METADATA, 0, None) {
+                match new_buffer.copy_into(passed_buffer, crate::BUFFER_COPY_METADATA, ..) {
                     Ok(_) => FlowReturn::Ok.into_glib(),
                     Err(_) => {
                         crate::error!(

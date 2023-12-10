@@ -69,18 +69,18 @@ macro_rules! define_seek_impl(
 
             // Work around lifetime annotation issues with closures
             let buffer_ref: fn(&Self) -> &BufferRef = $get_buffer_ref;
-            let (idx, _, skip) = buffer_ref(self)
-                .find_memory(self.cur_offset as usize, None)
+            let (range, skip) = buffer_ref(self)
+                .find_memory(self.cur_offset as usize..)
                 .expect("Failed to find memory");
 
-            if idx != self.cur_mem_idx && !self.map_info.memory.is_null() {
+            if range.start != self.cur_mem_idx && !self.map_info.memory.is_null() {
                 unsafe {
                     ffi::gst_memory_unmap(self.map_info.memory, &mut self.map_info);
                     self.map_info.memory = ptr::null_mut();
                 }
             }
 
-            self.cur_mem_idx = idx;
+            self.cur_mem_idx = range.start;
             self.cur_mem_offset = skip;
 
             Ok(self.cur_offset)

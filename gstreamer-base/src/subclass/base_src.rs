@@ -352,7 +352,7 @@ pub trait BaseSrcImplExt: sealed::Sealed + ObjectSubclass {
                                 passed_buffer.set_size(copied_size);
                             }
 
-                            match new_buffer.copy_into(passed_buffer, gst::BUFFER_COPY_METADATA, 0, None) {
+                            match new_buffer.copy_into(passed_buffer, gst::BUFFER_COPY_METADATA, ..) {
                                 Ok(_) => Ok(CreateSuccess::FilledBuffer),
                                 Err(_) => {
                                     gst::error!(
@@ -775,12 +775,7 @@ unsafe extern "C" fn base_src_create<T: BaseSrcImpl>(
                             passed_buffer.set_size(copied_size);
                         }
 
-                        match new_buffer.copy_into(
-                            passed_buffer,
-                            gst::BUFFER_COPY_METADATA,
-                            0,
-                            None,
-                        ) {
+                        match new_buffer.copy_into(passed_buffer, gst::BUFFER_COPY_METADATA, ..) {
                             Ok(_) => gst::FlowReturn::Ok,
                             Err(_) => {
                                 gst::error!(

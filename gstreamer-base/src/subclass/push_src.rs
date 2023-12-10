@@ -154,7 +154,7 @@ pub trait PushSrcImplExt: sealed::Sealed + ObjectSubclass {
                                 passed_buffer.set_size(copied_size);
                             }
 
-                            match new_buffer.copy_into(passed_buffer, gst::BUFFER_COPY_METADATA, 0, None) {
+                            match new_buffer.copy_into(passed_buffer, gst::BUFFER_COPY_METADATA, ..) {
                                 Ok(_) => Ok(CreateSuccess::FilledBuffer),
                                 Err(_) => {
                                     gst::error!(
@@ -282,12 +282,7 @@ unsafe extern "C" fn push_src_create<T: PushSrcImpl>(
                             passed_buffer.set_size(copied_size);
                         }
 
-                        match new_buffer.copy_into(
-                            passed_buffer,
-                            gst::BUFFER_COPY_METADATA,
-                            0,
-                            None,
-                        ) {
+                        match new_buffer.copy_into(passed_buffer, gst::BUFFER_COPY_METADATA, ..) {
                             Ok(_) => gst::FlowReturn::Ok,
                             Err(_) => {
                                 gst::error!(

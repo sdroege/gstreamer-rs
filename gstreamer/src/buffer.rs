@@ -4,7 +4,7 @@ use std::{
     cmp, fmt,
     marker::PhantomData,
     mem, ops,
-    ops::{Bound, ControlFlow, RangeBounds},
+    ops::{Bound, ControlFlow, Range, RangeBounds},
     ptr, slice, u64, usize,
 };
 
@@ -299,20 +299,53 @@ impl BufferRef {
         }
     }
 
+    pub(crate) fn byte_range_into_offset_len(
+        &self,
+        range: impl RangeBounds<usize>,
+    ) -> Result<(usize, usize), glib::BoolError> {
+        let size = self.size();
+
+        let start_idx = match range.start_bound() {
+            ops::Bound::Included(idx) if *idx >= size => {
+                return Err(glib::bool_error!("Invalid range start"));
+            }
+            ops::Bound::Included(idx) => *idx,
+            ops::Bound::Excluded(idx) if idx.checked_add(1).map_or(true, |idx| idx >= size) => {
+                return Err(glib::bool_error!("Invalid range start"));
+            }
+            ops::Bound::Excluded(idx) => *idx + 1,
+            ops::Bound::Unbounded => 0,
+        };
+
+        let end_idx = match range.end_bound() {
+            ops::Bound::Included(idx) if idx.checked_add(1).map_or(true, |idx| idx >= size) => {
+                return Err(glib::bool_error!("Invalid range end"));
+            }
+            ops::Bound::Included(idx) => *idx + 1,
+            ops::Bound::Excluded(idx) if *idx >= size => {
+                return Err(glib::bool_error!("Invalid range end"));
+            }
+            ops::Bound::Excluded(idx) => *idx,
+            ops::Bound::Unbounded => size,
+        };
+
+        Ok((start_idx, end_idx - start_idx))
+    }
+
     #[doc(alias = "gst_buffer_copy_region")]
     pub fn copy_region(
         &self,
         flags: crate::BufferCopyFlags,
-        offset: usize,
-        size: Option<usize>,
+        range: impl RangeBounds<usize>,
     ) -> Result<Buffer, glib::BoolError> {
-        let size_real = size.unwrap_or(usize::MAX);
+        let (offset, size) = self.byte_range_into_offset_len(range)?;
+
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_buffer_copy_region(
                 self.as_mut_ptr(),
                 flags.into_glib(),
                 offset,
-                size_real,
+                size,
             ))
             .ok_or_else(|| glib::bool_error!("Failed to copy region of buffer"))
         }
@@ -323,10 +356,10 @@ impl BufferRef {
         &self,
         dest: &mut BufferRef,
         flags: crate::BufferCopyFlags,
-        offset: usize,
-        size: Option<usize>,
+        range: impl RangeBounds<usize>,
     ) -> Result<(), glib::BoolError> {
-        let size_real = size.unwrap_or(usize::MAX);
+        let (offset, size) = self.byte_range_into_offset_len(range)?;
+
         unsafe {
             glib::result_from_gboolean!(
                 ffi::gst_buffer_copy_into(
@@ -334,7 +367,7 @@ impl BufferRef {
                     self.as_mut_ptr(),
                     flags.into_glib(),
                     offset,
-                    size_real,
+                    size,
                 ),
                 "Failed to copy into destination buffer",
             )
@@ -623,7 +656,9 @@ impl BufferRef {
     }
 
     #[doc(alias = "gst_buffer_find_memory")]
-    pub fn find_memory(&self, offset: usize, size: Option<usize>) -> Option<(u32, u32, usize)> {
+    pub fn find_memory(&self, range: impl RangeBounds<usize>) -> Option<(Range<u32>, usize)> {
+        let (offset, size) = self.byte_range_into_offset_len(range).ok()?;
+
         unsafe {
             let mut idx = mem::MaybeUninit::uninit();
             let mut length = mem::MaybeUninit::uninit();
@@ -632,14 +667,17 @@ impl BufferRef {
             let res = from_glib(ffi::gst_buffer_find_memory(
                 self.as_mut_ptr(),
                 offset,
-                size.unwrap_or(usize::MAX),
+                size,
                 idx.as_mut_ptr(),
                 length.as_mut_ptr(),
                 skip.as_mut_ptr(),
             ));
 
             if res {
-                Some((idx.assume_init(), length.assume_init(), skip.assume_init()))
+                let idx = idx.assume_init();
+                let length = length.assume_init();
+                let skip = skip.assume_init();
+                Some((idx..(idx + length), skip))
             } else {
                 None
             }
@@ -684,17 +722,11 @@ impl BufferRef {
 
     #[doc(alias = "get_memory_range")]
     #[doc(alias = "gst_buffer_get_memory_range")]
-    pub fn memory_range(&self, idx: u32, length: Option<u32>) -> Option<Memory> {
-        assert!(idx + length.unwrap_or(0) < self.n_memory());
+    pub fn memory_range(&self, range: impl RangeBounds<u32>) -> Option<Memory> {
+        let (idx, len) = self.memory_range_into_idx_len(range).ok()?;
+
         unsafe {
-            let res = ffi::gst_buffer_get_memory_range(
-                self.as_mut_ptr(),
-                idx,
-                match length {
-                    Some(val) => val as i32,
-                    None => -1,
-                },
-            );
+            let res = ffi::gst_buffer_get_memory_range(self.as_mut_ptr(), idx, len);
             if res.is_null() {
                 None
             } else {
@@ -704,17 +736,9 @@ impl BufferRef {
     }
 
     #[doc(alias = "gst_buffer_insert_memory")]
-    pub fn insert_memory(&mut self, idx: Option<u32>, mem: Memory) {
-        unsafe {
-            ffi::gst_buffer_insert_memory(
-                self.as_mut_ptr(),
-                match idx {
-                    Some(val) => val as i32,
-                    None => -1,
-                },
-                mem.into_glib_ptr(),
-            )
-        }
+    pub fn insert_memory(&mut self, idx: u32, mem: Memory) {
+        assert!(idx <= self.n_memory());
+        unsafe { ffi::gst_buffer_insert_memory(self.as_mut_ptr(), idx as i32, mem.into_glib_ptr()) }
     }
 
     #[doc(alias = "gst_buffer_is_all_memory_writable")]
@@ -723,15 +747,16 @@ impl BufferRef {
     }
 
     #[doc(alias = "gst_buffer_is_memory_range_writable")]
-    pub fn is_memory_range_writable(&self, idx: u32, length: Option<u16>) -> bool {
+    pub fn is_memory_range_writable(&self, range: impl RangeBounds<u32>) -> bool {
+        let Some((idx, len)) = self.memory_range_into_idx_len(range).ok() else {
+            return false;
+        };
+
         unsafe {
             from_glib(ffi::gst_buffer_is_memory_range_writable(
                 self.as_mut_ptr(),
                 idx,
-                match length {
-                    Some(val) => val as i32,
-                    None => -1,
-                },
+                len,
             ))
         }
     }
@@ -780,18 +805,12 @@ impl BufferRef {
     }
 
     #[doc(alias = "gst_buffer_remove_memory_range")]
-    pub fn remove_memory_range(&mut self, idx: u32, length: Option<u32>) {
-        assert!(idx + length.unwrap_or(0) < self.n_memory());
-        unsafe {
-            ffi::gst_buffer_remove_memory_range(
-                self.as_mut_ptr(),
-                idx,
-                match length {
-                    Some(val) => val as i32,
-                    None => -1,
-                },
-            )
-        }
+    pub fn remove_memory_range(&mut self, range: impl RangeBounds<u32>) {
+        let (idx, len) = self
+            .memory_range_into_idx_len(range)
+            .expect("Invalid memory range");
+
+        unsafe { ffi::gst_buffer_remove_memory_range(self.as_mut_ptr(), idx, len) }
     }
 
     #[doc(alias = "gst_buffer_replace_all_memory")]
@@ -806,18 +825,13 @@ impl BufferRef {
     }
 
     #[doc(alias = "gst_buffer_replace_memory_range")]
-    pub fn replace_memory_range(&mut self, idx: u32, length: Option<u32>, mem: Memory) {
-        assert!(idx + length.unwrap_or(0) < self.n_memory());
+    pub fn replace_memory_range(&mut self, range: impl RangeBounds<u32>, mem: Memory) {
+        let (idx, len) = self
+            .memory_range_into_idx_len(range)
+            .expect("Invalid memory range");
+
         unsafe {
-            ffi::gst_buffer_replace_memory_range(
-                self.as_mut_ptr(),
-                idx,
-                match length {
-                    Some(val) => val as i32,
-                    None => -1,
-                },
-                mem.into_glib_ptr(),
-            )
+            ffi::gst_buffer_replace_memory_range(self.as_mut_ptr(), idx, len, mem.into_glib_ptr())
         }
     }
 
@@ -1528,14 +1542,14 @@ impl<'a> Dump<'a> {
         }
 
         // This can't really fail because of the above
-        let (idx, _, skip) = self
+        let (memory_range, skip) = self
             .buffer
-            .find_memory(start_idx, None)
+            .find_memory(start_idx..)
             .expect("can't find memory");
 
         let chunks = BufferChunked16Iter {
             buffer: self.buffer,
-            mem_idx: idx,
+            mem_idx: memory_range.start,
             mem_len: n_memory,
             map: None,
             map_offset: skip,

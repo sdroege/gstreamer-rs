@@ -3,7 +3,11 @@
 #[cfg(feature = "v1_20")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 use std::ptr;
-use std::{fmt, marker::PhantomData, ops};
+use std::{
+    fmt,
+    marker::PhantomData,
+    ops::{self, RangeBounds},
+};
 
 use glib::translate::*;
 
@@ -228,8 +232,7 @@ impl<'a, T> MetaRef<'a, T> {
         &self,
         buffer: &mut BufferRef,
         region: bool,
-        offset: usize,
-        size: Option<usize>,
+        range: impl RangeBounds<usize>,
     ) -> Result<(), glib::BoolError>
     where
         T: MetaAPI,
@@ -237,6 +240,8 @@ impl<'a, T> MetaRef<'a, T> {
         use glib::once_cell::sync::Lazy;
 
         static TRANSFORM_COPY: Lazy<glib::Quark> = Lazy::new(|| glib::Quark::from_str("gst-copy"));
+
+        let (offset, size) = self.buffer.byte_range_into_offset_len(range)?;
 
         unsafe {
             let info = *(*self.upcast_ref().as_ptr()).info;
@@ -249,7 +254,7 @@ impl<'a, T> MetaRef<'a, T> {
             let mut copy_data = ffi::GstMetaTransformCopy {
                 region: region.into_glib(),
                 offset,
-                size: size.unwrap_or(usize::MAX),
+                size,
             };
 
             glib::result_from_gboolean!(
@@ -361,13 +366,12 @@ impl<'a, T, U> MetaRefMut<'a, T, U> {
         &self,
         buffer: &mut BufferRef,
         region: bool,
-        offset: usize,
-        size: Option<usize>,
+        range: impl RangeBounds<usize>,
     ) -> Result<(), glib::BoolError>
     where
         T: MetaAPI,
     {
-        self.as_meta_ref().copy(buffer, region, offset, size)
+        self.as_meta_ref().copy(buffer, region, range)
     }
 
     #[inline]
@@ -947,7 +951,7 @@ mod tests {
         {
             let meta = buffer.meta::<ReferenceTimestampMeta>().unwrap();
             let buffer_dest = buffer_dest.get_mut().unwrap();
-            meta.copy(buffer_dest, false, 0, None).unwrap();
+            meta.copy(buffer_dest, false, ..).unwrap();
         }
 
         let meta = buffer_dest.meta::<ReferenceTimestampMeta>().unwrap();
