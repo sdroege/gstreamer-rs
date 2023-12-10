@@ -93,6 +93,17 @@ macro_rules! impl_non_trait_op_same(
             pub const fn wrapping_sub(self, rhs: Self) -> Self {
                 self.overflowing_sub(rhs).0
             }
+
+            #[must_use = "this returns the result of the operation, without modifying the original"]
+            #[inline]
+            pub fn absdiff(self, rhs: Self) -> Self {
+                if self > rhs {
+                    self - rhs
+                } else {
+                    rhs - self
+                }
+            }
+
         }
     };
 );
