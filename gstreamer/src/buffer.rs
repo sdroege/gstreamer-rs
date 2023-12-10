@@ -1,6 +1,12 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use std::{fmt, marker::PhantomData, mem, ops, ops::ControlFlow, ptr, slice, u64, usize};
+use std::{
+    cmp, fmt,
+    marker::PhantomData,
+    mem, ops,
+    ops::{Bound, ControlFlow, RangeBounds},
+    ptr, slice, u64, usize,
+};
 
 use glib::translate::*;
 
@@ -748,6 +754,24 @@ impl BufferRef {
     ) -> Result<BufferRefCursor<&mut BufferRef>, glib::BoolError> {
         BufferRefCursor::new_writable(self)
     }
+
+    #[doc(alias = "gst_util_dump_buffer")]
+    pub fn dump(&self) -> Dump {
+        Dump {
+            buffer: self,
+            start: Bound::Unbounded,
+            end: Bound::Unbounded,
+        }
+    }
+
+    #[doc(alias = "gst_util_dump_buffer")]
+    pub fn dump_range(&self, range: impl RangeBounds<usize>) -> Dump {
+        Dump {
+            buffer: self,
+            start: range.start_bound().cloned(),
+            end: range.end_bound().cloned(),
+        }
+    }
 }
 
 macro_rules! define_meta_iter(
@@ -1311,6 +1335,195 @@ pub const BUFFER_COPY_METADATA: crate::BufferCopyFlags =
 pub const BUFFER_COPY_ALL: crate::BufferCopyFlags =
     crate::BufferCopyFlags::from_bits_truncate(ffi::GST_BUFFER_COPY_ALL);
 
+pub struct Dump<'a> {
+    buffer: &'a BufferRef,
+    start: Bound<usize>,
+    end: Bound<usize>,
+}
+
+struct BufferChunked16Iter<'a> {
+    buffer: &'a BufferRef,
+    mem_idx: u32,
+    mem_len: u32,
+    map: Option<crate::memory::MemoryMap<'a, crate::memory::Readable>>,
+    map_offset: usize,
+    len: usize,
+}
+
+impl<'a> Iterator for BufferChunked16Iter<'a> {
+    // FIXME: Return a `&'self [u8]` once there's some GAT iterator trait
+    type Item = ([u8; 16], usize);
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.mem_idx == self.mem_len || self.len == 0 {
+            return None;
+        }
+
+        let mut item = [0u8; 16];
+        let mut data = item.as_mut_slice();
+
+        while !data.is_empty() && self.mem_idx < self.mem_len && self.len > 0 {
+            if self.map.is_none() {
+                let mem = self.buffer.peek_memory(self.mem_idx);
+                self.map = Some(mem.map_readable().expect("failed to map memory"));
+            }
+
+            let map = self.map.as_ref().unwrap();
+            debug_assert!(self.map_offset < map.len());
+            let copy = cmp::min(cmp::min(map.len() - self.map_offset, data.len()), self.len);
+            data[..copy].copy_from_slice(&map[self.map_offset..][..copy]);
+            self.map_offset += copy;
+            self.len -= copy;
+            data = &mut data[copy..];
+
+            if self.map_offset == map.len() {
+                self.map = None;
+                self.map_offset = 0;
+                self.mem_idx += 1;
+            }
+        }
+
+        let copied = 16 - data.len();
+        Some((item, copied))
+    }
+}
+
+impl<'a> Dump<'a> {
+    fn fmt(&self, f: &mut fmt::Formatter, debug: bool) -> fmt::Result {
+        let n_memory = self.buffer.n_memory();
+        if n_memory == 0 {
+            write!(f, "<empty>")?;
+            return Ok(());
+        }
+
+        use std::fmt::Write;
+
+        let len = self.buffer.size();
+
+        // Kind of re-implementation of slice indexing to allow handling out of range values better
+        // with specific output strings
+        let mut start_idx = match self.start {
+            Bound::Included(idx) if idx >= len => {
+                write!(f, "<start out of range>")?;
+                return Ok(());
+            }
+            Bound::Excluded(idx) if idx.checked_add(1).map_or(true, |idx| idx >= len) => {
+                write!(f, "<start out of range>")?;
+                return Ok(());
+            }
+            Bound::Included(idx) => idx,
+            Bound::Excluded(idx) => idx + 1,
+            Bound::Unbounded => 0,
+        };
+
+        let end_idx = match self.end {
+            Bound::Included(idx) if idx.checked_add(1).map_or(true, |idx| idx > len) => {
+                write!(f, "<end out of range>")?;
+                return Ok(());
+            }
+            Bound::Excluded(idx) if idx > len => {
+                write!(f, "<end out of range>")?;
+                return Ok(());
+            }
+            Bound::Included(idx) => idx + 1,
+            Bound::Excluded(idx) => idx,
+            Bound::Unbounded => len,
+        };
+
+        if start_idx >= end_idx {
+            write!(f, "<empty range>")?;
+            return Ok(());
+        }
+
+        // This can't really fail because of the above
+        let (idx, _, skip) = self
+            .buffer
+            .find_memory(start_idx, None)
+            .expect("can't find memory");
+
+        let chunks = BufferChunked16Iter {
+            buffer: self.buffer,
+            mem_idx: idx,
+            mem_len: n_memory,
+            map: None,
+            map_offset: skip,
+            len: end_idx - start_idx,
+        };
+
+        if debug {
+            for (line, line_len) in chunks {
+                let line = &line[..line_len];
+
+                match end_idx {
+                    0x00_00..=0xff_ff => write!(f, "{:04x}:  ", start_idx)?,
+                    0x01_00_00..=0xff_ff_ff => write!(f, "{:06x}:  ", start_idx)?,
+                    0x01_00_00_00..=0xff_ff_ff_ff => write!(f, "{:08x}:  ", start_idx)?,
+                    _ => write!(f, "{:016x}:  ", start_idx)?,
+                }
+
+                for (i, v) in line.iter().enumerate() {
+                    if i > 0 {
+                        write!(f, " {:02x}", v)?;
+                    } else {
+                        write!(f, "{:02x}", v)?;
+                    }
+                }
+
+                for _ in line.len()..16 {
+                    write!(f, "   ")?;
+                }
+                write!(f, "   ")?;
+
+                for v in line {
+                    if v.is_ascii() && !v.is_ascii_control() {
+                        f.write_char((*v).into())?;
+                    } else {
+                        f.write_char('.')?;
+                    }
+                }
+
+                start_idx = start_idx.saturating_add(16);
+                if start_idx < end_idx {
+                    writeln!(f)?;
+                }
+            }
+
+            Ok(())
+        } else {
+            for (line, line_len) in chunks {
+                let line = &line[..line_len];
+
+                for (i, v) in line.iter().enumerate() {
+                    if i > 0 {
+                        write!(f, " {:02x}", v)?;
+                    } else {
+                        write!(f, "{:02x}", v)?;
+                    }
+                }
+
+                start_idx = start_idx.saturating_add(16);
+                if start_idx < end_idx {
+                    writeln!(f)?;
+                }
+            }
+
+            Ok(())
+        }
+    }
+}
+
+impl<'a> fmt::Display for Dump<'a> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        self.fmt(f, false)
+    }
+}
+
+impl<'a> fmt::Debug for Dump<'a> {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        self.fmt(f, true)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -1578,5 +1791,127 @@ mod tests {
         assert!(BufferRef::ptr_eq(&buffer1, &buffer1));
         let buffer2 = Buffer::new();
         assert!(!BufferRef::ptr_eq(&buffer1, &buffer2));
+    }
+
+    #[test]
+    fn test_dump() {
+        use std::fmt::Write;
+
+        crate::init().unwrap();
+
+        let mut s = String::new();
+        let buffer = crate::Buffer::from_slice(vec![1, 2, 3, 4]);
+        write!(&mut s, "{:?}", buffer.dump()).unwrap();
+        assert_eq!(
+            s,
+            "0000:  01 02 03 04                                       ...."
+        );
+        s.clear();
+        write!(&mut s, "{}", buffer.dump()).unwrap();
+        assert_eq!(s, "01 02 03 04");
+        s.clear();
+
+        let buffer = crate::Buffer::from_slice(vec![1, 2, 3, 4]);
+        write!(&mut s, "{:?}", buffer.dump_range(..)).unwrap();
+        assert_eq!(
+            s,
+            "0000:  01 02 03 04                                       ...."
+        );
+        s.clear();
+        write!(&mut s, "{:?}", buffer.dump_range(..2)).unwrap();
+        assert_eq!(
+            s,
+            "0000:  01 02                                             .."
+        );
+        s.clear();
+        write!(&mut s, "{:?}", buffer.dump_range(2..=3)).unwrap();
+        assert_eq!(
+            s,
+            "0002:  03 04                                             .."
+        );
+        s.clear();
+        write!(&mut s, "{:?}", buffer.dump_range(..100)).unwrap();
+        assert_eq!(s, "<end out of range>",);
+        s.clear();
+        write!(&mut s, "{:?}", buffer.dump_range(90..100)).unwrap();
+        assert_eq!(s, "<start out of range>",);
+        s.clear();
+
+        let buffer = crate::Buffer::from_slice(vec![0; 19]);
+        write!(&mut s, "{:?}", buffer.dump()).unwrap();
+        assert_eq!(
+            s,
+            "0000:  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   ................\n\
+             0010:  00 00 00                                          ..."
+        );
+        s.clear();
+    }
+
+    #[test]
+    fn test_dump_multi_memories() {
+        use std::fmt::Write;
+
+        crate::init().unwrap();
+
+        let mut buffer = crate::Buffer::new();
+        {
+            let buffer = buffer.get_mut().unwrap();
+
+            let mem = crate::Memory::from_slice(vec![1, 2, 3, 4]);
+            buffer.append_memory(mem);
+
+            let mem = crate::Memory::from_slice(vec![5, 6, 7, 8]);
+            buffer.append_memory(mem);
+
+            let mem = crate::Memory::from_slice(vec![9, 10, 11, 12]);
+            buffer.append_memory(mem);
+
+            let mem = crate::Memory::from_slice(vec![13, 14, 15, 16]);
+            buffer.append_memory(mem);
+
+            let mem = crate::Memory::from_slice(vec![17, 18, 19]);
+            buffer.append_memory(mem);
+        }
+
+        let mut s = String::new();
+        write!(&mut s, "{:?}", buffer.dump()).unwrap();
+        assert_eq!(
+            s,
+            "0000:  01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10   ................\n\
+             0010:  11 12 13                                          ..."
+        );
+        s.clear();
+        write!(&mut s, "{}", buffer.dump()).unwrap();
+        assert_eq!(
+            s,
+            "01 02 03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10\n11 12 13"
+        );
+        s.clear();
+
+        write!(&mut s, "{:?}", buffer.dump_range(2..)).unwrap();
+        assert_eq!(
+            s,
+            "0002:  03 04 05 06 07 08 09 0a 0b 0c 0d 0e 0f 10 11 12   ................\n\
+             0012:  13                                                ."
+        );
+        s.clear();
+
+        write!(&mut s, "{:?}", buffer.dump_range(14..17)).unwrap();
+        assert_eq!(
+            s,
+            "000e:  0f 10 11                                          ..."
+        );
+        s.clear();
+
+        write!(&mut s, "{:?}", buffer.dump_range(14..20)).unwrap();
+        assert_eq!(s, "<end out of range>");
+        s.clear();
+
+        #[allow(clippy::reversed_empty_ranges)]
+        {
+            write!(&mut s, "{:?}", buffer.dump_range(23..20)).unwrap();
+            assert_eq!(s, "<start out of range>");
+            s.clear();
+        }
     }
 }
