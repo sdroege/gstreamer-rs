@@ -207,6 +207,98 @@ impl BufferRef {
         }
     }
 
+    fn memory_range_into_idx_len(
+        &self,
+        range: impl RangeBounds<u32>,
+    ) -> Result<(u32, i32), glib::BoolError> {
+        let n_memory = self.n_memory();
+
+        let start_idx = match range.start_bound() {
+            ops::Bound::Included(idx) if *idx >= n_memory => {
+                return Err(glib::bool_error!("Invalid range start"));
+            }
+            ops::Bound::Included(idx) => *idx,
+            ops::Bound::Excluded(idx) if idx.checked_add(1).map_or(true, |idx| idx >= n_memory) => {
+                return Err(glib::bool_error!("Invalid range start"));
+            }
+            ops::Bound::Excluded(idx) => *idx + 1,
+            ops::Bound::Unbounded => 0,
+        };
+
+        let end_idx = match range.end_bound() {
+            ops::Bound::Included(idx) if idx.checked_add(1).map_or(true, |idx| idx >= n_memory) => {
+                return Err(glib::bool_error!("Invalid range end"));
+            }
+            ops::Bound::Included(idx) => *idx + 1,
+            ops::Bound::Excluded(idx) if *idx >= n_memory => {
+                return Err(glib::bool_error!("Invalid range end"));
+            }
+            ops::Bound::Excluded(idx) => *idx,
+            ops::Bound::Unbounded => n_memory,
+        };
+
+        Ok((
+            start_idx,
+            i32::try_from(end_idx - start_idx).map_err(|_| glib::bool_error!("Too large range"))?,
+        ))
+    }
+
+    #[doc(alias = "gst_buffer_map_range")]
+    #[inline]
+    pub fn map_range_readable(
+        &self,
+        range: impl RangeBounds<u32>,
+    ) -> Result<BufferMap<Readable>, glib::BoolError> {
+        let (idx, len) = self.memory_range_into_idx_len(range)?;
+        unsafe {
+            let mut map_info = mem::MaybeUninit::uninit();
+            let res = ffi::gst_buffer_map_range(
+                self.as_mut_ptr(),
+                idx,
+                len,
+                map_info.as_mut_ptr(),
+                ffi::GST_MAP_READ,
+            );
+            if res == glib::ffi::GTRUE {
+                Ok(BufferMap {
+                    buffer: self,
+                    map_info: map_info.assume_init(),
+                    phantom: PhantomData,
+                })
+            } else {
+                Err(glib::bool_error!("Failed to map buffer readable"))
+            }
+        }
+    }
+
+    #[doc(alias = "gst_buffer_map_range")]
+    #[inline]
+    pub fn map_range_writable(
+        &mut self,
+        range: impl RangeBounds<u32>,
+    ) -> Result<BufferMap<Writable>, glib::BoolError> {
+        let (idx, len) = self.memory_range_into_idx_len(range)?;
+        unsafe {
+            let mut map_info = mem::MaybeUninit::uninit();
+            let res = ffi::gst_buffer_map_range(
+                self.as_mut_ptr(),
+                idx,
+                len,
+                map_info.as_mut_ptr(),
+                ffi::GST_MAP_READWRITE,
+            );
+            if res == glib::ffi::GTRUE {
+                Ok(BufferMap {
+                    buffer: self,
+                    map_info: map_info.assume_init(),
+                    phantom: PhantomData,
+                })
+            } else {
+                Err(glib::bool_error!("Failed to map buffer writable"))
+            }
+        }
+    }
+
     #[doc(alias = "gst_buffer_copy_region")]
     pub fn copy_region(
         &self,
