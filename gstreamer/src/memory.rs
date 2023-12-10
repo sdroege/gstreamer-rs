@@ -175,12 +175,19 @@ impl MemoryRef {
         unsafe { from_glib(self.0.mini_object.flags) }
     }
 
-    pub fn copy_part(&self, offset: isize, size: Option<usize>) -> Memory {
-        let pos_sz = match size {
-            Some(val) => val as isize,
-            None => 0,
+    #[doc(alias = "gst_memory_copy")]
+    pub fn copy_range(&self, offset: isize, size: Option<usize>) -> Memory {
+        let new_offset = if offset < 0 {
+            assert!((-offset) as usize >= self.offset());
+            self.offset() - (-offset as usize)
+        } else {
+            self.offset()
+                .checked_add(offset as usize)
+                .expect("Too large offset")
         };
-        assert!(offset + pos_sz < (self.maxsize() as isize));
+
+        assert!(new_offset + size.unwrap_or(0) < self.maxsize());
+
         unsafe {
             from_glib_full(ffi::gst_memory_copy(
                 self.as_mut_ptr(),
@@ -261,11 +268,17 @@ impl MemoryRef {
 
     #[doc(alias = "gst_memory_share")]
     pub fn share(&self, offset: isize, size: Option<usize>) -> Memory {
-        let pos_sz = match size {
-            Some(val) => val as isize,
-            None => 0,
+        let new_offset = if offset < 0 {
+            assert!((-offset) as usize >= self.offset());
+            self.offset() - (-offset as usize)
+        } else {
+            self.offset()
+                .checked_add(offset as usize)
+                .expect("Too large offset")
         };
-        assert!(offset + pos_sz < (self.maxsize() as isize));
+
+        assert!(new_offset + size.unwrap_or(0) < self.maxsize());
+
         unsafe {
             from_glib_full(ffi::gst_memory_share(
                 self.as_ptr() as *mut _,
@@ -280,7 +293,17 @@ impl MemoryRef {
 
     #[doc(alias = "gst_memory_resize")]
     pub fn resize(&mut self, offset: isize, size: usize) {
-        assert!(offset + (size as isize) < (self.maxsize() as isize));
+        let new_offset = if offset < 0 {
+            assert!((-offset) as usize >= self.offset());
+            self.offset() - (-offset as usize)
+        } else {
+            self.offset()
+                .checked_add(offset as usize)
+                .expect("Too large offset")
+        };
+
+        assert!(new_offset + size < self.maxsize());
+
         unsafe { ffi::gst_memory_resize(self.as_mut_ptr(), offset, size) }
     }
 
