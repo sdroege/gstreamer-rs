@@ -28,7 +28,6 @@ opt-ops = { package = "option-operations", version = "0.5" }
 serde = { version = "1.0", optional = true, features = ["derive"] }
 serde_bytes = { version = "0.11", optional = true }
 paste = "1.0"
-pretty-hex = "0.4"
 thiserror = "1"
 smallvec = { version = "1.0", features = ["write"] }
 itertools = "0.12"

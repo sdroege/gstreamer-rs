@@ -125,6 +125,7 @@ mod memory_wrapped;
 pub use crate::memory::{MappedMemory, Memory, MemoryMap, MemoryRef};
 #[cfg(feature = "serde")]
 mod buffer_serde;
+pub mod slice;
 
 pub mod sample;
 pub use crate::sample::{Sample, SampleRef};
@@ -342,6 +343,7 @@ pub mod prelude {
         param_spec::GstParamSpecBuilderExt,
         pipeline::GstPipelineExtManual,
         plugin_feature::PluginFeatureExtManual,
+        slice::Dump,
         tag_setter::TagSetterExtManual,
         tags::{CustomTag, Tag},
         task_pool::{TaskHandle, TaskPoolExtManual},

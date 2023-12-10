@@ -845,7 +845,6 @@ dependencies = [
  "option-operations",
  "paste",
  "pin-project-lite",
- "pretty-hex",
  "ron",
  "serde",
  "serde_bytes",
@@ -2016,12 +2015,6 @@ dependencies = [
  "tracing",
  "windows-sys 0.52.0",
 ]
-
-[[package]]
-name = "pretty-hex"
-version = "0.4.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "23c6b968ed37d62e35b4febaba13bfa231b0b7929d68b8a94e65445a17e2d35f"
 
 [[package]]
 name = "proc-macro-crate"

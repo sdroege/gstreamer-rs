@@ -4,7 +4,7 @@ use std::{
     fmt,
     marker::PhantomData,
     mem,
-    ops::{Deref, DerefMut},
+    ops::{Bound, Deref, DerefMut, RangeBounds},
     ptr, slice,
 };
 
@@ -284,8 +284,22 @@ impl MemoryRef {
         unsafe { ffi::gst_memory_resize(self.as_mut_ptr(), offset, size) }
     }
 
-    pub fn dump(&self, size: Option<usize>) -> Dump {
-        Dump { memory: self, size }
+    #[doc(alias = "gst_util_dump_mem")]
+    pub fn dump(&self) -> Dump {
+        Dump {
+            memory: self,
+            start: Bound::Unbounded,
+            end: Bound::Unbounded,
+        }
+    }
+
+    #[doc(alias = "gst_util_dump_mem")]
+    pub fn dump_range(&self, range: impl RangeBounds<usize>) -> Dump {
+        Dump {
+            memory: self,
+            start: range.start_bound().cloned(),
+            end: range.end_bound().cloned(),
+        }
     }
 }
 
@@ -478,22 +492,25 @@ unsafe impl<T> Sync for MappedMemory<T> {}
 
 pub struct Dump<'a> {
     memory: &'a MemoryRef,
-    size: Option<usize>,
+    start: Bound<usize>,
+    end: Bound<usize>,
 }
 
 impl<'a> Dump<'a> {
     fn fmt(&self, f: &mut fmt::Formatter, debug: bool) -> fmt::Result {
-        use pretty_hex::*;
-
         let map = self.memory.map_readable().expect("Failed to map memory");
         let data = map.as_slice();
-        let size = self.size.unwrap_or_else(|| self.memory.size());
-        let data = &data[0..size];
+
+        let dump = crate::slice::Dump {
+            data,
+            start: self.start,
+            end: self.end,
+        };
 
         if debug {
-            write!(f, "{:?}", data.hex_dump())
+            <crate::slice::Dump as fmt::Debug>::fmt(&dump, f)
         } else {
-            write!(f, "{}", data.hex_dump())
+            <crate::slice::Dump as fmt::Display>::fmt(&dump, f)
         }
     }
 }
@@ -920,16 +937,56 @@ mod tests {
 
     #[test]
     fn test_dump() {
+        use std::fmt::Write;
+
         crate::init().unwrap();
 
+        let mut s = String::new();
         let mem = crate::Memory::from_slice(vec![1, 2, 3, 4]);
-        println!("{}", mem.dump(Some(mem.size())));
+        write!(&mut s, "{:?}", mem.dump()).unwrap();
+        assert_eq!(
+            s,
+            "0000:  01 02 03 04                                       ...."
+        );
+        s.clear();
+        write!(&mut s, "{}", mem.dump()).unwrap();
+        assert_eq!(s, "01 02 03 04");
+        s.clear();
 
         let mem = crate::Memory::from_slice(vec![1, 2, 3, 4]);
-        println!("{:?}", mem.dump(Some(2)));
+        write!(&mut s, "{:?}", mem.dump_range(..)).unwrap();
+        assert_eq!(
+            s,
+            "0000:  01 02 03 04                                       ...."
+        );
+        s.clear();
+        write!(&mut s, "{:?}", mem.dump_range(..2)).unwrap();
+        assert_eq!(
+            s,
+            "0000:  01 02                                             .."
+        );
+        s.clear();
+        write!(&mut s, "{:?}", mem.dump_range(2..=3)).unwrap();
+        assert_eq!(
+            s,
+            "0002:  03 04                                             .."
+        );
+        s.clear();
+        write!(&mut s, "{:?}", mem.dump_range(..100)).unwrap();
+        assert_eq!(s, "<end out of range>",);
+        s.clear();
+        write!(&mut s, "{:?}", mem.dump_range(90..100)).unwrap();
+        assert_eq!(s, "<start out of range>",);
+        s.clear();
 
-        let mem = crate::Memory::from_slice(vec![0; 64]);
-        dbg!(mem.dump(None));
+        let mem = crate::Memory::from_slice(vec![0; 19]);
+        write!(&mut s, "{:?}", mem.dump()).unwrap();
+        assert_eq!(
+            s,
+            "0000:  00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00   ................\n\
+             0010:  00 00 00                                          ..."
+        );
+        s.clear();
     }
 
     #[test]
