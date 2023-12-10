@@ -1801,4 +1801,15 @@ mod tests {
         let neg = Signed::<ClockTime>::from_seconds_f64(-5.0);
         assert!(neg.is_negative());
     }
+
+    #[test]
+    fn absdiff() {
+        let t1 = ClockTime::from_seconds(10);
+        let t2 = ClockTime::from_seconds(4);
+
+        let d = ClockTime::from_seconds(6);
+
+        assert_eq!(t1.absdiff(t2), d);
+        assert_eq!(t2.absdiff(t1), d);
+    }
 }
