@@ -61,24 +61,18 @@ unsafe extern "C" fn mem_share(
         (*mem).mem.parent as *mut WrappedMemory<()>
     };
 
-    // Actually an usize
+    // Offset and size are actually usizes and the API assumes that negative values simply wrap
+    // around, so let's cast to usizes here and do wrapping arithmetic.
+    let offset = offset as usize;
     let mut size = size as usize;
+
+    let new_offset = (*mem).mem.offset.wrapping_add(offset);
+    debug_assert!(new_offset < (*mem).mem.maxsize);
+
     if size == usize::MAX {
-        if offset < 0 {
-            size = (*mem).mem.size + (-offset as usize);
-        } else {
-            debug_assert!((*mem).mem.size >= offset as usize);
-            size = (*mem).mem.size - offset as usize;
-        }
+        size = (*mem).mem.size.wrapping_sub(offset);
     }
-
-    let new_offset = if offset < 0 {
-        debug_assert!((*mem).mem.offset >= (-offset as usize));
-        (*mem).mem.offset - (-offset as usize)
-    } else {
-        (*mem).mem.offset + offset as usize
-    };
-
+    debug_assert!(new_offset <= usize::MAX - size);
     debug_assert!(new_offset + size <= (*mem).mem.maxsize);
 
     let layout = alloc::Layout::new::<WrappedMemory<()>>();
