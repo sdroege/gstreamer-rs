@@ -175,29 +175,72 @@ impl MemoryRef {
         unsafe { from_glib(self.0.mini_object.flags) }
     }
 
-    #[doc(alias = "gst_memory_copy")]
-    pub fn copy_range(&self, offset: isize, size: Option<usize>) -> Memory {
-        let new_offset = if offset < 0 {
-            assert!((-offset) as usize >= self.offset());
-            self.offset() - (-offset as usize)
-        } else {
-            self.offset()
-                .checked_add(offset as usize)
-                .expect("Too large offset")
+    fn calculate_offset_size(&self, range: impl RangeBounds<usize>) -> (isize, isize) {
+        let size = self.size();
+
+        let start_offset = match range.start_bound() {
+            Bound::Included(v) => *v,
+            Bound::Excluded(v) => v.checked_add(1).expect("Invalid start offset"),
+            Bound::Unbounded => 0,
         };
+        assert!(start_offset < size, "Start offset after valid range");
 
-        assert!(new_offset + size.unwrap_or(0) < self.maxsize());
+        let end_offset = match range.end_bound() {
+            Bound::Included(v) => v.checked_add(1).expect("Invalid end offset"),
+            Bound::Excluded(v) => *v,
+            Bound::Unbounded => size,
+        };
+        assert!(end_offset <= size, "End offset after valid range");
 
-        unsafe {
-            from_glib_full(ffi::gst_memory_copy(
-                self.as_mut_ptr(),
-                offset,
-                match size {
-                    Some(val) => val as isize,
-                    None => -1,
-                },
-            ))
-        }
+        // Cast from usize to isize because that's literally how this works in the
+        // implementation and how the upper half of the usize range can be made use of.
+        //
+        // The implementation works exploiting wraparounds.
+        let new_offset = start_offset as isize;
+        let new_size = end_offset.saturating_sub(start_offset) as isize;
+
+        (new_offset, new_size)
+    }
+
+    fn calculate_offset_size_maxsize(&self, range: impl RangeBounds<usize>) -> (isize, isize) {
+        let maxsize = self.maxsize();
+
+        let start_offset = match range.start_bound() {
+            Bound::Included(v) => *v,
+            Bound::Excluded(v) => v.checked_add(1).expect("Invalid start offset"),
+            Bound::Unbounded => 0,
+        };
+        assert!(start_offset < maxsize, "Start offset after valid range");
+
+        let end_offset = match range.end_bound() {
+            Bound::Included(v) => v.checked_add(1).expect("Invalid end offset"),
+            Bound::Excluded(v) => *v,
+            Bound::Unbounded => maxsize,
+        };
+        assert!(end_offset <= maxsize, "End offset after valid range");
+
+        // Cast from usize to isize because that's literally how this works in the
+        // implementation and how the upper half of the usize range can be made use of.
+        //
+        // The implementation works by exploiting wraparounds.
+        let offset = self.offset();
+
+        let new_offset = start_offset.wrapping_sub(offset) as isize;
+        let new_size = end_offset.saturating_sub(start_offset) as isize;
+
+        (new_offset, new_size)
+    }
+
+    #[doc(alias = "gst_memory_copy")]
+    pub fn copy_range(&self, range: impl RangeBounds<usize>) -> Memory {
+        let (offset, size) = self.calculate_offset_size(range);
+        unsafe { from_glib_full(ffi::gst_memory_copy(self.as_mut_ptr(), offset, size)) }
+    }
+
+    #[doc(alias = "gst_memory_copy")]
+    pub fn copy_range_maxsize(&self, range: impl RangeBounds<usize>) -> Memory {
+        let (offset, size) = self.calculate_offset_size_maxsize(range);
+        unsafe { from_glib_full(ffi::gst_memory_copy(self.as_mut_ptr(), offset, size)) }
     }
 
     #[doc(alias = "gst_memory_is_span")]
@@ -267,44 +310,27 @@ impl MemoryRef {
     }
 
     #[doc(alias = "gst_memory_share")]
-    pub fn share(&self, offset: isize, size: Option<usize>) -> Memory {
-        let new_offset = if offset < 0 {
-            assert!((-offset) as usize >= self.offset());
-            self.offset() - (-offset as usize)
-        } else {
-            self.offset()
-                .checked_add(offset as usize)
-                .expect("Too large offset")
-        };
+    pub fn share(&self, range: impl RangeBounds<usize>) -> Memory {
+        let (offset, size) = self.calculate_offset_size(range);
+        unsafe { from_glib_full(ffi::gst_memory_share(self.as_ptr() as *mut _, offset, size)) }
+    }
 
-        assert!(new_offset + size.unwrap_or(0) < self.maxsize());
-
-        unsafe {
-            from_glib_full(ffi::gst_memory_share(
-                self.as_ptr() as *mut _,
-                offset,
-                match size {
-                    Some(val) => val as isize,
-                    None => -1,
-                },
-            ))
-        }
+    #[doc(alias = "gst_memory_share")]
+    pub fn share_maxsize(&self, range: impl RangeBounds<usize>) -> Memory {
+        let (offset, size) = self.calculate_offset_size_maxsize(range);
+        unsafe { from_glib_full(ffi::gst_memory_share(self.as_ptr() as *mut _, offset, size)) }
     }
 
     #[doc(alias = "gst_memory_resize")]
-    pub fn resize(&mut self, offset: isize, size: usize) {
-        let new_offset = if offset < 0 {
-            assert!((-offset) as usize >= self.offset());
-            self.offset() - (-offset as usize)
-        } else {
-            self.offset()
-                .checked_add(offset as usize)
-                .expect("Too large offset")
-        };
+    pub fn resize(&mut self, range: impl RangeBounds<usize>) {
+        let (offset, size) = self.calculate_offset_size(range);
+        unsafe { ffi::gst_memory_resize(self.as_mut_ptr(), offset, size as usize) }
+    }
 
-        assert!(new_offset + size < self.maxsize());
-
-        unsafe { ffi::gst_memory_resize(self.as_mut_ptr(), offset, size) }
+    #[doc(alias = "gst_memory_resize")]
+    pub fn resize_maxsize(&mut self, range: impl RangeBounds<usize>) {
+        let (offset, size) = self.calculate_offset_size_maxsize(range);
+        unsafe { ffi::gst_memory_resize(self.as_mut_ptr(), offset, size as usize) }
     }
 
     #[doc(alias = "gst_util_dump_mem")]
@@ -947,7 +973,9 @@ mod tests {
         crate::init().unwrap();
 
         let mem = crate::Memory::from_slice(vec![1, 2, 3, 4]);
-        let sub = mem.share(1, Some(2));
+        let sub = mem.share(1..=2); // [2, 3]
+        let sub_sub1 = sub.share(1..=1); // [3]
+        let sub_sub2 = sub.share_maxsize(0..4); // [1, 2, 3, 4]
 
         let map = mem.map_readable().unwrap();
         assert_eq!(map.as_slice(), &[1, 2, 3, 4]);
@@ -955,6 +983,14 @@ mod tests {
 
         let map = sub.map_readable().unwrap();
         assert_eq!(map.as_slice(), &[2, 3]);
+        drop(map);
+
+        let map = sub_sub1.map_readable().unwrap();
+        assert_eq!(map.as_slice(), &[3]);
+        drop(map);
+
+        let map = sub_sub2.map_readable().unwrap();
+        assert_eq!(map.as_slice(), &[1, 2, 3, 4]);
         drop(map);
     }
 
