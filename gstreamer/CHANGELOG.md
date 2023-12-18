@@ -5,6 +5,22 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.21.3] - 2023-12-18
+### Added
+- Update GStreamer gir files to latest (upcoming) 1.24 APIs.
+- Add an example for writing subclasses with virtual methods.
+- Add `gst::ClockTime::absdiff()` and same for similar types.
+
+### Fixed
+- In `Play` example, set bus to flushing before dropping `Play` instance.
+- Add missing `docsrs` configuration for correct documentation generation.
+- Make `gst_pbutils::element_properties` module public.
+- Add missing `gst_audio::AudioFilterImpl::parent_allowed_caps()`.
+- Fix assertions in `gst::Memory` copy/share/resize functions.
+
+### Changed
+- Update to itertool 0.12, pretty-hex 0.4.
+
 ## [0.21.2] - 2023-11-11
 ### Changed
 - Update GStreamer gir files to latest (upcoming) 1.24 APIs.
@@ -1597,7 +1613,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.21.2...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.21.3...HEAD
+[0.21.3]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.21.2...0.21.3
 [0.21.2]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.21.1...0.21.2
 [0.21.1]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.21.0...0.21.1
 [0.21.0]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.20.7...0.21.0
