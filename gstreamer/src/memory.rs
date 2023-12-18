@@ -222,7 +222,7 @@ impl MemoryRef {
     }
 
     #[doc(alias = "gst_memory_copy")]
-    pub fn copy_range(&self, offset: isize, size: Option<usize>) -> Memory {
+    pub fn copy_part(&self, offset: isize, size: Option<usize>) -> Memory {
         let new_offset = if offset < 0 {
             assert!((-offset) as usize >= self.offset());
             self.offset() - (-offset as usize)
