@@ -1,6 +1,6 @@
 [package]
 name = "gstreamer-utils"
-version = "0.21.2"
+version = "0.21.3"
 authors = ["Mathieu Duponchelle <mathieu@centricular.com>", "Thibault Saunier <tsaunier@igalia.com>"]
 categories = ["multimedia"]
 description = "Exposes an object to build several Gst pipeline with one producer and several consumer"
