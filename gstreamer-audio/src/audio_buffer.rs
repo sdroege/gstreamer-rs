@@ -4,6 +4,8 @@ use std::{fmt, marker::PhantomData, mem, ops, ptr, slice};
 
 use glib::translate::{from_glib, Borrowed, ToGlibPtr};
 
+use smallvec::SmallVec;
+
 pub enum Readable {}
 pub enum Writable {}
 
@@ -134,6 +136,16 @@ impl<T> AudioBuffer<T> {
         }
     }
 
+    pub fn planes_data(&self) -> SmallVec<[&[u8]; 8]> {
+        let mut planes = SmallVec::default();
+
+        for plane in 0..self.n_planes() {
+            planes[plane as usize] = self.plane_data(plane).unwrap();
+        }
+
+        planes
+    }
+
     #[inline]
     pub fn as_audio_buffer_ref(&self) -> AudioBufferRef<&gst::BufferRef> {
         AudioBufferRef {
@@ -239,6 +251,19 @@ impl AudioBuffer<Writable> {
                 self.plane_size(),
             ))
         }
+    }
+
+    pub fn planes_data_mut(&mut self) -> SmallVec<[&mut [u8]; 8]> {
+        let mut planes = SmallVec::default();
+
+        unsafe {
+            for plane in 0..self.n_planes() {
+                let slice = self.plane_data_mut(plane).unwrap();
+                planes.push(slice::from_raw_parts_mut(slice.as_mut_ptr(), slice.len()));
+            }
+        }
+
+        planes
     }
 
     #[inline]
@@ -397,6 +422,16 @@ impl<T> AudioBufferRef<T> {
         }
     }
 
+    pub fn planes_data(&self) -> SmallVec<[&[u8]; 8]> {
+        let mut planes = SmallVec::default();
+
+        for plane in 0..self.n_planes() {
+            planes[plane as usize] = self.plane_data(plane).unwrap();
+        }
+
+        planes
+    }
+
     #[inline]
     pub fn as_ptr(&self) -> *const ffi::GstAudioBuffer {
         &*self.audio_buffer
@@ -518,6 +553,19 @@ impl<'a> AudioBufferRef<&'a mut gst::BufferRef> {
                 self.plane_size(),
             ))
         }
+    }
+
+    pub fn planes_data_mut(&mut self) -> SmallVec<[&mut [u8]; 8]> {
+        let mut planes = SmallVec::default();
+
+        unsafe {
+            for plane in 0..self.n_planes() {
+                let slice = self.plane_data_mut(plane).unwrap();
+                planes.push(slice::from_raw_parts_mut(slice.as_mut_ptr(), slice.len()));
+            }
+        }
+
+        planes
     }
 
     #[inline]
