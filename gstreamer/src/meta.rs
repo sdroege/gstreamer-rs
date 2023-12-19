@@ -277,6 +277,129 @@ impl<'a, T> MetaRef<'a, T> {
     {
         self.meta as *const _ as *const <T as MetaAPI>::GstType
     }
+
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "gst_meta_serialize")]
+    pub fn serialize<B: ByteArrayInterface + ?Sized>(
+        &self,
+        writer: &mut B,
+    ) -> Result<usize, glib::BoolError> {
+        unsafe {
+            #[repr(C)]
+            struct Writer<'a, B: ?Sized> {
+                iface_: ffi::GstByteArrayInterface,
+                writer: &'a mut B,
+            }
+
+            unsafe extern "C" fn resize<B: ByteArrayInterface + ?Sized>(
+                iface_: *mut ffi::GstByteArrayInterface,
+                size: usize,
+            ) -> glib::ffi::gboolean {
+                let iface_ = &mut *(iface_ as *mut Writer<B>);
+
+                match iface_.writer.resize(size) {
+                    Some(new_data) => {
+                        iface_.iface_.data = new_data.as_mut_ptr();
+                        iface_.iface_.len = size;
+
+                        glib::ffi::GTRUE
+                    }
+                    None => glib::ffi::GFALSE,
+                }
+            }
+
+            let initial_len = writer.initial_len();
+
+            let mut iface_ = Writer {
+                iface_: ffi::GstByteArrayInterface {
+                    data: writer.as_mut().as_mut_ptr(),
+                    len: initial_len,
+                    resize: Some(resize::<B>),
+                    _gst_reserved: [ptr::null_mut(); 4],
+                },
+                writer: &mut *writer,
+            };
+
+            let res = bool::from_glib(ffi::gst_meta_serialize(
+                self.meta as *const T as *const ffi::GstMeta,
+                &mut iface_.iface_,
+            ));
+
+            if !res {
+                return Err(glib::bool_error!("Failed to serialize meta"));
+            }
+
+            assert!(iface_.iface_.len >= initial_len);
+
+            Ok(iface_.iface_.len - initial_len)
+        }
+    }
+}
+
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+pub trait ByteArrayInterface: AsMut<[u8]> {
+    fn initial_len(&self) -> usize;
+    fn resize(&mut self, size: usize) -> Option<&mut [u8]>;
+}
+
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+impl ByteArrayInterface for Vec<u8> {
+    fn initial_len(&self) -> usize {
+        self.len()
+    }
+
+    fn resize(&mut self, size: usize) -> Option<&mut [u8]> {
+        self.resize(size, 0);
+        Some(&mut self[0..size])
+    }
+}
+
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+impl<A: smallvec::Array<Item = u8>> ByteArrayInterface for smallvec::SmallVec<A> {
+    fn initial_len(&self) -> usize {
+        self.len()
+    }
+
+    fn resize(&mut self, size: usize) -> Option<&mut [u8]> {
+        self.resize(size, 0);
+        Some(&mut self[0..size])
+    }
+}
+
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+impl ByteArrayInterface for &mut [u8] {
+    fn initial_len(&self) -> usize {
+        0
+    }
+
+    fn resize(&mut self, size: usize) -> Option<&mut [u8]> {
+        if self.len() < size {
+            return None;
+        }
+
+        Some(&mut self[0..size])
+    }
+}
+
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+impl<const N: usize> ByteArrayInterface for [u8; N] {
+    fn initial_len(&self) -> usize {
+        0
+    }
+
+    fn resize(&mut self, size: usize) -> Option<&mut [u8]> {
+        if N < size {
+            return None;
+        }
+
+        Some(&mut self[0..size])
+    }
 }
 
 impl<'a> MetaRef<'a, Meta> {
@@ -389,6 +512,16 @@ impl<'a, T, U> MetaRefMut<'a, T, U> {
     {
         self.meta as *mut _ as *mut <T as MetaAPI>::GstType
     }
+
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "gst_meta_serialize")]
+    pub fn serialize<B: ByteArrayInterface + ?Sized>(
+        &self,
+        writer: &mut B,
+    ) -> Result<usize, glib::BoolError> {
+        self.as_meta_ref().serialize(writer)
+    }
 }
 
 impl<'a, T> MetaRefMut<'a, T, Standalone> {
@@ -491,6 +624,44 @@ impl fmt::Debug for Meta {
                 crate::MetaFlags::from_glib(self.0.flags)
             })
             .finish()
+    }
+}
+
+impl Meta {
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "gst_meta_deserialize")]
+    pub fn deserialize<'a>(
+        buffer: &'a mut BufferRef,
+        data: &[u8],
+        consumed: &mut usize,
+    ) -> Result<MetaRefMut<'a, Self, Standalone>, glib::BoolError> {
+        skip_assert_initialized!();
+
+        unsafe {
+            use std::mem;
+
+            let mut consumed_u32 = mem::MaybeUninit::uninit();
+
+            let res = ffi::gst_meta_deserialize(
+                buffer.as_mut_ptr(),
+                data.as_ptr(),
+                data.len(),
+                consumed_u32.as_mut_ptr(),
+            );
+
+            *consumed = consumed_u32.assume_init() as usize;
+
+            if res.is_null() {
+                return Err(glib::bool_error!("Failed to deserialize meta"));
+            }
+
+            Ok(MetaRefMut {
+                meta: &mut *(res as *mut Self),
+                buffer,
+                mode: PhantomData,
+            })
+        }
     }
 }
 
@@ -958,5 +1129,53 @@ mod tests {
         assert_eq!(meta.reference(), &caps);
         assert_eq!(meta.timestamp(), crate::ClockTime::from_seconds(1));
         assert_eq!(meta.duration(), crate::ClockTime::NONE);
+    }
+
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[test]
+    fn test_meta_serialize() {
+        use smallvec::SmallVec;
+
+        crate::init().unwrap();
+
+        let caps = crate::Caps::new_empty_simple("timestamp/x-ntp");
+        let mut buffer = crate::Buffer::new();
+
+        let meta = ReferenceTimestampMeta::add(
+            buffer.get_mut().unwrap(),
+            &caps,
+            crate::ClockTime::from_seconds(1),
+            crate::ClockTime::NONE,
+        );
+
+        let mut data_1 = Vec::new();
+        let mut data_2 = [0u8; 128];
+        let mut data_3 = SmallVec::<[u8; 128]>::new();
+
+        let len_1 = meta.serialize(&mut data_1).unwrap();
+        let len_2 = meta.serialize(&mut data_2).unwrap();
+        let len_3 = meta.serialize(&mut data_3).unwrap();
+        assert_eq!(&data_1[..len_1], &data_2[..len_2]);
+        assert_eq!(&data_1[..len_1], &data_3[..len_3]);
+
+        assert!(meta.serialize(&mut [0]).is_err());
+
+        let mut buffer_dest = crate::Buffer::new();
+        let mut consumed = 0;
+        let mut meta =
+            Meta::deserialize(buffer_dest.get_mut().unwrap(), &data_1, &mut consumed).unwrap();
+        assert_eq!(consumed, len_1);
+
+        let meta = meta.downcast_ref::<ReferenceTimestampMeta>().unwrap();
+        assert_eq!(meta.reference(), &caps);
+        assert_eq!(meta.timestamp(), crate::ClockTime::from_seconds(1));
+        assert_eq!(meta.duration(), crate::ClockTime::NONE);
+
+        let mut consumed = 0;
+        assert!(
+            Meta::deserialize(buffer_dest.get_mut().unwrap(), &[0, 1, 2], &mut consumed).is_err()
+        );
+        assert_eq!(consumed, 0);
     }
 }
