@@ -97,6 +97,11 @@ manual_traits = ["RTPHeaderExtensionExtManual"]
     manual = true
     rename = "set_outcaps"
 
+    [[object.property]]
+    name = "extensions"
+    # use proper type
+    ignore = true
+
 [[object]]
 name = "GstRtp.RTPBuffer"
 status = "manual"
