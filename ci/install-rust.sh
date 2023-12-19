@@ -26,20 +26,20 @@ if [ "$RUST_IMAGE_FULL" = "1" ]; then
   rustup component add clippy-preview
   rustup component add rustfmt
 
-  cargo install --force cargo-deny
-  cargo install --force cargo-outdated
-  cargo install --force typos-cli
+  cargo install --locked --force cargo-deny
+  cargo install --locked --force cargo-outdated
+  cargo install --locked --force typos-cli
 
   # Coverage tools
   rustup component add llvm-tools-preview
-  cargo install --force grcov
+  cargo install --locked --force grcov
 fi
 
-cargo install cargo-c --version 0.9.22+cargo-0.72
+cargo install --locked cargo-c --version 0.9.22+cargo-0.72
 
 if [ "$RUST_VERSION" = "nightly" ]; then
   rustup component add rustfmt --toolchain nightly
 
   # Documentation tools
-  cargo install --force rustdoc-stripper
+  cargo install --locked --force rustdoc-stripper
 fi
