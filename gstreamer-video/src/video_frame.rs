@@ -285,6 +285,16 @@ impl<T> VideoFrame<T> {
         }
     }
 
+    pub fn planes_data(&self) -> [&[u8]; 4] {
+        let mut planes = [[].as_slice(); 4];
+
+        for plane in 0..self.n_planes() {
+            planes[plane as usize] = self.plane_data(plane).unwrap();
+        }
+
+        planes
+    }
+
     #[inline]
     pub unsafe fn from_glib_full(frame: ffi::GstVideoFrame) -> Self {
         let buffer = gst::Buffer::from_glib_none(frame.buffer);
@@ -510,6 +520,24 @@ impl VideoFrame<Writable> {
         }
     }
 
+    pub fn planes_data_mut(&mut self) -> [&mut [u8]; 4] {
+        unsafe {
+            let mut planes = [
+                [].as_mut_slice(),
+                [].as_mut_slice(),
+                [].as_mut_slice(),
+                [].as_mut_slice(),
+            ];
+
+            for plane in 0..self.n_planes() {
+                let slice = self.plane_data_mut(plane).unwrap();
+                planes[plane as usize] = slice::from_raw_parts_mut(slice.as_mut_ptr(), slice.len());
+            }
+
+            planes
+        }
+    }
+
     #[inline]
     pub fn as_mut_video_frame_ref(&mut self) -> VideoFrameRef<&mut gst::BufferRef> {
         let frame = unsafe { ptr::read(&self.frame) };
@@ -629,6 +657,16 @@ impl<T> VideoFrameRef<T> {
                 (w * h) as usize,
             ))
         }
+    }
+
+    pub fn planes_data(&self) -> [&[u8]; 4] {
+        let mut planes = [[].as_slice(); 4];
+
+        for plane in 0..self.n_planes() {
+            planes[plane as usize] = self.plane_data(plane).unwrap();
+        }
+
+        planes
     }
 }
 
@@ -852,6 +890,24 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
                 self.frame.data[plane as usize] as *mut u8,
                 (w * h) as usize,
             ))
+        }
+    }
+
+    pub fn planes_data_mut(&mut self) -> [&mut [u8]; 4] {
+        unsafe {
+            let mut planes = [
+                [].as_mut_slice(),
+                [].as_mut_slice(),
+                [].as_mut_slice(),
+                [].as_mut_slice(),
+            ];
+
+            for plane in 0..self.n_planes() {
+                let slice = self.plane_data_mut(plane).unwrap();
+                planes[plane as usize] = slice::from_raw_parts_mut(slice.as_mut_ptr(), slice.len());
+            }
+
+            planes
         }
     }
 
