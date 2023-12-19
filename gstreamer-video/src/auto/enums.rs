@@ -2440,6 +2440,10 @@ pub enum VideoFormat {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     #[doc(alias = "GST_VIDEO_FORMAT_GBR_16BE")]
     Gbr16be,
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_RBGA")]
+    Rbga,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -2668,6 +2672,8 @@ impl IntoGlib for VideoFormat {
             Self::Gbr16le => ffi::GST_VIDEO_FORMAT_GBR_16LE,
             #[cfg(feature = "v1_24")]
             Self::Gbr16be => ffi::GST_VIDEO_FORMAT_GBR_16BE,
+            #[cfg(feature = "v1_24")]
+            Self::Rbga => ffi::GST_VIDEO_FORMAT_RBGA,
             Self::__Unknown(value) => value,
         }
     }
@@ -2864,6 +2870,8 @@ impl FromGlib<ffi::GstVideoFormat> for VideoFormat {
             ffi::GST_VIDEO_FORMAT_GBR_16LE => Self::Gbr16le,
             #[cfg(feature = "v1_24")]
             ffi::GST_VIDEO_FORMAT_GBR_16BE => Self::Gbr16be,
+            #[cfg(feature = "v1_24")]
+            ffi::GST_VIDEO_FORMAT_RBGA => Self::Rbga,
             value => Self::__Unknown(value),
         }
     }

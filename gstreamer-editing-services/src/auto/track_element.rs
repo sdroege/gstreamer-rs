@@ -88,7 +88,7 @@ pub trait TrackElementExt: IsA<TrackElement> + sealed::Sealed + 'static {
 
     //#[doc(alias = "ges_track_element_get_all_control_bindings")]
     //#[doc(alias = "get_all_control_bindings")]
-    //fn all_control_bindings(&self) -> /*Unknown conversion*//*Unimplemented*/HashTable TypeId { ns_id: 0, id: 28 }/TypeId { ns_id: 6, id: 87 } {
+    //fn all_control_bindings(&self) -> /*Unknown conversion*//*Unimplemented*/HashTable TypeId { ns_id: 0, id: 28 }/TypeId { ns_id: 6, id: 88 } {
     //    unsafe { TODO: call ffi:ges_track_element_get_all_control_bindings() }
     //}
 

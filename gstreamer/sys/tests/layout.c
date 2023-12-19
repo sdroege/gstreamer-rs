@@ -28,6 +28,7 @@ int main() {
     printf("%s;%zu;%zu\n", "GstBusClass", sizeof(GstBusClass), alignof(GstBusClass));
     printf("%s;%zu;%zu\n", "GstBusFlags", sizeof(GstBusFlags), alignof(GstBusFlags));
     printf("%s;%zu;%zu\n", "GstBusSyncReply", sizeof(GstBusSyncReply), alignof(GstBusSyncReply));
+    printf("%s;%zu;%zu\n", "GstByteArrayInterface", sizeof(GstByteArrayInterface), alignof(GstByteArrayInterface));
     printf("%s;%zu;%zu\n", "GstCaps", sizeof(GstCaps), alignof(GstCaps));
     printf("%s;%zu;%zu\n", "GstCapsFlags", sizeof(GstCapsFlags), alignof(GstCapsFlags));
     printf("%s;%zu;%zu\n", "GstCapsIntersectMode", sizeof(GstCapsIntersectMode), alignof(GstCapsIntersectMode));

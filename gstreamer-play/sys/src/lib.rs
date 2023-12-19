@@ -355,10 +355,21 @@ extern "C" {
     //=========================================================================
     pub fn gst_play_get_type() -> GType;
     pub fn gst_play_new(video_renderer: *mut GstPlayVideoRenderer) -> *mut GstPlay;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_play_config_get_pipeline_dump_in_error_details(
+        config: *const gst::GstStructure,
+    ) -> gboolean;
     pub fn gst_play_config_get_position_update_interval(config: *const gst::GstStructure)
         -> c_uint;
     pub fn gst_play_config_get_seek_accurate(config: *const gst::GstStructure) -> gboolean;
     pub fn gst_play_config_get_user_agent(config: *const gst::GstStructure) -> *mut c_char;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_play_config_set_pipeline_dump_in_error_details(
+        config: *mut gst::GstStructure,
+        value: gboolean,
+    );
     pub fn gst_play_config_set_position_update_interval(
         config: *mut gst::GstStructure,
         interval: c_uint,

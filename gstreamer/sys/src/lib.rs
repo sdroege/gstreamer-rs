@@ -910,6 +910,9 @@ pub const GST_SEGMENT_FLAG_TRICKMODE_NO_AUDIO: GstSegmentFlags = 256;
 pub type GstSerializeFlags = c_uint;
 pub const GST_SERIALIZE_FLAG_NONE: GstSerializeFlags = 0;
 pub const GST_SERIALIZE_FLAG_BACKWARD_COMPAT: GstSerializeFlags = 1;
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+pub const GST_SERIALIZE_FLAG_STRICT: GstSerializeFlags = 2;
 
 pub type GstStackTraceFlags = c_uint;
 pub const GST_STACK_TRACE_SHOW_NONE: GstStackTraceFlags = 0;
@@ -1078,9 +1081,15 @@ pub type GstMemoryShareFunction =
     Option<unsafe extern "C" fn(*mut GstMemory, ssize_t, ssize_t) -> *mut GstMemory>;
 pub type GstMemoryUnmapFullFunction = Option<unsafe extern "C" fn(*mut GstMemory, *mut GstMapInfo)>;
 pub type GstMemoryUnmapFunction = Option<unsafe extern "C" fn(*mut GstMemory)>;
+pub type GstMetaClearFunction = Option<unsafe extern "C" fn(*mut GstBuffer, *mut GstMeta)>;
+pub type GstMetaDeserializeFunction = Option<
+    unsafe extern "C" fn(*const GstMetaInfo, *mut GstBuffer, *const u8, size_t, u8) -> *mut GstMeta,
+>;
 pub type GstMetaFreeFunction = Option<unsafe extern "C" fn(*mut GstMeta, *mut GstBuffer)>;
 pub type GstMetaInitFunction =
     Option<unsafe extern "C" fn(*mut GstMeta, gpointer, *mut GstBuffer) -> gboolean>;
+pub type GstMetaSerializeFunction =
+    Option<unsafe extern "C" fn(*const GstMeta, *mut GstByteArrayInterface, *mut u8) -> gboolean>;
 pub type GstMetaTransformFunction = Option<
     unsafe extern "C" fn(
         *mut GstBuffer,
@@ -1408,6 +1417,25 @@ pub struct _GstBusPrivate {
 }
 
 pub type GstBusPrivate = *mut _GstBusPrivate;
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstByteArrayInterface {
+    pub data: *mut u8,
+    pub len: size_t,
+    pub resize: Option<unsafe extern "C" fn(*mut GstByteArrayInterface, size_t) -> gboolean>,
+    pub _gst_reserved: [gpointer; 4],
+}
+
+impl ::std::fmt::Debug for GstByteArrayInterface {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstByteArrayInterface @ {self:p}"))
+            .field("data", &self.data)
+            .field("len", &self.len)
+            .field("resize", &self.resize)
+            .finish()
+    }
+}
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -2058,6 +2086,9 @@ pub struct GstMetaInfo {
     pub init_func: GstMetaInitFunction,
     pub free_func: GstMetaFreeFunction,
     pub transform_func: GstMetaTransformFunction,
+    pub serialize_func: GstMetaSerializeFunction,
+    pub deserialize_func: GstMetaDeserializeFunction,
+    pub clear_func: GstMetaClearFunction,
 }
 
 impl ::std::fmt::Debug for GstMetaInfo {
@@ -2069,6 +2100,9 @@ impl ::std::fmt::Debug for GstMetaInfo {
             .field("init_func", &self.init_func)
             .field("free_func", &self.free_func)
             .field("transform_func", &self.transform_func)
+            .field("serialize_func", &self.serialize_func)
+            .field("deserialize_func", &self.deserialize_func)
+            .field("clear_func", &self.clear_func)
             .finish()
     }
 }
@@ -5751,9 +5785,24 @@ extern "C" {
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_meta_get_seqnum(meta: *const GstMeta) -> u64;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_meta_serialize(meta: *const GstMeta, data: *mut GstByteArrayInterface) -> gboolean;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_meta_serialize_simple(meta: *const GstMeta, data: *mut glib::GByteArray)
+        -> gboolean;
     pub fn gst_meta_api_type_get_tags(api: GType) -> *const *const c_char;
     pub fn gst_meta_api_type_has_tag(api: GType, tag: glib::GQuark) -> gboolean;
     pub fn gst_meta_api_type_register(api: *const c_char, tags: *mut *const c_char) -> GType;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_meta_deserialize(
+        buffer: *mut GstBuffer,
+        data: *const u8,
+        size: size_t,
+        consumed: *mut u32,
+    ) -> *mut GstMeta;
     pub fn gst_meta_get_info(impl_: *const c_char) -> *const GstMetaInfo;
     pub fn gst_meta_register(
         api: GType,
@@ -5782,6 +5831,12 @@ extern "C" {
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_meta_info_is_custom(info: *const GstMetaInfo) -> gboolean;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_meta_info_register(info: *mut GstMetaInfo) -> *const GstMetaInfo;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_meta_info_new(api: GType, impl_: *const c_char, size: size_t) -> *mut GstMetaInfo;
 
     //=========================================================================
     // GstMiniObject
@@ -8837,6 +8892,9 @@ extern "C" {
     #[cfg(feature = "v1_18_3")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18_3")))]
     pub fn gst_clear_caps(caps_ptr: *mut *mut GstCaps);
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_clear_context(context_ptr: *mut *mut GstContext);
     #[cfg(feature = "v1_18_3")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18_3")))]
     pub fn gst_clear_event(event_ptr: *mut *mut GstEvent);
@@ -8849,6 +8907,9 @@ extern "C" {
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_clear_object(object_ptr: *mut *mut GstObject);
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_clear_promise(promise_ptr: *mut *mut GstPromise);
     #[cfg(feature = "v1_18_3")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18_3")))]
     pub fn gst_clear_query(query_ptr: *mut *mut GstQuery);

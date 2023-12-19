@@ -206,6 +206,13 @@ pub trait BaseSrcExt: IsA<BaseSrc> + sealed::Sealed + 'static {
         }
     }
 
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "automatic-eos")]
+    fn is_automatic_eos(&self) -> bool {
+        ObjectExt::property(self.as_ref(), "automatic-eos")
+    }
+
     #[doc(alias = "num-buffers")]
     fn num_buffers(&self) -> i32 {
         ObjectExt::property(self.as_ref(), "num-buffers")
@@ -222,6 +229,37 @@ pub trait BaseSrcExt: IsA<BaseSrc> + sealed::Sealed + 'static {
 
     fn set_typefind(&self, typefind: bool) {
         ObjectExt::set_property(self.as_ref(), "typefind", typefind)
+    }
+
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "automatic-eos")]
+    fn connect_automatic_eos_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_automatic_eos_trampoline<
+            P: IsA<BaseSrc>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstBaseSrc,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(BaseSrc::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                b"notify::automatic-eos\0".as_ptr() as *const _,
+                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                    notify_automatic_eos_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
     }
 
     #[doc(alias = "blocksize")]

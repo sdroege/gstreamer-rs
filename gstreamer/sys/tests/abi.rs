@@ -343,6 +343,13 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "GstByteArrayInterface",
+        Layout {
+            size: size_of::<GstByteArrayInterface>(),
+            alignment: align_of::<GstByteArrayInterface>(),
+        },
+    ),
+    (
         "GstCaps",
         Layout {
             size: size_of::<GstCaps>(),
@@ -2032,6 +2039,7 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("GST_SEQNUM_INVALID", "0"),
     ("(guint) GST_SERIALIZE_FLAG_BACKWARD_COMPAT", "1"),
     ("(guint) GST_SERIALIZE_FLAG_NONE", "0"),
+    ("(guint) GST_SERIALIZE_FLAG_STRICT", "2"),
     ("(guint) GST_STACK_TRACE_SHOW_FULL", "1"),
     ("(guint) GST_STACK_TRACE_SHOW_NONE", "0"),
     ("(gint) GST_STATE_CHANGE_ASYNC", "2"),

@@ -388,6 +388,9 @@ pub const GST_VIDEO_FORMAT_GBR_16LE: GstVideoFormat = 131;
 #[cfg(feature = "v1_24")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
 pub const GST_VIDEO_FORMAT_GBR_16BE: GstVideoFormat = 132;
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+pub const GST_VIDEO_FORMAT_RBGA: GstVideoFormat = 133;
 
 pub type GstVideoGLTextureOrientation = c_int;
 pub const GST_VIDEO_GL_TEXTURE_ORIENTATION_X_NORMAL_Y_NORMAL: GstVideoGLTextureOrientation = 0;
@@ -4412,8 +4415,8 @@ extern "C" {
         width: c_uint,
         height: c_uint,
         n_planes: c_uint,
-        offset: *mut [size_t; 4],
-        stride: *mut [c_int; 4],
+        offset: *const [size_t; 4],
+        stride: *const [c_int; 4],
     ) -> *mut GstVideoMeta;
     pub fn gst_buffer_add_video_overlay_composition_meta(
         buf: *mut gst::GstBuffer,
