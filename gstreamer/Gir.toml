@@ -32,7 +32,6 @@ generate = [
     "Gst.PromiseResult",
     "Gst.QOSType",
     "Gst.SchedulingFlags",
-    "Gst.SerializeFlags",
     "Gst.StreamStatusType",
     "Gst.StreamType",
     "Gst.StructureChangeType",
@@ -2151,6 +2150,15 @@ status = "generate"
     version = "1.18"
     [[object.member]]
     name = "none"
+    ignore = true
+
+[[object]]
+name = "Gst.SerializeFlags"
+status = "generate"
+    [[object.member]]
+    name = "strict"
+    # Changes nullability of gst_structure_serialize() so moved to a
+    # separate function instead
     ignore = true
 
 [[object]]

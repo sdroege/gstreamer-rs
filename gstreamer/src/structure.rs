@@ -744,6 +744,26 @@ impl StructureRef {
         unsafe { from_glib_full(ffi::gst_structure_serialize(&self.0, flags.into_glib())) }
     }
 
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "gst_structure_serialize")]
+    pub fn serialize_strict(
+        &self,
+        flags: crate::SerializeFlags,
+    ) -> Result<glib::GString, glib::BoolError> {
+        unsafe {
+            let res = ffi::gst_structure_serialize(
+                &self.0,
+                flags.into_glib() | ffi::GST_SERIALIZE_FLAG_STRICT,
+            );
+            if res.is_null() {
+                Err(glib::bool_error!("Failed to serialize structure to string"))
+            } else {
+                Ok(from_glib_full(res))
+            }
+        }
+    }
+
     #[doc(alias = "gst_structure_foreach")]
     pub fn foreach<F: FnMut(glib::Quark, &glib::Value) -> std::ops::ControlFlow<()>>(
         &self,
