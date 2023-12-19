@@ -2,9 +2,7 @@
 
 FROM "registry.freedesktop.org/gstreamer/gstreamer/amd64/windows:2023-07-17.0-main"
 
-# Make sure any failure in PowerShell is fatal
-ENV ErrorActionPreference='Stop'
-SHELL ["powershell","-NoLogo", "-NonInteractive", "-Command"]
+SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
 
 ARG DEFAULT_BRANCH="main"
 ARG RUST_VERSION="invalid"
