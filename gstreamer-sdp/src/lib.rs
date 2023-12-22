@@ -21,7 +21,6 @@ macro_rules! skip_assert_initialized {
 }
 
 mod auto;
-pub use crate::auto::*;
 
 mod sdp_attribute;
 pub use crate::sdp_attribute::*;

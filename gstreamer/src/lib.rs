@@ -46,8 +46,6 @@ pub use crate::auto::*;
 #[macro_use]
 #[cfg(feature = "serde")]
 mod serde_macros;
-#[cfg(feature = "serde")]
-pub use crate::serde_macros::*;
 
 #[macro_use]
 pub mod log;

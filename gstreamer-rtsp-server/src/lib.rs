@@ -80,10 +80,13 @@ pub static RTSP_TOKEN_TRANSPORT_CLIENT_SETTINGS: &glib::GStr = unsafe {
 pub mod prelude {
     #[doc(hidden)]
     pub use gio::prelude::*;
-    #[doc(hidden)]
-    pub use gst_net::prelude::*;
+
     #[doc(hidden)]
     pub use gst_rtsp::prelude::*;
+
+    #[allow(unused_imports)]
+    #[doc(hidden)]
+    pub use gst_net::prelude::*;
 
     pub use crate::{
         auto::traits::*, rtsp_address_pool::RTSPAddressPoolExtManual, rtsp_auth::RTSPAuthExtManual,

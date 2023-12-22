@@ -68,9 +68,11 @@ mod flag_serde;
 // can always "use ges::prelude::*" without getting conflicts
 pub mod prelude {
     #[doc(hidden)]
-    pub use gio::prelude::*;
-    #[doc(hidden)]
     pub use glib::prelude::*;
+
+    #[doc(hidden)]
+    pub use gio::prelude::*;
+
     #[doc(hidden)]
     pub use gst_base::prelude::*;
     #[doc(hidden)]

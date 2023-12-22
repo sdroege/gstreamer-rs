@@ -324,6 +324,6 @@ mod test {
 
         let list = elem_props.map().unwrap();
         assert_eq!(list.len(), 1);
-        assert_eq!(list.get(0).unwrap(), &props_map);
+        assert_eq!(list.first().unwrap(), &props_map);
     }
 }

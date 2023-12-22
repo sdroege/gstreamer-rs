@@ -24,4 +24,3 @@ mod auto;
 pub use auto::*;
 
 mod gl_display_wayland;
-pub use gl_display_wayland::*;

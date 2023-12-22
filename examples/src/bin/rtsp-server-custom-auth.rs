@@ -134,7 +134,7 @@ mod auth {
                     .request()
                     .expect("Context without request. Should not happen !");
 
-                if let Some(auth_credentials) = req.parse_auth_credentials().get(0) {
+                if let Some(auth_credentials) = req.parse_auth_credentials().first() {
                     if let Some(authorization) = auth_credentials.authorization() {
                         if let Some(user) = self.external_auth(authorization) {
                             // Update context token with authenticated username

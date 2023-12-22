@@ -130,7 +130,7 @@ impl AudioConverterConfig {
     }
 
     pub fn set_mix_matrix(&mut self, v: &[impl AsRef<[f32]>]) {
-        let length = v.get(0).map(|v| v.as_ref().len()).unwrap_or(0);
+        let length = v.first().map(|v| v.as_ref().len()).unwrap_or(0);
         let array = gst::Array::from_values(v.iter().map(|val| {
             let val = val.as_ref();
             assert_eq!(val.len(), length);

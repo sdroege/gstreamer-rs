@@ -794,7 +794,7 @@ mod tests {
             }
 
             if i == 5 {
-                consumers.get(0).unwrap().disconnect(&producer);
+                consumers.first().unwrap().disconnect(&producer);
             }
         }
 

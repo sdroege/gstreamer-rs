@@ -51,7 +51,6 @@ mod action;
 pub use action::{Action, ActionRef};
 
 mod reporter;
-pub use reporter::*;
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst_validate::prelude::*" without getting conflicts
