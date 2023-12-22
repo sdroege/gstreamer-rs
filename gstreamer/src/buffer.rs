@@ -226,11 +226,11 @@ impl BufferRef {
         };
 
         let end_idx = match range.end_bound() {
-            ops::Bound::Included(idx) if idx.checked_add(1).map_or(true, |idx| idx >= n_memory) => {
+            ops::Bound::Included(idx) if idx.checked_add(1).map_or(true, |idx| idx > n_memory) => {
                 return Err(glib::bool_error!("Invalid range end"));
             }
             ops::Bound::Included(idx) => *idx + 1,
-            ops::Bound::Excluded(idx) if *idx >= n_memory => {
+            ops::Bound::Excluded(idx) if *idx > n_memory => {
                 return Err(glib::bool_error!("Invalid range end"));
             }
             ops::Bound::Excluded(idx) => *idx,
@@ -318,11 +318,11 @@ impl BufferRef {
         };
 
         let end_idx = match range.end_bound() {
-            ops::Bound::Included(idx) if idx.checked_add(1).map_or(true, |idx| idx >= size) => {
+            ops::Bound::Included(idx) if idx.checked_add(1).map_or(true, |idx| idx > size) => {
                 return Err(glib::bool_error!("Invalid range end"));
             }
             ops::Bound::Included(idx) => *idx + 1,
-            ops::Bound::Excluded(idx) if *idx >= size => {
+            ops::Bound::Excluded(idx) if *idx > size => {
                 return Err(glib::bool_error!("Invalid range end"));
             }
             ops::Bound::Excluded(idx) => *idx,
@@ -1897,6 +1897,66 @@ mod tests {
         assert!(BufferRef::ptr_eq(&buffer1, &buffer1));
         let buffer2 = Buffer::new();
         assert!(!BufferRef::ptr_eq(&buffer1, &buffer2));
+    }
+
+    #[test]
+    fn test_copy_region() {
+        crate::init().unwrap();
+
+        let buffer1 = Buffer::from_mut_slice(vec![0, 1, 2, 3, 4, 5, 6, 7]);
+        let buffer2 = buffer1.copy_region(BUFFER_COPY_ALL, ..).unwrap();
+        assert_eq!(
+            buffer2.map_readable().unwrap().as_slice(),
+            &[0, 1, 2, 3, 4, 5, 6, 7]
+        );
+        let buffer2 = buffer1.copy_region(BUFFER_COPY_ALL, 0..8).unwrap();
+        assert_eq!(
+            buffer2.map_readable().unwrap().as_slice(),
+            &[0, 1, 2, 3, 4, 5, 6, 7]
+        );
+        let buffer2 = buffer1.copy_region(BUFFER_COPY_ALL, 0..=7).unwrap();
+        assert_eq!(
+            buffer2.map_readable().unwrap().as_slice(),
+            &[0, 1, 2, 3, 4, 5, 6, 7]
+        );
+        let buffer2 = buffer1.copy_region(BUFFER_COPY_ALL, ..=7).unwrap();
+        assert_eq!(
+            buffer2.map_readable().unwrap().as_slice(),
+            &[0, 1, 2, 3, 4, 5, 6, 7]
+        );
+        let buffer2 = buffer1.copy_region(BUFFER_COPY_ALL, ..8).unwrap();
+        assert_eq!(
+            buffer2.map_readable().unwrap().as_slice(),
+            &[0, 1, 2, 3, 4, 5, 6, 7]
+        );
+        let buffer2 = buffer1.copy_region(BUFFER_COPY_ALL, 0..).unwrap();
+        assert_eq!(
+            buffer2.map_readable().unwrap().as_slice(),
+            &[0, 1, 2, 3, 4, 5, 6, 7]
+        );
+
+        assert!(buffer1.copy_region(BUFFER_COPY_ALL, 0..=8).is_err());
+        assert!(buffer1.copy_region(BUFFER_COPY_ALL, 0..=10).is_err());
+        assert!(buffer1.copy_region(BUFFER_COPY_ALL, 8..=10).is_err());
+        assert!(buffer1.copy_region(BUFFER_COPY_ALL, 8..=8).is_err());
+        assert!(buffer1.copy_region(BUFFER_COPY_ALL, 10..).is_err());
+        assert!(buffer1.copy_region(BUFFER_COPY_ALL, 10..100).is_err());
+
+        let buffer2 = buffer1.copy_region(BUFFER_COPY_ALL, 2..4).unwrap();
+        assert_eq!(buffer2.map_readable().unwrap().as_slice(), &[2, 3]);
+
+        let buffer2 = buffer1.copy_region(BUFFER_COPY_ALL, 2..=4).unwrap();
+        assert_eq!(buffer2.map_readable().unwrap().as_slice(), &[2, 3, 4]);
+
+        let buffer2 = buffer1.copy_region(BUFFER_COPY_ALL, 2..).unwrap();
+        assert_eq!(
+            buffer2.map_readable().unwrap().as_slice(),
+            &[2, 3, 4, 5, 6, 7]
+        );
+        let buffer2 = buffer1.copy_region(BUFFER_COPY_ALL, ..2).unwrap();
+        assert_eq!(buffer2.map_readable().unwrap().as_slice(), &[0, 1]);
+        let buffer2 = buffer1.copy_region(BUFFER_COPY_ALL, ..=2).unwrap();
+        assert_eq!(buffer2.map_readable().unwrap().as_slice(), &[0, 1, 2]);
     }
 
     #[test]
