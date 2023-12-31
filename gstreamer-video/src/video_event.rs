@@ -26,19 +26,28 @@ macro_rules! event_builder_generic_impl {
             }
         }
 
+        pub fn other_field(self, name: &'a str, value: impl ToSendValue) -> Self {
+            let mut other_fields = self.other_fields;
+            other_fields.push((name, value.to_send_value()));
+
+            Self {
+                other_fields,
+                ..self
+            }
+        }
+
+        #[deprecated = "use build.other_field() instead"]
         pub fn other_fields(
             self,
             other_fields: &[(&'a str, &'a (dyn ToSendValue + Sync))],
         ) -> Self {
-            Self {
-                other_fields: self
-                    .other_fields
-                    .iter()
-                    .cloned()
-                    .chain(other_fields.iter().cloned())
-                    .collect(),
-                ..self
+            let mut s = self;
+
+            for (name, value) in other_fields {
+                s = s.other_field(name, value.to_send_value());
             }
+
+            s
         }
 
         #[must_use = "Building the event without using it has no effect"]
@@ -61,7 +70,7 @@ macro_rules! event_builder_generic_impl {
                     );
 
                     for (k, v) in self.other_fields {
-                        s.set_value(k, v.to_send_value());
+                        s.set_value(k, v);
                     }
                 }
 
@@ -75,7 +84,7 @@ macro_rules! event_builder_generic_impl {
 pub struct DownstreamForceKeyUnitEventBuilder<'a> {
     seqnum: Option<gst::Seqnum>,
     running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a (dyn ToSendValue + Sync))>,
+    other_fields: Vec<(&'a str, glib::SendValue)>,
     timestamp: Option<gst::ClockTime>,
     stream_time: Option<gst::ClockTime>,
     running_time: Option<gst::ClockTime>,
@@ -193,7 +202,7 @@ impl DownstreamForceKeyUnitEvent {
 pub struct UpstreamForceKeyUnitEventBuilder<'a> {
     seqnum: Option<gst::Seqnum>,
     running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a (dyn ToSendValue + Sync))>,
+    other_fields: Vec<(&'a str, glib::SendValue)>,
     running_time: Option<gst::ClockTime>,
     all_headers: bool,
     count: u32,
@@ -306,7 +315,7 @@ impl ForceKeyUnitEvent {
 pub struct StillFrameEventBuilder<'a> {
     seqnum: Option<gst::Seqnum>,
     running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a (dyn ToSendValue + Sync))>,
+    other_fields: Vec<(&'a str, glib::SendValue)>,
     in_still: bool,
 }
 
@@ -364,7 +373,7 @@ macro_rules! nav_event_builder {
         pub struct $builder<'a> {
             seqnum: Option<gst::Seqnum>,
             running_time_offset: Option<i64>,
-            other_fields: Vec<(&'a str, &'a (dyn ToSendValue + Sync))>,
+            other_fields: Vec<(&'a str, glib::SendValue)>,
             $($field_names: $field_types,)*
             #[cfg(feature = "v1_22")]
             #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
@@ -495,7 +504,7 @@ nav_event_builder!(
 pub struct CommandEventBuilder<'a> {
     seqnum: Option<gst::Seqnum>,
     running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a (dyn ToSendValue + Sync))>,
+    other_fields: Vec<(&'a str, glib::SendValue)>,
     command: NavigationCommand,
     #[cfg(feature = "v1_22")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]

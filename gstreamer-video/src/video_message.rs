@@ -29,6 +29,14 @@ macro_rules! message_builder_generic_impl {
             }
         }
 
+        pub fn other_field(self, name: &'a str, value: impl ToSendValue) -> Self {
+            Self {
+                builder: self.builder.other_field(name, value),
+                ..self
+            }
+        }
+
+        #[deprecated = "use builder.other_field() instead"]
         #[allow(clippy::needless_update)]
         pub fn other_fields(
             self,
@@ -59,7 +67,7 @@ macro_rules! message_builder_generic_impl {
                             gst::StructureRef::from_glib_borrow_mut(structure as *mut _);
 
                         for (k, v) in self.builder.other_fields {
-                            structure.set_value(k, v.to_send_value());
+                            structure.set_value(k, v);
                         }
                     }
                 }
@@ -71,10 +79,9 @@ macro_rules! message_builder_generic_impl {
 }
 
 struct MessageBuilder<'a> {
-    pub src: Option<Object>,
-    pub seqnum: Option<Seqnum>,
-    #[allow(unused)]
-    pub other_fields: Vec<(&'a str, &'a (dyn ToSendValue + Sync))>,
+    src: Option<Object>,
+    seqnum: Option<Seqnum>,
+    other_fields: Vec<(&'a str, glib::SendValue)>,
 }
 
 impl<'a> MessageBuilder<'a> {
@@ -101,16 +108,24 @@ impl<'a> MessageBuilder<'a> {
         }
     }
 
-    pub fn other_fields(self, other_fields: &[(&'a str, &'a (dyn ToSendValue + Sync))]) -> Self {
+    fn other_field(self, name: &'a str, value: impl ToSendValue) -> Self {
+        let mut other_fields = self.other_fields;
+        other_fields.push((name, value.to_send_value()));
+
         Self {
-            other_fields: self
-                .other_fields
-                .iter()
-                .cloned()
-                .chain(other_fields.iter().cloned())
-                .collect(),
+            other_fields,
             ..self
         }
+    }
+
+    fn other_fields(self, other_fields: &[(&'a str, &'a (dyn ToSendValue + Sync))]) -> Self {
+        let mut s = self;
+
+        for (name, value) in other_fields {
+            s = s.other_field(name, value.to_send_value());
+        }
+
+        s
     }
 }
 

@@ -2474,8 +2474,7 @@ impl std::fmt::Debug for InstantRateRequest<Message> {
 struct MessageBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<Seqnum>,
-    #[allow(unused)]
-    other_fields: Vec<(&'a str, &'a (dyn ToSendValue + Sync))>,
+    other_fields: Vec<(&'a str, glib::SendValue)>,
 }
 
 impl<'a> MessageBuilder<'a> {
@@ -2501,16 +2500,24 @@ impl<'a> MessageBuilder<'a> {
         }
     }
 
-    fn other_fields(self, other_fields: &[(&'a str, &'a (dyn ToSendValue + Sync))]) -> Self {
+    fn other_field(self, name: &'a str, value: impl ToSendValue) -> Self {
+        let mut other_fields = self.other_fields;
+        other_fields.push((name, value.to_send_value()));
+
         Self {
-            other_fields: self
-                .other_fields
-                .iter()
-                .cloned()
-                .chain(other_fields.iter().cloned())
-                .collect(),
+            other_fields,
             ..self
         }
+    }
+
+    fn other_fields(self, other_fields: &[(&'a str, &'a (dyn ToSendValue + Sync))]) -> Self {
+        let mut s = self;
+
+        for (name, value) in other_fields {
+            s = s.other_field(name, value.to_send_value());
+        }
+
+        s
     }
 }
 
@@ -2533,6 +2540,15 @@ macro_rules! message_builder_generic_impl {
             }
         }
 
+        #[allow(clippy::needless_update)]
+        pub fn other_field(self, name: &'a str, value: impl ToSendValue) -> Self {
+            Self {
+                builder: self.builder.other_field(name, value),
+                ..self
+            }
+        }
+
+        #[deprecated = "use build.other_field() instead"]
         #[allow(clippy::needless_update)]
         pub fn other_fields(
             self,
@@ -2561,7 +2577,7 @@ macro_rules! message_builder_generic_impl {
                         let structure = StructureRef::from_glib_borrow_mut(structure as *mut _);
 
                         for (k, v) in self.builder.other_fields {
-                            structure.set_value(k, v.to_send_value());
+                            structure.set_value(k, v);
                         }
                     }
                 }
@@ -2997,7 +3013,7 @@ pub struct StreamStatusBuilder<'a> {
     builder: MessageBuilder<'a>,
     type_: crate::StreamStatusType,
     owner: &'a crate::Element,
-    status_object: Option<&'a (dyn glib::ToSendValue + Sync)>,
+    status_object: Option<glib::SendValue>,
 }
 
 impl<'a> StreamStatusBuilder<'a> {
@@ -3011,9 +3027,9 @@ impl<'a> StreamStatusBuilder<'a> {
         }
     }
 
-    pub fn status_object(self, status_object: &'a (dyn glib::ToSendValue + Sync)) -> Self {
+    pub fn status_object(self, status_object: impl ToSendValue) -> Self {
         Self {
-            status_object: Some(status_object),
+            status_object: Some(status_object.to_send_value()),
             ..self
         }
     }
@@ -3021,11 +3037,8 @@ impl<'a> StreamStatusBuilder<'a> {
     message_builder_generic_impl!(|s: &mut Self, src| {
         let msg =
             ffi::gst_message_new_stream_status(src, s.type_.into_glib(), s.owner.to_glib_none().0);
-        if let Some(status_object) = s.status_object {
-            ffi::gst_message_set_stream_status_object(
-                msg,
-                status_object.to_send_value().to_glib_none().0,
-            );
+        if let Some(ref status_object) = s.status_object {
+            ffi::gst_message_set_stream_status_object(msg, status_object.to_glib_none().0);
         }
         msg
     });
@@ -3533,7 +3546,7 @@ impl<'a> DeviceRemovedBuilder<'a> {
 pub struct PropertyNotifyBuilder<'a> {
     builder: MessageBuilder<'a>,
     property_name: &'a str,
-    value: Option<&'a (dyn glib::ToSendValue + Sync)>,
+    value: Option<glib::SendValue>,
 }
 
 impl<'a> PropertyNotifyBuilder<'a> {
@@ -3546,23 +3559,19 @@ impl<'a> PropertyNotifyBuilder<'a> {
         }
     }
 
-    pub fn value(self, value: &'a (dyn glib::ToSendValue + Sync)) -> Self {
+    pub fn value(self, value: impl ToSendValue) -> Self {
         Self {
-            value: Some(value),
+            value: Some(value.to_send_value()),
             ..self
         }
     }
 
     message_builder_generic_impl!(|s: &mut Self, src| {
-        let val = s.value.map(|v| v.to_send_value());
+        let v = s.value.take();
         ffi::gst_message_new_property_notify(
             src,
             s.property_name.to_glib_none().0,
-            mut_override(
-                val.as_ref()
-                    .map(|v| v.to_glib_none().0)
-                    .unwrap_or(ptr::null()),
-            ),
+            v.as_ref().map(|v| v.as_ptr()).unwrap_or(ptr::null_mut()),
         )
     });
 }
@@ -3793,6 +3802,7 @@ mod tests {
     }
 
     #[test]
+    #[allow(deprecated)]
     fn test_other_fields() {
         crate::init().unwrap();
 
@@ -3812,7 +3822,7 @@ mod tests {
         }
 
         let buffering_msg = Buffering::builder(42)
-            .other_fields(&[("extra-field", &true)])
+            .other_field("extra-field", true)
             .build();
         match buffering_msg.view() {
             MessageView::Buffering(buffering_msg) => {

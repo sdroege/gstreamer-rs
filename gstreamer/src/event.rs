@@ -2040,7 +2040,7 @@ impl std::fmt::Debug for Other<Event> {
 struct EventBuilder<'a> {
     seqnum: Option<Seqnum>,
     running_time_offset: Option<i64>,
-    other_fields: Vec<(&'a str, &'a (dyn ToSendValue + Sync))>,
+    other_fields: Vec<(&'a str, glib::SendValue)>,
 }
 
 impl<'a> EventBuilder<'a> {
@@ -2066,16 +2066,24 @@ impl<'a> EventBuilder<'a> {
         }
     }
 
-    fn other_fields(self, other_fields: &[(&'a str, &'a (dyn ToSendValue + Sync))]) -> Self {
+    fn other_field(self, name: &'a str, value: impl ToSendValue) -> Self {
+        let mut other_fields = self.other_fields;
+        other_fields.push((name, value.to_send_value()));
+
         Self {
-            other_fields: self
-                .other_fields
-                .iter()
-                .cloned()
-                .chain(other_fields.iter().cloned())
-                .collect(),
+            other_fields,
             ..self
         }
+    }
+
+    fn other_fields(self, other_fields: &[(&'a str, &'a (dyn ToSendValue + Sync))]) -> Self {
+        let mut s = self;
+
+        for (name, value) in other_fields {
+            s = s.other_field(name, value.to_send_value());
+        }
+
+        s
     }
 }
 
@@ -2099,6 +2107,15 @@ macro_rules! event_builder_generic_impl {
             }
         }
 
+        #[allow(clippy::needless_update)]
+        pub fn other_field(self, name: &'a str, value: impl ToSendValue) -> Self {
+            Self {
+                builder: self.builder.other_field(name, value),
+                ..self
+            }
+        }
+
+        #[deprecated = "use build.other_field() instead"]
         #[allow(clippy::needless_update)]
         pub fn other_fields(
             self,
@@ -2129,7 +2146,7 @@ macro_rules! event_builder_generic_impl {
                     ));
 
                     for (k, v) in self.builder.other_fields {
-                        s.set_value(k, v.to_send_value());
+                        s.set_value(k, v);
                     }
                 }
 
@@ -2947,6 +2964,7 @@ mod tests {
     use super::*;
 
     #[test]
+    #[allow(deprecated)]
     fn test_simple() {
         crate::init().unwrap();
 
@@ -2975,7 +2993,7 @@ mod tests {
 
         // Event with arguments
         let flush_stop_evt = FlushStop::builder(true)
-            .other_fields(&[("extra-field", &true)])
+            .other_field("extra-field", true)
             .build();
         match flush_stop_evt.view() {
             EventView::FlushStop(flush_stop_evt) => {
