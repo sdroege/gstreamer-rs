@@ -474,11 +474,6 @@ impl VideoFrame<Writable> {
         }
     }
 
-    #[inline]
-    pub fn buffer_mut(&mut self) -> &mut gst::BufferRef {
-        unsafe { gst::BufferRef::from_mut_ptr(self.frame.buffer) }
-    }
-
     pub fn comp_data_mut(&mut self, component: u32) -> Result<&mut [u8], glib::BoolError> {
         let poffset = self.info().comp_poffset(component as u8) as usize;
         Ok(&mut self.plane_data_mut(self.format_info().plane()[component as usize])?[poffset..])
@@ -845,11 +840,6 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
                 })
             }
         }
-    }
-
-    #[inline]
-    pub fn buffer_mut(&mut self) -> &mut gst::BufferRef {
-        unsafe { gst::BufferRef::from_mut_ptr(self.frame.buffer) }
     }
 
     pub fn comp_data_mut(&mut self, component: u32) -> Result<&mut [u8], glib::BoolError> {

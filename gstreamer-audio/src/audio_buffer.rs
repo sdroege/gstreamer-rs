@@ -233,11 +233,6 @@ impl AudioBuffer<Writable> {
         }
     }
 
-    #[inline]
-    pub fn buffer_mut(&mut self) -> &mut gst::BufferRef {
-        unsafe { gst::BufferRef::from_mut_ptr(self.audio_buffer.buffer) }
-    }
-
     pub fn plane_data_mut(&mut self, plane: u32) -> Result<&mut [u8], glib::BoolError> {
         if plane >= self.n_planes() {
             return Err(glib::bool_error!(
@@ -528,11 +523,6 @@ impl<'a> AudioBufferRef<&'a mut gst::BufferRef> {
                 })
             }
         }
-    }
-
-    #[inline]
-    pub fn buffer_mut(&mut self) -> &mut gst::BufferRef {
-        unsafe { gst::BufferRef::from_mut_ptr(self.audio_buffer.buffer) }
     }
 
     #[inline]
