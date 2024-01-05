@@ -2,7 +2,7 @@
 
 use std::{fmt, marker::PhantomData, mem, ops, ptr, slice};
 
-use glib::translate::{from_glib, Borrowed, ToGlibPtr};
+use glib::translate::*;
 
 use smallvec::SmallVec;
 
@@ -199,6 +199,11 @@ impl AudioBuffer<Readable> {
                 })
             }
         }
+    }
+
+    #[inline]
+    pub fn buffer_owned(&self) -> gst::Buffer {
+        unsafe { from_glib_none(self.audio_buffer.buffer) }
     }
 }
 

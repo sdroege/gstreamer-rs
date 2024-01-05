@@ -1368,6 +1368,14 @@ impl<T> MappedBuffer<T> {
     }
 }
 
+impl MappedBuffer<Readable> {
+    #[doc(alias = "get_buffer")]
+    #[inline]
+    pub fn buffer_owned(&self) -> Buffer {
+        self.buffer.clone()
+    }
+}
+
 impl MappedBuffer<Writable> {
     #[inline]
     pub fn as_mut_slice(&mut self) -> &mut [u8] {

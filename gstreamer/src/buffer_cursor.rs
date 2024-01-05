@@ -287,6 +287,10 @@ impl BufferCursor<Readable> {
             phantom: PhantomData,
         }
     }
+
+    pub fn buffer_owned(&self) -> Buffer {
+        self.buffer.as_ref().unwrap().clone()
+    }
 }
 
 impl BufferCursor<Writable> {
