@@ -29,6 +29,13 @@ macro_rules! mini_object_wrapper (
 
         impl $name {
             #[inline]
+            pub unsafe fn from_glib_ptr_borrow<'a>(
+                ptr: *const *const $ffi_name,
+            ) -> &'a Self {
+                &*(ptr as *const $name)
+            }
+
+            #[inline]
             pub unsafe fn from_glib_none(ptr: *const $ffi_name) -> Self {
                 skip_assert_initialized!();
                 debug_assert!(!ptr.is_null());
