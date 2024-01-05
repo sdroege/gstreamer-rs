@@ -17,8 +17,9 @@ pub trait BaseSinkExtManual: sealed::Sealed + IsA<BaseSink> + 'static {
     fn segment(&self) -> gst::Segment {
         unsafe {
             let sink: &ffi::GstBaseSink = &*(self.as_ptr() as *const _);
-            let _guard = self.as_ref().object_lock();
-            from_glib_none(&sink.segment as *const _)
+            let sinkpad = self.sink_pad();
+            let _guard = sinkpad.stream_lock();
+            from_glib_none(&sink.segment as *const gst::ffi::GstSegment)
         }
     }
 

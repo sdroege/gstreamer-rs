@@ -3,7 +3,10 @@
 use std::mem;
 
 use glib::{prelude::*, translate::*};
-use gst::format::{FormattedValue, SpecificFormattedValueFullRange};
+use gst::{
+    format::{FormattedValue, SpecificFormattedValueFullRange},
+    prelude::*,
+};
 
 use crate::{BaseParse, BaseParseFrame};
 
@@ -26,6 +29,33 @@ pub trait BaseParseExtManual: sealed::Sealed + IsA<BaseParse> + 'static {
         unsafe {
             let elt = &*(self.as_ptr() as *const ffi::GstBaseParse);
             &*(&elt.srcpad as *const *mut gst::ffi::GstPad as *const gst::Pad)
+        }
+    }
+
+    fn segment(&self) -> gst::Segment {
+        unsafe {
+            let ptr: &ffi::GstBaseParse = &*(self.as_ptr() as *const _);
+            let sinkpad = self.sink_pad();
+            let _guard = sinkpad.stream_lock();
+            from_glib_none(&ptr.segment as *const gst::ffi::GstSegment)
+        }
+    }
+
+    fn lost_sync(&self) -> bool {
+        unsafe {
+            let ptr: &ffi::GstBaseParse = &*(self.as_ptr() as *const _);
+            let sinkpad = self.sink_pad();
+            let _guard = sinkpad.stream_lock();
+            ptr.flags & ffi::GST_BASE_PARSE_FLAG_LOST_SYNC as u32 != 0
+        }
+    }
+
+    fn is_draining(&self) -> bool {
+        unsafe {
+            let ptr: &ffi::GstBaseParse = &*(self.as_ptr() as *const _);
+            let sinkpad = self.sink_pad();
+            let _guard = sinkpad.stream_lock();
+            ptr.flags & ffi::GST_BASE_PARSE_FLAG_DRAINING as u32 != 0
         }
     }
 

@@ -32,6 +32,8 @@ pub trait BaseSrcExtManual: sealed::Sealed + IsA<BaseSrc> + 'static {
     fn segment(&self) -> gst::Segment {
         unsafe {
             let src: &ffi::GstBaseSrc = &*(self.as_ptr() as *const _);
+            let srcpad = self.src_pad();
+            let _guard = srcpad.stream_lock();
             let _guard = self.as_ref().object_lock();
             from_glib_none(&src.segment as *const _)
         }

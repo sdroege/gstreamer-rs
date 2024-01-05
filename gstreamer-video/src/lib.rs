@@ -108,6 +108,7 @@ pub use crate::video_converter::{VideoConverter, VideoConverterConfig};
 mod video_codec_frame;
 mod video_decoder;
 mod video_encoder;
+mod video_filter;
 pub use crate::video_codec_frame::VideoCodecFrame;
 pub mod video_codec_state;
 pub use crate::video_codec_state::{VideoCodecState, VideoCodecStateContext};
@@ -175,8 +176,8 @@ pub mod prelude {
     pub use crate::{
         auto::traits::*, video_buffer_pool::VideoBufferPoolConfig,
         video_decoder::VideoDecoderExtManual, video_encoder::VideoEncoderExtManual,
-        video_format::VideoFormatIteratorExt, video_frame::VideoBufferExt,
-        video_overlay::VideoOverlayExtManual,
+        video_filter::VideoFilterExtManual, video_format::VideoFormatIteratorExt,
+        video_frame::VideoBufferExt, video_overlay::VideoOverlayExtManual,
     };
 }
 

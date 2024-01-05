@@ -32,7 +32,8 @@ pub trait BaseTransformExtManual: sealed::Sealed + IsA<BaseTransform> + 'static 
     fn segment(&self) -> gst::Segment {
         unsafe {
             let trans: &ffi::GstBaseTransform = &*(self.as_ptr() as *const _);
-            let _guard = self.as_ref().object_lock();
+            let sinkpad = self.sink_pad();
+            let _guard = sinkpad.stream_lock();
             from_glib_none(&trans.segment as *const _)
         }
     }

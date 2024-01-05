@@ -126,6 +126,26 @@ pub trait AudioDecoderExtManual: sealed::Sealed + IsA<AudioDecoder> + 'static {
             &*(&elt.srcpad as *const *mut gst::ffi::GstPad as *const gst::Pad)
         }
     }
+
+    fn input_segment(&self) -> gst::Segment {
+        unsafe {
+            let ptr: &ffi::GstAudioDecoder = &*(self.as_ptr() as *const _);
+            glib::ffi::g_rec_mutex_lock(mut_override(&ptr.stream_lock));
+            let segment = ptr.input_segment;
+            glib::ffi::g_rec_mutex_unlock(mut_override(&ptr.stream_lock));
+            from_glib_none(&segment as *const gst::ffi::GstSegment)
+        }
+    }
+
+    fn output_segment(&self) -> gst::Segment {
+        unsafe {
+            let ptr: &ffi::GstAudioDecoder = &*(self.as_ptr() as *const _);
+            glib::ffi::g_rec_mutex_lock(mut_override(&ptr.stream_lock));
+            let segment = ptr.output_segment;
+            glib::ffi::g_rec_mutex_unlock(mut_override(&ptr.stream_lock));
+            from_glib_none(&segment as *const gst::ffi::GstSegment)
+        }
+    }
 }
 
 impl<O: IsA<AudioDecoder>> AudioDecoderExtManual for O {}

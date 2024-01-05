@@ -58,6 +58,7 @@ pub use audio_buffer::{AudioBuffer, AudioBufferRef};
 
 mod audio_decoder;
 mod audio_encoder;
+mod audio_filter;
 
 mod audio_converter;
 pub use crate::audio_converter::AudioConverterConfig;
@@ -72,8 +73,8 @@ pub mod prelude {
     pub use crate::{
         audio_aggregator::AudioAggregatorExtManual,
         audio_aggregator_convert_pad::AudioAggregatorConvertPadExtManual,
-        audio_aggregator_pad::AudioAggregatorPadExtManual, audio_format::AudioFormatIteratorExt,
-        auto::traits::*,
+        audio_aggregator_pad::AudioAggregatorPadExtManual, audio_filter::AudioFilterExtManual,
+        audio_format::AudioFormatIteratorExt, auto::traits::*,
     };
 }
 
