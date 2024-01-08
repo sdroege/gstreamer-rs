@@ -905,6 +905,91 @@ impl fmt::Debug for VideoCodecAlphaMeta {
     }
 }
 
+#[cfg(feature = "v1_22")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
+#[repr(transparent)]
+#[doc(alias = "GstVideoSEIUserDataUnregisteredMeta")]
+pub struct VideoSeiUserDataUnregisteredMeta(ffi::GstVideoSEIUserDataUnregisteredMeta);
+
+#[cfg(feature = "v1_22")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
+unsafe impl Send for VideoSeiUserDataUnregisteredMeta {}
+#[cfg(feature = "v1_22")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
+unsafe impl Sync for VideoSeiUserDataUnregisteredMeta {}
+
+#[cfg(feature = "v1_22")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
+impl VideoSeiUserDataUnregisteredMeta {
+    #[doc(alias = "gst_buffer_add_video_sei_user_data_unregistered_meta")]
+    pub fn add<'a>(
+        buffer: &'a mut gst::BufferRef,
+        uuid: &[u8; 16],
+        data: &[u8],
+    ) -> gst::MetaRefMut<'a, Self, gst::meta::Standalone> {
+        skip_assert_initialized!();
+        assert!(!data.is_empty());
+        unsafe {
+            let meta = ffi::gst_buffer_add_video_sei_user_data_unregistered_meta(
+                buffer.as_mut_ptr(),
+                mut_override(uuid.as_ptr()),
+                mut_override(data.as_ptr()),
+                data.len(),
+            );
+
+            Self::from_mut_ptr(buffer, meta)
+        }
+    }
+
+    #[doc(alias = "get_data")]
+    #[inline]
+    pub fn data(&self) -> &[u8] {
+        if self.0.size == 0 {
+            return &[];
+        }
+        // SAFETY: In the C API we have a pointer data and a size variable
+        // indicating the length of the data. Here we convert it to a size,
+        // making sure we read the size specified in the C API.
+        unsafe {
+            use std::slice;
+            slice::from_raw_parts(self.0.data, self.0.size)
+        }
+    }
+
+    #[doc(alias = "get_uuid")]
+    #[inline]
+    pub fn uuid(&self) -> [u8; 16] {
+        self.0.uuid
+    }
+}
+
+#[cfg(feature = "v1_22")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
+impl fmt::Debug for VideoSeiUserDataUnregisteredMeta {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("VideoSeiUserDataUnregisteredMeta")
+            .field(
+                "uuid",
+                &format!("0x{:032X}", u128::from_be_bytes(self.uuid())),
+            )
+            .field("data", &self.data())
+            .finish()
+    }
+}
+
+#[cfg(feature = "v1_22")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
+unsafe impl MetaAPI for VideoSeiUserDataUnregisteredMeta {
+    type GstType = ffi::GstVideoSEIUserDataUnregisteredMeta;
+
+    #[doc(alias = "gst_video_sei_user_data_unregistered_meta_api_get_type")]
+    fn meta_api() -> glib::Type {
+        unsafe {
+            glib::translate::from_glib(ffi::gst_video_sei_user_data_unregistered_meta_api_get_type())
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -1055,5 +1140,47 @@ mod tests {
 
         assert_eq!(meta.plane_size().unwrap(), [79360, 39680, 0, 0]);
         assert_eq!(meta.plane_height().unwrap(), [248, 124, 0, 0]);
+    }
+
+    #[test]
+    #[cfg(feature = "v1_22")]
+    fn test_get_video_sei_user_data_unregistered_meta() {
+        gst::init().unwrap();
+
+        const META_UUID: &[u8; 16] = &[
+            0x4D, 0x49, 0x53, 0x50, 0x6D, 0x69, 0x63, 0x72, 0x6F, 0x73, 0x65, 0x63, 0x74, 0x69,
+            0x6D, 0x65,
+        ];
+
+        const META_DATA: &[u8] = &[
+            0x1f, 0x00, 0x05, 0xff, 0x21, 0x7e, 0xff, 0x29, 0xb5, 0xff, 0xdc, 0x13,
+        ];
+
+        let buffer_data = &[
+            &[0x00, 0x00, 0x00, 0x20, 0x06, 0x05, 0x1c],
+            META_UUID as &[u8],
+            META_DATA,
+            &[
+                0x80, 0x00, 0x00, 0x00, 0x14, 0x65, 0x88, 0x84, 0x00, 0x10, 0xff, 0xfe, 0xf6, 0xf0,
+                0xfe, 0x05, 0x36, 0x56, 0x04, 0x50, 0x96, 0x7b, 0x3f, 0x53, 0xe1,
+            ],
+        ]
+        .concat();
+
+        let mut harness = gst_check::Harness::new("h264parse");
+        harness.set_src_caps_str(r#"
+            video/x-h264, stream-format=(string)avc,
+            width=(int)1920, height=(int)1080, framerate=(fraction)25/1,
+            bit-depth-chroma=(uint)8, parsed=(boolean)true,
+            alignment=(string)au, profile=(string)high, level=(string)4,
+            codec_data=(buffer)01640028ffe1001a67640028acb200f0044fcb080000030008000003019478c1924001000568ebccb22c
+        "#);
+        let buffer = gst::Buffer::from_slice(buffer_data.clone());
+        let buffer = harness.push_and_pull(buffer).unwrap();
+
+        let meta = buffer.meta::<VideoSeiUserDataUnregisteredMeta>().unwrap();
+        assert_eq!(meta.uuid(), *META_UUID);
+        assert_eq!(meta.data(), META_DATA);
+        assert_eq!(meta.data().len(), META_DATA.len());
     }
 }
