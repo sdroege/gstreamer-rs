@@ -42,6 +42,13 @@ pub mod rtp_base_payload;
 
 pub mod rtp_base_depayload;
 
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+mod rtp_meta;
+#[cfg(feature = "v1_16")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+pub use crate::rtp_meta::*;
+
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst_rtp::prelude::*" without getting conflicts
 pub mod prelude {
