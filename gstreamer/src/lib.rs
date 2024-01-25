@@ -58,6 +58,11 @@ pub use crate::log::{
     CAT_REGISTRY, CAT_RUST, CAT_SCHEDULING, CAT_SIGNAL, CAT_STATES,
 };
 
+#[cfg(target_os = "macos")]
+mod macos;
+#[cfg(target_os = "macos")]
+pub use crate::macos::*;
+
 #[macro_use]
 mod error;
 pub use crate::error::*;
