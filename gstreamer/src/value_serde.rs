@@ -4,9 +4,9 @@
 
 use std::{fmt, mem};
 
-use glib::once_cell::sync::Lazy;
 use glib::{Date, StaticType, ToValue};
 use num_rational::Rational32;
+use once_cell::sync::Lazy;
 use serde::{
     de,
     de::{Deserialize, Deserializer, SeqAccess, Visitor},

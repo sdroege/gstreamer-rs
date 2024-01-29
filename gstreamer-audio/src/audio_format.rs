@@ -2,8 +2,8 @@
 
 use std::str;
 
-use glib::once_cell::sync::Lazy;
 use glib::translate::{from_glib, IntoGlib};
+use once_cell::sync::Lazy;
 
 #[cfg(feature = "v1_18")]
 pub static AUDIO_FORMATS_ALL: Lazy<Box<[crate::AudioFormat]>> = Lazy::new(|| unsafe {

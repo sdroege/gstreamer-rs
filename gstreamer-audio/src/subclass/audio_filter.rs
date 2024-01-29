@@ -1,6 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::{once_cell::sync::Lazy, translate::*};
+use glib::translate::*;
 use gst_base::{prelude::*, subclass::prelude::*};
 
 use crate::{AudioFilter, AudioInfo};
@@ -52,10 +52,9 @@ pub trait AudioFilterImplExt: sealed::Sealed + ObjectSubclass {
             );
 
             if templ.is_null() {
-                static ANY_AUDIO_CAPS: Lazy<gst::Caps> =
-                    Lazy::new(|| crate::AudioCapsBuilder::new().build());
+                static ANY_AUDIO_CAPS: std::sync::OnceLock<gst::Caps> = std::sync::OnceLock::new();
 
-                return &ANY_AUDIO_CAPS;
+                return ANY_AUDIO_CAPS.get_or_init(|| crate::AudioCapsBuilder::new().build());
             }
 
             &*(&(*templ).caps as *const *mut gst::ffi::GstCaps as *const gst::Caps)

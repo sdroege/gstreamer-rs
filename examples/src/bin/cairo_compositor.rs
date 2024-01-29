@@ -10,7 +10,6 @@ mod examples_common;
 
 // Our custom compositor element is defined in this module.
 mod cairo_compositor {
-    use glib::once_cell::sync::Lazy;
     use gst_base::subclass::prelude::*;
     use gst_video::{prelude::*, subclass::prelude::*};
 
@@ -57,15 +56,16 @@ mod cairo_compositor {
             // In this case a single property for configuring the background color of the
             // composition.
             fn properties() -> &'static [glib::ParamSpec] {
-                static PROPERTIES: Lazy<Vec<glib::ParamSpec>> = Lazy::new(|| {
+                static PROPERTIES: std::sync::OnceLock<Vec<glib::ParamSpec>> =
+                    std::sync::OnceLock::new();
+
+                PROPERTIES.get_or_init(|| {
                     vec![glib::ParamSpecUInt::builder("background-color")
                         .nick("Background Color")
                         .blurb("Background color as 0xRRGGBB")
                         .default_value(Settings::default().background_color)
                         .build()]
-                });
-
-                &PROPERTIES
+                })
             }
 
             // Called by the application whenever the value of a property should be changed.
@@ -100,20 +100,24 @@ mod cairo_compositor {
             // gst-inspect-1.0 and can also be programmatically retrieved from the gst::Registry
             // after initial registration without having to load the plugin in memory.
             fn metadata() -> Option<&'static gst::subclass::ElementMetadata> {
-                static ELEMENT_METADATA: Lazy<gst::subclass::ElementMetadata> = Lazy::new(|| {
+                static ELEMENT_METADATA: std::sync::OnceLock<gst::subclass::ElementMetadata> =
+                    std::sync::OnceLock::new();
+
+                Some(ELEMENT_METADATA.get_or_init(|| {
                     gst::subclass::ElementMetadata::new(
                         "Cairo Compositor",
                         "Compositor/Video",
                         "Cairo based compositor",
                         "Sebastian Dröge <sebastian@centricular.com>",
                     )
-                });
-
-                Some(&*ELEMENT_METADATA)
+                }))
             }
 
             fn pad_templates() -> &'static [gst::PadTemplate] {
-                static PAD_TEMPLATES: Lazy<Vec<gst::PadTemplate>> = Lazy::new(|| {
+                static PAD_TEMPLATES: std::sync::OnceLock<Vec<gst::PadTemplate>> =
+                    std::sync::OnceLock::new();
+
+                PAD_TEMPLATES.get_or_init(|| {
                     // Create pad templates for our sink and source pad. These are later used for
                     // actually creating the pads and beforehand already provide information to
                     // GStreamer about all possible pads that could exist for this type.
@@ -148,9 +152,7 @@ mod cairo_compositor {
                         )
                         .unwrap(),
                     ]
-                });
-
-                PAD_TEMPLATES.as_ref()
+                })
             }
 
             // Notify via the child proxy interface whenever a new pad is added or removed.
@@ -457,7 +459,10 @@ mod cairo_compositor {
             // In this case there are various properties for defining the position and otherwise
             // the appearance of the stream corresponding to this pad.
             fn properties() -> &'static [glib::ParamSpec] {
-                static PROPERTIES: Lazy<Vec<glib::ParamSpec>> = Lazy::new(|| {
+                static PROPERTIES: std::sync::OnceLock<Vec<glib::ParamSpec>> =
+                    std::sync::OnceLock::new();
+
+                PROPERTIES.get_or_init(|| {
                     vec![
                         glib::ParamSpecDouble::builder("alpha")
                             .nick("Alpha")
@@ -495,9 +500,7 @@ mod cairo_compositor {
                             .default_value(Settings::default().ypos)
                             .build(),
                     ]
-                });
-
-                PROPERTIES.as_ref()
+                })
             }
 
             // Called by the application whenever the value of a property should be changed.

@@ -2,8 +2,9 @@
 
 use std::{collections::VecDeque, sync::Mutex};
 
-use glib::{once_cell::sync::Lazy, prelude::*};
+use glib::prelude::*;
 use gst_audio::subclass::prelude::*;
+use once_cell::sync::Lazy;
 
 use byte_slice_cast::*;
 
@@ -152,15 +153,14 @@ impl BaseTransformImpl for IirFilter {
 
 impl AudioFilterImpl for IirFilter {
     fn allowed_caps() -> &'static gst::Caps {
-        static CAPS: Lazy<gst::Caps> = Lazy::new(|| {
+        static CAPS: std::sync::OnceLock<gst::Caps> = std::sync::OnceLock::new();
+        CAPS.get_or_init(|| {
             // On both of pads we can only handle F32 mono at any sample rate.
             gst_audio::AudioCapsBuilder::new_interleaved()
                 .format(gst_audio::AUDIO_FORMAT_F32)
                 .channels(1)
                 .build()
-        });
-
-        &CAPS
+        })
     }
 
     fn setup(&self, info: &gst_audio::AudioInfo) -> Result<(), gst::LoggableError> {

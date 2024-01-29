@@ -223,22 +223,22 @@ impl AppSrc {
 
     #[doc(alias = "gst_app_src_set_callbacks")]
     pub fn set_callbacks(&self, callbacks: AppSrcCallbacks) {
-        #[cfg(not(feature = "v1_18"))]
-        use glib::once_cell::sync::Lazy;
-        #[cfg(not(feature = "v1_18"))]
-        static SET_ONCE_QUARK: Lazy<glib::Quark> =
-            Lazy::new(|| glib::Quark::from_str("gstreamer-rs-app-src-callbacks"));
-
         unsafe {
             let src = self.to_glib_none().0;
             #[cfg(not(feature = "v1_18"))]
             {
+                static SET_ONCE_QUARK: std::sync::OnceLock<glib::Quark> =
+                    std::sync::OnceLock::new();
+
+                let set_once_quark = SET_ONCE_QUARK
+                    .get_or_init(|| glib::Quark::from_str("gstreamer-rs-app-src-callbacks"));
+
                 // This is not thread-safe before 1.16.3, see
                 // https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/merge_requests/570
                 if gst::version() < (1, 16, 3, 0) {
                     if !glib::gobject_ffi::g_object_get_qdata(
                         src as *mut _,
-                        SET_ONCE_QUARK.into_glib(),
+                        set_once_quark.into_glib(),
                     )
                     .is_null()
                     {
@@ -247,7 +247,7 @@ impl AppSrc {
 
                     glib::gobject_ffi::g_object_set_qdata(
                         src as *mut _,
-                        SET_ONCE_QUARK.into_glib(),
+                        set_once_quark.into_glib(),
                         1 as *mut _,
                     );
                 }

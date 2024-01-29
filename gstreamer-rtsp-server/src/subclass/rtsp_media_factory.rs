@@ -224,10 +224,10 @@ unsafe extern "C" fn factory_create_pipeline<T: RTSPMediaFactoryImpl>(
     ptr: *mut ffi::GstRTSPMediaFactory,
     media: *mut ffi::GstRTSPMedia,
 ) -> *mut gst::ffi::GstElement {
-    use glib::once_cell::sync::Lazy;
+    static PIPELINE_QUARK: std::sync::OnceLock<glib::Quark> = std::sync::OnceLock::new();
 
-    static PIPELINE_QUARK: Lazy<glib::Quark> =
-        Lazy::new(|| glib::Quark::from_str("gstreamer-rs-rtsp-media-pipeline"));
+    let pipeline_quark =
+        PIPELINE_QUARK.get_or_init(|| glib::Quark::from_str("gstreamer-rs-rtsp-media-pipeline"));
 
     let instance = &*(ptr as *mut T::Instance);
     let imp = instance.imp();
@@ -239,7 +239,7 @@ unsafe extern "C" fn factory_create_pipeline<T: RTSPMediaFactoryImpl>(
     // FIXME We somehow need to ensure the pipeline actually stays alive...
     glib::gobject_ffi::g_object_set_qdata_full(
         media as *mut _,
-        PIPELINE_QUARK.into_glib(),
+        pipeline_quark.into_glib(),
         pipeline as *mut _,
         Some(transmute::<_, unsafe extern "C" fn(glib::ffi::gpointer)>(
             glib::gobject_ffi::g_object_unref as *const (),

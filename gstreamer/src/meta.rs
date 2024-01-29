@@ -237,9 +237,9 @@ impl<'a, T> MetaRef<'a, T> {
     where
         T: MetaAPI,
     {
-        use glib::once_cell::sync::Lazy;
+        static TRANSFORM_COPY: std::sync::OnceLock<glib::Quark> = std::sync::OnceLock::new();
 
-        static TRANSFORM_COPY: Lazy<glib::Quark> = Lazy::new(|| glib::Quark::from_str("gst-copy"));
+        let transform_copy = TRANSFORM_COPY.get_or_init(|| glib::Quark::from_str("gst-copy"));
 
         let (offset, size) = self.buffer.byte_range_into_offset_len(range)?;
 
@@ -262,7 +262,7 @@ impl<'a, T> MetaRef<'a, T> {
                     buffer.as_mut_ptr(),
                     mut_override(self.upcast_ref().as_ptr()),
                     mut_override(self.buffer.as_ptr()),
-                    TRANSFORM_COPY.into_glib(),
+                    transform_copy.into_glib(),
                     &mut copy_data as *mut _ as *mut _,
                 ),
                 "Failed to copy meta"

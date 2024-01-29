@@ -666,22 +666,24 @@ mod tests {
 
         impl ElementImpl for TestElement {
             fn metadata() -> Option<&'static ElementMetadata> {
-                use glib::once_cell::sync::Lazy;
-                static ELEMENT_METADATA: Lazy<ElementMetadata> = Lazy::new(|| {
+                static ELEMENT_METADATA: std::sync::OnceLock<ElementMetadata> =
+                    std::sync::OnceLock::new();
+
+                Some(ELEMENT_METADATA.get_or_init(|| {
                     ElementMetadata::new(
                         "Test Element",
                         "Generic",
                         "Does nothing",
                         "Sebastian Dröge <sebastian@centricular.com>",
                     )
-                });
-
-                Some(&*ELEMENT_METADATA)
+                }))
             }
 
             fn pad_templates() -> &'static [PadTemplate] {
-                use glib::once_cell::sync::Lazy;
-                static PAD_TEMPLATES: Lazy<Vec<PadTemplate>> = Lazy::new(|| {
+                static PAD_TEMPLATES: std::sync::OnceLock<Vec<PadTemplate>> =
+                    std::sync::OnceLock::new();
+
+                PAD_TEMPLATES.get_or_init(|| {
                     let caps = crate::Caps::new_any();
                     vec![
                         PadTemplate::new(
@@ -699,9 +701,7 @@ mod tests {
                         )
                         .unwrap(),
                     ]
-                });
-
-                PAD_TEMPLATES.as_ref()
+                })
             }
 
             fn change_state(

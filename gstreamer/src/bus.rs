@@ -192,23 +192,23 @@ impl Bus {
     where
         F: Fn(&Bus, &Message) -> BusSyncReply + Send + Sync + 'static,
     {
-        #[cfg(not(feature = "v1_18"))]
-        use glib::once_cell::sync::Lazy;
-        #[cfg(not(feature = "v1_18"))]
-        static SET_ONCE_QUARK: Lazy<glib::Quark> =
-            Lazy::new(|| glib::Quark::from_str("gstreamer-rs-sync-handler"));
-
         unsafe {
             let bus = self.to_glib_none().0;
 
             #[cfg(not(feature = "v1_18"))]
             {
+                static SET_ONCE_QUARK: std::sync::OnceLock<glib::Quark> =
+                    std::sync::OnceLock::new();
+
+                let set_once_quark = SET_ONCE_QUARK
+                    .get_or_init(|| glib::Quark::from_str("gstreamer-rs-sync-handler"));
+
                 // This is not thread-safe before 1.16.3, see
                 // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/merge_requests/416
                 if crate::version() < (1, 16, 3, 0) {
                     if !glib::gobject_ffi::g_object_get_qdata(
                         bus as *mut _,
-                        SET_ONCE_QUARK.into_glib(),
+                        set_once_quark.into_glib(),
                     )
                     .is_null()
                     {
@@ -217,7 +217,7 @@ impl Bus {
 
                     glib::gobject_ffi::g_object_set_qdata(
                         bus as *mut _,
-                        SET_ONCE_QUARK.into_glib(),
+                        set_once_quark.into_glib(),
                         1 as *mut _,
                     );
                 }

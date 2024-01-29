@@ -356,12 +356,9 @@ unsafe extern "C" fn filter_boxed_unref(boxed: gpointer) {
 }
 
 unsafe extern "C" fn filter_boxed_get_type() -> glib::Type {
-    use std::sync::Once;
+    static TYPE: std::sync::OnceLock<glib::Type> = std::sync::OnceLock::new();
 
-    static mut TYPE: glib::Type = glib::Type::INVALID;
-    static ONCE: Once = Once::new();
-
-    ONCE.call_once(|| {
+    *TYPE.get_or_init(|| {
         let iter_type_name = {
             let mut idx = 0;
 
@@ -376,16 +373,16 @@ unsafe extern "C" fn filter_boxed_get_type() -> glib::Type {
             }
         };
 
-        TYPE = from_glib(glib::gobject_ffi::g_boxed_type_register_static(
+        let t = glib::Type::from_glib(glib::gobject_ffi::g_boxed_type_register_static(
             iter_type_name.as_ptr(),
             Some(filter_boxed_ref),
             Some(filter_boxed_unref),
         ));
 
-        assert!(TYPE.is_valid());
-    });
+        assert!(t.is_valid());
 
-    TYPE
+        t
+    })
 }
 
 unsafe extern "C" fn find_trampoline<T, F: FnMut(T) -> bool>(

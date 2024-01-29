@@ -361,11 +361,11 @@ mod video_filter {
         use std::{mem::ManuallyDrop, os::unix::prelude::FromRawFd};
 
         use anyhow::Error;
-        use glib::once_cell::sync::Lazy;
         use gst::{subclass::prelude::*, PadDirection, PadPresence, PadTemplate};
         use gst_app::gst_base::subclass::BaseTransformMode;
         use gst_video::{prelude::*, subclass::prelude::*, VideoFrameRef};
         use memmap2::MmapMut;
+        use once_cell::sync::Lazy;
 
         static CAT: Lazy<gst::DebugCategory> = Lazy::new(|| {
             gst::DebugCategory::new(
@@ -430,7 +430,10 @@ mod video_filter {
 
         impl ElementImpl for FdMemoryFadeInVideoFilter {
             fn pad_templates() -> &'static [PadTemplate] {
-                static PAD_TEMPLATES: Lazy<Vec<PadTemplate>> = Lazy::new(|| {
+                static PAD_TEMPLATES: std::sync::OnceLock<Vec<PadTemplate>> =
+                    std::sync::OnceLock::new();
+
+                PAD_TEMPLATES.get_or_init(|| {
                     let caps = gst_video::VideoCapsBuilder::new()
                         .format(gst_video::VideoFormat::Bgra)
                         .build();
@@ -440,9 +443,7 @@ mod video_filter {
                         PadTemplate::new("src", PadDirection::Src, PadPresence::Always, &caps)
                             .unwrap(),
                     ]
-                });
-
-                PAD_TEMPLATES.as_ref()
+                })
             }
         }
 

@@ -43,12 +43,12 @@ macro_rules! bitflags_serialize_impl {
             where
                 S: serde::Serializer,
             {
-                use glib::once_cell::sync::Lazy;
-
                 let mut handled = Self::empty();
                 let mut res = String::new();
 
-                static SORTED_VALUES: Lazy<Vec<(u32, String)>> = Lazy::new(|| {
+                static SORTED_VALUES: std::sync::OnceLock<Vec<(u32, String)>> = std::sync::OnceLock::new();
+
+                let sorted_values = SORTED_VALUES.get_or_init(|| {
                     let class = FlagsClass::with_type(<$type>::static_type()).unwrap();
                     let mut sorted_values: Vec<(u32, String)> =
                         class.values().iter()
@@ -62,7 +62,7 @@ macro_rules! bitflags_serialize_impl {
                     sorted_values
                 });
 
-                for (bits, nick) in SORTED_VALUES.iter() {
+                for (bits, nick) in sorted_values.iter() {
                     // not all values defined in the class are always also defined
                     // in the bitflags struct, see RTPBufferFlags for example
                     if let Some(value) = Self::from_bits(*bits) {

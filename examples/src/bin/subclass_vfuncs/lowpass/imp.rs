@@ -2,7 +2,7 @@
 
 use std::sync::Mutex;
 
-use glib::{once_cell::sync::Lazy, prelude::*};
+use glib::prelude::*;
 use gst::prelude::*;
 use gst_audio::subclass::prelude::*;
 
@@ -45,7 +45,9 @@ impl ObjectSubclass for Lowpass {
 // Implementation of glib::Object virtual methods
 impl ObjectImpl for Lowpass {
     fn properties() -> &'static [glib::ParamSpec] {
-        static PROPERTIES: Lazy<Vec<glib::ParamSpec>> = Lazy::new(|| {
+        static PROPERTIES: std::sync::OnceLock<Vec<glib::ParamSpec>> = std::sync::OnceLock::new();
+
+        PROPERTIES.get_or_init(|| {
             vec![glib::ParamSpecFloat::builder("cutoff")
                 .nick("Cutoff")
                 .blurb("Cutoff frequency in Hz")
@@ -53,9 +55,7 @@ impl ObjectImpl for Lowpass {
                 .minimum(0.0)
                 .mutable_playing()
                 .build()]
-        });
-
-        PROPERTIES.as_ref()
+        })
     }
 
     fn set_property(&self, _id: usize, value: &glib::Value, pspec: &glib::ParamSpec) {
@@ -84,16 +84,16 @@ impl ElementImpl for Lowpass {
     // gst-inspect-1.0 and can also be programmatically retrieved from the gst::Registry
     // after initial registration without having to load the plugin in memory.
     fn metadata() -> Option<&'static gst::subclass::ElementMetadata> {
-        static ELEMENT_METADATA: Lazy<gst::subclass::ElementMetadata> = Lazy::new(|| {
+        static ELEMENT_METADATA: std::sync::OnceLock<gst::subclass::ElementMetadata> =
+            std::sync::OnceLock::new();
+        Some(ELEMENT_METADATA.get_or_init(|| {
             gst::subclass::ElementMetadata::new(
                 "Lowpass Filter",
                 "Filter/Effect/Audio",
                 "A Lowpass audio filter",
                 "Sebastian Dröge <sebastian@centricular.com>",
             )
-        });
-
-        Some(&*ELEMENT_METADATA)
+        }))
     }
 }
 

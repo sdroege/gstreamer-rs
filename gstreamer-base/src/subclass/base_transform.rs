@@ -1310,22 +1310,24 @@ mod tests {
 
         impl ElementImpl for TestTransform {
             fn metadata() -> Option<&'static gst::subclass::ElementMetadata> {
-                use glib::once_cell::sync::Lazy;
-                static ELEMENT_METADATA: Lazy<gst::subclass::ElementMetadata> = Lazy::new(|| {
+                static ELEMENT_METADATA: std::sync::OnceLock<gst::subclass::ElementMetadata> =
+                    std::sync::OnceLock::new();
+
+                Some(ELEMENT_METADATA.get_or_init(|| {
                     gst::subclass::ElementMetadata::new(
                         "Test Transform",
                         "Generic",
                         "Does nothing",
                         "Sebastian Dröge <sebastian@centricular.com>",
                     )
-                });
-
-                Some(&*ELEMENT_METADATA)
+                }))
             }
 
             fn pad_templates() -> &'static [gst::PadTemplate] {
-                use glib::once_cell::sync::Lazy;
-                static PAD_TEMPLATES: Lazy<Vec<gst::PadTemplate>> = Lazy::new(|| {
+                static PAD_TEMPLATES: std::sync::OnceLock<Vec<gst::PadTemplate>> =
+                    std::sync::OnceLock::new();
+
+                PAD_TEMPLATES.get_or_init(|| {
                     let caps = gst::Caps::new_any();
                     vec![
                         gst::PadTemplate::new(
@@ -1343,9 +1345,7 @@ mod tests {
                         )
                         .unwrap(),
                     ]
-                });
-
-                PAD_TEMPLATES.as_ref()
+                })
             }
         }
 

@@ -49,9 +49,10 @@ unsafe extern "C" fn video_renderer_create_video_sink<T: PlayVideoRendererImpl>(
     video_renderer: *mut ffi::GstPlayVideoRenderer,
     play: *mut ffi::GstPlay,
 ) -> *mut gst::ffi::GstElement {
-    use glib::once_cell::sync::Lazy;
-    static VIDEO_SINK_QUARK: Lazy<glib::Quark> =
-        Lazy::new(|| glib::Quark::from_str("gstreamer-rs-play-video-sink"));
+    static VIDEO_SINK_QUARK: std::sync::OnceLock<glib::Quark> = std::sync::OnceLock::new();
+
+    let video_sink_quark =
+        VIDEO_SINK_QUARK.get_or_init(|| glib::Quark::from_str("gstreamer-rs-play-video-sink"));
 
     let instance = &*(video_renderer as *mut T::Instance);
     let imp = instance.imp();
@@ -62,7 +63,7 @@ unsafe extern "C" fn video_renderer_create_video_sink<T: PlayVideoRendererImpl>(
 
     let old_sink_ptr = glib::gobject_ffi::g_object_get_qdata(
         video_renderer as *mut _,
-        VIDEO_SINK_QUARK.into_glib(),
+        video_sink_quark.into_glib(),
     ) as *mut gst::ffi::GstElement;
     if !old_sink_ptr.is_null() && old_sink_ptr != sink_ptr {
         panic!("Video sink must not change");
@@ -74,7 +75,7 @@ unsafe extern "C" fn video_renderer_create_video_sink<T: PlayVideoRendererImpl>(
 
     glib::gobject_ffi::g_object_set_qdata_full(
         video_renderer as *mut _,
-        VIDEO_SINK_QUARK.into_glib(),
+        video_sink_quark.into_glib(),
         glib::gobject_ffi::g_object_ref(sink_ptr as *mut _) as *mut _,
         Some(unref),
     );

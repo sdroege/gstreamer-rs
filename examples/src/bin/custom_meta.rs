@@ -71,7 +71,6 @@ mod custom_meta {
     mod imp {
         use std::{mem, ptr};
 
-        use glib::once_cell::sync::Lazy;
         use glib::translate::*;
 
         pub(super) struct CustomMetaParams {
@@ -87,8 +86,10 @@ mod custom_meta {
 
         // Function to register the meta API and get a type back.
         pub(super) fn custom_meta_api_get_type() -> glib::Type {
-            static TYPE: Lazy<glib::Type> = Lazy::new(|| unsafe {
-                let t = from_glib(gst::ffi::gst_meta_api_type_register(
+            static TYPE: std::sync::OnceLock<glib::Type> = std::sync::OnceLock::new();
+
+            *TYPE.get_or_init(|| unsafe {
+                let t = glib::Type::from_glib(gst::ffi::gst_meta_api_type_register(
                     b"MyCustomMetaAPI\0".as_ptr() as *const _,
                     // We provide no tags here as our meta is just a label and does
                     // not refer to any specific aspect of the buffer.
@@ -98,9 +99,7 @@ mod custom_meta {
                 assert_ne!(t, glib::Type::INVALID);
 
                 t
-            });
-
-            *TYPE
+            })
         }
 
         // Initialization function for our meta. This needs to ensure all fields are correctly
@@ -157,21 +156,24 @@ mod custom_meta {
             unsafe impl Send for MetaInfo {}
             unsafe impl Sync for MetaInfo {}
 
-            static META_INFO: Lazy<MetaInfo> = Lazy::new(|| unsafe {
-                MetaInfo(
-                    ptr::NonNull::new(gst::ffi::gst_meta_register(
-                        custom_meta_api_get_type().into_glib(),
-                        b"MyCustomMeta\0".as_ptr() as *const _,
-                        mem::size_of::<CustomMeta>(),
-                        Some(custom_meta_init),
-                        Some(custom_meta_free),
-                        Some(custom_meta_transform),
-                    ) as *mut gst::ffi::GstMetaInfo)
-                    .expect("Failed to register meta API"),
-                )
-            });
+            static META_INFO: std::sync::OnceLock<MetaInfo> = std::sync::OnceLock::new();
 
-            META_INFO.0.as_ptr()
+            META_INFO
+                .get_or_init(|| unsafe {
+                    MetaInfo(
+                        ptr::NonNull::new(gst::ffi::gst_meta_register(
+                            custom_meta_api_get_type().into_glib(),
+                            b"MyCustomMeta\0".as_ptr() as *const _,
+                            mem::size_of::<CustomMeta>(),
+                            Some(custom_meta_init),
+                            Some(custom_meta_free),
+                            Some(custom_meta_transform),
+                        ) as *mut gst::ffi::GstMetaInfo)
+                        .expect("Failed to register meta API"),
+                    )
+                })
+                .0
+                .as_ptr()
         }
     }
 }

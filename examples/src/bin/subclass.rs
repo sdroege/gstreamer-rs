@@ -17,8 +17,8 @@ mod examples_common;
 // Our custom FIR filter element is defined in this module
 mod fir_filter {
     use byte_slice_cast::*;
-    use glib::once_cell::sync::Lazy;
     use gst_base::subclass::prelude::*;
+    use once_cell::sync::Lazy;
 
     // The debug category we use below for our filter
     pub static CAT: Lazy<gst::DebugCategory> = Lazy::new(|| {
@@ -63,20 +63,24 @@ mod fir_filter {
             // gst-inspect-1.0 and can also be programmatically retrieved from the gst::Registry
             // after initial registration without having to load the plugin in memory.
             fn metadata() -> Option<&'static gst::subclass::ElementMetadata> {
-                static ELEMENT_METADATA: Lazy<gst::subclass::ElementMetadata> = Lazy::new(|| {
+                static ELEMENT_METADATA: std::sync::OnceLock<gst::subclass::ElementMetadata> =
+                    std::sync::OnceLock::new();
+
+                Some(ELEMENT_METADATA.get_or_init(|| {
                     gst::subclass::ElementMetadata::new(
                         "FIR Filter",
                         "Filter/Effect/Audio",
                         "A FIR audio filter",
                         "Sebastian Dröge <sebastian@centricular.com>",
                     )
-                });
-
-                Some(&*ELEMENT_METADATA)
+                }))
             }
 
             fn pad_templates() -> &'static [gst::PadTemplate] {
-                static PAD_TEMPLATES: Lazy<Vec<gst::PadTemplate>> = Lazy::new(|| {
+                static PAD_TEMPLATES: std::sync::OnceLock<Vec<gst::PadTemplate>> =
+                    std::sync::OnceLock::new();
+
+                PAD_TEMPLATES.get_or_init(|| {
                     // Create pad templates for our sink and source pad. These are later used for
                     // actually creating the pads and beforehand already provide information to
                     // GStreamer about all possible pads that could exist for this type.
@@ -107,9 +111,7 @@ mod fir_filter {
                         )
                         .unwrap(),
                     ]
-                });
-
-                PAD_TEMPLATES.as_ref()
+                })
             }
         }
 

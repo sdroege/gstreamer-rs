@@ -504,6 +504,7 @@ dependencies = [
  "memfd",
  "memmap2",
  "objc",
+ "once_cell",
  "pango",
  "pangocairo",
  "raw-window-handle",
@@ -843,6 +844,7 @@ dependencies = [
  "muldiv",
  "num-integer",
  "num-rational",
+ "once_cell",
  "option-operations",
  "paste",
  "pin-project-lite",
@@ -863,6 +865,7 @@ dependencies = [
  "gstreamer",
  "gstreamer-allocators-sys",
  "libc",
+ "once_cell",
 ]
 
 [[package]]
@@ -919,6 +922,7 @@ dependencies = [
  "gstreamer-base",
  "itertools",
  "libc",
+ "once_cell",
  "serde",
  "serde_json",
  "smallvec",
@@ -1053,6 +1057,7 @@ dependencies = [
  "gstreamer-gl-sys",
  "gstreamer-video",
  "libc",
+ "once_cell",
  "serde",
  "serde_json",
 ]
@@ -1428,6 +1433,7 @@ dependencies = [
  "gstreamer",
  "gstreamer-app",
  "gstreamer-video",
+ "once_cell",
  "thiserror",
 ]
 
@@ -1471,6 +1477,7 @@ dependencies = [
  "gstreamer-video-sys",
  "itertools",
  "libc",
+ "once_cell",
  "serde",
  "serde_json",
  "thiserror",
@@ -1745,17 +1752,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8c196769dd60fd4f363e11d948139556a344e79d451aeb2fa2fd040738ef7691"
 dependencies = [
  "jni-sys",
-]
-
-[[package]]
-name = "nix"
-version = "0.26.4"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "598beaf3cc6fdd9a5dfb1630c2800c7acd31df7aaf0f565796fba2b53ca1af1b"
-dependencies = [
- "bitflags 1.3.2",
- "cfg-if",
- "libc",
 ]
 
 [[package]]
@@ -2526,11 +2522,11 @@ dependencies = [
 
 [[package]]
 name = "wayland-cursor"
-version = "0.31.0"
+version = "0.31.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a44aa20ae986659d6c77d64d808a046996a932aa763913864dc40c359ef7ad5b"
+checksum = "71ce5fa868dd13d11a0d04c5e2e65726d0897be8de247c0c5a65886e283231ba"
 dependencies = [
- "nix",
+ "rustix",
  "wayland-client",
  "xcursor",
 ]

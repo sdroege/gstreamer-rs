@@ -1,6 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::{once_cell::sync::Lazy, translate::*, StaticType};
+use glib::{translate::*, StaticType};
 
 use std::{alloc, mem, ptr};
 
@@ -141,49 +141,55 @@ unsafe extern "C" fn instance_init(
     (*allocator).object.flags |= ffi::GST_ALLOCATOR_FLAG_CUSTOM_ALLOC;
 }
 
-static RUST_ALLOCATOR: Lazy<crate::Allocator> = Lazy::new(|| unsafe {
-    struct TypeInfoWrap(glib::gobject_ffi::GTypeInfo);
-    unsafe impl Send for TypeInfoWrap {}
-    unsafe impl Sync for TypeInfoWrap {}
+fn rust_allocator() -> &'static crate::Allocator {
+    static RUST_ALLOCATOR: std::sync::OnceLock<crate::Allocator> = std::sync::OnceLock::new();
 
-    static TYPE_INFO: TypeInfoWrap = TypeInfoWrap(glib::gobject_ffi::GTypeInfo {
-        class_size: mem::size_of::<ffi::GstAllocatorClass>() as u16,
-        base_init: None,
-        base_finalize: None,
-        class_init: Some(class_init),
-        class_finalize: None,
-        class_data: ptr::null_mut(),
-        instance_size: mem::size_of::<ffi::GstAllocator>() as u16,
-        n_preallocs: 0,
-        instance_init: Some(instance_init),
-        value_table: ptr::null(),
-    });
+    RUST_ALLOCATOR.get_or_init(|| unsafe {
+        struct TypeInfoWrap(glib::gobject_ffi::GTypeInfo);
+        unsafe impl Send for TypeInfoWrap {}
+        unsafe impl Sync for TypeInfoWrap {}
 
-    let type_name = {
-        let mut idx = 0;
+        static TYPE_INFO: TypeInfoWrap = TypeInfoWrap(glib::gobject_ffi::GTypeInfo {
+            class_size: mem::size_of::<ffi::GstAllocatorClass>() as u16,
+            base_init: None,
+            base_finalize: None,
+            class_init: Some(class_init),
+            class_finalize: None,
+            class_data: ptr::null_mut(),
+            instance_size: mem::size_of::<ffi::GstAllocator>() as u16,
+            n_preallocs: 0,
+            instance_init: Some(instance_init),
+            value_table: ptr::null(),
+        });
 
-        loop {
-            let type_name = glib::gformat!("GstRsAllocator-{}", idx);
-            if glib::gobject_ffi::g_type_from_name(type_name.as_ptr())
-                == glib::gobject_ffi::G_TYPE_INVALID
-            {
-                break type_name;
+        let type_name = {
+            let mut idx = 0;
+
+            loop {
+                let type_name = glib::gformat!("GstRsAllocator-{}", idx);
+                if glib::gobject_ffi::g_type_from_name(type_name.as_ptr())
+                    == glib::gobject_ffi::G_TYPE_INVALID
+                {
+                    break type_name;
+                }
+                idx += 1;
             }
-            idx += 1;
-        }
-    };
+        };
 
-    let t = glib::gobject_ffi::g_type_register_static(
-        crate::Allocator::static_type().into_glib(),
-        type_name.as_ptr(),
-        &TYPE_INFO.0,
-        0,
-    );
+        let t = glib::gobject_ffi::g_type_register_static(
+            crate::Allocator::static_type().into_glib(),
+            type_name.as_ptr(),
+            &TYPE_INFO.0,
+            0,
+        );
 
-    assert!(t != glib::gobject_ffi::G_TYPE_INVALID);
+        assert!(t != glib::gobject_ffi::G_TYPE_INVALID);
 
-    from_glib_none(glib::gobject_ffi::g_object_newv(t, 0, ptr::null_mut()) as *mut ffi::GstAllocator)
-});
+        from_glib_none(
+            glib::gobject_ffi::g_object_newv(t, 0, ptr::null_mut()) as *mut ffi::GstAllocator
+        )
+    })
+}
 
 impl Memory {
     #[doc(alias = "gst_memory_new_wrapped")]
@@ -200,7 +206,7 @@ impl Memory {
             ffi::gst_memory_init(
                 mem as *mut ffi::GstMemory,
                 ffi::GST_MINI_OBJECT_FLAG_LOCK_READONLY,
-                RUST_ALLOCATOR.to_glib_none().0,
+                rust_allocator().to_glib_none().0,
                 ptr::null_mut(),
                 len,
                 0,
@@ -242,7 +248,7 @@ impl Memory {
             ffi::gst_memory_init(
                 mem as *mut ffi::GstMemory,
                 0,
-                RUST_ALLOCATOR.to_glib_none().0,
+                rust_allocator().to_glib_none().0,
                 ptr::null_mut(),
                 len,
                 0,

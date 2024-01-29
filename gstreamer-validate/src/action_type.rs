@@ -1,10 +1,6 @@
 use std::{ffi::c_int, ptr};
 
-use glib::once_cell::sync::Lazy;
 use glib::translate::*;
-
-static QUARK_ACTION_TYPE_FUNC: Lazy<glib::Quark> =
-    Lazy::new(|| glib::Quark::from_str("rs-action-type-function"));
 
 #[derive(Debug)]
 #[repr(transparent)]
@@ -193,6 +189,12 @@ impl<'a> ActionTypeBuilder<'a> {
     }
 
     pub fn build(self) -> crate::ActionType {
+        static QUARK_ACTION_TYPE_FUNC: std::sync::OnceLock<glib::Quark> =
+            std::sync::OnceLock::new();
+
+        let quark_action_type_func =
+            QUARK_ACTION_TYPE_FUNC.get_or_init(|| glib::Quark::from_str("rs-action-type-function"));
+
         unsafe extern "C" fn execute_func_trampoline(
             scenario: *mut ffi::GstValidateScenario,
             action: *mut ffi::GstValidateAction,
@@ -203,7 +205,7 @@ impl<'a> ActionTypeBuilder<'a> {
 
             let func: &ActionFunction = &*(gst::ffi::gst_mini_object_get_qdata(
                 action_type as *mut gst::ffi::GstMiniObject,
-                QUARK_ACTION_TYPE_FUNC.into_glib(),
+                QUARK_ACTION_TYPE_FUNC.get().unwrap().into_glib(),
             ) as *const Box<ActionFunction>);
 
             (*func)(&scenario, action).into_glib()
@@ -232,7 +234,7 @@ impl<'a> ActionTypeBuilder<'a> {
 
             gst::ffi::gst_mini_object_set_qdata(
                 action_type as *mut gst::ffi::GstMiniObject,
-                QUARK_ACTION_TYPE_FUNC.into_glib(),
+                quark_action_type_func.into_glib(),
                 Box::into_raw(Box::new(f)) as *mut _,
                 Some(destroy_notify),
             );
