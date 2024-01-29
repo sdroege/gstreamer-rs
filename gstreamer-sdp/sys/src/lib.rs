@@ -123,7 +123,7 @@ pub struct _GstMIKEYDecryptInfo {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstMIKEYDecryptInfo = *mut _GstMIKEYDecryptInfo;
+pub type GstMIKEYDecryptInfo = _GstMIKEYDecryptInfo;
 
 #[repr(C)]
 pub struct _GstMIKEYEncryptInfo {
@@ -131,7 +131,7 @@ pub struct _GstMIKEYEncryptInfo {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstMIKEYEncryptInfo = *mut _GstMIKEYEncryptInfo;
+pub type GstMIKEYEncryptInfo = _GstMIKEYEncryptInfo;
 
 #[derive(Copy, Clone)]
 #[repr(C)]

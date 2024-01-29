@@ -139,7 +139,7 @@ pub struct _GstAdapterClass {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstAdapterClass = *mut _GstAdapterClass;
+pub type GstAdapterClass = _GstAdapterClass;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -294,7 +294,7 @@ pub struct _GstAggregatorPadPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstAggregatorPadPrivate = *mut _GstAggregatorPadPrivate;
+pub type GstAggregatorPadPrivate = _GstAggregatorPadPrivate;
 
 #[repr(C)]
 pub struct _GstAggregatorPrivate {
@@ -302,7 +302,7 @@ pub struct _GstAggregatorPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstAggregatorPrivate = *mut _GstAggregatorPrivate;
+pub type GstAggregatorPrivate = _GstAggregatorPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -394,7 +394,7 @@ pub struct _GstBaseParsePrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstBaseParsePrivate = *mut _GstBaseParsePrivate;
+pub type GstBaseParsePrivate = _GstBaseParsePrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -471,7 +471,7 @@ pub struct _GstBaseSinkPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstBaseSinkPrivate = *mut _GstBaseSinkPrivate;
+pub type GstBaseSinkPrivate = _GstBaseSinkPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -565,7 +565,7 @@ pub struct _GstBaseSrcPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstBaseSrcPrivate = *mut _GstBaseSrcPrivate;
+pub type GstBaseSrcPrivate = _GstBaseSrcPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -733,7 +733,7 @@ pub struct _GstBaseTransformPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstBaseTransformPrivate = *mut _GstBaseTransformPrivate;
+pub type GstBaseTransformPrivate = _GstBaseTransformPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -848,7 +848,7 @@ pub struct _GstCollectDataPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstCollectDataPrivate = *mut _GstCollectDataPrivate;
+pub type GstCollectDataPrivate = _GstCollectDataPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -885,7 +885,7 @@ pub struct _GstCollectPadsPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstCollectPadsPrivate = *mut _GstCollectPadsPrivate;
+pub type GstCollectPadsPrivate = _GstCollectPadsPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -936,7 +936,7 @@ pub struct _GstDataQueuePrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstDataQueuePrivate = *mut _GstDataQueuePrivate;
+pub type GstDataQueuePrivate = _GstDataQueuePrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -999,7 +999,7 @@ pub struct _GstQueueArray {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstQueueArray = *mut _GstQueueArray;
+pub type GstQueueArray = _GstQueueArray;
 
 #[repr(C)]
 pub struct _GstTypeFindData {
@@ -1007,7 +1007,7 @@ pub struct _GstTypeFindData {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstTypeFindData = *mut _GstTypeFindData;
+pub type GstTypeFindData = _GstTypeFindData;
 
 // Classes
 #[repr(C)]

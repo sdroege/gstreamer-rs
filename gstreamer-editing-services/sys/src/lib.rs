@@ -344,7 +344,7 @@ pub struct _GESAssetPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESAssetPrivate = *mut _GESAssetPrivate;
+pub type GESAssetPrivate = _GESAssetPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -368,7 +368,7 @@ pub struct _GESAudioSourcePrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESAudioSourcePrivate = *mut _GESAudioSourcePrivate;
+pub type GESAudioSourcePrivate = _GESAudioSourcePrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -390,7 +390,7 @@ pub struct _GESAudioTestSourcePrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESAudioTestSourcePrivate = *mut _GESAudioTestSourcePrivate;
+pub type GESAudioTestSourcePrivate = _GESAudioTestSourcePrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -414,7 +414,7 @@ pub struct _GESAudioTrackPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESAudioTrackPrivate = *mut _GESAudioTrackPrivate;
+pub type GESAudioTrackPrivate = _GESAudioTrackPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -438,7 +438,7 @@ pub struct _GESAudioTransitionPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESAudioTransitionPrivate = *mut _GESAudioTransitionPrivate;
+pub type GESAudioTransitionPrivate = _GESAudioTransitionPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -460,7 +460,7 @@ pub struct _GESAudioUriSourcePrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESAudioUriSourcePrivate = *mut _GESAudioUriSourcePrivate;
+pub type GESAudioUriSourcePrivate = _GESAudioUriSourcePrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -496,7 +496,7 @@ pub struct _GESBaseEffectClipPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESBaseEffectClipPrivate = *mut _GESBaseEffectClipPrivate;
+pub type GESBaseEffectClipPrivate = _GESBaseEffectClipPrivate;
 
 #[repr(C)]
 pub struct _GESBaseEffectPrivate {
@@ -504,7 +504,7 @@ pub struct _GESBaseEffectPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESBaseEffectPrivate = *mut _GESBaseEffectPrivate;
+pub type GESBaseEffectPrivate = _GESBaseEffectPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -526,7 +526,7 @@ pub struct _GESBaseTransitionClipPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESBaseTransitionClipPrivate = *mut _GESBaseTransitionClipPrivate;
+pub type GESBaseTransitionClipPrivate = _GESBaseTransitionClipPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -560,7 +560,7 @@ pub struct _GESBaseXmlFormatterPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESBaseXmlFormatterPrivate = *mut _GESBaseXmlFormatterPrivate;
+pub type GESBaseXmlFormatterPrivate = _GESBaseXmlFormatterPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -587,7 +587,7 @@ pub struct _GESClipAssetPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESClipAssetPrivate = *mut _GESClipAssetPrivate;
+pub type GESClipAssetPrivate = _GESClipAssetPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -628,7 +628,7 @@ pub struct _GESClipPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESClipPrivate = *mut _GESClipPrivate;
+pub type GESClipPrivate = _GESClipPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -650,7 +650,7 @@ pub struct _GESCommandLineFormatterPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESCommandLineFormatterPrivate = *mut _GESCommandLineFormatterPrivate;
+pub type GESCommandLineFormatterPrivate = _GESCommandLineFormatterPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -698,7 +698,7 @@ pub struct _GESContainerPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESContainerPrivate = *mut _GESContainerPrivate;
+pub type GESContainerPrivate = _GESContainerPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -720,7 +720,7 @@ pub struct _GESDiscovererManagerPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESDiscovererManagerPrivate = *mut _GESDiscovererManagerPrivate;
+pub type GESDiscovererManagerPrivate = _GESDiscovererManagerPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -744,7 +744,7 @@ pub struct _GESEffectAssetPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESEffectAssetPrivate = *mut _GESEffectAssetPrivate;
+pub type GESEffectAssetPrivate = _GESEffectAssetPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -781,7 +781,7 @@ pub struct _GESEffectClipPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESEffectClipPrivate = *mut _GESEffectClipPrivate;
+pub type GESEffectClipPrivate = _GESEffectClipPrivate;
 
 #[repr(C)]
 pub struct _GESEffectPrivate {
@@ -789,7 +789,7 @@ pub struct _GESEffectPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESEffectPrivate = *mut _GESEffectPrivate;
+pub type GESEffectPrivate = _GESEffectPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -866,7 +866,7 @@ pub struct _GESFormatterPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESFormatterPrivate = *mut _GESFormatterPrivate;
+pub type GESFormatterPrivate = _GESFormatterPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -918,7 +918,7 @@ pub struct _GESGroupPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESGroupPrivate = *mut _GESGroupPrivate;
+pub type GESGroupPrivate = _GESGroupPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -942,7 +942,7 @@ pub struct _GESImageSourcePrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESImageSourcePrivate = *mut _GESImageSourcePrivate;
+pub type GESImageSourcePrivate = _GESImageSourcePrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -970,7 +970,7 @@ pub struct _GESLayerPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESLayerPrivate = *mut _GESLayerPrivate;
+pub type GESLayerPrivate = _GESLayerPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1038,7 +1038,7 @@ pub struct _GESMultiFileSourcePrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESMultiFileSourcePrivate = *mut _GESMultiFileSourcePrivate;
+pub type GESMultiFileSourcePrivate = _GESMultiFileSourcePrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1074,7 +1074,7 @@ pub struct _GESOperationClipPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESOperationClipPrivate = *mut _GESOperationClipPrivate;
+pub type GESOperationClipPrivate = _GESOperationClipPrivate;
 
 #[repr(C)]
 pub struct _GESOperationPrivate {
@@ -1082,7 +1082,7 @@ pub struct _GESOperationPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESOperationPrivate = *mut _GESOperationPrivate;
+pub type GESOperationPrivate = _GESOperationPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1105,7 +1105,7 @@ pub struct _GESOverlayClipPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESOverlayClipPrivate = *mut _GESOverlayClipPrivate;
+pub type GESOverlayClipPrivate = _GESOverlayClipPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1127,7 +1127,7 @@ pub struct _GESPipelinePrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESPipelinePrivate = *mut _GESPipelinePrivate;
+pub type GESPipelinePrivate = _GESPipelinePrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1149,7 +1149,7 @@ pub struct _GESPitiviFormatterPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESPitiviFormatterPrivate = *mut _GESPitiviFormatterPrivate;
+pub type GESPitiviFormatterPrivate = _GESPitiviFormatterPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1191,7 +1191,7 @@ pub struct _GESProjectPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESProjectPrivate = *mut _GESProjectPrivate;
+pub type GESProjectPrivate = _GESProjectPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1245,7 +1245,7 @@ pub struct _GESSourceClipPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESSourceClipPrivate = *mut _GESSourceClipPrivate;
+pub type GESSourceClipPrivate = _GESSourceClipPrivate;
 
 #[repr(C)]
 pub struct _GESSourcePrivate {
@@ -1253,7 +1253,7 @@ pub struct _GESSourcePrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESSourcePrivate = *mut _GESSourcePrivate;
+pub type GESSourcePrivate = _GESSourcePrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1275,7 +1275,7 @@ pub struct _GESTestClipPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESTestClipPrivate = *mut _GESTestClipPrivate;
+pub type GESTestClipPrivate = _GESTestClipPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1312,7 +1312,7 @@ pub struct _GESTextOverlayClipPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESTextOverlayClipPrivate = *mut _GESTextOverlayClipPrivate;
+pub type GESTextOverlayClipPrivate = _GESTextOverlayClipPrivate;
 
 #[repr(C)]
 pub struct _GESTextOverlayPrivate {
@@ -1320,7 +1320,7 @@ pub struct _GESTextOverlayPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESTextOverlayPrivate = *mut _GESTextOverlayPrivate;
+pub type GESTextOverlayPrivate = _GESTextOverlayPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1448,7 +1448,7 @@ pub struct _GESTimelineElementPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESTimelineElementPrivate = *mut _GESTimelineElementPrivate;
+pub type GESTimelineElementPrivate = _GESTimelineElementPrivate;
 
 #[repr(C)]
 pub struct _GESTimelinePrivate {
@@ -1456,7 +1456,7 @@ pub struct _GESTimelinePrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESTimelinePrivate = *mut _GESTimelinePrivate;
+pub type GESTimelinePrivate = _GESTimelinePrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1478,7 +1478,7 @@ pub struct _GESTitleClipPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESTitleClipPrivate = *mut _GESTitleClipPrivate;
+pub type GESTitleClipPrivate = _GESTitleClipPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1501,7 +1501,7 @@ pub struct _GESTitleSourcePrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESTitleSourcePrivate = *mut _GESTitleSourcePrivate;
+pub type GESTitleSourcePrivate = _GESTitleSourcePrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1544,7 +1544,7 @@ pub struct _GESTrackElementAssetPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESTrackElementAssetPrivate = *mut _GESTrackElementAssetPrivate;
+pub type GESTrackElementAssetPrivate = _GESTrackElementAssetPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1610,7 +1610,7 @@ pub struct _GESTrackElementPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESTrackElementPrivate = *mut _GESTrackElementPrivate;
+pub type GESTrackElementPrivate = _GESTrackElementPrivate;
 
 #[repr(C)]
 pub struct _GESTrackPrivate {
@@ -1618,7 +1618,7 @@ pub struct _GESTrackPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESTrackPrivate = *mut _GESTrackPrivate;
+pub type GESTrackPrivate = _GESTrackPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1654,7 +1654,7 @@ pub struct _GESTransitionClipPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESTransitionClipPrivate = *mut _GESTransitionClipPrivate;
+pub type GESTransitionClipPrivate = _GESTransitionClipPrivate;
 
 #[repr(C)]
 pub struct _GESTransitionPrivate {
@@ -1662,7 +1662,7 @@ pub struct _GESTransitionPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESTransitionPrivate = *mut _GESTransitionPrivate;
+pub type GESTransitionPrivate = _GESTransitionPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1696,7 +1696,7 @@ pub struct _GESUriClipAssetPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESUriClipAssetPrivate = *mut _GESUriClipAssetPrivate;
+pub type GESUriClipAssetPrivate = _GESUriClipAssetPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1718,7 +1718,7 @@ pub struct _GESUriClipPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESUriClipPrivate = *mut _GESUriClipPrivate;
+pub type GESUriClipPrivate = _GESUriClipPrivate;
 
 #[repr(C)]
 pub struct _GESUriSource {
@@ -1726,7 +1726,7 @@ pub struct _GESUriSource {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESUriSource = *mut _GESUriSource;
+pub type GESUriSource = _GESUriSource;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1750,7 +1750,7 @@ pub struct _GESUriSourceAssetPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESUriSourceAssetPrivate = *mut _GESUriSourceAssetPrivate;
+pub type GESUriSourceAssetPrivate = _GESUriSourceAssetPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1801,7 +1801,7 @@ pub struct _GESVideoSourcePrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESVideoSourcePrivate = *mut _GESVideoSourcePrivate;
+pub type GESVideoSourcePrivate = _GESVideoSourcePrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1825,7 +1825,7 @@ pub struct _GESVideoTestSourcePrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESVideoTestSourcePrivate = *mut _GESVideoTestSourcePrivate;
+pub type GESVideoTestSourcePrivate = _GESVideoTestSourcePrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1849,7 +1849,7 @@ pub struct _GESVideoTrackPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESVideoTrackPrivate = *mut _GESVideoTrackPrivate;
+pub type GESVideoTrackPrivate = _GESVideoTrackPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1872,7 +1872,7 @@ pub struct _GESVideoTransitionPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESVideoTransitionPrivate = *mut _GESVideoTransitionPrivate;
+pub type GESVideoTransitionPrivate = _GESVideoTransitionPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1894,7 +1894,7 @@ pub struct _GESVideoUriSourcePrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESVideoUriSourcePrivate = *mut _GESVideoUriSourcePrivate;
+pub type GESVideoUriSourcePrivate = _GESVideoUriSourcePrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1918,7 +1918,7 @@ pub struct _GESXmlFormatterPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GESXmlFormatterPrivate = *mut _GESXmlFormatterPrivate;
+pub type GESXmlFormatterPrivate = _GESXmlFormatterPrivate;
 
 // Classes
 #[derive(Copy, Clone)]

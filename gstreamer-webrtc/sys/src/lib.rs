@@ -167,7 +167,7 @@ pub struct _GstWebRTCDTLSTransportClass {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstWebRTCDTLSTransportClass = *mut _GstWebRTCDTLSTransportClass;
+pub type GstWebRTCDTLSTransportClass = _GstWebRTCDTLSTransportClass;
 
 #[repr(C)]
 pub struct _GstWebRTCDataChannelClass {
@@ -175,7 +175,7 @@ pub struct _GstWebRTCDataChannelClass {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstWebRTCDataChannelClass = *mut _GstWebRTCDataChannelClass;
+pub type GstWebRTCDataChannelClass = _GstWebRTCDataChannelClass;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -365,7 +365,7 @@ pub struct _GstWebRTCRTPReceiverClass {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstWebRTCRTPReceiverClass = *mut _GstWebRTCRTPReceiverClass;
+pub type GstWebRTCRTPReceiverClass = _GstWebRTCRTPReceiverClass;
 
 #[repr(C)]
 pub struct _GstWebRTCRTPSenderClass {
@@ -373,7 +373,7 @@ pub struct _GstWebRTCRTPSenderClass {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstWebRTCRTPSenderClass = *mut _GstWebRTCRTPSenderClass;
+pub type GstWebRTCRTPSenderClass = _GstWebRTCRTPSenderClass;
 
 #[repr(C)]
 pub struct _GstWebRTCRTPTransceiverClass {
@@ -381,7 +381,7 @@ pub struct _GstWebRTCRTPTransceiverClass {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstWebRTCRTPTransceiverClass = *mut _GstWebRTCRTPTransceiverClass;
+pub type GstWebRTCRTPTransceiverClass = _GstWebRTCRTPTransceiverClass;
 
 #[repr(C)]
 pub struct _GstWebRTCSCTPTransportClass {
@@ -389,7 +389,7 @@ pub struct _GstWebRTCSCTPTransportClass {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstWebRTCSCTPTransportClass = *mut _GstWebRTCSCTPTransportClass;
+pub type GstWebRTCSCTPTransportClass = _GstWebRTCSCTPTransportClass;
 
 #[derive(Copy, Clone)]
 #[repr(C)]

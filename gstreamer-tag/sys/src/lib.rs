@@ -160,7 +160,7 @@ pub struct _GstTagDemuxPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstTagDemuxPrivate = *mut _GstTagDemuxPrivate;
+pub type GstTagDemuxPrivate = _GstTagDemuxPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -189,7 +189,7 @@ pub struct _GstTagMuxPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstTagMuxPrivate = *mut _GstTagMuxPrivate;
+pub type GstTagMuxPrivate = _GstTagMuxPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]

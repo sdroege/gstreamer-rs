@@ -342,7 +342,7 @@ pub struct _GstRTSPConnection {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstRTSPConnection = *mut _GstRTSPConnection;
+pub type GstRTSPConnection = _GstRTSPConnection;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -632,7 +632,7 @@ pub struct _GstRTSPWatch {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstRTSPWatch = *mut _GstRTSPWatch;
+pub type GstRTSPWatch = _GstRTSPWatch;
 
 #[derive(Copy, Clone)]
 #[repr(C)]

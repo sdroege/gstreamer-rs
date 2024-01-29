@@ -193,7 +193,7 @@ pub struct _GstInterpolationControlSourcePrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstInterpolationControlSourcePrivate = *mut _GstInterpolationControlSourcePrivate;
+pub type GstInterpolationControlSourcePrivate = _GstInterpolationControlSourcePrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -216,7 +216,7 @@ pub struct _GstLFOControlSourcePrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstLFOControlSourcePrivate = *mut _GstLFOControlSourcePrivate;
+pub type GstLFOControlSourcePrivate = _GstLFOControlSourcePrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -253,7 +253,7 @@ pub struct _GstTimedValueControlSourcePrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstTimedValueControlSourcePrivate = *mut _GstTimedValueControlSourcePrivate;
+pub type GstTimedValueControlSourcePrivate = _GstTimedValueControlSourcePrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -276,7 +276,7 @@ pub struct _GstTriggerControlSourcePrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstTriggerControlSourcePrivate = *mut _GstTriggerControlSourcePrivate;
+pub type GstTriggerControlSourcePrivate = _GstTriggerControlSourcePrivate;
 
 // Classes
 #[derive(Copy, Clone)]

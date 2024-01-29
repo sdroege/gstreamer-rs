@@ -372,7 +372,7 @@ pub struct _GstAudioAggregatorConvertPadPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstAudioAggregatorConvertPadPrivate = *mut _GstAudioAggregatorConvertPadPrivate;
+pub type GstAudioAggregatorConvertPadPrivate = _GstAudioAggregatorConvertPadPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -406,7 +406,7 @@ pub struct _GstAudioAggregatorPadPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstAudioAggregatorPadPrivate = *mut _GstAudioAggregatorPadPrivate;
+pub type GstAudioAggregatorPadPrivate = _GstAudioAggregatorPadPrivate;
 
 #[repr(C)]
 pub struct _GstAudioAggregatorPrivate {
@@ -414,7 +414,7 @@ pub struct _GstAudioAggregatorPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstAudioAggregatorPrivate = *mut _GstAudioAggregatorPrivate;
+pub type GstAudioAggregatorPrivate = _GstAudioAggregatorPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -444,7 +444,7 @@ pub struct _GstAudioBaseSinkPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstAudioBaseSinkPrivate = *mut _GstAudioBaseSinkPrivate;
+pub type GstAudioBaseSinkPrivate = _GstAudioBaseSinkPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -470,7 +470,7 @@ pub struct _GstAudioBaseSrcPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstAudioBaseSrcPrivate = *mut _GstAudioBaseSrcPrivate;
+pub type GstAudioBaseSrcPrivate = _GstAudioBaseSrcPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -525,7 +525,7 @@ pub struct _GstAudioCdSrcPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstAudioCdSrcPrivate = *mut _GstAudioCdSrcPrivate;
+pub type GstAudioCdSrcPrivate = _GstAudioCdSrcPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -557,7 +557,7 @@ pub struct _GstAudioChannelMixer {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstAudioChannelMixer = *mut _GstAudioChannelMixer;
+pub type GstAudioChannelMixer = _GstAudioChannelMixer;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -690,7 +690,7 @@ pub struct _GstAudioDecoderPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstAudioDecoderPrivate = *mut _GstAudioDecoderPrivate;
+pub type GstAudioDecoderPrivate = _GstAudioDecoderPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -790,7 +790,7 @@ pub struct _GstAudioEncoderPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstAudioEncoderPrivate = *mut _GstAudioEncoderPrivate;
+pub type GstAudioEncoderPrivate = _GstAudioEncoderPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -916,7 +916,7 @@ pub struct _GstAudioQuantize {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstAudioQuantize = *mut _GstAudioQuantize;
+pub type GstAudioQuantize = _GstAudioQuantize;
 
 #[repr(C)]
 pub struct _GstAudioResampler {
@@ -924,7 +924,7 @@ pub struct _GstAudioResampler {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstAudioResampler = *mut _GstAudioResampler;
+pub type GstAudioResampler = _GstAudioResampler;
 
 #[derive(Copy, Clone)]
 #[repr(C)]

@@ -66,7 +66,7 @@ pub struct _GstPlayAudioInfoClass {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstPlayAudioInfoClass = *mut _GstPlayAudioInfoClass;
+pub type GstPlayAudioInfoClass = _GstPlayAudioInfoClass;
 
 #[repr(C)]
 pub struct _GstPlayClass {
@@ -74,7 +74,7 @@ pub struct _GstPlayClass {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstPlayClass = *mut _GstPlayClass;
+pub type GstPlayClass = _GstPlayClass;
 
 #[repr(C)]
 pub struct _GstPlayMediaInfoClass {
@@ -82,7 +82,7 @@ pub struct _GstPlayMediaInfoClass {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstPlayMediaInfoClass = *mut _GstPlayMediaInfoClass;
+pub type GstPlayMediaInfoClass = _GstPlayMediaInfoClass;
 
 #[repr(C)]
 pub struct _GstPlaySignalAdapterClass {
@@ -90,7 +90,7 @@ pub struct _GstPlaySignalAdapterClass {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstPlaySignalAdapterClass = *mut _GstPlaySignalAdapterClass;
+pub type GstPlaySignalAdapterClass = _GstPlaySignalAdapterClass;
 
 #[repr(C)]
 pub struct _GstPlayStreamInfoClass {
@@ -98,7 +98,7 @@ pub struct _GstPlayStreamInfoClass {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstPlayStreamInfoClass = *mut _GstPlayStreamInfoClass;
+pub type GstPlayStreamInfoClass = _GstPlayStreamInfoClass;
 
 #[repr(C)]
 pub struct _GstPlaySubtitleInfoClass {
@@ -106,7 +106,7 @@ pub struct _GstPlaySubtitleInfoClass {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstPlaySubtitleInfoClass = *mut _GstPlaySubtitleInfoClass;
+pub type GstPlaySubtitleInfoClass = _GstPlaySubtitleInfoClass;
 
 #[repr(C)]
 pub struct _GstPlayVideoInfoClass {
@@ -114,7 +114,7 @@ pub struct _GstPlayVideoInfoClass {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstPlayVideoInfoClass = *mut _GstPlayVideoInfoClass;
+pub type GstPlayVideoInfoClass = _GstPlayVideoInfoClass;
 
 #[repr(C)]
 pub struct _GstPlayVideoOverlayVideoRendererClass {
@@ -122,7 +122,7 @@ pub struct _GstPlayVideoOverlayVideoRendererClass {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstPlayVideoOverlayVideoRendererClass = *mut _GstPlayVideoOverlayVideoRendererClass;
+pub type GstPlayVideoOverlayVideoRendererClass = _GstPlayVideoOverlayVideoRendererClass;
 
 #[derive(Copy, Clone)]
 #[repr(C)]

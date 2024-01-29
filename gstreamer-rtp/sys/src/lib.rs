@@ -263,7 +263,7 @@ pub struct _GstRTPBaseAudioPayloadPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstRTPBaseAudioPayloadPrivate = *mut _GstRTPBaseAudioPayloadPrivate;
+pub type GstRTPBaseAudioPayloadPrivate = _GstRTPBaseAudioPayloadPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -303,7 +303,7 @@ pub struct _GstRTPBaseDepayloadPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstRTPBaseDepayloadPrivate = *mut _GstRTPBaseDepayloadPrivate;
+pub type GstRTPBaseDepayloadPrivate = _GstRTPBaseDepayloadPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -355,7 +355,7 @@ pub struct _GstRTPBasePayloadPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstRTPBasePayloadPrivate = *mut _GstRTPBasePayloadPrivate;
+pub type GstRTPBasePayloadPrivate = _GstRTPBasePayloadPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]

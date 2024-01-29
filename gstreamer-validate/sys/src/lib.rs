@@ -218,7 +218,7 @@ pub struct _GstValidateActionPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstValidateActionPrivate = *mut _GstValidateActionPrivate;
+pub type GstValidateActionPrivate = _GstValidateActionPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -261,7 +261,7 @@ pub struct _GstValidateActionTypePrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstValidateActionTypePrivate = *mut _GstValidateActionTypePrivate;
+pub type GstValidateActionTypePrivate = _GstValidateActionTypePrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -359,7 +359,7 @@ pub struct _GstValidateMediaDescriptorParserPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstValidateMediaDescriptorParserPrivate = *mut _GstValidateMediaDescriptorParserPrivate;
+pub type GstValidateMediaDescriptorParserPrivate = _GstValidateMediaDescriptorParserPrivate;
 
 #[repr(C)]
 pub struct _GstValidateMediaDescriptorPrivate {
@@ -367,7 +367,7 @@ pub struct _GstValidateMediaDescriptorPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstValidateMediaDescriptorPrivate = *mut _GstValidateMediaDescriptorPrivate;
+pub type GstValidateMediaDescriptorPrivate = _GstValidateMediaDescriptorPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -390,7 +390,7 @@ pub struct _GstValidateMediaDescriptorWriterPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstValidateMediaDescriptorWriterPrivate = *mut _GstValidateMediaDescriptorWriterPrivate;
+pub type GstValidateMediaDescriptorWriterPrivate = _GstValidateMediaDescriptorWriterPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -472,7 +472,7 @@ pub struct _GstValidateOverridePrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstValidateOverridePrivate = *mut _GstValidateOverridePrivate;
+pub type GstValidateOverridePrivate = _GstValidateOverridePrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -516,7 +516,7 @@ pub struct _GstValidatePadSeekData {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstValidatePadSeekData = *mut _GstValidatePadSeekData;
+pub type GstValidatePadSeekData = _GstValidatePadSeekData;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -624,7 +624,7 @@ pub struct _GstValidateRunnerPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstValidateRunnerPrivate = *mut _GstValidateRunnerPrivate;
+pub type GstValidateRunnerPrivate = _GstValidateRunnerPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -647,7 +647,7 @@ pub struct _GstValidateScenarioPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstValidateScenarioPrivate = *mut _GstValidateScenarioPrivate;
+pub type GstValidateScenarioPrivate = _GstValidateScenarioPrivate;
 
 #[repr(C)]
 pub struct _GstValidateStreamInfo {
@@ -655,7 +655,7 @@ pub struct _GstValidateStreamInfo {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstValidateStreamInfo = *mut _GstValidateStreamInfo;
+pub type GstValidateStreamInfo = _GstValidateStreamInfo;
 
 // Classes
 #[derive(Copy, Clone)]

@@ -1218,7 +1218,7 @@ pub struct _GstAllocatorPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstAllocatorPrivate = *mut _GstAllocatorPrivate;
+pub type GstAllocatorPrivate = _GstAllocatorPrivate;
 
 #[repr(C)]
 pub struct GstAtomicQueue {
@@ -1272,7 +1272,7 @@ pub struct _GstBinPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstBinPrivate = *mut _GstBinPrivate;
+pub type GstBinPrivate = _GstBinPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1389,7 +1389,7 @@ pub struct _GstBufferPoolPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstBufferPoolPrivate = *mut _GstBufferPoolPrivate;
+pub type GstBufferPoolPrivate = _GstBufferPoolPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1416,7 +1416,7 @@ pub struct _GstBusPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstBusPrivate = *mut _GstBusPrivate;
+pub type GstBusPrivate = _GstBusPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1559,7 +1559,7 @@ pub struct _GstClockPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstClockPrivate = *mut _GstClockPrivate;
+pub type GstClockPrivate = _GstClockPrivate;
 
 #[repr(C)]
 pub struct GstContext {
@@ -1626,7 +1626,7 @@ pub struct _GstControlBindingPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstControlBindingPrivate = *mut _GstControlBindingPrivate;
+pub type GstControlBindingPrivate = _GstControlBindingPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1706,7 +1706,7 @@ pub struct _GstDebugMessage {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstDebugMessage = *mut _GstDebugMessage;
+pub type GstDebugMessage = _GstDebugMessage;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1750,7 +1750,7 @@ pub struct _GstDeviceMonitorPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstDeviceMonitorPrivate = *mut _GstDeviceMonitorPrivate;
+pub type GstDeviceMonitorPrivate = _GstDeviceMonitorPrivate;
 
 #[repr(C)]
 pub struct _GstDevicePrivate {
@@ -1758,7 +1758,7 @@ pub struct _GstDevicePrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstDevicePrivate = *mut _GstDevicePrivate;
+pub type GstDevicePrivate = _GstDevicePrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1790,7 +1790,7 @@ pub struct _GstDeviceProviderFactoryClass {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstDeviceProviderFactoryClass = *mut _GstDeviceProviderFactoryClass;
+pub type GstDeviceProviderFactoryClass = _GstDeviceProviderFactoryClass;
 
 #[repr(C)]
 pub struct _GstDeviceProviderPrivate {
@@ -1798,7 +1798,7 @@ pub struct _GstDeviceProviderPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstDeviceProviderPrivate = *mut _GstDeviceProviderPrivate;
+pub type GstDeviceProviderPrivate = _GstDeviceProviderPrivate;
 
 #[repr(C)]
 pub struct _GstDynamicTypeFactoryClass {
@@ -1806,7 +1806,7 @@ pub struct _GstDynamicTypeFactoryClass {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstDynamicTypeFactoryClass = *mut _GstDynamicTypeFactoryClass;
+pub type GstDynamicTypeFactoryClass = _GstDynamicTypeFactoryClass;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1886,7 +1886,7 @@ pub struct _GstElementFactoryClass {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstElementFactoryClass = *mut _GstElementFactoryClass;
+pub type GstElementFactoryClass = _GstElementFactoryClass;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1949,7 +1949,7 @@ pub struct _GstGhostPadPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstGhostPadPrivate = *mut _GstGhostPadPrivate;
+pub type GstGhostPadPrivate = _GstGhostPadPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -2198,7 +2198,7 @@ pub struct _GstPadPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstPadPrivate = *mut _GstPadPrivate;
+pub type GstPadPrivate = _GstPadPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -2379,7 +2379,7 @@ pub struct _GstPipelinePrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstPipelinePrivate = *mut _GstPipelinePrivate;
+pub type GstPipelinePrivate = _GstPipelinePrivate;
 
 #[repr(C)]
 pub struct _GstPluginClass {
@@ -2387,7 +2387,7 @@ pub struct _GstPluginClass {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstPluginClass = *mut _GstPluginClass;
+pub type GstPluginClass = _GstPluginClass;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -2430,7 +2430,7 @@ pub struct _GstPluginFeatureClass {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstPluginFeatureClass = *mut _GstPluginFeatureClass;
+pub type GstPluginFeatureClass = _GstPluginFeatureClass;
 
 #[repr(C)]
 pub struct _GstPoll {
@@ -2438,7 +2438,7 @@ pub struct _GstPoll {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstPoll = *mut _GstPoll;
+pub type GstPoll = _GstPoll;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -2552,7 +2552,7 @@ pub struct _GstProxyPadPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstProxyPadPrivate = *mut _GstProxyPadPrivate;
+pub type GstProxyPadPrivate = _GstProxyPadPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -2610,7 +2610,7 @@ pub struct _GstRegistryPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstRegistryPrivate = *mut _GstRegistryPrivate;
+pub type GstRegistryPrivate = _GstRegistryPrivate;
 
 #[repr(C)]
 pub struct GstSample {
@@ -2680,7 +2680,7 @@ pub struct _GstSharedTaskPoolPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstSharedTaskPoolPrivate = *mut _GstSharedTaskPoolPrivate;
+pub type GstSharedTaskPoolPrivate = _GstSharedTaskPoolPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -2759,7 +2759,7 @@ pub struct _GstStreamCollectionPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstStreamCollectionPrivate = *mut _GstStreamCollectionPrivate;
+pub type GstStreamCollectionPrivate = _GstStreamCollectionPrivate;
 
 #[repr(C)]
 pub struct _GstStreamPrivate {
@@ -2767,7 +2767,7 @@ pub struct _GstStreamPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstStreamPrivate = *mut _GstStreamPrivate;
+pub type GstStreamPrivate = _GstStreamPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -2805,7 +2805,7 @@ pub struct _GstSystemClockPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstSystemClockPrivate = *mut _GstSystemClockPrivate;
+pub type GstSystemClockPrivate = _GstSystemClockPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -2889,7 +2889,7 @@ pub struct _GstTaskPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstTaskPrivate = *mut _GstTaskPrivate;
+pub type GstTaskPrivate = _GstTaskPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -2966,7 +2966,7 @@ pub struct _GstTracerFactoryClass {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstTracerFactoryClass = *mut _GstTracerFactoryClass;
+pub type GstTracerFactoryClass = _GstTracerFactoryClass;
 
 #[repr(C)]
 pub struct _GstTracerPrivate {
@@ -2974,7 +2974,7 @@ pub struct _GstTracerPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstTracerPrivate = *mut _GstTracerPrivate;
+pub type GstTracerPrivate = _GstTracerPrivate;
 
 #[repr(C)]
 pub struct _GstTracerRecordClass {
@@ -2982,7 +2982,7 @@ pub struct _GstTracerRecordClass {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstTracerRecordClass = *mut _GstTracerRecordClass;
+pub type GstTracerRecordClass = _GstTracerRecordClass;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -3011,7 +3011,7 @@ pub struct _GstTypeFindFactoryClass {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstTypeFindFactoryClass = *mut _GstTypeFindFactoryClass;
+pub type GstTypeFindFactoryClass = _GstTypeFindFactoryClass;
 
 #[derive(Copy, Clone)]
 #[repr(C)]

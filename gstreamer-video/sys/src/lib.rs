@@ -963,7 +963,7 @@ pub struct _GstVideoAggregatorConvertPadPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstVideoAggregatorConvertPadPrivate = *mut _GstVideoAggregatorConvertPadPrivate;
+pub type GstVideoAggregatorConvertPadPrivate = _GstVideoAggregatorConvertPadPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1023,7 +1023,7 @@ pub struct _GstVideoAggregatorPadPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstVideoAggregatorPadPrivate = *mut _GstVideoAggregatorPadPrivate;
+pub type GstVideoAggregatorPadPrivate = _GstVideoAggregatorPadPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1048,7 +1048,7 @@ pub struct _GstVideoAggregatorPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstVideoAggregatorPrivate = *mut _GstVideoAggregatorPrivate;
+pub type GstVideoAggregatorPrivate = _GstVideoAggregatorPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1134,7 +1134,7 @@ pub struct _GstVideoBufferPoolPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstVideoBufferPoolPrivate = *mut _GstVideoBufferPoolPrivate;
+pub type GstVideoBufferPoolPrivate = _GstVideoBufferPoolPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1162,7 +1162,7 @@ pub struct _GstVideoChromaResample {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstVideoChromaResample = *mut _GstVideoChromaResample;
+pub type GstVideoChromaResample = _GstVideoChromaResample;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1335,7 +1335,7 @@ pub struct _GstVideoConverter {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstVideoConverter = *mut _GstVideoConverter;
+pub type GstVideoConverter = _GstVideoConverter;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1450,7 +1450,7 @@ pub struct _GstVideoDecoderPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstVideoDecoderPrivate = *mut _GstVideoDecoderPrivate;
+pub type GstVideoDecoderPrivate = _GstVideoDecoderPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1472,7 +1472,7 @@ pub struct _GstVideoDither {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstVideoDither = *mut _GstVideoDither;
+pub type GstVideoDither = _GstVideoDither;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1550,7 +1550,7 @@ pub struct _GstVideoEncoderPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstVideoEncoderPrivate = *mut _GstVideoEncoderPrivate;
+pub type GstVideoEncoderPrivate = _GstVideoEncoderPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -2086,7 +2086,7 @@ pub struct _GstVideoScaler {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstVideoScaler = *mut _GstVideoScaler;
+pub type GstVideoScaler = _GstVideoScaler;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -2116,7 +2116,7 @@ pub struct _GstVideoSinkPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstVideoSinkPrivate = *mut _GstVideoSinkPrivate;
+pub type GstVideoSinkPrivate = _GstVideoSinkPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]

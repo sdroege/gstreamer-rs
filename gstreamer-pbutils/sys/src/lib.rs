@@ -135,7 +135,7 @@ pub struct _GstAudioVisualizerPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstAudioVisualizerPrivate = *mut _GstAudioVisualizerPrivate;
+pub type GstAudioVisualizerPrivate = _GstAudioVisualizerPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -172,7 +172,7 @@ pub struct _GstDiscovererPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstDiscovererPrivate = *mut _GstDiscovererPrivate;
+pub type GstDiscovererPrivate = _GstDiscovererPrivate;
 
 #[repr(C)]
 pub struct _GstEncodingAudioProfileClass {
@@ -180,7 +180,7 @@ pub struct _GstEncodingAudioProfileClass {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstEncodingAudioProfileClass = *mut _GstEncodingAudioProfileClass;
+pub type GstEncodingAudioProfileClass = _GstEncodingAudioProfileClass;
 
 #[repr(C)]
 pub struct _GstEncodingContainerProfileClass {
@@ -188,7 +188,7 @@ pub struct _GstEncodingContainerProfileClass {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstEncodingContainerProfileClass = *mut _GstEncodingContainerProfileClass;
+pub type GstEncodingContainerProfileClass = _GstEncodingContainerProfileClass;
 
 #[repr(C)]
 pub struct _GstEncodingProfileClass {
@@ -196,7 +196,7 @@ pub struct _GstEncodingProfileClass {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstEncodingProfileClass = *mut _GstEncodingProfileClass;
+pub type GstEncodingProfileClass = _GstEncodingProfileClass;
 
 #[repr(C)]
 pub struct _GstEncodingVideoProfileClass {
@@ -204,7 +204,7 @@ pub struct _GstEncodingVideoProfileClass {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstEncodingVideoProfileClass = *mut _GstEncodingVideoProfileClass;
+pub type GstEncodingVideoProfileClass = _GstEncodingVideoProfileClass;
 
 #[repr(C)]
 pub struct GstInstallPluginsContext {

@@ -187,7 +187,7 @@ pub struct _GstRTSPAddressPoolPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstRTSPAddressPoolPrivate = *mut _GstRTSPAddressPoolPrivate;
+pub type GstRTSPAddressPoolPrivate = _GstRTSPAddressPoolPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -232,7 +232,7 @@ pub struct _GstRTSPAuthPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstRTSPAuthPrivate = *mut _GstRTSPAuthPrivate;
+pub type GstRTSPAuthPrivate = _GstRTSPAuthPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -449,7 +449,7 @@ pub struct _GstRTSPClientPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstRTSPClientPrivate = *mut _GstRTSPClientPrivate;
+pub type GstRTSPClientPrivate = _GstRTSPClientPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -610,7 +610,7 @@ pub struct _GstRTSPMediaFactoryPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstRTSPMediaFactoryPrivate = *mut _GstRTSPMediaFactoryPrivate;
+pub type GstRTSPMediaFactoryPrivate = _GstRTSPMediaFactoryPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -633,7 +633,7 @@ pub struct _GstRTSPMediaFactoryURIPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstRTSPMediaFactoryURIPrivate = *mut _GstRTSPMediaFactoryURIPrivate;
+pub type GstRTSPMediaFactoryURIPrivate = _GstRTSPMediaFactoryURIPrivate;
 
 #[repr(C)]
 pub struct _GstRTSPMediaPrivate {
@@ -641,7 +641,7 @@ pub struct _GstRTSPMediaPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstRTSPMediaPrivate = *mut _GstRTSPMediaPrivate;
+pub type GstRTSPMediaPrivate = _GstRTSPMediaPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -668,7 +668,7 @@ pub struct _GstRTSPMountPointsPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstRTSPMountPointsPrivate = *mut _GstRTSPMountPointsPrivate;
+pub type GstRTSPMountPointsPrivate = _GstRTSPMountPointsPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -724,7 +724,7 @@ pub struct _GstRTSPOnvifMediaFactoryPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstRTSPOnvifMediaFactoryPrivate = *mut _GstRTSPOnvifMediaFactoryPrivate;
+pub type GstRTSPOnvifMediaFactoryPrivate = _GstRTSPOnvifMediaFactoryPrivate;
 
 #[repr(C)]
 pub struct _GstRTSPOnvifMediaPrivate {
@@ -732,7 +732,7 @@ pub struct _GstRTSPOnvifMediaPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstRTSPOnvifMediaPrivate = *mut _GstRTSPOnvifMediaPrivate;
+pub type GstRTSPOnvifMediaPrivate = _GstRTSPOnvifMediaPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -788,7 +788,7 @@ pub struct _GstRTSPServerPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstRTSPServerPrivate = *mut _GstRTSPServerPrivate;
+pub type GstRTSPServerPrivate = _GstRTSPServerPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -826,7 +826,7 @@ pub struct _GstRTSPSessionMediaPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstRTSPSessionMediaPrivate = *mut _GstRTSPSessionMediaPrivate;
+pub type GstRTSPSessionMediaPrivate = _GstRTSPSessionMediaPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -856,7 +856,7 @@ pub struct _GstRTSPSessionPoolPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstRTSPSessionPoolPrivate = *mut _GstRTSPSessionPoolPrivate;
+pub type GstRTSPSessionPoolPrivate = _GstRTSPSessionPoolPrivate;
 
 #[repr(C)]
 pub struct _GstRTSPSessionPrivate {
@@ -864,7 +864,7 @@ pub struct _GstRTSPSessionPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstRTSPSessionPrivate = *mut _GstRTSPSessionPrivate;
+pub type GstRTSPSessionPrivate = _GstRTSPSessionPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -887,7 +887,7 @@ pub struct _GstRTSPStreamPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstRTSPStreamPrivate = *mut _GstRTSPStreamPrivate;
+pub type GstRTSPStreamPrivate = _GstRTSPStreamPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -910,7 +910,7 @@ pub struct _GstRTSPStreamTransportPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstRTSPStreamTransportPrivate = *mut _GstRTSPStreamTransportPrivate;
+pub type GstRTSPStreamTransportPrivate = _GstRTSPStreamTransportPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -971,7 +971,7 @@ pub struct _GstRTSPThreadPoolPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstRTSPThreadPoolPrivate = *mut _GstRTSPThreadPoolPrivate;
+pub type GstRTSPThreadPoolPrivate = _GstRTSPThreadPoolPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]

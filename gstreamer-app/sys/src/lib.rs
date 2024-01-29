@@ -97,7 +97,7 @@ pub struct _GstAppSinkPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstAppSinkPrivate = *mut _GstAppSinkPrivate;
+pub type GstAppSinkPrivate = _GstAppSinkPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -156,7 +156,7 @@ pub struct _GstAppSrcPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstAppSrcPrivate = *mut _GstAppSrcPrivate;
+pub type GstAppSrcPrivate = _GstAppSrcPrivate;
 
 // Classes
 #[derive(Copy, Clone)]

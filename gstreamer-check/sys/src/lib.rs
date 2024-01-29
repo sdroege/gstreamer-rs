@@ -57,7 +57,7 @@ pub struct _GstHarnessPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstHarnessPrivate = *mut _GstHarnessPrivate;
+pub type GstHarnessPrivate = _GstHarnessPrivate;
 
 #[repr(C)]
 pub struct _GstHarnessThread {
@@ -65,7 +65,7 @@ pub struct _GstHarnessThread {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstHarnessThread = *mut _GstHarnessThread;
+pub type GstHarnessThread = _GstHarnessThread;
 
 #[repr(C)]
 pub struct _GstStreamConsistency {
@@ -73,7 +73,7 @@ pub struct _GstStreamConsistency {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstStreamConsistency = *mut _GstStreamConsistency;
+pub type GstStreamConsistency = _GstStreamConsistency;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -95,7 +95,7 @@ pub struct _GstTestClockPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstTestClockPrivate = *mut _GstTestClockPrivate;
+pub type GstTestClockPrivate = _GstTestClockPrivate;
 
 // Classes
 #[derive(Copy, Clone)]

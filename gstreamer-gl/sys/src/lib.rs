@@ -339,7 +339,7 @@ pub struct _GstGLBaseFilterPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstGLBaseFilterPrivate = *mut _GstGLBaseFilterPrivate;
+pub type GstGLBaseFilterPrivate = _GstGLBaseFilterPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -443,7 +443,7 @@ pub struct _GstGLBaseMixerPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstGLBaseMixerPrivate = *mut _GstGLBaseMixerPrivate;
+pub type GstGLBaseMixerPrivate = _GstGLBaseMixerPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -475,7 +475,7 @@ pub struct _GstGLBaseSrcPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstGLBaseSrcPrivate = *mut _GstGLBaseSrcPrivate;
+pub type GstGLBaseSrcPrivate = _GstGLBaseSrcPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -552,7 +552,7 @@ pub struct _GstGLBufferPoolPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstGLBufferPoolPrivate = *mut _GstGLBufferPoolPrivate;
+pub type GstGLBufferPoolPrivate = _GstGLBufferPoolPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -574,7 +574,7 @@ pub struct _GstGLColorConvertPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstGLColorConvertPrivate = *mut _GstGLColorConvertPrivate;
+pub type GstGLColorConvertPrivate = _GstGLColorConvertPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -635,7 +635,7 @@ pub struct _GstGLContextPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstGLContextPrivate = *mut _GstGLContextPrivate;
+pub type GstGLContextPrivate = _GstGLContextPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -662,7 +662,7 @@ pub struct _GstGLDisplayPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstGLDisplayPrivate = *mut _GstGLDisplayPrivate;
+pub type GstGLDisplayPrivate = _GstGLDisplayPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -726,7 +726,7 @@ pub struct _GstGLFramebufferPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstGLFramebufferPrivate = *mut _GstGLFramebufferPrivate;
+pub type GstGLFramebufferPrivate = _GstGLFramebufferPrivate;
 
 #[repr(C)]
 pub struct _GstGLFuncs {
@@ -734,7 +734,7 @@ pub struct _GstGLFuncs {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstGLFuncs = *mut _GstGLFuncs;
+pub type GstGLFuncs = _GstGLFuncs;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -863,7 +863,7 @@ pub struct _GstGLMixerPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstGLMixerPrivate = *mut _GstGLMixerPrivate;
+pub type GstGLMixerPrivate = _GstGLMixerPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -977,7 +977,7 @@ pub struct _GstGLSLStagePrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstGLSLStagePrivate = *mut _GstGLSLStagePrivate;
+pub type GstGLSLStagePrivate = _GstGLSLStagePrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -998,7 +998,7 @@ pub struct _GstGLShaderPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstGLShaderPrivate = *mut _GstGLShaderPrivate;
+pub type GstGLShaderPrivate = _GstGLShaderPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1064,7 +1064,7 @@ pub struct _GstGLUploadPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstGLUploadPrivate = *mut _GstGLUploadPrivate;
+pub type GstGLUploadPrivate = _GstGLUploadPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1111,7 +1111,7 @@ pub struct _GstGLViewConvertPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstGLViewConvertPrivate = *mut _GstGLViewConvertPrivate;
+pub type GstGLViewConvertPrivate = _GstGLViewConvertPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -1171,7 +1171,7 @@ pub struct _GstGLWindowPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstGLWindowPrivate = *mut _GstGLWindowPrivate;
+pub type GstGLWindowPrivate = _GstGLWindowPrivate;
 
 // Classes
 #[derive(Copy, Clone)]

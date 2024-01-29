@@ -72,7 +72,7 @@ pub struct _GstNetClientClockPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstNetClientClockPrivate = *mut _GstNetClientClockPrivate;
+pub type GstNetClientClockPrivate = _GstNetClientClockPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -128,7 +128,7 @@ pub struct _GstNetTimeProviderPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstNetTimeProviderPrivate = *mut _GstNetTimeProviderPrivate;
+pub type GstNetTimeProviderPrivate = _GstNetTimeProviderPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -166,7 +166,7 @@ pub struct _GstPtpClockPrivate {
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
-pub type GstPtpClockPrivate = *mut _GstPtpClockPrivate;
+pub type GstPtpClockPrivate = _GstPtpClockPrivate;
 
 // Classes
 #[derive(Copy, Clone)]
