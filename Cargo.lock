@@ -507,6 +507,7 @@ dependencies = [
  "image",
  "memfd",
  "memmap2",
+ "objc",
  "pango",
  "pangocairo",
  "raw-window-handle",
