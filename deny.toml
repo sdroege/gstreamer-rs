@@ -29,14 +29,3 @@ unknown-git = "deny"
 allow-git = [
   "https://github.com/gtk-rs/gtk-rs-core",
 ]
-
-# Various crates depend on an older version of syn
-[[bans.skip]]
-name = "syn"
-version = "1.0"
-
-# proc-macro-crate depends on an older version of toml_edit
-# https://github.com/bkchr/proc-macro-crate/pull/41
-[[bans.skip]]
-name = "toml_edit"
-version = "0.20"
