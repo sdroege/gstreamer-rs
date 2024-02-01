@@ -6,7 +6,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-#![cfg_attr(all(not(doctest), doc), feature(doc_cfg))]
+#![cfg_attr(docsrs, feature(doc_cfg))]
 #![allow(clippy::missing_safety_doc)]
 
 pub use ffi;
