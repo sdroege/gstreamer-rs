@@ -1,17 +1,17 @@
 [package]
 name = "gstreamer-utils"
-version = "0.22.0"
 authors = ["Mathieu Duponchelle <mathieu@centricular.com>", "Thibault Saunier <tsaunier@igalia.com>"]
 categories = ["multimedia"]
 description = "Exposes an object to build several Gst pipeline with one producer and several consumer"
-repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs"
 license = "MIT/Apache-2.0"
 readme = "README.md"
-homepage = "https://gstreamer.freedesktop.org"
 documentation = "https://gstreamer.pages.freedesktop.org/gstreamer-rs/stable/latest/docs/gstreamer_utils/"
 keywords = ["gstreamer", "multimedia", "audio", "video", "gnome"]
-edition = "2021"
-rust-version = "1.70"
+version.workspace = true
+repository.workspace = true 
+homepage.workspace = true 
+edition.workspace = true 
+rust-version.workspace = true 
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

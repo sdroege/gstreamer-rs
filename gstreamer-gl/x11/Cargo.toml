@@ -1,20 +1,20 @@
 [package]
 name = "gstreamer-gl-x11"
-version = "0.22.0"
 authors = [
     "Sebastian Dröge <sebastian@centricular.com>",
     "Víctor M. Jáquez L. <vjaquez@igalia.com>"
 ]
-categories = ["api-bindings", "multimedia"]
 description = "Rust bindings for GStreamer GL library (X11 support)"
-repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs"
 license = "MIT OR Apache-2.0"
 readme = "README.md"
-homepage = "https://gstreamer.freedesktop.org"
 documentation = "https://gstreamer.pages.freedesktop.org/gstreamer-rs/stable/latest/docs/gstreamer_gl_x11/"
 keywords = ["gstreamer", "multimedia", "audio", "video", "gnome"]
-edition = "2021"
-rust-version = "1.70"
+version.workspace = true
+categories.workspace = true
+repository.workspace = true 
+homepage.workspace = true 
+edition.workspace = true 
+rust-version.workspace = true 
 
 [dependencies]
 libc = "0.2"

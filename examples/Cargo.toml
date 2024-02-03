@@ -1,10 +1,10 @@
 [package]
 name = "examples"
-version = "0.22.0"
+version.workspace = true
 license = "MIT"
 authors = ["Sebastian Dröge <sebastian@centricular.com>"]
-edition = "2021"
-rust-version = "1.70"
+edition.workspace = true
+rust-version.workspace = true
 
 [dependencies]
 glib = { git = "https://github.com/gtk-rs/gtk-rs-core" }

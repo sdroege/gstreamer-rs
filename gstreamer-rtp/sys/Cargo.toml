@@ -32,15 +32,28 @@ authors = ["Mathieu Duponchelle <mathieu@centricular.com>", "Sebastian Dröge <s
 build = "build.rs"
 description = "FFI bindings to libgstrtp-1.0"
 documentation = "https://gstreamer.pages.freedesktop.org/gstreamer-rs/stable/latest/docs/gstreamer_rtp_sys/"
-homepage = "https://gstreamer.freedesktop.org"
 keywords = ["ffi", "gstreamer", "gnome", "multimedia"]
 license = "MIT"
 name = "gstreamer-rtp-sys"
 readme = "README.md"
-repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs"
-version = "0.22.0"
-edition = "2021"
-rust-version = "1.70"
+
+[package.version]
+workspace = true
+
+[package.categories]
+workspace = true
+
+[package.repository]
+workspace = true
+
+[package.homepage]
+workspace = true
+
+[package.edition]
+workspace = true
+
+[package.rust-version]
+workspace = true
 
 [package.metadata.docs.rs]
 all-features = true

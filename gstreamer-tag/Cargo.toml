@@ -1,20 +1,20 @@
 [package]
 name = "gstreamer-tag"
-version = "0.22.0"
 authors = [
     "Sebastian Dröge <sebastian@centricular.com>",
     "Marc Wiblishauser <marcbull@mwcloud.eu>",
 ]
-categories = ["api-bindings", "multimedia"]
 description = "Rust bindings for GStreamer Tag Support library"
-repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs"
 license = "MIT OR Apache-2.0"
 readme = "README.md"
-homepage = "https://gstreamer.freedesktop.org"
 documentation = "https://gstreamer.pages.freedesktop.org/gstreamer-rs/stable/latest/docs/gstreamer_tag/"
 keywords = ["gstreamer", "multimedia", "audio", "tag", "tags", "gnome"]
-edition = "2021"
-rust-version = "1.70"
+version.workspace = true
+categories.workspace = true
+repository.workspace = true 
+homepage.workspace = true 
+edition.workspace = true 
+rust-version.workspace = true 
 
 [dependencies]
 libc = "0.2"
