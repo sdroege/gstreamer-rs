@@ -16,12 +16,12 @@ rust-version.workspace = true
 [dependencies]
 libc = "0.2"
 ffi = { package = "gstreamer-rtsp-server-sys", path = "sys" }
-glib = { git = "https://github.com/gtk-rs/gtk-rs-core" }
-gio = { git = "https://github.com/gtk-rs/gtk-rs-core" }
-gst = { package = "gstreamer", path = "../gstreamer" }
-gst-sdp = { package = "gstreamer-sdp", path = "../gstreamer-sdp" }
-gst-rtsp = { package = "gstreamer-rtsp", path = "../gstreamer-rtsp" }
-gst-net = { package = "gstreamer-net", path = "../gstreamer-net" }
+glib.workspace = true
+gio.workspace = true
+gst.workspace = true
+gst-sdp.workspace = true
+gst-rtsp.workspace = true
+gst-net.workspace = true
 serde = { version = "1.0", optional = true }
 
 [dev-dependencies]

@@ -7,12 +7,12 @@ edition.workspace = true
 rust-version.workspace = true
 
 [dependencies]
-glib = { git = "https://github.com/gtk-rs/gtk-rs-core" }
-gst = { package = "gstreamer", path = "../gstreamer" }
-gst-audio = { package = "gstreamer-audio", path = "../gstreamer-audio" }
-gst-video = { package = "gstreamer-video", path = "../gstreamer-video", optional = true }
-gst-app = { package = "gstreamer-app", path = "../gstreamer-app" }
-gst-pbutils = { package = "gstreamer-pbutils", path = "../gstreamer-pbutils" }
+glib.workspace = true
+gst.workspace = true
+gst-audio.workspace = true
+gst-video = { workspace = true, optional = true }
+gst-app.workspace = true
+gst-pbutils.workspace = true
 byte-slice-cast = "1"
 anyhow = "1"
 termion = { version = "3", optional = true }

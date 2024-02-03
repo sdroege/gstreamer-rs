@@ -5,13 +5,13 @@ system-deps = "6"
 libc = "0.2"
 
 [dependencies.glib-sys]
-git = "https://github.com/gtk-rs/gtk-rs-core"
-
-[dependencies.gstreamer-base-sys]
-path = "../../gstreamer-base/sys"
+workspace = true
 
 [dependencies.gstreamer-sys]
-path = "../../gstreamer/sys"
+workspace = true
+
+[dependencies.gstreamer-base-sys]
+workspace = true
 
 [dev-dependencies]
 shell-words = "1.0.0"

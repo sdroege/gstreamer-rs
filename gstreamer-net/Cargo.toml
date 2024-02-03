@@ -15,9 +15,9 @@ rust-version.workspace = true
 
 [dependencies]
 ffi = { package = "gstreamer-net-sys", path = "sys" }
-glib = { git = "https://github.com/gtk-rs/gtk-rs-core" }
-gst = { package = "gstreamer", path = "../gstreamer" }
-gio = { git = "https://github.com/gtk-rs/gtk-rs-core" }
+glib.workspace = true
+gio.workspace = true
+gst.workspace = true
 
 [dev-dependencies]
 gir-format-check = "0.1"

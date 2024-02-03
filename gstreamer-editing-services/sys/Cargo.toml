@@ -4,20 +4,20 @@ system-deps = "6"
 [dependencies]
 libc = "0.2"
 
-[dependencies.gio-sys]
-git = "https://github.com/gtk-rs/gtk-rs-core"
-
 [dependencies.glib-sys]
-git = "https://github.com/gtk-rs/gtk-rs-core"
+workspace = true
 
 [dependencies.gobject-sys]
-git = "https://github.com/gtk-rs/gtk-rs-core"
+workspace = true
+
+[dependencies.gio-sys]
+workspace = true
 
 [dependencies.gstreamer-pbutils-sys]
-path = "../../gstreamer-pbutils/sys"
+workspace = true
 
 [dependencies.gstreamer-sys]
-path = "../../gstreamer/sys"
+workspace = true
 
 [dev-dependencies]
 shell-words = "1.0.0"

@@ -45,10 +45,10 @@ name = "gstreamer_gl_wayland_sys"
 libc = "0.2"
 
 [dependencies.glib-sys]
-git = "https://github.com/gtk-rs/gtk-rs-core"
+workspace = true
 
 [dependencies.gstreamer-gl-sys]
-path = "../../sys"
+workspace = true
 
 [build-dependencies]
 system-deps = "6"
