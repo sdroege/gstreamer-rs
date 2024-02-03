@@ -12,6 +12,12 @@
 )]
 #![cfg_attr(docsrs, feature(doc_cfg))]
 
+use glib_sys as glib;
+use gobject_sys as gobject;
+use gstreamer_base_sys as gst_base;
+use gstreamer_sys as gst;
+use gstreamer_video_sys as gst_video;
+
 mod manual;
 
 pub use manual::*;

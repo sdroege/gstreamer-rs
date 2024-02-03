@@ -12,6 +12,12 @@
 )]
 #![cfg_attr(docsrs, feature(doc_cfg))]
 
+use glib_sys as glib;
+use gobject_sys as gobject;
+use gstreamer_audio_sys as gst_audio;
+use gstreamer_sys as gst;
+use gstreamer_video_sys as gst_video;
+
 #[allow(unused_imports)]
 use libc::{
     c_char, c_double, c_float, c_int, c_long, c_short, c_uchar, c_uint, c_ulong, c_ushort, c_void,

@@ -12,6 +12,14 @@
 )]
 #![cfg_attr(docsrs, feature(doc_cfg))]
 
+use gio_sys as gio;
+use glib_sys as glib;
+use gobject_sys as gobject;
+use gstreamer_net_sys as gst_net;
+use gstreamer_rtsp_sys as gst_rtsp;
+use gstreamer_sdp_sys as gst_sdp;
+use gstreamer_sys as gst;
+
 #[allow(unused_imports)]
 use libc::{
     c_char, c_double, c_float, c_int, c_long, c_short, c_uchar, c_uint, c_ulong, c_ushort, c_void,
