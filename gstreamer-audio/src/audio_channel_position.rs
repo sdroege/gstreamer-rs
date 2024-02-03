@@ -2,7 +2,7 @@
 
 use std::{mem, slice};
 
-use glib::{translate::*, value::FromValue, StaticType, ToValue, Type};
+use glib::{prelude::*, translate::*, value::FromValue, Type};
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]

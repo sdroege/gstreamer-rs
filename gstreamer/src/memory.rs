@@ -595,7 +595,7 @@ pub struct MemoryTypeValueTypeChecker<M>(PhantomData<M>);
 
 unsafe impl<M> glib::value::ValueTypeChecker for MemoryTypeValueTypeChecker<M>
 where
-    M: MemoryType + glib::StaticType,
+    M: MemoryType + glib::prelude::StaticType,
     <M as crate::prelude::IsMiniObject>::RefType: AsRef<MemoryRef> + AsMut<MemoryRef>,
 {
     type Error = glib::value::ValueTypeMismatchOrNoneError<MemoryTypeMismatchError>;
@@ -875,7 +875,7 @@ macro_rules! memory_object_wrapper {
             }
 
             fn value_type(&self) -> glib::Type {
-                <Self as glib::StaticType>::static_type()
+                <Self as $crate::glib::prelude::StaticType>::static_type()
             }
         }
 

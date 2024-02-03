@@ -1,6 +1,6 @@
 use std::ops::{Bound::*, RangeBounds};
 
-use glib::IntoGStr;
+use glib::translate::*;
 use gst::Caps;
 
 use crate::VideoFormat;

@@ -2,7 +2,7 @@
 
 use std::fmt;
 
-use glib::{translate::*, Cast};
+use glib::{prelude::*, translate::*};
 
 use crate::{DiscovererStreamInfo, DiscovererVideoInfo};
 

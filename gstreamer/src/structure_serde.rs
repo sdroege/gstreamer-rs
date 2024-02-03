@@ -4,7 +4,7 @@
 
 use std::fmt;
 
-use glib::{Date, ToValue};
+use glib::{value::ToValue, Date};
 use serde::{
     de,
     de::{Deserialize, DeserializeSeed, Deserializer, SeqAccess, Visitor},

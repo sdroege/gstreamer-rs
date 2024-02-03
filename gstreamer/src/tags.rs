@@ -3,9 +3,9 @@
 use std::{fmt, marker::PhantomData, mem};
 
 use glib::{
+    prelude::*,
     translate::*,
     value::{FromValue, SendValue, ToSendValue, Value},
-    IntoGStr, StaticType,
 };
 
 use crate::{Sample, TagError, TagMergeMode, TagScope};

@@ -37,11 +37,11 @@ macro_rules! panic_to_error(
         {
             let panicked = $imp.panicked();
             let element = $crate::glib::subclass::types::ObjectSubclassExt::obj($imp);
-            let element = unsafe { $crate::glib::Cast::unsafe_cast_ref::<$crate::Element>(element.as_ref()) };
+            let element = unsafe { $crate::glib::prelude::Cast::unsafe_cast_ref::<$crate::Element>(element.as_ref()) };
             if panicked.load(std::sync::atomic::Ordering::Relaxed) {
                 $crate::subclass::post_panic_error_message(
                     element,
-                    $crate::glib::Cast::upcast_ref::<$crate::Object>(element),
+                    $crate::glib::prelude::Cast::upcast_ref::<$crate::Object>(element),
                     None,
                 );
                 $ret
@@ -54,7 +54,7 @@ macro_rules! panic_to_error(
                         panicked.store(true, std::sync::atomic::Ordering::Relaxed);
                         $crate::subclass::post_panic_error_message(
                             element,
-                            $crate::glib::Cast::upcast_ref::<$crate::Object>(element),
+                            $crate::glib::prelude::Cast::upcast_ref::<$crate::Object>(element),
                             Some(err),
                         );
                         $ret

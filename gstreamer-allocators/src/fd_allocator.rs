@@ -1,6 +1,6 @@
 use std::{fmt, os::unix::prelude::RawFd};
 
-use glib::{translate::*, Cast};
+use glib::{prelude::*, translate::*};
 use gst::{Memory, MemoryRef};
 
 use crate::{FdAllocator, FdMemoryFlags};

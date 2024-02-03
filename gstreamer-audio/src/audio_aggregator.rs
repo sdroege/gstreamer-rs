@@ -5,7 +5,7 @@ use std::mem::transmute;
 use glib::object::Cast;
 #[cfg(feature = "v1_18")]
 use glib::signal::{connect_raw, SignalHandlerId};
-use glib::{object::IsA, translate::*};
+use glib::translate::*;
 use gst::prelude::*;
 
 use crate::auto::{AudioAggregator, AudioAggregatorPad};
@@ -31,14 +31,14 @@ pub trait AudioAggregatorExtManual: sealed::Sealed + IsA<AudioAggregator> + 'sta
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "output-buffer-duration-fraction")]
     fn output_buffer_duration_fraction(&self) -> gst::Fraction {
-        glib::ObjectExt::property(self.as_ref(), "output-buffer-duration-fraction")
+        ObjectExt::property(self.as_ref(), "output-buffer-duration-fraction")
     }
 
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "output-buffer-duration-fraction")]
     fn set_output_buffer_duration_fraction(&self, output_buffer_duration_fraction: gst::Fraction) {
-        glib::ObjectExt::set_property(
+        ObjectExt::set_property(
             self.as_ref(),
             "output-buffer-duration-fraction",
             output_buffer_duration_fraction,

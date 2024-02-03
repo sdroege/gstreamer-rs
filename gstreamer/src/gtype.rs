@@ -64,7 +64,7 @@ impl PluginApiExt for glib::Type {
 
 #[cfg(test)]
 mod tests {
-    use glib::StaticType;
+    use glib::prelude::StaticType;
 
     use super::*;
 

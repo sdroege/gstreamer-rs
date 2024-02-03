@@ -1,6 +1,5 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::object::IsA;
 use gst::prelude::*;
 
 use crate::{auto::AudioVisualizer, subclass::AudioVisualizerSetupToken};

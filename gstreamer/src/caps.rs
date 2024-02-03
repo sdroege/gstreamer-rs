@@ -2,11 +2,7 @@
 
 use std::{fmt, marker::PhantomData, ptr, str};
 
-use glib::{
-    translate::{from_glib, from_glib_full, FromGlibPtrFull, IntoGlib, IntoGlibPtr, ToGlibPtr},
-    value::ToSendValue,
-    IntoGStr, StaticType,
-};
+use glib::{prelude::*, translate::*, value::ToSendValue};
 
 use crate::{caps_features::*, structure::*, CapsIntersectMode};
 

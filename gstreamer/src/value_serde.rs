@@ -4,7 +4,7 @@
 
 use std::{fmt, mem};
 
-use glib::{Date, StaticType, ToValue};
+use glib::{prelude::*, Date};
 use num_rational::Rational32;
 use once_cell::sync::Lazy;
 use serde::{

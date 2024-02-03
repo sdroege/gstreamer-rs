@@ -2,7 +2,7 @@
 
 use std::{borrow::Cow, ffi::CStr, fmt, ptr};
 
-use glib::{ffi::gpointer, prelude::*, translate::*, IntoGStr, IntoOptionalGStr};
+use glib::{ffi::gpointer, prelude::*, translate::*};
 use libc::c_char;
 use once_cell::sync::Lazy;
 
@@ -746,7 +746,7 @@ macro_rules! log_with_level(
         #[allow(unused_unsafe)]
         #[allow(clippy::redundant_closure_call)]
         if cat.above_threshold($level) {
-            use $crate::glib::Cast;
+            use $crate::glib::prelude::Cast;
 
             // FIXME: Once there's a function_name! macro that returns a string literal we can
             // directly pass it as `&GStr` forward
@@ -789,7 +789,7 @@ macro_rules! log_with_level(
         // formatted arguments are evaluated even if we end up not logging.
         #[allow(unused_unsafe)]
         if cat.above_threshold($level) {
-            use $crate::glib::Cast;
+            use $crate::glib::prelude::Cast;
 
             // FIXME: Once there's a function_name! macro that returns a string literal we can
             // directly pass it as `&GStr` forward
@@ -814,7 +814,7 @@ macro_rules! log_with_level(
         #[allow(unused_unsafe)]
         #[allow(clippy::redundant_closure_call)]
         if cat.above_threshold($level) {
-            use $crate::glib::Cast;
+            use $crate::glib::prelude::Cast;
 
             // FIXME: Once there's a function_name! macro that returns a string literal we can
             // directly pass it as `&GStr` forward
@@ -858,7 +858,7 @@ macro_rules! log_with_level(
         // formatted arguments are evaluated even if we end up not logging.
         #[allow(unused_unsafe)]
         if cat.above_threshold($level) {
-            use $crate::glib::Cast;
+            use $crate::glib::prelude::Cast;
 
             // FIXME: Once there's a function_name! macro that returns a string literal we can
             // directly pass it as `&GStr` forward

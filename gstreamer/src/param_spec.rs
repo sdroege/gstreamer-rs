@@ -1,6 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::{gobject_ffi, translate::*, ParamSpec};
+use glib::{gobject_ffi, prelude::*, translate::*, ParamSpec};
 
 glib::wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -26,9 +26,9 @@ impl std::ops::Deref for ParamSpecFraction {
     }
 }
 
-unsafe impl glib::ParamSpecType for ParamSpecFraction {}
+unsafe impl ParamSpecType for ParamSpecFraction {}
 
-impl glib::HasParamSpec for crate::Fraction {
+impl HasParamSpec for crate::Fraction {
     type ParamSpec = ParamSpecFraction;
 
     type SetValue = crate::Fraction;
@@ -222,9 +222,9 @@ impl std::ops::Deref for ParamSpecArray {
     }
 }
 
-unsafe impl glib::ParamSpecType for ParamSpecArray {}
+unsafe impl ParamSpecType for ParamSpecArray {}
 
-impl glib::HasParamSpec for crate::Array {
+impl HasParamSpec for crate::Array {
     type ParamSpec = ParamSpecArray;
 
     type SetValue = crate::Array;

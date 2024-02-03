@@ -2,7 +2,7 @@
 
 use std::{cmp, fmt, ops, slice};
 
-use glib::{translate::*, StaticType};
+use glib::{prelude::*, translate::*};
 use num_rational::Rational32;
 
 #[derive(Copy, Clone, Debug, Ord, PartialOrd, Eq, PartialEq, Hash)]

@@ -6,7 +6,8 @@ use std::{cell::RefCell, cmp, fmt, rc::Rc};
 
 use glib::{
     translate::{from_glib, ToGlibPtr},
-    Date, SendValue, ToValue,
+    value::{SendValue, ToValue},
+    Date,
 };
 use serde::{
     de,

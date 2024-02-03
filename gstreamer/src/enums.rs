@@ -3,9 +3,10 @@
 use std::{cmp, ops};
 
 use glib::{
+    prelude::*,
     translate::*,
     value::{FromValue, ToValue, Value},
-    StaticType, Type,
+    Type,
 };
 use thiserror::Error;
 

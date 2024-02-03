@@ -9,7 +9,7 @@ use std::{
     ptr, str,
 };
 
-use glib::{translate::*, IntoGStr, StaticType};
+use glib::{prelude::*, translate::*};
 use once_cell::sync::Lazy;
 
 #[doc(alias = "GstCapsFeatures")]
@@ -854,7 +854,7 @@ mod tests {
 
     #[test]
     fn test_from_value_optional() {
-        use glib::ToValue;
+        use glib::value::ToValue;
 
         crate::init().unwrap();
 

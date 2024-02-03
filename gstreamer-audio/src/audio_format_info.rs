@@ -3,8 +3,8 @@
 use std::{cmp::Ordering, fmt, marker::PhantomData, str};
 
 use glib::{
+    prelude::*,
     translate::{from_glib, from_glib_none, FromGlib, IntoGlib, ToGlibPtr, ToGlibPtrMut},
-    StaticType,
 };
 
 #[derive(PartialEq, Eq, Copy, Clone, Debug, Hash)]

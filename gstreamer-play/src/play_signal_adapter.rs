@@ -3,9 +3,9 @@
 use std::{boxed::Box as Box_, mem::transmute};
 
 use glib::{
+    prelude::*,
     signal::{connect_raw, SignalHandlerId},
     translate::*,
-    ObjectType,
 };
 
 use crate::PlaySignalAdapter;

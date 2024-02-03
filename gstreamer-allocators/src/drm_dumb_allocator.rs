@@ -1,6 +1,6 @@
 use std::{fmt, mem, os::unix::prelude::IntoRawFd};
 
-use glib::{translate::*, Cast};
+use glib::{prelude::*, translate::*};
 use gst::{Memory, MemoryRef};
 
 use crate::{DRMDumbAllocator, DmaBufMemory};

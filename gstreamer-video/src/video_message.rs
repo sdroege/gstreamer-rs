@@ -4,7 +4,7 @@ use std::ptr;
 
 use glib::{
     translate::{from_glib, from_glib_full, IntoGlib, ToGlibPtr},
-    ToSendValue,
+    value::ToSendValue,
 };
 use gst::{ffi as gst_ffi, prelude::*, Message, Object, Seqnum};
 

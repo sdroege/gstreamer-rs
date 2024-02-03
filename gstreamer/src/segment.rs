@@ -2,7 +2,7 @@
 
 use std::{fmt, marker::PhantomData, mem};
 
-use glib::{translate::*, StaticType};
+use glib::{prelude::*, translate::*};
 
 use crate::{
     format::{

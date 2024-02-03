@@ -51,7 +51,7 @@ impl<T: IirFilterImpl> IirFilterImplExt for T {}
 /// Class struct for `IirFilter`.
 #[repr(C)]
 pub struct Class {
-    parent: <<imp::IirFilter as ObjectSubclass>::ParentType as glib::ObjectType>::GlibClassType,
+    parent: <<imp::IirFilter as ObjectSubclass>::ParentType as ObjectType>::GlibClassType,
 
     set_rate: fn(&IirFilter, rate: u32),
 }

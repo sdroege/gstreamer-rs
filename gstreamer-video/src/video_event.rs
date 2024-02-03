@@ -1,7 +1,7 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 use std::mem;
 
-use glib::{translate::*, ToSendValue};
+use glib::{prelude::*, translate::*};
 use gst::EventType;
 
 #[cfg(feature = "v1_22")]

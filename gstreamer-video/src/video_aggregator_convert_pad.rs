@@ -1,10 +1,9 @@
 use std::mem::transmute;
 
 use glib::{
-    object::IsA,
+    prelude::*,
     signal::{connect_raw, SignalHandlerId},
     translate::*,
-    Cast,
 };
 
 use crate::auto::VideoAggregatorConvertPad;
@@ -19,13 +18,13 @@ pub trait VideoAggregatorConvertPadExtManual:
 {
     #[doc(alias = "converter-config")]
     fn converter_config(&self) -> Option<crate::VideoConverterConfig> {
-        glib::ObjectExt::property::<Option<gst::Structure>>(self.as_ref(), "converter-config")
+        ObjectExt::property::<Option<gst::Structure>>(self.as_ref(), "converter-config")
             .map(|c| c.try_into().unwrap())
     }
 
     #[doc(alias = "converter-config")]
     fn set_converter_config(&self, converter_config: Option<&crate::VideoConverterConfig>) {
-        glib::ObjectExt::set_property(
+        ObjectExt::set_property(
             self.as_ref(),
             "converter-config",
             converter_config.map(|s| s.as_ref()),

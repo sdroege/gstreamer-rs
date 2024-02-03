@@ -4,9 +4,10 @@ use std::{any::Any, fmt, iter, marker::PhantomData, mem, ptr, sync::Arc};
 
 use glib::{
     ffi::{gconstpointer, gpointer},
+    prelude::*,
     translate::*,
     value::{FromValue, ToValue},
-    StaticType, Value,
+    Value,
 };
 use thiserror::Error;
 

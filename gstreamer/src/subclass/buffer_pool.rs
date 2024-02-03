@@ -3,9 +3,9 @@
 use std::ptr;
 
 use glib::{
+    prelude::*,
     subclass::{prelude::*, InitializingObject},
     translate::*,
-    Cast, StaticType,
 };
 use libc::c_char;
 

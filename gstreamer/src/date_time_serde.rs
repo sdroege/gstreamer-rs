@@ -4,8 +4,8 @@
 
 use glib::{
     translate::{FromGlib, IntoGlib},
+    types::StaticType,
     value::{ToValue, ToValueOptional},
-    StaticType,
 };
 use serde::{
     de::{Deserialize, Deserializer, Error},

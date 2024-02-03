@@ -44,7 +44,7 @@ impl StaticType for Rank {
     }
 }
 
-impl glib::HasParamSpec for Rank {
+impl HasParamSpec for Rank {
     type ParamSpec = glib::ParamSpecEnum;
     type SetValue = Self;
     type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;

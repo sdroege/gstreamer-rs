@@ -2,6 +2,7 @@
 
 use std::fmt;
 
+use crate::prelude::*;
 use glib::translate::*;
 
 pub trait IsMiniObject:
@@ -570,7 +571,7 @@ macro_rules! mini_object_wrapper (
 
             #[inline]
             fn value_type(&self) -> $crate::glib::Type {
-                <Self as $crate::glib::StaticType>::static_type()
+                <Self as $crate::glib::prelude::StaticType>::static_type()
             }
         }
 
@@ -617,7 +618,7 @@ macro_rules! mini_object_wrapper (
         // Can't have SetValue/SetValueOptional impls as otherwise one could use it to get
         // immutable references from a mutable reference without borrowing via the value
 
-        impl $crate::glib::HasParamSpec for $name {
+        impl $crate::glib::prelude::HasParamSpec for $name {
             type ParamSpec = $crate::glib::ParamSpecBoxed;
             type SetValue = Self;
             type BuilderFn = fn(&str) -> $crate::glib::ParamSpecBoxedBuilder<Self>;
@@ -639,7 +640,7 @@ mini_object_wrapper!(MiniObject, MiniObjectRef, ffi::GstMiniObject, || {
 
 impl MiniObject {
     #[inline]
-    pub fn downcast<T: IsMiniObject + glib::StaticType>(self) -> Result<T, Self> {
+    pub fn downcast<T: IsMiniObject + StaticType>(self) -> Result<T, Self> {
         if self.type_().is_a(T::static_type()) {
             unsafe { Ok(from_glib_full(self.into_glib_ptr() as *mut T::FfiType)) }
         } else {
@@ -670,7 +671,7 @@ impl MiniObjectRef {
     }
 
     #[inline]
-    pub fn downcast_ref<T: IsMiniObject + glib::StaticType>(&self) -> Option<&T::RefType> {
+    pub fn downcast_ref<T: IsMiniObject + StaticType>(&self) -> Option<&T::RefType> {
         if self.type_().is_a(T::static_type()) {
             unsafe { Some(&*(self as *const Self as *const T::RefType)) }
         } else {
@@ -679,7 +680,7 @@ impl MiniObjectRef {
     }
 
     #[inline]
-    pub fn downcast_mut<T: IsMiniObject + glib::StaticType>(&mut self) -> Option<&mut T::RefType> {
+    pub fn downcast_mut<T: IsMiniObject + StaticType>(&mut self) -> Option<&mut T::RefType> {
         if self.type_().is_a(T::static_type()) {
             unsafe { Some(&mut *(self as *mut Self as *mut T::RefType)) }
         } else {

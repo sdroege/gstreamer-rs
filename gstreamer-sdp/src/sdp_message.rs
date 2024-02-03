@@ -6,7 +6,7 @@ use std::{
     fmt, mem, ops, ptr,
 };
 
-use glib::{translate::*, StaticType};
+use glib::{prelude::*, translate::*};
 
 use crate::{
     sdp_attribute::SDPAttribute,

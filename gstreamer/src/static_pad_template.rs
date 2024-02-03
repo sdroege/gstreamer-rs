@@ -2,7 +2,7 @@
 
 use std::{ffi::CStr, fmt, marker::PhantomData, ptr};
 
-use glib::{translate::*, StaticType};
+use glib::{prelude::*, translate::*};
 
 use crate::{Caps, PadTemplate};
 

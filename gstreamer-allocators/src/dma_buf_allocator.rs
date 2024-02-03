@@ -3,7 +3,7 @@ use std::{
     os::unix::prelude::{IntoRawFd, RawFd},
 };
 
-use glib::{translate::*, Cast};
+use glib::{prelude::*, translate::*};
 use gst::{Memory, MemoryRef};
 
 #[cfg(feature = "v1_16")]

@@ -5,7 +5,7 @@ use std::{
     ptr::{self, addr_of},
 };
 
-use glib::{translate::*, ObjectType};
+use glib::{prelude::*, translate::*};
 use gst_rtsp::{rtsp_message::RTSPMessage, RTSPUrl};
 
 use crate::{RTSPClient, RTSPSession, RTSPToken};

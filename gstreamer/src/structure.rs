@@ -1205,7 +1205,7 @@ mod tests {
 
     #[test]
     fn test_from_value_optional() {
-        use glib::ToValue;
+        use glib::value::ToValue;
 
         crate::init().unwrap();
 

@@ -1,6 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use glib::{translate::*, StaticType};
+use glib::{prelude::*, translate::*};
 
 use std::{alloc, mem, ptr};
 

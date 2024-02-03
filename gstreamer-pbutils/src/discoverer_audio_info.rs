@@ -2,7 +2,7 @@
 
 use std::fmt;
 
-use glib::Cast;
+use glib::prelude::*;
 
 use crate::{DiscovererAudioInfo, DiscovererStreamInfo};
 

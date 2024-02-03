@@ -6,7 +6,8 @@ use std::{
     time::Duration,
 };
 
-use glib::{translate::*, StaticType};
+use crate::prelude::*;
+use glib::translate::*;
 
 use super::{
     Format, FormattedValue, FormattedValueError, FormattedValueFullRange, FormattedValueIntrinsic,
@@ -527,14 +528,14 @@ impl From<ClockTime> for glib::Value {
 }
 
 #[doc(hidden)]
-impl glib::StaticType for ClockTime {
+impl StaticType for ClockTime {
     #[inline]
     fn static_type() -> glib::Type {
-        <u64 as glib::StaticType>::static_type()
+        <u64 as StaticType>::static_type()
     }
 }
 
-impl glib::HasParamSpec for ClockTime {
+impl HasParamSpec for ClockTime {
     type ParamSpec = glib::ParamSpecUInt64;
     type SetValue = Self;
     type BuilderFn = fn(&str) -> glib::ParamSpecUInt64Builder;

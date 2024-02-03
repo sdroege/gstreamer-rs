@@ -1,8 +1,9 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 use glib::{
+    prelude::*,
     translate::{from_glib, ToGlibPtr},
-    FlagsClass, StaticType, ToValue,
+    FlagsClass,
 };
 
 bitflags_serde_impl!(crate::BinFlags);

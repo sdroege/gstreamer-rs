@@ -1,5 +1,7 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+use glib::prelude::*;
+
 // rustdoc-stripper-ignore-next
 /// Trait that allows accessing `Display` implementation on types external to this crate.
 pub trait Displayable {
@@ -16,13 +18,12 @@ pub struct ObjectLockGuard<'a, T: ?Sized> {
 
 impl<'a, T> ObjectLockGuard<'a, T>
 where
-    T: glib::IsA<crate::Object> + ?Sized,
+    T: IsA<crate::Object> + ?Sized,
 {
     #[inline]
     pub fn acquire(obj: &'a T) -> ObjectLockGuard<'a, T> {
         skip_assert_initialized!();
         unsafe {
-            use glib::ObjectType;
             let mutex = &mut (*obj.as_ref().as_ptr()).lock;
             glib::ffi::g_mutex_lock(mutex);
             Self { obj, mutex }

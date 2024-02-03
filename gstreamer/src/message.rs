@@ -350,7 +350,6 @@ impl Error {
     pub fn builder_from_error<'a>(error: glib::Error) -> ErrorBuilder<'a> {
         assert_initialized_main_thread!();
 
-        use glib::error::ErrorDomain;
         assert!([
             crate::CoreError::domain(),
             crate::ResourceError::domain(),
@@ -443,8 +442,6 @@ impl Warning {
     pub fn builder_from_error<'a>(error: glib::Error) -> WarningBuilder<'a> {
         assert_initialized_main_thread!();
 
-        use glib::error::ErrorDomain;
-
         assert!([
             crate::CoreError::domain(),
             crate::ResourceError::domain(),
@@ -536,8 +533,6 @@ impl Info {
 
     pub fn builder_from_error<'a>(error: glib::Error) -> InfoBuilder<'a> {
         assert_initialized_main_thread!();
-
-        use glib::error::ErrorDomain;
 
         assert!([
             crate::CoreError::domain(),

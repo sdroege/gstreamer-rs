@@ -2,7 +2,7 @@
 
 use std::{fmt, marker::PhantomData, ptr};
 
-use glib::{translate::*, StaticType};
+use glib::{prelude::*, translate::*};
 
 use crate::Caps;
 
@@ -31,7 +31,7 @@ impl fmt::Debug for StaticCaps {
     }
 }
 
-impl glib::types::StaticType for StaticCaps {
+impl StaticType for StaticCaps {
     #[inline]
     fn static_type() -> glib::types::Type {
         unsafe { glib::translate::from_glib(ffi::gst_static_caps_get_type()) }
