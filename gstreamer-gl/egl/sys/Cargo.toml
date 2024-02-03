@@ -44,12 +44,10 @@ name = "gstreamer_gl_egl_sys"
 [dependencies]
 libc = "0.2"
 
-[dependencies.glib]
-package = "glib-sys"
+[dependencies.glib-sys]
 git = "https://github.com/gtk-rs/gtk-rs-core"
 
-[dependencies.gst_gl]
-package = "gstreamer-gl-sys"
+[dependencies.gstreamer-gl-sys]
 path = "../../sys"
 
 [build-dependencies]

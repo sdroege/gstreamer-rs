@@ -170,7 +170,7 @@ checksum = "a2bd12c1caf447e69cd4528f47f94d203fd2582878ecb9e9465484c4148a8223"
 [[package]]
 name = "cairo-rs"
 version = "0.19.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core#a4a16882a52da514e7ea5c8c8094bff047d4737f"
+source = "git+https://github.com/gtk-rs/gtk-rs-core#63217f7a949d3a579a0df72eff6d6734a18afe8e"
 dependencies = [
  "bitflags 2.4.2",
  "cairo-sys-rs",
@@ -182,7 +182,7 @@ dependencies = [
 [[package]]
 name = "cairo-sys-rs"
 version = "0.19.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core#a4a16882a52da514e7ea5c8c8094bff047d4737f"
+source = "git+https://github.com/gtk-rs/gtk-rs-core#63217f7a949d3a579a0df72eff6d6734a18afe8e"
 dependencies = [
  "glib-sys",
  "libc",
@@ -678,7 +678,7 @@ dependencies = [
 [[package]]
 name = "gio"
 version = "0.19.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core#a4a16882a52da514e7ea5c8c8094bff047d4737f"
+source = "git+https://github.com/gtk-rs/gtk-rs-core#63217f7a949d3a579a0df72eff6d6734a18afe8e"
 dependencies = [
  "futures-channel",
  "futures-core",
@@ -695,7 +695,7 @@ dependencies = [
 [[package]]
 name = "gio-sys"
 version = "0.19.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core#a4a16882a52da514e7ea5c8c8094bff047d4737f"
+source = "git+https://github.com/gtk-rs/gtk-rs-core#63217f7a949d3a579a0df72eff6d6734a18afe8e"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -724,7 +724,7 @@ dependencies = [
 [[package]]
 name = "glib"
 version = "0.19.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core#a4a16882a52da514e7ea5c8c8094bff047d4737f"
+source = "git+https://github.com/gtk-rs/gtk-rs-core#63217f7a949d3a579a0df72eff6d6734a18afe8e"
 dependencies = [
  "bitflags 2.4.2",
  "futures-channel",
@@ -745,7 +745,7 @@ dependencies = [
 [[package]]
 name = "glib-macros"
 version = "0.19.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core#a4a16882a52da514e7ea5c8c8094bff047d4737f"
+source = "git+https://github.com/gtk-rs/gtk-rs-core#63217f7a949d3a579a0df72eff6d6734a18afe8e"
 dependencies = [
  "heck",
  "proc-macro-crate",
@@ -757,7 +757,7 @@ dependencies = [
 [[package]]
 name = "glib-sys"
 version = "0.19.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core#a4a16882a52da514e7ea5c8c8094bff047d4737f"
+source = "git+https://github.com/gtk-rs/gtk-rs-core#63217f7a949d3a579a0df72eff6d6734a18afe8e"
 dependencies = [
  "libc",
  "system-deps",
@@ -820,7 +820,7 @@ dependencies = [
 [[package]]
 name = "gobject-sys"
 version = "0.19.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core#a4a16882a52da514e7ea5c8c8094bff047d4737f"
+source = "git+https://github.com/gtk-rs/gtk-rs-core#63217f7a949d3a579a0df72eff6d6734a18afe8e"
 dependencies = [
  "glib-sys",
  "libc",
@@ -1561,9 +1561,9 @@ dependencies = [
 
 [[package]]
 name = "indexmap"
-version = "2.2.1"
+version = "2.2.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "433de089bd45971eecf4668ee0ee8f4cec17db4f8bd8f7bc3197a6ce37aa7d9b"
+checksum = "824b2ae422412366ba479e8111fd301f7b5faece8149317bb81925979a53f520"
 dependencies = [
  "equivalent",
  "hashbrown",
@@ -1638,9 +1638,9 @@ checksum = "e2db585e1d738fc771bf08a151420d3ed193d9d895a36df7f6f8a9456b911ddc"
 
 [[package]]
 name = "libc"
-version = "0.2.152"
+version = "0.2.153"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "13e3bf6590cbc649f4d1a3eefc9d5d6eb746f5200ffb04e5e142700b8faa56e7"
+checksum = "9c198f91728a82281a64e1f4f9eeb25d82cb32a5de251c6bd1b5154d63a8e7bd"
 
 [[package]]
 name = "libloading"
@@ -1870,7 +1870,7 @@ dependencies = [
 [[package]]
 name = "pango"
 version = "0.19.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core#a4a16882a52da514e7ea5c8c8094bff047d4737f"
+source = "git+https://github.com/gtk-rs/gtk-rs-core#63217f7a949d3a579a0df72eff6d6734a18afe8e"
 dependencies = [
  "gio",
  "glib",
@@ -1881,7 +1881,7 @@ dependencies = [
 [[package]]
 name = "pango-sys"
 version = "0.19.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core#a4a16882a52da514e7ea5c8c8094bff047d4737f"
+source = "git+https://github.com/gtk-rs/gtk-rs-core#63217f7a949d3a579a0df72eff6d6734a18afe8e"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -1892,7 +1892,7 @@ dependencies = [
 [[package]]
 name = "pangocairo"
 version = "0.19.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core#a4a16882a52da514e7ea5c8c8094bff047d4737f"
+source = "git+https://github.com/gtk-rs/gtk-rs-core#63217f7a949d3a579a0df72eff6d6734a18afe8e"
 dependencies = [
  "cairo-rs",
  "glib",
@@ -1904,7 +1904,7 @@ dependencies = [
 [[package]]
 name = "pangocairo-sys"
 version = "0.19.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core#a4a16882a52da514e7ea5c8c8094bff047d4737f"
+source = "git+https://github.com/gtk-rs/gtk-rs-core#63217f7a949d3a579a0df72eff6d6734a18afe8e"
 dependencies = [
  "cairo-sys-rs",
  "glib-sys",
@@ -2065,9 +2065,9 @@ dependencies = [
 
 [[package]]
 name = "rustix"
-version = "0.38.30"
+version = "0.38.31"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "322394588aaf33c24007e8bb3238ee3e4c5c09c084ab32bc73890b99ff326bca"
+checksum = "6ea3e1a662af26cd7a3ba09c0297a31af215563ecf42817c98df621387f4e949"
 dependencies = [
  "bitflags 2.4.2",
  "errno",
@@ -2301,9 +2301,9 @@ dependencies = [
 
 [[package]]
 name = "toml"
-version = "0.8.8"
+version = "0.8.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a1a195ec8c9da26928f773888e0742ca3ca1040c6cd859c919c9f59c1954ab35"
+checksum = "c6a4b9e8023eb94392d3dca65d717c53abc5dad49c07cb65bb8fcd87115fa325"
 dependencies = [
  "serde",
  "serde_spanned",
@@ -2322,9 +2322,9 @@ dependencies = [
 
 [[package]]
 name = "toml_edit"
-version = "0.21.0"
+version = "0.21.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d34d383cd00a163b4a5b85053df514d45bc330f6de7737edfe0a93311d1eaa03"
+checksum = "6a8534fd7f78b5405e860340ad6575217ce99f38d4d5c8f2442cb5ecb50090e1"
 dependencies = [
  "indexmap",
  "serde",
@@ -2909,9 +2909,9 @@ dependencies = [
 
 [[package]]
 name = "winnow"
-version = "0.5.35"
+version = "0.5.37"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1931d78a9c73861da0134f453bb1f790ce49b2e30eba8410b4b79bac72b46a2d"
+checksum = "a7cad8365489051ae9f054164e459304af2e7e9bb407c958076c8bf4aef52da5"
 dependencies = [
  "memchr",
 ]
