@@ -19,7 +19,8 @@ external_libraries = [
 ]
 
 [external_libraries]
-gstreamer_sdp="GstSdp"
+gstreamer = "Gst"
+gstreamer_sdp = "GstSdp"
 
 [[object]]
 name = "GstWebRTC.WebRTCSCTPTransport"

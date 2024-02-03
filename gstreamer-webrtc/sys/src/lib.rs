@@ -14,6 +14,7 @@
 
 use glib_sys as glib;
 use gstreamer_sdp_sys as gst_sdp;
+use gstreamer_sys as gst;
 
 #[allow(unused_imports)]
 use libc::{
