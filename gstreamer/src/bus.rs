@@ -311,7 +311,7 @@ impl Bus {
     pub fn stream_filtered<'a>(
         &self,
         message_types: &'a [MessageType],
-    ) -> impl Stream<Item = Message> + Unpin + FusedStream + Send + 'a {
+    ) -> impl FusedStream<Item = Message> + Unpin + Send + 'a {
         self.stream().filter(move |message| {
             let message_type = message.type_();
 
