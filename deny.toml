@@ -23,6 +23,12 @@ multiple-versions = "deny"
 wildcards = "allow"
 highlight = "all"
 
+# proc-macro-crate depends on an older version of toml_edit
+# https://github.com/bkchr/proc-macro-crate/pull/50
+[[bans.skip]]
+name = "toml_edit"
+version = "0.21"
+
 [sources]
 unknown-registry = "deny"
 unknown-git = "deny"
