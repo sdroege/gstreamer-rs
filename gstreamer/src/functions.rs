@@ -13,6 +13,10 @@ pub use crate::auto::functions::{
     main_executable_path, util_get_timestamp as get_timestamp, version, version_string,
 };
 
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+pub use crate::auto::functions::util_ceil_log2 as ceil_log2;
+
 #[doc(alias = "gst_calculate_linear_regression")]
 pub fn calculate_linear_regression(
     xy: &[(u64, u64)],
@@ -68,6 +72,19 @@ pub fn calculate_linear_regression(
 pub fn active_tracers() -> glib::List<Tracer> {
     assert_initialized_main_thread!();
     unsafe { FromGlibPtrContainer::from_glib_full(ffi::gst_tracing_get_active_tracers()) }
+}
+
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+#[doc(alias = "gst_util_filename_compare")]
+pub fn filename_compare(a: &std::path::Path, b: &std::path::Path) -> std::cmp::Ordering {
+    skip_assert_initialized!();
+    unsafe {
+        from_glib(ffi::gst_util_filename_compare(
+            a.to_glib_none().0,
+            b.to_glib_none().0,
+        ))
+    }
 }
 
 #[cfg(test)]
