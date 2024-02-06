@@ -392,6 +392,16 @@ status = "generate"
     # Needs integration into subclassing infrastructure
     ignore = true
 
+    [[object.function]]
+    name = "util_filename_compare"
+    # Convert return type to `Ordering`
+    manual = true
+
+    [[object.function]]
+    name = "util_ceil_log2"
+    # can be called before gst_init()
+    assertion = "skip"
+
 [[object]]
 name = "Gst.Allocator"
 status = "generate"
