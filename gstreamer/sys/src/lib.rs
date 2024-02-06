@@ -8334,9 +8334,15 @@ extern "C" {
     pub fn gst_pipeline_get_auto_flush_bus(pipeline: *mut GstPipeline) -> gboolean;
     pub fn gst_pipeline_get_bus(pipeline: *mut GstPipeline) -> *mut GstBus;
     pub fn gst_pipeline_get_clock(pipeline: *mut GstPipeline) -> *mut GstClock;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_pipeline_get_configured_latency(pipeline: *mut GstPipeline) -> GstClockTime;
     pub fn gst_pipeline_get_delay(pipeline: *mut GstPipeline) -> GstClockTime;
     pub fn gst_pipeline_get_latency(pipeline: *mut GstPipeline) -> GstClockTime;
     pub fn gst_pipeline_get_pipeline_clock(pipeline: *mut GstPipeline) -> *mut GstClock;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_pipeline_is_live(pipeline: *mut GstPipeline) -> gboolean;
     pub fn gst_pipeline_set_auto_flush_bus(pipeline: *mut GstPipeline, auto_flush: gboolean);
     pub fn gst_pipeline_set_clock(pipeline: *mut GstPipeline, clock: *mut GstClock) -> gboolean;
     pub fn gst_pipeline_set_delay(pipeline: *mut GstPipeline, delay: GstClockTime);
@@ -9180,9 +9186,15 @@ extern "C" {
         search_data: gconstpointer,
         user_data: gpointer,
     ) -> gpointer;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_util_ceil_log2(v: u32) -> c_uint;
     pub fn gst_util_double_to_fraction(src: c_double, dest_n: *mut c_int, dest_d: *mut c_int);
     pub fn gst_util_dump_buffer(buf: *mut GstBuffer);
     pub fn gst_util_dump_mem(mem: *const u8, size: c_uint);
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_util_filename_compare(a: *const c_char, b: *const c_char) -> c_int;
     pub fn gst_util_fraction_add(
         a_n: c_int,
         a_d: c_int,

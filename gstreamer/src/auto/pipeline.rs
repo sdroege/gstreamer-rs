@@ -50,6 +50,18 @@ pub trait PipelineExt: IsA<Pipeline> + sealed::Sealed + 'static {
         }
     }
 
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "gst_pipeline_get_configured_latency")]
+    #[doc(alias = "get_configured_latency")]
+    fn configured_latency(&self) -> Option<ClockTime> {
+        unsafe {
+            from_glib(ffi::gst_pipeline_get_configured_latency(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
     #[doc(alias = "gst_pipeline_get_delay")]
     #[doc(alias = "get_delay")]
     fn delay(&self) -> ClockTime {
@@ -77,6 +89,13 @@ pub trait PipelineExt: IsA<Pipeline> + sealed::Sealed + 'static {
                 self.as_ref().to_glib_none().0,
             ))
         }
+    }
+
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "gst_pipeline_is_live")]
+    fn is_live(&self) -> bool {
+        unsafe { from_glib(ffi::gst_pipeline_is_live(self.as_ref().to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_pipeline_set_auto_flush_bus")]

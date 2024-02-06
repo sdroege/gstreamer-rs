@@ -877,6 +877,10 @@ impl From<RTSPRangeUnit> for glib::Value {
 pub enum RTSPResult {
     #[doc(alias = "GST_RTSP_OK")]
     Ok,
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "GST_RTSP_OK_REDIRECT")]
+    OkRedirect,
     #[doc(alias = "GST_RTSP_ERROR")]
     Error,
     #[doc(alias = "GST_RTSP_EINVAL")]
@@ -922,6 +926,8 @@ impl IntoGlib for RTSPResult {
     fn into_glib(self) -> ffi::GstRTSPResult {
         match self {
             Self::Ok => ffi::GST_RTSP_OK,
+            #[cfg(feature = "v1_24")]
+            Self::OkRedirect => ffi::GST_RTSP_OK_REDIRECT,
             Self::Error => ffi::GST_RTSP_ERROR,
             Self::Einval => ffi::GST_RTSP_EINVAL,
             Self::Eintr => ffi::GST_RTSP_EINTR,
@@ -951,6 +957,8 @@ impl FromGlib<ffi::GstRTSPResult> for RTSPResult {
 
         match value {
             ffi::GST_RTSP_OK => Self::Ok,
+            #[cfg(feature = "v1_24")]
+            ffi::GST_RTSP_OK_REDIRECT => Self::OkRedirect,
             ffi::GST_RTSP_ERROR => Self::Error,
             ffi::GST_RTSP_EINVAL => Self::Einval,
             ffi::GST_RTSP_EINTR => Self::Eintr,
@@ -1167,6 +1175,14 @@ pub enum RTSPStatusCode {
     NotModified,
     #[doc(alias = "GST_RTSP_STS_USE_PROXY")]
     UseProxy,
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "GST_RTSP_STS_REDIRECT_TEMPORARILY")]
+    RedirectTemporarily,
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "GST_RTSP_STS_REDIRECT_PERMANENTLY")]
+    RedirectPermanently,
     #[doc(alias = "GST_RTSP_STS_BAD_REQUEST")]
     BadRequest,
     #[doc(alias = "GST_RTSP_STS_UNAUTHORIZED")]
@@ -1258,6 +1274,10 @@ impl IntoGlib for RTSPStatusCode {
             Self::SeeOther => ffi::GST_RTSP_STS_SEE_OTHER,
             Self::NotModified => ffi::GST_RTSP_STS_NOT_MODIFIED,
             Self::UseProxy => ffi::GST_RTSP_STS_USE_PROXY,
+            #[cfg(feature = "v1_24")]
+            Self::RedirectTemporarily => ffi::GST_RTSP_STS_REDIRECT_TEMPORARILY,
+            #[cfg(feature = "v1_24")]
+            Self::RedirectPermanently => ffi::GST_RTSP_STS_REDIRECT_PERMANENTLY,
             Self::BadRequest => ffi::GST_RTSP_STS_BAD_REQUEST,
             Self::Unauthorized => ffi::GST_RTSP_STS_UNAUTHORIZED,
             Self::PaymentRequired => ffi::GST_RTSP_STS_PAYMENT_REQUIRED,
@@ -1319,6 +1339,10 @@ impl FromGlib<ffi::GstRTSPStatusCode> for RTSPStatusCode {
             ffi::GST_RTSP_STS_SEE_OTHER => Self::SeeOther,
             ffi::GST_RTSP_STS_NOT_MODIFIED => Self::NotModified,
             ffi::GST_RTSP_STS_USE_PROXY => Self::UseProxy,
+            #[cfg(feature = "v1_24")]
+            ffi::GST_RTSP_STS_REDIRECT_TEMPORARILY => Self::RedirectTemporarily,
+            #[cfg(feature = "v1_24")]
+            ffi::GST_RTSP_STS_REDIRECT_PERMANENTLY => Self::RedirectPermanently,
             ffi::GST_RTSP_STS_BAD_REQUEST => Self::BadRequest,
             ffi::GST_RTSP_STS_UNAUTHORIZED => Self::Unauthorized,
             ffi::GST_RTSP_STS_PAYMENT_REQUIRED => Self::PaymentRequired,

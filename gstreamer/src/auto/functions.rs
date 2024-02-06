@@ -221,6 +221,14 @@ pub fn update_registry() -> Result<(), glib::error::BoolError> {
     }
 }
 
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+#[doc(alias = "gst_util_ceil_log2")]
+pub fn util_ceil_log2(v: u32) -> u32 {
+    skip_assert_initialized!();
+    unsafe { ffi::gst_util_ceil_log2(v) }
+}
+
 #[doc(alias = "gst_util_get_timestamp")]
 pub fn util_get_timestamp() -> ClockTime {
     skip_assert_initialized!();
