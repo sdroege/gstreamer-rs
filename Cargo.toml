@@ -120,6 +120,9 @@ gio-sys = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "master" }
 glib = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "master" }
 glib-sys = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "master" }
 gobject-sys = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "master" }
+cairo-rs = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "master" }
+pango = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "master" }
+pangocairo = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "master" }
 gstreamer-audio-sys = { path = "./gstreamer-audio/sys"}
 gstreamer-base-sys = { path = "./gstreamer-base/sys"}
 gstreamer-gl-sys = { path = "./gstreamer-gl/sys"}
