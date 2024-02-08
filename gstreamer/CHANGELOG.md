@@ -5,6 +5,50 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.22.0] - 2024-02-08
+### Changed
+- Compatible with gtk-rs-core 0.19 / gtk4-rs 0.8.
+- Update GStreamer gir files to latest (upcoming) 1.24 APIs.
+- Various standalone functions were moved to separate modules or methods.
+- `gst::Rank` is not implemented as an enum but as a struct with associated
+  constants now.
+- Optimized `gst::Buffer::from_slice()` and `Memory::from_slice()`
+  implementations that have one heap allocation fewer.
+- Various `gst::Buffer` and `gst::Memory` functions take ranges now instead of
+  offset/size parameters.
+
+### Added
+- Bindings for `gst_gl::GLContext::thread_add()`, `GLFrameBuffer::draw_to_texture()`.
+- New `gst_gl::GLVideoFrame` type that replaces `gst_video::VideoFrame` for
+  GL-specific API, and comes with mostly the same interface.
+- Basic gstreamer-tag bindings.
+- `gst::Buffer:dump()` and `dump_range()` together with the same API on
+  `gst::Memory` for hex-dumping the whole buffer/memory content.
+- Implement `Clone` on `gst::MetaRef`.
+- Bindings for `gst::Buffer::map_range_readable()` and its writable variant.
+- Array-based accessor for `gst_video::VideoFrame` and
+  `gst_audio::AudioBuffer` plane data.
+- Support for handling custom authentication in `gstreamer-rtsp-server`.
+- Accessors for various base class struct fields.
+- Owned buffer getter for `AudioBuffer` / `VideoFrame`.
+- `gst_rtp::RTPSourceMeta` bindings.
+- `gst::macos_main()` bindings.
+- gstreamer-analytics bindings.
+
+### Fixed
+- API typo in owned `gst::ReferenceTimestampMeta` reference getter.
+- Allow variable expansion in `gst::loggable_error!` macro.
+- `gstreamer-gl-*` crates can build docs again on stable.
+
+### Removed
+- `gst::Pad::caps()` property getter. Use `current_caps()` instead which does
+  the same thing.
+- Various deprecated APIs that were deprecated in previous releases.
+- Getter for a mutable buffer reference from `AudioBuffer` / `VideoFrame` as
+  that allowed invalidating the buffer map.
+
+### Fixed
+
 ## [0.21.3] - 2023-12-18
 ### Added
 - Update GStreamer gir files to latest (upcoming) 1.24 APIs.
@@ -59,6 +103,10 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
 - Ordering of raw video formats follows the rules of latest libgstvideo now.
 - Fix potential deadlock in `gst_utils::StreamProducer` when sending
   force-keyunit events.
+
+### Added
+- `max-time` / `max-bytes` setters to `gst_app::AppSink` builder.
+- `gst::CustomMeta::register_simple()`.
 
 ## [0.21.0] - 2023-08-08
 ### Changed
@@ -1613,7 +1661,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.21.3...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.22.0...HEAD
+[0.22.0]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.21.3...0.22.0
 [0.21.3]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.21.2...0.21.3
 [0.21.2]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.21.1...0.21.2
 [0.21.1]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.21.0...0.21.1
