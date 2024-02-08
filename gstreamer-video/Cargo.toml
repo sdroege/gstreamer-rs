@@ -17,7 +17,7 @@ rust-version.workspace = true
 [dependencies]
 libc = "0.2"
 cfg-if = "1.0"
-ffi = { package = "gstreamer-video-sys", path = "sys" }
+ffi = { package = "gstreamer-video-sys", path = "sys", version = "0.22" }
 glib.workspace = true
 gst.workspace = true
 gst-base.workspace = true

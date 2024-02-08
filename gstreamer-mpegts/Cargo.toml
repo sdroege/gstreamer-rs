@@ -14,7 +14,7 @@ edition.workspace = true
 rust-version.workspace = true 
 
 [dependencies]
-ffi = { package = "gstreamer-mpegts-sys", path = "sys" }
+ffi = { package = "gstreamer-mpegts-sys", path = "sys", version = "0.22" }
 glib.workspace = true
 gst.workspace = true
 

@@ -14,7 +14,7 @@ edition.workspace = true
 rust-version.workspace = true 
 
 [dependencies]
-ffi = { package = "gstreamer-controller-sys", path = "sys" }
+ffi = { package = "gstreamer-controller-sys", path = "sys", version = "0.22" }
 glib.workspace = true
 gst.workspace = true
 

@@ -15,7 +15,7 @@ rust-version.workspace = true
 
 [dependencies]
 libc = "0.2"
-ffi = { package = "gstreamer-analytics-sys", path = "sys" }
+ffi = { package = "gstreamer-analytics-sys", path = "sys", version = "0.22" }
 glib.workspace = true
 gst.workspace = true
 
