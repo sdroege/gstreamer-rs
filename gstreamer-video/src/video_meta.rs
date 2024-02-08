@@ -1168,6 +1168,38 @@ pub mod tags {
     gst::impl_meta_tag!(Colorspace, GST_META_TAG_VIDEO_COLORSPACE_STR);
 }
 
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct VideoMetaTransform<'a> {
+    in_info: &'a crate::VideoInfo,
+    out_info: &'a crate::VideoInfo,
+}
+
+impl<'a> VideoMetaTransform<'a> {
+    pub fn new(in_info: &'a crate::VideoInfo, out_info: &'a crate::VideoInfo) -> Self {
+        skip_assert_initialized!();
+        VideoMetaTransform { in_info, out_info }
+    }
+}
+
+unsafe impl<'a> gst::meta::MetaTransform<'a> for VideoMetaTransform<'a> {
+    type GLibType = ffi::GstVideoMetaTransform;
+
+    #[doc(alias = "gst_video_meta_transform_scale_get_quark")]
+    fn quark() -> glib::Quark {
+        unsafe { from_glib(ffi::gst_video_meta_transform_scale_get_quark()) }
+    }
+
+    fn to_raw<T: MetaAPI>(
+        &self,
+        _meta: &gst::MetaRef<T>,
+    ) -> Result<ffi::GstVideoMetaTransform, glib::BoolError> {
+        Ok(ffi::GstVideoMetaTransform {
+            in_info: mut_override(self.in_info.to_glib_none().0),
+            out_info: mut_override(self.out_info.to_glib_none().0),
+        })
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -1254,7 +1286,7 @@ mod tests {
 
     #[test]
     #[cfg(feature = "v1_18")]
-    fn test_vide_meta_alignment() {
+    fn test_video_meta_alignment() {
         gst::init().unwrap();
 
         let mut buffer = gst::Buffer::with_size(115200).unwrap();
@@ -1364,5 +1396,32 @@ mod tests {
         assert_eq!(meta.uuid(), *META_UUID);
         assert_eq!(meta.data(), META_DATA);
         assert_eq!(meta.data().len(), META_DATA.len());
+    }
+
+    #[test]
+    fn test_meta_video_transform() {
+        gst::init().unwrap();
+
+        let mut buffer = gst::Buffer::with_size(320 * 240 * 4).unwrap();
+        let meta = VideoCropMeta::add(buffer.get_mut().unwrap(), (10, 10, 20, 20));
+
+        let mut buffer2 = gst::Buffer::with_size(640 * 480 * 4).unwrap();
+
+        let in_video_info = crate::VideoInfo::builder(crate::VideoFormat::Rgba, 320, 240)
+            .build()
+            .unwrap();
+        let out_video_info = crate::VideoInfo::builder(crate::VideoFormat::Rgba, 640, 480)
+            .build()
+            .unwrap();
+
+        meta.transform(
+            buffer2.get_mut().unwrap(),
+            &VideoMetaTransform::new(&in_video_info, &out_video_info),
+        )
+        .unwrap();
+
+        let meta2 = buffer2.meta::<VideoCropMeta>().unwrap();
+
+        assert_eq!(meta2.rect(), (20, 20, 40, 40));
     }
 }
