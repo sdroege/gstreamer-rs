@@ -60,13 +60,13 @@ impl<'a> AnalyticsRelationMetaODExt
     }
 }
 
-#[derive(Default, Debug)]
+#[derive(Clone, Copy, Default, Debug)]
 pub struct AnalyticsODLocation {
-    x: i32,
-    y: i32,
-    w: i32,
-    h: i32,
-    loc_conf_lvl: f32,
+    pub x: i32,
+    pub y: i32,
+    pub w: i32,
+    pub h: i32,
+    pub loc_conf_lvl: f32,
 }
 
 unsafe impl AnalyticsMtd for AnalyticsODMtd {
