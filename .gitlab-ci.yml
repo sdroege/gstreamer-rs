@@ -56,7 +56,7 @@ variables:
   # latest release must be at the top
   # (only relevant on main branch)
   RELEASES:
-    0.21=0.21
+    0.22=0.22
 
 stages:
   - "trigger"
