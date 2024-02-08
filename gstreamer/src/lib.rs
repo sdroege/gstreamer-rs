@@ -109,6 +109,7 @@ pub use crate::tags::{
 #[cfg(feature = "serde")]
 mod tags_serde;
 
+#[macro_use]
 pub mod meta;
 #[cfg(feature = "v1_16")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
@@ -339,7 +340,7 @@ pub mod prelude {
         gobject::GObjectExtManualGst,
         memory::MemoryType,
         message::MessageErrorDomain,
-        meta::{MetaAPI, MetaAPIExt},
+        meta::{MetaAPI, MetaAPIExt, MetaTag},
         miniobject::IsMiniObject,
         object::GstObjectExtManual,
         pad::PadExtManual,

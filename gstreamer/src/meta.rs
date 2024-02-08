@@ -206,7 +206,12 @@ impl<'a, T> MetaRef<'a, T> {
 
     #[inline]
     #[doc(alias = "gst_meta_api_type_has_tag")]
-    pub fn has_tag(&self, tag: glib::Quark) -> bool {
+    pub fn has_tag<MT: MetaTag>(&self) -> bool {
+        self.has_tag_by_quark(MT::quark())
+    }
+
+    #[inline]
+    pub fn has_tag_by_quark(&self, tag: glib::Quark) -> bool {
         unsafe {
             from_glib(ffi::gst_meta_api_type_has_tag(
                 self.api().into_glib(),
@@ -457,8 +462,13 @@ impl<'a, T, U> MetaRefMut<'a, T, U> {
 
     #[inline]
     #[doc(alias = "gst_meta_api_type_has_tag")]
-    pub fn has_tag(&self, tag: glib::Quark) -> bool {
-        self.as_meta_ref().has_tag(tag)
+    pub fn has_tag<MT: MetaTag>(&self) -> bool {
+        self.as_meta_ref().has_tag::<MT>()
+    }
+
+    #[inline]
+    pub fn has_tag_by_quark(&self, tag: glib::Quark) -> bool {
+        self.as_meta_ref().has_tag_by_quark(tag)
     }
 
     #[inline]
@@ -1050,6 +1060,30 @@ impl CustomMeta {
     }
 }
 
+pub trait MetaTag {
+    const TAG_NAME: &'static glib::GStr;
+    fn quark() -> glib::Quark;
+}
+
+#[macro_export]
+macro_rules! impl_meta_tag(
+    ($name:ident, $gst_tag:ident) => {
+        pub enum $name {}
+        impl $crate::meta::MetaTag for $name {
+            const TAG_NAME: &'static glib::GStr = unsafe { glib::GStr::from_utf8_with_nul_unchecked(ffi::$gst_tag) };
+	    fn quark() -> glib::Quark {
+                static QUARK: std::sync::OnceLock<glib::Quark> = std::sync::OnceLock::new();
+                *QUARK.get_or_init(|| glib::Quark::from_static_str(Self::TAG_NAME))
+            }
+        }
+    };
+);
+
+pub mod tags {
+    impl_meta_tag!(Memory, GST_META_TAG_MEMORY_STR);
+    impl_meta_tag!(MemoryReference, GST_META_TAG_MEMORY_REFERENCE_STR);
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -1086,8 +1120,8 @@ mod tests {
                 .collect::<Vec<_>>();
             assert_eq!(metas.len(), 1);
             assert_eq!(metas[0].parent().as_ptr(), parent.as_ptr());
-            assert!(!metas[0].has_tag(glib::Quark::from_str("video")));
-            assert!(metas[0].has_tag(glib::Quark::from_str("memory-reference")));
+            assert!(!metas[0].has_tag_by_quark(glib::Quark::from_str("video")));
+            assert!(metas[0].has_tag::<tags::MemoryReference>());
             assert_eq!(metas[0].tags().len(), 1);
 
             assert_eq!(metas[0].tags(), metas[0].upcast_ref().tags());

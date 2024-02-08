@@ -294,6 +294,14 @@ impl fmt::Debug for AudioLevelMeta {
     }
 }
 
+pub mod tags {
+    gst::impl_meta_tag!(Audio, GST_META_TAG_AUDIO_STR);
+    gst::impl_meta_tag!(Channels, GST_META_TAG_AUDIO_CHANNELS_STR);
+    gst::impl_meta_tag!(Rate, GST_META_TAG_AUDIO_RATE_STR);
+    #[cfg(feature = "v1_24")]
+    gst::impl_meta_tag!(DSDPlaneOffsets, GST_META_TAG_DSD_PLANE_OFFSETS_STR);
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -319,6 +327,8 @@ mod tests {
             let cmeta = buffer.meta::<AudioClippingMeta>().unwrap();
             assert_eq!(cmeta.start().try_into(), Ok(Some(start)));
             assert_eq!(cmeta.end().try_into(), Ok(Some(stop)));
+
+            assert!(cmeta.has_tag::<tags::Audio>());
         }
     }
 

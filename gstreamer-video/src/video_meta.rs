@@ -1161,6 +1161,13 @@ impl fmt::Debug for AncillaryMeta {
     }
 }
 
+pub mod tags {
+    gst::impl_meta_tag!(Video, GST_META_TAG_VIDEO_STR);
+    gst::impl_meta_tag!(Size, GST_META_TAG_VIDEO_SIZE_STR);
+    gst::impl_meta_tag!(Orientation, GST_META_TAG_VIDEO_ORIENTATION_STR);
+    gst::impl_meta_tag!(Colorspace, GST_META_TAG_VIDEO_COLORSPACE_STR);
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -1187,6 +1194,10 @@ mod tests {
             assert_eq!(meta.n_planes(), 1);
             assert_eq!(meta.offset(), &[0]);
             assert_eq!(meta.stride(), &[320 * 4]);
+            assert!(meta.has_tag::<gst::meta::tags::Memory>());
+            assert!(meta.has_tag::<tags::Video>());
+            assert!(meta.has_tag::<tags::Colorspace>());
+            assert!(meta.has_tag::<tags::Size>());
         }
 
         {
