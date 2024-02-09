@@ -522,6 +522,24 @@ impl<'a, T, U> MetaRefMut<'a, T, U> {
     ) -> Result<usize, glib::BoolError> {
         self.as_meta_ref().serialize(writer)
     }
+
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn clear(&mut self) -> Result<(), glib::BoolError>
+    where
+        T: MetaAPI,
+    {
+        unsafe {
+            let info = *(*self.upcast_ref().as_ptr()).info;
+
+            if let Some(clear_func) = info.clear_func {
+                clear_func(self.buffer.as_mut_ptr(), self.upcast_mut().as_mut_ptr());
+                Ok(())
+            } else {
+                Err(glib::bool_error!("Failed to clear meta"))
+            }
+        }
+    }
 }
 
 impl<'a, T> MetaRefMut<'a, T, Standalone> {
