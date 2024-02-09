@@ -473,7 +473,7 @@ impl<'a, T, U> MetaRefMut<'a, T, U> {
     }
 
     #[inline]
-    pub fn upcast_mut(&mut self) -> &MetaRefMut<'a, Meta, U> {
+    pub fn upcast_mut(&mut self) -> &mut MetaRefMut<'a, Meta, U> {
         unsafe { &mut *(self as *mut MetaRefMut<'a, T, U> as *mut MetaRefMut<'a, Meta, U>) }
     }
 
