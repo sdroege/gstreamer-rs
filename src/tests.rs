@@ -1,9 +1,9 @@
 use crate::*;
-use gstreamer as g;
 use g::{
-    glib::{translate::ToGlibPtr},
+    glib::translate::ToGlibPtr,
     prelude::{Cast, ElementExt, ObjectType},
 };
+use gstreamer as g;
 use std::{
     collections::VecDeque,
     sync::atomic::{AtomicU64, Ordering},

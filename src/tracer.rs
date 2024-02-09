@@ -1,9 +1,6 @@
 use crate::callsite::GstCallsiteKind;
 use gstreamer::{
-    glib,
-    prelude::*,
-    subclass::prelude::*,
-    Buffer, FlowError, FlowSuccess, Object, Pad, Tracer,
+    glib, prelude::*, subclass::prelude::*, Buffer, FlowError, FlowSuccess, Object, Pad, Tracer,
 };
 use std::{cell::RefCell, str::FromStr};
 use tracing::{error, info, span::Attributes, Callsite, Dispatch, Id};
