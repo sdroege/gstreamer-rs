@@ -17,7 +17,7 @@ function. Calling it before the call to any other `gstreamer` call (especially b
 // e.g. tracing_subscriber::fmt::init();
 
 tracing_gstreamer::integrate_events();
-gstreamer::debug_remove_default_log_function();
+gstreamer::log::remove_default_log_function();
 gstreamer::init();
 ```
 
@@ -25,7 +25,7 @@ Keep in mind that both `GST_DEBUG` and tracing filters are in effect. The `gstre
 filters can be relaxed from code via:
 
 ```
-gstreamer::debug_set_default_threshold(gstreamer::DebugLevel::Memdump);
+gstreamer::log::set_default_threshold(gstreamer::DebugLevel::Memdump);
 ```
 
 Similarly you can use `tracing` APIs to adjust the filters on the `tracing` side.
@@ -179,4 +179,3 @@ cargo build && \
   RUST_LOG=debug GST_TRACERS="fmttracing(log-level=4)" \
   gst-launch-1.0 playbin3 uri="https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_trailer-480p.webm"
 ```
-

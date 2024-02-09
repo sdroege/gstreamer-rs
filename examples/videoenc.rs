@@ -1,15 +1,15 @@
 //! This example prepares a vp9 encoding pipeline, instrumented via tracing.
-use gstreamer::{traits::ElementExt, ClockTime, MessageView::*, State};
+use gstreamer::{prelude::ElementExt, ClockTime, MessageView::*, State};
 
 fn main() {
     tracing_subscriber::fmt::init();
     tracing_gstreamer::integrate_events();
-    gstreamer::debug_remove_default_log_function();
-    gstreamer::debug_set_default_threshold(gstreamer::DebugLevel::Memdump);
+    gstreamer::log::remove_default_log_function();
+    gstreamer::log::set_default_threshold(gstreamer::DebugLevel::Memdump);
     gstreamer::init().expect("gst init");
     tracing_gstreamer::integrate_spans();
 
-    let pipeline = gstreamer::parse_launch(
+    let pipeline = gstreamer::parse::launch(
         r#"
         videotestsrc num-buffers=120
         ! vp9enc

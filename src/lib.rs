@@ -143,20 +143,20 @@ pub fn register(p: Option<&gstreamer::Plugin>) -> Result<(), gstreamer::glib::Bo
     gstreamer::Tracer::register(
         p,
         "rusttracing",
-        <tracer::TracingTracer as gstreamer::glib::StaticType>::static_type(),
+        <tracer::TracingTracer as gstreamer::glib::types::StaticType>::static_type(),
     )?;
 
     #[cfg(feature = "tracing-chrome")]
     gstreamer::Tracer::register(
         p,
         "chrometracing",
-        <chrometracer::ChromeTracer as gstreamer::glib::StaticType>::static_type(),
+        <chrometracer::ChromeTracer as gstreamer::glib::types::StaticType>::static_type(),
     )?;
 
     gstreamer::Tracer::register(
         p,
         "fmttracing",
-        <fmttracer::FmtTracer as gstreamer::glib::StaticType>::static_type(),
+        <fmttracer::FmtTracer as gstreamer::glib::types::StaticType>::static_type(),
     )?;
     Ok(())
 }

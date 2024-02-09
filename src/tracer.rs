@@ -3,7 +3,6 @@ use gstreamer::{
     glib,
     prelude::*,
     subclass::prelude::*,
-    traits::{GstObjectExt, PadExt},
     Buffer, FlowError, FlowSuccess, Object, Pad, Tracer,
 };
 use std::{cell::RefCell, str::FromStr};
@@ -123,8 +122,8 @@ impl ObjectImpl for TracingTracerPriv {
                 info!("Integrating `{gst_logs_level}` GStreamer logs as part of our tracing");
 
                 crate::integrate_events();
-                gstreamer::debug_remove_default_log_function();
-                gstreamer::debug_set_threshold_from_string(&gst_logs_level, true);
+                gstreamer::log::remove_default_log_function();
+                gstreamer::log::set_threshold_from_string(&gst_logs_level, true);
             }
         }
 

@@ -1,7 +1,9 @@
 use crate::*;
-use g::traits::ElementExt;
 use gstreamer as g;
-use gstreamer::glib::{translate::ToGlibPtr, Cast, ObjectType};
+use g::{
+    glib::{translate::ToGlibPtr},
+    prelude::{Cast, ElementExt, ObjectType},
+};
 use std::{
     collections::VecDeque,
     sync::atomic::{AtomicU64, Ordering},
@@ -522,9 +524,9 @@ fn test_user_span() {
 // NB: we aren't using the test harness here to allow us for the necessary gstreamer setup more
 // straightforwardly.
 pub(crate) fn run() {
-    g::debug_remove_default_log_function();
+    g::log::remove_default_log_function();
     g::init().expect("gst init");
-    g::debug_set_default_threshold(g::DebugLevel::Memdump);
+    g::log::set_default_threshold(g::DebugLevel::Memdump);
     integrate_events();
     test_simple_error();
     test_simple_warning();
