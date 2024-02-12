@@ -62,6 +62,9 @@ mod video_sink;
 pub use self::video_sink::VideoSink;
 
 mod enums;
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+pub use self::enums::AncillaryMetaField;
 pub use self::enums::ColorBalanceType;
 pub use self::enums::NavigationCommand;
 pub use self::enums::NavigationEventType;

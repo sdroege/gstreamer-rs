@@ -5,6 +5,124 @@
 
 use glib::{prelude::*, translate::*, GStr};
 
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+#[doc(alias = "GstAncillaryMetaField")]
+pub enum AncillaryMetaField {
+    #[doc(alias = "GST_ANCILLARY_META_FIELD_PROGRESSIVE")]
+    Progressive,
+    #[doc(alias = "GST_ANCILLARY_META_FIELD_INTERLACED_FIRST")]
+    InterlacedFirst,
+    #[doc(alias = "GST_ANCILLARY_META_FIELD_INTERLACED_SECOND")]
+    InterlacedSecond,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+#[doc(hidden)]
+impl IntoGlib for AncillaryMetaField {
+    type GlibType = ffi::GstAncillaryMetaField;
+
+    #[inline]
+    fn into_glib(self) -> ffi::GstAncillaryMetaField {
+        match self {
+            Self::Progressive => ffi::GST_ANCILLARY_META_FIELD_PROGRESSIVE,
+            Self::InterlacedFirst => ffi::GST_ANCILLARY_META_FIELD_INTERLACED_FIRST,
+            Self::InterlacedSecond => ffi::GST_ANCILLARY_META_FIELD_INTERLACED_SECOND,
+            Self::__Unknown(value) => value,
+        }
+    }
+}
+
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+#[doc(hidden)]
+impl FromGlib<ffi::GstAncillaryMetaField> for AncillaryMetaField {
+    #[inline]
+    unsafe fn from_glib(value: ffi::GstAncillaryMetaField) -> Self {
+        skip_assert_initialized!();
+
+        match value {
+            ffi::GST_ANCILLARY_META_FIELD_PROGRESSIVE => Self::Progressive,
+            ffi::GST_ANCILLARY_META_FIELD_INTERLACED_FIRST => Self::InterlacedFirst,
+            ffi::GST_ANCILLARY_META_FIELD_INTERLACED_SECOND => Self::InterlacedSecond,
+            value => Self::__Unknown(value),
+        }
+    }
+}
+
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+impl StaticType for AncillaryMetaField {
+    #[inline]
+    #[doc(alias = "gst_ancillary_meta_field_get_type")]
+    fn static_type() -> glib::Type {
+        unsafe { from_glib(ffi::gst_ancillary_meta_field_get_type()) }
+    }
+}
+
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+impl glib::HasParamSpec for AncillaryMetaField {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        Self::ParamSpec::builder_with_default
+    }
+}
+
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+impl glib::value::ValueType for AncillaryMetaField {
+    type Type = Self;
+}
+
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+unsafe impl<'a> glib::value::FromValue<'a> for AncillaryMetaField {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    #[inline]
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+impl ToValue for AncillaryMetaField {
+    #[inline]
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    #[inline]
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+impl From<AncillaryMetaField> for glib::Value {
+    #[inline]
+    fn from(v: AncillaryMetaField) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstColorBalanceType")]
