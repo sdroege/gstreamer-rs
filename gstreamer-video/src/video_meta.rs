@@ -990,6 +990,177 @@ unsafe impl MetaAPI for VideoSeiUserDataUnregisteredMeta {
     }
 }
 
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+#[repr(transparent)]
+#[doc(alias = "GstAncillaryMeta")]
+pub struct AncillaryMeta(ffi::GstAncillaryMeta);
+
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+unsafe impl Send for AncillaryMeta {}
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+unsafe impl Sync for AncillaryMeta {}
+
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+impl AncillaryMeta {
+    #[doc(alias = "gst_buffer_add_ancillary_meta")]
+    pub fn add(buffer: &mut gst::BufferRef) -> gst::MetaRefMut<Self, gst::meta::Standalone> {
+        skip_assert_initialized!();
+        unsafe {
+            let meta = ffi::gst_buffer_add_ancillary_meta(buffer.as_mut_ptr());
+
+            Self::from_mut_ptr(buffer, meta)
+        }
+    }
+
+    #[inline]
+    pub fn field(&self) -> crate::AncillaryMetaField {
+        unsafe { from_glib(self.0.field) }
+    }
+
+    #[inline]
+    pub fn set_field(&mut self, field: crate::AncillaryMetaField) {
+        self.0.field = field.into_glib();
+    }
+
+    #[inline]
+    pub fn c_not_y_channel(&self) -> bool {
+        unsafe { from_glib(self.0.c_not_y_channel) }
+    }
+
+    #[inline]
+    pub fn set_c_not_y_channel(&mut self, c_not_y_channel: bool) {
+        self.0.c_not_y_channel = c_not_y_channel.into_glib();
+    }
+
+    #[inline]
+    pub fn line(&self) -> u16 {
+        self.0.line
+    }
+
+    #[inline]
+    pub fn set_line(&mut self, line: u16) {
+        self.0.line = line;
+    }
+
+    #[inline]
+    pub fn offset(&self) -> u16 {
+        self.0.offset
+    }
+
+    #[inline]
+    pub fn set_offset(&mut self, offset: u16) {
+        self.0.offset = offset;
+    }
+
+    #[inline]
+    pub fn did(&self) -> u16 {
+        self.0.DID
+    }
+
+    #[inline]
+    pub fn set_did(&mut self, did: u16) {
+        self.0.DID = did;
+    }
+
+    #[inline]
+    pub fn sdid_block_number(&self) -> u16 {
+        self.0.SDID_block_number
+    }
+
+    #[inline]
+    pub fn set_sdid_block_number(&mut self, sdid_block_number: u16) {
+        self.0.SDID_block_number = sdid_block_number;
+    }
+
+    #[inline]
+    pub fn data_count(&self) -> u16 {
+        self.0.data_count
+    }
+
+    #[inline]
+    pub fn checksum(&self) -> u16 {
+        self.0.checksum
+    }
+
+    #[inline]
+    pub fn set_checksum(&mut self, checksum: u16) {
+        self.0.checksum = checksum;
+    }
+
+    #[inline]
+    pub fn data(&self) -> &[u16] {
+        if self.0.data_count & 0xff == 0 {
+            return &[];
+        }
+        unsafe {
+            use std::slice;
+
+            slice::from_raw_parts(self.0.data, (self.0.data_count & 0xff) as usize)
+        }
+    }
+
+    #[inline]
+    pub fn data_mut(&mut self) -> &mut [u16] {
+        if self.0.data_count & 0xff == 0 {
+            return &mut [];
+        }
+        unsafe {
+            use std::slice;
+
+            slice::from_raw_parts_mut(self.0.data, (self.0.data_count & 0xff) as usize)
+        }
+    }
+
+    #[inline]
+    pub fn set_data(&mut self, data: glib::Slice<u16>) {
+        unsafe {
+            assert!(data.len() < 256);
+            self.0.data_count = data.len() as u16;
+            self.0.data = data.into_glib_ptr();
+        }
+    }
+
+    #[inline]
+    pub fn set_data_count_upper_two_bits(&mut self, upper_two_bits: u8) {
+        assert!(upper_two_bits & !0x03 == 0);
+        self.0.data_count = ((upper_two_bits as u16) << 8) | self.0.data_count & 0xff;
+    }
+}
+
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+unsafe impl MetaAPI for AncillaryMeta {
+    type GstType = ffi::GstAncillaryMeta;
+
+    #[doc(alias = "gst_ancillary_meta_api_get_type")]
+    #[inline]
+    fn meta_api() -> glib::Type {
+        unsafe { from_glib(ffi::gst_ancillary_meta_api_get_type()) }
+    }
+}
+
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+impl fmt::Debug for AncillaryMeta {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("AncillaryMeta")
+            .field("field", &self.field())
+            .field("c_not_y_channel", &self.c_not_y_channel())
+            .field("line", &self.line())
+            .field("offset", &self.offset())
+            .field("did", &self.did())
+            .field("sdid_block_number", &self.sdid_block_number())
+            .field("data_count", &self.data_count())
+            .field("data", &self.data())
+            .field("checksum", &self.checksum())
+            .finish()
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;

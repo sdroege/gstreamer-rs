@@ -18,6 +18,7 @@ external_libraries = [
 ]
 
 generate = [
+    "GstVideo.AncillaryMetaField",
     "GstVideo.ColorBalance",
     "GstVideo.ColorBalanceChannel",
     "GstVideo.ColorBalanceType",
