@@ -27,6 +27,11 @@ use libc::{
 use glib::{gboolean, gconstpointer, gpointer, GType};
 
 // Enums
+pub type GstAncillaryMetaField = c_int;
+pub const GST_ANCILLARY_META_FIELD_PROGRESSIVE: GstAncillaryMetaField = 0;
+pub const GST_ANCILLARY_META_FIELD_INTERLACED_FIRST: GstAncillaryMetaField = 16;
+pub const GST_ANCILLARY_META_FIELD_INTERLACED_SECOND: GstAncillaryMetaField = 17;
+
 pub type GstColorBalanceType = c_int;
 pub const GST_COLOR_BALANCE_HARDWARE: GstColorBalanceType = 0;
 pub const GST_COLOR_BALANCE_SOFTWARE: GstColorBalanceType = 1;
@@ -799,6 +804,38 @@ pub type GstVideoGLTextureUpload =
     Option<unsafe extern "C" fn(*mut GstVideoGLTextureUploadMeta, *mut c_uint) -> gboolean>;
 
 // Records
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstAncillaryMeta {
+    pub meta: gst::GstMeta,
+    pub field: GstAncillaryMetaField,
+    pub c_not_y_channel: gboolean,
+    pub line: u16,
+    pub offset: u16,
+    pub DID: u16,
+    pub SDID_block_number: u16,
+    pub data_count: u16,
+    pub data: *mut u16,
+    pub checksum: u16,
+}
+
+impl ::std::fmt::Debug for GstAncillaryMeta {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstAncillaryMeta @ {self:p}"))
+            .field("meta", &self.meta)
+            .field("field", &self.field)
+            .field("c_not_y_channel", &self.c_not_y_channel)
+            .field("line", &self.line)
+            .field("offset", &self.offset)
+            .field("DID", &self.DID)
+            .field("SDID_block_number", &self.SDID_block_number)
+            .field("data_count", &self.data_count)
+            .field("data", &self.data)
+            .field("checksum", &self.checksum)
+            .finish()
+    }
+}
+
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct GstColorBalanceChannelClass {
@@ -2512,6 +2549,13 @@ impl ::std::fmt::Debug for GstVideoOverlay {
 extern "C" {
 
     //=========================================================================
+    // GstAncillaryMetaField
+    //=========================================================================
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_ancillary_meta_field_get_type() -> GType;
+
+    //=========================================================================
     // GstColorBalanceType
     //=========================================================================
     pub fn gst_color_balance_type_get_type() -> GType;
@@ -2882,6 +2926,13 @@ extern "C" {
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_video_time_code_flags_get_type() -> GType;
+
+    //=========================================================================
+    // GstAncillaryMeta
+    //=========================================================================
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_ancillary_meta_get_info() -> *const gst::GstMetaInfo;
 
     //=========================================================================
     // GstVideoAFDMeta
@@ -4362,6 +4413,10 @@ extern "C" {
     //=========================================================================
     // Other functions
     //=========================================================================
+    pub fn gst_ancillary_meta_api_get_type() -> GType;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_buffer_add_ancillary_meta(buffer: *mut gst::GstBuffer) -> *mut GstAncillaryMeta;
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_buffer_add_video_afd_meta(

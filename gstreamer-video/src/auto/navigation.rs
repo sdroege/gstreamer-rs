@@ -24,7 +24,7 @@ impl Navigation {
     //}
 
     //#[doc(alias = "gst_navigation_query_set_commandsv")]
-    //pub fn query_set_commandsv(query: &gst::Query, cmds: /*Unimplemented*/&CArray TypeId { ns_id: 1, id: 6 }) {
+    //pub fn query_set_commandsv(query: &gst::Query, cmds: /*Unimplemented*/&CArray TypeId { ns_id: 1, id: 8 }) {
     //    unsafe { TODO: call ffi:gst_navigation_query_set_commandsv() }
     //}
 }

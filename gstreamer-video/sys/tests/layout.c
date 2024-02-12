@@ -8,6 +8,8 @@
 #include <stdio.h>
 
 int main() {
+    printf("%s;%zu;%zu\n", "GstAncillaryMeta", sizeof(GstAncillaryMeta), alignof(GstAncillaryMeta));
+    printf("%s;%zu;%zu\n", "GstAncillaryMetaField", sizeof(GstAncillaryMetaField), alignof(GstAncillaryMetaField));
     printf("%s;%zu;%zu\n", "GstColorBalanceChannel", sizeof(GstColorBalanceChannel), alignof(GstColorBalanceChannel));
     printf("%s;%zu;%zu\n", "GstColorBalanceChannelClass", sizeof(GstColorBalanceChannelClass), alignof(GstColorBalanceChannelClass));
     printf("%s;%zu;%zu\n", "GstColorBalanceInterface", sizeof(GstColorBalanceInterface), alignof(GstColorBalanceInterface));

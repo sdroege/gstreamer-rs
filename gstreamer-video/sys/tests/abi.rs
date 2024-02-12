@@ -203,6 +203,20 @@ fn get_c_output(name: &str) -> Result<String, Box<dyn Error>> {
 
 const RUST_LAYOUTS: &[(&str, Layout)] = &[
     (
+        "GstAncillaryMeta",
+        Layout {
+            size: size_of::<GstAncillaryMeta>(),
+            alignment: align_of::<GstAncillaryMeta>(),
+        },
+    ),
+    (
+        "GstAncillaryMetaField",
+        Layout {
+            size: size_of::<GstAncillaryMetaField>(),
+            alignment: align_of::<GstAncillaryMetaField>(),
+        },
+    ),
+    (
         "GstColorBalanceChannel",
         Layout {
             size: size_of::<GstColorBalanceChannel>(),
@@ -954,6 +968,9 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
 ];
 
 const RUST_CONSTANTS: &[(&str, &str)] = &[
+    ("(gint) GST_ANCILLARY_META_FIELD_INTERLACED_FIRST", "16"),
+    ("(gint) GST_ANCILLARY_META_FIELD_INTERLACED_SECOND", "17"),
+    ("(gint) GST_ANCILLARY_META_FIELD_PROGRESSIVE", "0"),
     (
         "GST_BUFFER_POOL_OPTION_VIDEO_AFFINE_TRANSFORMATION_META",
         "GstBufferPoolOptionVideoAffineTransformation",

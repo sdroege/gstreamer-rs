@@ -2116,6 +2116,10 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("GST_TAG_CONDUCTOR", "conductor"),
     ("GST_TAG_CONTACT", "contact"),
     ("GST_TAG_CONTAINER_FORMAT", "container-format"),
+    (
+        "GST_TAG_CONTAINER_SPECIFIC_TRACK_ID",
+        "container-specific-track-id",
+    ),
     ("GST_TAG_COPYRIGHT", "copyright"),
     ("GST_TAG_COPYRIGHT_URI", "copyright-uri"),
     ("GST_TAG_DATE", "date"),
