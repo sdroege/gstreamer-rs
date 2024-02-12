@@ -322,6 +322,23 @@ impl_tag!(
 );
 impl_tag!(PrivateData, Sample, TAG_PRIVATE_DATA, GST_TAG_PRIVATE_DATA);
 
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+mod v1_24 {
+    use super::*;
+
+    impl_tag!(
+        ContainerSpecificTrackId,
+        &'a str,
+        TAG_CONTAINER_SPECIFIC_TRACK_ID,
+        GST_TAG_CONTAINER_SPECIFIC_TRACK_ID
+    );
+}
+
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+pub use v1_24::ContainerSpecificTrackId;
+
 mini_object_wrapper!(TagList, TagListRef, ffi::GstTagList, || {
     ffi::gst_tag_list_get_type()
 });
