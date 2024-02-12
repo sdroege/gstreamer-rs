@@ -951,6 +951,11 @@ impl CustomMeta {
         }
     }
 
+    pub fn is_registered(name: &str) -> bool {
+        assert_initialized_main_thread!();
+        unsafe { name.run_with_gstr(|name| !ffi::gst_meta_get_info(name.as_ptr()).is_null()) }
+    }
+
     #[doc(alias = "gst_buffer_add_custom_meta")]
     pub fn add<'a>(
         buffer: &'a mut BufferRef,
