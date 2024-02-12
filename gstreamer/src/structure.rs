@@ -747,12 +747,13 @@ impl StructureRef {
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     #[doc(alias = "gst_structure_serialize")]
+    #[doc(alias = "gst_structure_serialize_full")]
     pub fn serialize_strict(
         &self,
         flags: crate::SerializeFlags,
     ) -> Result<glib::GString, glib::BoolError> {
         unsafe {
-            let res = ffi::gst_structure_serialize(
+            let res = ffi::gst_structure_serialize_full(
                 &self.0,
                 flags.into_glib() | ffi::GST_SERIALIZE_FLAG_STRICT,
             );
