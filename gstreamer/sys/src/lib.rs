@@ -537,6 +537,7 @@ pub const GST_TAG_COMPOSER_SORTNAME: &[u8] = b"composer-sortname\0";
 pub const GST_TAG_CONDUCTOR: &[u8] = b"conductor\0";
 pub const GST_TAG_CONTACT: &[u8] = b"contact\0";
 pub const GST_TAG_CONTAINER_FORMAT: &[u8] = b"container-format\0";
+pub const GST_TAG_CONTAINER_SPECIFIC_TRACK_ID: &[u8] = b"container-specific-track-id\0";
 pub const GST_TAG_COPYRIGHT: &[u8] = b"copyright\0";
 pub const GST_TAG_COPYRIGHT_URI: &[u8] = b"copyright-uri\0";
 pub const GST_TAG_DATE: &[u8] = b"date\0";
@@ -6660,6 +6661,12 @@ extern "C" {
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_structure_serialize(
+        structure: *const GstStructure,
+        flags: GstSerializeFlags,
+    ) -> *mut c_char;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_structure_serialize_full(
         structure: *const GstStructure,
         flags: GstSerializeFlags,
     ) -> *mut c_char;
