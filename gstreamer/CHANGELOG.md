@@ -5,6 +5,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.22.1] - 2024-02-13
+### Changed
+- Update GStreamer gir files and add more new 1.24 API.
+
+### Fixed
+- Make `AnalyticsODLocation` struct fields public.
+- `MetaRefMut::upcast_mut()` returns a mutable reference now.
+
 ## [0.22.0] - 2024-02-08
 ### Changed
 - Compatible with gtk-rs-core 0.19 / gtk4-rs 0.8.
@@ -1661,7 +1669,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.22.0...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.22.1...HEAD
+[0.22.1]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.22.0...0.22.1
 [0.22.0]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.21.3...0.22.0
 [0.21.3]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.21.2...0.21.3
 [0.21.2]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.21.1...0.21.2
