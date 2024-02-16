@@ -8,7 +8,7 @@ use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
     #[doc(alias = "GstRTPHeaderExtension")]
-    pub struct RTPHeaderExtension(Object<ffi::GstRTPHeaderExtension, ffi::GstRTPHeaderExtensionClass>) @extends gst::Element;
+    pub struct RTPHeaderExtension(Object<ffi::GstRTPHeaderExtension, ffi::GstRTPHeaderExtensionClass>) @extends gst::Element, gst::Object;
 
     match fn {
         type_ => || ffi::gst_rtp_header_extension_get_type(),

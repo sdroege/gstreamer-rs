@@ -32,6 +32,7 @@ manual = [
     "Gst.Caps",
     "Gst.Element",
     "Gst.ElementFactory",
+    "Gst.Object",
 ]
 
 [[object]]
