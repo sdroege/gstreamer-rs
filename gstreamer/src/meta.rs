@@ -6,7 +6,7 @@ use std::ptr;
 use std::{
     fmt,
     marker::PhantomData,
-    ops::{self, RangeBounds},
+    ops::{self, Bound, RangeBounds},
 };
 
 use glib::translate::*;
@@ -233,21 +233,11 @@ impl<'a, T> MetaRef<'a, T> {
         unsafe { &*(self as *const MetaRef<'a, T> as *const MetaRef<'a, Meta>) }
     }
 
-    pub fn copy(
-        &self,
-        buffer: &mut BufferRef,
-        region: bool,
-        range: impl RangeBounds<usize>,
-    ) -> Result<(), glib::BoolError>
+    pub fn transform<MT>(&self, buffer: &mut BufferRef, data: &'a MT) -> Result<(), glib::BoolError>
     where
         T: MetaAPI,
+        MT: MetaTransform<'a>,
     {
-        static TRANSFORM_COPY: std::sync::OnceLock<glib::Quark> = std::sync::OnceLock::new();
-
-        let transform_copy = TRANSFORM_COPY.get_or_init(|| glib::Quark::from_str("gst-copy"));
-
-        let (offset, size) = self.buffer.byte_range_into_offset_len(range)?;
-
         unsafe {
             let info = *(*self.upcast_ref().as_ptr()).info;
             let Some(transform_func) = info.transform_func else {
@@ -256,21 +246,17 @@ impl<'a, T> MetaRef<'a, T> {
                 ));
             };
 
-            let mut copy_data = ffi::GstMetaTransformCopy {
-                region: region.into_glib(),
-                offset,
-                size,
-            };
+            let data = data.to_raw(self)?;
 
             glib::result_from_gboolean!(
                 transform_func(
                     buffer.as_mut_ptr(),
                     mut_override(self.upcast_ref().as_ptr()),
                     mut_override(self.buffer.as_ptr()),
-                    transform_copy.into_glib(),
-                    &mut copy_data as *mut _ as *mut _,
+                    MT::quark().into_glib(),
+                    mut_override(&data) as *mut _,
                 ),
-                "Failed to copy meta"
+                "Failed to transform meta"
             )
         }
     }
@@ -495,16 +481,16 @@ impl<'a, T, U> MetaRefMut<'a, T, U> {
         }
     }
 
-    pub fn copy(
-        &self,
+    pub fn transform<MT>(
+        &'a self,
         buffer: &mut BufferRef,
-        region: bool,
-        range: impl RangeBounds<usize>,
+        data: &'a MT,
     ) -> Result<(), glib::BoolError>
     where
         T: MetaAPI,
+        MT: MetaTransform<'a>,
     {
-        self.as_meta_ref().copy(buffer, region, range)
+        self.as_meta_ref().transform(buffer, data)
     }
 
     #[inline]
@@ -1084,6 +1070,49 @@ pub mod tags {
     impl_meta_tag!(MemoryReference, GST_META_TAG_MEMORY_REFERENCE_STR);
 }
 
+pub unsafe trait MetaTransform<'a> {
+    type GLibType;
+    fn quark() -> glib::Quark;
+    fn to_raw<T: MetaAPI>(&self, meta: &MetaRef<T>) -> Result<Self::GLibType, glib::BoolError>;
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct MetaTransformCopy {
+    range: (Bound<usize>, Bound<usize>),
+    region: bool,
+}
+
+impl MetaTransformCopy {
+    pub fn new(region: bool, range: impl RangeBounds<usize>) -> Self {
+        skip_assert_initialized!();
+        MetaTransformCopy {
+            range: (range.start_bound().cloned(), range.end_bound().cloned()),
+            region,
+        }
+    }
+}
+
+unsafe impl<'a> MetaTransform<'a> for MetaTransformCopy {
+    type GLibType = ffi::GstMetaTransformCopy;
+
+    fn quark() -> glib::Quark {
+        static QUARK: std::sync::OnceLock<glib::Quark> = std::sync::OnceLock::new();
+        *QUARK.get_or_init(|| glib::Quark::from_static_str(glib::gstr!("gst-copy")))
+    }
+    fn to_raw<T: MetaAPI>(
+        &self,
+        meta: &MetaRef<T>,
+    ) -> Result<ffi::GstMetaTransformCopy, glib::BoolError> {
+        let (offset, size) = meta.buffer.byte_range_into_offset_len(self.range)?;
+
+        Ok(ffi::GstMetaTransformCopy {
+            region: self.region.into_glib(),
+            offset,
+            size,
+        })
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -1179,7 +1208,8 @@ mod tests {
         {
             let meta = buffer.meta::<ReferenceTimestampMeta>().unwrap();
             let buffer_dest = buffer_dest.get_mut().unwrap();
-            meta.copy(buffer_dest, false, ..).unwrap();
+            meta.transform(buffer_dest, &MetaTransformCopy::new(false, ..))
+                .unwrap();
         }
 
         let meta = buffer_dest.meta::<ReferenceTimestampMeta>().unwrap();
