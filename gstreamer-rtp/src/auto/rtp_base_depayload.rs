@@ -15,7 +15,7 @@ use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "GstRTPBaseDepayload")]
-    pub struct RTPBaseDepayload(Object<ffi::GstRTPBaseDepayload, ffi::GstRTPBaseDepayloadClass>) @extends gst::Element;
+    pub struct RTPBaseDepayload(Object<ffi::GstRTPBaseDepayload, ffi::GstRTPBaseDepayloadClass>) @extends gst::Element, gst::Object;
 
     match fn {
         type_ => || ffi::gst_rtp_base_depayload_get_type(),
