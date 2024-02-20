@@ -1169,19 +1169,19 @@ pub mod tags {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
-pub struct VideoMetaTransform<'a> {
+pub struct VideoMetaTransformScale<'a> {
     in_info: &'a crate::VideoInfo,
     out_info: &'a crate::VideoInfo,
 }
 
-impl<'a> VideoMetaTransform<'a> {
+impl<'a> VideoMetaTransformScale<'a> {
     pub fn new(in_info: &'a crate::VideoInfo, out_info: &'a crate::VideoInfo) -> Self {
         skip_assert_initialized!();
-        VideoMetaTransform { in_info, out_info }
+        VideoMetaTransformScale { in_info, out_info }
     }
 }
 
-unsafe impl<'a> gst::meta::MetaTransform<'a> for VideoMetaTransform<'a> {
+unsafe impl<'a> gst::meta::MetaTransform<'a> for VideoMetaTransformScale<'a> {
     type GLibType = ffi::GstVideoMetaTransform;
 
     #[doc(alias = "gst_video_meta_transform_scale_get_quark")]
@@ -1416,7 +1416,7 @@ mod tests {
 
         meta.transform(
             buffer2.get_mut().unwrap(),
-            &VideoMetaTransform::new(&in_video_info, &out_video_info),
+            &VideoMetaTransformScale::new(&in_video_info, &out_video_info),
         )
         .unwrap();
 
