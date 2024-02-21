@@ -346,7 +346,13 @@ impl BusStream {
 
         let (sender, receiver) = mpsc::unbounded();
 
-        bus.set_sync_handler(move |_, message| {
+        bus.set_sync_handler(move |bus, message| {
+            // First pop all messages that might've been previously queued before creating
+            // the bus stream.
+            while let Some(message) = bus.pop() {
+                let _ = sender.unbounded_send(message);
+            }
+
             let _ = sender.unbounded_send(message.to_owned());
 
             BusSyncReply::Drop
