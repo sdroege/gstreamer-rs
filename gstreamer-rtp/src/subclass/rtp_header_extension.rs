@@ -19,7 +19,7 @@ pub trait RTPHeaderExtensionImpl: RTPHeaderExtensionImplExt + ElementImpl {
         &self,
         input: &gst::BufferRef,
         write_flags: crate::RTPHeaderExtensionFlags,
-        output: &mut gst::BufferRef,
+        output: &gst::BufferRef,
         output_data: &mut [u8],
     ) -> Result<usize, gst::LoggableError> {
         self.parent_write(input, write_flags, output, output_data)
@@ -97,7 +97,7 @@ pub trait RTPHeaderExtensionImplExt: sealed::Sealed + ObjectSubclass {
         &self,
         input: &gst::BufferRef,
         write_flags: crate::RTPHeaderExtensionFlags,
-        output: &mut gst::BufferRef,
+        output: &gst::BufferRef,
         output_data: &mut [u8],
     ) -> Result<usize, gst::LoggableError> {
         unsafe {
@@ -114,7 +114,7 @@ pub trait RTPHeaderExtensionImplExt: sealed::Sealed + ObjectSubclass {
                     .0,
                 input.as_ptr(),
                 write_flags.into_glib(),
-                output.as_mut_ptr(),
+                mut_override(output.as_ptr()),
                 output_data.as_mut_ptr(),
                 output_data.len(),
             );
@@ -318,7 +318,7 @@ unsafe extern "C" fn write<T: RTPHeaderExtensionImpl>(
         match imp.write(
             gst::BufferRef::from_ptr(input),
             from_glib(write_flags),
-            gst::BufferRef::from_mut_ptr(output),
+            gst::BufferRef::from_ptr(output),
             if output_data_len == 0 {
                 &mut []
             } else {

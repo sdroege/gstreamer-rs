@@ -32,7 +32,7 @@ pub trait RTPHeaderExtensionExtManual: sealed::Sealed + IsA<RTPHeaderExtension> 
         &self,
         input_meta: &gst::Buffer,
         write_flags: RTPHeaderExtensionFlags,
-        output: &mut gst::BufferRef,
+        output: &gst::BufferRef,
         data: &mut [u8],
     ) -> Result<usize, glib::BoolError> {
         let size = data.len();
@@ -41,7 +41,7 @@ pub trait RTPHeaderExtensionExtManual: sealed::Sealed + IsA<RTPHeaderExtension> 
                 self.as_ref().to_glib_none().0,
                 input_meta.to_glib_none().0,
                 write_flags.into_glib(),
-                output.as_mut_ptr(),
+                mut_override(output.as_ptr()),
                 data.to_glib_none().0,
                 size,
             );
