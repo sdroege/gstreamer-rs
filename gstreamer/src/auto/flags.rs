@@ -1167,6 +1167,10 @@ bitflags! {
     pub struct ObjectFlags: u32 {
         #[doc(alias = "GST_OBJECT_FLAG_MAY_BE_LEAKED")]
         const MAY_BE_LEAKED = ffi::GST_OBJECT_FLAG_MAY_BE_LEAKED as _;
+        #[cfg(feature = "v1_24")]
+        #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+        #[doc(alias = "GST_OBJECT_FLAG_CONSTRUCTED")]
+        const CONSTRUCTED = ffi::GST_OBJECT_FLAG_CONSTRUCTED as _;
     }
 }
 

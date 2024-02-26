@@ -1826,6 +1826,7 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(guint) GST_MINI_OBJECT_FLAG_MAY_BE_LEAKED", "4"),
     ("GST_MSECOND", "1000000"),
     ("GST_NSECOND", "1"),
+    ("(guint) GST_OBJECT_FLAG_CONSTRUCTED", "2"),
     ("(guint) GST_OBJECT_FLAG_LAST", "16"),
     ("(guint) GST_OBJECT_FLAG_MAY_BE_LEAKED", "1"),
     ("(gint) GST_PAD_ALWAYS", "0"),
