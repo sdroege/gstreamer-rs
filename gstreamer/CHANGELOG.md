@@ -5,6 +5,18 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.22.2] - 2024-02-26
+### Changed
+- Update GStreamer gir files and add more new 1.24 API.
+
+### Fixed
+- Add `gst::Object` as parent class for various `gst_rtp` types.
+- Handle all already queued messages in `gst::BusStream` instead of just new
+  messages.
+
+### Added
+- Add `gst::CustomMeta::is_registered()`.
+
 ## [0.22.1] - 2024-02-13
 ### Changed
 - Update GStreamer gir files and add more new 1.24 API.
@@ -1669,7 +1681,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.22.1...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.22.2...HEAD
+[0.22.2]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.22.1...0.22.2
 [0.22.1]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.22.0...0.22.1
 [0.22.0]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.21.3...0.22.0
 [0.21.3]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.21.2...0.21.3
