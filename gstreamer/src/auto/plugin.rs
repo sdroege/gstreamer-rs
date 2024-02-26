@@ -54,6 +54,33 @@ impl Plugin {
         }
     }
 
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "gst_plugin_add_status_error")]
+    pub fn add_status_error(&self, message: &str) {
+        unsafe {
+            ffi::gst_plugin_add_status_error(self.to_glib_none().0, message.to_glib_none().0);
+        }
+    }
+
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "gst_plugin_add_status_info")]
+    pub fn add_status_info(&self, message: &str) {
+        unsafe {
+            ffi::gst_plugin_add_status_info(self.to_glib_none().0, message.to_glib_none().0);
+        }
+    }
+
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "gst_plugin_add_status_warning")]
+    pub fn add_status_warning(&self, message: &str) {
+        unsafe {
+            ffi::gst_plugin_add_status_warning(self.to_glib_none().0, message.to_glib_none().0);
+        }
+    }
+
     #[doc(alias = "gst_plugin_get_description")]
     #[doc(alias = "get_description")]
     pub fn description(&self) -> glib::GString {
@@ -104,6 +131,42 @@ impl Plugin {
     #[doc(alias = "get_source")]
     pub fn source(&self) -> glib::GString {
         unsafe { from_glib_none(ffi::gst_plugin_get_source(self.to_glib_none().0)) }
+    }
+
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "gst_plugin_get_status_errors")]
+    #[doc(alias = "get_status_errors")]
+    pub fn status_errors(&self) -> Vec<glib::GString> {
+        unsafe {
+            FromGlibPtrContainer::from_glib_full(ffi::gst_plugin_get_status_errors(
+                self.to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "gst_plugin_get_status_infos")]
+    #[doc(alias = "get_status_infos")]
+    pub fn status_infos(&self) -> Vec<glib::GString> {
+        unsafe {
+            FromGlibPtrContainer::from_glib_full(ffi::gst_plugin_get_status_infos(
+                self.to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "gst_plugin_get_status_warnings")]
+    #[doc(alias = "get_status_warnings")]
+    pub fn status_warnings(&self) -> Vec<glib::GString> {
+        unsafe {
+            FromGlibPtrContainer::from_glib_full(ffi::gst_plugin_get_status_warnings(
+                self.to_glib_none().0,
+            ))
+        }
     }
 
     #[doc(alias = "gst_plugin_get_version")]

@@ -797,6 +797,9 @@ pub const GST_MINI_OBJECT_FLAG_LAST: GstMiniObjectFlags = 16;
 
 pub type GstObjectFlags = c_uint;
 pub const GST_OBJECT_FLAG_MAY_BE_LEAKED: GstObjectFlags = 1;
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+pub const GST_OBJECT_FLAG_CONSTRUCTED: GstObjectFlags = 2;
 pub const GST_OBJECT_FLAG_LAST: GstObjectFlags = 16;
 
 pub type GstPadFlags = c_uint;
@@ -8405,6 +8408,15 @@ extern "C" {
         names: *const c_char,
         flags: GstPluginDependencyFlags,
     );
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_plugin_add_status_error(plugin: *mut GstPlugin, message: *const c_char);
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_plugin_add_status_info(plugin: *mut GstPlugin, message: *const c_char);
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_plugin_add_status_warning(plugin: *mut GstPlugin, message: *const c_char);
     pub fn gst_plugin_get_cache_data(plugin: *mut GstPlugin) -> *const GstStructure;
     pub fn gst_plugin_get_description(plugin: *mut GstPlugin) -> *const c_char;
     pub fn gst_plugin_get_filename(plugin: *mut GstPlugin) -> *const c_char;
@@ -8414,6 +8426,15 @@ extern "C" {
     pub fn gst_plugin_get_package(plugin: *mut GstPlugin) -> *const c_char;
     pub fn gst_plugin_get_release_date_string(plugin: *mut GstPlugin) -> *const c_char;
     pub fn gst_plugin_get_source(plugin: *mut GstPlugin) -> *const c_char;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_plugin_get_status_errors(plugin: *mut GstPlugin) -> *mut *mut c_char;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_plugin_get_status_infos(plugin: *mut GstPlugin) -> *mut *mut c_char;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_plugin_get_status_warnings(plugin: *mut GstPlugin) -> *mut *mut c_char;
     pub fn gst_plugin_get_version(plugin: *mut GstPlugin) -> *const c_char;
     pub fn gst_plugin_is_loaded(plugin: *mut GstPlugin) -> gboolean;
     pub fn gst_plugin_load(plugin: *mut GstPlugin) -> *mut GstPlugin;
