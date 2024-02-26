@@ -188,7 +188,7 @@ mod tests {
             )
         );
         check_serialize!(crate::MetaFlags::all(), "\"readonly+pooled+locked\"");
-        check_serialize!(crate::ObjectFlags::all(), "\"may-be-leaked\"");
+        check_serialize!(crate::ObjectFlags::all(), "\"may-be-leaked+constructed\"");
         check_serialize!(
             crate::PadFlags::all(),
             concat!(
@@ -363,7 +363,7 @@ mod tests {
         check_deserialize!(
             crate::ObjectFlags,
             crate::ObjectFlags::all(),
-            "\"may-be-leaked\""
+            "\"may-be-leaked+constructed\""
         );
         check_deserialize!(
             crate::PadFlags,
