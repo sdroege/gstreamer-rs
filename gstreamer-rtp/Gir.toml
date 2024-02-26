@@ -21,7 +21,6 @@ generate = [
     "GstRtp.RTCPSDESType",
     "GstRtp.RTCPType",
     "GstRtp.RTCPXRType",
-    "GstRtp.RTPBaseDepayload",
     "GstRtp.RTPHeaderExtensionDirection",
     "GstRtp.RTPHeaderExtensionFlags",
     "GstRtp.RTPPayload",
@@ -83,9 +82,19 @@ status = "generate"
     ignore = true
 
 [[object]]
+name = "GstRtp.RTPBaseDepayload"
+status = "generate"
+manual_traits = ["RTPBaseDepayloadExtManual"]
+
+    [[object.property]]
+    name = "extensions"
+    # use proper type
+    ignore = true
+
+[[object]]
 name = "GstRtp.RTPBasePayload"
 status = "generate"
-manual_traits = ["RTPHeaderExtensionExtManual"]
+manual_traits = ["RTPBasePayloadExtManual"]
 
     [[object.function]]
     name = "set_outcaps"
