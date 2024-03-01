@@ -9,10 +9,35 @@ use num_rational::Rational32;
 pub struct Fraction(pub Rational32);
 
 impl Fraction {
+    // rustdoc-stripper-ignore-next
+    /// Creates a new `Ratio`.
+    ///
+    /// # Panics
+    ///
+    /// Panics if `denom` is zero.
     #[inline]
     pub fn new(num: i32, den: i32) -> Self {
         skip_assert_initialized!();
         (num, den).into()
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Creates a `Fraction` without checking for `denom == 0` or reducing.
+    ///
+    /// While this does not panic, there are several methods that will panic
+    /// if used on a `Fraction` with `denom == 0`.
+    #[inline]
+    pub const fn new_raw(num: i32, den: i32) -> Self {
+        skip_assert_initialized!();
+        Self(Rational32::new_raw(num, den))
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Creates a `Fraction` representing the integer `t`.
+    #[inline]
+    pub const fn from_integer(t: i32) -> Self {
+        skip_assert_initialized!();
+        Self::new_raw(t, 1)
     }
 
     pub fn approximate_f32(x: f32) -> Option<Self> {
