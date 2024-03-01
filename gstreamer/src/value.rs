@@ -16,9 +16,9 @@ impl Fraction {
     ///
     /// Panics if `denom` is zero.
     #[inline]
-    pub fn new(num: i32, den: i32) -> Self {
+    pub fn new(numer: i32, denom: i32) -> Self {
         skip_assert_initialized!();
-        (num, den).into()
+        (numer, denom).into()
     }
 
     // rustdoc-stripper-ignore-next
@@ -27,9 +27,9 @@ impl Fraction {
     /// While this does not panic, there are several methods that will panic
     /// if used on a `Fraction` with `denom == 0`.
     #[inline]
-    pub const fn new_raw(num: i32, den: i32) -> Self {
+    pub const fn new_raw(numer: i32, denom: i32) -> Self {
         skip_assert_initialized!();
-        Self(Rational32::new_raw(num, den))
+        Self(Rational32::new_raw(numer, denom))
     }
 
     // rustdoc-stripper-ignore-next
@@ -66,10 +66,10 @@ impl Fraction {
     pub fn simplify(&mut self, n_terms: u32, threshold: u32) {
         skip_assert_initialized!();
         unsafe {
-            let mut num = self.numer();
-            let mut den = self.denom();
-            ffi::gst_util_simplify_fraction(&mut num, &mut den, n_terms, threshold);
-            *self = Self::new(num, den);
+            let mut numer = self.numer();
+            let mut denom = self.denom();
+            ffi::gst_util_simplify_fraction(&mut numer, &mut denom, n_terms, threshold);
+            *self = Self::new(numer, denom);
         }
     }
 }
