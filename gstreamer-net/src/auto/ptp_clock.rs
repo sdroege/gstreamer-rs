@@ -21,11 +21,15 @@ glib::wrapper! {
 
 impl PtpClock {
     #[doc(alias = "gst_ptp_clock_new")]
-    pub fn new(name: &str, domain: u32) -> PtpClock {
+    pub fn new(name: Option<&str>, domain: u32) -> Result<PtpClock, glib::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
-            gst::Clock::from_glib_full(ffi::gst_ptp_clock_new(name.to_glib_none().0, domain))
-                .unsafe_cast()
+            Option::<gst::Clock>::from_glib_full(ffi::gst_ptp_clock_new(
+                name.to_glib_none().0,
+                domain,
+            ))
+            .map(|o| o.unsafe_cast())
+            .ok_or_else(|| glib::bool_error!("Can't create gst::PtpClock"))
         }
     }
 

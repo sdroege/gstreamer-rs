@@ -57,3 +57,14 @@ final_type = true
 name = "GstNet.PtpClock"
 status = "generate"
 final_type = true
+    [[object.function]]
+    name = "new"
+        [[object.function.parameter]]
+        name = "name"
+        # See https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6251
+        nullable = true
+
+        [object.function.return]
+        # See https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6251
+        nullable = true
+        nullable_return_is_error = "Can't create gst::PtpClock"
