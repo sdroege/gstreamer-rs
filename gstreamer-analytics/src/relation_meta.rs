@@ -652,13 +652,13 @@ mod tests {
         assert_eq!(meta.len(), meta.iter::<AnalyticsAnyMtd>().count());
         assert_eq!(meta.len(), meta.iter::<AnalyticsODMtd>().count());
         for mtd in meta.iter::<AnalyticsODMtd>() {
-            assert_eq!(mtd.obj_type(), glib::Quark::from_str("blb"))
+            assert_eq!(mtd.obj_type().unwrap(), glib::Quark::from_str("blb"))
         }
 
         assert_eq!(meta.len(), meta.iter::<AnalyticsAnyMtd>().count());
         for mtd in meta.iter::<AnalyticsAnyMtd>() {
             if let Ok(mtd) = mtd.downcast::<AnalyticsODMtd>() {
-                assert_eq!(mtd.obj_type(), glib::Quark::from_str("blb"))
+                assert_eq!(mtd.obj_type().unwrap(), glib::Quark::from_str("blb"))
             }
         }
 
@@ -689,7 +689,7 @@ mod tests {
             0
         );
         for mtd in meta.iter_direct_related::<AnalyticsODMtd>(od1_id, crate::RelTypes::IS_PART_OF) {
-            assert_eq!(mtd.obj_type(), glib::Quark::from_str("blb"))
+            assert_eq!(mtd.obj_type().unwrap(), glib::Quark::from_str("blb"))
         }
 
         let mut meta = buf.make_mut().meta_mut::<AnalyticsRelationMeta>().unwrap();
