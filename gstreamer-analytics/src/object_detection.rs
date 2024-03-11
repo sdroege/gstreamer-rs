@@ -82,11 +82,15 @@ unsafe fn from(t: ffi::GstAnalyticsMtd) -> ffi::GstAnalyticsODMtd {
 
 impl<'a> AnalyticsMtdRef<'a, AnalyticsODMtd> {
     #[doc(alias = "gst_analytics_od_mtd_get_obj_type")]
-    pub fn obj_type(&self) -> glib::Quark {
+    pub fn obj_type(&self) -> Option<glib::Quark> {
         unsafe {
             let mut mtd = from(ffi::GstAnalyticsMtd::unsafe_from(self));
             let type_ = ffi::gst_analytics_od_mtd_get_obj_type(&mut mtd);
-            glib::Quark::from_glib(type_)
+            if type_ == 0 {
+                None
+            } else {
+                Some(glib::Quark::from_glib(type_))
+            }
         }
     }
 
@@ -143,7 +147,7 @@ mod tests {
             .add_od_mtd(glib::Quark::from_str("blb"), 0, 1, 10, 20, 0.8)
             .unwrap();
 
-        assert_eq!(od.obj_type(), glib::Quark::from_str("blb"));
+        assert_eq!(od.obj_type().unwrap(), glib::Quark::from_str("blb"));
 
         let loc = od.location().unwrap();
 
@@ -159,7 +163,7 @@ mod tests {
         let meta2 = buf.meta::<AnalyticsRelationMeta>().unwrap();
         let od2 = meta2.mtd::<AnalyticsODMtd>(0).unwrap();
 
-        assert_eq!(od2.obj_type(), glib::Quark::from_str("blb"));
+        assert_eq!(od2.obj_type().unwrap(), glib::Quark::from_str("blb"));
         let loc = od2.location().unwrap();
 
         assert_eq!(loc.x, 0);
