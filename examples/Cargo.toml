@@ -204,3 +204,6 @@ required-features = ["cairo-rs", "gst-video/v1_18"]
 [[bin]]
 name = "d3d11videosink"
 required-features = ["windows"]
+
+[[bin]]
+name = "audio_multichannel_interleave"
