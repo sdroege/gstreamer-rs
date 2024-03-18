@@ -20,32 +20,32 @@ impl FrameCompositionMeta {
     }
 
     #[inline]
-    pub fn position(&self) -> (i32, i32) {
+    pub fn position(&self) -> (f64, f64) {
         (self.0.posx, self.0.posy)
     }
 
     #[inline]
-    pub fn pos_x(&self) -> i32 {
+    pub fn pos_x(&self) -> f64 {
         self.0.posx
     }
 
     #[inline]
-    pub fn pos_y(&self) -> i32 {
+    pub fn pos_y(&self) -> f64 {
         self.0.posy
     }
 
     #[inline]
-    pub fn size(&self) -> (i32, i32) {
+    pub fn size(&self) -> (f64, f64) {
         (self.0.width, self.0.height)
     }
 
     #[inline]
-    pub fn width(&self) -> i32 {
+    pub fn width(&self) -> f64 {
         self.0.width
     }
 
     #[inline]
-    pub fn height(&self) -> i32 {
+    pub fn height(&self) -> f64 {
         self.0.height
     }
 
@@ -90,8 +90,8 @@ mod tests {
 
     fn add_composition_meta(
         buffer: &mut gst::BufferRef,
-        position: (i32, i32),
-        size: (i32, i32),
+        position: (f64, f64),
+        size: (f64, f64),
         alpha: f64,
         zorder: u32,
         operator: i32,
@@ -125,14 +125,14 @@ mod tests {
         let mut buffer = gst::Buffer::with_size(320 * 240 * 4).unwrap();
         {
             let _meta =
-                add_composition_meta(buffer.get_mut().unwrap(), (42, 42), (20, 22), 0.42, 2, 42)
+                add_composition_meta(buffer.get_mut().unwrap(), (42., 42.), (20., 22.), 0.42, 2, 42)
                     .unwrap();
         }
 
         {
             let meta = buffer.meta::<FrameCompositionMeta>().unwrap();
-            assert_eq!(meta.position(), (42, 42));
-            assert_eq!(meta.size(), (20, 22));
+            assert_eq!(meta.position(), (42., 42.));
+            assert_eq!(meta.size(), (20., 22.));
             assert_eq!(meta.alpha(), 0.42);
             assert_eq!(meta.zorder(), 2);
             assert_eq!(meta.operator(), 42);
