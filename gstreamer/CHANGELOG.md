@@ -5,6 +5,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.22.3] - 2024-03-19
+### Changed
+- Change `ges::CompositionMeta` position fields to `f64`s in correspondence
+  with the C API.
+- Change `gst_analytics::AnalyticsMtdRef::obj_type()` to an `Option` in
+  correspondence with the C API.
+
+### Added
+- `gst::Fraction::new_raw()` and `from_integer()` const constructors.
+
 ## [0.22.2] - 2024-02-26
 ### Changed
 - Update GStreamer gir files and add more new 1.24 API.
@@ -1681,7 +1691,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.22.2...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.22.3...HEAD
+[0.22.3]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.22.2...0.22.3
 [0.22.2]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.22.1...0.22.2
 [0.22.1]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.22.0...0.22.1
 [0.22.0]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.21.3...0.22.0
