@@ -879,10 +879,10 @@ pub type GESFormatterPrivate = _GESFormatterPrivate;
 pub struct GESFrameCompositionMeta {
     pub meta: gst::GstMeta,
     pub alpha: c_double,
-    pub posx: c_int,
-    pub posy: c_int,
-    pub height: c_int,
-    pub width: c_int,
+    pub posx: c_double,
+    pub posy: c_double,
+    pub height: c_double,
+    pub width: c_double,
     pub zorder: c_uint,
     pub operator: c_int,
 }
