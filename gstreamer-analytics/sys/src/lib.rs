@@ -28,7 +28,6 @@ use glib::{gboolean, gconstpointer, gpointer, GType};
 pub type GstAnalyticsMtdType = uintptr_t;
 
 // Constants
-pub const GST_AN_RELATION_META_TAG: &[u8] = b"GST-ANALYSIS-RELATION-META-TAG\0";
 pub const GST_INF_RELATION_SPAN: c_int = -1;
 pub const GST_ANALYTICS_MTD_TYPE_ANY: c_int = 0;
 
@@ -95,7 +94,6 @@ impl ::std::fmt::Debug for GstAnalyticsMtdImpl {
         f.debug_struct(&format!("GstAnalyticsMtdImpl @ {self:p}"))
             .field("name", &self.name)
             .field("mtd_meta_transform", &self.mtd_meta_transform)
-            .field("_reserved", &self._reserved)
             .finish()
     }
 }

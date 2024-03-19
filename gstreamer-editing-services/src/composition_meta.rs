@@ -124,9 +124,15 @@ mod tests {
 
         let mut buffer = gst::Buffer::with_size(320 * 240 * 4).unwrap();
         {
-            let _meta =
-                add_composition_meta(buffer.get_mut().unwrap(), (42., 42.), (20., 22.), 0.42, 2, 42)
-                    .unwrap();
+            let _meta = add_composition_meta(
+                buffer.get_mut().unwrap(),
+                (42., 42.),
+                (20., 22.),
+                0.42,
+                2,
+                42,
+            )
+            .unwrap();
         }
 
         {

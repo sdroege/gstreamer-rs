@@ -268,6 +268,5 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(guint) GST_ANALYTICS_REL_TYPE_LAST", "16"),
     ("(guint) GST_ANALYTICS_REL_TYPE_NONE", "0"),
     ("(guint) GST_ANALYTICS_REL_TYPE_RELATE_TO", "8"),
-    ("GST_AN_RELATION_META_TAG", "GST-ANALYSIS-RELATION-META-TAG"),
     ("GST_INF_RELATION_SPAN", "-1"),
 ];
