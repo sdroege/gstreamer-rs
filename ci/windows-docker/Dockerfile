@@ -4,7 +4,7 @@ FROM "registry.freedesktop.org/gstreamer/gstreamer/amd64/windows:2023-07-17.0-ma
 
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
 
-ARG DEFAULT_BRANCH="main"
+ARG DEFAULT_BRANCH="1.24"
 ARG RUST_VERSION="invalid"
 
 RUN choco install -y pkgconfiglite nasm llvm openssl
