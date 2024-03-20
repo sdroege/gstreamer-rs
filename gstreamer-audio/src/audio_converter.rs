@@ -73,6 +73,30 @@ impl From<AudioConverterConfig> for gst::Structure {
     }
 }
 
+impl glib::value::ToValue for AudioConverterConfig {
+    fn to_value(&self) -> glib::Value {
+        self.0.to_value()
+    }
+
+    fn value_type(&self) -> glib::Type {
+        self.0.value_type()
+    }
+}
+
+impl glib::value::ToValueOptional for AudioConverterConfig {
+    fn to_value_optional(s: Option<&Self>) -> glib::Value {
+        skip_assert_initialized!();
+        s.map(|s| &s.0).to_value()
+    }
+}
+
+impl From<AudioConverterConfig> for glib::Value {
+    fn from(s: AudioConverterConfig) -> glib::Value {
+        skip_assert_initialized!();
+        s.0.into()
+    }
+}
+
 impl AudioConverterConfig {
     pub fn new() -> Self {
         Self(gst::Structure::new_empty("GstAudioConverter"))
