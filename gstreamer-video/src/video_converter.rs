@@ -3,7 +3,7 @@
 use std::{ops, ptr};
 
 use crate::VideoFrameExt;
-use glib::translate::*;
+use glib::{prelude::*, translate::*};
 
 #[derive(Debug)]
 #[doc(alias = "GstVideoConverter")]
@@ -176,6 +176,30 @@ impl From<VideoConverterConfig> for gst::Structure {
     fn from(v: VideoConverterConfig) -> Self {
         skip_assert_initialized!();
         v.0
+    }
+}
+
+impl glib::value::ToValue for VideoConverterConfig {
+    fn to_value(&self) -> glib::Value {
+        self.0.to_value()
+    }
+
+    fn value_type(&self) -> glib::Type {
+        self.0.value_type()
+    }
+}
+
+impl glib::value::ToValueOptional for VideoConverterConfig {
+    fn to_value_optional(s: Option<&Self>) -> glib::Value {
+        skip_assert_initialized!();
+        s.map(|s| &s.0).to_value()
+    }
+}
+
+impl From<VideoConverterConfig> for glib::Value {
+    fn from(s: VideoConverterConfig) -> glib::Value {
+        skip_assert_initialized!();
+        s.0.into()
     }
 }
 
