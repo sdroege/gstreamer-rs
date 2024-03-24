@@ -22,6 +22,7 @@ pub fn init() {
     assert_initialized_main_thread!();
 }
 
-// Workaround for https://github.com/gtk-rs/gir/issues/1555.
 #[allow(unused_imports)]
 mod auto;
+#[allow(unused_imports)]
+pub use crate::auto::*;
