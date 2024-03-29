@@ -71,6 +71,14 @@ impl AppSinkCallbacksBuilder {
         }
     }
 
+    pub fn eos_if_some<F: FnMut(&AppSink) + Send + 'static>(self, eos: Option<F>) -> Self {
+        if let Some(eos) = eos {
+            self.eos(eos)
+        } else {
+            self
+        }
+    }
+
     pub fn new_preroll<
         F: FnMut(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static,
     >(
@@ -80,6 +88,19 @@ impl AppSinkCallbacksBuilder {
         Self {
             new_preroll: Some(Box::new(new_preroll)),
             ..self
+        }
+    }
+
+    pub fn new_preroll_if_some<
+        F: FnMut(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static,
+    >(
+        self,
+        new_preroll: Option<F>,
+    ) -> Self {
+        if let Some(new_preroll) = new_preroll {
+            self.new_preroll(new_preroll)
+        } else {
+            self
         }
     }
 
@@ -95,12 +116,38 @@ impl AppSinkCallbacksBuilder {
         }
     }
 
+    pub fn new_sample_if_some<
+        F: FnMut(&AppSink) -> Result<gst::FlowSuccess, gst::FlowError> + Send + 'static,
+    >(
+        self,
+        new_sample: Option<F>,
+    ) -> Self {
+        if let Some(new_sample) = new_sample {
+            self.new_sample(new_sample)
+        } else {
+            self
+        }
+    }
+
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn new_event<F: FnMut(&AppSink) -> bool + Send + 'static>(self, new_event: F) -> Self {
         Self {
             new_event: Some(Box::new(new_event)),
             ..self
+        }
+    }
+
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
+    pub fn new_event_if_some<F: FnMut(&AppSink) -> bool + Send + 'static>(
+        self,
+        new_event: Option<F>,
+    ) -> Self {
+        if let Some(new_event) = new_event {
+            self.new_event(new_event)
+        } else {
+            self
         }
     }
 
@@ -115,6 +162,21 @@ impl AppSinkCallbacksBuilder {
         Self {
             propose_allocation: Some(Box::new(propose_allocation)),
             ..self
+        }
+    }
+
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn propose_allocation_if_some<
+        F: FnMut(&AppSink, &mut gst::query::Allocation) -> bool + Send + 'static,
+    >(
+        self,
+        propose_allocation: Option<F>,
+    ) -> Self {
+        if let Some(propose_allocation) = propose_allocation {
+            self.propose_allocation(propose_allocation)
+        } else {
+            self
         }
     }
 

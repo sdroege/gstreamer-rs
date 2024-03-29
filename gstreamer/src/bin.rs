@@ -250,15 +250,39 @@ impl BinBuilder {
         }
     }
 
+    pub fn async_handling_if_some(self, async_handling: Option<bool>) -> Self {
+        if let Some(async_handling) = async_handling {
+            self.async_handling(async_handling)
+        } else {
+            self
+        }
+    }
+
     pub fn message_forward(self, message_forward: bool) -> Self {
         Self {
             builder: self.builder.property("message-forward", message_forward),
         }
     }
 
+    pub fn message_forward_if_some(self, message_forward: Option<bool>) -> Self {
+        if let Some(message_forward) = message_forward {
+            self.message_forward(message_forward)
+        } else {
+            self
+        }
+    }
+
     pub fn name(self, name: impl Into<glib::GString>) -> Self {
         Self {
             builder: self.builder.property("name", name.into()),
+        }
+    }
+
+    pub fn name_if_some(self, name: Option<impl Into<glib::GString>>) -> Self {
+        if let Some(name) = name {
+            self.name(name)
+        } else {
+            self
         }
     }
 }

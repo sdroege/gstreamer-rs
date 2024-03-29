@@ -96,6 +96,17 @@ impl<'a> AudioInfoBuilder<'a> {
         }
     }
 
+    pub fn positions_if_some(
+        self,
+        positions: Option<&'a [crate::AudioChannelPosition]>,
+    ) -> AudioInfoBuilder<'a> {
+        if let Some(positions) = positions {
+            self.positions(positions)
+        } else {
+            self
+        }
+    }
+
     pub fn flags(self, flags: crate::AudioFlags) -> Self {
         Self {
             flags: Some(flags),
@@ -103,10 +114,26 @@ impl<'a> AudioInfoBuilder<'a> {
         }
     }
 
+    pub fn flags_if_some(self, flags: Option<crate::AudioFlags>) -> Self {
+        if let Some(flags) = flags {
+            self.flags(flags)
+        } else {
+            self
+        }
+    }
+
     pub fn layout(self, layout: crate::AudioLayout) -> Self {
         Self {
             layout: Some(layout),
             ..self
+        }
+    }
+
+    pub fn layout_if_some(self, layout: Option<crate::AudioLayout>) -> Self {
+        if let Some(layout) = layout {
+            self.layout(layout)
+        } else {
+            self
         }
     }
 }

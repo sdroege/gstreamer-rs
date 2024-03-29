@@ -1690,6 +1690,19 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
         }
     }
 
+    // rustdoc-stripper-ignore-next
+    /// Optionally sets the name of the Pad.
+    ///
+    /// This method is convenient when the `name` is provided as an `Option`.
+    /// If the `name` is `None`, this has no effect.
+    pub fn name_if_some<N: glib::IntoGStr>(self, name: Option<N>) -> Self {
+        if let Some(name) = name {
+            self.name(name)
+        } else {
+            self
+        }
+    }
+
     #[doc(alias = "gst_pad_set_activate_function")]
     pub fn activate_function<F>(self, func: F) -> Self
     where
@@ -1700,6 +1713,18 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
         }
 
         self
+    }
+
+    #[doc(alias = "gst_pad_set_activate_function")]
+    pub fn activate_function_if_some<F>(self, func: Option<F>) -> Self
+    where
+        F: Fn(&T, Option<&crate::Object>) -> Result<(), LoggableError> + Send + Sync + 'static,
+    {
+        if let Some(func) = func {
+            self.activate_function(func)
+        } else {
+            self
+        }
     }
 
     #[doc(alias = "gst_pad_set_activatemode_function")]
@@ -1717,6 +1742,21 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
         self
     }
 
+    #[doc(alias = "gst_pad_set_activatemode_function")]
+    pub fn activatemode_function_if_some<F>(self, func: Option<F>) -> Self
+    where
+        F: Fn(&T, Option<&crate::Object>, crate::PadMode, bool) -> Result<(), LoggableError>
+            + Send
+            + Sync
+            + 'static,
+    {
+        if let Some(func) = func {
+            self.activatemode_function(func)
+        } else {
+            self
+        }
+    }
+
     #[doc(alias = "gst_pad_set_chain_function")]
     pub fn chain_function<F>(self, func: F) -> Self
     where
@@ -1730,6 +1770,21 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
         }
 
         self
+    }
+
+    #[doc(alias = "gst_pad_set_chain_function")]
+    pub fn chain_function_if_some<F>(self, func: Option<F>) -> Self
+    where
+        F: Fn(&T, Option<&crate::Object>, crate::Buffer) -> Result<FlowSuccess, FlowError>
+            + Send
+            + Sync
+            + 'static,
+    {
+        if let Some(func) = func {
+            self.chain_function(func)
+        } else {
+            self
+        }
     }
 
     #[doc(alias = "gst_pad_set_chain_list_function")]
@@ -1747,6 +1802,21 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
         self
     }
 
+    #[doc(alias = "gst_pad_set_chain_list_function")]
+    pub fn chain_list_function_if_some<F>(self, func: Option<F>) -> Self
+    where
+        F: Fn(&T, Option<&crate::Object>, crate::BufferList) -> Result<FlowSuccess, FlowError>
+            + Send
+            + Sync
+            + 'static,
+    {
+        if let Some(func) = func {
+            self.chain_list_function(func)
+        } else {
+            self
+        }
+    }
+
     #[doc(alias = "gst_pad_set_event_function")]
     pub fn event_function<F>(self, func: F) -> Self
     where
@@ -1757,6 +1827,18 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
         }
 
         self
+    }
+
+    #[doc(alias = "gst_pad_set_event_function")]
+    pub fn event_function_if_some<F>(self, func: Option<F>) -> Self
+    where
+        F: Fn(&T, Option<&crate::Object>, crate::Event) -> bool + Send + Sync + 'static,
+    {
+        if let Some(func) = func {
+            self.event_function(func)
+        } else {
+            self
+        }
     }
 
     #[doc(alias = "gst_pad_set_event_full_function")]
@@ -1772,6 +1854,21 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
         }
 
         self
+    }
+
+    #[doc(alias = "gst_pad_set_event_full_function")]
+    pub fn event_full_function_if_some<F>(self, func: Option<F>) -> Self
+    where
+        F: Fn(&T, Option<&crate::Object>, crate::Event) -> Result<FlowSuccess, FlowError>
+            + Send
+            + Sync
+            + 'static,
+    {
+        if let Some(func) = func {
+            self.event_full_function(func)
+        } else {
+            self
+        }
     }
 
     #[doc(alias = "gst_pad_set_getrange_function")]
@@ -1795,6 +1892,27 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
         self
     }
 
+    #[doc(alias = "gst_pad_set_getrange_function")]
+    pub fn getrange_function_if_some<F>(self, func: Option<F>) -> Self
+    where
+        F: Fn(
+                &T,
+                Option<&crate::Object>,
+                u64,
+                Option<&mut crate::BufferRef>,
+                u32,
+            ) -> Result<PadGetRangeSuccess, crate::FlowError>
+            + Send
+            + Sync
+            + 'static,
+    {
+        if let Some(func) = func {
+            self.getrange_function(func)
+        } else {
+            self
+        }
+    }
+
     #[doc(alias = "gst_pad_set_iterate_internal_links_function")]
     pub fn iterate_internal_links_function<F>(self, func: F) -> Self
     where
@@ -1805,6 +1923,18 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
         }
 
         self
+    }
+
+    #[doc(alias = "gst_pad_set_iterate_internal_links_function")]
+    pub fn iterate_internal_links_function_if_some<F>(self, func: Option<F>) -> Self
+    where
+        F: Fn(&T, Option<&crate::Object>) -> crate::Iterator<Pad> + Send + Sync + 'static,
+    {
+        if let Some(func) = func {
+            self.iterate_internal_links_function(func)
+        } else {
+            self
+        }
     }
 
     #[doc(alias = "gst_pad_set_link_function")]
@@ -1826,6 +1956,25 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
         self
     }
 
+    #[doc(alias = "gst_pad_set_link_function")]
+    pub fn link_function_if_some<F>(self, func: Option<F>) -> Self
+    where
+        F: Fn(
+                &T,
+                Option<&crate::Object>,
+                &Pad,
+            ) -> Result<crate::PadLinkSuccess, crate::PadLinkError>
+            + Send
+            + Sync
+            + 'static,
+    {
+        if let Some(func) = func {
+            self.link_function(func)
+        } else {
+            self
+        }
+    }
+
     #[doc(alias = "gst_pad_set_query_function")]
     pub fn query_function<F>(self, func: F) -> Self
     where
@@ -1836,6 +1985,18 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
         }
 
         self
+    }
+
+    #[doc(alias = "gst_pad_set_query_function")]
+    pub fn query_function_if_some<F>(self, func: Option<F>) -> Self
+    where
+        F: Fn(&T, Option<&crate::Object>, &mut crate::QueryRef) -> bool + Send + Sync + 'static,
+    {
+        if let Some(func) = func {
+            self.query_function(func)
+        } else {
+            self
+        }
     }
 
     #[doc(alias = "gst_pad_set_unlink_function")]
@@ -1850,10 +2011,30 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
         self
     }
 
+    #[doc(alias = "gst_pad_set_unlink_function")]
+    pub fn unlink_function_if_some<F>(self, func: Option<F>) -> Self
+    where
+        F: Fn(&T, Option<&crate::Object>) + Send + Sync + 'static,
+    {
+        if let Some(func) = func {
+            self.unlink_function(func)
+        } else {
+            self
+        }
+    }
+
     pub fn flags(self, flags: PadFlags) -> Self {
         self.pad.set_pad_flags(flags);
 
         self
+    }
+
+    pub fn flags_if_some(self, flags: Option<PadFlags>) -> Self {
+        if let Some(flags) = flags {
+            self.flags(flags)
+        } else {
+            self
+        }
     }
 
     // rustdoc-stripper-ignore-next

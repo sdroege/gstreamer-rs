@@ -109,15 +109,43 @@ impl PipelineBuilder {
         }
     }
 
+    pub fn auto_flush_bus_if_some(self, auto_flush_bus: Option<bool>) -> Self {
+        if let Some(auto_flush_bus) = auto_flush_bus {
+            self.auto_flush_bus(auto_flush_bus)
+        } else {
+            self
+        }
+    }
+
     pub fn delay(self, delay: u64) -> Self {
         Self {
             builder: self.builder.property("delay", delay),
         }
     }
 
-    pub fn latency(self, latency: crate::ClockTime) -> Self {
-        Self {
-            builder: self.builder.property("latency", latency),
+    pub fn delay_if_some(self, delay: Option<u64>) -> Self {
+        if let Some(delay) = delay {
+            self.delay(delay)
+        } else {
+            self
+        }
+    }
+
+    pub fn latency(self, latency: impl Into<Option<crate::ClockTime>>) -> Self {
+        if let Some(latency) = latency.into() {
+            Self {
+                builder: self.builder.property("latency", latency),
+            }
+        } else {
+            self
+        }
+    }
+
+    pub fn latency_if_some(self, latency: Option<crate::ClockTime>) -> Self {
+        if let Some(latency) = latency {
+            self.latency(latency)
+        } else {
+            self
         }
     }
 
@@ -127,15 +155,39 @@ impl PipelineBuilder {
         }
     }
 
+    pub fn async_handling_if_some(self, async_handling: Option<bool>) -> Self {
+        if let Some(async_handling) = async_handling {
+            self.async_handling(async_handling)
+        } else {
+            self
+        }
+    }
+
     pub fn message_forward(self, message_forward: bool) -> Self {
         Self {
             builder: self.builder.property("message-forward", message_forward),
         }
     }
 
+    pub fn message_forward_if_some(self, message_forward: Option<bool>) -> Self {
+        if let Some(message_forward) = message_forward {
+            self.message_forward(message_forward)
+        } else {
+            self
+        }
+    }
+
     pub fn name(self, name: impl Into<glib::GString>) -> Self {
         Self {
             builder: self.builder.property("name", name.into()),
+        }
+    }
+
+    pub fn name_if_some(self, name: Option<impl Into<glib::GString>>) -> Self {
+        if let Some(name) = name {
+            self.name(name)
+        } else {
+            self
         }
     }
 }

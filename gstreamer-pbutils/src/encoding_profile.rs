@@ -33,15 +33,39 @@ impl<O: IsA<EncodingProfile>> EncodingProfileExtManual for O {}
 trait EncodingProfileBuilderCommon {
     fn set_allow_dynamic_output(&self, allow_dynamic_output: bool);
 
+    fn set_allow_dynamic_output_if_some(&self, allow_dynamic_output: Option<bool>) {
+        if let Some(allow_dynamic_output) = allow_dynamic_output {
+            self.set_allow_dynamic_output(allow_dynamic_output)
+        }
+    }
+
     fn set_description(&self, description: Option<&str>);
 
     fn set_enabled(&self, enabled: bool);
 
+    fn set_enabled_if_some(&self, enabled: Option<bool>) {
+        if let Some(enabled) = enabled {
+            self.set_enabled(enabled)
+        }
+    }
+
     fn set_format(&self, format: &gst::Caps);
+
+    fn set_format_if_some(&self, format: Option<&gst::Caps>) {
+        if let Some(format) = format {
+            self.set_format(format)
+        }
+    }
 
     fn set_name(&self, name: Option<&str>);
 
     fn set_presence(&self, presence: u32);
+
+    fn set_presence_if_some(&self, presence: Option<u32>) {
+        if let Some(presence) = presence {
+            self.set_presence(presence);
+        }
+    }
 
     fn set_preset(&self, preset: Option<&str>);
 
@@ -52,6 +76,13 @@ trait EncodingProfileBuilderCommon {
 
     #[cfg(feature = "v1_20")]
     fn set_element_properties(&self, element_properties: ElementProperties);
+
+    #[cfg(feature = "v1_20")]
+    fn set_element_properties_if_some(&self, element_properties: Option<ElementProperties>) {
+        if let Some(element_properties) = element_properties {
+            self.set_element_properties(element_properties);
+        }
+    }
 }
 
 impl<O: IsA<EncodingProfile>> EncodingProfileBuilderCommon for O {

@@ -90,6 +90,14 @@ impl<T> AudioCapsBuilder<T> {
         }
     }
 
+    pub fn format_if_some(self, format: Option<AudioFormat>) -> Self {
+        if let Some(format) = format {
+            self.format(format)
+        } else {
+            self
+        }
+    }
+
     pub fn format_list(self, formats: impl IntoIterator<Item = AudioFormat>) -> Self {
         Self {
             builder: self.builder.field(
@@ -99,9 +107,28 @@ impl<T> AudioCapsBuilder<T> {
         }
     }
 
+    pub fn format_list_if_some(
+        self,
+        formats: Option<impl IntoIterator<Item = AudioFormat>>,
+    ) -> Self {
+        if let Some(formats) = formats {
+            self.format_list(formats)
+        } else {
+            self
+        }
+    }
+
     pub fn rate(self, rate: i32) -> Self {
         Self {
             builder: self.builder.field(glib::gstr!("rate"), rate),
+        }
+    }
+
+    pub fn rate_if_some(self, rate: Option<i32>) -> Self {
+        if let Some(rate) = rate {
+            self.rate(rate)
+        } else {
+            self
         }
     }
 
@@ -113,6 +140,14 @@ impl<T> AudioCapsBuilder<T> {
         }
     }
 
+    pub fn rate_range_if_some(self, rates: Option<impl RangeBounds<i32>>) -> Self {
+        if let Some(rates) = rates {
+            self.rate_range(rates)
+        } else {
+            self
+        }
+    }
+
     pub fn rate_list(self, rates: impl IntoIterator<Item = i32>) -> Self {
         Self {
             builder: self
@@ -121,9 +156,25 @@ impl<T> AudioCapsBuilder<T> {
         }
     }
 
+    pub fn rate_list_if_some(self, rates: Option<impl IntoIterator<Item = i32>>) -> Self {
+        if let Some(rates) = rates {
+            self.rate_list(rates)
+        } else {
+            self
+        }
+    }
+
     pub fn channels(self, channels: i32) -> Self {
         Self {
             builder: self.builder.field(glib::gstr!("channels"), channels),
+        }
+    }
+
+    pub fn channels_if_some(self, channels: Option<i32>) -> Self {
+        if let Some(channels) = channels {
+            self.channels(channels)
+        } else {
+            self
         }
     }
 
@@ -135,6 +186,14 @@ impl<T> AudioCapsBuilder<T> {
         }
     }
 
+    pub fn channels_range_if_some(self, channels: Option<impl RangeBounds<i32>>) -> Self {
+        if let Some(channels) = channels {
+            self.channels_range(channels)
+        } else {
+            self
+        }
+    }
+
     pub fn channels_list(self, channels: impl IntoIterator<Item = i32>) -> Self {
         Self {
             builder: self
@@ -143,11 +202,27 @@ impl<T> AudioCapsBuilder<T> {
         }
     }
 
+    pub fn channels_list_if_some(self, channels: Option<impl IntoIterator<Item = i32>>) -> Self {
+        if let Some(channels) = channels {
+            self.channels_list(channels)
+        } else {
+            self
+        }
+    }
+
     pub fn layout(self, layout: AudioLayout) -> Self {
         Self {
             builder: self
                 .builder
                 .field(glib::gstr!("layout"), layout_str(layout)),
+        }
+    }
+
+    pub fn layout_if_some(self, layout: Option<AudioLayout>) -> Self {
+        if let Some(layout) = layout {
+            self.layout(layout)
+        } else {
+            self
         }
     }
 
@@ -160,11 +235,30 @@ impl<T> AudioCapsBuilder<T> {
         }
     }
 
+    pub fn layout_list_if_some(
+        self,
+        layouts: Option<impl IntoIterator<Item = AudioLayout>>,
+    ) -> Self {
+        if let Some(layouts) = layouts {
+            self.layout_list(layouts)
+        } else {
+            self
+        }
+    }
+
     pub fn channel_mask(self, channel_mask: u64) -> Self {
         Self {
             builder: self
                 .builder
                 .field("channel-mask", gst::Bitmask::new(channel_mask)),
+        }
+    }
+
+    pub fn channel_mask_if_some(self, channel_mask: Option<u64>) -> Self {
+        if let Some(channel_mask) = channel_mask {
+            self.channel_mask(channel_mask)
+        } else {
+            self
         }
     }
 
@@ -184,6 +278,14 @@ impl<T> AudioCapsBuilder<T> {
     pub fn field(self, name: &str, value: impl Into<glib::Value> + Send) -> Self {
         Self {
             builder: self.builder.field(name, value),
+        }
+    }
+
+    pub fn field_if_some(self, name: &str, value: Option<impl Into<glib::Value> + Send>) -> Self {
+        if let Some(value) = value {
+            self.field(name, value)
+        } else {
+            self
         }
     }
 

@@ -2525,6 +2525,14 @@ macro_rules! message_builder_generic_impl {
                 ..self
             }
         }
+        #[allow(clippy::needless_update)]
+        pub fn src_if_some<O: IsA<Object> + Cast + Clone>(self, src: Option<&O>) -> Self {
+            if let Some(src) = src {
+                self.src(src)
+            } else {
+                self
+            }
+        }
 
         #[doc(alias = "gst_message_set_seqnum")]
         #[allow(clippy::needless_update)]
@@ -2535,11 +2543,30 @@ macro_rules! message_builder_generic_impl {
             }
         }
 
+        #[doc(alias = "gst_message_set_seqnum")]
+        #[allow(clippy::needless_update)]
+        pub fn seqnum_if_some(self, seqnum: Option<Seqnum>) -> Self {
+            if let Some(seqnum) = seqnum {
+                self.seqnum(seqnum)
+            } else {
+                self
+            }
+        }
+
         #[allow(clippy::needless_update)]
         pub fn other_field(self, name: &'a str, value: impl ToSendValue) -> Self {
             Self {
                 builder: self.builder.other_field(name, value),
                 ..self
+            }
+        }
+
+        #[allow(clippy::needless_update)]
+        pub fn other_field_if_some(self, name: &'a str, value: Option<impl ToSendValue>) -> Self {
+            if let Some(value) = value {
+                self.other_field(name, value)
+            } else {
+                self
             }
         }
 
@@ -2633,10 +2660,26 @@ impl<'a> ErrorBuilder<'a> {
         }
     }
 
+    pub fn debug_if_some(self, debug: Option<&'a str>) -> Self {
+        if let Some(debug) = debug {
+            self.debug(debug)
+        } else {
+            self
+        }
+    }
+
     pub fn details(self, details: Structure) -> Self {
         Self {
             details: Some(details),
             ..self
+        }
+    }
+
+    pub fn details_if_some(self, details: Option<Structure>) -> Self {
+        if let Some(details) = details {
+            self.details(details)
+        } else {
+            self
         }
     }
 
@@ -2682,10 +2725,26 @@ impl<'a> WarningBuilder<'a> {
         }
     }
 
+    pub fn debug_if_some(self, debug: Option<&'a str>) -> Self {
+        if let Some(debug) = debug {
+            self.debug(debug)
+        } else {
+            self
+        }
+    }
+
     pub fn details(self, details: Structure) -> Self {
         Self {
             details: Some(details),
             ..self
+        }
+    }
+
+    pub fn details_if_some(self, details: Option<Structure>) -> Self {
+        if let Some(details) = details {
+            self.details(details)
+        } else {
+            self
         }
     }
 
@@ -2731,10 +2790,26 @@ impl<'a> InfoBuilder<'a> {
         }
     }
 
+    pub fn debug_if_some(self, debug: Option<&'a str>) -> Self {
+        if let Some(debug) = debug {
+            self.debug(debug)
+        } else {
+            self
+        }
+    }
+
     pub fn details(self, details: Structure) -> Self {
         Self {
             details: Some(details),
             ..self
+        }
+    }
+
+    pub fn details_if_some(self, details: Option<Structure>) -> Self {
+        if let Some(details) = details {
+            self.details(details)
+        } else {
+            self
         }
     }
 
@@ -3026,6 +3101,14 @@ impl<'a> StreamStatusBuilder<'a> {
         Self {
             status_object: Some(status_object.to_send_value()),
             ..self
+        }
+    }
+
+    pub fn status_object_if_some(self, status_object: Option<impl ToSendValue>) -> Self {
+        if let Some(status_object) = status_object {
+            self.status_object(status_object)
+        } else {
+            self
         }
     }
 
@@ -3444,6 +3527,14 @@ impl<'a> StreamStartBuilder<'a> {
         }
     }
 
+    pub fn group_id_if_some(self, group_id: Option<GroupId>) -> Self {
+        if let Some(group_id) = group_id {
+            self.group_id(group_id)
+        } else {
+            self
+        }
+    }
+
     message_builder_generic_impl!(|s: &mut Self, src| {
         let msg = ffi::gst_message_new_stream_start(src);
         if let Some(group_id) = s.group_id {
@@ -3561,6 +3652,14 @@ impl<'a> PropertyNotifyBuilder<'a> {
         }
     }
 
+    pub fn value_if_some(self, value: Option<impl ToSendValue>) -> Self {
+        if let Some(value) = value {
+            self.value(value)
+        } else {
+            self
+        }
+    }
+
     message_builder_generic_impl!(|s: &mut Self, src| {
         let v = s.value.take();
         ffi::gst_message_new_property_notify(
@@ -3623,6 +3722,17 @@ impl<'a> StreamsSelectedBuilder<'a> {
         }
     }
 
+    pub fn streams_if_some(
+        self,
+        streams: Option<impl IntoIterator<Item = impl std::borrow::Borrow<crate::Stream>>>,
+    ) -> Self {
+        if let Some(streams) = streams {
+            self.streams(streams)
+        } else {
+            self
+        }
+    }
+
     message_builder_generic_impl!(|s: &mut Self, src| {
         let msg = ffi::gst_message_new_streams_selected(src, s.collection.to_glib_none().0);
         if let Some(ref streams) = s.streams {
@@ -3663,10 +3773,26 @@ impl<'a> RedirectBuilder<'a> {
         }
     }
 
+    pub fn tag_list_if_some(self, tag_list: Option<&'a TagList>) -> Self {
+        if let Some(tag_list) = tag_list {
+            self.tag_list(tag_list)
+        } else {
+            self
+        }
+    }
+
     pub fn entry_struct(self, entry_struct: Structure) -> Self {
         Self {
             entry_struct: Some(entry_struct),
             ..self
+        }
+    }
+
+    pub fn entry_struct_if_some(self, entry_struct: Option<Structure>) -> Self {
+        if let Some(entry_struct) = entry_struct {
+            self.entry_struct(entry_struct)
+        } else {
+            self
         }
     }
 
@@ -3678,6 +3804,18 @@ impl<'a> RedirectBuilder<'a> {
         Self {
             entries: Some(entries),
             ..self
+        }
+    }
+
+    #[allow(clippy::type_complexity)]
+    pub fn entries_if_some(
+        self,
+        entries: Option<&'a [(&'a str, Option<&'a TagList>, Option<&'a Structure>)]>,
+    ) -> Self {
+        if let Some(entries) = entries {
+            self.entries(entries)
+        } else {
+            self
         }
     }
 

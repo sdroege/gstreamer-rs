@@ -115,6 +115,15 @@ impl StreamCollectionBuilder {
         self
     }
 
+    #[doc(alias = "gst_stream_collection_add_stream")]
+    pub fn stream_if_some(self, stream: Option<Stream>) -> Self {
+        if let Some(stream) = stream {
+            self.stream(stream)
+        } else {
+            self
+        }
+    }
+
     pub fn streams(self, streams: impl IntoIterator<Item = Stream>) -> Self {
         for stream in streams.into_iter() {
             unsafe {
@@ -126,6 +135,14 @@ impl StreamCollectionBuilder {
         }
 
         self
+    }
+
+    pub fn streams_if_some(self, streams: Option<impl IntoIterator<Item = Stream>>) -> Self {
+        if let Some(streams) = streams {
+            self.streams(streams)
+        } else {
+            self
+        }
     }
 
     #[must_use = "Building the stream collection without using it has no effect"]

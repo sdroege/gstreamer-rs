@@ -20,6 +20,15 @@ macro_rules! message_builder_generic_impl {
             }
         }
 
+        #[allow(clippy::needless_update)]
+        pub fn src_if_some<O: IsA<Object> + Cast + Clone>(self, src: Option<&O>) -> Self {
+            if let Some(src) = src {
+                self.src(src)
+            } else {
+                self
+            }
+        }
+
         #[doc(alias = "gst_message_set_seqnum")]
         #[allow(clippy::needless_update)]
         pub fn seqnum(self, seqnum: Seqnum) -> Self {
@@ -29,10 +38,28 @@ macro_rules! message_builder_generic_impl {
             }
         }
 
+        #[doc(alias = "gst_message_set_seqnum")]
+        #[allow(clippy::needless_update)]
+        pub fn seqnum_if_some(self, seqnum: Option<Seqnum>) -> Self {
+            if let Some(seqnum) = seqnum {
+                self.seqnum(seqnum)
+            } else {
+                self
+            }
+        }
+
         pub fn other_field(self, name: &'a str, value: impl ToSendValue) -> Self {
             Self {
                 builder: self.builder.other_field(name, value),
                 ..self
+            }
+        }
+
+        pub fn other_field_if_some(self, name: &'a str, value: Option<impl ToSendValue>) -> Self {
+            if let Some(value) = value {
+                self.other_field(name, value)
+            } else {
+                self
             }
         }
 

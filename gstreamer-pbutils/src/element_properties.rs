@@ -145,9 +145,28 @@ impl ElementPropertiesGeneralBuilder {
         self
     }
 
+    pub fn field_if_some<T>(self, property_name: &str, value: Option<T>) -> Self
+    where
+        T: Into<glib::Value> + Send,
+    {
+        if let Some(value) = value {
+            self.field(property_name, value)
+        } else {
+            self
+        }
+    }
+
     pub fn field_value(mut self, property_name: &str, value: glib::SendValue) -> Self {
         self.structure.set_value(property_name, value);
         self
+    }
+
+    pub fn field_value_if_some(self, property_name: &str, value: Option<glib::SendValue>) -> Self {
+        if let Some(value) = value {
+            self.field_value(property_name, value)
+        } else {
+            self
+        }
     }
 
     pub fn build(self) -> ElementProperties {
@@ -165,6 +184,14 @@ impl ElementPropertiesMapBuilder {
     pub fn item(mut self, item: ElementPropertiesMapItem) -> Self {
         self.map.push(item.into_inner().to_send_value());
         self
+    }
+
+    pub fn item_if_some(self, item: Option<ElementPropertiesMapItem>) -> Self {
+        if let Some(item) = item {
+            self.item(item)
+        } else {
+            self
+        }
     }
 
     pub fn build(self) -> ElementProperties {
@@ -252,9 +279,28 @@ impl ElementPropertiesMapItemBuilder {
         self
     }
 
+    pub fn field_if_some<T>(self, property_name: &str, value: Option<T>) -> Self
+    where
+        T: Into<glib::Value> + Send,
+    {
+        if let Some(value) = value {
+            self.field(property_name, value)
+        } else {
+            self
+        }
+    }
+
     pub fn field_value(mut self, property_name: &str, value: glib::SendValue) -> Self {
         self.structure.set_value(property_name, value);
         self
+    }
+
+    pub fn field_value_if_some(self, property_name: &str, value: Option<glib::SendValue>) -> Self {
+        if let Some(value) = value {
+            self.field_value(property_name, value)
+        } else {
+            self
+        }
     }
 
     pub fn build(self) -> ElementPropertiesMapItem {

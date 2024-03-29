@@ -499,6 +499,17 @@ impl StructureRef {
         self.set_value(name, value);
     }
 
+    #[doc(alias = "gst_structure_set")]
+    pub fn set_if_some(
+        &mut self,
+        name: impl IntoGStr,
+        value: Option<impl Into<glib::Value> + Send>,
+    ) {
+        if let Some(value) = value {
+            self.set(name, value);
+        }
+    }
+
     #[doc(alias = "gst_structure_set_value")]
     pub fn set_value(&mut self, name: impl IntoGStr, value: SendValue) {
         unsafe {
@@ -508,16 +519,41 @@ impl StructureRef {
         }
     }
 
+    #[doc(alias = "gst_structure_set_value")]
+    pub fn set_value_if_some(&mut self, name: impl IntoGStr, value: Option<SendValue>) {
+        if let Some(value) = value {
+            self.set_value(name, value);
+        }
+    }
+
     #[doc(alias = "gst_structure_id_set")]
     pub fn set_by_quark(&mut self, name: glib::Quark, value: impl Into<glib::Value> + Send) {
         let value = glib::SendValue::from_owned(value);
         self.set_value_by_quark(name, value);
     }
 
+    #[doc(alias = "gst_structure_id_set")]
+    pub fn set_by_quark_if_some(
+        &mut self,
+        name: glib::Quark,
+        value: Option<impl Into<glib::Value> + Send>,
+    ) {
+        if let Some(value) = value {
+            self.set_by_quark(name, value);
+        }
+    }
+
     #[doc(alias = "gst_structure_id_set_value")]
     pub fn set_value_by_quark(&mut self, name: glib::Quark, value: SendValue) {
         unsafe {
             ffi::gst_structure_id_take_value(&mut self.0, name.into_glib(), &mut value.into_raw());
+        }
+    }
+
+    #[doc(alias = "gst_structure_id_set_value")]
+    pub fn set_value_by_quark_if_some(&mut self, name: glib::Quark, value: Option<SendValue>) {
+        if let Some(value) = value {
+            self.set_value_by_quark(name, value);
         }
     }
 
@@ -536,6 +572,13 @@ impl StructureRef {
     pub fn set_name(&mut self, name: impl IntoGStr) {
         unsafe {
             name.run_with_gstr(|name| ffi::gst_structure_set_name(&mut self.0, name.as_ptr()))
+        }
+    }
+
+    #[doc(alias = "gst_structure_set_name")]
+    pub fn set_name_if_some(&mut self, name: Option<impl IntoGStr>) {
+        if let Some(name) = name {
+            self.set_name(name);
         }
     }
 
@@ -1121,6 +1164,18 @@ impl Builder {
         self
     }
 
+    pub fn field_if_some(
+        self,
+        name: impl IntoGStr,
+        value: Option<impl Into<glib::Value> + Send>,
+    ) -> Self {
+        if let Some(value) = value {
+            self.field(name, value)
+        } else {
+            self
+        }
+    }
+
     #[must_use = "Building the structure without using it has no effect"]
     pub fn build(self) -> Structure {
         self.s
@@ -1143,6 +1198,7 @@ mod tests {
         s.set("f1", "abc");
         s.set("f2", &String::from("bcd"));
         s.set("f3", 123i32);
+        s.set("f5", Some("efg"));
 
         assert_eq!(s.get::<&str>("f1"), Ok("abc"));
         assert_eq!(s.get::<Option<&str>>("f2"), Ok(Some("bcd")));
@@ -1151,6 +1207,7 @@ mod tests {
         assert_eq!(s.get_optional::<&str>("f4"), Ok(None));
         assert_eq!(s.get_optional::<i32>("f3"), Ok(Some(123i32)));
         assert_eq!(s.get_optional::<i32>("f4"), Ok(None));
+        assert_eq!(s.get::<&str>("f5"), Ok("efg"));
 
         assert_eq!(
             s.get::<i32>("f2"),
@@ -1172,23 +1229,38 @@ mod tests {
         );
         assert_eq!(s.get::<i32>("f4"), Err(GetError::new_field_not_found("f4")));
 
-        assert_eq!(s.fields().collect::<Vec<_>>(), vec!["f1", "f2", "f3"]);
+        assert_eq!(s.fields().collect::<Vec<_>>(), vec!["f1", "f2", "f3", "f5"]);
 
         let v = s.iter().map(|(f, v)| (f, v.clone())).collect::<Vec<_>>();
-        assert_eq!(v.len(), 3);
+        assert_eq!(v.len(), 4);
         assert_eq!(v[0].0, "f1");
         assert_eq!(v[0].1.get::<&str>(), Ok("abc"));
         assert_eq!(v[1].0, "f2");
         assert_eq!(v[1].1.get::<&str>(), Ok("bcd"));
         assert_eq!(v[2].0, "f3");
         assert_eq!(v[2].1.get::<i32>(), Ok(123i32));
+        assert_eq!(v[3].0, "f5");
+        assert_eq!(v[3].1.get::<&str>(), Ok("efg"));
 
         let s2 = Structure::builder("test")
             .field("f1", "abc")
             .field("f2", String::from("bcd"))
             .field("f3", 123i32)
+            .field_if_some("f4", Option::<i32>::None)
+            .field_if_some("f5", Some("efg"))
+            .field_if_some("f6", Option::<&str>::None)
             .build();
         assert_eq!(s, s2);
+
+        let mut s3 = Structure::new_empty("test");
+
+        s3.set_if_some("f1", Some("abc"));
+        s3.set_if_some("f2", Some(String::from("bcd")));
+        s3.set_if_some("f3", Some(123i32));
+        s3.set_if_some("f4", Option::<i32>::None);
+        s3.set_if_some("f5", Some("efg"));
+        s3.set_if_some("f6", Option::<&str>::None);
+        assert_eq!(s, s3);
     }
 
     #[test]

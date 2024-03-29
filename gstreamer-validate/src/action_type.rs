@@ -77,9 +77,17 @@ impl<'a> ActionParameterBuilder<'a> {
     /// parameter. For example for the start value of a seek action, we will
     /// accept to take 'duration' which will be replace by the total duration of
     /// the stream on which the action is executed.
-    pub fn add_possible_variable(mut self, possible_variables: &str) -> Self {
-        self.possible_variables.push(possible_variables.to_owned());
+    pub fn add_possible_variable(mut self, possible_variable: &str) -> Self {
+        self.possible_variables.push(possible_variable.to_owned());
         self
+    }
+
+    pub fn add_possible_variable_if_some(self, possible_variable: Option<&str>) -> Self {
+        if let Some(possible_variable) = possible_variable {
+            self.add_possible_variable(possible_variable)
+        } else {
+            self
+        }
     }
 
     pub fn mandatory(mut self) -> Self {
@@ -92,6 +100,14 @@ impl<'a> ActionParameterBuilder<'a> {
         self
     }
 
+    pub fn default_value_if_some(self, default_value: Option<&'a str>) -> Self {
+        if let Some(default_value) = default_value {
+            self.default_value(default_value)
+        } else {
+            self
+        }
+    }
+
     // rustdoc-stripper-ignore-next
     /// The types the parameter can take described as a string.
     ///
@@ -101,6 +117,14 @@ impl<'a> ActionParameterBuilder<'a> {
     pub fn add_type(mut self, types: &str) -> Self {
         self.types.push(types.to_owned());
         self
+    }
+
+    pub fn add_type_if_some(self, types: Option<&str>) -> Self {
+        if let Some(types) = types {
+            self.add_type(types)
+        } else {
+            self
+        }
     }
 
     pub fn build(self) -> ActionParameter {
@@ -173,9 +197,25 @@ impl<'a> ActionTypeBuilder<'a> {
         self
     }
 
+    pub fn implementer_namespace_if_some(self, implementer_namespace: Option<&'a str>) -> Self {
+        if let Some(implementer_namespace) = implementer_namespace {
+            self.implementer_namespace(implementer_namespace)
+        } else {
+            self
+        }
+    }
+
     pub fn description(mut self, description: &'a str) -> Self {
         self.description = Some(description);
         self
+    }
+
+    pub fn description_if_some(self, description: Option<&'a str>) -> Self {
+        if let Some(description) = description {
+            self.description(description)
+        } else {
+            self
+        }
     }
 
     pub fn parameter(mut self, parameter: ActionParameter) -> Self {
@@ -183,9 +223,25 @@ impl<'a> ActionTypeBuilder<'a> {
         self
     }
 
+    pub fn parameter_if_some(self, parameter: Option<ActionParameter>) -> Self {
+        if let Some(parameter) = parameter {
+            self.parameter(parameter)
+        } else {
+            self
+        }
+    }
+
     pub fn flags(mut self, flags: crate::ActionTypeFlags) -> Self {
         self.flags |= flags;
         self
+    }
+
+    pub fn flags_if_some(self, flags: Option<crate::ActionTypeFlags>) -> Self {
+        if let Some(flags) = flags {
+            self.flags(flags)
+        } else {
+            self
+        }
     }
 
     pub fn build(self) -> crate::ActionType {

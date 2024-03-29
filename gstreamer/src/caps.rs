@@ -1013,6 +1013,18 @@ impl<T> Builder<T> {
         self
     }
 
+    pub fn field_if_some(
+        self,
+        name: impl IntoGStr,
+        value: Option<impl Into<glib::Value> + Send>,
+    ) -> Self {
+        if let Some(value) = value {
+            self.field(name, value)
+        } else {
+            self
+        }
+    }
+
     #[must_use = "Building the caps without using them has no effect"]
     pub fn build(self) -> Caps {
         let mut caps = Caps::new_empty();
@@ -1070,8 +1082,28 @@ impl BuilderFull<SomeFeatures> {
         self.append_structure(structure, Some(features))
     }
 
+    pub fn structure_with_features_if_some(
+        self,
+        structure: Option<Structure>,
+        features: CapsFeatures,
+    ) -> Self {
+        if let Some(structure) = structure {
+            self.structure_with_features(structure, features)
+        } else {
+            self
+        }
+    }
+
     pub fn structure_with_any_features(self, structure: Structure) -> Self {
         self.append_structure(structure, Some(CapsFeatures::new_any()))
+    }
+
+    pub fn structure_with_any_features_if_some(self, structure: Option<Structure>) -> Self {
+        if let Some(structure) = structure {
+            self.structure_with_any_features(structure)
+        } else {
+            self
+        }
     }
 }
 
@@ -1112,6 +1144,14 @@ impl<T> BuilderFull<T> {
 
     pub fn structure(self, structure: Structure) -> Self {
         self.append_structure(structure, None)
+    }
+
+    pub fn structure_if_some(self, structure: Option<Structure>) -> Self {
+        if let Some(structure) = structure {
+            self.structure(structure)
+        } else {
+            self
+        }
     }
 
     #[must_use = "Building the caps without using them has no effect"]
@@ -1166,6 +1206,17 @@ mod tests {
             .features(["foo:bla", "foo:baz"])
             .build();
         assert_eq!(caps.to_string(), "foo/bar(foo:bla, foo:baz), int=(int)12");
+
+        let caps = Caps::builder("foo/bar")
+            .field_if_some("int0", Option::<i32>::None)
+            .field_if_some("int1", Some(12))
+            .field_if_some("string0", Option::<String>::None)
+            .field_if_some("string1", Some("bla"))
+            .build();
+        assert_eq!(
+            caps.to_string(),
+            "foo/bar, int1=(int)12, string1=(string)bla"
+        );
     }
 
     #[test]
@@ -1210,6 +1261,37 @@ mod tests {
             caps.to_string(),
             "audio/x-raw(ANY); video/x-raw(foo:bla, foo:baz)"
         );
+
+        let caps = Caps::builder_full()
+            .structure_if_some(Option::<Structure>::None)
+            .build();
+        assert!(caps.is_empty());
+
+        let caps = Caps::builder_full()
+            .structure_if_some(Some(Structure::builder("audio/x-raw").build()))
+            .build();
+        assert_eq!(caps.to_string(), "audio/x-raw");
+
+        let caps = Caps::builder_full()
+            .structure_with_any_features_if_some(Some(Structure::builder("audio/x-raw").build()))
+            .structure_with_features_if_some(
+                Some(Structure::builder("video/x-raw").build()),
+                CapsFeatures::new(["foo:bla", "foo:baz"]),
+            )
+            .build();
+        assert_eq!(
+            caps.to_string(),
+            "audio/x-raw(ANY); video/x-raw(foo:bla, foo:baz)"
+        );
+
+        let caps = Caps::builder_full()
+            .structure_with_any_features_if_some(Option::<Structure>::None)
+            .structure_with_features_if_some(
+                Option::<Structure>::None,
+                CapsFeatures::new(["foo:bla", "foo:baz"]),
+            )
+            .build();
+        assert!(caps.is_empty());
     }
 
     #[test]

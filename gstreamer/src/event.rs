@@ -2098,6 +2098,16 @@ macro_rules! event_builder_generic_impl {
             }
         }
 
+        #[doc(alias = "gst_event_set_seqnum")]
+        #[allow(clippy::needless_update)]
+        pub fn seqnum_if_some(self, seqnum: Option<Seqnum>) -> Self {
+            if let Some(seqnum) = seqnum {
+                self.seqnum(seqnum)
+            } else {
+                self
+            }
+        }
+
         #[doc(alias = "gst_event_set_running_time_offset")]
         #[allow(clippy::needless_update)]
         pub fn running_time_offset(self, running_time_offset: i64) -> Self {
@@ -2107,11 +2117,30 @@ macro_rules! event_builder_generic_impl {
             }
         }
 
+        #[doc(alias = "gst_event_set_running_time_offset")]
+        #[allow(clippy::needless_update)]
+        pub fn running_time_offset_if_some(self, running_time_offset: Option<i64>) -> Self {
+            if let Some(running_time_offset) = running_time_offset {
+                self.running_time_offset(running_time_offset)
+            } else {
+                self
+            }
+        }
+
         #[allow(clippy::needless_update)]
         pub fn other_field(self, name: &'a str, value: impl ToSendValue) -> Self {
             Self {
                 builder: self.builder.other_field(name, value),
                 ..self
+            }
+        }
+
+        #[allow(clippy::needless_update)]
+        pub fn other_field_if_some(self, name: &'a str, value: Option<impl ToSendValue>) -> Self {
+            if let Some(value) = value {
+                self.other_field(name, value)
+            } else {
+                self
             }
         }
 
@@ -2219,6 +2248,14 @@ impl<'a> StreamStartBuilder<'a> {
         }
     }
 
+    pub fn flags_if_some(self, flags: Option<crate::StreamFlags>) -> Self {
+        if let Some(flags) = flags {
+            self.flags(flags)
+        } else {
+            self
+        }
+    }
+
     pub fn group_id(self, group_id: GroupId) -> Self {
         Self {
             group_id: Some(group_id),
@@ -2226,10 +2263,26 @@ impl<'a> StreamStartBuilder<'a> {
         }
     }
 
+    pub fn group_id_if_some(self, group_id: Option<GroupId>) -> Self {
+        if let Some(group_id) = group_id {
+            self.group_id(group_id)
+        } else {
+            self
+        }
+    }
+
     pub fn stream(self, stream: crate::Stream) -> Self {
         Self {
             stream: Some(stream),
             ..self
+        }
+    }
+
+    pub fn stream_if_some(self, stream: Option<crate::Stream>) -> Self {
+        if let Some(stream) = stream {
+            self.stream(stream)
+        } else {
+            self
         }
     }
 
@@ -2501,6 +2554,14 @@ impl<'a> ProtectionBuilder<'a> {
         }
     }
 
+    pub fn origin_if_some(self, origin: Option<&'a str>) -> Self {
+        if let Some(origin) = origin {
+            self.origin(origin)
+        } else {
+            self
+        }
+    }
+
     event_builder_generic_impl!(|s: &Self| {
         ffi::gst_event_new_protection(
             s.system_id.to_glib_none().0,
@@ -2556,6 +2617,16 @@ impl<'a> GapBuilder<'a> {
     pub fn gap_flags(mut self, flags: crate::GapFlags) -> Self {
         self.gap_flags = Some(flags);
         self
+    }
+
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
+    pub fn gap_flags_if_some(self, flags: Option<crate::GapFlags>) -> Self {
+        if let Some(flags) = flags {
+            self.gap_flags(flags)
+        } else {
+            self
+        }
     }
 
     pub fn duration(mut self, duration: impl Into<Option<ClockTime>>) -> Self {

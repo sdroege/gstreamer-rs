@@ -19,10 +19,26 @@ macro_rules! event_builder_generic_impl {
             }
         }
 
+        pub fn seqnum_if_some(self, seqnum: Option<gst::Seqnum>) -> Self {
+            if let Some(seqnum) = seqnum {
+                self.seqnum(seqnum)
+            } else {
+                self
+            }
+        }
+
         pub fn running_time_offset(self, running_time_offset: i64) -> Self {
             Self {
                 running_time_offset: Some(running_time_offset),
                 ..self
+            }
+        }
+
+        pub fn running_time_offset_if_some(self, running_time_offset: Option<i64>) -> Self {
+            if let Some(running_time_offset) = running_time_offset {
+                self.running_time_offset(running_time_offset)
+            } else {
+                self
             }
         }
 
@@ -33,6 +49,14 @@ macro_rules! event_builder_generic_impl {
             Self {
                 other_fields,
                 ..self
+            }
+        }
+
+        pub fn other_field_if_some(self, name: &'a str, value: Option<impl ToSendValue>) -> Self {
+            if let Some(value) = value {
+                self.other_field(name, value)
+            } else {
+                self
             }
         }
 
@@ -135,8 +159,24 @@ impl<'a> DownstreamForceKeyUnitEventBuilder<'a> {
         }
     }
 
+    pub fn all_headers_if_some(self, all_headers: Option<bool>) -> Self {
+        if let Some(all_headers) = all_headers {
+            self.all_headers(all_headers)
+        } else {
+            self
+        }
+    }
+
     pub fn count(self, count: u32) -> Self {
         Self { count, ..self }
+    }
+
+    pub fn count_if_some(self, count: Option<u32>) -> Self {
+        if let Some(count) = count {
+            self.count(count)
+        } else {
+            self
+        }
     }
 
     event_builder_generic_impl!(|s: &mut Self| {
@@ -235,8 +275,24 @@ impl<'a> UpstreamForceKeyUnitEventBuilder<'a> {
         }
     }
 
+    pub fn all_headers_if_some(self, all_headers: Option<bool>) -> Self {
+        if let Some(all_headers) = all_headers {
+            self.all_headers(all_headers)
+        } else {
+            self
+        }
+    }
+
     pub fn count(self, count: u32) -> Self {
         Self { count, ..self }
+    }
+
+    pub fn count_if_some(self, count: Option<u32>) -> Self {
+        if let Some(count) = count {
+            self.count(count)
+        } else {
+            self
+        }
     }
 
     event_builder_generic_impl!(|s: &mut Self| {

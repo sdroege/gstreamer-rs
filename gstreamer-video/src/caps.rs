@@ -72,6 +72,14 @@ impl<T> VideoCapsBuilder<T> {
         }
     }
 
+    pub fn format_if_some(self, format: Option<VideoFormat>) -> Self {
+        if let Some(format) = format {
+            self.format(format)
+        } else {
+            self
+        }
+    }
+
     pub fn format_list(self, formats: impl IntoIterator<Item = VideoFormat>) -> Self {
         Self {
             builder: self.builder.field(
@@ -81,9 +89,28 @@ impl<T> VideoCapsBuilder<T> {
         }
     }
 
+    pub fn format_list_if_some(
+        self,
+        formats: Option<impl IntoIterator<Item = VideoFormat>>,
+    ) -> Self {
+        if let Some(formats) = formats {
+            self.format_list(formats)
+        } else {
+            self
+        }
+    }
+
     pub fn width(self, width: i32) -> Self {
         Self {
             builder: self.builder.field(glib::gstr!("width"), width),
+        }
+    }
+
+    pub fn width_if_some(self, width: Option<i32>) -> Self {
+        if let Some(width) = width {
+            self.width(width)
+        } else {
+            self
         }
     }
 
@@ -95,6 +122,14 @@ impl<T> VideoCapsBuilder<T> {
         }
     }
 
+    pub fn width_range_if_some(self, widths: Option<impl RangeBounds<i32>>) -> Self {
+        if let Some(widths) = widths {
+            self.width_range(widths)
+        } else {
+            self
+        }
+    }
+
     pub fn width_list(self, widths: impl IntoIterator<Item = i32>) -> Self {
         Self {
             builder: self
@@ -103,9 +138,25 @@ impl<T> VideoCapsBuilder<T> {
         }
     }
 
+    pub fn width_list_if_some(self, widths: Option<impl IntoIterator<Item = i32>>) -> Self {
+        if let Some(widths) = widths {
+            self.width_list(widths)
+        } else {
+            self
+        }
+    }
+
     pub fn height(self, height: i32) -> Self {
         Self {
             builder: self.builder.field(glib::gstr!("height"), height),
+        }
+    }
+
+    pub fn height_if_some(self, height: Option<i32>) -> Self {
+        if let Some(height) = height {
+            self.height(height)
+        } else {
+            self
         }
     }
 
@@ -117,6 +168,14 @@ impl<T> VideoCapsBuilder<T> {
         }
     }
 
+    pub fn height_range_if_some(self, heights: Option<impl RangeBounds<i32>>) -> Self {
+        if let Some(heights) = heights {
+            self.height_range(heights)
+        } else {
+            self
+        }
+    }
+
     pub fn height_list(self, heights: impl IntoIterator<Item = i32>) -> Self {
         Self {
             builder: self
@@ -125,9 +184,25 @@ impl<T> VideoCapsBuilder<T> {
         }
     }
 
+    pub fn height_list_if_some(self, heights: Option<impl IntoIterator<Item = i32>>) -> Self {
+        if let Some(heights) = heights {
+            self.height_list(heights)
+        } else {
+            self
+        }
+    }
+
     pub fn framerate(self, framerate: gst::Fraction) -> Self {
         Self {
             builder: self.builder.field(glib::gstr!("framerate"), framerate),
+        }
+    }
+
+    pub fn framerate_if_some(self, framerate: Option<gst::Fraction>) -> Self {
+        if let Some(framerate) = framerate {
+            self.framerate(framerate)
+        } else {
+            self
         }
     }
 
@@ -155,6 +230,17 @@ impl<T> VideoCapsBuilder<T> {
         }
     }
 
+    pub fn framerate_range_if_some(
+        self,
+        framerates: Option<impl RangeBounds<gst::Fraction>>,
+    ) -> Self {
+        if let Some(framerates) = framerates {
+            self.framerate_range(framerates)
+        } else {
+            self
+        }
+    }
+
     pub fn framerate_list(self, framerates: impl IntoIterator<Item = gst::Fraction>) -> Self {
         Self {
             builder: self
@@ -163,9 +249,28 @@ impl<T> VideoCapsBuilder<T> {
         }
     }
 
+    pub fn framerate_list_if_some(
+        self,
+        framerates: Option<impl IntoIterator<Item = gst::Fraction>>,
+    ) -> Self {
+        if let Some(framerates) = framerates {
+            self.framerate_list(framerates)
+        } else {
+            self
+        }
+    }
+
     pub fn pixel_aspect_ratio(self, pixel_aspect_ratio: gst::Fraction) -> Self {
         Self {
             builder: self.builder.field("pixel-aspect-ratio", pixel_aspect_ratio),
+        }
+    }
+
+    pub fn pixel_aspect_ratio_if_some(self, pixel_aspect_ratio: Option<gst::Fraction>) -> Self {
+        if let Some(pixel_aspect_ratio) = pixel_aspect_ratio {
+            self.pixel_aspect_ratio(pixel_aspect_ratio)
+        } else {
+            self
         }
     }
 
@@ -198,6 +303,17 @@ impl<T> VideoCapsBuilder<T> {
         }
     }
 
+    pub fn pixel_aspect_ratio_range_if_some(
+        self,
+        pixel_aspect_ratios: Option<impl RangeBounds<gst::Fraction>>,
+    ) -> Self {
+        if let Some(pixel_aspect_ratios) = pixel_aspect_ratios {
+            self.pixel_aspect_ratio_range(pixel_aspect_ratios)
+        } else {
+            self
+        }
+    }
+
     pub fn pixel_aspect_ratio_list(
         self,
         pixel_aspect_ratios: impl IntoIterator<Item = gst::Fraction>,
@@ -209,9 +325,28 @@ impl<T> VideoCapsBuilder<T> {
         }
     }
 
+    pub fn pixel_aspect_ratio_list_if_some(
+        self,
+        pixel_aspect_ratios: Option<impl IntoIterator<Item = gst::Fraction>>,
+    ) -> Self {
+        if let Some(pixel_aspect_ratios) = pixel_aspect_ratios {
+            self.pixel_aspect_ratio_list(pixel_aspect_ratios)
+        } else {
+            self
+        }
+    }
+
     pub fn field(self, name: &str, value: impl Into<glib::Value> + Send) -> Self {
         Self {
             builder: self.builder.field(name, value),
+        }
+    }
+
+    pub fn field_if_some(self, name: &str, value: Option<impl Into<glib::Value> + Send>) -> Self {
+        if let Some(value) = value {
+            self.field(name, value)
+        } else {
+            self
         }
     }
 

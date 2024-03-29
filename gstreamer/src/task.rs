@@ -22,6 +22,17 @@ impl<F: FnMut(&Task) + Send + 'static> TaskBuilder<F> {
             ..self
         }
     }
+    #[doc(alias = "gst_task_set_enter_callback")]
+    pub fn enter_callback_if_some<E: FnMut(&Task) + Send + 'static>(
+        self,
+        enter_callback: Option<E>,
+    ) -> Self {
+        if let Some(enter_callback) = enter_callback {
+            self.enter_callback(enter_callback)
+        } else {
+            self
+        }
+    }
 
     #[doc(alias = "gst_task_set_leave_callback")]
     pub fn leave_callback<E: FnMut(&Task) + Send + 'static>(self, leave_callback: E) -> Self {
@@ -31,11 +42,32 @@ impl<F: FnMut(&Task) + Send + 'static> TaskBuilder<F> {
         }
     }
 
+    #[doc(alias = "gst_task_set_leave_callback")]
+    pub fn leave_callback_if_some<E: FnMut(&Task) + Send + 'static>(
+        self,
+        leave_callback: Option<E>,
+    ) -> Self {
+        if let Some(leave_callback) = leave_callback {
+            self.leave_callback(leave_callback)
+        } else {
+            self
+        }
+    }
+
     #[doc(alias = "gst_task_set_lock")]
     pub fn lock(self, lock: &TaskLock) -> Self {
         Self {
             lock: Some(lock.clone()),
             ..self
+        }
+    }
+
+    #[doc(alias = "gst_task_set_lock")]
+    pub fn lock_if_some(self, lock: Option<&TaskLock>) -> Self {
+        if let Some(lock) = lock {
+            self.lock(lock)
+        } else {
+            self
         }
     }
 

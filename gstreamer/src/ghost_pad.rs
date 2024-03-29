@@ -244,6 +244,21 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
         self
     }
 
+    #[doc(alias = "gst_pad_set_activate_function")]
+    pub fn proxy_pad_activate_function_if_some<F>(self, func: Option<F>) -> Self
+    where
+        F: Fn(&crate::ProxyPad, Option<&crate::Object>) -> Result<(), LoggableError>
+            + Send
+            + Sync
+            + 'static,
+    {
+        if let Some(func) = func {
+            self.proxy_pad_activate_function(func)
+        } else {
+            self
+        }
+    }
+
     #[doc(alias = "gst_pad_set_activatemode_function")]
     pub fn proxy_pad_activatemode_function<F>(self, func: F) -> Self
     where
@@ -267,6 +282,26 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
         }
 
         self
+    }
+
+    #[doc(alias = "gst_pad_set_activatemode_function")]
+    pub fn proxy_pad_activatemode_function_if_some<F>(self, func: Option<F>) -> Self
+    where
+        F: Fn(
+                &crate::ProxyPad,
+                Option<&crate::Object>,
+                crate::PadMode,
+                bool,
+            ) -> Result<(), LoggableError>
+            + Send
+            + Sync
+            + 'static,
+    {
+        if let Some(func) = func {
+            self.proxy_pad_activatemode_function(func)
+        } else {
+            self
+        }
     }
 
     #[doc(alias = "gst_pad_set_chain_function")]
@@ -293,6 +328,25 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
         self
     }
 
+    #[doc(alias = "gst_pad_set_chain_function")]
+    pub fn proxy_pad_chain_function_if_some<F>(self, func: Option<F>) -> Self
+    where
+        F: Fn(
+                &crate::ProxyPad,
+                Option<&crate::Object>,
+                crate::Buffer,
+            ) -> Result<FlowSuccess, FlowError>
+            + Send
+            + Sync
+            + 'static,
+    {
+        if let Some(func) = func {
+            self.proxy_pad_chain_function(func)
+        } else {
+            self
+        }
+    }
+
     #[doc(alias = "gst_pad_set_chain_list_function")]
     pub fn proxy_pad_chain_list_function<F>(self, func: F) -> Self
     where
@@ -317,6 +371,25 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
         self
     }
 
+    #[doc(alias = "gst_pad_set_chain_list_function")]
+    pub fn proxy_pad_chain_list_function_if_some<F>(self, func: Option<F>) -> Self
+    where
+        F: Fn(
+                &crate::ProxyPad,
+                Option<&crate::Object>,
+                crate::BufferList,
+            ) -> Result<FlowSuccess, FlowError>
+            + Send
+            + Sync
+            + 'static,
+    {
+        if let Some(func) = func {
+            self.proxy_pad_chain_list_function(func)
+        } else {
+            self
+        }
+    }
+
     #[doc(alias = "gst_pad_set_event_function")]
     pub fn proxy_pad_event_function<F>(self, func: F) -> Self
     where
@@ -335,6 +408,21 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
         }
 
         self
+    }
+
+    #[doc(alias = "gst_pad_set_event_function")]
+    pub fn proxy_pad_event_function_if_some<F>(self, func: Option<F>) -> Self
+    where
+        F: Fn(&crate::ProxyPad, Option<&crate::Object>, crate::Event) -> bool
+            + Send
+            + Sync
+            + 'static,
+    {
+        if let Some(func) = func {
+            self.proxy_pad_event_function(func)
+        } else {
+            self
+        }
     }
 
     #[doc(alias = "gst_pad_set_event_full_function")]
@@ -359,6 +447,25 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
         }
 
         self
+    }
+
+    #[doc(alias = "gst_pad_set_event_full_function")]
+    pub fn proxy_pad_event_full_function_if_some<F>(self, func: Option<F>) -> Self
+    where
+        F: Fn(
+                &crate::ProxyPad,
+                Option<&crate::Object>,
+                crate::Event,
+            ) -> Result<FlowSuccess, FlowError>
+            + Send
+            + Sync
+            + 'static,
+    {
+        if let Some(func) = func {
+            self.proxy_pad_event_full_function(func)
+        } else {
+            self
+        }
     }
 
     #[doc(alias = "gst_pad_set_getrange_function")]
@@ -387,6 +494,27 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
         self
     }
 
+    #[doc(alias = "gst_pad_set_getrange_function")]
+    pub fn proxy_pad_getrange_function_if_some<F>(self, func: Option<F>) -> Self
+    where
+        F: Fn(
+                &crate::ProxyPad,
+                Option<&crate::Object>,
+                u64,
+                Option<&mut crate::BufferRef>,
+                u32,
+            ) -> Result<PadGetRangeSuccess, crate::FlowError>
+            + Send
+            + Sync
+            + 'static,
+    {
+        if let Some(func) = func {
+            self.proxy_pad_getrange_function(func)
+        } else {
+            self
+        }
+    }
+
     #[doc(alias = "gst_pad_set_iterate_internal_links_function")]
     pub fn proxy_pad_iterate_internal_links_function<F>(self, func: F) -> Self
     where
@@ -405,6 +533,21 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
         }
 
         self
+    }
+
+    #[doc(alias = "gst_pad_set_iterate_internal_links_function")]
+    pub fn proxy_pad_iterate_internal_links_function_if_some<F>(self, func: Option<F>) -> Self
+    where
+        F: Fn(&crate::ProxyPad, Option<&crate::Object>) -> crate::Iterator<Pad>
+            + Send
+            + Sync
+            + 'static,
+    {
+        if let Some(func) = func {
+            self.proxy_pad_iterate_internal_links_function(func)
+        } else {
+            self
+        }
     }
 
     #[doc(alias = "gst_pad_set_link_function")]
@@ -431,6 +574,25 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
         self
     }
 
+    #[doc(alias = "gst_pad_set_link_function")]
+    pub fn proxy_pad_link_function_if_some<F>(self, func: Option<F>) -> Self
+    where
+        F: Fn(
+                &crate::ProxyPad,
+                Option<&crate::Object>,
+                &Pad,
+            ) -> Result<crate::PadLinkSuccess, crate::PadLinkError>
+            + Send
+            + Sync
+            + 'static,
+    {
+        if let Some(func) = func {
+            self.proxy_pad_link_function(func)
+        } else {
+            self
+        }
+    }
+
     #[doc(alias = "gst_pad_set_query_function")]
     pub fn proxy_pad_query_function<F>(self, func: F) -> Self
     where
@@ -451,6 +613,21 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
         self
     }
 
+    #[doc(alias = "gst_pad_set_query_function")]
+    pub fn proxy_pad_query_function_if_some<F>(self, func: Option<F>) -> Self
+    where
+        F: Fn(&crate::ProxyPad, Option<&crate::Object>, &mut crate::QueryRef) -> bool
+            + Send
+            + Sync
+            + 'static,
+    {
+        if let Some(func) = func {
+            self.proxy_pad_query_function(func)
+        } else {
+            self
+        }
+    }
+
     #[doc(alias = "gst_pad_set_unlink_function")]
     pub fn proxy_pad_unlink_function<F>(self, func: F) -> Self
     where
@@ -468,6 +645,18 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
         self
     }
 
+    #[doc(alias = "gst_pad_set_unlink_function")]
+    pub fn proxy_pad_unlink_function_if_some<F>(self, func: Option<F>) -> Self
+    where
+        F: Fn(&crate::ProxyPad, Option<&crate::Object>) + Send + Sync + 'static,
+    {
+        if let Some(func) = func {
+            self.proxy_pad_unlink_function(func)
+        } else {
+            self
+        }
+    }
+
     pub fn proxy_pad_flags(self, flags: PadFlags) -> Self {
         unsafe {
             let proxy = self
@@ -479,6 +668,14 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
         }
 
         self
+    }
+
+    pub fn proxy_pad_flags_if_some(self, flags: Option<PadFlags>) -> Self {
+        if let Some(flags) = flags {
+            self.proxy_pad_flags(flags)
+        } else {
+            self
+        }
     }
 
     // rustdoc-stripper-ignore-next

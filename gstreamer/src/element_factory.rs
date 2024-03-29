@@ -213,7 +213,18 @@ impl<'a> ElementBuilder<'a> {
     }
 
     // rustdoc-stripper-ignore-next
-    /// Set property `name` to the given value `value`.
+    /// Sets the name property to the given `name` if it is `Some`.
+    #[inline]
+    pub fn name_if_some(self, name: Option<impl Into<glib::GString>>) -> Self {
+        if let Some(name) = name {
+            self.name(name)
+        } else {
+            self
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Sets property `name` to the given value `value`.
     #[inline]
     pub fn property(self, name: &'a str, value: impl Into<glib::Value> + 'a) -> Self {
         Self {
@@ -223,6 +234,21 @@ impl<'a> ElementBuilder<'a> {
                 properties.push((name, ValueOrStr::Value(value.into())));
                 properties
             },
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Sets property `name` to the given value `value` if it is `Some`.
+    #[inline]
+    pub fn property_if_some(
+        self,
+        name: &'a str,
+        value: Option<impl Into<glib::Value> + 'a>,
+    ) -> Self {
+        if let Some(value) = value {
+            self.property(name, value)
+        } else {
+            self
         }
     }
 
@@ -237,6 +263,17 @@ impl<'a> ElementBuilder<'a> {
                 properties.push((name, ValueOrStr::Str(value)));
                 properties
             },
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Set property `name` to the given string value `value` if it is `Some`.
+    #[inline]
+    pub fn property_from_str_if_some(self, name: &'a str, value: Option<&'a str>) -> Self {
+        if let Some(value) = value {
+            self.property_from_str(name, value)
+        } else {
+            self
         }
     }
 

@@ -32,11 +32,27 @@ impl<'a> SampleBuilder<'a> {
         }
     }
 
+    pub fn buffer_if_some(self, buffer: Option<&'a Buffer>) -> Self {
+        if let Some(buffer) = buffer {
+            self.buffer(buffer)
+        } else {
+            self
+        }
+    }
+
     pub fn buffer_list(self, buffer_list: &'a BufferList) -> Self {
         Self {
             buffer: None,
             buffer_list: Some(buffer_list),
             ..self
+        }
+    }
+
+    pub fn buffer_list_if_some(self, buffer_list: Option<&'a BufferList>) -> Self {
+        if let Some(buffer_list) = buffer_list {
+            self.buffer_list(buffer_list)
+        } else {
+            self
         }
     }
 
@@ -47,6 +63,14 @@ impl<'a> SampleBuilder<'a> {
         }
     }
 
+    pub fn caps_if_some(self, caps: Option<&'a Caps>) -> Self {
+        if let Some(caps) = caps {
+            self.caps(caps)
+        } else {
+            self
+        }
+    }
+
     pub fn segment<F: FormattedValueIntrinsic>(self, segment: &'a FormattedSegment<F>) -> Self {
         Self {
             segment: Some(segment.upcast_ref()),
@@ -54,10 +78,29 @@ impl<'a> SampleBuilder<'a> {
         }
     }
 
+    pub fn segment_if_some<F: FormattedValueIntrinsic>(
+        self,
+        segment: Option<&'a FormattedSegment<F>>,
+    ) -> Self {
+        if let Some(segment) = segment {
+            self.segment(segment)
+        } else {
+            self
+        }
+    }
+
     pub fn info(self, info: Structure) -> Self {
         Self {
             info: Some(info),
             ..self
+        }
+    }
+
+    pub fn info_if_some(self, info: Option<Structure>) -> Self {
+        if let Some(info) = info {
+            self.info(info)
+        } else {
+            self
         }
     }
 

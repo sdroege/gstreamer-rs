@@ -107,6 +107,18 @@ impl Builder {
         self
     }
 
+    pub fn field_if_some(
+        self,
+        name: impl IntoGStr,
+        value: Option<impl Into<glib::Value> + Send>,
+    ) -> Self {
+        if let Some(value) = value {
+            self.field(name, value)
+        } else {
+            self
+        }
+    }
+
     #[must_use = "Building the structure without using it has no effect"]
     pub fn build(self) -> RTSPToken {
         self.token
