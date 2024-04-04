@@ -141,6 +141,7 @@ trigger:
       libpango1.0-dev libcairo2-dev libjson-glib-dev libgdk-pixbuf-2.0-dev
       libtiff-dev libpng-dev libjpeg-dev libepoxy-dev libsass-dev sassc
       libcsound64-dev llvm clang nasm libsodium-dev libwebp-dev
+      libflac-dev
     FDO_DISTRIBUTION_EXEC: >-
       bash ci/install-gst.sh &&
       bash ci/install-dav1d.sh &&
