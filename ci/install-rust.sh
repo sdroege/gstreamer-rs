@@ -28,7 +28,7 @@ if [ "$RUST_IMAGE_FULL" = "1" ]; then
 
   cargo install --locked --force cargo-deny
   cargo install --locked --force cargo-outdated
-  cargo install --locked --force typos-cli
+  cargo install --locked --force typos-cli --version "1.19.0"
 
   # Coverage tools
   rustup component add llvm-tools-preview
