@@ -13,6 +13,8 @@ extend-ignore-identifiers-re = [
     # gst_rtsp_media_factory_is_stop_on_disonnect
     ".*is_stop_on_disonnect",
     "ser_de", # gstreamer/CHANGELOG.md
+    # FFMpeg prefixes
+    "anc", "Anc"
 ]
 
 [files]
@@ -29,4 +31,5 @@ extend-exclude = [
     # can't fix typos in generated code as the typo is likely in the C API
     "*/src/auto/*.rs",
     "*/sys/src/lib.rs",
+    "*/sys/tests/*",
 ]
