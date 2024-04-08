@@ -107,7 +107,7 @@ members = [
 exclude = ["gir"]
 
 [workspace.package]
-version = "0.22.3"
+version = "0.22.4"
 categories = ["api-bindings", "multimedia"]
 repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs"
 homepage = "https://gstreamer.freedesktop.org"
