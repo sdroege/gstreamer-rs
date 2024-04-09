@@ -2,7 +2,7 @@
 
 use std::fmt;
 
-use glib::{translate::*, value::ToSendValue};
+use glib::{translate::*, SendValue};
 
 gst::mini_object_wrapper!(RTSPToken, RTSPTokenRef, ffi::GstRTSPToken, || {
     ffi::gst_rtsp_token_get_type()
@@ -15,18 +15,19 @@ impl RTSPToken {
         unsafe { from_glib_full(ffi::gst_rtsp_token_new_empty()) }
     }
 
-    pub fn new(values: &[(&str, &(dyn ToSendValue + Sync))]) -> Self {
+    #[doc(alias = "gst_rtsp_token_new")]
+    pub fn builder() -> Builder {
+        skip_assert_initialized!();
+        Builder::new()
+    }
+
+    #[allow(clippy::should_implement_trait)]
+    pub fn from_iter(iter: impl IntoIterator<Item = (impl IntoGStr, SendValue)>) -> RTSPToken {
         skip_assert_initialized!();
         let mut token = RTSPToken::new_empty();
 
-        {
-            let token = token.get_mut().unwrap();
-            let structure = token.structure_mut();
-
-            for &(f, v) in values {
-                structure.set_value(f, v.to_send_value());
-            }
-        }
+        let s = token.get_mut().unwrap().structure_mut();
+        iter.into_iter().for_each(|(f, v)| s.set_value(f, v));
 
         token
     }
@@ -80,5 +81,34 @@ impl fmt::Debug for RTSPTokenRef {
         f.debug_struct("RTSPToken")
             .field("structure", &self.structure())
             .finish()
+    }
+}
+
+#[derive(Debug)]
+#[must_use = "The builder must be built to be used"]
+pub struct Builder {
+    token: RTSPToken,
+}
+
+impl Builder {
+    fn new() -> Self {
+        skip_assert_initialized!();
+        Builder {
+            token: RTSPToken::new_empty(),
+        }
+    }
+
+    pub fn field(mut self, name: impl IntoGStr, value: impl Into<glib::Value> + Send) -> Self {
+        self.token
+            .get_mut()
+            .unwrap()
+            .structure_mut()
+            .set(name, value);
+        self
+    }
+
+    #[must_use = "Building the structure without using it has no effect"]
+    pub fn build(self) -> RTSPToken {
+        self.token
     }
 }

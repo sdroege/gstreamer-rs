@@ -138,7 +138,11 @@ mod auth {
                     if let Some(authorization) = auth_credentials.authorization() {
                         if let Some(user) = self.external_auth(authorization) {
                             // Update context token with authenticated username
-                            ctx.set_token(gst_rtsp_server::RTSPToken::new(&[("user", &user)]));
+                            ctx.set_token(
+                                gst_rtsp_server::RTSPToken::builder()
+                                    .field("user", user)
+                                    .build(),
+                            );
                             return true;
                         }
                     }

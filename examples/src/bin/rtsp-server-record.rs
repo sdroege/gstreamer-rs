@@ -45,10 +45,9 @@ fn main_loop() -> Result<(), Error> {
     // Here we configure a method of authentication that we want the
     // server to require from clients.
     let auth = gst_rtsp_server::RTSPAuth::new();
-    let token = gst_rtsp_server::RTSPToken::new(&[(
-        gst_rtsp_server::RTSP_TOKEN_MEDIA_FACTORY_ROLE,
-        &"user",
-    )]);
+    let token = gst_rtsp_server::RTSPToken::builder()
+        .field(gst_rtsp_server::RTSP_TOKEN_MEDIA_FACTORY_ROLE, "user")
+        .build();
     let basic = gst_rtsp_server::RTSPAuth::make_basic("user", "password");
     // For proper authentication, we want to use encryption. And there's no
     // encryption without a certificate!
