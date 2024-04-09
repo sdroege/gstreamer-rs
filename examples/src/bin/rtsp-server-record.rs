@@ -4,11 +4,10 @@
 // send to the server. For this, the launch syntax pipeline, that is passed
 // to this example's cli is spawned and the client's media is streamed into it.
 
-use std::{env, ptr};
+use std::env;
 
 use anyhow::Error;
 use derive_more::{Display, Error};
-use glib::translate::*;
 use gst_rtsp_server::prelude::*;
 
 #[path = "../examples-common.rs"]
@@ -77,24 +76,14 @@ fn main_loop() -> Result<(), Error> {
          W535W8UBbEg=-----END PRIVATE KEY-----",
     )?;
 
-    // Bindable versions were added in b1f515178a363df0322d7adbd5754e1f6e2083c9
     // This declares that the user "user" (once authenticated) has a role that
     // allows them to access and construct media factories.
-    unsafe {
-        gst_rtsp_server::ffi::gst_rtsp_media_factory_add_role(
-            factory.to_glib_none().0,
-            "user".to_glib_none().0,
-            gst_rtsp_server::RTSP_PERM_MEDIA_FACTORY_ACCESS
-                .to_glib_none()
-                .0,
-            <bool as StaticType>::static_type().into_glib() as *const u8,
-            true.into_glib() as *const u8,
-            gst_rtsp_server::RTSP_PERM_MEDIA_FACTORY_CONSTRUCT.as_ptr() as *const u8,
-            <bool as StaticType>::static_type().into_glib() as *const u8,
-            true.into_glib() as *const u8,
-            ptr::null_mut::<u8>(),
-        );
-    }
+    factory.add_role_from_structure(
+        &gst::Structure::builder("user")
+            .field(gst_rtsp_server::RTSP_PERM_MEDIA_FACTORY_ACCESS, true)
+            .field(gst_rtsp_server::RTSP_PERM_MEDIA_FACTORY_CONSTRUCT, true)
+            .build(),
+    );
 
     auth.set_tls_certificate(Some(&cert));
     auth.add_basic(basic.as_str(), &token);
