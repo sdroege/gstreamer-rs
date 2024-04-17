@@ -2634,6 +2634,14 @@ impl<'a> GapBuilder<'a> {
         self
     }
 
+    pub fn duration_if_some(self, duration: Option<ClockTime>) -> Self {
+        if let Some(duration) = duration {
+            self.duration(duration)
+        } else {
+            self
+        }
+    }
+
     event_builder_generic_impl!(|s: &Self| {
         #[allow(clippy::let_and_return)]
         let ev = ffi::gst_event_new_gap(s.timestamp.into_glib(), s.duration.into_glib());
@@ -2698,6 +2706,14 @@ impl<'a> QosBuilder<'a> {
     pub fn timestamp(mut self, timestamp: impl Into<Option<ClockTime>>) -> Self {
         self.timestamp = timestamp.into();
         self
+    }
+
+    pub fn timestamp_if_some(self, timestamp: Option<ClockTime>) -> Self {
+        if let Some(timestamp) = timestamp {
+            self.timestamp(timestamp)
+        } else {
+            self
+        }
     }
 
     event_builder_generic_impl!(|s: &Self| ffi::gst_event_new_qos(

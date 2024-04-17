@@ -3276,6 +3276,14 @@ impl<'a> AsyncDoneBuilder<'a> {
         self
     }
 
+    pub fn running_time_if_some(self, running_time: Option<crate::ClockTime>) -> Self {
+        if let Some(running_time) = running_time {
+            self.running_time(running_time)
+        } else {
+            self
+        }
+    }
+
     message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_async_done(
         src,
         s.running_time.into_glib()
@@ -3375,9 +3383,25 @@ impl<'a> QosBuilder<'a> {
         self
     }
 
+    pub fn running_time_if_some(self, running_time: Option<crate::ClockTime>) -> Self {
+        if let Some(running_time) = running_time {
+            self.running_time(running_time)
+        } else {
+            self
+        }
+    }
+
     pub fn stream_time(mut self, stream_time: impl Into<Option<crate::ClockTime>>) -> Self {
         self.stream_time = stream_time.into();
         self
+    }
+
+    pub fn stream_time_if_some(self, stream_time: Option<crate::ClockTime>) -> Self {
+        if let Some(stream_time) = stream_time {
+            self.stream_time(stream_time)
+        } else {
+            self
+        }
     }
 
     pub fn timestamp(mut self, timestamp: impl Into<Option<crate::ClockTime>>) -> Self {
@@ -3385,9 +3409,25 @@ impl<'a> QosBuilder<'a> {
         self
     }
 
+    pub fn timestamp_if_some(self, timestamp: Option<crate::ClockTime>) -> Self {
+        if let Some(timestamp) = timestamp {
+            self.timestamp(timestamp)
+        } else {
+            self
+        }
+    }
+
     pub fn duration(mut self, duration: impl Into<Option<crate::ClockTime>>) -> Self {
         self.duration = duration.into();
         self
+    }
+
+    pub fn duration_if_some(self, duration: Option<crate::ClockTime>) -> Self {
+        if let Some(duration) = duration {
+            self.duration(duration)
+        } else {
+            self
+        }
     }
 
     pub fn values(self, jitter: i64, proportion: f64, quality: i32) -> Self {

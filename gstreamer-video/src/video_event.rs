@@ -138,6 +138,14 @@ impl<'a> DownstreamForceKeyUnitEventBuilder<'a> {
         }
     }
 
+    pub fn timestamp_if_some(self, timestamp: Option<gst::ClockTime>) -> Self {
+        if let Some(timestamp) = timestamp {
+            self.timestamp(timestamp)
+        } else {
+            self
+        }
+    }
+
     pub fn stream_time(self, stream_time: impl Into<Option<gst::ClockTime>>) -> Self {
         Self {
             stream_time: stream_time.into(),
@@ -145,10 +153,26 @@ impl<'a> DownstreamForceKeyUnitEventBuilder<'a> {
         }
     }
 
+    pub fn stream_time_if_some(self, stream_time: Option<gst::ClockTime>) -> Self {
+        if let Some(stream_time) = stream_time {
+            self.stream_time(stream_time)
+        } else {
+            self
+        }
+    }
+
     pub fn running_time(self, running_time: impl Into<Option<gst::ClockTime>>) -> Self {
         Self {
             running_time: running_time.into(),
             ..self
+        }
+    }
+
+    pub fn running_time_if_some(self, running_time: Option<gst::ClockTime>) -> Self {
+        if let Some(running_time) = running_time {
+            self.running_time(running_time)
+        } else {
+            self
         }
     }
 
@@ -265,6 +289,14 @@ impl<'a> UpstreamForceKeyUnitEventBuilder<'a> {
         Self {
             running_time: running_time.into(),
             ..self
+        }
+    }
+
+    pub fn running_time_if_some(self, running_time: Option<gst::ClockTime>) -> Self {
+        if let Some(running_time) = running_time {
+            self.running_time(running_time)
+        } else {
+            self
         }
     }
 
