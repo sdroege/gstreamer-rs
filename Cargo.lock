@@ -842,6 +842,7 @@ dependencies = [
  "gstreamer-sys",
  "itertools",
  "libc",
+ "log",
  "muldiv",
  "num-integer",
  "num-rational",

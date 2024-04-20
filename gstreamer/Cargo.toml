@@ -23,6 +23,7 @@ num-rational = { version = "0.4", default-features = false, features = [] }
 futures-core = "0.3"
 futures-channel = "0.3"
 futures-util = { version = "0.3", default-features = false }
+log = { version = "0.4", optional = true }
 muldiv = "1"
 opt-ops = { package = "option-operations", version = "0.5" }
 serde = { version = "1.0", optional = true, features = ["derive"] }
@@ -48,6 +49,7 @@ v1_20 = ["ffi/v1_20", "v1_18"]
 v1_22 = ["ffi/v1_22", "v1_20"]
 v1_24 = ["ffi/v1_24", "v1_22"]
 serde = ["num-rational/serde", "dep:serde", "serde_bytes"]
+log = ["dep:log"]
 
 [package.metadata.docs.rs]
 all-features = true

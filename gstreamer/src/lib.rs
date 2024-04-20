@@ -49,6 +49,8 @@ mod serde_macros;
 
 #[macro_use]
 pub mod log;
+#[cfg(feature = "log")]
+pub use crate::log::DebugCategoryLogger;
 pub use crate::log::{
     DebugCategory, DebugLogFunction, DebugMessage, LoggedObject, CAT_BUFFER, CAT_BUFFER_LIST,
     CAT_BUS, CAT_CALL_TRACE, CAT_CAPS, CAT_CLOCK, CAT_CONTEXT, CAT_DEFAULT, CAT_ELEMENT_PADS,

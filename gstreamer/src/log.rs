@@ -4,6 +4,8 @@ use std::{borrow::Cow, ffi::CStr, fmt, ptr};
 
 use glib::{ffi::gpointer, prelude::*, translate::*};
 use libc::c_char;
+#[cfg(feature = "log")]
+use log;
 use once_cell::sync::Lazy;
 
 use crate::DebugLevel;
@@ -1064,6 +1066,57 @@ macro_rules! log_with_level(
     }};
 );
 
+#[cfg(feature = "log")]
+#[cfg_attr(docsrs, doc(cfg(feature = "log")))]
+#[derive(Debug)]
+pub struct DebugCategoryLogger(DebugCategory);
+
+#[cfg(feature = "log")]
+#[cfg_attr(docsrs, doc(cfg(feature = "log")))]
+impl DebugCategoryLogger {
+    pub fn new(cat: DebugCategory) -> Self {
+        skip_assert_initialized!();
+        Self(cat)
+    }
+
+    fn to_level(level: log::Level) -> crate::DebugLevel {
+        skip_assert_initialized!();
+        match level {
+            log::Level::Error => DebugLevel::Error,
+            log::Level::Warn => DebugLevel::Warning,
+            log::Level::Info => DebugLevel::Info,
+            log::Level::Debug => DebugLevel::Debug,
+            log::Level::Trace => DebugLevel::Trace,
+        }
+    }
+}
+
+#[cfg(feature = "log")]
+#[cfg_attr(docsrs, doc(cfg(feature = "log")))]
+impl log::Log for DebugCategoryLogger {
+    fn enabled(&self, metadata: &log::Metadata) -> bool {
+        self.0.above_threshold(Self::to_level(metadata.level()))
+    }
+
+    fn log(&self, record: &log::Record) {
+        if !self.enabled(record.metadata()) {
+            return;
+        }
+        record.file().unwrap_or("").run_with_gstr(|file| {
+            self.0.log(
+                None::<&glib::Object>,
+                Self::to_level(record.level()),
+                file,
+                record.module_path().unwrap_or(""),
+                record.line().unwrap_or(0),
+                *record.args(),
+            );
+        });
+    }
+
+    fn flush(&self) {}
+}
+
 unsafe extern "C" fn log_handler<T>(
     category: *mut ffi::GstDebugCategory,
     level: ffi::GstDebugLevel,
@@ -1306,6 +1359,65 @@ mod tests {
         log!(cat, obj: obj, "meh");
         trace!(cat, obj: obj, "meh");
         memdump!(cat, obj: obj, "meh");
+    }
+
+    #[cfg(feature = "log")]
+    static LOGGER: Lazy<DebugCategoryLogger> = Lazy::new(|| {
+        DebugCategoryLogger::new(DebugCategory::new(
+            "Log_trait",
+            crate::DebugColorFlags::empty(),
+            Some("Using the Log trait"),
+        ))
+    });
+
+    #[test]
+    #[cfg(feature = "log")]
+    fn log_trait() {
+        crate::init().unwrap();
+
+        log::set_logger(&(*LOGGER)).expect("Failed to set logger");
+        log::set_max_level(log::LevelFilter::Trace);
+        log::error!("meh");
+        log::warn!("fish");
+
+        let (sender, receiver) = mpsc::channel();
+        let sender = Arc::new(Mutex::new(sender));
+        let handler = move |category: DebugCategory,
+                            level: DebugLevel,
+                            _file: &glib::GStr,
+                            _function: &glib::GStr,
+                            _line: u32,
+                            _object: Option<&LoggedObject>,
+                            message: &DebugMessage| {
+            let cat = DebugCategory::get("Log_trait").unwrap();
+
+            if category != cat {
+                // This test can run in parallel with other tests, including new_and_log above.
+                // We cannot be certain we only see our own messages.
+                return;
+            }
+
+            assert_eq!(level, DebugLevel::Error);
+            assert_eq!(message.get().unwrap().as_ref(), "meh");
+            let _ = sender.lock().unwrap().send(());
+        };
+
+        remove_default_log_function();
+        add_log_function(handler);
+
+        let cat = LOGGER.0;
+
+        cat.set_threshold(crate::DebugLevel::Warning);
+        log::error!("meh");
+        receiver.recv().unwrap();
+
+        cat.set_threshold(crate::DebugLevel::Error);
+        log::error!("meh");
+        receiver.recv().unwrap();
+
+        cat.set_threshold(crate::DebugLevel::None);
+        log::error!("fish");
+        log::warn!("meh");
     }
 
     #[test]
