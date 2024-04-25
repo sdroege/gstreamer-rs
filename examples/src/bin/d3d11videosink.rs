@@ -194,7 +194,7 @@ fn main() -> Result<()> {
                             let mut metrics = DWRITE_TEXT_METRICS::default();
                             layout.GetMetrics(&mut metrics).unwrap();
                             layout
-                                .GetFontSize2(0, &mut font_size, Some(&mut range))
+                                .GetFontSize(0, &mut font_size, Some(&mut range))
                                 .unwrap();
 
                             if metrics.widthIncludingTrailingWhitespace >= desc.Width as f32 {
