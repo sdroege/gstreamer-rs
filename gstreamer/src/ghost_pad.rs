@@ -56,6 +56,8 @@ impl GhostPad {
     // rustdoc-stripper-ignore-next
     /// Creates a new [`GhostPad`] with an automatically generated name.
     ///
+    /// The [`Pad`] will be assigned the usual `gst::Object` generated unique name.
+    ///
     /// Use [`GhostPad::builder_from_template()`] to get a [`PadBuilder`](crate::PadBuilder)
     /// and define options.
     #[doc(alias = "gst_ghost_pad_new_no_target")]
@@ -65,10 +67,7 @@ impl GhostPad {
     }
 
     // rustdoc-stripper-ignore-next
-    /// Creates a [`PadBuilder`](crate::PadBuilder) for a [`PadBuilder`] with an automatically generated name.
-    ///
-    /// Use [`PadBuilder::name`](crate::PadBuilder::name) or [`PadBuilder::maybe_name`](crate::PadBuilder::maybe_name)
-    /// to specify a different name.
+    /// Creates a [`PadBuilder`](crate::PadBuilder) with the specified [`PadDirection`](crate::PadDirection).
     #[doc(alias = "gst_ghost_pad_new_no_target")]
     pub fn builder(direction: crate::PadDirection) -> PadBuilder<Self> {
         skip_assert_initialized!();
@@ -82,12 +81,15 @@ impl GhostPad {
     /// i.e. if it's not a wildcard-name containing `%u`, `%s` or `%d`,
     /// the `GhostPad` will automatically be named after the `name_template`.
     ///
+    /// Use [`GhostPad::builder_from_template()`] to get a [`PadBuilder`](crate::PadBuilder)
+    /// and define options.
+    ///
+    /// Use [`generated_name()`](crate::PadBuilder::generated_name`) to keep the `gst::Object`
+    /// automatically generated unique name.
+    ///
     /// # Panics
     ///
     /// Panics if the `name_template` is a wildcard-name.
-    ///
-    /// Use [`GhostPad::builder_from_template()`] to get a [`PadBuilder`](crate::PadBuilder)
-    /// and define options.
     #[doc(alias = "gst_ghost_pad_new_no_target_from_static_template")]
     pub fn from_static_template(templ: &StaticPadTemplate) -> Self {
         skip_assert_initialized!();
@@ -103,6 +105,9 @@ impl GhostPad {
     ///
     /// Use [`PadBuilder::name`](crate::PadBuilder::name) or [`PadBuilder::maybe_name`](crate::PadBuilder::maybe_name)
     /// to specify a different name.
+    ///
+    /// Use [`generated_name()`](crate::PadBuilder::generated_name`) to keep the `gst::Object`
+    /// automatically generated unique name.
     #[doc(alias = "gst_ghost_pad_new_no_target_from_static_template")]
     pub fn builder_from_static_template(templ: &StaticPadTemplate) -> PadBuilder<Self> {
         skip_assert_initialized!();
@@ -116,12 +121,15 @@ impl GhostPad {
     /// i.e. if it's not a wildcard-name containing `%u`, `%s` or `%d`,
     /// the `GhostPad` will automatically be named after the `name_template`.
     ///
+    /// Use [`GhostPad::builder_from_template()`] to get a [`PadBuilder`](crate::PadBuilder)
+    /// and define options.
+    ///
+    /// Use [`generated_name()`](crate::PadBuilder::generated_name`) to keep the `gst::Object`
+    /// automatically generated unique name.
+    ///
     /// # Panics
     ///
     /// Panics if the `name_template` is a wildcard-name.
-    ///
-    /// Use [`GhostPad::builder_from_template()`] to get a [`PadBuilder`](crate::PadBuilder)
-    /// and define options.
     #[doc(alias = "gst_ghost_pad_new_no_target_from_template")]
     pub fn from_template(templ: &crate::PadTemplate) -> Self {
         skip_assert_initialized!();
@@ -137,6 +145,9 @@ impl GhostPad {
     ///
     /// Use [`PadBuilder::name`](crate::PadBuilder::name) or [`PadBuilder::maybe_name`](crate::PadBuilder::maybe_name)
     /// to specify a different name.
+    ///
+    /// Use [`generated_name()`](crate::PadBuilder::generated_name`) to keep the `gst::Object`
+    /// automatically generated unique name.
     #[doc(alias = "gst_ghost_pad_new_no_target_from_template")]
     pub fn builder_from_template(templ: &crate::PadTemplate) -> PadBuilder<Self> {
         skip_assert_initialized!();
@@ -150,6 +161,9 @@ impl GhostPad {
     ///
     /// Use [`GhostPad::builder_with_target()`] to get a [`PadBuilder`](crate::PadBuilder)
     /// and define options.
+    ///
+    /// Use [`generated_name()`](crate::PadBuilder::generated_name`) to keep the `gst::Object`
+    /// automatically generated unique name.
     #[doc(alias = "gst_ghost_pad_new")]
     pub fn with_target<P: IsA<Pad> + IsA<crate::Object>>(
         target: &P,
@@ -165,13 +179,15 @@ impl GhostPad {
     ///
     /// Use [`PadBuilder::name`](crate::PadBuilder::name) or [`PadBuilder::maybe_name`](crate::PadBuilder::maybe_name)
     /// to specify a different name.
+    ///
+    /// Use [`generated_name()`](crate::PadBuilder::generated_name`) to keep the `gst::Object`
+    /// automatically generated unique name.
     #[doc(alias = "gst_ghost_pad_new_no_target_from_template")]
     pub fn builder_with_target<P: IsA<Pad> + IsA<crate::Object>>(
         target: &P,
     ) -> Result<PadBuilder<Self>, glib::BoolError> {
         skip_assert_initialized!();
-        let mut builder = Self::builder(target.direction());
-        builder.needs_specific_name = true;
+        let builder = Self::builder(target.direction());
         builder.with_target(target)
     }
 
@@ -186,6 +202,9 @@ impl GhostPad {
     /// If the `name_template` is a wildcard-name, then the `target` `name` is used,
     /// if it is compatible. Otherwise, a specific name must be provided using
     /// [`PadBuilder::name`](crate::PadBuilder::name) or [`PadBuilder::maybe_name`](crate::PadBuilder::maybe_name).
+    ///
+    /// Use [`generated_name()`](crate::PadBuilder::generated_name`) to keep the `gst::Object`
+    /// automatically generated unique name.
     #[doc(alias = "gst_ghost_pad_new_from_template")]
     pub fn from_template_with_target<P: IsA<Pad> + IsA<crate::Object>>(
         templ: &crate::PadTemplate,
@@ -206,6 +225,9 @@ impl GhostPad {
     /// If the `name_template` is a wildcard-name, then the `target` `name` is used,
     /// if it is compatible. Otherwise, a specific name must be provided using
     /// [`PadBuilder::name`](crate::PadBuilder::name) or [`PadBuilder::maybe_name`](crate::PadBuilder::maybe_name).
+    ///
+    /// Use [`generated_name()`](crate::PadBuilder::generated_name`) to keep the `gst::Object`
+    /// automatically generated unique name.
     #[doc(alias = "gst_ghost_pad_new_from_template")]
     pub fn builder_from_template_with_target<P: IsA<Pad> + IsA<crate::Object>>(
         templ: &crate::PadTemplate,
@@ -689,6 +711,9 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
     /// If the `name_template` is a wildcard-name, then the `target` `name` is used,
     /// if it is compatible. Otherwise, a specific name must be provided using
     /// [`PadBuilder::name`](crate::PadBuilder::name) or [`PadBuilder::maybe_name`](crate::PadBuilder::maybe_name).
+    ///
+    /// Use [`generated_name()`](crate::PadBuilder::generated_name`) to keep the `gst::Object`
+    /// automatically generated unique name.
     pub fn with_target<P: IsA<Pad> + IsA<crate::Object>>(
         mut self,
         target: &P,
@@ -696,92 +721,8 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
         assert_eq!(self.pad.direction(), target.direction());
 
         self.pad.set_target(Some(target))?;
-
-        if self.needs_specific_name {
-            let mut can_assign_target_name = true;
-
-            if let Some(pad_template) = self.pad.pad_template() {
-                if pad_template.presence() == crate::PadPresence::Request {
-                    // Check if the target name is compatible with the name template.
-                    use crate::CAT_RUST;
-
-                    let target_name = target.name();
-                    let mut target_parts = target_name.split('_');
-                    for template_part in pad_template.name_template().split('_') {
-                        let Some(target_part) = target_parts.next() else {
-                            crate::debug!(
-                                CAT_RUST,
-                                "Not using target Pad name '{target_name}': not enough parts compared to template '{}'",
-                                pad_template.name_template(),
-                            );
-                            can_assign_target_name = false;
-                            break;
-                        };
-
-                        if let Some(conv_spec_start) = template_part.find('%') {
-                            if conv_spec_start > 0
-                                && !target_part.starts_with(&template_part[..conv_spec_start])
-                            {
-                                crate::debug!(
-                                    CAT_RUST,
-                                    "Not using target Pad name '{target_name}': mismatch template '{}' prefix",
-                                    pad_template.name_template(),
-                                );
-                                can_assign_target_name = false;
-                                break;
-                            }
-
-                            let conv_spec_pos = conv_spec_start + 1;
-                            match template_part.get(conv_spec_pos..=conv_spec_pos) {
-                                Some("s") => {
-                                    // *There can be only one* %s
-                                    break;
-                                }
-                                Some("u") => {
-                                    if target_part
-                                        .get(conv_spec_start..)
-                                        .map_or(true, |s| s.parse::<u32>().is_err())
-                                    {
-                                        crate::debug!(
-                                            CAT_RUST,
-                                            "Not using target Pad name '{target_name}': can't parse '%u' from '{target_part}' (template '{}')",
-                                            pad_template.name_template(),
-                                        );
-
-                                        can_assign_target_name = false;
-                                        break;
-                                    }
-                                }
-                                Some("d") => {
-                                    if target_part
-                                        .get(conv_spec_start..)
-                                        .map_or(true, |s| s.parse::<i32>().is_err())
-                                    {
-                                        crate::debug!(
-                                            CAT_RUST,
-                                            "Not using target Pad name '{target_name}': can't parse '%i' from '{target_part}' (template '{}')",
-                                            pad_template.name_template(),
-                                        );
-
-                                        can_assign_target_name = false;
-                                        break;
-                                    }
-                                }
-                                other => unreachable!("Unexpected conversion specifier {other:?}"),
-                            }
-                        } else if target_part != template_part {
-                            can_assign_target_name = false;
-                            break;
-                        }
-                    }
-                }
-            }
-
-            if can_assign_target_name {
-                self.pad.set_property("name", target.name());
-                self.needs_specific_name = false;
-            }
-        }
+        self.name =
+            crate::pad::PadBuilderName::CandidateForWildcardTemplate(target.name().to_string());
 
         Ok(self)
     }
@@ -911,6 +852,13 @@ mod tests {
             .name("ghost_test")
             .build();
         assert_eq!(ghost_pad.name(), "ghost_test");
+
+        let target = crate::Pad::from_template(&templ);
+        let ghost_pad = GhostPad::builder_with_target(&target)
+            .unwrap()
+            .generated_name()
+            .build();
+        assert!(ghost_pad.name().starts_with("ghostpad"));
     }
 
     #[test]
@@ -952,6 +900,13 @@ mod tests {
             .build();
         assert_eq!(ghost_pad.name(), "my-sink");
 
+        let target = crate::Pad::from_template(&sink_templ);
+        let ghost_pad = GhostPad::builder_from_template_with_target(&ghost_templ, &target)
+            .unwrap()
+            .generated_name()
+            .build();
+        assert!(ghost_pad.name().starts_with("ghostpad"));
+
         // # Request template %u
         let wildcard_u_templ = crate::PadTemplate::new(
             "sink_%u",
@@ -982,6 +937,13 @@ mod tests {
             .unwrap()
             .build();
         assert_eq!(ghost_pad.name(), "sink_0");
+
+        let target = crate::Pad::from_template(&sink_0_templ);
+        let ghost_pad = GhostPad::builder_from_template_with_target(&wildcard_u_templ, &target)
+            .unwrap()
+            .generated_name()
+            .build();
+        assert!(ghost_pad.name().starts_with("ghostpad"));
 
         // # Request template %d_%u
         let wildcard_u_templ = crate::PadTemplate::new(

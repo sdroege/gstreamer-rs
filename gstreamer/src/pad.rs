@@ -1428,7 +1428,7 @@ impl Pad {
     // rustdoc-stripper-ignore-next
     /// Creates a new [`Pad`] with the specified [`PadDirection`](crate::PadDirection).
     ///
-    /// An automatically generated name will be assigned.
+    /// The [`Pad`] will be assigned the usual `gst::Object` generated unique name.
     ///
     /// Use [`Pad::builder()`] to get a [`PadBuilder`] and define options.
     #[doc(alias = "gst_pad_new")]
@@ -1439,8 +1439,6 @@ impl Pad {
 
     // rustdoc-stripper-ignore-next
     /// Creates a [`PadBuilder`] with the specified [`PadDirection`](crate::PadDirection).
-    ///
-    /// An automatically generated name will be assigned.
     #[doc(alias = "gst_pad_new")]
     pub fn builder(direction: crate::PadDirection) -> PadBuilder<Self> {
         skip_assert_initialized!();
@@ -1454,11 +1452,14 @@ impl Pad {
     /// i.e. if it's not a wildcard-name containing `%u`, `%s` or `%d`,
     /// the `Pad` will automatically be named after the `name_template`.
     ///
+    /// Use [`Pad::builder_from_static_template()`] to get a [`PadBuilder`] and define options.
+    ///
+    /// Use [`generated_name()`](crate::PadBuilder::generated_name`) to keep the `gst::Object`
+    /// automatically generated unique name.
+    ///
     /// # Panics
     ///
     /// Panics if the `name_template` is a wildcard-name.
-    ///
-    /// Use [`Pad::builder_from_static_template()`] to get a [`PadBuilder`] and define options.
     #[doc(alias = "gst_pad_new_from_static_template")]
     pub fn from_static_template(templ: &StaticPadTemplate) -> Self {
         skip_assert_initialized!();
@@ -1472,7 +1473,8 @@ impl Pad {
     /// i.e. if it's not a wildcard-name containing `%u`, `%s` or `%d`,
     /// the `Pad` will automatically be named after the `name_template`.
     ///
-    /// Use [`PadBuilder::name`] or [`PadBuilder::maybe_name`] to specify a different name.
+    /// Use [`generated_name()`](crate::PadBuilder::generated_name`) to keep the `gst::Object`
+    /// automatically generated unique name.
     #[doc(alias = "gst_pad_new_from_static_template")]
     pub fn builder_from_static_template(templ: &StaticPadTemplate) -> PadBuilder<Self> {
         skip_assert_initialized!();
@@ -1486,11 +1488,11 @@ impl Pad {
     /// i.e. if it's not a wildcard-name containing `%u`, `%s` or `%d`,
     /// the `Pad` will automatically be named after the `name_template`.
     ///
+    /// Use [`Pad::builder_from_template()`] to get a [`PadBuilder`] and define options.
+    ///
     /// # Panics
     ///
     /// Panics if the `name_template` is a wildcard-name.
-    ///
-    /// Use [`Pad::builder_from_template()`] to get a [`PadBuilder`] and define options.
     #[doc(alias = "gst_pad_new_from_template")]
     pub fn from_template(templ: &crate::PadTemplate) -> Self {
         skip_assert_initialized!();
@@ -1504,7 +1506,8 @@ impl Pad {
     /// i.e. if it's not a wildcard-name containing `%u`, `%s` or `%d`,
     /// the `Pad` will automatically be named after the `name_template`.
     ///
-    /// Use [`PadBuilder::name`] or [`PadBuilder::maybe_name`] to specify a different name.
+    /// Use [`generated_name()`](crate::PadBuilder::generated_name`) to keep the `gst::Object`
+    /// automatically generated unique name.
     #[doc(alias = "gst_pad_new_from_template")]
     pub fn builder_from_template(templ: &crate::PadTemplate) -> PadBuilder<Self> {
         skip_assert_initialized!();
@@ -1558,18 +1561,22 @@ impl Pad {
     }
 }
 
+pub(crate) enum PadBuilderName {
+    Undefined,
+    KeepGenerated,
+    UserDefined(String),
+    CandidateForWildcardTemplate(String),
+}
+
 #[must_use = "The builder must be built to be used"]
 pub struct PadBuilder<T> {
     pub(crate) pad: T,
-    pub(crate) needs_specific_name: bool,
+    pub(crate) name: PadBuilderName,
 }
 
 impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
     // rustdoc-stripper-ignore-next
     /// Creates a `PadBuilder` with the specified [`PadDirection`](crate::PadDirection).
-    ///
-    /// An automatically generated name will be assigned. Use [`PadBuilder::name`] or
-    /// [`PadBuilder::maybe_name`] to define a specific name.
     pub fn new(direction: crate::PadDirection) -> Self {
         assert_initialized_main_thread!();
 
@@ -1588,7 +1595,7 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
 
         PadBuilder {
             pad,
-            needs_specific_name: false,
+            name: PadBuilderName::Undefined,
         }
     }
 
@@ -1599,7 +1606,8 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
     /// i.e. if it's not a wildcard-name containing `%u`, `%s` or `%d`,
     /// the `Pad` will automatically be named after the `name_template`.
     ///
-    /// Use [`PadBuilder::name`] or [`PadBuilder::maybe_name`] to specify a different name.
+    /// Use [`generated_name()`](crate::PadBuilder::generated_name`) to keep the `gst::Object`
+    /// automatically generated unique name.
     pub fn from_static_template(templ: &StaticPadTemplate) -> Self {
         skip_assert_initialized!();
 
@@ -1614,7 +1622,8 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
     /// i.e. if it's not a wildcard-name containing `%u`, `%s` or `%d`,
     /// the `Pad` will automatically be named after the `name_template`.
     ///
-    /// Use [`PadBuilder::name`] or [`PadBuilder::maybe_name`] to specify a different name.
+    /// Use [`generated_name()`](crate::PadBuilder::generated_name`) to keep the `gst::Object`
+    /// automatically generated unique name.
     pub fn from_template(templ: &crate::PadTemplate) -> Self {
         assert_initialized_main_thread!();
 
@@ -1654,25 +1663,23 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
             }
         }
 
-        let needs_specific_name = if templ.name().find('%').is_some() {
-            // Pad needs a specific name
-            true
-        } else {
-            pad.set_property("name", templ.name());
-            false
-        };
-
         PadBuilder {
             pad,
-            needs_specific_name,
+            name: PadBuilderName::Undefined,
         }
     }
 
     // rustdoc-stripper-ignore-next
+    /// Uses the `gst::Object` generated unique name.
+    pub fn generated_name(mut self) -> Self {
+        self.name = PadBuilderName::KeepGenerated;
+        self
+    }
+
+    // rustdoc-stripper-ignore-next
     /// Sets the name of the Pad.
-    pub fn name(mut self, name: impl glib::IntoGStr) -> Self {
-        name.run_with_gstr(|name| self.pad.set_property("name", name));
-        self.needs_specific_name = false;
+    pub fn name(mut self, name: impl Into<String>) -> Self {
+        self.name = PadBuilderName::UserDefined(name.into());
 
         self
     }
@@ -1682,7 +1689,7 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
     ///
     /// This method is convenient when the `name` is provided as an `Option`.
     /// If the `name` is `None`, this has no effect.
-    pub fn maybe_name<N: glib::IntoGStr>(self, name: Option<N>) -> Self {
+    pub fn maybe_name<N: Into<String>>(self, name: Option<N>) -> Self {
         if let Some(name) = name {
             self.name(name)
         } else {
@@ -1695,7 +1702,7 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
     ///
     /// This method is convenient when the `name` is provided as an `Option`.
     /// If the `name` is `None`, this has no effect.
-    pub fn name_if_some<N: glib::IntoGStr>(self, name: Option<N>) -> Self {
+    pub fn name_if_some<N: Into<String>>(self, name: Option<N>) -> Self {
         if let Some(name) = name {
             self.name(name)
         } else {
@@ -2047,18 +2054,132 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
     /// and no specific `name` was provided using [`PadBuilder::name`]
     /// or [`PadBuilder::maybe_name`], or for [`GhostPad`s](crate::GhostPad),
     /// by defining a `target`.
+    ///
+    /// Use [`generated_name()`](crate::PadBuilder::generated_name`) to keep the `gst::Object`
+    /// automatically generated unique name.
     #[must_use = "Building the pad without using it has no effect"]
     #[track_caller]
     pub fn build(self) -> T {
-        if self.needs_specific_name {
-            panic!(concat!(
-                "Attempt to build a Pad from a wildcard-name template",
-                " or with a target Pad with an incompatible name.",
-                " Make sure to define a specific name using PadBuilder.",
-            ));
+        let Self { pad, name } = self;
+
+        let templ = pad.pad_template();
+
+        use PadBuilderName::*;
+        match (name, templ) {
+            (KeepGenerated, _) => (),
+            (Undefined, None) => (),
+            (Undefined, Some(templ)) => {
+                if templ.name().find('%').is_some() {
+                    panic!(concat!(
+                        "Attempt to build a Pad from a wildcard-name template",
+                        " or with a target Pad with an incompatible name.",
+                        " Make sure to define a specific name using PadBuilder",
+                        " or opt-in to keep the automatically generated name.",
+                    ));
+                } else {
+                    pad.set_property("name", templ.name());
+                }
+            }
+            (UserDefined(name), _) | (CandidateForWildcardTemplate(name), None) => {
+                pad.set_property("name", name);
+            }
+            (CandidateForWildcardTemplate(name), Some(templ)) => {
+                if templ.name().find('%').is_none() {
+                    // Not a widlcard template
+                    pad.set_property("name", templ.name());
+                } else {
+                    let mut can_assign_name = true;
+
+                    if templ.presence() == crate::PadPresence::Request {
+                        // Check if the name is compatible with the name template.
+                        use crate::CAT_RUST;
+
+                        let mut name_parts = name.split('_');
+                        for templ_part in templ.name_template().split('_') {
+                            let Some(name_part) = name_parts.next() else {
+                                crate::debug!(
+                                CAT_RUST,
+                                "Not using Pad name '{name}': not enough parts compared to template '{}'",
+                                templ.name_template(),
+                            );
+                                can_assign_name = false;
+                                break;
+                            };
+
+                            if let Some(conv_spec_start) = templ_part.find('%') {
+                                if conv_spec_start > 0
+                                    && !name_part.starts_with(&templ_part[..conv_spec_start])
+                                {
+                                    crate::debug!(
+                                    CAT_RUST,
+                                    "Not using Pad name '{name}': mismatch template '{}' prefix",
+                                    templ.name_template(),
+                                );
+                                    can_assign_name = false;
+                                    break;
+                                }
+
+                                let conv_spec_pos = conv_spec_start + 1;
+                                match templ_part.get(conv_spec_pos..=conv_spec_pos) {
+                                    Some("s") => {
+                                        // *There can be only one* %s
+                                        break;
+                                    }
+                                    Some("u") => {
+                                        if name_part
+                                            .get(conv_spec_start..)
+                                            .map_or(true, |s| s.parse::<u32>().is_err())
+                                        {
+                                            crate::debug!(
+                                            CAT_RUST,
+                                            "Not using Pad name '{name}': can't parse '%u' from '{name_part}' (template '{}')",
+                                            templ.name_template(),
+                                        );
+
+                                            can_assign_name = false;
+                                            break;
+                                        }
+                                    }
+                                    Some("d") => {
+                                        if name_part
+                                            .get(conv_spec_start..)
+                                            .map_or(true, |s| s.parse::<i32>().is_err())
+                                        {
+                                            crate::debug!(
+                                            CAT_RUST,
+                                            "Not using target Pad name '{name}': can't parse '%i' from '{name_part}' (template '{}')",
+                                            templ.name_template(),
+                                        );
+
+                                            can_assign_name = false;
+                                            break;
+                                        }
+                                    }
+                                    other => {
+                                        unreachable!("Unexpected conversion specifier {other:?}")
+                                    }
+                                }
+                            } else if name_part != templ_part {
+                                can_assign_name = false;
+                            }
+                        }
+                    }
+
+                    if can_assign_name {
+                        pad.set_property("name", name);
+                    } else {
+                        panic!(concat!(
+                            "Attempt to build a Pad from a wildcard-name template",
+                            " with a target Pad with an incompatible name.",
+                            " Make sure to define a specific name using PadBuilder",
+                            " or opt-in to keep the automatically generated name.",
+                        ));
+                    }
+                }
+            }
         }
 
-        self.pad
+        pad
     }
 }
 
@@ -2485,7 +2606,17 @@ mod tests {
         assert!(pad.name().starts_with("pad"));
 
         let pad = crate::Pad::builder(crate::PadDirection::Unknown)
+            .generated_name()
+            .build();
+        assert!(pad.name().starts_with("pad"));
+
+        let pad = crate::Pad::builder(crate::PadDirection::Unknown)
             .maybe_name(None::<&str>)
+            .build();
+        assert!(pad.name().starts_with("pad"));
+
+        let pad = crate::Pad::builder(crate::PadDirection::Unknown)
+            .name_if_some(None::<&str>)
             .build();
         assert!(pad.name().starts_with("pad"));
 
@@ -2509,6 +2640,11 @@ mod tests {
             .build();
         assert_eq!(pad.name(), "test");
 
+        let pad = crate::Pad::builder(crate::PadDirection::Unknown)
+            .name_if_some(Some("test"))
+            .build();
+        assert_eq!(pad.name(), "test");
+
         let caps = crate::Caps::new_any();
         let templ = crate::PadTemplate::new(
             "sink",
@@ -2526,6 +2662,9 @@ mod tests {
             .build();
         assert!(pad.name().starts_with("audio_sink"));
 
+        let pad = Pad::builder_from_template(&templ).generated_name().build();
+        assert!(pad.name().starts_with("pad"));
+
         let templ = crate::PadTemplate::new(
             "audio_%u",
             crate::PadDirection::Sink,
@@ -2536,6 +2675,9 @@ mod tests {
 
         let pad = Pad::builder_from_template(&templ).name("audio_0").build();
         assert!(pad.name().starts_with("audio_0"));
+
+        let pad = Pad::builder_from_template(&templ).generated_name().build();
+        assert!(pad.name().starts_with("pad"));
     }
 
     #[test]
