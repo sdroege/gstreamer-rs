@@ -364,7 +364,8 @@ mod tests {
     fn test_display() {
         gst::init().unwrap();
 
-        format!("{}", crate::AudioFormat::S16be);
+        assert_eq!(format!("{}", crate::AudioFormat::S16be), "S16BE");
+        assert_eq!(format!("{:?}", crate::AudioFormat::S16be), "S16be");
     }
 
     #[test]

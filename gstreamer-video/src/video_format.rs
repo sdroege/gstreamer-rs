@@ -484,7 +484,8 @@ mod tests {
     fn test_display() {
         gst::init().unwrap();
 
-        format!("{}", crate::VideoFormat::Nv16);
+        assert_eq!(format!("{}", crate::VideoFormat::Nv16), "NV16");
+        assert_eq!(format!("{:?}", crate::VideoFormat::Nv16), "Nv16");
     }
 
     #[test]
