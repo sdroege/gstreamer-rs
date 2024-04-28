@@ -514,7 +514,6 @@ pages:
     # We also don't need a CONTEXT_DIR var as its also
     # hardcoded to be windows-docker/
     DOCKERFILE: 'ci/windows-docker/Dockerfile'
-    GST_UPSTREAM_BRANCH: 'main'
   tags:
     - 'windows'
     - 'shell'
