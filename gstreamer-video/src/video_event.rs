@@ -541,6 +541,11 @@ pub enum MouseEventType {
         delta_x: f64,
         delta_y: f64,
     },
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    DoubleClick {
+        button: i32,
+    },
 }
 
 nav_event_builder!(
@@ -581,6 +586,14 @@ nav_event_builder!(
                 delta_y,
                 #[cfg(feature = "v1_22")]
                 #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
+                modifier_state: s.modifier_state,
+            },
+            #[cfg(feature = "v1_26")]
+            #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+            MouseEventType::DoubleClick { button } => NavigationEvent::MouseDoubleClick {
+                button,
+                x: s.x,
+                y: s.y,
                 modifier_state: s.modifier_state,
             },
         };
@@ -793,6 +806,14 @@ pub enum NavigationEvent {
     TouchCancel {
         modifier_state: NavigationModifierType,
     },
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    MouseDoubleClick {
+        button: i32,
+        x: f64,
+        y: f64,
+        modifier_state: NavigationModifierType,
+    },
 }
 
 impl NavigationEvent {
@@ -954,6 +975,18 @@ impl NavigationEvent {
         }
     }
 
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "gst_navigation_event_new_mouse_double_click")]
+    pub fn new_mouse_double_click(button: i32, x: f64, y: f64) -> NavigationEvent {
+        assert_initialized_main_thread!();
+        Self::MouseDoubleClick {
+            button,
+            x,
+            y,
+            modifier_state: NavigationModifierType::empty(),
+        }
+    }
     pub fn key_press_builder(key: &str) -> KeyEventBuilder {
         assert_initialized_main_thread!();
         KeyEventBuilder::new(KeyEventType::Press { key })
@@ -1054,6 +1087,15 @@ impl NavigationEvent {
     pub fn touch_cancel_builder() -> TouchMetaEventBuilder<'static> {
         assert_initialized_main_thread!();
         TouchMetaEventBuilder::new(TouchMetaEventType::Cancel)
+    }
+
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn mouse_double_click_builder(button: i32, x: f64, y: f64) -> MouseEventBuilder<'static> {
+        assert_initialized_main_thread!();
+        MouseEventBuilder::new(MouseEventType::DoubleClick { button })
+            .x(x)
+            .y(y)
     }
 
     #[doc(alias = "gst_navigation_event_get_type")]
@@ -1224,6 +1266,21 @@ impl NavigationEvent {
             #[cfg(feature = "v1_22")]
             #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
             NavigationEventType::TouchCancel => NavigationEvent::TouchCancel { modifier_state },
+            #[cfg(feature = "v1_26")]
+            #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+            NavigationEventType::MouseDoubleClick => NavigationEvent::MouseDoubleClick {
+                button: structure
+                    .get("button")
+                    .map_err(|_| glib::bool_error!("Invalid mouse event"))?,
+                x: structure
+                    .get("pointer_x")
+                    .map_err(|_| glib::bool_error!("Invalid mouse event"))?,
+                y: structure
+                    .get("pointer_y")
+                    .map_err(|_| glib::bool_error!("Invalid mouse event"))?,
+                modifier_state,
+            },
+
             NavigationEventType::Invalid | NavigationEventType::__Unknown(_) => {
                 return Err(glib::bool_error!("Invalid navigation event"))
             }
@@ -1323,10 +1380,19 @@ impl NavigationEvent {
             Self::TouchCancel { .. } => {
                 gst::Structure::builder(NAVIGATION_EVENT_NAME).field("event", "touch-cancel")
             }
+            #[cfg(feature = "v1_26")]
+            #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+            Self::MouseDoubleClick { button, x, y, .. } => {
+                gst::Structure::builder(NAVIGATION_EVENT_NAME)
+                    .field("event", "mouse-double-click")
+                    .field("button", button)
+                    .field("pointer_x", x)
+                    .field("pointer_y", y)
+            }
         };
 
         #[cfg(feature = "v1_22")]
-        if true {
+        {
             structure = match self {
                 Self::MouseMove { modifier_state, .. } => structure.field("state", modifier_state),
                 Self::MouseButtonPress { modifier_state, .. } => {
@@ -1348,6 +1414,11 @@ impl NavigationEvent {
                 Self::TouchUp { modifier_state, .. } => structure.field("state", modifier_state),
                 Self::TouchFrame { modifier_state, .. } => structure.field("state", modifier_state),
                 Self::TouchCancel { modifier_state, .. } => {
+                    structure.field("state", modifier_state)
+                }
+                #[cfg(feature = "v1_26")]
+                #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+                Self::MouseDoubleClick { modifier_state, .. } => {
                     structure.field("state", modifier_state)
                 }
             };
