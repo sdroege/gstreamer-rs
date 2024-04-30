@@ -16,8 +16,7 @@
     # 'gstreamer-gl/egl',
     # 'gstreamer-gl/wayland',
     # 'gstreamer-gl/x11',
-    # only has sys
-    # 'gstreamer-mpegts',
+    'gstreamer-mpegts',
     'gstreamer-mpegts/sys',
     'gstreamer-net',
     'gstreamer-pbutils',
@@ -26,8 +25,7 @@
     'gstreamer-rtsp',
     'gstreamer-rtsp-server',
     'gstreamer-sdp',
-    # only has sys
-    # 'gstreamer-tag',
+    'gstreamer-tag',
     'gstreamer-tag/sys',
     'gstreamer-video',
     'gstreamer-webrtc',
