@@ -408,6 +408,10 @@ pub enum NavigationEventType {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     #[doc(alias = "GST_NAVIGATION_EVENT_TOUCH_CANCEL")]
     TouchCancel,
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "GST_NAVIGATION_EVENT_MOUSE_DOUBLE_CLICK")]
+    MouseDoubleClick,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -437,6 +441,8 @@ impl IntoGlib for NavigationEventType {
             Self::TouchFrame => ffi::GST_NAVIGATION_EVENT_TOUCH_FRAME,
             #[cfg(feature = "v1_22")]
             Self::TouchCancel => ffi::GST_NAVIGATION_EVENT_TOUCH_CANCEL,
+            #[cfg(feature = "v1_26")]
+            Self::MouseDoubleClick => ffi::GST_NAVIGATION_EVENT_MOUSE_DOUBLE_CLICK,
             Self::__Unknown(value) => value,
         }
     }
@@ -467,6 +473,8 @@ impl FromGlib<ffi::GstNavigationEventType> for NavigationEventType {
             ffi::GST_NAVIGATION_EVENT_TOUCH_FRAME => Self::TouchFrame,
             #[cfg(feature = "v1_22")]
             ffi::GST_NAVIGATION_EVENT_TOUCH_CANCEL => Self::TouchCancel,
+            #[cfg(feature = "v1_26")]
+            ffi::GST_NAVIGATION_EVENT_MOUSE_DOUBLE_CLICK => Self::MouseDoubleClick,
             value => Self::__Unknown(value),
         }
     }

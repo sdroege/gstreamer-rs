@@ -52,6 +52,28 @@ impl EncodingProfile {
             })
         }
     }
+
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "gst_encoding_profile_from_string")]
+    pub fn from_string(string: &str) -> Result<EncodingProfile, glib::BoolError> {
+        assert_initialized_main_thread!();
+        unsafe {
+            Option::<_>::from_glib_full(ffi::gst_encoding_profile_from_string(
+                string.to_glib_none().0,
+            ))
+            .ok_or_else(|| glib::bool_error!("Failed to create EncodingProfile from string"))
+        }
+    }
+}
+
+#[cfg(feature = "v1_26")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+impl std::fmt::Display for EncodingProfile {
+    #[inline]
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        f.write_str(&EncodingProfileExt::to_str(self))
+    }
 }
 
 unsafe impl Send for EncodingProfile {}
@@ -196,6 +218,18 @@ pub trait EncodingProfileExt: IsA<EncodingProfile> + sealed::Sealed + 'static {
             from_glib(ffi::gst_encoding_profile_is_equal(
                 self.as_ref().to_glib_none().0,
                 b.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "gst_encoding_profile_to_string")]
+    #[doc(alias = "to_string")]
+    fn to_str(&self) -> glib::GString {
+        unsafe {
+            from_glib_full(ffi::gst_encoding_profile_to_string(
+                self.as_ref().to_glib_none().0,
             ))
         }
     }

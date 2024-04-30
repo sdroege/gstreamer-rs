@@ -769,6 +769,7 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(guint) GST_AUDIO_FORMAT_FLAG_INTEGER", "1"),
     ("(guint) GST_AUDIO_FORMAT_FLAG_SIGNED", "4"),
     ("(guint) GST_AUDIO_FORMAT_FLAG_UNPACK", "32"),
+    ("GST_AUDIO_FORMAT_LAST", "32"),
     ("(gint) GST_AUDIO_FORMAT_S16", "4"),
     ("(gint) GST_AUDIO_FORMAT_S16BE", "5"),
     ("(gint) GST_AUDIO_FORMAT_S16LE", "4"),

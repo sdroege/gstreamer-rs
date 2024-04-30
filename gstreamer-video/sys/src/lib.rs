@@ -82,6 +82,9 @@ pub const GST_NAVIGATION_EVENT_TOUCH_FRAME: GstNavigationEventType = 11;
 #[cfg(feature = "v1_22")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 pub const GST_NAVIGATION_EVENT_TOUCH_CANCEL: GstNavigationEventType = 12;
+#[cfg(feature = "v1_26")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+pub const GST_NAVIGATION_EVENT_MOUSE_DOUBLE_CLICK: GstNavigationEventType = 13;
 
 pub type GstNavigationMessageType = c_int;
 pub const GST_NAVIGATION_MESSAGE_INVALID: GstNavigationMessageType = 0;
@@ -591,6 +594,7 @@ pub const GST_VIDEO_DECODER_SINK_NAME: &[u8] = b"sink\0";
 pub const GST_VIDEO_DECODER_SRC_NAME: &[u8] = b"src\0";
 pub const GST_VIDEO_ENCODER_SINK_NAME: &[u8] = b"sink\0";
 pub const GST_VIDEO_ENCODER_SRC_NAME: &[u8] = b"src\0";
+pub const GST_VIDEO_FORMAT_LAST: c_int = 134;
 pub const GST_VIDEO_FPS_RANGE: &[u8] = b"(fraction) [ 0, max ]\0";
 pub const GST_VIDEO_MAX_COMPONENTS: c_int = 4;
 pub const GST_VIDEO_MAX_PLANES: c_int = 4;
@@ -4127,6 +4131,14 @@ extern "C" {
     #[cfg(feature = "v1_22")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_navigation_event_new_mouse_button_release(
+        button: c_int,
+        x: c_double,
+        y: c_double,
+        state: GstNavigationModifierType,
+    ) -> *mut gst::GstEvent;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_navigation_event_new_mouse_double_click(
         button: c_int,
         x: c_double,
         y: c_double,

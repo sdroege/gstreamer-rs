@@ -412,7 +412,7 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_RTCP_TYPE_SR", "200"),
     ("(gint) GST_RTCP_TYPE_XR", "207"),
     ("GST_RTCP_VALID_MASK", "57598"),
-    ("GST_RTCP_VALID_VALUE", "200"),
+    ("GST_RTCP_VALID_VALUE", "32968"),
     ("GST_RTCP_VERSION", "2"),
     ("(gint) GST_RTCP_XR_TYPE_DLRR", "5"),
     ("(gint) GST_RTCP_XR_TYPE_DRLE", "2"),

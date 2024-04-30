@@ -212,6 +212,7 @@ pub const GST_AUDIO_DEF_FORMAT: &[u8] = b"S16LE\0";
 pub const GST_AUDIO_DEF_RATE: c_int = 44100;
 pub const GST_AUDIO_ENCODER_SINK_NAME: &[u8] = b"sink\0";
 pub const GST_AUDIO_ENCODER_SRC_NAME: &[u8] = b"src\0";
+pub const GST_AUDIO_FORMAT_LAST: c_int = 32;
 pub const GST_AUDIO_RATE_RANGE: &[u8] = b"(int) [ 1, max ]\0";
 pub const GST_AUDIO_RESAMPLER_OPT_CUBIC_B: &[u8] = b"GstAudioResampler.cubic-b\0";
 pub const GST_AUDIO_RESAMPLER_OPT_CUBIC_C: &[u8] = b"GstAudioResampler.cubic-c\0";

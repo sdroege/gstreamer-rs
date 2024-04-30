@@ -667,6 +667,9 @@ extern "C" {
     pub fn gst_encoding_profile_from_discoverer(
         info: *mut GstDiscovererInfo,
     ) -> *mut GstEncodingProfile;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_encoding_profile_from_string(string: *const c_char) -> *mut GstEncodingProfile;
     pub fn gst_encoding_profile_copy(self_: *mut GstEncodingProfile) -> *mut GstEncodingProfile;
     pub fn gst_encoding_profile_get_allow_dynamic_output(
         profile: *mut GstEncodingProfile,
@@ -736,6 +739,9 @@ extern "C" {
         profile: *mut GstEncodingProfile,
         single_segment: gboolean,
     );
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_encoding_profile_to_string(profile: *mut GstEncodingProfile) -> *mut c_char;
 
     //=========================================================================
     // GstEncodingTarget
