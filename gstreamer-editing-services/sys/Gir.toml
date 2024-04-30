@@ -37,3 +37,18 @@ status = "generate"
     [[object.function]]
     name = "frame_composition_meta_api_get_type"
     version = "1.24"
+
+[[object]]
+name = "GES.PitiviFormatter"
+# Deprecated since GStreamer 1.0 & causes ABI test failures
+# See: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/-/merge_requests/1425#note_2380648
+status = "ignore"
+    [[object.function]]
+    pattern = ".+"
+    ignore = true
+
+[[object]]
+name = "GES.PitiviFormatterClass"
+# Deprecated since GStreamer 1.0 & causes ABI test failures
+# See: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/-/merge_requests/1425#note_2380648
+status = "ignore"
