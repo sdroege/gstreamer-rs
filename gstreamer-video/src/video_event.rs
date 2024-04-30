@@ -805,8 +805,6 @@ impl NavigationEvent {
             x,
             y,
             pressure,
-            #[cfg(feature = "v1_22")]
-            #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
             modifier_state: NavigationModifierType::empty(),
         }
     }
@@ -821,8 +819,6 @@ impl NavigationEvent {
             x,
             y,
             pressure,
-            #[cfg(feature = "v1_22")]
-            #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
             modifier_state: NavigationModifierType::empty(),
         }
     }
@@ -836,8 +832,6 @@ impl NavigationEvent {
             identifier,
             x,
             y,
-            #[cfg(feature = "v1_22")]
-            #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
             modifier_state: NavigationModifierType::empty(),
         }
     }
@@ -848,8 +842,6 @@ impl NavigationEvent {
     pub fn new_touch_frame() -> NavigationEvent {
         assert_initialized_main_thread!();
         Self::TouchFrame {
-            #[cfg(feature = "v1_22")]
-            #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
             modifier_state: NavigationModifierType::empty(),
         }
     }
@@ -860,8 +852,6 @@ impl NavigationEvent {
     pub fn new_touch_cancel() -> NavigationEvent {
         assert_initialized_main_thread!();
         Self::TouchCancel {
-            #[cfg(feature = "v1_22")]
-            #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
             modifier_state: NavigationModifierType::empty(),
         }
     }
