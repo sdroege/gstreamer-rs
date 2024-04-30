@@ -30,10 +30,12 @@ macro_rules! mini_object_wrapper (
 
         impl $name {
             #[inline]
-            pub unsafe fn from_glib_ptr_borrow<'a>(
-                ptr: *const *const $ffi_name,
-            ) -> &'a Self {
-                &*(ptr as *const $name)
+            pub unsafe fn from_glib_ptr_borrow(
+                ptr: &*mut $ffi_name,
+            ) -> &Self {
+                debug_assert_eq!(std::mem::size_of::<$name>(), std::mem::size_of::<$crate::glib::ffi::gpointer>());
+                debug_assert!(!ptr.is_null());
+                &*(ptr as *const *mut $ffi_name as *const $name)
             }
 
             #[inline]
@@ -548,11 +550,8 @@ macro_rules! mini_object_wrapper (
             #[inline]
             unsafe fn from_value(value: &'a $crate::glib::Value) -> Self {
                 skip_assert_initialized!();
-                assert_eq!(std::mem::size_of::<$name>(), std::mem::size_of::<$crate::glib::ffi::gpointer>());
                 let value = &*(value as *const $crate::glib::Value as *const $crate::glib::gobject_ffi::GValue);
-                let ptr = &value.data[0].v_pointer as *const $crate::glib::ffi::gpointer as *const *const $ffi_name;
-                debug_assert!(!(*ptr).is_null());
-                &*(ptr as *const $name)
+                $name::from_glib_ptr_borrow(&*(&value.data[0].v_pointer as *const $crate::glib::ffi::gpointer as *const *mut $ffi_name))
             }
         }
 
