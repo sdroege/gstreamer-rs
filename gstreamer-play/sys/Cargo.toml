@@ -23,6 +23,7 @@ tempfile = "3"
 [features]
 v1_22 = []
 v1_24 = ["v1_22"]
+v1_26 = ["v1_24"]
 
 [lib]
 name = "gstreamer_play_sys"
@@ -68,4 +69,7 @@ version = "1.20"
 version = "1.22"
 
 [package.metadata.system-deps.gstreamer_play_1_0.v1_24]
-version = "1.23"
+version = "1.24"
+
+[package.metadata.system-deps.gstreamer_play_1_0.v1_26]
+version = "1.25"

@@ -24,6 +24,7 @@ gir-format-check = "0.1"
 
 [features]
 default = []
+v1_26 = ["gst/v1_26", "ffi/v1_26"]
 
 [package.metadata.docs.rs]
 all-features = true

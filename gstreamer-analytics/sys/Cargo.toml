@@ -52,6 +52,10 @@ rustdoc-args = ["--cfg", "docsrs", "--generate-link-to-definition"]
 
 [package.metadata.system-deps.gstreamer_analytics_1_0]
 name = "gstreamer-analytics-1.0"
-version = "1.23"
+version = "1.24"
+
+[package.metadata.system-deps.gstreamer_analytics_1_0.v1_26]
+version = "1.25"
 
 [features]
+v1_26 = []

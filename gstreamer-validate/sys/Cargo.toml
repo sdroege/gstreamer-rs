@@ -36,7 +36,10 @@ name = "gstreamer-validate-1.0"
 version = "1.22"
 
 [package.metadata.system-deps.gstreamer_validate_1_0.v1_24]
-version = "1.23"
+version = "1.24"
+
+[package.metadata.system-deps.gstreamer_validate_1_0.v1_26]
+version = "1.25"
 
 [lib]
 name = "gstreamer_validate_sys"
@@ -65,3 +68,4 @@ tempfile = "3"
 
 [features]
 v1_24 = []
+v1_26 = ["v1_24"]
