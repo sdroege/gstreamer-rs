@@ -13,6 +13,8 @@ for crate in gstreamer*/sys gstreamer-gl/*/sys; do
 done
 
 for crate in gstreamer/sys \
+             gstreamer-allocators/sys \
+             gstreamer-analytics/sys \
              gstreamer-app/sys \
              gstreamer-audio/sys \
              gstreamer-base/sys \
@@ -26,11 +28,14 @@ for crate in gstreamer/sys \
              gstreamer-mpegts/sys \
              gstreamer-net/sys \
              gstreamer-pbutils/sys \
+             gstreamer-play/sys \
              gstreamer-player/sys \
+             gstreamer-rtp/sys \
              gstreamer-rtsp-server/sys \
              gstreamer-rtsp/sys \
              gstreamer-sdp/sys \
              gstreamer-tag/sys \
+             gstreamer-validate/sys \
              gstreamer-video/sys \
              gstreamer-webrtc/sys; do
     echo "Testing $crate with --all-features)"
