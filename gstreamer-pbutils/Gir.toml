@@ -359,6 +359,13 @@ status = "generate"
         [object.function.return]
         nullable_return_is_error = "Failed to create EncodingProfile from DiscovererInfo"
 
+    [[object.function]]
+    name = "from_string"
+        [object.function.return]
+        # https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6775
+        nullable = true
+        nullable_return_is_error = "Failed to create EncodingProfile from string"
+
 [[object]]
 name = "GstPbutils.EncodingTarget"
 status = "generate"

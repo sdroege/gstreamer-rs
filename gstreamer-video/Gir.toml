@@ -203,6 +203,10 @@ status = "generate"
     manual = true
 
     [[object.function]]
+    name = "event_new_mouse_double_click"
+    manual = true
+
+    [[object.function]]
     name = "event_new_touch_cancel"
     manual = true
 
@@ -648,6 +652,10 @@ status = "generate"
     [[object.member]]
     name = "y412_le"
     version = "1.18"
+
+    [[object.member]]
+    name = "last"
+    ignore = true
 
     [[object.function]]
     name = "to_string"

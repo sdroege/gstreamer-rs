@@ -327,6 +327,10 @@ status = "generate"
     # Platform dependant
     manual = true
 
+    [[object.member]]
+    name = "last"
+    ignore = true
+
     [[object.function]]
     name = "to_string"
     # This has an Unknown field that may return NULL or "UNKNOWN"
