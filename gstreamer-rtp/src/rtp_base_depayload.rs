@@ -1,5 +1,7 @@
 use glib::prelude::*;
-use glib::translate::FromGlibPtrBorrow;
+#[cfg(feature = "v1_24")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+use glib::translate::*;
 
 use crate::RTPBaseDepayload;
 
