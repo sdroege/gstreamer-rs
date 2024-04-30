@@ -75,8 +75,6 @@ int main() {
     printf("%s;%zu;%zu\n", "GESPipeline", sizeof(GESPipeline), alignof(GESPipeline));
     printf("%s;%zu;%zu\n", "GESPipelineClass", sizeof(GESPipelineClass), alignof(GESPipelineClass));
     printf("%s;%zu;%zu\n", "GESPipelineFlags", sizeof(GESPipelineFlags), alignof(GESPipelineFlags));
-    printf("%s;%zu;%zu\n", "GESPitiviFormatter", sizeof(GESPitiviFormatter), alignof(GESPitiviFormatter));
-    printf("%s;%zu;%zu\n", "GESPitiviFormatterClass", sizeof(GESPitiviFormatterClass), alignof(GESPitiviFormatterClass));
     printf("%s;%zu;%zu\n", "GESProject", sizeof(GESProject), alignof(GESProject));
     printf("%s;%zu;%zu\n", "GESProjectClass", sizeof(GESProjectClass), alignof(GESProjectClass));
     printf("%s;%zu;%zu\n", "GESSource", sizeof(GESSource), alignof(GESSource));

@@ -1138,20 +1138,6 @@ pub struct _GESPipelinePrivate {
 
 pub type GESPipelinePrivate = _GESPipelinePrivate;
 
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct GESPitiviFormatterClass {
-    pub parent_class: GESFormatterClass,
-    pub _ges_reserved: [gpointer; 4],
-}
-
-impl ::std::fmt::Debug for GESPitiviFormatterClass {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESPitiviFormatterClass @ {self:p}"))
-            .finish()
-    }
-}
-
 #[repr(C)]
 pub struct _GESPitiviFormatterPrivate {
     _data: [u8; 0],
@@ -2394,22 +2380,6 @@ impl ::std::fmt::Debug for GESPipeline {
 
 #[derive(Copy, Clone)]
 #[repr(C)]
-pub struct GESPitiviFormatter {
-    pub parent: GESFormatter,
-    pub priv_: *mut GESPitiviFormatterPrivate,
-    pub _ges_reserved: [gpointer; 4],
-}
-
-impl ::std::fmt::Debug for GESPitiviFormatter {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GESPitiviFormatter @ {self:p}"))
-            .field("parent", &self.parent)
-            .finish()
-    }
-}
-
-#[derive(Copy, Clone)]
-#[repr(C)]
 pub struct GESProject {
     pub parent: GESAsset,
     pub priv_: *mut GESProjectPrivate,
@@ -3469,8 +3439,6 @@ extern "C" {
     //=========================================================================
     // GESPitiviFormatter
     //=========================================================================
-    pub fn ges_pitivi_formatter_get_type() -> GType;
-    pub fn ges_pitivi_formatter_new() -> *mut GESPitiviFormatter;
 
     //=========================================================================
     // GESProject

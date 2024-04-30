@@ -672,20 +672,6 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
-        "GESPitiviFormatter",
-        Layout {
-            size: size_of::<GESPitiviFormatter>(),
-            alignment: align_of::<GESPitiviFormatter>(),
-        },
-    ),
-    (
-        "GESPitiviFormatterClass",
-        Layout {
-            size: size_of::<GESPitiviFormatterClass>(),
-            alignment: align_of::<GESPitiviFormatterClass>(),
-        },
-    ),
-    (
         "GESProject",
         Layout {
             size: size_of::<GESProject>(),
