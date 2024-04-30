@@ -18,6 +18,7 @@ for crate in gstreamer/sys \
              gstreamer-base/sys \
              gstreamer-check/sys \
              gstreamer-controller/sys \
+             gstreamer-editing-services/sys \
              gstreamer-gl/sys \
              gstreamer-gl/egl/sys \
              gstreamer-gl/wayland/sys \
