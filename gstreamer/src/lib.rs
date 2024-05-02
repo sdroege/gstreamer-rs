@@ -332,6 +332,8 @@ pub mod prelude {
         buffer_pool::BufferPoolExtManual,
         child_proxy::ChildProxyExtManual,
         clock::ClockExtManual,
+        control_binding::ControlBindingExtManual,
+        control_source::ControlSourceExtManual,
         device_monitor::DeviceMonitorExtManual,
         device_provider::{DeviceProviderClassExt, DeviceProviderExtManual},
         element::{ElementClassExt, ElementExtManual},

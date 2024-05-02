@@ -35,7 +35,7 @@ pub mod prelude {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub use super::video_aggregator_pad::{VideoAggregatorPadImpl, VideoAggregatorPadImplExt};
     pub use super::{
-        navigation::NavigationImpl,
+        navigation::{NavigationImpl, NavigationImplExt},
         video_decoder::{VideoDecoderImpl, VideoDecoderImplExt},
         video_encoder::{VideoEncoderImpl, VideoEncoderImplExt},
         video_filter::{VideoFilterImpl, VideoFilterImplExt},

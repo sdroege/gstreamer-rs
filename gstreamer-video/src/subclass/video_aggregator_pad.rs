@@ -36,7 +36,7 @@ mod sealed {
     impl<T: super::VideoAggregatorPadImplExt> Sealed for T {}
 }
 
-pub trait VideoAggregatorPadImplExt: ObjectSubclass {
+pub trait VideoAggregatorPadImplExt: ObjectSubclass + sealed::Sealed {
     fn parent_update_conversion_info(&self) {
         unsafe {
             let data = Self::type_data();
