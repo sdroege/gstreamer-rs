@@ -33,39 +33,15 @@ impl<O: IsA<EncodingProfile>> EncodingProfileExtManual for O {}
 trait EncodingProfileBuilderCommon {
     fn set_allow_dynamic_output(&self, allow_dynamic_output: bool);
 
-    fn set_allow_dynamic_output_if_some(&self, allow_dynamic_output: Option<bool>) {
-        if let Some(allow_dynamic_output) = allow_dynamic_output {
-            self.set_allow_dynamic_output(allow_dynamic_output)
-        }
-    }
-
     fn set_description(&self, description: Option<&str>);
 
     fn set_enabled(&self, enabled: bool);
 
-    fn set_enabled_if_some(&self, enabled: Option<bool>) {
-        if let Some(enabled) = enabled {
-            self.set_enabled(enabled)
-        }
-    }
-
     fn set_format(&self, format: &gst::Caps);
-
-    fn set_format_if_some(&self, format: Option<&gst::Caps>) {
-        if let Some(format) = format {
-            self.set_format(format)
-        }
-    }
 
     fn set_name(&self, name: Option<&str>);
 
     fn set_presence(&self, presence: u32);
-
-    fn set_presence_if_some(&self, presence: Option<u32>) {
-        if let Some(presence) = presence {
-            self.set_presence(presence);
-        }
-    }
 
     fn set_preset(&self, preset: Option<&str>);
 
@@ -76,13 +52,6 @@ trait EncodingProfileBuilderCommon {
 
     #[cfg(feature = "v1_20")]
     fn set_element_properties(&self, element_properties: ElementProperties);
-
-    #[cfg(feature = "v1_20")]
-    fn set_element_properties_if_some(&self, element_properties: Option<ElementProperties>) {
-        if let Some(element_properties) = element_properties {
-            self.set_element_properties(element_properties);
-        }
-    }
 }
 
 impl<O: IsA<EncodingProfile>> EncodingProfileBuilderCommon for O {
@@ -184,11 +153,6 @@ impl<O: IsA<EncodingProfile>> EncodingProfileBuilderCommon for O {
     }
 }
 
-// Split the trait as only the getter is public
-trait EncodingProfileHasRestrictionSetter {
-    fn set_restriction(&self, restriction: Option<gst::Caps>);
-}
-
 pub trait EncodingProfileHasRestrictionGetter {
     #[doc(alias = "get_restriction")]
     #[doc(alias = "gst_encoding_profile_get_restriction")]
@@ -197,25 +161,6 @@ pub trait EncodingProfileHasRestrictionGetter {
 
 macro_rules! declare_encoding_profile_has_restriction(
     ($name:ident) => {
-        impl EncodingProfileHasRestrictionSetter for $name {
-            // checker-ignore-item
-            fn set_restriction(&self, restriction: Option<gst::Caps>) {
-                let profile: &EncodingProfile = glib::object::Cast::upcast_ref(self);
-
-                unsafe {
-                    let restriction = match restriction {
-                        Some(restriction) => restriction.into_glib_ptr(),
-                        None => gst::ffi::gst_caps_new_any(),
-                    };
-
-                    ffi::gst_encoding_profile_set_restriction(
-                        profile.to_glib_none().0,
-                        restriction,
-                    );
-                }
-            }
-        }
-
         impl EncodingProfileHasRestrictionGetter for $name {
             // checker-ignore-item
             fn restriction(&self) -> Option<gst::Caps> {
@@ -401,20 +346,37 @@ pub trait EncodingProfileBuilder<'a>: Sized {
     #[doc(alias = "gst_encoding_profile_set_presence")]
     #[must_use]
     fn presence(self, presence: u32) -> Self;
+    #[doc(alias = "gst_encoding_profile_set_presence")]
+    #[must_use]
+    fn presence_if_some(self, presence: Option<u32>) -> Self;
     #[doc(alias = "gst_encoding_profile_set_allow_dynamic_output")]
     #[must_use]
     fn allow_dynamic_output(self, allow: bool) -> Self;
+    #[doc(alias = "gst_encoding_profile_set_allow_dynamic_output")]
+    #[must_use]
+    fn allow_dynamic_output_if_some(self, allow_dynamic_output: Option<bool>) -> Self;
     #[doc(alias = "gst_encoding_profile_set_enabled")]
     #[must_use]
     fn enabled(self, enabled: bool) -> Self;
+    #[doc(alias = "gst_encoding_profile_set_enabled")]
+    #[must_use]
+    fn enabled_if_some(self, enabled: Option<bool>) -> Self;
     #[cfg(feature = "v1_18")]
     #[doc(alias = "gst_encoding_profile_set_single_segment")]
     #[must_use]
     fn single_segment(self, single_segment: bool) -> Self;
+    #[cfg(feature = "v1_18")]
+    #[doc(alias = "gst_encoding_profile_set_single_segment")]
+    #[must_use]
+    fn single_segment_if_some(self, single_segment: Option<bool>) -> Self;
     #[cfg(feature = "v1_20")]
     #[doc(alias = "gst_encoding_profile_set_element_properties")]
     #[must_use]
     fn element_properties(self, element_properties: ElementProperties) -> Self;
+    #[cfg(feature = "v1_20")]
+    #[doc(alias = "gst_encoding_profile_set_element_properties")]
+    #[must_use]
+    fn element_properties_if_some(self, element_properties: Option<ElementProperties>) -> Self;
 }
 
 macro_rules! declare_encoding_profile_builder_common(
@@ -445,14 +407,38 @@ macro_rules! declare_encoding_profile_builder_common(
                 self
             }
 
+            fn presence_if_some(self, presence: Option<u32>) -> $name<'a> {
+                if let Some(presence) = presence {
+                    self.presence(presence)
+                } else {
+                    self
+                }
+            }
+
             fn allow_dynamic_output(mut self, allow: bool) -> $name<'a> {
                 self.base.allow_dynamic_output = allow;
                 self
             }
 
+            fn allow_dynamic_output_if_some(self, allow_dynamic_output: Option<bool>) -> $name<'a> {
+                if let Some(allow_dynamic_output) = allow_dynamic_output {
+                    self.allow_dynamic_output(allow_dynamic_output)
+                } else {
+                    self
+                }
+            }
+
             fn enabled(mut self, enabled: bool) -> $name<'a> {
                 self.base.enabled = enabled;
                 self
+            }
+
+            fn enabled_if_some(self, enabled: Option<bool>) -> $name<'a> {
+                if let Some(enabled) = enabled {
+                    self.enabled(enabled)
+                } else {
+                    self
+                }
             }
 
             #[cfg(feature = "v1_18")]
@@ -461,10 +447,28 @@ macro_rules! declare_encoding_profile_builder_common(
                 self
             }
 
+            #[cfg(feature = "v1_18")]
+            fn single_segment_if_some(self, single_segment: Option<bool>) -> $name<'a> {
+                if let Some(single_segment) = single_segment {
+                    self.single_segment(single_segment)
+                } else {
+                    self
+                }
+            }
+
             #[cfg(feature = "v1_20")]
             fn element_properties(mut self, element_properties: ElementProperties) -> $name<'a> {
                 self.base.element_properties = Some(element_properties);
                 self
+            }
+
+            #[cfg(feature = "v1_20")]
+            fn element_properties_if_some(self, element_properties: Option<ElementProperties>) -> $name<'a> {
+                if let Some(element_properties) = element_properties {
+                    self.element_properties(element_properties)
+                } else {
+                    self
+                }
             }
         }
     }
@@ -475,6 +479,7 @@ fn set_common_fields<T: EncodingProfileBuilderCommon>(
     base_data: EncodingProfileBuilderCommonData,
 ) {
     skip_assert_initialized!();
+    profile.set_format(base_data.format);
     profile.set_name(base_data.name);
     profile.set_description(base_data.description);
     profile.set_preset(base_data.preset);
@@ -694,12 +699,6 @@ mod tests {
         assert_eq!(audio_profile.presence(), PRESENCE);
         assert_eq!(audio_profile.allows_dynamic_output(), ALLOW_DYNAMIC_OUTPUT);
         assert_eq!(audio_profile.is_enabled(), ENABLED);
-
-        let restriction = gst_audio::AudioCapsBuilder::new()
-            .format(gst_audio::AudioFormat::S32be)
-            .build();
-        audio_profile.set_restriction(Some(restriction.clone()));
-        assert_eq!(audio_profile.restriction().unwrap(), restriction);
     }
 
     #[test]
@@ -742,12 +741,6 @@ mod tests {
             glib::object::Cast::downcast(video_profile).ok().unwrap();
         assert_eq!(video_profile.is_variableframerate(), VARIABLE_FRAMERATE);
         assert_eq!(video_profile.pass(), PASS);
-
-        let restriction = gst_video::VideoCapsBuilder::new()
-            .format(gst_video::VideoFormat::Nv12)
-            .build();
-        video_profile.set_restriction(Some(restriction.clone()));
-        assert_eq!(video_profile.restriction().unwrap(), restriction);
     }
 
     #[test]

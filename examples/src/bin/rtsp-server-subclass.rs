@@ -19,10 +19,6 @@ mod examples_common;
 #[display(fmt = "Could not get mount points")]
 struct NoMountPoints;
 
-#[derive(Debug, Display, Error)]
-#[display(fmt = "Usage: {_0} LAUNCH_LINE")]
-struct UsageError(#[error(not(source))] String);
-
 fn main_loop() -> Result<(), Error> {
     let main_loop = glib::MainLoop::new(None, false);
     let server = server::Server::default();

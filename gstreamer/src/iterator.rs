@@ -318,13 +318,13 @@ where
 unsafe impl<T> Send for Iterator<T> {}
 unsafe impl<T> Sync for Iterator<T> {}
 
-unsafe extern "C" fn filter_trampoline<T: StaticType, F: Fn(T) -> bool + Send + Sync + 'static>(
+unsafe extern "C" fn filter_trampoline<
+    T: for<'a> FromValue<'a> + StaticType + 'static,
+    F: Fn(T) -> bool + Send + Sync + 'static,
+>(
     value: gconstpointer,
     func: gconstpointer,
-) -> i32
-where
-    for<'a> T: FromValue<'a> + 'static,
-{
+) -> i32 {
     let value = value as *const glib::gobject_ffi::GValue;
 
     let func = func as *const glib::gobject_ffi::GValue;

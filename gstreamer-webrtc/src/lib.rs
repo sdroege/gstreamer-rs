@@ -34,4 +34,8 @@ pub mod prelude {
     pub use crate::web_rtcice::WebRTCICEExtManual;
     #[doc(hidden)]
     pub use gst_sdp::prelude::*;
+
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
+    pub use crate::auto::traits::*;
 }

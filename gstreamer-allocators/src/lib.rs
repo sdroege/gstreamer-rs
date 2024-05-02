@@ -56,6 +56,8 @@ pub use phys_memory::*;
 pub mod prelude {
     #[doc(hidden)]
     pub use gst::prelude::*;
+
+    pub use crate::auto::traits::*;
 }
 
 pub mod subclass;
