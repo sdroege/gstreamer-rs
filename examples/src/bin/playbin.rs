@@ -36,14 +36,14 @@ fn example_main() {
     // For flags handling
     // With flags, one can configure playbin's behavior such as whether it
     // should play back contained video streams, or if it should render subtitles.
-    // let flags = playbin.get_property("flags").unwrap();
-    // let flags_class = FlagsClass::new(flags.type_()).unwrap();
+    // let flags = playbin.property_value("flags");
+    // let flags_class = FlagsClass::with_type(flags.type_()).unwrap();
     // let flags = flags_class.builder_with_value(flags).unwrap()
     //     .unset_by_nick("text")
     //     .unset_by_nick("video")
     //     .build()
     //     .unwrap();
-    // playbin.set_property_from_value("flags", &flags).unwrap();
+    // playbin.set_property_from_value("flags", &flags);
 
     // The playbin also provides any kind of metadata that it found in the played stream.
     // For this, the playbin provides signals notifying about changes in the metadata.
