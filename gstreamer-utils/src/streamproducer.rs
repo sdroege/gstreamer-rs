@@ -364,6 +364,11 @@ impl StreamProducer {
         self.consumers.lock().unwrap().events_to_forward = events_to_forward.into_iter().collect();
     }
 
+    /// configure whether the preroll sample should be forwarded (default: `true`)
+    pub fn set_forward_preroll(&self, forward_preroll: bool) {
+        self.consumers.lock().unwrap().forward_preroll = forward_preroll;
+    }
+
     /// Get the GStreamer `appsink` wrapped by this producer
     pub fn appsink(&self) -> &gst_app::AppSink {
         &self.appsink
@@ -399,6 +404,7 @@ impl<'a> From<&'a gst_app::AppSink> for StreamProducer {
             // it would make sense to automatically forward more events such as Tag but that would break
             // with older GStreamer, see https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/4297
             events_to_forward: vec![gst::EventType::Eos],
+            forward_preroll: true,
             just_forwarded_preroll: false,
         }));
 
@@ -434,9 +440,13 @@ impl<'a> From<&'a gst_app::AppSink> for StreamProducer {
                         }
                     };
 
-                    consumers.just_forwarded_preroll = true;
+                    if consumers.forward_preroll {
+                        consumers.just_forwarded_preroll = true;
 
-                    StreamProducer::process_sample(sample, appsink, consumers)
+                        StreamProducer::process_sample(sample, appsink, consumers)
+                    } else {
+                        Ok(gst::FlowSuccess::Ok)
+                    }
                 }))
                 .new_event(glib::clone!(@strong consumers => move |appsink| {
                     match appsink.pull_object().map(|obj| obj.downcast::<gst::Event>()) {
@@ -525,6 +535,8 @@ struct StreamConsumers {
     consumers: HashMap<gst_app::AppSrc, StreamConsumer>,
     /// What events should be forwarded to consumers
     events_to_forward: Vec<gst::EventType>,
+    /// Whether the preroll sample should be forwarded at all
+    forward_preroll: bool,
     /// Whether we just forwarded the preroll sample. When we did we want to
     /// discard the next sample from on_new_sample as it would cause us to
     /// otherwise push out the same sample twice to consumers.
