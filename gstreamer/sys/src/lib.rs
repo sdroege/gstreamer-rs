@@ -3082,6 +3082,14 @@ impl ::std::fmt::Debug for GstValueTable {
     }
 }
 
+#[repr(C)]
+pub struct _GstVecDeque {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
+
+pub type GstVecDeque = _GstVecDeque;
+
 // Classes
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -7108,6 +7116,110 @@ extern "C" {
     pub fn gst_uri_join_strings(base_uri: *const c_char, ref_uri: *const c_char) -> *mut c_char;
     pub fn gst_uri_protocol_is_supported(type_: GstURIType, protocol: *const c_char) -> gboolean;
     pub fn gst_uri_protocol_is_valid(protocol: *const c_char) -> gboolean;
+
+    //=========================================================================
+    // GstVecDeque
+    //=========================================================================
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_vec_deque_clear(array: *mut GstVecDeque);
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_vec_deque_drop_element(array: *mut GstVecDeque, idx: size_t) -> gpointer;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_vec_deque_drop_struct(
+        array: *mut GstVecDeque,
+        idx: size_t,
+        p_struct: gpointer,
+    ) -> gboolean;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_vec_deque_find(
+        array: *mut GstVecDeque,
+        func: glib::GCompareFunc,
+        data: gpointer,
+    ) -> size_t;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_vec_deque_free(array: *mut GstVecDeque);
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_vec_deque_get_length(array: *mut GstVecDeque) -> size_t;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_vec_deque_is_empty(array: *mut GstVecDeque) -> gboolean;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_vec_deque_peek_head(array: *mut GstVecDeque) -> gpointer;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_vec_deque_peek_head_struct(array: *mut GstVecDeque) -> gpointer;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_vec_deque_peek_nth(array: *mut GstVecDeque, idx: size_t) -> gpointer;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_vec_deque_peek_nth_struct(array: *mut GstVecDeque, idx: size_t) -> gpointer;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_vec_deque_peek_tail(array: *mut GstVecDeque) -> gpointer;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_vec_deque_peek_tail_struct(array: *mut GstVecDeque) -> gpointer;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_vec_deque_pop_head(array: *mut GstVecDeque) -> gpointer;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_vec_deque_pop_head_struct(array: *mut GstVecDeque) -> gpointer;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_vec_deque_pop_tail(array: *mut GstVecDeque) -> gpointer;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_vec_deque_pop_tail_struct(array: *mut GstVecDeque) -> gpointer;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_vec_deque_push_sorted(
+        array: *mut GstVecDeque,
+        data: gpointer,
+        func: glib::GCompareDataFunc,
+        user_data: gpointer,
+    );
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_vec_deque_push_sorted_struct(
+        array: *mut GstVecDeque,
+        p_struct: gpointer,
+        func: glib::GCompareDataFunc,
+        user_data: gpointer,
+    );
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_vec_deque_push_tail(array: *mut GstVecDeque, data: gpointer);
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_vec_deque_push_tail_struct(array: *mut GstVecDeque, p_struct: gpointer);
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_vec_deque_set_clear_func(array: *mut GstVecDeque, clear_func: glib::GDestroyNotify);
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_vec_deque_sort(
+        array: *mut GstVecDeque,
+        compare_func: glib::GCompareDataFunc,
+        user_data: gpointer,
+    );
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_vec_deque_new(initial_size: size_t) -> *mut GstVecDeque;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_vec_deque_new_for_struct(
+        struct_size: size_t,
+        initial_size: size_t,
+    ) -> *mut GstVecDeque;
 
     //=========================================================================
     // GstAllocator

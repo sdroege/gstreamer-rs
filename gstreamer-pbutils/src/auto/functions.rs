@@ -58,6 +58,25 @@ pub fn codec_utils_aac_get_sample_rate_from_index(sr_idx: u32) -> u32 {
     unsafe { ffi::gst_codec_utils_aac_get_sample_rate_from_index(sr_idx) }
 }
 
+#[cfg(feature = "v1_26")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+#[doc(alias = "gst_codec_utils_av1_get_level")]
+pub fn codec_utils_av1_get_level(seq_level_idx: u8) -> Result<glib::GString, glib::BoolError> {
+    assert_initialized_main_thread!();
+    unsafe {
+        Option::<_>::from_glib_none(ffi::gst_codec_utils_av1_get_level(seq_level_idx))
+            .ok_or_else(|| glib::bool_error!("Failed to get AV1 level"))
+    }
+}
+
+#[cfg(feature = "v1_26")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+#[doc(alias = "gst_codec_utils_av1_get_seq_level_idx")]
+pub fn codec_utils_av1_get_seq_level_idx(level: &str) -> u8 {
+    assert_initialized_main_thread!();
+    unsafe { ffi::gst_codec_utils_av1_get_seq_level_idx(level.to_glib_none().0) }
+}
+
 #[cfg(feature = "v1_22")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 #[doc(alias = "gst_codec_utils_caps_from_mime_codec")]

@@ -2570,6 +2570,22 @@ pub enum VideoFormat {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     #[doc(alias = "GST_VIDEO_FORMAT_RBGA")]
     Rbga,
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_Y216_LE")]
+    Y216Le,
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_Y216_BE")]
+    Y216Be,
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_Y416_LE")]
+    Y416Le,
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_Y416_BE")]
+    Y416Be,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -2800,6 +2816,14 @@ impl IntoGlib for VideoFormat {
             Self::Gbr16be => ffi::GST_VIDEO_FORMAT_GBR_16BE,
             #[cfg(feature = "v1_24")]
             Self::Rbga => ffi::GST_VIDEO_FORMAT_RBGA,
+            #[cfg(feature = "v1_26")]
+            Self::Y216Le => ffi::GST_VIDEO_FORMAT_Y216_LE,
+            #[cfg(feature = "v1_26")]
+            Self::Y216Be => ffi::GST_VIDEO_FORMAT_Y216_BE,
+            #[cfg(feature = "v1_26")]
+            Self::Y416Le => ffi::GST_VIDEO_FORMAT_Y416_LE,
+            #[cfg(feature = "v1_26")]
+            Self::Y416Be => ffi::GST_VIDEO_FORMAT_Y416_BE,
             Self::__Unknown(value) => value,
         }
     }
@@ -2998,6 +3022,14 @@ impl FromGlib<ffi::GstVideoFormat> for VideoFormat {
             ffi::GST_VIDEO_FORMAT_GBR_16BE => Self::Gbr16be,
             #[cfg(feature = "v1_24")]
             ffi::GST_VIDEO_FORMAT_RBGA => Self::Rbga,
+            #[cfg(feature = "v1_26")]
+            ffi::GST_VIDEO_FORMAT_Y216_LE => Self::Y216Le,
+            #[cfg(feature = "v1_26")]
+            ffi::GST_VIDEO_FORMAT_Y216_BE => Self::Y216Be,
+            #[cfg(feature = "v1_26")]
+            ffi::GST_VIDEO_FORMAT_Y416_LE => Self::Y416Le,
+            #[cfg(feature = "v1_26")]
+            ffi::GST_VIDEO_FORMAT_Y416_BE => Self::Y416Be,
             value => Self::__Unknown(value),
         }
     }

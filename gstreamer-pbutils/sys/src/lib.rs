@@ -821,6 +821,12 @@ extern "C" {
     pub fn gst_codec_utils_aac_get_profile(audio_config: *const u8, len: c_uint) -> *const c_char;
     pub fn gst_codec_utils_aac_get_sample_rate(audio_config: *const u8, len: c_uint) -> c_uint;
     pub fn gst_codec_utils_aac_get_sample_rate_from_index(sr_idx: c_uint) -> c_uint;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_codec_utils_av1_get_level(seq_level_idx: u8) -> *const c_char;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_codec_utils_av1_get_seq_level_idx(level: *const c_char) -> u8;
     #[cfg(feature = "v1_22")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_codec_utils_caps_from_mime_codec(codecs_field: *const c_char) -> *mut gst::GstCaps;
