@@ -147,6 +147,11 @@ status = "generate"
         nullable_return_is_error = "Unsupported caps"
 
     [[object.function]]
+    name = "codec_utils_av1_get_level"
+        [object.function.return]
+        nullable_return_is_error = "Failed to get AV1 level"
+
+    [[object.function]]
     name = "codec_utils_opus_create_caps"
     # Manual checks
     manual = true
@@ -362,8 +367,6 @@ status = "generate"
     [[object.function]]
     name = "from_string"
         [object.function.return]
-        # https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/6775
-        nullable = true
         nullable_return_is_error = "Failed to create EncodingProfile from string"
 
 [[object]]
