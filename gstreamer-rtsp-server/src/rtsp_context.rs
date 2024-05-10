@@ -1,9 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use std::{
-    marker::PhantomData,
-    ptr::{self, addr_of},
-};
+use std::{marker::PhantomData, ptr};
 
 use glib::{prelude::*, translate::*};
 use gst_rtsp::{rtsp_message::RTSPMessage, RTSPUrl};
@@ -36,9 +33,7 @@ impl RTSPContext {
             if (*ptr).uri.is_null() {
                 None
             } else {
-                let uri = RTSPUrl::from_glib_ptr_borrow(
-                    addr_of!((*ptr).uri) as *const *const gst_rtsp::ffi::GstRTSPUrl
-                );
+                let uri = RTSPUrl::from_glib_ptr_borrow(&(*ptr).uri);
                 Some(uri)
             }
         }
@@ -51,9 +46,7 @@ impl RTSPContext {
             if (*ptr).client.is_null() {
                 None
             } else {
-                let client = RTSPClient::from_glib_ptr_borrow(
-                    addr_of!((*ptr).client) as *const *const ffi::GstRTSPClient
-                );
+                let client = RTSPClient::from_glib_ptr_borrow(&(*ptr).client);
                 Some(client)
             }
         }
@@ -66,9 +59,7 @@ impl RTSPContext {
             if (*ptr).request.is_null() {
                 None
             } else {
-                let msg = RTSPMessage::from_glib_ptr_borrow(
-                    addr_of!((*ptr).request) as *const *const gst_rtsp::ffi::GstRTSPMessage
-                );
+                let msg = RTSPMessage::from_glib_ptr_borrow(&(*ptr).request);
                 Some(msg)
             }
         }
@@ -81,9 +72,7 @@ impl RTSPContext {
             if (*ptr).response.is_null() {
                 None
             } else {
-                let msg = RTSPMessage::from_glib_ptr_borrow(
-                    addr_of!((*ptr).response) as *const *const gst_rtsp::ffi::GstRTSPMessage
-                );
+                let msg = RTSPMessage::from_glib_ptr_borrow(&(*ptr).response);
                 Some(msg)
             }
         }
@@ -96,9 +85,7 @@ impl RTSPContext {
             if (*ptr).session.is_null() {
                 None
             } else {
-                let sess = RTSPSession::from_glib_ptr_borrow(
-                    addr_of!((*ptr).session) as *const *const ffi::GstRTSPSession
-                );
+                let sess = RTSPSession::from_glib_ptr_borrow(&(*ptr).session);
                 Some(sess)
             }
         }
