@@ -34,6 +34,18 @@ pub fn post_panic_error_message(
 macro_rules! panic_to_error(
     ($imp:expr, $ret:expr, $code:block) => {{
         #[allow(clippy::unused_unit)]
+        #[cfg(panic = "abort")]
+        {
+            if true {
+                #[allow(unused_mut)]
+                let mut closure = || { $code };
+                closure()
+            } else {
+                let _imp = $imp;
+                $ret
+            }
+        }
+        #[cfg(not(panic = "abort"))]
         {
             let panicked = $imp.panicked();
             let element = $crate::glib::subclass::types::ObjectSubclassExt::obj($imp);

@@ -286,8 +286,16 @@ pub trait ElementImplExt: sealed::Sealed + ObjectSubclass {
 
     #[inline(never)]
     fn panicked(&self) -> &atomic::AtomicBool {
-        self.instance_data::<atomic::AtomicBool>(crate::Element::static_type())
-            .expect("instance not initialized correctly")
+        #[cfg(panic = "abort")]
+        {
+            static DUMMY: atomic::AtomicBool = atomic::AtomicBool::new(false);
+            &DUMMY
+        }
+        #[cfg(not(panic = "abort"))]
+        {
+            self.instance_data::<atomic::AtomicBool>(crate::Element::static_type())
+                .expect("instance not initialized correctly")
+        }
     }
 
     fn catch_panic<R, F: FnOnce(&Self) -> R, G: FnOnce() -> R>(&self, fallback: G, f: F) -> R {
@@ -408,6 +416,7 @@ unsafe impl<T: ElementImpl> IsSubclassable<T> for Element {
     fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
         Self::parent_instance_init::<T>(instance);
 
+        #[cfg(not(panic = "abort"))]
         instance.set_instance_data(Self::static_type(), atomic::AtomicBool::new(false));
     }
 }
@@ -429,7 +438,10 @@ unsafe extern "C" fn element_change_state<T: ElementImpl>(
         _ => StateChangeReturn::Failure,
     };
 
-    panic_to_error!(imp, fallback, { imp.change_state(transition).into() }).into_glib()
+    panic_to_error!(imp, fallback, {
+        StateChangeReturn::from(imp.change_state(transition))
+    })
+    .into_glib()
 }
 
 unsafe extern "C" fn element_request_new_pad<T: ElementImpl>(
