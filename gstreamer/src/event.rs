@@ -2910,7 +2910,7 @@ impl<'a> SelectStreamsBuilder<'a> {
     }
 
     event_builder_generic_impl!(|s: &Self| {
-        ffi::gst_event_new_select_streams(s.streams.to_glib_full())
+        ffi::gst_event_new_select_streams(s.streams.to_glib_none().0)
     });
 }
 
@@ -3123,5 +3123,18 @@ mod tests {
         };
 
         assert_eq!(&*caps, caps2);
+    }
+
+    #[test]
+    fn test_select_streams() {
+        crate::init().unwrap();
+
+        let s = ["foo", "bar"].to_vec();
+        let event = crate::event::SelectStreams::new(&s);
+        let streams = match event.view() {
+            EventView::SelectStreams(streams) => streams.streams(),
+            _ => unreachable!(),
+        };
+        assert_eq!(streams, s);
     }
 }
