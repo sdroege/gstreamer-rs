@@ -44,6 +44,10 @@ impl BufferListRef {
 
     #[doc(alias = "gst_buffer_list_remove")]
     pub fn remove(&mut self, idx: u32, len: u32) {
+        let n = self.len() as u32;
+        assert!(idx < n);
+        assert!(idx.checked_add(len).unwrap() <= n);
+
         unsafe { ffi::gst_buffer_list_remove(self.as_mut_ptr(), idx, len) }
     }
 
