@@ -459,5 +459,32 @@ mod tests {
             res,
             &[(Some(ClockTime::ZERO), 0), (Some(3 * ClockTime::SECOND), 1)]
         );
+
+        // Try removing buffers from inside foreach_mut
+        let mut buffer_list = BufferList::new();
+        for i in 0..10 {
+            let buffer_list = buffer_list.get_mut().unwrap();
+            let mut buffer = Buffer::new();
+            buffer.get_mut().unwrap().set_pts(i * ClockTime::SECOND);
+            buffer_list.add(buffer);
+        }
+
+        assert_eq!(buffer_list.len(), 10);
+
+        let buffer_list_ref = buffer_list.make_mut();
+
+        buffer_list_ref.foreach_mut(|buf, _n| {
+            let keep_packet = (buf.pts().unwrap() / ClockTime::SECOND) % 3 != 0;
+            ControlFlow::Continue(keep_packet.then_some(buf))
+        });
+
+        assert_eq!(buffer_list.len(), 6);
+
+        let res = buffer_list
+            .iter()
+            .map(|buf| buf.pts().unwrap() / ClockTime::SECOND)
+            .collect::<Vec<_>>();
+
+        assert_eq!(res, &[1, 2, 4, 5, 7, 8]);
     }
 }
