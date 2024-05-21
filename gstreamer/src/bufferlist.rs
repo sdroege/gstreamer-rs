@@ -1,6 +1,10 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use std::{fmt, ops::ControlFlow, ptr};
+use std::{
+    fmt,
+    ops::{ControlFlow, RangeBounds},
+    ptr,
+};
 
 use glib::translate::*;
 
@@ -43,12 +47,23 @@ impl BufferListRef {
     }
 
     #[doc(alias = "gst_buffer_list_remove")]
-    pub fn remove(&mut self, idx: u32, len: u32) {
+    pub fn remove(&mut self, range: impl RangeBounds<u32>) {
         let n = self.len() as u32;
-        assert!(idx < n);
-        assert!(idx.checked_add(len).unwrap() <= n);
+        let start_idx = match range.start_bound() {
+            std::ops::Bound::Included(idx) => *idx,
+            std::ops::Bound::Excluded(idx) => idx.checked_add(1).unwrap(),
+            std::ops::Bound::Unbounded => 0,
+        };
+        assert!(start_idx < n);
 
-        unsafe { ffi::gst_buffer_list_remove(self.as_mut_ptr(), idx, len) }
+        let end_idx = match range.end_bound() {
+            std::ops::Bound::Included(idx) => *idx,
+            std::ops::Bound::Excluded(idx) => idx.checked_add(1).unwrap(),
+            std::ops::Bound::Unbounded => n,
+        };
+        assert!(end_idx <= n);
+
+        unsafe { ffi::gst_buffer_list_remove(self.as_mut_ptr(), start_idx, end_idx - start_idx) }
     }
 
     #[doc(alias = "gst_buffer_list_get")]
