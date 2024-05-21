@@ -50,20 +50,22 @@ impl BufferListRef {
     #[doc(alias = "gst_buffer_list_get")]
     pub fn get(&self, idx: u32) -> Option<&BufferRef> {
         unsafe {
-            let ptr = ffi::gst_buffer_list_get(self.as_mut_ptr(), idx);
-            if ptr.is_null() {
-                None
-            } else {
-                Some(BufferRef::from_ptr(ptr))
+            if idx as usize >= self.len() {
+                return None;
             }
+            let ptr = ffi::gst_buffer_list_get(self.as_mut_ptr(), idx);
+            Some(BufferRef::from_ptr(ptr))
         }
     }
 
     #[doc(alias = "gst_buffer_list_get")]
     pub fn get_owned(&self, idx: u32) -> Option<Buffer> {
         unsafe {
+            if idx as usize >= self.len() {
+                return None;
+            }
             let ptr = ffi::gst_buffer_list_get(self.as_mut_ptr(), idx);
-            from_glib_none(ptr)
+            Some(from_glib_none(ptr))
         }
     }
 
@@ -71,12 +73,11 @@ impl BufferListRef {
     #[doc(alias = "get_writable")]
     pub fn get_mut(&mut self, idx: u32) -> Option<&mut BufferRef> {
         unsafe {
-            let ptr = ffi::gst_buffer_list_get_writable(self.as_mut_ptr(), idx);
-            if ptr.is_null() {
-                None
-            } else {
-                Some(BufferRef::from_mut_ptr(ptr))
+            if idx as usize >= self.len() {
+                return None;
             }
+            let ptr = ffi::gst_buffer_list_get_writable(self.as_mut_ptr(), idx);
+            Some(BufferRef::from_mut_ptr(ptr))
         }
     }
 
