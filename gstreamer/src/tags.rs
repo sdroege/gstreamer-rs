@@ -464,18 +464,18 @@ impl TagListRef {
     }
 
     #[doc(alias = "gst_tag_list_n_tags")]
-    pub fn n_tags(&self) -> u32 {
-        unsafe { ffi::gst_tag_list_n_tags(self.as_ptr()) as u32 }
+    pub fn n_tags(&self) -> usize {
+        unsafe { ffi::gst_tag_list_n_tags(self.as_ptr()) as usize }
     }
 
     #[doc(alias = "gst_tag_list_nth_tag_name")]
-    pub fn nth_tag_name(&self, idx: u32) -> Option<&glib::GStr> {
+    pub fn nth_tag_name(&self, idx: usize) -> Option<&glib::GStr> {
         if idx >= self.n_tags() {
             return None;
         }
 
         unsafe {
-            let name = ffi::gst_tag_list_nth_tag_name(self.as_ptr(), idx);
+            let name = ffi::gst_tag_list_nth_tag_name(self.as_ptr(), idx as u32);
             debug_assert!(!name.is_null());
             Some(glib::GStr::from_ptr(name))
         }
@@ -483,7 +483,7 @@ impl TagListRef {
 
     #[doc(alias = "get_index")]
     #[doc(alias = "gst_tag_list_get_index")]
-    pub fn index<'a, T: Tag<'a>>(&self, idx: u32) -> Option<&'a TagValue<T::TagType>> {
+    pub fn index<'a, T: Tag<'a>>(&self, idx: usize) -> Option<&'a TagValue<T::TagType>> {
         self.index_generic(T::TAG_NAME, idx).map(|value| {
             if !value.is::<T::TagType>() {
                 panic!(
@@ -498,8 +498,9 @@ impl TagListRef {
 
     #[doc(alias = "get_index_generic")]
     #[doc(alias = "gst_tag_list_get_index")]
-    pub fn index_generic(&self, tag_name: impl IntoGStr, idx: u32) -> Option<&SendValue> {
+    pub fn index_generic(&self, tag_name: impl IntoGStr, idx: usize) -> Option<&SendValue> {
         unsafe {
+            let idx = u32::try_from(idx).ok()?;
             let value = tag_name.run_with_gstr(|tag_name| {
                 ffi::gst_tag_list_get_value_index(self.as_ptr(), tag_name.as_ptr(), idx)
             });
@@ -514,16 +515,16 @@ impl TagListRef {
 
     #[doc(alias = "get_size")]
     #[doc(alias = "gst_tag_list_get_tag_size")]
-    pub fn size<'a, T: Tag<'a>>(&self) -> u32 {
+    pub fn size<'a, T: Tag<'a>>(&self) -> usize {
         self.size_by_name(T::TAG_NAME)
     }
 
     #[doc(alias = "get_size_by_name")]
     #[doc(alias = "gst_tag_list_get_tag_size")]
-    pub fn size_by_name(&self, tag_name: impl IntoGStr) -> u32 {
+    pub fn size_by_name(&self, tag_name: impl IntoGStr) -> usize {
         unsafe {
             tag_name.run_with_gstr(|tag_name| {
-                ffi::gst_tag_list_get_tag_size(self.as_ptr(), tag_name.as_ptr())
+                ffi::gst_tag_list_get_tag_size(self.as_ptr(), tag_name.as_ptr()) as usize
             })
         }
     }
@@ -648,7 +649,7 @@ impl<'a, T: Tag<'a>> TagIter<'a, T> {
         TagIter {
             taglist,
             idx: 0,
-            size: taglist.size::<T>() as usize,
+            size: taglist.size::<T>(),
             phantom: PhantomData,
         }
     }
@@ -666,7 +667,7 @@ where
             return None;
         }
 
-        let item = self.taglist.index::<T>(self.idx as u32).unwrap();
+        let item = self.taglist.index::<T>(self.idx).unwrap();
         self.idx += 1;
 
         Some(item)
@@ -689,7 +690,7 @@ where
             None
         } else {
             self.idx = end + 1;
-            Some(self.taglist.index::<T>(end as u32).unwrap())
+            Some(self.taglist.index::<T>(end).unwrap())
         }
     }
 
@@ -697,7 +698,7 @@ where
         if self.idx == self.size {
             None
         } else {
-            Some(self.taglist.index::<T>(self.size as u32 - 1).unwrap())
+            Some(self.taglist.index::<T>(self.size - 1).unwrap())
         }
     }
 }
@@ -713,7 +714,7 @@ where
         }
 
         self.size -= 1;
-        Some(self.taglist.index::<T>(self.size as u32).unwrap())
+        Some(self.taglist.index::<T>(self.size).unwrap())
     }
 
     fn nth_back(&mut self, n: usize) -> Option<Self::Item> {
@@ -723,7 +724,7 @@ where
             None
         } else {
             self.size = end - 1;
-            Some(self.taglist.index::<T>(self.size as u32).unwrap())
+            Some(self.taglist.index::<T>(self.size).unwrap())
         }
     }
 }
@@ -757,7 +758,7 @@ impl<'a> GenericTagIter<'a> {
             taglist,
             name,
             idx: 0,
-            size: taglist.size_by_name(name) as usize,
+            size: taglist.size_by_name(name),
         }
     }
 }
@@ -770,10 +771,7 @@ impl<'a> Iterator for GenericTagIter<'a> {
             return None;
         }
 
-        let item = self
-            .taglist
-            .index_generic(self.name, self.idx as u32)
-            .unwrap();
+        let item = self.taglist.index_generic(self.name, self.idx).unwrap();
         self.idx += 1;
 
         Some(item)
@@ -796,7 +794,7 @@ impl<'a> Iterator for GenericTagIter<'a> {
             None
         } else {
             self.idx = end + 1;
-            Some(self.taglist.index_generic(self.name, end as u32).unwrap())
+            Some(self.taglist.index_generic(self.name, end).unwrap())
         }
     }
 
@@ -806,7 +804,7 @@ impl<'a> Iterator for GenericTagIter<'a> {
         } else {
             Some(
                 self.taglist
-                    .index_generic(self.name, self.size as u32 - 1)
+                    .index_generic(self.name, self.size - 1)
                     .unwrap(),
             )
         }
@@ -820,11 +818,7 @@ impl<'a> DoubleEndedIterator for GenericTagIter<'a> {
         }
 
         self.size -= 1;
-        Some(
-            self.taglist
-                .index_generic(self.name, self.size as u32)
-                .unwrap(),
-        )
+        Some(self.taglist.index_generic(self.name, self.size).unwrap())
     }
 
     fn nth_back(&mut self, n: usize) -> Option<Self::Item> {
@@ -834,11 +828,7 @@ impl<'a> DoubleEndedIterator for GenericTagIter<'a> {
             None
         } else {
             self.size = end - 1;
-            Some(
-                self.taglist
-                    .index_generic(self.name, self.size as u32)
-                    .unwrap(),
-            )
+            Some(self.taglist.index_generic(self.name, self.size).unwrap())
         }
     }
 }
@@ -861,7 +851,7 @@ impl<'a> GenericIter<'a> {
         GenericIter {
             taglist,
             idx: 0,
-            size: if size > 0 { size as usize } else { 0 },
+            size: if size > 0 { size } else { 0 },
         }
     }
 }
@@ -874,7 +864,7 @@ impl<'a> Iterator for GenericIter<'a> {
             return None;
         }
 
-        let name = self.taglist.nth_tag_name(self.idx as u32).unwrap();
+        let name = self.taglist.nth_tag_name(self.idx).unwrap();
         let item = (name, self.taglist.iter_tag_generic(name));
         self.idx += 1;
 
@@ -898,7 +888,7 @@ impl<'a> Iterator for GenericIter<'a> {
             None
         } else {
             self.idx = end + 1;
-            let name = self.taglist.nth_tag_name(end as u32).unwrap();
+            let name = self.taglist.nth_tag_name(end).unwrap();
             Some((name, self.taglist.iter_tag_generic(name)))
         }
     }
@@ -907,7 +897,7 @@ impl<'a> Iterator for GenericIter<'a> {
         if self.idx == self.size {
             None
         } else {
-            let name = self.taglist.nth_tag_name(self.size as u32 - 1).unwrap();
+            let name = self.taglist.nth_tag_name(self.size - 1).unwrap();
             Some((name, self.taglist.iter_tag_generic(name)))
         }
     }
@@ -920,7 +910,7 @@ impl<'a> DoubleEndedIterator for GenericIter<'a> {
         }
 
         self.size -= 1;
-        let name = self.taglist.nth_tag_name(self.idx as u32).unwrap();
+        let name = self.taglist.nth_tag_name(self.idx).unwrap();
         Some((name, self.taglist.iter_tag_generic(name)))
     }
 
@@ -931,7 +921,7 @@ impl<'a> DoubleEndedIterator for GenericIter<'a> {
             None
         } else {
             self.size = end - 1;
-            let name = self.taglist.nth_tag_name(self.size as u32).unwrap();
+            let name = self.taglist.nth_tag_name(self.size).unwrap();
             Some((name, self.taglist.iter_tag_generic(name)))
         }
     }
@@ -955,7 +945,7 @@ impl<'a> Iter<'a> {
         Iter {
             taglist,
             idx: 0,
-            size: if size > 0 { size as usize } else { 0 },
+            size: if size > 0 { size } else { 0 },
         }
     }
 }
@@ -968,7 +958,7 @@ impl<'a> Iterator for Iter<'a> {
             return None;
         }
 
-        let name = self.taglist.nth_tag_name(self.idx as u32).unwrap();
+        let name = self.taglist.nth_tag_name(self.idx).unwrap();
         let item = (name, self.taglist.generic(name).unwrap());
         self.idx += 1;
 
@@ -992,7 +982,7 @@ impl<'a> Iterator for Iter<'a> {
             None
         } else {
             self.idx = end + 1;
-            let name = self.taglist.nth_tag_name(end as u32).unwrap();
+            let name = self.taglist.nth_tag_name(end).unwrap();
             Some((name, self.taglist.generic(name).unwrap()))
         }
     }
@@ -1001,7 +991,7 @@ impl<'a> Iterator for Iter<'a> {
         if self.idx == self.size {
             None
         } else {
-            let name = self.taglist.nth_tag_name(self.size as u32 - 1).unwrap();
+            let name = self.taglist.nth_tag_name(self.size - 1).unwrap();
             Some((name, self.taglist.generic(name).unwrap()))
         }
     }
@@ -1014,7 +1004,7 @@ impl<'a> DoubleEndedIterator for Iter<'a> {
         }
 
         self.size -= 1;
-        let name = self.taglist.nth_tag_name(self.idx as u32).unwrap();
+        let name = self.taglist.nth_tag_name(self.idx).unwrap();
         Some((name, self.taglist.generic(name).unwrap()))
     }
 
@@ -1025,7 +1015,7 @@ impl<'a> DoubleEndedIterator for Iter<'a> {
             None
         } else {
             self.size = end - 1;
-            let name = self.taglist.nth_tag_name(self.size as u32).unwrap();
+            let name = self.taglist.nth_tag_name(self.size).unwrap();
             Some((name, self.taglist.generic(name).unwrap()))
         }
     }

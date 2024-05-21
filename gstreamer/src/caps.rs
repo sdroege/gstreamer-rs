@@ -316,13 +316,13 @@ impl CapsRef {
 
     #[doc(alias = "get_structure")]
     #[doc(alias = "gst_caps_get_structure")]
-    pub fn structure(&self, idx: u32) -> Option<&StructureRef> {
+    pub fn structure(&self, idx: usize) -> Option<&StructureRef> {
         if idx >= self.size() {
             return None;
         }
 
         unsafe {
-            let structure = ffi::gst_caps_get_structure(self.as_ptr(), idx);
+            let structure = ffi::gst_caps_get_structure(self.as_ptr(), idx as u32);
             if structure.is_null() {
                 return None;
             }
@@ -333,13 +333,13 @@ impl CapsRef {
 
     #[doc(alias = "get_mut_structure")]
     #[doc(alias = "gst_caps_get_structure")]
-    pub fn structure_mut(&mut self, idx: u32) -> Option<&mut StructureRef> {
+    pub fn structure_mut(&mut self, idx: usize) -> Option<&mut StructureRef> {
         if idx >= self.size() {
             return None;
         }
 
         unsafe {
-            let structure = ffi::gst_caps_get_structure(self.as_ptr(), idx);
+            let structure = ffi::gst_caps_get_structure(self.as_ptr(), idx as u32);
             if structure.is_null() {
                 return None;
             }
@@ -350,38 +350,38 @@ impl CapsRef {
 
     #[doc(alias = "get_features")]
     #[doc(alias = "gst_caps_get_features")]
-    pub fn features(&self, idx: u32) -> Option<&CapsFeaturesRef> {
+    pub fn features(&self, idx: usize) -> Option<&CapsFeaturesRef> {
         if idx >= self.size() {
             return None;
         }
 
         unsafe {
-            let features = ffi::gst_caps_get_features(self.as_ptr(), idx);
+            let features = ffi::gst_caps_get_features(self.as_ptr(), idx as u32);
             Some(CapsFeaturesRef::from_glib_borrow(features))
         }
     }
 
     #[doc(alias = "get_mut_features")]
     #[doc(alias = "gst_caps_get_features")]
-    pub fn features_mut(&mut self, idx: u32) -> Option<&mut CapsFeaturesRef> {
+    pub fn features_mut(&mut self, idx: usize) -> Option<&mut CapsFeaturesRef> {
         if idx >= self.size() {
             return None;
         }
 
         unsafe {
-            let features = ffi::gst_caps_get_features(self.as_ptr(), idx);
+            let features = ffi::gst_caps_get_features(self.as_ptr(), idx as u32);
             Some(CapsFeaturesRef::from_glib_borrow_mut(features))
         }
     }
 
     #[doc(alias = "gst_caps_set_features")]
-    pub fn set_features(&mut self, idx: u32, features: Option<CapsFeatures>) {
+    pub fn set_features(&mut self, idx: usize, features: Option<CapsFeatures>) {
         assert!(idx < self.size());
 
         unsafe {
             ffi::gst_caps_set_features(
                 self.as_mut_ptr(),
-                idx,
+                idx as u32,
                 features
                     .map(|f| f.into_glib_ptr())
                     .unwrap_or(ptr::null_mut()),
@@ -405,8 +405,12 @@ impl CapsRef {
 
     #[doc(alias = "get_size")]
     #[doc(alias = "gst_caps_get_size")]
-    pub fn size(&self) -> u32 {
-        unsafe { ffi::gst_caps_get_size(self.as_ptr()) }
+    pub fn size(&self) -> usize {
+        unsafe { ffi::gst_caps_get_size(self.as_ptr()) as usize }
+    }
+
+    pub fn len(&self) -> usize {
+        self.size()
     }
 
     pub fn iter(&self) -> Iter {
@@ -444,8 +448,10 @@ impl CapsRef {
     }
 
     #[doc(alias = "gst_caps_remove_structure")]
-    pub fn remove_structure(&mut self, idx: u32) {
-        unsafe { ffi::gst_caps_remove_structure(self.as_mut_ptr(), idx) }
+    pub fn remove_structure(&mut self, idx: usize) {
+        assert!(idx < self.size());
+
+        unsafe { ffi::gst_caps_remove_structure(self.as_mut_ptr(), idx as u32) }
     }
 
     #[doc(alias = "gst_caps_append")]
@@ -704,7 +710,7 @@ macro_rules! define_iter(
             }
 
             unsafe {
-                let item = $get_item(self.caps, self.idx as u32).unwrap();
+                let item = $get_item(self.caps, self.idx).unwrap();
                 self.idx += 1;
                 Some(item)
             }
@@ -728,7 +734,7 @@ macro_rules! define_iter(
             } else {
                 unsafe {
                     self.idx = end + 1;
-                    Some($get_item(self.caps, end as u32).unwrap())
+                    Some($get_item(self.caps, end).unwrap())
                 }
             }
         }
@@ -738,7 +744,7 @@ macro_rules! define_iter(
                 None
             } else {
                 unsafe {
-                    Some($get_item(self.caps, self.n_structures as u32 - 1).unwrap())
+                    Some($get_item(self.caps, self.n_structures - 1).unwrap())
                 }
             }
         }
@@ -754,7 +760,7 @@ macro_rules! define_iter(
             self.n_structures -= 1;
 
             unsafe {
-                Some($get_item(self.caps, self.n_structures as u32).unwrap())
+                Some($get_item(self.caps, self.n_structures).unwrap())
             }
         }
 
@@ -766,7 +772,7 @@ macro_rules! define_iter(
             } else {
                 self.n_structures = end - 1;
                 unsafe {
-                    Some($get_item(self.caps, self.n_structures as u32).unwrap())
+                    Some($get_item(self.caps, self.n_structures).unwrap())
                 }
             }
         }
@@ -783,7 +789,7 @@ define_iter!(
     &'a CapsRef,
     &'a StructureRef,
     |caps: &CapsRef, idx| {
-        let ptr = ffi::gst_caps_get_structure(caps.as_ptr(), idx);
+        let ptr = ffi::gst_caps_get_structure(caps.as_ptr(), idx as u32);
         if ptr.is_null() {
             None
         } else {
@@ -798,7 +804,7 @@ define_iter!(
     &'a mut CapsRef,
     &'a mut StructureRef,
     |caps: &CapsRef, idx| {
-        let ptr = ffi::gst_caps_get_structure(caps.as_ptr(), idx);
+        let ptr = ffi::gst_caps_get_structure(caps.as_ptr(), idx as u32);
         if ptr.is_null() {
             None
         } else {
@@ -811,8 +817,8 @@ define_iter!(
     &'a CapsRef,
     (&'a StructureRef, &'a CapsFeaturesRef),
     |caps: &CapsRef, idx| {
-        let ptr1 = ffi::gst_caps_get_structure(caps.as_ptr(), idx);
-        let ptr2 = ffi::gst_caps_get_features(caps.as_ptr(), idx);
+        let ptr1 = ffi::gst_caps_get_structure(caps.as_ptr(), idx as u32);
+        let ptr2 = ffi::gst_caps_get_features(caps.as_ptr(), idx as u32);
         if ptr1.is_null() || ptr2.is_null() {
             None
         } else {
@@ -828,8 +834,8 @@ define_iter!(
     &'a mut CapsRef,
     (&'a mut StructureRef, &'a mut CapsFeaturesRef),
     |caps: &CapsRef, idx| {
-        let ptr1 = ffi::gst_caps_get_structure(caps.as_ptr(), idx);
-        let ptr2 = ffi::gst_caps_get_features(caps.as_ptr(), idx);
+        let ptr1 = ffi::gst_caps_get_structure(caps.as_ptr(), idx as u32);
+        let ptr2 = ffi::gst_caps_get_features(caps.as_ptr(), idx as u32);
         if ptr1.is_null() || ptr2.is_null() {
             None
         } else {

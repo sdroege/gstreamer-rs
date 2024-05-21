@@ -209,9 +209,10 @@ impl BufferRef {
 
     fn memory_range_into_idx_len(
         &self,
-        range: impl RangeBounds<u32>,
+        range: impl RangeBounds<usize>,
     ) -> Result<(u32, i32), glib::BoolError> {
         let n_memory = self.n_memory();
+        debug_assert!(n_memory <= u32::MAX as usize);
 
         let start_idx = match range.start_bound() {
             ops::Bound::Included(idx) if *idx >= n_memory => {
@@ -238,7 +239,7 @@ impl BufferRef {
         };
 
         Ok((
-            start_idx,
+            start_idx as u32,
             i32::try_from(end_idx - start_idx).map_err(|_| glib::bool_error!("Too large range"))?,
         ))
     }
@@ -247,7 +248,7 @@ impl BufferRef {
     #[inline]
     pub fn map_range_readable(
         &self,
-        range: impl RangeBounds<u32>,
+        range: impl RangeBounds<usize>,
     ) -> Result<BufferMap<Readable>, glib::BoolError> {
         let (idx, len) = self.memory_range_into_idx_len(range)?;
         unsafe {
@@ -275,7 +276,7 @@ impl BufferRef {
     #[inline]
     pub fn map_range_writable(
         &mut self,
-        range: impl RangeBounds<u32>,
+        range: impl RangeBounds<usize>,
     ) -> Result<BufferMap<Writable>, glib::BoolError> {
         let (idx, len) = self.memory_range_into_idx_len(range)?;
         unsafe {
@@ -656,7 +657,7 @@ impl BufferRef {
     }
 
     #[doc(alias = "gst_buffer_find_memory")]
-    pub fn find_memory(&self, range: impl RangeBounds<usize>) -> Option<(Range<u32>, usize)> {
+    pub fn find_memory(&self, range: impl RangeBounds<usize>) -> Option<(Range<usize>, usize)> {
         let (offset, size) = self.byte_range_into_offset_len(range).ok()?;
 
         unsafe {
@@ -674,8 +675,8 @@ impl BufferRef {
             ));
 
             if res {
-                let idx = idx.assume_init();
-                let length = length.assume_init();
+                let idx = idx.assume_init() as usize;
+                let length = length.assume_init() as usize;
                 let skip = skip.assume_init();
                 Some((idx..(idx + length), skip))
             } else {
@@ -687,56 +688,43 @@ impl BufferRef {
     #[doc(alias = "get_all_memory")]
     #[doc(alias = "gst_buffer_get_all_memory")]
     pub fn all_memory(&self) -> Option<Memory> {
-        unsafe {
-            let res = ffi::gst_buffer_get_all_memory(self.as_mut_ptr());
-            if res.is_null() {
-                None
-            } else {
-                Some(from_glib_full(res))
-            }
-        }
+        unsafe { from_glib_full(ffi::gst_buffer_get_all_memory(self.as_mut_ptr())) }
     }
 
     #[doc(alias = "get_max_memory")]
     #[doc(alias = "gst_buffer_get_max_memory")]
-    pub fn max_memory() -> u32 {
-        unsafe { ffi::gst_buffer_get_max_memory() }
+    pub fn max_memory() -> usize {
+        unsafe { ffi::gst_buffer_get_max_memory() as usize }
     }
 
     #[doc(alias = "get_memory")]
     #[doc(alias = "gst_buffer_get_memory")]
-    pub fn memory(&self, idx: u32) -> Option<Memory> {
+    pub fn memory(&self, idx: usize) -> Option<Memory> {
         if idx >= self.n_memory() {
-            None
-        } else {
-            unsafe {
-                let res = ffi::gst_buffer_get_memory(self.as_mut_ptr(), idx);
-                if res.is_null() {
-                    None
-                } else {
-                    Some(from_glib_full(res))
-                }
-            }
+            return None;
+        }
+        unsafe {
+            let res = ffi::gst_buffer_get_memory(self.as_mut_ptr(), idx as u32);
+            Some(from_glib_full(res))
         }
     }
 
     #[doc(alias = "get_memory_range")]
     #[doc(alias = "gst_buffer_get_memory_range")]
-    pub fn memory_range(&self, range: impl RangeBounds<u32>) -> Option<Memory> {
+    pub fn memory_range(&self, range: impl RangeBounds<usize>) -> Option<Memory> {
         let (idx, len) = self.memory_range_into_idx_len(range).ok()?;
 
         unsafe {
             let res = ffi::gst_buffer_get_memory_range(self.as_mut_ptr(), idx, len);
-            if res.is_null() {
-                None
-            } else {
-                Some(from_glib_full(res))
-            }
+            from_glib_full(res)
         }
     }
 
     #[doc(alias = "gst_buffer_insert_memory")]
-    pub fn insert_memory(&mut self, idx: u32, mem: Memory) {
+    pub fn insert_memory(&mut self, idx: impl Into<Option<usize>>, mem: Memory) {
+        let n_memory = self.n_memory();
+        let idx = idx.into();
+        let idx = idx.unwrap_or(n_memory);
         assert!(idx <= self.n_memory());
         unsafe { ffi::gst_buffer_insert_memory(self.as_mut_ptr(), idx as i32, mem.into_glib_ptr()) }
     }
@@ -747,7 +735,7 @@ impl BufferRef {
     }
 
     #[doc(alias = "gst_buffer_is_memory_range_writable")]
-    pub fn is_memory_range_writable(&self, range: impl RangeBounds<u32>) -> bool {
+    pub fn is_memory_range_writable(&self, range: impl RangeBounds<usize>) -> bool {
         let Some((idx, len)) = self.memory_range_into_idx_len(range).ok() else {
             return false;
         };
@@ -762,28 +750,25 @@ impl BufferRef {
     }
 
     #[doc(alias = "gst_buffer_n_memory")]
-    pub fn n_memory(&self) -> u32 {
-        unsafe { ffi::gst_buffer_n_memory(self.as_ptr() as *mut _) }
+    pub fn n_memory(&self) -> usize {
+        unsafe { ffi::gst_buffer_n_memory(self.as_ptr() as *mut _) as usize }
     }
 
     #[doc(alias = "gst_buffer_peek_memory")]
-    pub fn peek_memory(&self, idx: u32) -> &MemoryRef {
+    pub fn peek_memory(&self, idx: usize) -> &MemoryRef {
         assert!(idx < self.n_memory());
-        unsafe { MemoryRef::from_ptr(ffi::gst_buffer_peek_memory(self.as_mut_ptr(), idx)) }
+        unsafe { MemoryRef::from_ptr(ffi::gst_buffer_peek_memory(self.as_mut_ptr(), idx as u32)) }
     }
 
     #[doc(alias = "gst_buffer_peek_memory")]
-    pub fn peek_memory_mut(&mut self, idx: u32) -> Result<&mut MemoryRef, glib::BoolError> {
+    pub fn peek_memory_mut(&mut self, idx: usize) -> Result<&mut MemoryRef, glib::BoolError> {
         assert!(idx < self.n_memory());
         unsafe {
-            let mem = ffi::gst_buffer_peek_memory(self.as_mut_ptr(), idx);
+            let mem = ffi::gst_buffer_peek_memory(self.as_mut_ptr(), idx as u32);
             if ffi::gst_mini_object_is_writable(mem as *mut _) == glib::ffi::GFALSE {
                 Err(glib::bool_error!("Memory not writable"))
             } else {
-                Ok(MemoryRef::from_mut_ptr(ffi::gst_buffer_peek_memory(
-                    self.as_mut_ptr(),
-                    idx,
-                )))
+                Ok(MemoryRef::from_mut_ptr(mem))
             }
         }
     }
@@ -799,13 +784,13 @@ impl BufferRef {
     }
 
     #[doc(alias = "gst_buffer_remove_memory")]
-    pub fn remove_memory(&mut self, idx: u32) {
+    pub fn remove_memory(&mut self, idx: usize) {
         assert!(idx < self.n_memory());
-        unsafe { ffi::gst_buffer_remove_memory(self.as_mut_ptr(), idx) }
+        unsafe { ffi::gst_buffer_remove_memory(self.as_mut_ptr(), idx as u32) }
     }
 
     #[doc(alias = "gst_buffer_remove_memory_range")]
-    pub fn remove_memory_range(&mut self, range: impl RangeBounds<u32>) {
+    pub fn remove_memory_range(&mut self, range: impl RangeBounds<usize>) {
         let (idx, len) = self
             .memory_range_into_idx_len(range)
             .expect("Invalid memory range");
@@ -819,13 +804,15 @@ impl BufferRef {
     }
 
     #[doc(alias = "gst_buffer_replace_memory")]
-    pub fn replace_memory(&mut self, idx: u32, mem: Memory) {
+    pub fn replace_memory(&mut self, idx: usize, mem: Memory) {
         assert!(idx < self.n_memory());
-        unsafe { ffi::gst_buffer_replace_memory(self.as_mut_ptr(), idx, mem.into_glib_ptr()) }
+        unsafe {
+            ffi::gst_buffer_replace_memory(self.as_mut_ptr(), idx as u32, mem.into_glib_ptr())
+        }
     }
 
     #[doc(alias = "gst_buffer_replace_memory_range")]
-    pub fn replace_memory_range(&mut self, range: impl RangeBounds<u32>, mem: Memory) {
+    pub fn replace_memory_range(&mut self, range: impl RangeBounds<usize>, mem: Memory) {
         let (idx, len) = self
             .memory_range_into_idx_len(range)
             .expect("Invalid memory range");
@@ -984,7 +971,7 @@ macro_rules! define_iter(
             $name {
                 buffer,
                 idx: 0,
-                n_memory: n_memory as usize,
+                n_memory,
             }
         }
     }
@@ -1000,7 +987,7 @@ macro_rules! define_iter(
 
             #[allow(unused_unsafe)]
             unsafe {
-                let item = $get_item(self.buffer, self.idx as u32).unwrap();
+                let item = $get_item(self.buffer, self.idx).unwrap();
                 self.idx += 1;
                 Some(item)
             }
@@ -1025,7 +1012,7 @@ macro_rules! define_iter(
                 #[allow(unused_unsafe)]
                 unsafe {
                     self.idx = end + 1;
-                    Some($get_item(self.buffer, end as u32).unwrap())
+                    Some($get_item(self.buffer, end).unwrap())
                 }
             }
         }
@@ -1036,7 +1023,7 @@ macro_rules! define_iter(
             } else {
                 #[allow(unused_unsafe)]
                 unsafe {
-                    Some($get_item(self.buffer, self.n_memory as u32 - 1).unwrap())
+                    Some($get_item(self.buffer, self.n_memory - 1).unwrap())
                 }
             }
         }
@@ -1052,7 +1039,7 @@ macro_rules! define_iter(
             #[allow(unused_unsafe)]
             unsafe {
                 self.n_memory -= 1;
-                Some($get_item(self.buffer, self.n_memory as u32).unwrap())
+                Some($get_item(self.buffer, self.n_memory).unwrap())
             }
         }
 
@@ -1065,7 +1052,7 @@ macro_rules! define_iter(
                 #[allow(unused_unsafe)]
                 unsafe {
                     self.n_memory = end - 1;
-                    Some($get_item(self.buffer, self.n_memory as u32).unwrap())
+                    Some($get_item(self.buffer, self.n_memory).unwrap())
                 }
             }
         }
@@ -1082,7 +1069,7 @@ define_iter!(
     &'a BufferRef,
     &'a MemoryRef,
     |buffer: &BufferRef, idx| {
-        let ptr = ffi::gst_buffer_peek_memory(buffer.as_mut_ptr(), idx);
+        let ptr = ffi::gst_buffer_peek_memory(buffer.as_mut_ptr(), idx as u32);
         if ptr.is_null() {
             None
         } else {
@@ -1096,7 +1083,7 @@ define_iter!(
     &'a mut BufferRef,
     &'a mut MemoryRef,
     |buffer: &mut BufferRef, idx| {
-        let ptr = ffi::gst_buffer_peek_memory(buffer.as_mut_ptr(), idx);
+        let ptr = ffi::gst_buffer_peek_memory(buffer.as_mut_ptr(), idx as u32);
         if ptr.is_null() {
             None
         } else {
@@ -1457,8 +1444,8 @@ pub struct Dump<'a> {
 
 struct BufferChunked16Iter<'a> {
     buffer: &'a BufferRef,
-    mem_idx: u32,
-    mem_len: u32,
+    mem_idx: usize,
+    mem_len: usize,
     map: Option<crate::memory::MemoryMap<'a, crate::memory::Readable>>,
     map_offset: usize,
     len: usize,

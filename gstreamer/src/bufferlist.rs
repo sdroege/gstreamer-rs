@@ -1,7 +1,7 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 use std::{
-    fmt,
+    cmp, fmt,
     ops::{ControlFlow, RangeBounds},
     ptr,
 };
@@ -24,21 +24,26 @@ impl BufferList {
     #[doc(alias = "gst_buffer_list_new_sized")]
     pub fn new_sized(size: usize) -> Self {
         assert_initialized_main_thread!();
-        unsafe { from_glib_full(ffi::gst_buffer_list_new_sized(size as u32)) }
+        unsafe { from_glib_full(ffi::gst_buffer_list_new_sized(u32::try_from(size).unwrap())) }
     }
 }
 
 impl BufferListRef {
     #[doc(alias = "gst_buffer_list_insert")]
-    pub fn insert(&mut self, idx: i32, buffer: Buffer) {
+    pub fn insert(&mut self, idx: impl Into<Option<usize>>, buffer: Buffer) {
         unsafe {
+            let len = self.len();
+            debug_assert!(len <= u32::MAX as usize);
+
+            let idx = idx.into();
+            let idx = cmp::min(idx.unwrap_or(len), len) as i32;
             ffi::gst_buffer_list_insert(self.as_mut_ptr(), idx, buffer.into_glib_ptr());
         }
     }
 
     #[doc(alias = "gst_buffer_list_add")]
     pub fn add(&mut self, buffer: Buffer) {
-        self.insert(-1, buffer);
+        self.insert(None, buffer);
     }
 
     #[doc(alias = "gst_buffer_list_copy_deep")]
@@ -47,8 +52,10 @@ impl BufferListRef {
     }
 
     #[doc(alias = "gst_buffer_list_remove")]
-    pub fn remove(&mut self, range: impl RangeBounds<u32>) {
-        let n = self.len() as u32;
+    pub fn remove(&mut self, range: impl RangeBounds<usize>) {
+        let n = self.len();
+        debug_assert!(n <= u32::MAX as usize);
+
         let start_idx = match range.start_bound() {
             std::ops::Bound::Included(idx) => *idx,
             std::ops::Bound::Excluded(idx) => idx.checked_add(1).unwrap(),
@@ -63,39 +70,45 @@ impl BufferListRef {
         };
         assert!(end_idx <= n);
 
-        unsafe { ffi::gst_buffer_list_remove(self.as_mut_ptr(), start_idx, end_idx - start_idx) }
+        unsafe {
+            ffi::gst_buffer_list_remove(
+                self.as_mut_ptr(),
+                start_idx as u32,
+                (end_idx - start_idx) as u32,
+            )
+        }
     }
 
     #[doc(alias = "gst_buffer_list_get")]
-    pub fn get(&self, idx: u32) -> Option<&BufferRef> {
+    pub fn get(&self, idx: usize) -> Option<&BufferRef> {
         unsafe {
-            if idx as usize >= self.len() {
+            if idx >= self.len() {
                 return None;
             }
-            let ptr = ffi::gst_buffer_list_get(self.as_mut_ptr(), idx);
+            let ptr = ffi::gst_buffer_list_get(self.as_mut_ptr(), idx as u32);
             Some(BufferRef::from_ptr(ptr))
         }
     }
 
     #[doc(alias = "gst_buffer_list_get")]
-    pub fn get_owned(&self, idx: u32) -> Option<Buffer> {
+    pub fn get_owned(&self, idx: usize) -> Option<Buffer> {
         unsafe {
-            if idx as usize >= self.len() {
+            if idx >= self.len() {
                 return None;
             }
-            let ptr = ffi::gst_buffer_list_get(self.as_mut_ptr(), idx);
+            let ptr = ffi::gst_buffer_list_get(self.as_mut_ptr(), idx as u32);
             Some(from_glib_none(ptr))
         }
     }
 
     #[doc(alias = "gst_buffer_list_get_writable")]
     #[doc(alias = "get_writable")]
-    pub fn get_mut(&mut self, idx: u32) -> Option<&mut BufferRef> {
+    pub fn get_mut(&mut self, idx: usize) -> Option<&mut BufferRef> {
         unsafe {
-            if idx as usize >= self.len() {
+            if idx >= self.len() {
                 return None;
             }
-            let ptr = ffi::gst_buffer_list_get_writable(self.as_mut_ptr(), idx);
+            let ptr = ffi::gst_buffer_list_get_writable(self.as_mut_ptr(), idx as u32);
             Some(BufferRef::from_mut_ptr(ptr))
         }
     }
@@ -123,14 +136,14 @@ impl BufferListRef {
     }
 
     #[doc(alias = "gst_buffer_list_foreach")]
-    pub fn foreach<F: FnMut(&Buffer, u32) -> ControlFlow<(), ()>>(&self, func: F) -> bool {
-        unsafe extern "C" fn trampoline<F: FnMut(&Buffer, u32) -> ControlFlow<(), ()>>(
+    pub fn foreach<F: FnMut(&Buffer, usize) -> ControlFlow<(), ()>>(&self, func: F) -> bool {
+        unsafe extern "C" fn trampoline<F: FnMut(&Buffer, usize) -> ControlFlow<(), ()>>(
             buffer: *mut *mut ffi::GstBuffer,
             idx: u32,
             user_data: glib::ffi::gpointer,
         ) -> glib::ffi::gboolean {
             let func = user_data as *mut F;
-            let res = (*func)(&Buffer::from_glib_borrow(*buffer), idx);
+            let res = (*func)(&Buffer::from_glib_borrow(*buffer), idx as usize);
 
             matches!(res, ControlFlow::Continue(_)).into_glib()
         }
@@ -147,12 +160,12 @@ impl BufferListRef {
     }
 
     #[doc(alias = "gst_buffer_list_foreach")]
-    pub fn foreach_mut<F: FnMut(Buffer, u32) -> ControlFlow<Option<Buffer>, Option<Buffer>>>(
+    pub fn foreach_mut<F: FnMut(Buffer, usize) -> ControlFlow<Option<Buffer>, Option<Buffer>>>(
         &mut self,
         func: F,
     ) -> bool {
         unsafe extern "C" fn trampoline<
-            F: FnMut(Buffer, u32) -> ControlFlow<Option<Buffer>, Option<Buffer>>,
+            F: FnMut(Buffer, usize) -> ControlFlow<Option<Buffer>, Option<Buffer>>,
         >(
             buffer: *mut *mut ffi::GstBuffer,
             idx: u32,
@@ -164,7 +177,7 @@ impl BufferListRef {
                     buffer as *mut *const ffi::GstBuffer,
                     ptr::null_mut::<ffi::GstBuffer>(),
                 )),
-                idx,
+                idx as usize,
             );
 
             let (cont, res_buffer) = match res {
@@ -243,7 +256,7 @@ macro_rules! define_iter(
             $name {
                 list,
                 idx: 0,
-                size: list.len() as usize,
+                size: list.len(),
             }
         }
     }
@@ -257,7 +270,7 @@ macro_rules! define_iter(
                 return None;
             }
 
-            let item = $get_item(self.list, self.idx as u32).unwrap();
+            let item = $get_item(self.list, self.idx).unwrap();
             self.idx += 1;
 
             Some(item)
@@ -280,7 +293,7 @@ macro_rules! define_iter(
                 None
             } else {
                 self.idx = end + 1;
-                Some($get_item(self.list, end as u32).unwrap())
+                Some($get_item(self.list, end).unwrap())
             }
         }
 
@@ -288,7 +301,7 @@ macro_rules! define_iter(
             if self.idx == self.size {
                 None
             } else {
-                Some($get_item(self.list, self.size as u32 - 1).unwrap())
+                Some($get_item(self.list, self.size - 1).unwrap())
             }
         }
     }
@@ -301,7 +314,7 @@ macro_rules! define_iter(
             }
 
             self.size -= 1;
-            Some($get_item(self.list, self.size as u32).unwrap())
+            Some($get_item(self.list, self.size).unwrap())
         }
 
         fn nth_back(&mut self, n: usize) -> Option<Self::Item> {
@@ -311,7 +324,7 @@ macro_rules! define_iter(
                 None
             } else {
                 self.size = end - 1;
-                Some($get_item(self.list, self.size as u32).unwrap())
+                Some($get_item(self.list, self.size).unwrap())
             }
         }
     }

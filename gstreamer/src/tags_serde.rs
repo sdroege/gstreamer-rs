@@ -117,7 +117,7 @@ impl<'a> Serialize for TagListSer<'a> {
         let tag_count = self.0.n_tags();
         match tag_count.cmp(&0) {
             cmp::Ordering::Greater => {
-                let mut seq = serializer.serialize_seq(Some(tag_count as usize))?;
+                let mut seq = serializer.serialize_seq(Some(tag_count))?;
                 let tag_list_iter = self.0.iter_generic();
                 for (tag_name, tag_iter) in tag_list_iter {
                     seq.serialize_element(&TagsSer::new(tag_name, tag_iter))?;

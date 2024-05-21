@@ -10,8 +10,8 @@ use crate::{
 pub struct BufferCursor<T> {
     buffer: Option<Buffer>,
     size: u64,
-    num_mem: u32,
-    cur_mem_idx: u32,
+    num_mem: usize,
+    cur_mem_idx: usize,
     cur_offset: u64,
     cur_mem_offset: usize,
     map_info: ffi::GstMapInfo,
@@ -21,8 +21,8 @@ pub struct BufferCursor<T> {
 pub struct BufferRefCursor<T> {
     buffer: T,
     size: u64,
-    num_mem: u32,
-    cur_mem_idx: u32,
+    num_mem: usize,
+    cur_mem_idx: usize,
     cur_offset: u64,
     cur_mem_offset: usize,
     map_info: ffi::GstMapInfo,
@@ -112,7 +112,7 @@ macro_rules! define_read_write_fn_impl(
                     let buffer_ref: fn(&Self) -> &BufferRef = $get_buffer_ref;
                     let memory = ffi::gst_buffer_peek_memory(
                         buffer_ref($self).as_mut_ptr(),
-                        $self.cur_mem_idx,
+                        $self.cur_mem_idx as u32,
                     );
                     debug_assert!(!memory.is_null());
 

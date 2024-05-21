@@ -383,19 +383,19 @@ impl CapsFeaturesRef {
 
     #[doc(alias = "get_size")]
     #[doc(alias = "gst_caps_features_get_size")]
-    pub fn size(&self) -> u32 {
-        unsafe { ffi::gst_caps_features_get_size(self.as_ptr()) }
+    pub fn size(&self) -> usize {
+        unsafe { ffi::gst_caps_features_get_size(self.as_ptr()) as usize }
     }
 
     #[doc(alias = "get_nth")]
     #[doc(alias = "gst_caps_features_get_nth")]
-    pub fn nth(&self, idx: u32) -> Option<&glib::GStr> {
+    pub fn nth(&self, idx: usize) -> Option<&glib::GStr> {
         if idx >= self.size() {
             return None;
         }
 
         unsafe {
-            let feature = ffi::gst_caps_features_get_nth(self.as_ptr(), idx);
+            let feature = ffi::gst_caps_features_get_nth(self.as_ptr(), idx as u32);
             if feature.is_null() {
                 return None;
             }
@@ -405,13 +405,13 @@ impl CapsFeaturesRef {
     }
 
     #[doc(alias = "gst_caps_features_get_nth_id")]
-    pub fn nth_quark(&self, idx: u32) -> Option<glib::Quark> {
+    pub fn nth_quark(&self, idx: usize) -> Option<glib::Quark> {
         if idx >= self.size() {
             return None;
         }
 
         unsafe {
-            let feature = ffi::gst_caps_features_get_nth_id(self.as_ptr(), idx);
+            let feature = ffi::gst_caps_features_get_nth_id(self.as_ptr(), idx as u32);
             Some(from_glib(feature))
         }
     }
@@ -552,7 +552,7 @@ impl<'a> Iter<'a> {
         Iter {
             caps_features,
             idx: 0,
-            n_features: n_features as usize,
+            n_features,
         }
     }
 }

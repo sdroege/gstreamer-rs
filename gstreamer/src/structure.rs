@@ -658,13 +658,13 @@ impl StructureRef {
 
     #[doc(alias = "get_nth_field_name")]
     #[doc(alias = "gst_structure_nth_field_name")]
-    pub fn nth_field_name<'a>(&self, idx: u32) -> Option<&'a glib::GStr> {
+    pub fn nth_field_name<'a>(&self, idx: usize) -> Option<&'a glib::GStr> {
         if idx >= self.n_fields() {
             return None;
         }
 
         unsafe {
-            let field_name = ffi::gst_structure_nth_field_name(&self.0, idx);
+            let field_name = ffi::gst_structure_nth_field_name(&self.0, idx as u32);
             debug_assert!(!field_name.is_null());
 
             Some(glib::GStr::from_ptr(field_name))
@@ -672,8 +672,16 @@ impl StructureRef {
     }
 
     #[doc(alias = "gst_structure_n_fields")]
-    pub fn n_fields(&self) -> u32 {
-        unsafe { ffi::gst_structure_n_fields(&self.0) as u32 }
+    pub fn n_fields(&self) -> usize {
+        unsafe { ffi::gst_structure_n_fields(&self.0) as usize }
+    }
+
+    pub fn len(&self) -> usize {
+        self.n_fields()
+    }
+
+    pub fn is_empty(&self) -> bool {
+        self.n_fields() == 0
     }
 
     #[doc(alias = "gst_structure_can_intersect")]
@@ -1001,7 +1009,7 @@ impl<'a> FieldIterator<'a> {
         FieldIterator {
             structure,
             idx: 0,
-            n_fields: n_fields as usize,
+            n_fields,
         }
     }
 }
@@ -1014,7 +1022,7 @@ impl<'a> Iterator for FieldIterator<'a> {
             return None;
         }
 
-        let field_name = self.structure.nth_field_name(self.idx as u32).unwrap();
+        let field_name = self.structure.nth_field_name(self.idx).unwrap();
         self.idx += 1;
 
         Some(field_name)
@@ -1034,7 +1042,7 @@ impl<'a> DoubleEndedIterator for FieldIterator<'a> {
         }
 
         self.n_fields -= 1;
-        Some(self.structure.nth_field_name(self.n_fields as u32).unwrap())
+        Some(self.structure.nth_field_name(self.n_fields).unwrap())
     }
 }
 
