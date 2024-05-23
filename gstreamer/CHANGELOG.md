@@ -5,6 +5,22 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.22.5] - 2024-05-23
+### Fixed
+- A couple of clippy warnings and compiler warnings about unused imports with
+  latest rustc.
+- Memory leak in builder for the `SelectStreams` event.
+- Add parameter validity assertions to various `BufferList` and `Caps` APIs
+  where these assertions were missing to avoid assertions in C.
+
+### Added
+- `StreamProducer::set_forward_preroll()` API to configure if the preroll
+  buffer should be directly forwarded or not yet.
+
+### Changed
+- Remove nonsensical gstreamer-video test that fails with latest GStreamer main.
+- Update to itertools 0.13.
+
 ## [0.22.4] - 2024-04-08
 ### Added
 - Implement `From<glib::Value>` / `ToValue` for `gst_audio::AudioConverterConfig` and
@@ -1699,7 +1715,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.22.4...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.22.5...HEAD
+[0.22.5]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.22.4...0.22.5
 [0.22.4]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.22.3...0.22.4
 [0.22.3]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.22.2...0.22.3
 [0.22.2]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.22.1...0.22.2
