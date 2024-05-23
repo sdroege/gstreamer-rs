@@ -445,6 +445,8 @@ impl CapsRef {
 
     #[doc(alias = "gst_caps_remove_structure")]
     pub fn remove_structure(&mut self, idx: u32) {
+        assert!(idx < self.size());
+
         unsafe { ffi::gst_caps_remove_structure(self.as_mut_ptr(), idx) }
     }
 
