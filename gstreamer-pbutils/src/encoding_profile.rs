@@ -346,37 +346,20 @@ pub trait EncodingProfileBuilder<'a>: Sized {
     #[doc(alias = "gst_encoding_profile_set_presence")]
     #[must_use]
     fn presence(self, presence: u32) -> Self;
-    #[doc(alias = "gst_encoding_profile_set_presence")]
-    #[must_use]
-    fn presence_if_some(self, presence: Option<u32>) -> Self;
     #[doc(alias = "gst_encoding_profile_set_allow_dynamic_output")]
     #[must_use]
     fn allow_dynamic_output(self, allow: bool) -> Self;
-    #[doc(alias = "gst_encoding_profile_set_allow_dynamic_output")]
-    #[must_use]
-    fn allow_dynamic_output_if_some(self, allow_dynamic_output: Option<bool>) -> Self;
     #[doc(alias = "gst_encoding_profile_set_enabled")]
     #[must_use]
     fn enabled(self, enabled: bool) -> Self;
-    #[doc(alias = "gst_encoding_profile_set_enabled")]
-    #[must_use]
-    fn enabled_if_some(self, enabled: Option<bool>) -> Self;
     #[cfg(feature = "v1_18")]
     #[doc(alias = "gst_encoding_profile_set_single_segment")]
     #[must_use]
     fn single_segment(self, single_segment: bool) -> Self;
-    #[cfg(feature = "v1_18")]
-    #[doc(alias = "gst_encoding_profile_set_single_segment")]
-    #[must_use]
-    fn single_segment_if_some(self, single_segment: Option<bool>) -> Self;
     #[cfg(feature = "v1_20")]
     #[doc(alias = "gst_encoding_profile_set_element_properties")]
     #[must_use]
     fn element_properties(self, element_properties: ElementProperties) -> Self;
-    #[cfg(feature = "v1_20")]
-    #[doc(alias = "gst_encoding_profile_set_element_properties")]
-    #[must_use]
-    fn element_properties_if_some(self, element_properties: Option<ElementProperties>) -> Self;
 }
 
 macro_rules! declare_encoding_profile_builder_common(
@@ -407,38 +390,14 @@ macro_rules! declare_encoding_profile_builder_common(
                 self
             }
 
-            fn presence_if_some(self, presence: Option<u32>) -> $name<'a> {
-                if let Some(presence) = presence {
-                    self.presence(presence)
-                } else {
-                    self
-                }
-            }
-
             fn allow_dynamic_output(mut self, allow: bool) -> $name<'a> {
                 self.base.allow_dynamic_output = allow;
                 self
             }
 
-            fn allow_dynamic_output_if_some(self, allow_dynamic_output: Option<bool>) -> $name<'a> {
-                if let Some(allow_dynamic_output) = allow_dynamic_output {
-                    self.allow_dynamic_output(allow_dynamic_output)
-                } else {
-                    self
-                }
-            }
-
             fn enabled(mut self, enabled: bool) -> $name<'a> {
                 self.base.enabled = enabled;
                 self
-            }
-
-            fn enabled_if_some(self, enabled: Option<bool>) -> $name<'a> {
-                if let Some(enabled) = enabled {
-                    self.enabled(enabled)
-                } else {
-                    self
-                }
             }
 
             #[cfg(feature = "v1_18")]
@@ -447,28 +406,10 @@ macro_rules! declare_encoding_profile_builder_common(
                 self
             }
 
-            #[cfg(feature = "v1_18")]
-            fn single_segment_if_some(self, single_segment: Option<bool>) -> $name<'a> {
-                if let Some(single_segment) = single_segment {
-                    self.single_segment(single_segment)
-                } else {
-                    self
-                }
-            }
-
             #[cfg(feature = "v1_20")]
             fn element_properties(mut self, element_properties: ElementProperties) -> $name<'a> {
                 self.base.element_properties = Some(element_properties);
                 self
-            }
-
-            #[cfg(feature = "v1_20")]
-            fn element_properties_if_some(self, element_properties: Option<ElementProperties>) -> $name<'a> {
-                if let Some(element_properties) = element_properties {
-                    self.element_properties(element_properties)
-                } else {
-                    self
-                }
             }
         }
     }
