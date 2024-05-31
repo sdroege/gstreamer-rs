@@ -86,7 +86,7 @@ mod value_serde;
 mod flag_serde;
 
 pub mod message;
-pub use crate::message::{Message, MessageErrorDomain, MessageRef, MessageView};
+pub use crate::message::{Message, MessageErrorDomain, MessageRef, MessageView, MessageViewMut};
 
 pub mod structure;
 pub use crate::structure::{Structure, StructureRef};
