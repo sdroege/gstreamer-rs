@@ -1,0 +1,118 @@
+[options]
+girs_directories = ["../gir-files", "../gst-gir-files"]
+library = "GstVulkan"
+version = "1.0"
+min_cfg_version = "1.18"
+work_mode = "normal"
+concurrency = "send+sync"
+generate_safety_asserts = true
+single_version_file = true
+generate_display_trait = false
+trust_return_value_nullability = true
+
+external_libraries = [
+    "GLib",
+    "GObject",
+    "Gst",
+    "GstBase",
+    "GstVideo",
+]
+
+generate = [
+    #"GstVulkan.VulkanBufferMemory",
+    "GstVulkan.VulkanBufferMemoryAllocator",
+    "GstVulkan.VulkanBufferPool",
+    "GstVulkan.VulkanCommandBuffer",
+    "GstVulkan.VulkanCommandPool",
+    #"GstVulkan.VulkanDecoder",
+    "GstVulkan.VulkanDescriptorSet",
+    "GstVulkan.VulkanDevice",
+    "GstVulkan.VulkanDisplay",
+    "GstVulkan.VulkanDisplayType",
+    #"GstVulkan.VulkanEncoder",
+    "GstVulkan.VulkanFence",
+    #"GstVulkan.VulkanFullScreenQuad",
+    "GstVulkan.VulkanHandlePool",
+    "GstVulkan.VulkanImageBufferPool",
+    #"GstVulkan.VulkanImageMemory",
+    "GstVulkan.VulkanImageMemoryAllocator",
+    "GstVulkan.VulkanImageView",
+    "GstVulkan.VulkanInstance",
+    #"GstVulkan.VulkanMemory",
+    "GstVulkan.VulkanOperation",
+    "GstVulkan.VulkanPhysicalDevice",
+    "GstVulkan.VulkanQueue",
+    "GstVulkan.VulkanSwapper",
+    "GstVulkan.VulkanTrash",
+    "GstVulkan.VulkanVideoFilter",
+    "GstVulkan.VulkanWindow",
+]
+
+manual = [
+    "GLib.Error",
+    "GLib.Thread",
+    "GObject.Object",
+    "GObject.Value",
+    "Gst.AllocationParams",
+    "Gst.Allocator",
+    "Gst.BufferPool",
+    "Gst.Context",
+    "Gst.Element",
+    "Gst.FlowReturn",
+    "Gst.Fraction",
+    "Gst.Memory",
+    "Gst.Object",
+    "Gst.PadDirection",
+    "GstBase.BaseSrc",
+    "GstBase.BaseTransform",
+    "GstBase.PushSrc",
+    "GstVideo.VideoAlignment",
+    "GstVideo.VideoInfo",
+    "GstVideo.VideoMultiviewFlags",
+    "GstVideo.VideoMultiviewMode",
+    "GstVideo.VideoOverlay",
+]
+
+[[object]]
+name = "Gst.Buffer"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.Caps"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.Query"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.Structure"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "GstVulkan.VulkanFullScreenQuad"
+status = "generate"
+concurrency = "none"
+
+[[object]]
+name = "GstVulkan.VulkanHandle"
+status = "generate"
+ref_mode = "ref"
+
+[[object]]
+name = "GstVulkan.VulkanDescriptorPool"
+status = "generate"
+    [[object.function]]
+    name = "create"
+    ignore = true
+
+[[object]]
+name = "GstVulkan.VulkanDescriptorCache"
+status = "generate"
+    [[object.function]]
+    name = "new"
+    ignore = true

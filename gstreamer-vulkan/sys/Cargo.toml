@@ -1,0 +1,92 @@
+[build-dependencies]
+system-deps = "6"
+
+[dependencies]
+libc = "0.2"
+
+[dependencies.glib-sys]
+workspace = true
+
+[dependencies.gobject-sys]
+workspace = true
+
+[dependencies.gstreamer-sys]
+workspace = true
+
+[dependencies.gstreamer-base-sys]
+workspace = true
+
+[dependencies.gstreamer-video-sys]
+workspace = true
+
+[dependencies.ash]
+version = "0.38"
+
+[dev-dependencies]
+shell-words = "1.0.0"
+tempfile = "3"
+
+[features]
+v1_18 = []
+v1_20 = []
+v1_22 = ["v1_20"]
+v1_24 = ["v1_22"]
+v1_26 = ["v1_24"]
+
+[lib]
+name = "gstreamer_vulkan_sys"
+
+[package]
+authors = ["Matthew Waters <matthew@centricular.com>"]
+build = "build.rs"
+description = "FFI bindings to libgstvulkan-1.0"
+documentation = "https://gstreamer.pages.freedesktop.org/gstreamer-rs/stable/latest/docs/gstreamer_vulkan_sys/"
+keywords = ["ffi", "gstreamer", "gnome", "multimedia"]
+license = "MIT"
+name = "gstreamer-vulkan-sys"
+readme = "README.md"
+
+[package.version]
+workspace = true
+
+[package.categories]
+workspace = true
+
+[package.repository]
+workspace = true
+
+[package.homepage]
+workspace = true
+
+[package.edition]
+workspace = true
+
+[package.rust-version]
+workspace = true
+
+[package.metadata.docs.rs]
+all-features = true
+rustc-args = ["--cfg", "docsrs"]
+rustdoc-args = ["--cfg", "docsrs", "--generate-link-to-definition"]
+
+[package.metadata.system-deps.gstreamer_vulkan_1_0]
+name = "gstreamer-vulkan-1.0"
+version = "1.14"
+
+[package.metadata.system-deps.gstreamer_vulkan_1_0.v1_16]
+version = "1.16"
+
+[package.metadata.system-deps.gstreamer_vulkan_1_0.v1_18]
+version = "1.18"
+
+[package.metadata.system-deps.gstreamer_vulkan_1_0.v1_20]
+version = "1.20"
+
+[package.metadata.system-deps.gstreamer_vulkan_1_0.v1_22]
+version = "1.22"
+
+[package.metadata.system-deps.gstreamer_vulkan_1_0.v1_24]
+version = "1.24"
+
+[package.metadata.system-deps.gstreamer_vulkan_1_0.v1_26]
+version = "1.25"

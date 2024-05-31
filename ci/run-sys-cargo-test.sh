@@ -11,7 +11,7 @@ CARGO_NEXTEST_FLAGS="--profile=ci --no-tests=pass"
 
 parent="${CI_PROJECT_DIR:-$(pwd)}"
 
-for crate in gstreamer*/sys gstreamer-gl/*/sys; do
+for crate in gstreamer*/sys gstreamer-gl/*/sys gstreamer-vulkan/*/sys; do
     if [[ "$crate" == gstreamer-d3d12* ]]; then
         echo "Skipping $crate"
         continue
@@ -48,6 +48,9 @@ for crate in gstreamer/sys \
              gstreamer-tag/sys \
              gstreamer-validate/sys \
              gstreamer-video/sys \
+             gstreamer-vulkan/sys \
+             gstreamer-vulkan/wayland/sys \
+             gstreamer-vulkan/xcb/sys \
              gstreamer-webrtc/sys; do
     echo "Testing $crate with --all-features)"
     RUST_BACKTRACE=1 cargo nextest run $CARGO_NEXTEST_FLAGS $CARGO_FLAGS --locked --manifest-path $crate/Cargo.toml --all-features

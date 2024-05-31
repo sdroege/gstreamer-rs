@@ -11,7 +11,7 @@ CARGO_NEXTEST_FLAGS="--profile=ci --no-tests=pass"
 
 parent="${CI_PROJECT_DIR:-$(pwd)}"
 
-for crate in gstreamer* gstreamer-gl/{egl,wayland,x11}; do
+for crate in gstreamer* gstreamer-gl/{egl,wayland,x11} gstreamer-vulkan/{wayland,xcb}; do
     if [[ "$crate" == gstreamer-d3d12* ]]; then
         echo "Skipping $crate"
         continue

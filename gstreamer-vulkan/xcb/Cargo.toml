@@ -1,0 +1,36 @@
+[package]
+name = "gstreamer-vulkan-xcb"
+authors = ["Matthew Waters <matthew@centricular.com>"]
+description = "Rust bindings for GStreamer Vulkan library (XCB support)"
+license = "MIT OR Apache-2.0"
+readme = "README.md"
+documentation = "https://gstreamer.pages.freedesktop.org/gstreamer-rs/stable/latest/docs/gstreamer_vulkan_xcb/"
+keywords = ["gstreamer", "multimedia", "audio", "video", "gnome"]
+version.workspace = true
+categories.workspace = true
+repository.workspace = true
+homepage.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+libc = "0.2"
+ffi = { package = "gstreamer-vulkan-xcb-sys", path = "sys" }
+glib.workspace = true
+gst.workspace = true
+gst-vulkan.workspace = true
+
+[dev-dependencies]
+gir-format-check = "0.1"
+
+[features]
+default = []
+v1_20 = ["gst/v1_20", "gst-vulkan/v1_20", "ffi/v1_20"]
+v1_22 = ["gst/v1_22", "gst-vulkan/v1_22", "ffi/v1_22", "v1_20"]
+v1_24 = ["gst/v1_24", "gst-vulkan/v1_24", "ffi/v1_24", "v1_22"]
+v1_26 = ["gst/v1_26", "gst-vulkan/v1_26", "ffi/v1_26", "v1_24"]
+
+[package.metadata.docs.rs]
+all-features = true
+rustc-args = ["--cfg", "docsrs"]
+rustdoc-args = ["--cfg", "docsrs", "--generate-link-to-definition"]

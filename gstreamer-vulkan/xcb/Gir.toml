@@ -1,0 +1,59 @@
+[options]
+girs_directories = ["../../gir-files", "../../gst-gir-files"]
+library = "GstVulkanXCB"
+version = "1.0"
+min_cfg_version = "1.18"
+work_mode = "normal"
+concurrency = "send+sync"
+generate_safety_asserts = true
+single_version_file = true
+generate_display_trait = false
+trust_return_value_nullability = true
+
+external_libraries = [
+    "GLib",
+    "GObject",
+    "Gst",
+    "GstBase",
+    "GstVideo",
+    "GstVulkan",
+]
+
+generate = []
+
+manual = [
+    "GLib.Error",
+    "GLib.Thread",
+    "GObject.Object",
+    "Gst.FlowReturn",
+    "Gst.Object",
+    "Gst.PadDirection",
+]
+
+[[object]]
+name = "Gst.Buffer"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.Caps"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.Query"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.Structure"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "GstVulkanXCB.VulkanDisplayXCB"
+status = "generate"
+    [[object.function]]
+    name = "new"
+        [object.function.return]
+        nullable_return_is_error = "Failed to create XCB display"

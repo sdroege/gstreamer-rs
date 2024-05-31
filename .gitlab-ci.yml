@@ -142,7 +142,7 @@ trigger:
   stage: container-base
   variables:
     FDO_DISTRIBUTION_PACKAGES: >-
-      build-essential cmake curl python3-setuptools libglib2.0-dev libxml2-dev
+      build-essential cmake curl glslc python3-setuptools libglib2.0-dev libxml2-dev
       libdrm-dev libegl1-mesa-dev libgl1-mesa-dev libgbm-dev libgles2-mesa-dev
       libgl1-mesa-dri libegl-dev libgl-dev libgles-dev libglx-dev
       libssl-dev git wget ca-certificates ninja-build python3-pip flex bison
@@ -151,13 +151,13 @@ trigger:
       libgraphene-1.0-dev libjpeg-dev libwayland-dev wayland-protocols
       python3-gi libavcodec-dev libavformat-dev libavutil-dev libavfilter-dev
       libswscale-dev yasm libx264-dev libfontconfig-dev libfreetype-dev
-      libxkbcommon-dev libxi-dev libxcb-render0-dev libxcb-shm0-dev
+      libxkbcommon-dev libxkbcommon-x11-dev libxi-dev libxcb-render0-dev libxcb-shm0-dev
       libxcb1-dev libxext-dev libxrender-dev libxrandr-dev libxcursor-dev
       libxdamage-dev libxfixes-dev libxinerama-dev libgudev-1.0-dev
       libpango1.0-dev libcairo2-dev libjson-glib-dev libgdk-pixbuf-2.0-dev
       libtiff-dev libpng-dev libjpeg-dev libepoxy-dev libsass-dev sassc
       libcsound64-dev llvm clang nasm libsodium-dev libwebp-dev
-      libflac-dev libmysofa-dev libgtk-4-dev libdav1d-dev libclang-dev
+      libflac-dev libmysofa-dev libgtk-4-dev libdav1d-dev libclang-dev libvulkan-dev
     FDO_DISTRIBUTION_EXEC: >-
       bash ci/install-gst.sh &&
       bash ci/install-vvdec.sh &&

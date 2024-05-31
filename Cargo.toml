@@ -75,6 +75,9 @@ members = [
   "gstreamer-sdp/sys",
   "gstreamer-tag/sys",
   "gstreamer-video/sys",
+  "gstreamer-vulkan/sys",
+  "gstreamer-vulkan/wayland/sys",
+  "gstreamer-vulkan/xcb/sys",
   "gstreamer-webrtc/sys",
   "gstreamer-allocators/sys",
   "gstreamer",
@@ -103,6 +106,9 @@ members = [
   "gstreamer-tag",
   "gstreamer-validate",
   "gstreamer-video",
+  "gstreamer-vulkan",
+  "gstreamer-vulkan/wayland",
+  "gstreamer-vulkan/xcb",
   "gstreamer-webrtc",
   "gstreamer-allocators",
   "gstreamer-utils",
@@ -157,6 +163,9 @@ gstreamer-sys = { path = "./gstreamer/sys"}
 gstreamer-validate-sys = { path = "./gstreamer-validate/sys" }
 gstreamer-video-sys = { path = "./gstreamer-video/sys"}
 gstreamer-webrtc-sys = { path = "./gstreamer-webrtc/sys" }
+gstreamer-vulkan-sys = { path = "./gstreamer-vulkan/sys"}
+gstreamer-vulkan-wayland-sys = { path = "./gstreamer-vulkan/wayland/sys"}
+gstreamer-vulkan-xcb-sys = { path = "./gstreamer-vulkan/xcb/sys"}
 ges = { package = "gstreamer-editing-services", path = "./gstreamer-editing-services" }
 gst = { package = "gstreamer", path = "./gstreamer" }
 gst-allocators = { package = "gstreamer-allocators", path = "./gstreamer-allocators" }
@@ -177,3 +186,6 @@ gst-rtsp = { package = "gstreamer-rtsp", path = "./gstreamer-rtsp" }
 gst-rtsp-server = { package = "gstreamer-rtsp-server", path = "./gstreamer-rtsp-server" }
 gst-sdp = { package = "gstreamer-sdp", path = "./gstreamer-sdp" }
 gst-video = { package = "gstreamer-video", path = "./gstreamer-video" }
+gst-vulkan = { package = "gstreamer-vulkan", path = "./gstreamer-vulkan" }
+gst-vulkan-wayland = { package = "gstreamer-vulkan-wayland", path = "./gstreamer-vulkan/wayland" }
+gst-vulkan-xcb = { package = "gstreamer-vulkan-xcb", path = "./gstreamer-vulkan/xcb" }

@@ -61,6 +61,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "175571dd1d178ced59193a6fc02dde1b972eb0bc56c892cde9beeceac5bf0f6b"
 
 [[package]]
+name = "ash"
+version = "0.38.0+1.3.281"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0bb44936d800fea8f016d7f2311c6a4f97aebd5dc86f09906139ec848cf3a46f"
+dependencies = [
+ "libloading",
+]
+
+[[package]]
 name = "async-channel"
 version = "2.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -536,6 +545,9 @@ dependencies = [
  "gstreamer-rtsp-server",
  "gstreamer-sdp",
  "gstreamer-video",
+ "gstreamer-vulkan",
+ "gstreamer-vulkan-wayland",
+ "gstreamer-vulkan-xcb",
  "image",
  "memfd",
  "memmap2",
@@ -1612,6 +1624,86 @@ dependencies = [
  "gobject-sys",
  "gstreamer-base-sys",
  "gstreamer-sys",
+ "libc",
+ "shell-words",
+ "system-deps",
+ "tempfile",
+]
+
+[[package]]
+name = "gstreamer-vulkan"
+version = "0.23.0"
+dependencies = [
+ "gir-format-check",
+ "glib",
+ "gstreamer",
+ "gstreamer-base",
+ "gstreamer-video",
+ "gstreamer-vulkan-sys",
+ "libc",
+ "once_cell",
+ "serde",
+ "serde_json",
+]
+
+[[package]]
+name = "gstreamer-vulkan-sys"
+version = "0.23.0"
+dependencies = [
+ "ash",
+ "glib-sys",
+ "gobject-sys",
+ "gstreamer-base-sys",
+ "gstreamer-sys",
+ "gstreamer-video-sys",
+ "libc",
+ "shell-words",
+ "system-deps",
+ "tempfile",
+]
+
+[[package]]
+name = "gstreamer-vulkan-wayland"
+version = "0.23.0"
+dependencies = [
+ "gir-format-check",
+ "glib",
+ "gstreamer",
+ "gstreamer-vulkan",
+ "gstreamer-vulkan-wayland-sys",
+ "libc",
+]
+
+[[package]]
+name = "gstreamer-vulkan-wayland-sys"
+version = "0.23.0"
+dependencies = [
+ "glib-sys",
+ "gstreamer-vulkan-sys",
+ "libc",
+ "shell-words",
+ "system-deps",
+ "tempfile",
+]
+
+[[package]]
+name = "gstreamer-vulkan-xcb"
+version = "0.23.0"
+dependencies = [
+ "gir-format-check",
+ "glib",
+ "gstreamer",
+ "gstreamer-vulkan",
+ "gstreamer-vulkan-xcb-sys",
+ "libc",
+]
+
+[[package]]
+name = "gstreamer-vulkan-xcb-sys"
+version = "0.23.0"
+dependencies = [
+ "glib-sys",
+ "gstreamer-vulkan-sys",
  "libc",
  "shell-words",
  "system-deps",
