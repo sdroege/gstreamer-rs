@@ -148,7 +148,7 @@ mod bufferlist_serde;
 pub mod query;
 pub use crate::query::{Query, QueryRef, QueryView, QueryViewMut};
 pub mod event;
-pub use crate::event::{Event, EventRef, EventView, GroupId, Seqnum};
+pub use crate::event::{Event, EventRef, EventView, EventViewMut, GroupId, Seqnum};
 pub mod context;
 pub use crate::context::{Context, ContextRef};
 mod rank;

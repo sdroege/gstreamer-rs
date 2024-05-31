@@ -1,6 +1,8 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use std::{borrow::Borrow, cmp, ffi::CStr, fmt, mem, num::NonZeroU32, ops::Deref, ptr};
+use std::{
+    borrow::Borrow, cmp, ffi::CStr, fmt, mem, num::NonZeroU32, ops::Deref, ops::DerefMut, ptr,
+};
 
 use glib::{
     translate::{FromGlibPtrContainer, *},
@@ -281,6 +283,49 @@ impl EventRef {
             }
         }
     }
+
+    pub fn view_mut(&mut self) -> EventViewMut {
+        unsafe {
+            let type_ = (*self.as_ptr()).type_;
+
+            match type_ {
+                ffi::GST_EVENT_FLUSH_START => FlushStart::view_mut(self),
+                ffi::GST_EVENT_FLUSH_STOP => FlushStop::view_mut(self),
+                ffi::GST_EVENT_STREAM_START => StreamStart::view_mut(self),
+                ffi::GST_EVENT_CAPS => Caps::view_mut(self),
+                ffi::GST_EVENT_SEGMENT => Segment::view_mut(self),
+                ffi::GST_EVENT_STREAM_COLLECTION => StreamCollection::view_mut(self),
+                ffi::GST_EVENT_TAG => Tag::view_mut(self),
+                ffi::GST_EVENT_BUFFERSIZE => Buffersize::view_mut(self),
+                ffi::GST_EVENT_SINK_MESSAGE => SinkMessage::view_mut(self),
+                ffi::GST_EVENT_STREAM_GROUP_DONE => StreamGroupDone::view_mut(self),
+                ffi::GST_EVENT_EOS => Eos::view_mut(self),
+                ffi::GST_EVENT_TOC => Toc::view_mut(self),
+                ffi::GST_EVENT_PROTECTION => Protection::view_mut(self),
+                ffi::GST_EVENT_SEGMENT_DONE => SegmentDone::view_mut(self),
+                ffi::GST_EVENT_GAP => Gap::view_mut(self),
+                #[cfg(feature = "v1_18")]
+                ffi::GST_EVENT_INSTANT_RATE_CHANGE => InstantRateChange::view_mut(self),
+                ffi::GST_EVENT_QOS => Qos::view_mut(self),
+                ffi::GST_EVENT_SEEK => Seek::view_mut(self),
+                ffi::GST_EVENT_NAVIGATION => Navigation::view_mut(self),
+                ffi::GST_EVENT_LATENCY => Latency::view_mut(self),
+                ffi::GST_EVENT_STEP => Step::view_mut(self),
+                ffi::GST_EVENT_RECONFIGURE => Reconfigure::view_mut(self),
+                ffi::GST_EVENT_TOC_SELECT => TocSelect::view_mut(self),
+                ffi::GST_EVENT_SELECT_STREAMS => SelectStreams::view_mut(self),
+                #[cfg(feature = "v1_18")]
+                ffi::GST_EVENT_INSTANT_RATE_SYNC_TIME => InstantRateSyncTime::view_mut(self),
+                ffi::GST_EVENT_CUSTOM_UPSTREAM => CustomUpstream::view_mut(self),
+                ffi::GST_EVENT_CUSTOM_DOWNSTREAM => CustomDownstream::view_mut(self),
+                ffi::GST_EVENT_CUSTOM_DOWNSTREAM_OOB => CustomDownstreamOob::view_mut(self),
+                ffi::GST_EVENT_CUSTOM_DOWNSTREAM_STICKY => CustomDownstreamSticky::view_mut(self),
+                ffi::GST_EVENT_CUSTOM_BOTH => CustomBoth::view_mut(self),
+                ffi::GST_EVENT_CUSTOM_BOTH_OOB => CustomBothOob::view_mut(self),
+                _ => Other::view_mut(self),
+            }
+        }
+    }
 }
 
 impl fmt::Debug for Event {
@@ -347,6 +392,47 @@ pub enum EventView<'a> {
     Other(&'a Other),
 }
 
+#[derive(Debug)]
+#[non_exhaustive]
+pub enum EventViewMut<'a> {
+    FlushStart(&'a mut FlushStart),
+    FlushStop(&'a mut FlushStop),
+    StreamStart(&'a mut StreamStart),
+    Caps(&'a mut Caps),
+    Segment(&'a mut Segment),
+    StreamCollection(&'a mut StreamCollection),
+    Tag(&'a mut Tag),
+    Buffersize(&'a mut Buffersize),
+    SinkMessage(&'a mut SinkMessage),
+    StreamGroupDone(&'a mut StreamGroupDone),
+    Eos(&'a mut Eos),
+    Toc(&'a mut Toc),
+    Protection(&'a mut Protection),
+    SegmentDone(&'a mut SegmentDone),
+    Gap(&'a mut Gap),
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    InstantRateChange(&'a mut InstantRateChange),
+    Qos(&'a mut Qos),
+    Seek(&'a mut Seek),
+    Navigation(&'a mut Navigation),
+    Latency(&'a mut Latency),
+    Step(&'a mut Step),
+    Reconfigure(&'a mut Reconfigure),
+    TocSelect(&'a mut TocSelect),
+    SelectStreams(&'a mut SelectStreams),
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    InstantRateSyncTime(&'a mut InstantRateSyncTime),
+    CustomUpstream(&'a mut CustomUpstream),
+    CustomDownstream(&'a mut CustomDownstream),
+    CustomDownstreamOob(&'a mut CustomDownstreamOob),
+    CustomDownstreamSticky(&'a mut CustomDownstreamSticky),
+    CustomBoth(&'a mut CustomBoth),
+    CustomBothOob(&'a mut CustomBothOob),
+    Other(&'a mut Other),
+}
+
 macro_rules! declare_concrete_event {
     (@sticky $name:ident, $param:ident) => {
         declare_concrete_event!($name, $param);
@@ -371,9 +457,20 @@ macro_rules! declare_concrete_event {
             }
 
             #[inline]
+            pub fn event_mut(&mut self) -> &mut EventRef {
+                unsafe { &mut *(self as *mut Self as *mut EventRef) }
+            }
+
+            #[inline]
             unsafe fn view(event: &EventRef) -> EventView<'_> {
                 let event = &*(event as *const EventRef as *const Self);
                 EventView::$name(event)
+            }
+
+            #[inline]
+            unsafe fn view_mut(event: &mut EventRef) -> EventViewMut<'_> {
+                let event = &mut *(event as *mut EventRef as *mut Self);
+                EventViewMut::$name(event)
             }
         }
 
@@ -383,6 +480,13 @@ macro_rules! declare_concrete_event {
             #[inline]
             fn deref(&self) -> &Self::Target {
                 self.event()
+            }
+        }
+
+        impl DerefMut for $name {
+            #[inline]
+            fn deref_mut(&mut self) -> &mut Self::Target {
+                self.event_mut()
             }
         }
 
@@ -410,6 +514,14 @@ macro_rules! declare_concrete_event {
             #[inline]
             fn deref(&self) -> &Self::Target {
                 unsafe { &*(self.0.as_ptr() as *const Self::Target) }
+            }
+        }
+
+        impl DerefMut for $name<Event> {
+            #[inline]
+            fn deref_mut(&mut self) -> &mut Self::Target {
+                debug_assert!(self.0.is_writable());
+                unsafe { &mut *(self.0.as_mut_ptr() as *mut Self::Target) }
             }
         }
 

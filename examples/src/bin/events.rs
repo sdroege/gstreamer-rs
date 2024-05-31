@@ -30,8 +30,43 @@ fn example_main() {
     let main_loop = glib::MainLoop::new(None, false);
 
     // This creates a pipeline by parsing the gst-launch pipeline syntax.
-    let pipeline = gst::parse::launch("audiotestsrc ! fakesink").unwrap();
+    let pipeline = gst::parse::launch("audiotestsrc ! identity name=capsmut ! fakesink").unwrap();
     let bus = pipeline.bus().unwrap();
+
+    // This is a contrived example to mutate events. This would normally be code inside an element,
+    // which might transform caps to reflect transformation in the data
+    let identity = pipeline
+        .downcast_ref::<gst::Bin>()
+        .unwrap()
+        .by_name("capsmut")
+        .unwrap();
+    let _ = identity.static_pad("sink").unwrap().add_probe(
+        gst::PadProbeType::EVENT_DOWNSTREAM,
+        move |_, probe_info| {
+            let Some(e) = probe_info.event() else {
+                return gst::PadProbeReturn::Ok;
+            };
+
+            if e.type_() != gst::EventType::Caps {
+                return gst::PadProbeReturn::Ok;
+            };
+
+            let mut ev = probe_info.take_event().unwrap();
+            let ev_ref = ev.make_mut();
+
+            let gst::EventViewMut::Caps(caps) = ev_ref.view_mut() else {
+                unreachable!()
+            };
+
+            caps.structure_mut().set("custom-field", true);
+            identity
+                .static_pad("src")
+                .unwrap()
+                .push_event(ev_ref.to_owned());
+
+            gst::PadProbeReturn::Drop
+        },
+    );
 
     pipeline
         .set_state(gst::State::Playing)
