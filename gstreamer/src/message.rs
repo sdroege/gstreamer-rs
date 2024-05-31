@@ -1,6 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use std::{borrow::Borrow, ffi::CStr, fmt, mem, num::NonZeroU32, ops::Deref, ptr};
+use std::{borrow::Borrow, ffi::CStr, fmt, mem, num::NonZeroU32, ops::Deref, ops::DerefMut, ptr};
 
 use glib::{
     translate::*,
@@ -173,6 +173,57 @@ impl MessageRef {
         }
     }
 
+    pub fn view_mut(&mut self) -> MessageViewMut {
+        unsafe {
+            let type_ = (*self.as_ptr()).type_;
+
+            match type_ {
+                ffi::GST_MESSAGE_EOS => Eos::view_mut(self),
+                ffi::GST_MESSAGE_ERROR => Error::view_mut(self),
+                ffi::GST_MESSAGE_WARNING => Warning::view_mut(self),
+                ffi::GST_MESSAGE_INFO => Info::view_mut(self),
+                ffi::GST_MESSAGE_TAG => Tag::view_mut(self),
+                ffi::GST_MESSAGE_BUFFERING => Buffering::view_mut(self),
+                ffi::GST_MESSAGE_STATE_CHANGED => StateChanged::view_mut(self),
+                ffi::GST_MESSAGE_STATE_DIRTY => StateDirty::view_mut(self),
+                ffi::GST_MESSAGE_STEP_DONE => StepDone::view_mut(self),
+                ffi::GST_MESSAGE_CLOCK_PROVIDE => ClockProvide::view_mut(self),
+                ffi::GST_MESSAGE_CLOCK_LOST => ClockLost::view_mut(self),
+                ffi::GST_MESSAGE_NEW_CLOCK => NewClock::view_mut(self),
+                ffi::GST_MESSAGE_STRUCTURE_CHANGE => StructureChange::view_mut(self),
+                ffi::GST_MESSAGE_STREAM_STATUS => StreamStatus::view_mut(self),
+                ffi::GST_MESSAGE_APPLICATION => Application::view_mut(self),
+                ffi::GST_MESSAGE_ELEMENT => Element::view_mut(self),
+                ffi::GST_MESSAGE_SEGMENT_START => SegmentStart::view_mut(self),
+                ffi::GST_MESSAGE_SEGMENT_DONE => SegmentDone::view_mut(self),
+                ffi::GST_MESSAGE_DURATION_CHANGED => DurationChanged::view_mut(self),
+                ffi::GST_MESSAGE_LATENCY => Latency::view_mut(self),
+                ffi::GST_MESSAGE_ASYNC_START => AsyncStart::view_mut(self),
+                ffi::GST_MESSAGE_ASYNC_DONE => AsyncDone::view_mut(self),
+                ffi::GST_MESSAGE_REQUEST_STATE => RequestState::view_mut(self),
+                ffi::GST_MESSAGE_STEP_START => StepStart::view_mut(self),
+                ffi::GST_MESSAGE_QOS => Qos::view_mut(self),
+                ffi::GST_MESSAGE_PROGRESS => Progress::view_mut(self),
+                ffi::GST_MESSAGE_TOC => Toc::view_mut(self),
+                ffi::GST_MESSAGE_RESET_TIME => ResetTime::view_mut(self),
+                ffi::GST_MESSAGE_STREAM_START => StreamStart::view_mut(self),
+                ffi::GST_MESSAGE_NEED_CONTEXT => NeedContext::view_mut(self),
+                ffi::GST_MESSAGE_HAVE_CONTEXT => HaveContext::view_mut(self),
+                ffi::GST_MESSAGE_DEVICE_ADDED => DeviceAdded::view_mut(self),
+                ffi::GST_MESSAGE_DEVICE_REMOVED => DeviceRemoved::view_mut(self),
+                ffi::GST_MESSAGE_REDIRECT => Redirect::view_mut(self),
+                ffi::GST_MESSAGE_PROPERTY_NOTIFY => PropertyNotify::view_mut(self),
+                ffi::GST_MESSAGE_STREAM_COLLECTION => StreamCollection::view_mut(self),
+                ffi::GST_MESSAGE_STREAMS_SELECTED => StreamsSelected::view_mut(self),
+                #[cfg(feature = "v1_16")]
+                ffi::GST_MESSAGE_DEVICE_CHANGED => DeviceChanged::view_mut(self),
+                #[cfg(feature = "v1_18")]
+                ffi::GST_MESSAGE_INSTANT_RATE_REQUEST => InstantRateRequest::view_mut(self),
+                _ => MessageViewMut::Other,
+            }
+        }
+    }
+
     #[doc(alias = "get_type")]
     #[inline]
     pub fn type_(&self) -> MessageType {
@@ -269,6 +320,55 @@ pub enum MessageView<'a> {
     Other,
 }
 
+#[derive(Debug)]
+#[non_exhaustive]
+pub enum MessageViewMut<'a> {
+    Eos(&'a mut Eos),
+    Error(&'a mut Error),
+    Warning(&'a mut Warning),
+    Info(&'a mut Info),
+    Tag(&'a mut Tag),
+    Buffering(&'a mut Buffering),
+    StateChanged(&'a mut StateChanged),
+    StateDirty(&'a mut StateDirty),
+    StepDone(&'a mut StepDone),
+    ClockProvide(&'a mut ClockProvide),
+    ClockLost(&'a mut ClockLost),
+    NewClock(&'a mut NewClock),
+    StructureChange(&'a mut StructureChange),
+    StreamStatus(&'a mut StreamStatus),
+    Application(&'a mut Application),
+    Element(&'a mut Element),
+    SegmentStart(&'a mut SegmentStart),
+    SegmentDone(&'a mut SegmentDone),
+    DurationChanged(&'a mut DurationChanged),
+    Latency(&'a mut Latency),
+    AsyncStart(&'a mut AsyncStart),
+    AsyncDone(&'a mut AsyncDone),
+    RequestState(&'a mut RequestState),
+    StepStart(&'a mut StepStart),
+    Qos(&'a mut Qos),
+    Progress(&'a mut Progress),
+    Toc(&'a mut Toc),
+    ResetTime(&'a mut ResetTime),
+    StreamStart(&'a mut StreamStart),
+    NeedContext(&'a mut NeedContext),
+    HaveContext(&'a mut HaveContext),
+    DeviceAdded(&'a mut DeviceAdded),
+    DeviceRemoved(&'a mut DeviceRemoved),
+    PropertyNotify(&'a mut PropertyNotify),
+    StreamCollection(&'a mut StreamCollection),
+    StreamsSelected(&'a mut StreamsSelected),
+    Redirect(&'a mut Redirect),
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+    DeviceChanged(&'a mut DeviceChanged),
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    InstantRateRequest(&'a mut InstantRateRequest),
+    Other,
+}
+
 macro_rules! declare_concrete_message(
     ($name:ident, $param:ident) => {
         #[repr(transparent)]
@@ -281,9 +381,20 @@ macro_rules! declare_concrete_message(
             }
 
             #[inline]
+            pub fn message_mut(&mut self) -> &mut MessageRef {
+                unsafe { &mut *(self as *mut Self as *mut MessageRef) }
+            }
+
+            #[inline]
             unsafe fn view(message: &MessageRef) -> MessageView<'_> {
                 let message = &*(message as *const MessageRef as *const Self);
                 MessageView::$name(message)
+            }
+
+            #[inline]
+            unsafe fn view_mut(message: &mut MessageRef) -> MessageViewMut<'_> {
+                let message = &mut *(message as *mut MessageRef as *mut Self);
+                MessageViewMut::$name(message)
             }
         }
 
@@ -295,6 +406,13 @@ macro_rules! declare_concrete_message(
                 unsafe {
                     &*(self as *const Self as *const Self::Target)
                 }
+            }
+        }
+
+        impl DerefMut for $name {
+            #[inline]
+            fn deref_mut(&mut self) -> &mut Self::Target {
+                self.message_mut()
             }
         }
 
@@ -322,6 +440,14 @@ macro_rules! declare_concrete_message(
             #[inline]
             fn deref(&self) -> &Self::Target {
                 unsafe { &*(self.0.as_ptr() as *const Self::Target) }
+            }
+        }
+
+        impl DerefMut for $name<Message> {
+            #[inline]
+            fn deref_mut(&mut self) -> &mut Self::Target {
+                debug_assert!(self.0.is_writable());
+                unsafe { &mut *(self.0.as_mut_ptr() as *mut Self::Target) }
             }
         }
 
