@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::FdAllocator;
+use crate::{ffi, FdAllocator};
 
 glib::wrapper! {
     #[doc(alias = "GstShmAllocator")]

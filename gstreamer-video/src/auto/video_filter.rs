@@ -3,6 +3,8 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
+use crate::ffi;
+
 glib::wrapper! {
     #[doc(alias = "GstVideoFilter")]
     pub struct VideoFilter(Object<ffi::GstVideoFilter, ffi::GstVideoFilterClass>) @extends gst_base::BaseTransform, gst::Element, gst::Object;

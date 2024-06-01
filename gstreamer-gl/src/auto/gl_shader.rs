@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{GLContext, GLSLStage};
+use crate::{ffi, GLContext, GLSLStage};
 #[cfg(feature = "v1_16")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 use crate::{GLSLProfile, GLSLVersion};
@@ -442,7 +442,7 @@ impl GLShader {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::linked\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_linked_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

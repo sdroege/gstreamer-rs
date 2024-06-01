@@ -3,6 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
+use crate::ffi;
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -123,7 +124,7 @@ impl NetClientClock {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::address\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_address_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -151,7 +152,7 @@ impl NetClientClock {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::bus\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_bus_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -179,7 +180,7 @@ impl NetClientClock {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::internal-clock\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_internal_clock_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -207,7 +208,7 @@ impl NetClientClock {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::minimum-update-interval\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_minimum_update_interval_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -235,7 +236,7 @@ impl NetClientClock {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::port\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_port_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -263,7 +264,7 @@ impl NetClientClock {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::qos-dscp\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_qos_dscp_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -291,7 +292,7 @@ impl NetClientClock {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::round-trip-limit\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_round_trip_limit_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

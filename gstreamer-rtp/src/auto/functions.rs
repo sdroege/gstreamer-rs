@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::RTCPSDESType;
+use crate::{ffi, RTCPSDESType};
 use glib::translate::*;
 
 //#[cfg(feature = "v1_16")]

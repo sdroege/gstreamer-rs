@@ -3,6 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
+use crate::ffi;
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -119,7 +120,7 @@ impl TestClock {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::clock-type\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_clock_type_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{MetaContainer, Track};
+use crate::{ffi, MetaContainer, Track};
 use glib::translate::*;
 
 glib::wrapper! {

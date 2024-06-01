@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{RTSPMedia, RTSPStreamTransport};
+use crate::{ffi, RTSPMedia, RTSPStreamTransport};
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {

@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{GLContext, GLDisplayType, GLWindow, GLAPI};
+use crate::{ffi, GLContext, GLDisplayType, GLWindow, GLAPI};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -148,7 +148,7 @@ pub trait GLDisplayExt: IsA<GLDisplay> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"create-context\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     create_context_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

@@ -4,10 +4,10 @@
 // DO NOT EDIT
 #![allow(deprecated)]
 
+use crate::{ffi, Extractable, MetaContainer, Timeline, TrackType};
 #[cfg(feature = "v1_18")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 use crate::{Edge, EditMode, Layer};
-use crate::{Extractable, MetaContainer, Timeline, TrackType};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -607,7 +607,7 @@ pub trait TimelineElementExt: IsA<TimelineElement> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"child-property-added\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     child_property_added_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -643,7 +643,7 @@ pub trait TimelineElementExt: IsA<TimelineElement> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"child-property-removed\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     child_property_removed_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -682,7 +682,7 @@ pub trait TimelineElementExt: IsA<TimelineElement> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 signal_name.as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     deep_notify_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -708,7 +708,7 @@ pub trait TimelineElementExt: IsA<TimelineElement> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::duration\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_duration_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -734,7 +734,7 @@ pub trait TimelineElementExt: IsA<TimelineElement> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::in-point\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_in_point_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -760,7 +760,7 @@ pub trait TimelineElementExt: IsA<TimelineElement> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::max-duration\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_max_duration_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -786,7 +786,7 @@ pub trait TimelineElementExt: IsA<TimelineElement> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::name\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_name_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -812,7 +812,7 @@ pub trait TimelineElementExt: IsA<TimelineElement> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::parent\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_parent_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -839,7 +839,7 @@ pub trait TimelineElementExt: IsA<TimelineElement> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::priority\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_priority_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -865,7 +865,7 @@ pub trait TimelineElementExt: IsA<TimelineElement> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::serialize\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_serialize_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -891,7 +891,7 @@ pub trait TimelineElementExt: IsA<TimelineElement> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::start\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_start_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -917,7 +917,7 @@ pub trait TimelineElementExt: IsA<TimelineElement> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::timeline\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_timeline_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::AudioInfo;
+use crate::{ffi, AudioInfo};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -323,7 +323,7 @@ pub trait AudioEncoderExt: IsA<AudioEncoder> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::hard-resync\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_hard_resync_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -352,7 +352,7 @@ pub trait AudioEncoderExt: IsA<AudioEncoder> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::mark-granule\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_mark_granule_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -381,7 +381,7 @@ pub trait AudioEncoderExt: IsA<AudioEncoder> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::perfect-timestamp\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_perfect_timestamp_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -410,7 +410,7 @@ pub trait AudioEncoderExt: IsA<AudioEncoder> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::tolerance\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_tolerance_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

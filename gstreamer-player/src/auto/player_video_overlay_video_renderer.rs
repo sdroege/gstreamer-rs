@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::PlayerVideoRenderer;
+use crate::{ffi, PlayerVideoRenderer};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -95,7 +95,7 @@ impl PlayerVideoOverlayVideoRenderer {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::video-sink\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_video_sink_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -123,7 +123,7 @@ impl PlayerVideoOverlayVideoRenderer {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::window-handle\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_window_handle_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

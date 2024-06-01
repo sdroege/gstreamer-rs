@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{ClockTime, Object};
+use crate::{ffi, ClockTime, Object};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -340,7 +340,7 @@ pub trait ClockExt: IsA<Clock> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"synced\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     synced_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -369,7 +369,7 @@ pub trait ClockExt: IsA<Clock> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::timeout\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_timeout_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -398,7 +398,7 @@ pub trait ClockExt: IsA<Clock> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::window-size\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_window_size_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -427,7 +427,7 @@ pub trait ClockExt: IsA<Clock> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::window-threshold\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_window_threshold_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

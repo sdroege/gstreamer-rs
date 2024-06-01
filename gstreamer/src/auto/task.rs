@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{Object, TaskPool, TaskState};
+use crate::{ffi, Object, TaskPool, TaskState};
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {

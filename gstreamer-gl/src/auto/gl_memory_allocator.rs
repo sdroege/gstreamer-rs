@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{GLBaseMemoryAllocator, GLContext};
+use crate::{ffi, GLBaseMemoryAllocator, GLContext};
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {

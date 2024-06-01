@@ -3,6 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
+use crate::ffi;
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -189,7 +190,7 @@ pub trait AudioBaseSinkExt: IsA<AudioBaseSink> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::alignment-threshold\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_alignment_threshold_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -218,7 +219,7 @@ pub trait AudioBaseSinkExt: IsA<AudioBaseSink> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::buffer-time\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_buffer_time_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -247,7 +248,7 @@ pub trait AudioBaseSinkExt: IsA<AudioBaseSink> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::can-activate-pull\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_can_activate_pull_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -276,7 +277,7 @@ pub trait AudioBaseSinkExt: IsA<AudioBaseSink> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::discont-wait\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_discont_wait_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -305,7 +306,7 @@ pub trait AudioBaseSinkExt: IsA<AudioBaseSink> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::drift-tolerance\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_drift_tolerance_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -334,7 +335,7 @@ pub trait AudioBaseSinkExt: IsA<AudioBaseSink> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::latency-time\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_latency_time_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -363,7 +364,7 @@ pub trait AudioBaseSinkExt: IsA<AudioBaseSink> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::provide-clock\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_provide_clock_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -392,7 +393,7 @@ pub trait AudioBaseSinkExt: IsA<AudioBaseSink> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::slave-method\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_slave_method_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

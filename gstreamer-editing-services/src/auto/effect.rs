@@ -3,7 +3,9 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{BaseEffect, Extractable, MetaContainer, Operation, TimelineElement, TrackElement};
+use crate::{
+    ffi, BaseEffect, Extractable, MetaContainer, Operation, TimelineElement, TrackElement,
+};
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {

@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{WebRTCDTLSTransport, WebRTCSCTPTransportState};
+use crate::{ffi, WebRTCDTLSTransport, WebRTCSCTPTransportState};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -59,7 +59,7 @@ impl WebRTCSCTPTransport {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::max-channels\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_max_channels_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -87,7 +87,7 @@ impl WebRTCSCTPTransport {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::max-message-size\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_max_message_size_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -115,7 +115,7 @@ impl WebRTCSCTPTransport {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::state\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_state_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -143,7 +143,7 @@ impl WebRTCSCTPTransport {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::transport\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_transport_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

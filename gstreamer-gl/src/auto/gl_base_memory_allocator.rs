@@ -3,6 +3,8 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
+use crate::ffi;
+
 glib::wrapper! {
     #[doc(alias = "GstGLBaseMemoryAllocator")]
     pub struct GLBaseMemoryAllocator(Object<ffi::GstGLBaseMemoryAllocator, ffi::GstGLBaseMemoryAllocatorClass>) @extends gst::Allocator, gst::Object;

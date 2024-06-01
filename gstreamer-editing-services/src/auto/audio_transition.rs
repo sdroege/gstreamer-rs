@@ -4,7 +4,9 @@
 // DO NOT EDIT
 #![allow(deprecated)]
 
-use crate::{Extractable, MetaContainer, Operation, TimelineElement, TrackElement, Transition};
+use crate::{
+    ffi, Extractable, MetaContainer, Operation, TimelineElement, TrackElement, Transition,
+};
 use glib::translate::*;
 
 glib::wrapper! {

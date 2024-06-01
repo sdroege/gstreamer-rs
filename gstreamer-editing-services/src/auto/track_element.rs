@@ -4,7 +4,9 @@
 // DO NOT EDIT
 #![allow(deprecated)]
 
-use crate::{Edge, EditMode, Extractable, Layer, MetaContainer, TimelineElement, Track, TrackType};
+use crate::{
+    ffi, Edge, EditMode, Extractable, Layer, MetaContainer, TimelineElement, Track, TrackType,
+};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -411,7 +413,7 @@ pub trait TrackElementExt: IsA<TrackElement> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"control-binding-added\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     control_binding_added_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -443,7 +445,7 @@ pub trait TrackElementExt: IsA<TrackElement> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"control-binding-removed\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     control_binding_removed_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -466,7 +468,7 @@ pub trait TrackElementExt: IsA<TrackElement> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::active\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_active_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -497,7 +499,7 @@ pub trait TrackElementExt: IsA<TrackElement> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::auto-clamp-control-sources\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_auto_clamp_control_sources_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -525,7 +527,7 @@ pub trait TrackElementExt: IsA<TrackElement> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::has-internal-source\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_has_internal_source_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -548,7 +550,7 @@ pub trait TrackElementExt: IsA<TrackElement> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::track\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_track_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -574,7 +576,7 @@ pub trait TrackElementExt: IsA<TrackElement> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::track-type\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_track_type_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

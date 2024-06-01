@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{ClockTime, Message, Object};
+use crate::{ffi, ClockTime, Message, Object};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -147,7 +147,7 @@ impl Bus {
             connect_raw(
                 self.as_ptr() as *mut _,
                 signal_name.as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     message_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -180,7 +180,7 @@ impl Bus {
             connect_raw(
                 self.as_ptr() as *mut _,
                 signal_name.as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     sync_message_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

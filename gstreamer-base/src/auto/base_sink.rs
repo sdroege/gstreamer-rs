@@ -3,6 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
+use crate::ffi;
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -297,7 +298,7 @@ pub trait BaseSinkExt: IsA<BaseSink> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::async\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_async_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -326,7 +327,7 @@ pub trait BaseSinkExt: IsA<BaseSink> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::blocksize\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_blocksize_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -355,7 +356,7 @@ pub trait BaseSinkExt: IsA<BaseSink> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::enable-last-sample\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_enable_last_sample_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -384,7 +385,7 @@ pub trait BaseSinkExt: IsA<BaseSink> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::last-sample\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_last_sample_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -413,7 +414,7 @@ pub trait BaseSinkExt: IsA<BaseSink> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::max-bitrate\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_max_bitrate_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -442,7 +443,7 @@ pub trait BaseSinkExt: IsA<BaseSink> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::max-lateness\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_max_lateness_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -473,7 +474,7 @@ pub trait BaseSinkExt: IsA<BaseSink> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::processing-deadline\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_processing_deadline_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -499,7 +500,7 @@ pub trait BaseSinkExt: IsA<BaseSink> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::qos\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_qos_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -528,7 +529,7 @@ pub trait BaseSinkExt: IsA<BaseSink> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::render-delay\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_render_delay_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -556,7 +557,7 @@ pub trait BaseSinkExt: IsA<BaseSink> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::stats\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_stats_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -582,7 +583,7 @@ pub trait BaseSinkExt: IsA<BaseSink> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::sync\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_sync_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -611,7 +612,7 @@ pub trait BaseSinkExt: IsA<BaseSink> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::throttle-time\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_throttle_time_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -640,7 +641,7 @@ pub trait BaseSinkExt: IsA<BaseSink> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::ts-offset\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_ts_offset_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

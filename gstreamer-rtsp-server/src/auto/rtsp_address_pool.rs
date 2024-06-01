@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{RTSPAddress, RTSPAddressFlags};
+use crate::{ffi, RTSPAddress, RTSPAddressFlags};
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {

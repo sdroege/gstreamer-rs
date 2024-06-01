@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{Issue, ReportLevel, Reporter, ReportingDetails};
+use crate::{ffi, Issue, ReportLevel, Reporter, ReportingDetails};
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {

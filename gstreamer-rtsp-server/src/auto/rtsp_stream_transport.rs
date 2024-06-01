@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::RTSPStream;
+use crate::{ffi, RTSPStream};
 use glib::{prelude::*, translate::*};
 use std::boxed::Box as Box_;
 

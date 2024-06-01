@@ -3,6 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
+use crate::ffi;
 use glib::GStr;
 
 #[doc(alias = "GST_BUFFER_POOL_OPTION_GL_SYNC_META")]

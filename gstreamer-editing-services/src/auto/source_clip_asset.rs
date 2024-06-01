@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{Asset, ClipAsset, MetaContainer};
+use crate::{ffi, Asset, ClipAsset, MetaContainer};
 
 glib::wrapper! {
     #[doc(alias = "GESSourceClipAsset")]

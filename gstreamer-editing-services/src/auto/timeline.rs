@@ -5,7 +5,7 @@
 #![allow(deprecated)]
 
 use crate::{
-    Asset, Extractable, Group, Layer, MetaContainer, TimelineElement, Track, TrackElement,
+    ffi, Asset, Extractable, Group, Layer, MetaContainer, TimelineElement, Track, TrackElement,
 };
 #[cfg(feature = "v1_18")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
@@ -435,7 +435,7 @@ pub trait TimelineExt: IsA<Timeline> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"commited\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     commited_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -464,7 +464,7 @@ pub trait TimelineExt: IsA<Timeline> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"group-added\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     group_added_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -498,7 +498,7 @@ pub trait TimelineExt: IsA<Timeline> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"layer-added\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     layer_added_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -527,7 +527,7 @@ pub trait TimelineExt: IsA<Timeline> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"layer-removed\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     layer_removed_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -566,7 +566,7 @@ pub trait TimelineExt: IsA<Timeline> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"select-element-track\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     select_element_track_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -607,7 +607,7 @@ pub trait TimelineExt: IsA<Timeline> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"snapping-ended\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     snapping_ended_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -643,7 +643,7 @@ pub trait TimelineExt: IsA<Timeline> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"snapping-started\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     snapping_started_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -672,7 +672,7 @@ pub trait TimelineExt: IsA<Timeline> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"track-added\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     track_added_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -701,7 +701,7 @@ pub trait TimelineExt: IsA<Timeline> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"track-removed\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     track_removed_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -727,7 +727,7 @@ pub trait TimelineExt: IsA<Timeline> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::auto-transition\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_auto_transition_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -750,7 +750,7 @@ pub trait TimelineExt: IsA<Timeline> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::duration\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_duration_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -776,7 +776,7 @@ pub trait TimelineExt: IsA<Timeline> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::snapping-distance\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_snapping_distance_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

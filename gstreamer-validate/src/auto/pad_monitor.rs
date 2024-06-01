@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{ElementMonitor, Monitor, Reporter, Runner};
+use crate::{ffi, ElementMonitor, Monitor, Reporter, Runner};
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {

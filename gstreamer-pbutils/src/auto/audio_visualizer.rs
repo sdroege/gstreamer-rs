@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::AudioVisualizerShader;
+use crate::{ffi, AudioVisualizerShader};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -72,7 +72,7 @@ pub trait AudioVisualizerExt: IsA<AudioVisualizer> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::shade-amount\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_shade_amount_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -98,7 +98,7 @@ pub trait AudioVisualizerExt: IsA<AudioVisualizer> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::shader\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_shader_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

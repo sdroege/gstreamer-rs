@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{Element, Object, TagList, TagMergeMode};
+use crate::{ffi, Element, Object, TagList, TagMergeMode};
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {

@@ -3,6 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
+use crate::ffi;
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -87,7 +88,7 @@ pub trait AudioAggregatorExt: IsA<AudioAggregator> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::alignment-threshold\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_alignment_threshold_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -116,7 +117,7 @@ pub trait AudioAggregatorExt: IsA<AudioAggregator> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::discont-wait\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_discont_wait_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -145,7 +146,7 @@ pub trait AudioAggregatorExt: IsA<AudioAggregator> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::output-buffer-duration\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_output_buffer_duration_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

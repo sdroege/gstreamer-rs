@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{PipelineFlags, Timeline};
+use crate::{ffi, PipelineFlags, Timeline};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -239,7 +239,7 @@ pub trait GESPipelineExt: IsA<Pipeline> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::audio-filter\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_audio_filter_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -262,7 +262,7 @@ pub trait GESPipelineExt: IsA<Pipeline> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::audio-sink\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_audio_sink_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -285,7 +285,7 @@ pub trait GESPipelineExt: IsA<Pipeline> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::mode\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_mode_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -308,7 +308,7 @@ pub trait GESPipelineExt: IsA<Pipeline> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::timeline\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_timeline_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -334,7 +334,7 @@ pub trait GESPipelineExt: IsA<Pipeline> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::video-filter\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_video_filter_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -357,7 +357,7 @@ pub trait GESPipelineExt: IsA<Pipeline> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::video-sink\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_video_sink_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

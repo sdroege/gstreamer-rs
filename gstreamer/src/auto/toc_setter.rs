@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{Element, Object, Toc};
+use crate::{ffi, Element, Object, Toc};
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {

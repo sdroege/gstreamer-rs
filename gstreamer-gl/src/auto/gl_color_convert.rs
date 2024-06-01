@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::GLContext;
+use crate::{ffi, GLContext};
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {

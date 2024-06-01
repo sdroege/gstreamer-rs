@@ -4,7 +4,7 @@
 // DO NOT EDIT
 
 use crate::{
-    Buffer, BufferList, Caps, Element, Event, FlowError, FlowSuccess, Object, PadDirection,
+    ffi, Buffer, BufferList, Caps, Element, Event, FlowError, FlowSuccess, Object, PadDirection,
     PadLinkCheck, PadLinkError, PadLinkSuccess, PadMode, PadTemplate, Stream, TaskState,
 };
 use glib::{
@@ -516,7 +516,7 @@ pub trait PadExt: IsA<Pad> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"linked\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     linked_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -548,7 +548,7 @@ pub trait PadExt: IsA<Pad> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"unlinked\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     unlinked_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -574,7 +574,7 @@ pub trait PadExt: IsA<Pad> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::caps\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_caps_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -600,7 +600,7 @@ pub trait PadExt: IsA<Pad> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::offset\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_offset_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

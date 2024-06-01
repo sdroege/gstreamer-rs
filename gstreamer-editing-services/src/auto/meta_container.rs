@@ -6,7 +6,7 @@
 #[cfg(feature = "v1_18")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 use crate::MarkerList;
-use crate::MetaFlag;
+use crate::{ffi, MetaFlag};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -620,7 +620,7 @@ pub trait MetaContainerExt: IsA<MetaContainer> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 signal_name.as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_meta_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

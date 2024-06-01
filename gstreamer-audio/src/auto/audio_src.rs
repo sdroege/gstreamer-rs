@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::AudioBaseSrc;
+use crate::{ffi, AudioBaseSrc};
 
 glib::wrapper! {
     #[doc(alias = "GstAudioSrc")]

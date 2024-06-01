@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{Object, Plugin, PluginFeature};
+use crate::{ffi, Object, Plugin, PluginFeature};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -166,7 +166,7 @@ impl Registry {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"feature-added\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     feature_added_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -194,7 +194,7 @@ impl Registry {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"plugin-added\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     plugin_added_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

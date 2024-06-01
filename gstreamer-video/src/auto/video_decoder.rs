@@ -3,10 +3,10 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::VideoCodecFrame;
 #[cfg(feature = "v1_20")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 use crate::VideoDecoderRequestSyncPointFlags;
+use crate::{ffi, VideoCodecFrame};
 #[cfg(feature = "v1_18")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 use glib::signal::{connect_raw, SignalHandlerId};
@@ -441,7 +441,7 @@ pub trait VideoDecoderExt: IsA<VideoDecoder> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::automatic-request-sync-point-flags\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_automatic_request_sync_point_flags_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -472,7 +472,7 @@ pub trait VideoDecoderExt: IsA<VideoDecoder> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::automatic-request-sync-points\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_automatic_request_sync_points_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -503,7 +503,7 @@ pub trait VideoDecoderExt: IsA<VideoDecoder> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::discard-corrupted-frames\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_discard_corrupted_frames_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -534,7 +534,7 @@ pub trait VideoDecoderExt: IsA<VideoDecoder> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::max-errors\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_max_errors_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -565,7 +565,7 @@ pub trait VideoDecoderExt: IsA<VideoDecoder> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::min-force-key-unit-interval\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_min_force_key_unit_interval_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -593,7 +593,7 @@ pub trait VideoDecoderExt: IsA<VideoDecoder> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::qos\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_qos_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

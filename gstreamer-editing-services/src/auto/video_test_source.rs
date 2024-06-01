@@ -4,7 +4,7 @@
 // DO NOT EDIT
 
 use crate::{
-    Extractable, MetaContainer, Source, TimelineElement, TrackElement, VideoSource,
+    ffi, Extractable, MetaContainer, Source, TimelineElement, TrackElement, VideoSource,
     VideoTestPattern,
 };
 use glib::{prelude::*, translate::*};

@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{RTSPContext, RTSPThread, RTSPThreadType};
+use crate::{ffi, RTSPContext, RTSPThread, RTSPThreadType};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -99,7 +99,7 @@ pub trait RTSPThreadPoolExt: IsA<RTSPThreadPool> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::max-threads\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_max_threads_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

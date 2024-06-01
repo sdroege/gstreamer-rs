@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::GLContext;
+use crate::{ffi, GLContext};
 #[cfg(feature = "v1_16")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 use glib::signal::{connect_raw, SignalHandlerId};
@@ -90,7 +90,7 @@ impl GLOverlayCompositor {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::yinvert\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_yinvert_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

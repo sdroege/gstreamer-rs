@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{Asset, MetaContainer, TrackElementAsset};
+use crate::{ffi, Asset, MetaContainer, TrackElementAsset};
 
 glib::wrapper! {
     #[doc(alias = "GESEffectAsset")]

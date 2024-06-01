@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{Clip, Container, Extractable, MetaContainer, TimelineElement};
+use crate::{ffi, Clip, Container, Extractable, MetaContainer, TimelineElement};
 #[cfg(feature = "v1_18")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 use glib::translate::*;

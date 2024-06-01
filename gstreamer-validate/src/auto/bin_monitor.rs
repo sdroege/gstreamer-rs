@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{ElementMonitor, Monitor, Reporter, Runner, Scenario};
+use crate::{ffi, ElementMonitor, Monitor, Reporter, Runner, Scenario};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -85,7 +85,7 @@ pub trait BinMonitorExt: IsA<BinMonitor> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::handles-states\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_handles_states_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

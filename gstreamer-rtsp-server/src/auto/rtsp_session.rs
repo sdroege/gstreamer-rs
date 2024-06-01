@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{RTSPFilterResult, RTSPMedia, RTSPSessionMedia};
+use crate::{ffi, RTSPFilterResult, RTSPMedia, RTSPSessionMedia};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -227,7 +227,7 @@ pub trait RTSPSessionExt: IsA<RTSPSession> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::extra-timeout\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_extra_timeout_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -256,7 +256,7 @@ pub trait RTSPSessionExt: IsA<RTSPSession> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::timeout\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_timeout_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -285,7 +285,7 @@ pub trait RTSPSessionExt: IsA<RTSPSession> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::timeout-always-visible\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_timeout_always_visible_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

@@ -6,7 +6,7 @@
 #[cfg(feature = "v1_20")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 use crate::GLAllocationParams;
-use crate::GLContext;
+use crate::{ffi, GLContext};
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {

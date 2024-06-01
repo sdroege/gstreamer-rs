@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{Clip, Container, Extractable, MetaContainer, SourceClip, TimelineElement};
+use crate::{ffi, Clip, Container, Extractable, MetaContainer, SourceClip, TimelineElement};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -84,7 +84,7 @@ pub trait UriClipExt: IsA<UriClip> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::is-image\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_is_image_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -107,7 +107,7 @@ pub trait UriClipExt: IsA<UriClip> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::mute\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_mute_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

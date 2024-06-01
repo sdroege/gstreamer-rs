@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{Clip, Container, Extractable, MetaContainer, TimelineElement};
+use crate::{ffi, Clip, Container, Extractable, MetaContainer, TimelineElement};
 
 glib::wrapper! {
     #[doc(alias = "GESOperationClip")]

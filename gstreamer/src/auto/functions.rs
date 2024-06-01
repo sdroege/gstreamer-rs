@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{Bin, ClockTime, DebugGraphDetails, DebugLevel, Element, StackTraceFlags};
+use crate::{ffi, Bin, ClockTime, DebugGraphDetails, DebugLevel, Element, StackTraceFlags};
 use glib::{prelude::*, translate::*};
 
 #[doc(alias = "gst_debug_add_ring_buffer_logger")]

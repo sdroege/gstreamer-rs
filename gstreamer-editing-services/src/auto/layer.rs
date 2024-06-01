@@ -7,7 +7,7 @@
 #[cfg(feature = "v1_18")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 use crate::Track;
-use crate::{Asset, Clip, Extractable, MetaContainer, Timeline, TrackType};
+use crate::{ffi, Asset, Clip, Extractable, MetaContainer, Timeline, TrackType};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -286,7 +286,7 @@ pub trait LayerExt: IsA<Layer> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"clip-added\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     clip_added_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -312,7 +312,7 @@ pub trait LayerExt: IsA<Layer> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"clip-removed\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     clip_removed_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -338,7 +338,7 @@ pub trait LayerExt: IsA<Layer> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::auto-transition\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_auto_transition_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -362,7 +362,7 @@ pub trait LayerExt: IsA<Layer> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::priority\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_priority_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
