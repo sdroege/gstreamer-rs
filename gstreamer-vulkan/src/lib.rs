@@ -40,5 +40,7 @@ pub mod prelude {
     pub use crate::auto::traits::*;
 }
 
+pub mod subclass;
+
 mod caps_features;
 pub use caps_features::*;
