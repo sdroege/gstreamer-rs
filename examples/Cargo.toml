@@ -25,6 +25,9 @@ gst-rtsp = { workspace = true, optional = true }
 gst-rtsp-server = { workspace = true, optional = true }
 gst-allocators = { workspace = true, optional = true }
 gst-d3d12 = { workspace = true, optional = true }
+gst-vulkan = { workspace = true, optional = true }
+gst-vulkan-wayland = { workspace = true, optional = true }
+gst-vulkan-xcb = { workspace = true, optional = true }
 gio = { workspace = true, optional = true }
 anyhow = "1.0"
 byte-slice-cast = "1"
@@ -81,6 +84,9 @@ gst-gl-egl = ["dep:gst-gl-egl", "glutin-winit?/egl", "glutin-winit?/x11", "gluti
 allocators = ["gst-allocators", "memmap2", "memfd", "uds"]
 windows = ["dep:windows"]
 d3d12 = ["dep:gst-d3d12", "windows"]
+vulkan = ["dep:gst-vulkan", "gst-vulkan/v1_26"]
+gst-vulkan-xcb = ["vulkan", "dep:gst-vulkan-xcb"]
+gst-vulkan-wayland = ["vulkan", "dep:gst-vulkan-wayland"]
 
 [[bin]]
 name = "appsink"
@@ -228,3 +234,7 @@ required-features = ["gst-video/v1_18"]
 [[bin]]
 name = "d3d12convert"
 required-features = ["d3d12"]
+
+[[bin]]
+name = "vulkanfilter"
+required-features = ["vulkan", "gst-vulkan/v1_26_4"]
