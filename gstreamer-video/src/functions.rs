@@ -2,6 +2,7 @@
 
 use std::{i32, mem, ptr};
 
+use crate::ffi;
 use glib::translate::{from_glib, from_glib_full, IntoGlib, ToGlibPtr};
 
 #[doc(alias = "gst_video_convert_sample")]

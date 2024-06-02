@@ -8,7 +8,7 @@ use glib::{
     translate::*,
 };
 
-use crate::{Stream, StreamCollection};
+use crate::{ffi, Stream, StreamCollection};
 
 #[derive(Debug)]
 pub struct Iter<'a> {

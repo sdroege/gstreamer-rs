@@ -4,7 +4,7 @@ use std::{io, mem, ops};
 
 use glib::translate::*;
 
-use crate::Adapter;
+use crate::{ffi, Adapter};
 
 impl Adapter {
     #[doc(alias = "gst_adapter_copy")]

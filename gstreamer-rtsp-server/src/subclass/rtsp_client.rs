@@ -2,7 +2,7 @@
 
 use glib::{prelude::*, subclass::prelude::*, translate::*};
 
-use crate::RTSPClient;
+use crate::{ffi, RTSPClient};
 
 pub trait RTSPClientImpl: RTSPClientImplExt + ObjectImpl + Send + Sync {
     fn create_sdp(&self, media: &crate::RTSPMedia) -> Option<gst_sdp::SDPMessage> {

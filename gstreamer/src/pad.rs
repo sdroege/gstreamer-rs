@@ -11,6 +11,7 @@ use std::{
 use glib::{ffi::gpointer, prelude::*, translate::*};
 
 use crate::{
+    ffi,
     format::{FormattedValue, SpecificFormattedValueFullRange, SpecificFormattedValueIntrinsic},
     prelude::*,
     Buffer, BufferList, Event, FlowError, FlowReturn, FlowSuccess, Format, GenericFormattedValue,

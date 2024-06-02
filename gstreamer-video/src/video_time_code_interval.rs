@@ -2,6 +2,7 @@
 
 use std::{cmp, fmt, mem, str};
 
+use crate::ffi;
 use glib::translate::*;
 
 glib::wrapper! {

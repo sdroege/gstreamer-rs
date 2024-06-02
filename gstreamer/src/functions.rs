@@ -12,6 +12,7 @@ use crate::Tracer;
 pub use crate::auto::functions::{
     main_executable_path, util_get_timestamp as get_timestamp, version, version_string,
 };
+use crate::ffi;
 
 #[cfg(feature = "v1_24")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]

@@ -5,7 +5,7 @@ use std::ptr;
 use glib::translate::*;
 use gst::subclass::prelude::*;
 
-use crate::{prelude::*, RTPBaseDepayload};
+use crate::{ffi, prelude::*, RTPBaseDepayload};
 
 pub trait RTPBaseDepayloadImpl: RTPBaseDepayloadImplExt + ElementImpl {
     fn set_caps(&self, caps: &gst::Caps) -> Result<(), gst::LoggableError> {

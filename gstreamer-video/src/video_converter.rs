@@ -2,7 +2,7 @@
 
 use std::{ops, ptr};
 
-use crate::VideoFrameExt;
+use crate::{ffi, prelude::*};
 use glib::{prelude::*, translate::*};
 
 #[derive(Debug)]

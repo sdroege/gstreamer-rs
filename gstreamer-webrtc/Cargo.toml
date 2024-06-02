@@ -15,7 +15,7 @@ rust-version.workspace = true
 
 [dependencies]
 libc = "0.2"
-ffi = { package = "gstreamer-webrtc-sys", path = "sys" }
+gstreamer-webrtc-sys.workspace = true
 glib.workspace = true
 gst.workspace = true
 gst-sdp.workspace = true
@@ -25,13 +25,13 @@ gir-format-check = "0.1"
 
 [features]
 default = []
-v1_14_1 = ["ffi/v1_14_1"]
-v1_16 = ["gst/v1_16", "gst-sdp/v1_16", "ffi/v1_16", "v1_14_1"]
-v1_18 = ["gst/v1_18", "gst-sdp/v1_18", "ffi/v1_18", "v1_16"]
-v1_20 = ["gst/v1_20", "gst-sdp/v1_20", "ffi/v1_20", "v1_18"]
-v1_22 = ["gst/v1_22", "gst-sdp/v1_22", "ffi/v1_22", "v1_20"]
-v1_24 = ["gst/v1_24", "gst-sdp/v1_24", "ffi/v1_24", "v1_22"]
-v1_26 = ["gst/v1_26", "gst-sdp/v1_26", "ffi/v1_26", "v1_24"]
+v1_14_1 = ["gstreamer-webrtc-sys/v1_14_1"]
+v1_16 = ["gst/v1_16", "gst-sdp/v1_16", "gstreamer-webrtc-sys/v1_16", "v1_14_1"]
+v1_18 = ["gst/v1_18", "gst-sdp/v1_18", "gstreamer-webrtc-sys/v1_18", "v1_16"]
+v1_20 = ["gst/v1_20", "gst-sdp/v1_20", "gstreamer-webrtc-sys/v1_20", "v1_18"]
+v1_22 = ["gst/v1_22", "gst-sdp/v1_22", "gstreamer-webrtc-sys/v1_22", "v1_20"]
+v1_24 = ["gst/v1_24", "gst-sdp/v1_24", "gstreamer-webrtc-sys/v1_24", "v1_22"]
+v1_26 = ["gst/v1_26", "gst-sdp/v1_26", "gstreamer-webrtc-sys/v1_26", "v1_24"]
 
 [package.metadata.docs.rs]
 all-features = true

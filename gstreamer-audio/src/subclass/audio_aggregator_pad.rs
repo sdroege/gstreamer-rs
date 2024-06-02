@@ -5,7 +5,7 @@ use std::ptr;
 use glib::translate::*;
 use gst_base::{prelude::*, subclass::prelude::*};
 
-use crate::AudioAggregatorPad;
+use crate::{ffi, AudioAggregatorPad};
 
 pub trait AudioAggregatorPadImpl: AudioAggregatorPadImplExt + AggregatorPadImpl {
     const HANDLE_CONVERSION: bool = false;

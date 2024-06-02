@@ -3,7 +3,7 @@
 use glib::{prelude::*, subclass::prelude::*, translate::*};
 
 use super::prelude::*;
-use crate::Pad;
+use crate::{ffi, Pad};
 
 pub trait PadImpl: PadImplExt + GstObjectImpl + Send + Sync {
     fn linked(&self, peer: &Pad) {

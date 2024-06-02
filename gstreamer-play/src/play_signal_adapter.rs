@@ -8,7 +8,7 @@ use glib::{
     translate::*,
 };
 
-use crate::PlaySignalAdapter;
+use crate::{ffi, PlaySignalAdapter};
 
 impl PlaySignalAdapter {
     #[doc(alias = "duration-changed")]

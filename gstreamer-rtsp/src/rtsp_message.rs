@@ -1,4 +1,4 @@
-use crate::{RTSPAuthCredential, RTSPHeaderField, RTSPStatusCode};
+use crate::{ffi, RTSPAuthCredential, RTSPHeaderField, RTSPStatusCode};
 use glib::translate::*;
 
 glib::wrapper! {

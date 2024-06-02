@@ -4,7 +4,7 @@ use glib::{prelude::*, translate::*};
 
 use std::{alloc, mem, ptr};
 
-use crate::Memory;
+use crate::{ffi, Memory};
 
 #[repr(C)]
 struct WrappedMemory<T> {

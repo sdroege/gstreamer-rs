@@ -5,6 +5,7 @@ use std::{mem, ptr};
 use glib::{prelude::*, translate::*};
 
 use crate::{
+    ffi,
     utils::HasStreamLock,
     video_codec_state::{InNegotiation, Readable, VideoCodecState, VideoCodecStateContext},
     VideoCodecFrame, VideoEncoder,

@@ -3,9 +3,9 @@
 
 use std::sync::Once;
 
-pub use ffi::*;
 pub use glib;
 pub use gst;
+pub use gstreamer_mpegts_sys as ffi;
 
 static MPEGTS_INIT: Once = Once::new();
 
@@ -14,7 +14,7 @@ macro_rules! assert_initialized_main_thread {
         if !gst::INITIALIZED.load(std::sync::atomic::Ordering::SeqCst) {
             gst::assert_initialized();
         }
-        crate::MPEGTS_INIT.call_once(|| unsafe { ffi::gst_mpegts_initialize() });
+        crate::MPEGTS_INIT.call_once(|| unsafe { crate::ffi::gst_mpegts_initialize() });
     };
 }
 

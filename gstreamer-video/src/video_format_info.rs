@@ -2,6 +2,7 @@
 
 use std::{cmp::Ordering, fmt, marker::PhantomData, str};
 
+use crate::ffi;
 use glib::translate::{from_glib, IntoGlib, ToGlibPtr};
 
 #[doc(alias = "GstVideoFormatInfo")]

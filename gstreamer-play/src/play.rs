@@ -2,7 +2,7 @@
 
 use glib::translate::*;
 
-use crate::Play;
+use crate::{ffi, Play};
 
 impl Play {
     #[doc(alias = "get_config")]

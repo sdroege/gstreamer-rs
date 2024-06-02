@@ -13,7 +13,7 @@ use crate::GLDisplayX11;
 
 impl GLDisplayX11 {
     pub unsafe fn with_display(display: uintptr_t) -> Result<GLDisplayX11, glib::error::BoolError> {
-        from_glib_full::<_, Option<GLDisplayX11>>(ffi::gst_gl_display_x11_new_with_display(
+        from_glib_full::<_, Option<GLDisplayX11>>(crate::ffi::gst_gl_display_x11_new_with_display(
             display as gpointer,
         ))
         .ok_or_else(|| glib::bool_error!("Failed to create new X11 GL display"))

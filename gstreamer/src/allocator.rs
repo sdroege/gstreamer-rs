@@ -2,7 +2,7 @@
 
 use glib::{prelude::*, translate::*};
 
-use crate::Allocator;
+use crate::{ffi, Allocator};
 
 impl Allocator {
     #[doc(alias = "gst_allocator_register")]

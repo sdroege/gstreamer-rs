@@ -3,7 +3,7 @@ use glib::translate::*;
 use gst::{result_from_gboolean, LoggableError, CAT_RUST};
 use gst_base::subclass::prelude::*;
 
-use crate::{prelude::*, GLBaseSrc, GLMemory, GLAPI};
+use crate::{ffi, prelude::*, GLBaseSrc, GLMemory, GLAPI};
 
 pub trait GLBaseSrcImpl: GLBaseSrcImplExt + PushSrcImpl {
     const SUPPORTED_GL_API: GLAPI;

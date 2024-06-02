@@ -2,7 +2,7 @@
 
 use glib::{prelude::*, translate::*};
 
-use crate::{prelude::*, Pipeline, PipelineFlags};
+use crate::{ffi, prelude::*, Pipeline, PipelineFlags};
 
 impl Pipeline {
     // rustdoc-stripper-ignore-next

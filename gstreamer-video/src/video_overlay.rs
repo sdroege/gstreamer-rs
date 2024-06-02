@@ -3,7 +3,7 @@
 use glib::{prelude::*, translate::*};
 use libc::uintptr_t;
 
-use crate::VideoOverlay;
+use crate::{ffi, VideoOverlay};
 
 mod sealed {
     pub trait Sealed {}

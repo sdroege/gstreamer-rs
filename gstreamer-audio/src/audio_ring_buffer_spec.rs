@@ -5,10 +5,10 @@ use std::fmt;
 use glib::translate::*;
 use gst::Caps;
 
-use crate::{ffi::GstAudioRingBufferSpec, AudioInfo, AudioRingBufferFormatType};
+use crate::{ffi, AudioInfo, AudioRingBufferFormatType};
 
 #[repr(transparent)]
-pub struct AudioRingBufferSpec(pub(crate) GstAudioRingBufferSpec);
+pub struct AudioRingBufferSpec(pub(crate) ffi::GstAudioRingBufferSpec);
 
 impl AudioRingBufferSpec {
     #[doc(alias = "get_type")]

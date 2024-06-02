@@ -4,7 +4,7 @@ use glib::translate::*;
 use gst::prelude::*;
 use std::marker::PhantomData;
 
-use crate::RelTypes;
+use crate::{ffi, RelTypes};
 
 #[repr(transparent)]
 #[doc(alias = "GstAnalyticsRelationMeta")]

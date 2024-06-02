@@ -15,7 +15,7 @@ rust-version.workspace = true
 
 [dependencies]
 libc = "0.2"
-ffi = { package = "gstreamer-play-sys", path = "sys" }
+gstreamer-play-sys.workspace = true
 glib.workspace = true
 gst = { workspace = true, features = ["v1_20"] }
 gst-video = { workspace = true, features = ["v1_20"] }
@@ -24,9 +24,9 @@ gst-video = { workspace = true, features = ["v1_20"] }
 gir-format-check = "0.1"
 
 [features]
-v1_22 = ["gst/v1_22", "gst-video/v1_22", "ffi/v1_22"]
-v1_24 = ["gst/v1_24", "gst-video/v1_24", "ffi/v1_24", "v1_22"]
-v1_26 = ["gst/v1_26", "gst-video/v1_26", "ffi/v1_26", "v1_24"]
+v1_22 = ["gst/v1_22", "gst-video/v1_22", "gstreamer-play-sys/v1_22"]
+v1_24 = ["gst/v1_24", "gst-video/v1_24", "gstreamer-play-sys/v1_24", "v1_22"]
+v1_26 = ["gst/v1_26", "gst-video/v1_26", "gstreamer-play-sys/v1_26", "v1_24"]
 
 [package.metadata.docs.rs]
 all-features = true

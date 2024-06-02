@@ -5,7 +5,7 @@ use gst::LoggableError;
 use gst_base::subclass::prelude::*;
 
 use super::prelude::*;
-use crate::{AudioRingBufferSpec, AudioSink};
+use crate::{ffi, AudioRingBufferSpec, AudioSink};
 
 pub trait AudioSinkImpl: AudioSinkImplExt + AudioBaseSinkImpl {
     fn close(&self) -> Result<(), LoggableError> {

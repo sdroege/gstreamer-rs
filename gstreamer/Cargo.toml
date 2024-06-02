@@ -16,7 +16,7 @@ rust-version.workspace = true
 [dependencies]
 cfg-if = "1.0"
 libc = "0.2"
-ffi = { package = "gstreamer-sys", path = "sys" }
+gstreamer-sys.workspace = true
 glib.workspace = true
 num-integer = { version = "0.1", default-features = false, features = [] }
 num-rational = { version = "0.4", default-features = false, features = [] }
@@ -43,12 +43,12 @@ gir-format-check = "0.1"
 
 [features]
 default = []
-v1_16 = ["ffi/v1_16"]
-v1_18 = ["ffi/v1_18", "v1_16"]
-v1_20 = ["ffi/v1_20", "v1_18"]
-v1_22 = ["ffi/v1_22", "v1_20"]
-v1_24 = ["ffi/v1_24", "v1_22"]
-v1_26 = ["ffi/v1_26", "v1_24"]
+v1_16 = ["gstreamer-sys/v1_16"]
+v1_18 = ["gstreamer-sys/v1_18", "v1_16"]
+v1_20 = ["gstreamer-sys/v1_20", "v1_18"]
+v1_22 = ["gstreamer-sys/v1_22", "v1_20"]
+v1_24 = ["gstreamer-sys/v1_24", "v1_22"]
+v1_26 = ["gstreamer-sys/v1_26", "v1_24"]
 serde = ["num-rational/serde", "dep:serde", "serde_bytes"]
 log = ["dep:log"]
 

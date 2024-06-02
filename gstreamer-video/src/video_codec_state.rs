@@ -4,7 +4,7 @@ use std::{fmt, marker::PhantomData, ptr};
 
 use glib::translate::*;
 
-use crate::{utils::HasStreamLock, video_info::VideoInfo};
+use crate::{ffi, utils::HasStreamLock, video_info::VideoInfo};
 
 pub trait VideoCodecStateContext<'a> {
     #[doc(alias = "get_element")]

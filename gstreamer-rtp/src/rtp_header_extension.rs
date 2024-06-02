@@ -1,6 +1,6 @@
 use glib::{object::IsA, translate::*};
 
-use crate::{RTPHeaderExtension, RTPHeaderExtensionFlags};
+use crate::{ffi, RTPHeaderExtension, RTPHeaderExtensionFlags};
 
 mod sealed {
     pub trait Sealed {}

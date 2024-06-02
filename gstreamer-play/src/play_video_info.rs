@@ -4,7 +4,7 @@ use std::mem;
 
 use glib::translate::*;
 
-use crate::PlayVideoInfo;
+use crate::{ffi, PlayVideoInfo};
 
 impl PlayVideoInfo {
     #[doc(alias = "get_framerate")]

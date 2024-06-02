@@ -2,7 +2,7 @@ use ffi::GstGLBaseMemory;
 use glib::{prelude::*, translate::*};
 use gst::{Memory, MemoryRef};
 
-use crate::{GLAllocationParams, GLBaseMemoryAllocator};
+use crate::{ffi, GLAllocationParams, GLBaseMemoryAllocator};
 
 gst::memory_object_wrapper!(
     GLBaseMemory,

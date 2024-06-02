@@ -5,7 +5,7 @@ use std::ptr;
 use glib::{bool_error, prelude::*, subclass::prelude::*, translate::*, BoolError};
 
 use super::prelude::*;
-use crate::{AllocationParams, Allocator, Memory};
+use crate::{ffi, AllocationParams, Allocator, Memory};
 
 pub trait AllocatorImpl: AllocatorImplExt + GstObjectImpl + Send + Sync {
     fn alloc(&self, size: usize, params: Option<&AllocationParams>) -> Result<Memory, BoolError> {

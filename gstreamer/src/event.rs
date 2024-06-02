@@ -8,6 +8,7 @@ use glib::{
 };
 
 use crate::{
+    ffi,
     format::{
         CompatibleFormattedValue, FormattedValue, FormattedValueIntrinsic, GenericFormattedValue,
     },

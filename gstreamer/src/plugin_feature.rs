@@ -5,7 +5,7 @@ use glib::{
     translate::{from_glib, FromGlibPtrFull, IntoGlib, ToGlibPtr},
 };
 
-use crate::{PluginFeature, Rank};
+use crate::{ffi, PluginFeature, Rank};
 
 mod sealed {
     pub trait Sealed {}

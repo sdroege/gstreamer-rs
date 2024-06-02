@@ -17,7 +17,7 @@ use glib::{
 use libc::c_void;
 
 use crate::{
-    prelude::*, Clock, ClockEntryType, ClockError, ClockFlags, ClockReturn, ClockSuccess,
+    ffi, prelude::*, Clock, ClockEntryType, ClockError, ClockFlags, ClockReturn, ClockSuccess,
     ClockTime, ClockTimeDiff,
 };
 

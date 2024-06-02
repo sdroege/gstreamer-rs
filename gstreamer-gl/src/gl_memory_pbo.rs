@@ -2,7 +2,7 @@ use ffi::GstGLMemoryPBO;
 use glib::translate::*;
 use gst::{Memory, MemoryRef};
 
-use crate::{GLBaseMemory, GLBaseMemoryRef, GLMemory, GLMemoryRef};
+use crate::{ffi, GLBaseMemory, GLBaseMemoryRef, GLMemory, GLMemoryRef};
 
 gst::memory_object_wrapper!(
     GLMemoryPBO,

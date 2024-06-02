@@ -1,5 +1,6 @@
 use std::fmt;
 
+use crate::ffi;
 use glib::translate::*;
 use gst::{Memory, MemoryRef};
 

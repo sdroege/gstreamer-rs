@@ -4,7 +4,7 @@ use std::mem::transmute;
 
 use glib::{prelude::*, subclass::prelude::*, translate::*};
 
-use crate::RTSPMediaFactory;
+use crate::{ffi, RTSPMediaFactory};
 
 pub trait RTSPMediaFactoryImpl: RTSPMediaFactoryImplExt + ObjectImpl + Send + Sync {
     fn gen_key(&self, url: &gst_rtsp::RTSPUrl) -> Option<glib::GString> {

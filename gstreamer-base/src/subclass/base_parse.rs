@@ -5,7 +5,7 @@ use std::mem;
 use glib::translate::*;
 use gst::subclass::prelude::*;
 
-use crate::{prelude::*, BaseParse, BaseParseFrame};
+use crate::{ffi, prelude::*, BaseParse, BaseParseFrame};
 
 pub trait BaseParseImpl: BaseParseImplExt + ElementImpl {
     fn start(&self) -> Result<(), gst::ErrorMessage> {

@@ -4,7 +4,7 @@ use std::fmt;
 
 use glib::{prelude::*, translate::*};
 
-use crate::{DiscovererStreamInfo, DiscovererVideoInfo};
+use crate::{ffi, DiscovererStreamInfo, DiscovererVideoInfo};
 
 impl DiscovererVideoInfo {
     #[doc(alias = "get_framerate")]

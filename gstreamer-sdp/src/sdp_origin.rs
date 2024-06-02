@@ -4,7 +4,7 @@ use std::{ffi::CStr, fmt};
 
 #[repr(transparent)]
 #[doc(alias = "GstSDPOrigin")]
-pub struct SDPOrigin(pub(crate) ffi::GstSDPOrigin);
+pub struct SDPOrigin(pub(crate) crate::ffi::GstSDPOrigin);
 
 unsafe impl Send for SDPOrigin {}
 unsafe impl Sync for SDPOrigin {}

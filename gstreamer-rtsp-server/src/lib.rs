@@ -4,13 +4,13 @@
 #![allow(clippy::missing_safety_doc)]
 #![doc = include_str!("../README.md")]
 
-pub use ffi;
 pub use gio;
 pub use glib;
 pub use gst;
 pub use gst_net;
 pub use gst_rtsp;
 pub use gst_sdp;
+pub use gstreamer_rtsp_server_sys as ffi;
 
 macro_rules! assert_initialized_main_thread {
     () => {

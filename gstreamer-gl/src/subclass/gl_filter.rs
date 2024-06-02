@@ -5,7 +5,7 @@ use gst::{
 };
 
 use super::prelude::*;
-use crate::{prelude::*, GLFilter, GLMemory};
+use crate::{ffi, prelude::*, GLFilter, GLMemory};
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub enum GLFilterMode {

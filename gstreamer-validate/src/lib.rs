@@ -4,6 +4,8 @@
 #![allow(clippy::missing_safety_doc)]
 #![doc = include_str!("../README.md")]
 
+pub use gstreamer_validate_sys as ffi;
+
 #[doc(hidden)]
 pub static INITIALIZED: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicBool::new(false);
 

@@ -11,6 +11,7 @@ use std::{
 use glib::{object::IsA, translate::*};
 
 use crate::{
+    ffi,
     format::{CompatibleFormattedValue, FormattedValue, GenericFormattedValue},
     structure::*,
 };

@@ -2,7 +2,7 @@
 
 use std::fmt;
 
-use crate::prelude::*;
+use crate::{ffi, prelude::*};
 use glib::translate::*;
 
 pub trait IsMiniObject:

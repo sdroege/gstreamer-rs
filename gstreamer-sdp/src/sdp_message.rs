@@ -9,6 +9,7 @@ use std::{
 use glib::{prelude::*, translate::*};
 
 use crate::{
+    ffi,
     sdp_attribute::SDPAttribute,
     sdp_bandwidth::SDPBandwidth,
     sdp_connection::SDPConnection,

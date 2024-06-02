@@ -8,7 +8,7 @@ use glib::signal::{connect_raw, SignalHandlerId};
 use glib::translate::*;
 use gst::prelude::*;
 
-use crate::auto::{AudioAggregator, AudioAggregatorPad};
+use crate::{ffi, AudioAggregator, AudioAggregatorPad};
 
 mod sealed {
     pub trait Sealed {}

@@ -29,7 +29,7 @@ impl UnixBusExtManual for Bus {
         #[cfg(unix)]
         unsafe {
             let mut pollfd = mem::MaybeUninit::uninit();
-            ffi::gst_bus_get_pollfd(self.to_glib_none().0, pollfd.as_mut_ptr());
+            crate::ffi::gst_bus_get_pollfd(self.to_glib_none().0, pollfd.as_mut_ptr());
             let pollfd = pollfd.assume_init();
             pollfd.fd
         }

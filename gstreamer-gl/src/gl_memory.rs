@@ -2,7 +2,7 @@ use ffi::GstGLMemory;
 use glib::translate::*;
 use gst::{result_from_gboolean, LoggableError, Memory, MemoryRef, CAT_RUST};
 
-use crate::{GLBaseMemory, GLBaseMemoryRef, GLFormat, GLTextureTarget};
+use crate::{ffi, GLBaseMemory, GLBaseMemoryRef, GLFormat, GLTextureTarget};
 
 gst::memory_object_wrapper!(
     GLMemory,

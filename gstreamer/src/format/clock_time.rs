@@ -6,7 +6,7 @@ use std::{
     time::Duration,
 };
 
-use crate::prelude::*;
+use crate::{ffi, prelude::*};
 use glib::translate::*;
 
 use super::{

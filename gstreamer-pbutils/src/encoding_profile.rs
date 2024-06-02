@@ -2,11 +2,11 @@
 
 use glib::{prelude::*, translate::*};
 
-use crate::auto::{
-    EncodingAudioProfile, EncodingContainerProfile, EncodingProfile, EncodingVideoProfile,
-};
 #[cfg(feature = "v1_20")]
 use crate::ElementProperties;
+use crate::{
+    ffi, EncodingAudioProfile, EncodingContainerProfile, EncodingProfile, EncodingVideoProfile,
+};
 
 mod sealed {
     pub trait Sealed {}

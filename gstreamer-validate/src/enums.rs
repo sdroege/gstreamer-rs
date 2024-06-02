@@ -1,3 +1,4 @@
+use crate::ffi;
 use glib::translate::*;
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]

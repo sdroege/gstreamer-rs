@@ -5,7 +5,7 @@ use std::ptr;
 use glib::{prelude::*, translate::*};
 use libc::uintptr_t;
 
-use crate::PlayerVideoOverlayVideoRenderer;
+use crate::{ffi, PlayerVideoOverlayVideoRenderer};
 
 impl PlayerVideoOverlayVideoRenderer {
     pub unsafe fn new(window_handle: uintptr_t) -> PlayerVideoOverlayVideoRenderer {

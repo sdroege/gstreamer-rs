@@ -3,7 +3,7 @@
 use glib::translate::*;
 use gst::subclass::prelude::*;
 
-use crate::{prelude::*, RTPBasePayload};
+use crate::{ffi, prelude::*, RTPBasePayload};
 
 pub trait RTPBasePayloadImpl: RTPBasePayloadImplExt + ElementImpl {
     fn caps(&self, pad: &gst::Pad, filter: Option<&gst::Caps>) -> gst::Caps {

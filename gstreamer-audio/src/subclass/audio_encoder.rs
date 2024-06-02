@@ -5,7 +5,7 @@ use std::ptr;
 use glib::translate::*;
 use gst::subclass::prelude::*;
 
-use crate::{prelude::*, AudioEncoder, AudioInfo};
+use crate::{ffi, prelude::*, AudioEncoder, AudioInfo};
 
 pub trait AudioEncoderImpl: AudioEncoderImplExt + ElementImpl {
     fn open(&self) -> Result<(), gst::ErrorMessage> {

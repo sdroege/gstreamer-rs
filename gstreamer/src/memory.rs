@@ -10,7 +10,7 @@ use std::{
 
 use glib::translate::*;
 
-use crate::{AllocationParams, Allocator, MemoryFlags};
+use crate::{ffi, AllocationParams, Allocator, MemoryFlags};
 
 mini_object_wrapper!(Memory, MemoryRef, ffi::GstMemory, || {
     ffi::gst_memory_get_type()

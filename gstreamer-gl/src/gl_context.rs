@@ -3,7 +3,7 @@
 use glib::{prelude::*, translate::*};
 use libc::uintptr_t;
 
-use crate::{GLContext, GLDisplay, GLPlatform, GLAPI};
+use crate::{ffi, GLContext, GLDisplay, GLPlatform, GLAPI};
 
 impl GLContext {
     pub unsafe fn new_wrapped<T: IsA<GLDisplay>>(

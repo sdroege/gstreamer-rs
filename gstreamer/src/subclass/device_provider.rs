@@ -5,7 +5,7 @@ use std::borrow::Cow;
 use glib::{prelude::*, subclass::prelude::*, translate::*};
 
 use super::prelude::*;
-use crate::{Device, DeviceProvider, LoggableError};
+use crate::{ffi, Device, DeviceProvider, LoggableError};
 
 #[derive(Debug, Clone)]
 pub struct DeviceProviderMetadata {

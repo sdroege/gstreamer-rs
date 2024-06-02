@@ -6,7 +6,7 @@ use glib::{
     translate::*,
 };
 
-use crate::auto::AudioAggregatorConvertPad;
+use crate::{ffi, AudioAggregatorConvertPad};
 
 mod sealed {
     pub trait Sealed {}

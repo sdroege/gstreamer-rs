@@ -9,6 +9,6 @@ impl TracerFactory {
     #[doc(alias = "get_list")]
     pub fn factories() -> glib::List<TracerFactory> {
         assert_initialized_main_thread!();
-        unsafe { FromGlibPtrContainer::from_glib_full(ffi::gst_tracer_factory_get_list()) }
+        unsafe { FromGlibPtrContainer::from_glib_full(crate::ffi::gst_tracer_factory_get_list()) }
     }
 }

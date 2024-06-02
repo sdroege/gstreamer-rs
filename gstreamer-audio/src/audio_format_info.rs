@@ -2,6 +2,7 @@
 
 use std::{cmp::Ordering, fmt, marker::PhantomData, str};
 
+use crate::ffi;
 use glib::{
     prelude::*,
     translate::{from_glib, from_glib_none, FromGlib, IntoGlib, ToGlibPtr, ToGlibPtrMut},

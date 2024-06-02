@@ -9,7 +9,7 @@ use std::{
 use glib::{ffi::gpointer, subclass::prelude::*, translate::*};
 
 use super::prelude::*;
-use crate::{TaskHandle, TaskPool};
+use crate::{ffi, TaskHandle, TaskPool};
 
 pub trait TaskPoolImpl: GstObjectImpl + Send + Sync {
     // rustdoc-stripper-ignore-next

@@ -2,6 +2,7 @@
 
 use std::ffi::c_void;
 
+use crate::ffi;
 use glib::translate::*;
 
 pub trait PluginApiExt {

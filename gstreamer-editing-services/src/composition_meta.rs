@@ -2,6 +2,7 @@
 
 use std::fmt;
 
+use crate::ffi;
 use glib::translate::from_glib;
 use gst::prelude::*;
 

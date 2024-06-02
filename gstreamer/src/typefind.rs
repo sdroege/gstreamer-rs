@@ -4,7 +4,7 @@ use std::{ptr, slice};
 
 use glib::translate::*;
 
-use crate::{Caps, Plugin, Rank, TypeFindFactory, TypeFindProbability};
+use crate::{ffi, Caps, Plugin, Rank, TypeFindFactory, TypeFindProbability};
 
 #[repr(transparent)]
 #[derive(Debug)]

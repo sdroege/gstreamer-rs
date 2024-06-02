@@ -6,7 +6,7 @@ use glib::{subclass::prelude::*, translate::*};
 
 use super::prelude::*;
 use crate::{
-    prelude::*, Element, Event, PadTemplate, QueryRef, StateChange, StateChangeError,
+    ffi, prelude::*, Element, Event, PadTemplate, QueryRef, StateChange, StateChangeError,
     StateChangeReturn, StateChangeSuccess,
 };
 

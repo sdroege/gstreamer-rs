@@ -10,7 +10,7 @@ use glib::{
     ControlFlow,
 };
 
-use crate::RTSPSessionPool;
+use crate::{ffi, RTSPSessionPool};
 
 unsafe extern "C" fn trampoline_watch<
     F: FnMut(&RTSPSessionPool) -> ControlFlow + Send + 'static,

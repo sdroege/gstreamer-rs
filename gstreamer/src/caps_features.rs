@@ -9,6 +9,7 @@ use std::{
     ptr, str,
 };
 
+use crate::ffi;
 use glib::{prelude::*, translate::*};
 use once_cell::sync::Lazy;
 

@@ -3,6 +3,7 @@
 use glib::{prelude::*, subclass::prelude::*, translate::*};
 
 use super::prelude::*;
+use crate::ffi;
 
 pub trait RTPHeaderExtensionImpl: RTPHeaderExtensionImplExt + ElementImpl {
     const URI: &'static str;

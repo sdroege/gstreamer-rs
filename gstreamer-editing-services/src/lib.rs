@@ -6,13 +6,13 @@
 
 use std::sync::Once;
 
-pub use ffi;
 pub use gio;
 pub use glib;
 use glib::translate::from_glib;
 pub use gst;
 pub use gst_base;
 pub use gst_pbutils;
+pub use gstreamer_editing_services_sys as ffi;
 
 static GES_INIT: Once = Once::new();
 

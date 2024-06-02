@@ -10,7 +10,7 @@ use glib::{
 use libc::c_char;
 
 use super::prelude::*;
-use crate::{BufferPool, BufferPoolAcquireParams, BufferPoolConfigRef};
+use crate::{ffi, BufferPool, BufferPoolAcquireParams, BufferPoolConfigRef};
 
 pub trait BufferPoolImpl: BufferPoolImplExt + GstObjectImpl + Send + Sync {
     fn acquire_buffer(

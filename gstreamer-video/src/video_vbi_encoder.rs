@@ -1,6 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::VideoFormat;
+use crate::{ffi, VideoFormat};
 use glib::translate::*;
 
 use crate::video_vbi::line_buffer_len;

@@ -1,7 +1,7 @@
-use glib::{object::IsA, translate::*};
+use glib::translate::*;
 use gst::prelude::*;
 
-use crate::auto::AudioAggregatorPad;
+use crate::{ffi, AudioAggregatorPad};
 
 mod sealed {
     pub trait Sealed {}

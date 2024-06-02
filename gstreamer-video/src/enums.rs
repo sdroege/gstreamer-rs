@@ -17,7 +17,7 @@ impl VideoCaptionType {
     #[doc(alias = "gst_video_caption_type_from_caps")]
     pub fn from_caps(caps: &gst::CapsRef) -> VideoCaptionType {
         skip_assert_initialized!();
-        unsafe { from_glib(ffi::gst_video_caption_type_from_caps(caps.as_ptr())) }
+        unsafe { from_glib(crate::ffi::gst_video_caption_type_from_caps(caps.as_ptr())) }
     }
 }
 
@@ -34,7 +34,7 @@ impl VideoOrientationMethod {
             use std::mem;
 
             let mut method = mem::MaybeUninit::uninit();
-            let ret = from_glib(ffi::gst_video_orientation_from_tag(
+            let ret = from_glib(crate::ffi::gst_video_orientation_from_tag(
                 mut_override(taglist.as_ptr()),
                 method.as_mut_ptr(),
             ));

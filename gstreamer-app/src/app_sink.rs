@@ -14,7 +14,7 @@ use std::sync::atomic::{AtomicBool, Ordering};
 use futures_core::Stream;
 use glib::{ffi::gpointer, prelude::*, translate::*};
 
-use crate::AppSink;
+use crate::{ffi, AppSink};
 
 #[allow(clippy::type_complexity)]
 pub struct AppSinkCallbacks {

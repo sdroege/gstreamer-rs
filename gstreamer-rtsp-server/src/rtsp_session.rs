@@ -4,7 +4,7 @@ use std::mem;
 
 use glib::{prelude::*, translate::*};
 
-use crate::{RTSPSession, RTSPSessionMedia};
+use crate::{ffi, RTSPSession, RTSPSessionMedia};
 
 mod sealed {
     pub trait Sealed {}

@@ -21,7 +21,7 @@ pub trait ControlBindingExtManual: sealed::Sealed + IsA<ControlBinding> + 'stati
         let n_values = values.len() as u32;
         unsafe {
             glib::result_from_gboolean!(
-                ffi::gst_control_binding_get_g_value_array(
+                crate::ffi::gst_control_binding_get_g_value_array(
                     self.as_ref().to_glib_none().0,
                     timestamp.into_glib(),
                     interval.into_glib(),

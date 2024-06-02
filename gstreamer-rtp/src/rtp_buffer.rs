@@ -2,6 +2,7 @@
 
 use std::{fmt, marker::PhantomData, mem, ptr, slice};
 
+use crate::ffi;
 use glib::translate::{from_glib, mut_override, FromGlibPtrFull, IntoGlib};
 
 pub enum Readable {}

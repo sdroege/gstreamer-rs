@@ -3,7 +3,7 @@
 use glib::translate::*;
 use gst_base::{prelude::*, subclass::prelude::*};
 
-use crate::{VideoFilter, VideoFrameExt, VideoFrameRef, VideoInfo};
+use crate::{ffi, VideoFilter, VideoFrameExt, VideoFrameRef, VideoInfo};
 
 pub trait VideoFilterImpl: VideoFilterImplExt + BaseTransformImpl {
     fn set_info(

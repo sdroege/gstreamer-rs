@@ -4,7 +4,7 @@ use std::{fmt, marker::PhantomData, ptr};
 
 use glib::translate::*;
 
-use crate::{BaseParse, BaseParseFrameFlags};
+use crate::{ffi, BaseParse, BaseParseFrameFlags};
 
 pub struct BaseParseFrame<'a>(
     ptr::NonNull<ffi::GstBaseParseFrame>,

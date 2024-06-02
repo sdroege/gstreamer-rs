@@ -10,7 +10,9 @@ use std::{
 
 use glib::translate::*;
 
-use crate::{meta::*, BufferCursor, BufferFlags, BufferRefCursor, ClockTime, Memory, MemoryRef};
+use crate::{
+    ffi, meta::*, BufferCursor, BufferFlags, BufferRefCursor, ClockTime, Memory, MemoryRef,
+};
 
 pub enum Readable {}
 pub enum Writable {}

@@ -4,7 +4,7 @@ use std::{cmp, fmt};
 
 use glib::translate::*;
 
-use crate::DateTime;
+use crate::{ffi, DateTime};
 
 // Validate that the given values result in a valid DateTime
 fn validate(

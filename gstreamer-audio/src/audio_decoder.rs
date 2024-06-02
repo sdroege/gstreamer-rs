@@ -4,7 +4,7 @@ use std::{mem, ptr};
 
 use glib::{prelude::*, translate::*};
 
-use crate::{AudioDecoder, AudioInfo};
+use crate::{ffi, AudioDecoder, AudioInfo};
 
 extern "C" {
     fn _gst_audio_decoder_error(

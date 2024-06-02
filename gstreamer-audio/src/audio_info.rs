@@ -2,6 +2,7 @@
 
 use std::{fmt, marker::PhantomData, mem, ptr, slice};
 
+use crate::ffi;
 use glib::translate::{
     from_glib, from_glib_full, from_glib_none, IntoGlib, ToGlibPtr, ToGlibPtrMut,
 };

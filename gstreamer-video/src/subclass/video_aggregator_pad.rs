@@ -5,7 +5,7 @@ use std::{mem, ptr};
 use glib::translate::*;
 use gst_base::{prelude::*, subclass::prelude::*};
 
-use crate::{subclass::AggregateFramesToken, VideoAggregator, VideoAggregatorPad};
+use crate::{ffi, subclass::AggregateFramesToken, VideoAggregator, VideoAggregatorPad};
 
 pub trait VideoAggregatorPadImpl: VideoAggregatorPadImplExt + AggregatorPadImpl {
     fn update_conversion_info(&self) {

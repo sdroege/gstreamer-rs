@@ -14,8 +14,7 @@ use glib::signal::{connect_raw, SignalHandlerId};
 use glib::{prelude::*, translate::*};
 use gst::{format::FormattedValue, prelude::*};
 
-use crate::Aggregator;
-use crate::AggregatorPad;
+use crate::{ffi, Aggregator, AggregatorPad};
 
 mod sealed {
     pub trait Sealed {}

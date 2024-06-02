@@ -2,6 +2,7 @@
 
 use std::{fmt, marker::PhantomData, mem, ptr, str};
 
+use crate::ffi;
 use glib::translate::*;
 use gst::prelude::*;
 

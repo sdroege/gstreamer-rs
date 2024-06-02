@@ -4,7 +4,7 @@ use std::ptr;
 
 use glib::{ffi::gpointer, prelude::*, translate::*};
 
-use crate::TaskPool;
+use crate::{ffi, TaskPool};
 
 unsafe extern "C" fn task_pool_trampoline<P: FnOnce() + Send + 'static>(data: gpointer) {
     let func = Box::from_raw(data as *mut P);

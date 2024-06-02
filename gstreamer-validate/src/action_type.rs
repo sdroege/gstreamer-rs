@@ -1,5 +1,6 @@
 use std::{ffi::c_int, ptr};
 
+use crate::ffi;
 use glib::translate::*;
 
 #[derive(Debug)]

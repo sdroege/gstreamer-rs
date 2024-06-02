@@ -14,6 +14,8 @@ use glib::translate::{from_glib, IntoGlib};
 use glib::translate::{from_glib_none, ToGlibPtr};
 use gst::prelude::*;
 
+use crate::ffi;
+
 #[repr(transparent)]
 #[doc(alias = "GstAudioClippingMeta")]
 pub struct AudioClippingMeta(ffi::GstAudioClippingMeta);
@@ -295,11 +297,14 @@ impl fmt::Debug for AudioLevelMeta {
 }
 
 pub mod tags {
-    gst::impl_meta_tag!(Audio, GST_META_TAG_AUDIO_STR);
-    gst::impl_meta_tag!(Channels, GST_META_TAG_AUDIO_CHANNELS_STR);
-    gst::impl_meta_tag!(Rate, GST_META_TAG_AUDIO_RATE_STR);
+    gst::impl_meta_tag!(Audio, crate::ffi::GST_META_TAG_AUDIO_STR);
+    gst::impl_meta_tag!(Channels, crate::ffi::GST_META_TAG_AUDIO_CHANNELS_STR);
+    gst::impl_meta_tag!(Rate, crate::ffi::GST_META_TAG_AUDIO_RATE_STR);
     #[cfg(feature = "v1_24")]
-    gst::impl_meta_tag!(DSDPlaneOffsets, GST_META_TAG_DSD_PLANE_OFFSETS_STR);
+    gst::impl_meta_tag!(
+        DSDPlaneOffsets,
+        crate::ffi::GST_META_TAG_DSD_PLANE_OFFSETS_STR
+    );
 }
 
 #[cfg(test)]

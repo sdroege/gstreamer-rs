@@ -2,6 +2,7 @@
 
 use std::str;
 
+use crate::ffi;
 use glib::translate::{from_glib, IntoGlib};
 use once_cell::sync::Lazy;
 

@@ -4,7 +4,7 @@ use glib::{prelude::*, translate::*};
 use gst::prelude::*;
 use gst_base::prelude::*;
 
-use crate::VideoFilter;
+use crate::{ffi, VideoFilter};
 
 mod sealed {
     pub trait Sealed {}

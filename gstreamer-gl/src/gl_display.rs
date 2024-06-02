@@ -1,4 +1,4 @@
-use crate::{GLContext, GLDisplay};
+use crate::{ffi, GLContext, GLDisplay};
 
 use glib::prelude::*;
 use glib::translate::*;

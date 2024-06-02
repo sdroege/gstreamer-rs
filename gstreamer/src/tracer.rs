@@ -14,7 +14,7 @@ impl Tracer {
         skip_assert_initialized!();
         unsafe {
             glib::result_from_gboolean!(
-                ffi::gst_tracer_register(
+                crate::ffi::gst_tracer_register(
                     plugin.to_glib_none().0,
                     name.to_glib_none().0,
                     type_.into_glib()

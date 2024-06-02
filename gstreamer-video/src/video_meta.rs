@@ -2,6 +2,7 @@
 
 use std::{fmt, ptr};
 
+use crate::ffi;
 use glib::translate::*;
 use gst::prelude::*;
 
@@ -1162,10 +1163,10 @@ impl fmt::Debug for AncillaryMeta {
 }
 
 pub mod tags {
-    gst::impl_meta_tag!(Video, GST_META_TAG_VIDEO_STR);
-    gst::impl_meta_tag!(Size, GST_META_TAG_VIDEO_SIZE_STR);
-    gst::impl_meta_tag!(Orientation, GST_META_TAG_VIDEO_ORIENTATION_STR);
-    gst::impl_meta_tag!(Colorspace, GST_META_TAG_VIDEO_COLORSPACE_STR);
+    gst::impl_meta_tag!(Video, crate::ffi::GST_META_TAG_VIDEO_STR);
+    gst::impl_meta_tag!(Size, crate::ffi::GST_META_TAG_VIDEO_SIZE_STR);
+    gst::impl_meta_tag!(Orientation, crate::ffi::GST_META_TAG_VIDEO_ORIENTATION_STR);
+    gst::impl_meta_tag!(Colorspace, crate::ffi::GST_META_TAG_VIDEO_COLORSPACE_STR);
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]

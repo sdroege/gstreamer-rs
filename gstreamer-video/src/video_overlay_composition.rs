@@ -2,6 +2,7 @@
 
 use std::{fmt, mem};
 
+use crate::ffi;
 use glib::translate::*;
 
 gst::mini_object_wrapper!(

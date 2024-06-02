@@ -6,9 +6,9 @@
 
 use std::sync::Once;
 
-pub use ffi;
 pub use glib;
 pub use gst;
+pub use gstreamer_pbutils_sys as ffi;
 
 static PBUTILS_INIT: Once = Once::new();
 
@@ -18,7 +18,7 @@ macro_rules! assert_initialized_main_thread {
             gst::assert_initialized();
         }
         crate::PBUTILS_INIT.call_once(|| {
-            unsafe { ffi::gst_pb_utils_init() };
+            unsafe { crate::ffi::gst_pb_utils_init() };
         });
     };
 }

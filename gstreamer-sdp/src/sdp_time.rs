@@ -2,6 +2,7 @@
 
 use std::{ffi::CStr, fmt, mem, os::raw::c_char, ptr};
 
+use crate::ffi;
 use glib::translate::*;
 
 #[repr(transparent)]

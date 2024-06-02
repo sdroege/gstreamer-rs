@@ -6,6 +6,7 @@ use super::{
     Format, FormattedValue, FormattedValueError, FormattedValueFullRange, FormattedValueIntrinsic,
     FormattedValueNoneBuilder, GenericFormattedValue,
 };
+use crate::ffi;
 
 pub trait SpecificFormattedValue: FormattedValue {}
 

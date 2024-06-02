@@ -10,7 +10,7 @@ use glib::{
 };
 use thiserror::Error;
 
-use crate::{ClockReturn, State, StateChange, StateChangeReturn};
+use crate::{ffi, ClockReturn, State, StateChange, StateChangeReturn};
 
 macro_rules! impl_return_result_traits {
     ($ffi_type:ident, $ret_type:ident, $ok_type:ident, $err_type:ident) => {

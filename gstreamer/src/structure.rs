@@ -16,7 +16,7 @@ use glib::{
     IntoGStr,
 };
 
-use crate::Fraction;
+use crate::{ffi, Fraction};
 
 #[derive(Clone, Debug, Eq, PartialEq, thiserror::Error)]
 pub enum GetError<E: std::error::Error> {

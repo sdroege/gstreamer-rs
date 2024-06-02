@@ -5,6 +5,7 @@ use std::{fmt, marker::PhantomData, mem};
 use glib::{prelude::*, translate::*};
 
 use crate::{
+    ffi,
     format::{
         CompatibleFormattedValue, FormattedValue, FormattedValueFullRange, FormattedValueIntrinsic,
         FormattedValueNoneBuilder, NoneSignedBuilder, UnsignedIntoSigned,

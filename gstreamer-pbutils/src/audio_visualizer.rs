@@ -2,7 +2,7 @@
 
 use gst::prelude::*;
 
-use crate::{auto::AudioVisualizer, subclass::AudioVisualizerSetupToken};
+use crate::{ffi, subclass::AudioVisualizerSetupToken, AudioVisualizer};
 
 mod sealed {
     pub trait Sealed {}

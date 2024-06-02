@@ -2,7 +2,7 @@
 
 use glib::translate::*;
 
-use crate::relation_meta::*;
+use crate::{ffi, relation_meta::*};
 
 #[derive(Debug)]
 pub enum AnalyticsClassificationMtd {}

@@ -2,7 +2,7 @@
 
 use glib::{prelude::*, translate::*};
 
-use crate::{RTSPContext, RTSPOnvifMediaFactory};
+use crate::{ffi, RTSPContext, RTSPOnvifMediaFactory};
 
 mod sealed {
     pub trait Sealed {}

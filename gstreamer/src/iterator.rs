@@ -2,6 +2,7 @@
 
 use std::{any::Any, fmt, iter, marker::PhantomData, mem, ptr, sync::Arc};
 
+use crate::ffi;
 use glib::{
     ffi::{gconstpointer, gpointer},
     prelude::*,

@@ -2,7 +2,7 @@ use std::ptr;
 
 use glib::{prelude::*, translate::*};
 
-use crate::RTPBasePayload;
+use crate::{ffi, RTPBasePayload};
 
 mod sealed {
     pub trait Sealed {}

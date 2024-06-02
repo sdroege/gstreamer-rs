@@ -11,7 +11,7 @@ use std::{
 
 use glib::translate::*;
 
-use crate::{Buffer, BufferRef, Caps, CapsRef, ClockTime};
+use crate::{ffi, Buffer, BufferRef, Caps, CapsRef, ClockTime};
 
 pub unsafe trait MetaAPI: Sync + Send + Sized {
     type GstType;
@@ -1053,10 +1053,10 @@ pub trait MetaTag {
 
 #[macro_export]
 macro_rules! impl_meta_tag(
-    ($name:ident, $gst_tag:ident) => {
+    ($name:ident, $gst_tag:path) => {
         pub enum $name {}
         impl $crate::meta::MetaTag for $name {
-            const TAG_NAME: &'static glib::GStr = unsafe { glib::GStr::from_utf8_with_nul_unchecked(ffi::$gst_tag) };
+            const TAG_NAME: &'static glib::GStr = unsafe { glib::GStr::from_utf8_with_nul_unchecked($gst_tag) };
 	    fn quark() -> glib::Quark {
                 static QUARK: std::sync::OnceLock<glib::Quark> = std::sync::OnceLock::new();
                 *QUARK.get_or_init(|| glib::Quark::from_static_str(Self::TAG_NAME))
@@ -1066,8 +1066,11 @@ macro_rules! impl_meta_tag(
 );
 
 pub mod tags {
-    impl_meta_tag!(Memory, GST_META_TAG_MEMORY_STR);
-    impl_meta_tag!(MemoryReference, GST_META_TAG_MEMORY_REFERENCE_STR);
+    impl_meta_tag!(Memory, crate::ffi::GST_META_TAG_MEMORY_STR);
+    impl_meta_tag!(
+        MemoryReference,
+        crate::ffi::GST_META_TAG_MEMORY_REFERENCE_STR
+    );
 }
 
 pub unsafe trait MetaTransform<'a> {

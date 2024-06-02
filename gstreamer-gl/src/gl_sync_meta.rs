@@ -5,7 +5,7 @@ use std::fmt;
 use glib::translate::*;
 use gst::prelude::*;
 
-use crate::GLContext;
+use crate::{ffi, GLContext};
 
 #[repr(transparent)]
 #[doc(alias = "GstGLSyncMeta")]

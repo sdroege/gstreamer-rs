@@ -2,6 +2,7 @@
 
 use std::i32;
 
+use crate::ffi;
 use glib::translate::{from_glib_full, IntoGlibPtr, ToGlibPtr};
 
 #[doc(alias = "gst_audio_buffer_clip")]

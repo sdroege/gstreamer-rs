@@ -17,7 +17,7 @@ pub trait ChildProxyExtManual: sealed::Sealed + IsA<ChildProxy> + 'static {
         unsafe {
             let mut target = ptr::null_mut();
             let mut pspec = ptr::null_mut();
-            let ret = from_glib(ffi::gst_child_proxy_lookup(
+            let ret = from_glib(crate::ffi::gst_child_proxy_lookup(
                 self.as_ref().to_glib_none().0,
                 name.to_glib_none().0,
                 &mut target,

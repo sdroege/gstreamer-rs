@@ -9,7 +9,7 @@ use std::{
 use glib::translate::*;
 
 use crate::{
-    sdp_attribute::SDPAttribute, sdp_bandwidth::SDPBandwidth, sdp_connection::SDPConnection,
+    ffi, sdp_attribute::SDPAttribute, sdp_bandwidth::SDPBandwidth, sdp_connection::SDPConnection,
     sdp_key::SDPKey,
 };
 

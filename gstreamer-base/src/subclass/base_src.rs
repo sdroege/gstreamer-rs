@@ -6,7 +6,7 @@ use atomic_refcell::AtomicRefCell;
 use glib::{prelude::*, translate::*};
 use gst::{prelude::*, subclass::prelude::*};
 
-use crate::{prelude::BaseSrcExtManual, BaseSrc};
+use crate::{ffi, prelude::*, BaseSrc};
 
 #[derive(Default)]
 pub(super) struct InstanceData {

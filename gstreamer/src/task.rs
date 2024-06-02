@@ -4,7 +4,7 @@ use std::{mem, ptr, sync::Arc};
 
 use glib::{prelude::*, translate::*};
 
-use crate::Task;
+use crate::{ffi, Task};
 
 #[allow(clippy::type_complexity)]
 pub struct TaskBuilder<F: FnMut(&Task) + Send + 'static> {

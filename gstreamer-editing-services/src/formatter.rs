@@ -1,5 +1,5 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
-use crate::{prelude::*, Formatter};
+use crate::{ffi, prelude::*, Formatter};
 use gst::glib::translate::*;
 
 mod sealed {

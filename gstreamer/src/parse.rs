@@ -4,7 +4,7 @@ use std::ptr;
 
 use glib::{prelude::*, translate::*};
 
-use crate::{Bin, Element, Object, ParseContext, ParseFlags};
+use crate::{ffi, Bin, Element, Object, ParseContext, ParseFlags};
 
 pub use crate::auto::functions::parse_bin_from_description as bin_from_description;
 pub use crate::auto::functions::parse_launch as launch;

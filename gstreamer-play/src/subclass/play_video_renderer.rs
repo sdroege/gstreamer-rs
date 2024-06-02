@@ -2,7 +2,7 @@
 
 use glib::{prelude::*, subclass::prelude::*, translate::*};
 
-use crate::{Play, PlayVideoRenderer};
+use crate::{ffi, Play, PlayVideoRenderer};
 
 pub trait PlayVideoRendererImpl: ObjectImpl {
     fn create_video_sink(&self, play: &Play) -> gst::Element;

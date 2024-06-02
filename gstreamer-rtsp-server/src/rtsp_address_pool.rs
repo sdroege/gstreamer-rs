@@ -4,7 +4,7 @@ use std::ptr;
 
 use glib::{prelude::*, translate::*};
 
-use crate::{RTSPAddress, RTSPAddressPool, RTSPAddressPoolResult};
+use crate::{ffi, RTSPAddress, RTSPAddressPool, RTSPAddressPoolResult};
 
 mod sealed {
     pub trait Sealed {}

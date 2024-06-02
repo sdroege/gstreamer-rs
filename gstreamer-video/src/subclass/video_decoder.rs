@@ -4,6 +4,7 @@ use glib::translate::*;
 use gst::subclass::prelude::*;
 
 use crate::{
+    ffi,
     prelude::*,
     video_codec_state::{Readable, VideoCodecState},
     VideoCodecFrame, VideoDecoder,

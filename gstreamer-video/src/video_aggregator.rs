@@ -1,7 +1,7 @@
 use glib::translate::*;
 use gst::prelude::*;
 
-use crate::auto::VideoAggregator;
+use crate::{ffi, VideoAggregator};
 
 mod sealed {
     pub trait Sealed {}

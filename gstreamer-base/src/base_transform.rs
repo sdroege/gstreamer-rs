@@ -5,7 +5,7 @@ use std::{mem, ptr};
 use glib::{prelude::*, translate::*};
 use gst::prelude::*;
 
-use crate::BaseTransform;
+use crate::{ffi, BaseTransform};
 
 mod sealed {
     pub trait Sealed {}

@@ -3,6 +3,7 @@
 use std::fmt;
 use std::ptr;
 
+use crate::ffi;
 use glib::translate::*;
 use gst::prelude::*;
 

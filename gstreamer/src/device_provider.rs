@@ -4,7 +4,7 @@ use std::ffi::CStr;
 
 use glib::{prelude::*, translate::*};
 
-use crate::{DeviceProvider, Plugin, Rank};
+use crate::{ffi, DeviceProvider, Plugin, Rank};
 
 impl DeviceProvider {
     #[doc(alias = "gst_device_provider_register")]

@@ -9,7 +9,7 @@ use gst::{Memory, MemoryRef};
 #[cfg(feature = "v1_16")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 use crate::FdMemoryFlags;
-use crate::{DmaBufAllocator, FdMemory, FdMemoryRef};
+use crate::{ffi, DmaBufAllocator, FdMemory, FdMemoryRef};
 
 gst::memory_object_wrapper!(
     DmaBufMemory,

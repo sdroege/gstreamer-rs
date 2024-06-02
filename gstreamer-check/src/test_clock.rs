@@ -4,7 +4,7 @@ use std::ptr;
 
 use glib::translate::*;
 
-use crate::TestClock;
+use crate::{ffi, TestClock};
 
 impl TestClock {
     #[doc(alias = "gst_test_clock_has_id")]

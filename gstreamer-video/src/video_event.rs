@@ -7,7 +7,7 @@ use gst::EventType;
 #[cfg(feature = "v1_22")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 use crate::NavigationModifierType;
-use crate::{NavigationCommand, NavigationEventType};
+use crate::{ffi, NavigationCommand, NavigationEventType};
 
 // FIXME: Copy from gstreamer/src/event.rs
 macro_rules! event_builder_generic_impl {

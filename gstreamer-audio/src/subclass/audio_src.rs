@@ -7,7 +7,7 @@ use gst::LoggableError;
 use gst_base::subclass::prelude::*;
 
 use super::prelude::*;
-use crate::{AudioRingBufferSpec, AudioSrc};
+use crate::{ffi, AudioRingBufferSpec, AudioSrc};
 
 pub trait AudioSrcImpl: AudioSrcImplExt + AudioBaseSrcImpl {
     fn close(&self) -> Result<(), LoggableError> {

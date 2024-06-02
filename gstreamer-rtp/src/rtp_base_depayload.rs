@@ -3,7 +3,7 @@ use glib::prelude::*;
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
 use glib::translate::*;
 
-use crate::RTPBaseDepayload;
+use crate::{ffi, RTPBaseDepayload};
 
 mod sealed {
     pub trait Sealed {}

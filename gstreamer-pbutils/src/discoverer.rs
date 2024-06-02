@@ -8,7 +8,7 @@ use glib::{
     translate::*,
 };
 
-use crate::{auto::Discoverer, DiscovererInfo};
+use crate::{ffi, Discoverer, DiscovererInfo};
 
 impl Discoverer {
     pub fn set_timeout(&self, timeout: gst::ClockTime) {

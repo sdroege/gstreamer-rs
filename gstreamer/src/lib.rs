@@ -7,8 +7,8 @@
 #![doc = include_str!("../README.md")]
 
 // Re-exported for the subclass gst_plugin_define! macro
-pub use ffi;
 pub use glib;
+pub use gstreamer_sys as ffi;
 pub use paste;
 
 #[doc(hidden)]

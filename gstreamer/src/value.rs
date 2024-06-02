@@ -2,6 +2,7 @@
 
 use std::{cmp, fmt, ops, slice};
 
+use crate::ffi;
 use glib::{prelude::*, translate::*};
 use num_rational::Rational32;
 

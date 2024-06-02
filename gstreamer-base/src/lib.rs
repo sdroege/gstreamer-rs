@@ -4,9 +4,9 @@
 #![allow(clippy::missing_safety_doc)]
 #![doc = include_str!("../README.md")]
 
-pub use ffi;
 pub use glib;
 pub use gst;
+pub use gstreamer_base_sys as ffi;
 
 macro_rules! assert_initialized_main_thread {
     () => {
@@ -20,6 +20,7 @@ macro_rules! skip_assert_initialized {
     () => {};
 }
 
+#[allow(unused_imports)]
 mod auto;
 pub use crate::auto::*;
 

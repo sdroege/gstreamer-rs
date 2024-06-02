@@ -8,7 +8,7 @@ use glib::{
     value::{FromValue, SendValue, ToSendValue, Value},
 };
 
-use crate::{Sample, TagError, TagMergeMode, TagScope};
+use crate::{ffi, Sample, TagError, TagMergeMode, TagScope};
 
 pub trait Tag<'a> {
     type TagType: StaticType + FromValue<'a> + ToSendValue + Send + Sync;

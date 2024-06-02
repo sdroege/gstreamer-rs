@@ -15,7 +15,7 @@ rust-version.workspace = true
 
 [dependencies]
 libc = "0.2"
-ffi = { package = "gstreamer-analytics-sys", path = "sys" }
+gstreamer-analytics-sys.workspace = true
 glib.workspace = true
 gst.workspace = true
 
@@ -24,7 +24,7 @@ gir-format-check = "0.1"
 
 [features]
 default = []
-v1_26 = ["gst/v1_26", "ffi/v1_26"]
+v1_26 = ["gst/v1_26", "gstreamer-analytics-sys/v1_26"]
 
 [package.metadata.docs.rs]
 all-features = true

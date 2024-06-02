@@ -4,7 +4,7 @@ use std::ptr;
 
 use glib::{prelude::*, subclass::prelude::*, translate::*};
 
-use crate::{RTSPMedia, RTSPThread};
+use crate::{ffi, RTSPMedia, RTSPThread};
 
 #[derive(Debug)]
 pub struct SDPInfo(ptr::NonNull<ffi::GstSDPInfo>);

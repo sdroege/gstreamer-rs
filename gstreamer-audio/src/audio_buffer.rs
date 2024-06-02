@@ -2,6 +2,7 @@
 
 use std::{fmt, marker::PhantomData, mem, ops, ptr, slice};
 
+use crate::ffi;
 use glib::translate::*;
 
 use smallvec::SmallVec;

@@ -4,7 +4,7 @@ use std::{fmt, io, marker::PhantomData, mem, ptr, u64, usize};
 
 use crate::{
     buffer::{Readable, Writable},
-    Buffer, BufferRef,
+    ffi, Buffer, BufferRef,
 };
 
 pub struct BufferCursor<T> {

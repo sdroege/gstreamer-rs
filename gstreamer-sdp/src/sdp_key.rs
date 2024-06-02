@@ -4,7 +4,7 @@ use std::{ffi::CStr, fmt};
 
 #[repr(transparent)]
 #[doc(alias = "GstSDPKey")]
-pub struct SDPKey(ffi::GstSDPKey);
+pub struct SDPKey(crate::ffi::GstSDPKey);
 
 unsafe impl Send for SDPKey {}
 unsafe impl Sync for SDPKey {}

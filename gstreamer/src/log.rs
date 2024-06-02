@@ -8,7 +8,7 @@ use libc::c_char;
 use log;
 use once_cell::sync::Lazy;
 
-use crate::DebugLevel;
+use crate::{ffi, DebugLevel};
 
 // import and rename those so they are namespaced as log::*
 pub use crate::auto::functions::debug_add_ring_buffer_logger as add_ring_buffer_logger;

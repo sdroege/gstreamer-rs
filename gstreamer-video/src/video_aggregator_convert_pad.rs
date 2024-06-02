@@ -6,7 +6,7 @@ use glib::{
     translate::*,
 };
 
-use crate::auto::VideoAggregatorConvertPad;
+use crate::{ffi, VideoAggregatorConvertPad};
 
 mod sealed {
     pub trait Sealed {}

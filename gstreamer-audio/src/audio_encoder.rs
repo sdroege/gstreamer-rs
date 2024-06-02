@@ -4,7 +4,7 @@ use std::{mem, ptr};
 
 use glib::{prelude::*, translate::*};
 
-use crate::AudioEncoder;
+use crate::{ffi, AudioEncoder};
 
 mod sealed {
     pub trait Sealed {}

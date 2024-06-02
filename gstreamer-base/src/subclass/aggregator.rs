@@ -5,7 +5,7 @@ use std::ptr;
 use glib::{prelude::*, translate::*};
 use gst::subclass::prelude::*;
 
-use crate::{Aggregator, AggregatorPad};
+use crate::{ffi, Aggregator, AggregatorPad};
 
 pub trait AggregatorImpl: AggregatorImplExt + ElementImpl {
     fn flush(&self) -> Result<gst::FlowSuccess, gst::FlowError> {

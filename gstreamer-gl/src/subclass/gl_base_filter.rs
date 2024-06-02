@@ -3,7 +3,7 @@ use glib::translate::*;
 use gst::{ffi::GstCaps, result_from_gboolean, Caps, LoggableError, CAT_RUST};
 use gst_base::subclass::prelude::*;
 
-use crate::{prelude::*, GLBaseFilter};
+use crate::{ffi, prelude::*, GLBaseFilter};
 
 pub trait GLBaseFilterImpl: GLBaseFilterImplExt + BaseTransformImpl {
     fn gl_set_caps(&self, incaps: &Caps, outcaps: &Caps) -> Result<(), LoggableError> {

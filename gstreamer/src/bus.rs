@@ -18,7 +18,7 @@ use glib::{
     ControlFlow,
 };
 
-use crate::{Bus, BusSyncReply, Message, MessageType};
+use crate::{ffi, Bus, BusSyncReply, Message, MessageType};
 
 unsafe extern "C" fn trampoline_watch<F: FnMut(&Bus, &Message) -> ControlFlow + Send + 'static>(
     bus: *mut ffi::GstBus,

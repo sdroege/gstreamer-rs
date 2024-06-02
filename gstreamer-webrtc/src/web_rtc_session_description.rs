@@ -9,7 +9,7 @@ impl WebRTCSessionDescription {
     pub fn new(type_: WebRTCSDPType, sdp: gst_sdp::SDPMessage) -> WebRTCSessionDescription {
         skip_assert_initialized!();
         unsafe {
-            from_glib_full(ffi::gst_webrtc_session_description_new(
+            from_glib_full(crate::ffi::gst_webrtc_session_description_new(
                 type_.into_glib(),
                 sdp.into_glib_ptr(),
             ))

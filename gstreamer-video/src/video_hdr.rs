@@ -2,6 +2,7 @@
 
 use std::{fmt, mem, ptr, str};
 
+use crate::ffi;
 use glib::translate::*;
 
 #[doc(alias = "GstVideoContentLightLevel")]

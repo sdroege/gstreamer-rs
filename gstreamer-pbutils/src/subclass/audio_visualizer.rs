@@ -3,7 +3,7 @@
 use glib::{prelude::*, translate::*};
 use gst::{result_from_gboolean, subclass::prelude::*, LoggableError, CAT_RUST};
 
-use crate::AudioVisualizer;
+use crate::{ffi, AudioVisualizer};
 
 pub struct AudioVisualizerSetupToken<'a>(pub(crate) &'a AudioVisualizer);
 

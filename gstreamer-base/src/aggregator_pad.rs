@@ -3,7 +3,7 @@
 use glib::{prelude::*, translate::*};
 use gst::prelude::*;
 
-use crate::AggregatorPad;
+use crate::{ffi, AggregatorPad};
 
 mod sealed {
     pub trait Sealed {}

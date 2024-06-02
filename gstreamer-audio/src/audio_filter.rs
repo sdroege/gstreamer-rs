@@ -3,7 +3,7 @@
 use glib::{prelude::*, translate::*};
 use gst_base::prelude::*;
 
-use crate::{AudioFilter, AudioInfo};
+use crate::{ffi, AudioFilter, AudioInfo};
 
 mod sealed {
     pub trait Sealed {}

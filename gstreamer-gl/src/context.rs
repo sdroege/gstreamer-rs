@@ -5,7 +5,7 @@ use std::ptr;
 use glib::{prelude::*, translate::*};
 use gst::ContextRef;
 
-use crate::GLDisplay;
+use crate::{ffi, GLDisplay};
 
 pub trait ContextGLExt {
     #[doc(alias = "get_gl_display")]

@@ -2,7 +2,7 @@
 
 use std::{fmt::Debug, marker::PhantomData, mem, ptr};
 
-use crate::GLMemoryRef;
+use crate::{ffi, GLMemoryRef};
 use glib::translate::{from_glib, Borrowed, ToGlibPtr};
 use gst_video::{video_frame::IsVideoFrame, VideoFrameExt};
 

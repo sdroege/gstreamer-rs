@@ -2,6 +2,7 @@
 
 use std::{marker::PhantomData, mem};
 
+use crate::ffi;
 use glib::translate::IntoGlib;
 
 #[repr(C)]

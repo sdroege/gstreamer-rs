@@ -3,8 +3,7 @@
 use glib::prelude::*;
 use glib::translate::*;
 
-use crate::ActionType;
-use crate::Scenario;
+use crate::{ffi, ActionType, Scenario};
 
 gst::mini_object_wrapper!(Action, ActionRef, ffi::GstValidateAction, || {
     ffi::gst_validate_action_get_type()

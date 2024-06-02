@@ -2,6 +2,7 @@
 
 use std::{mem, ops};
 
+use crate::ffi;
 use glib::translate::*;
 
 #[derive(Debug, Clone, PartialEq, Eq)]

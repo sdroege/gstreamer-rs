@@ -6,7 +6,7 @@ use glib::{prelude::*, subclass::prelude::*, translate::*};
 use gst::prelude::*;
 
 use super::base_src::{BaseSrcImpl, CreateSuccess};
-use crate::{prelude::BaseSrcExtManual, PushSrc};
+use crate::{ffi, prelude::*, PushSrc};
 
 pub trait PushSrcImpl: PushSrcImplExt + BaseSrcImpl {
     fn fill(&self, buffer: &mut gst::BufferRef) -> Result<gst::FlowSuccess, gst::FlowError> {

@@ -7,7 +7,7 @@ use glib::translate::{
     ToGlibPtr,
 };
 
-use crate::{TagList, TagMergeMode, TocEntryType, TocLoopType, TocScope};
+use crate::{ffi, TagList, TagMergeMode, TocEntryType, TocLoopType, TocScope};
 
 mini_object_wrapper!(Toc, TocRef, ffi::GstToc, || { ffi::gst_toc_get_type() });
 

@@ -3,7 +3,7 @@
 use glib::{prelude::*, translate::*};
 use gst_base::subclass::prelude::*;
 
-use crate::VideoSink;
+use crate::{ffi, VideoSink};
 
 pub trait VideoSinkImpl: VideoSinkImplExt + BaseSinkImpl + ElementImpl {
     fn show_frame(&self, buffer: &gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError> {

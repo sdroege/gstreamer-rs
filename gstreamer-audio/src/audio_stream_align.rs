@@ -18,7 +18,7 @@ impl AudioStreamAlign {
             let mut out_timestamp = mem::MaybeUninit::uninit();
             let mut out_duration = mem::MaybeUninit::uninit();
             let mut out_sample_position = mem::MaybeUninit::uninit();
-            let ret = from_glib(ffi::gst_audio_stream_align_process(
+            let ret = from_glib(crate::ffi::gst_audio_stream_align_process(
                 self.to_glib_none_mut().0,
                 discont.into_glib(),
                 timestamp.into_glib(),

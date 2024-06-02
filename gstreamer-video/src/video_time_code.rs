@@ -5,7 +5,7 @@ use std::{cmp, fmt, mem, str};
 use glib::translate::*;
 use gst::prelude::*;
 
-use crate::{VideoTimeCodeFlags, VideoTimeCodeInterval};
+use crate::{ffi, VideoTimeCodeFlags, VideoTimeCodeInterval};
 
 glib::wrapper! {
     #[doc(alias = "GstVideoTimeCode")]

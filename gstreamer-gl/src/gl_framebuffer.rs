@@ -1,6 +1,6 @@
 use glib::{prelude::*, translate::*};
 
-use crate::{GLFramebuffer, GLMemoryRef};
+use crate::{ffi, GLFramebuffer, GLMemoryRef};
 
 mod sealed {
     pub trait Sealed {}

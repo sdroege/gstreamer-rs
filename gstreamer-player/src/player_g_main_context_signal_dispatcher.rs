@@ -2,7 +2,7 @@
 
 use glib::translate::*;
 
-use crate::PlayerGMainContextSignalDispatcher;
+use crate::{ffi, PlayerGMainContextSignalDispatcher};
 
 impl PlayerGMainContextSignalDispatcher {
     #[doc(alias = "gst_player_g_main_context_signal_dispatcher_new")]

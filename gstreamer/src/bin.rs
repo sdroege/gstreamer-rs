@@ -9,7 +9,7 @@ use glib::{
     GString,
 };
 
-use crate::{prelude::*, Bin, BinFlags, Element, LoggableError};
+use crate::{ffi, prelude::*, Bin, BinFlags, Element, LoggableError};
 
 impl Bin {
     // rustdoc-stripper-ignore-next

@@ -3,7 +3,7 @@ use std::{fmt, mem, os::unix::prelude::IntoRawFd};
 use glib::{prelude::*, translate::*};
 use gst::{Memory, MemoryRef};
 
-use crate::{DRMDumbAllocator, DmaBufMemory};
+use crate::{ffi, DRMDumbAllocator, DmaBufMemory};
 
 gst::memory_object_wrapper!(
     DRMDumbMemory,

@@ -4,10 +4,10 @@
 #![allow(clippy::missing_safety_doc)]
 #![doc = include_str!("../README.md")]
 
-pub use ffi;
 pub use glib;
 pub use gst;
 pub use gst_base;
+pub use gstreamer_audio_sys as ffi;
 
 macro_rules! assert_initialized_main_thread {
     () => {

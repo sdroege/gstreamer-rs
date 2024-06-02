@@ -4,7 +4,7 @@ use std::{fmt, marker::PhantomData, ptr, str};
 
 use glib::{prelude::*, translate::*, value::ToSendValue};
 
-use crate::{caps_features::*, structure::*, CapsIntersectMode};
+use crate::{caps_features::*, ffi, structure::*, CapsIntersectMode};
 
 mini_object_wrapper!(Caps, CapsRef, ffi::GstCaps, || { ffi::gst_caps_get_type() });
 

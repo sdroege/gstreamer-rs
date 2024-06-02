@@ -1,7 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::prelude::*;
-use crate::Formatter;
+use crate::{ffi, prelude::*, Formatter};
 use glib::{subclass::prelude::*, translate::*};
 
 pub trait FormatterImpl: FormatterImplExt + ObjectImpl + Send + Sync {

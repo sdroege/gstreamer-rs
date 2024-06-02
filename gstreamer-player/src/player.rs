@@ -8,7 +8,7 @@ use glib::{
     translate::*,
 };
 
-use crate::Player;
+use crate::{ffi, Player};
 
 impl Player {
     #[doc(alias = "get_config")]

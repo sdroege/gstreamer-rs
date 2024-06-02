@@ -2,7 +2,7 @@
 
 use glib::{prelude::*, translate::*};
 
-use crate::{tags::*, TagMergeMode, TagSetter};
+use crate::{ffi, tags::*, TagMergeMode, TagSetter};
 
 mod sealed {
     pub trait Sealed {}

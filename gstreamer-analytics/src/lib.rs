@@ -4,9 +4,9 @@
 #![allow(clippy::missing_safety_doc)]
 #![doc = include_str!("../README.md")]
 
-pub use ffi;
 pub use glib;
 pub use gst;
+pub use gstreamer_analytics_sys as ffi;
 
 macro_rules! skip_assert_initialized {
     () => {};

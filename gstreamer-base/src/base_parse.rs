@@ -8,7 +8,7 @@ use gst::{
     prelude::*,
 };
 
-use crate::{BaseParse, BaseParseFrame};
+use crate::{ffi, BaseParse, BaseParseFrame};
 
 mod sealed {
     pub trait Sealed {}

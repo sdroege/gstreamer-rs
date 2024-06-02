@@ -2,7 +2,7 @@
 
 use glib::{prelude::*, source::SourceId, translate::*};
 
-use crate::RTSPServer;
+use crate::{ffi, RTSPServer};
 
 mod sealed {
     pub trait Sealed {}

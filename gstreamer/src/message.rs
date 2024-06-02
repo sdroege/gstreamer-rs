@@ -5,6 +5,7 @@ use std::{borrow::Borrow, ffi::CStr, fmt, mem, num::NonZeroU32, ops::Deref, ptr}
 use glib::translate::*;
 
 use crate::{
+    ffi,
     format::{CompatibleFormattedValue, FormattedValue},
     prelude::*,
     structure::*,

@@ -8,7 +8,7 @@ use std::{
 
 use glib::translate::*;
 
-use crate::{Buffer, BufferRef};
+use crate::{ffi, Buffer, BufferRef};
 
 mini_object_wrapper!(BufferList, BufferListRef, ffi::GstBufferList, || {
     ffi::gst_buffer_list_get_type()

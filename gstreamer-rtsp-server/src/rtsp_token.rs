@@ -2,6 +2,7 @@
 
 use std::fmt;
 
+use crate::ffi;
 use glib::{translate::*, SendValue};
 
 gst::mini_object_wrapper!(RTSPToken, RTSPTokenRef, ffi::GstRTSPToken, || {

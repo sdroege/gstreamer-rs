@@ -8,7 +8,7 @@ use glib::{
     translate::*,
 };
 
-use crate::{RTSPAuth, RTSPToken};
+use crate::{ffi, RTSPAuth, RTSPToken};
 
 mod sealed {
     pub trait Sealed {}

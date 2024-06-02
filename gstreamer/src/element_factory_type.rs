@@ -2,6 +2,8 @@
 
 use glib::{bitflags::bitflags, translate::*};
 
+use crate::ffi;
+
 bitflags! {
     #[doc(alias = "GstElementFactoryListType")]
     #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]

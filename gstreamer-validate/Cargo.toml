@@ -15,7 +15,7 @@ rust-version.workspace = true
 
 [dependencies]
 libc = "0.2"
-ffi = { package = "gstreamer-validate-sys", path = "sys" }
+gstreamer-validate-sys.workspace = true
 glib.workspace = true
 gst = { workspace = true, features = ["v1_22"] }
 
@@ -25,8 +25,8 @@ tempfile = "3"
 
 [features]
 default = []
-v1_24 = ["gst/v1_24", "ffi/v1_24"]
-v1_26 = ["gst/v1_26", "ffi/v1_26", "v1_24"]
+v1_24 = ["gst/v1_24", "gstreamer-validate-sys/v1_24"]
+v1_26 = ["gst/v1_26", "gstreamer-validate-sys/v1_26", "v1_24"]
 
 [package.metadata.docs.rs]
 all-features = true

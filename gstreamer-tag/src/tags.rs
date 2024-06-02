@@ -17,7 +17,7 @@ pub fn tag_parse_extended_comment(
         let mut c_key = ptr::null_mut();
         let mut c_lang = ptr::null_mut();
         let mut c_value = ptr::null_mut();
-        let res: bool = from_glib(ffi::gst_tag_parse_extended_comment(
+        let res: bool = from_glib(crate::ffi::gst_tag_parse_extended_comment(
             ext_comment.to_glib_none().0,
             &mut c_key,
             &mut c_lang,

@@ -3,7 +3,7 @@
 use glib::{prelude::*, subclass::prelude::*, translate::*};
 use gst_rtsp::ffi::GstRTSPUrl;
 
-use crate::RTSPMountPoints;
+use crate::{ffi, RTSPMountPoints};
 
 pub trait RTSPMountPointsImpl: RTSPMountPointsImplExt + ObjectImpl + Send + Sync {
     fn make_path(&self, url: &gst_rtsp::RTSPUrl) -> Option<glib::GString> {

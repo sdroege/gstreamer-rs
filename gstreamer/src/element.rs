@@ -6,6 +6,7 @@ use glib::translate::*;
 use itertools::Itertools;
 
 use crate::{
+    ffi,
     format::{
         CompatibleFormattedValue, FormattedValue, SpecificFormattedValueFullRange,
         SpecificFormattedValueIntrinsic,

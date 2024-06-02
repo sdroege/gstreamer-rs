@@ -9,7 +9,7 @@ use std::{
 
 use glib::{prelude::*, translate::*};
 
-use crate::{AllocationParams, Allocator, BufferPool, Structure, StructureRef};
+use crate::{ffi, AllocationParams, Allocator, BufferPool, Structure, StructureRef};
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[repr(transparent)]

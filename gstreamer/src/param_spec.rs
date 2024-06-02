@@ -1,5 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+use crate::ffi;
 use glib::{gobject_ffi, prelude::*, translate::*, ParamSpec};
 
 glib::wrapper! {

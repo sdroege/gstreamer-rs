@@ -123,15 +123,32 @@ gobject-sys = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "master"
 cairo-rs = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "master" }
 pango = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "master" }
 pangocairo = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "master" }
+gstreamer-allocators-sys = { path = "gstreamer-allocators/sys" }
+gstreamer-analytics-sys = { path = "gstreamer-analytics/sys" }
+gstreamer-app-sys = {  path = "gstreamer-app/sys" }
 gstreamer-audio-sys = { path = "./gstreamer-audio/sys"}
 gstreamer-base-sys = { path = "./gstreamer-base/sys"}
+gstreamer-check-sys = { path = "./gstreamer-check/sys" }
+gstreamer-controller-sys = { path = "./gstreamer-controller/sys" }
+gstreamer-editing-services-sys = { path = "./gstreamer-editing-services/sys"}
+gstreamer-gl-egl-sys = { path = "./gstreamer-gl/egl/sys"}
+gstreamer-gl-wayland-sys = { path = "./gstreamer-gl/wayland/sys"}
+gstreamer-gl-x11-sys = { path = "./gstreamer-gl/x11/sys"}
 gstreamer-gl-sys = { path = "./gstreamer-gl/sys"}
+gstreamer-mpegts-sys = { path = "./gstreamer-mpegts/sys"}
 gstreamer-net-sys = { path = "./gstreamer-net/sys"}
 gstreamer-pbutils-sys = { path = "./gstreamer-pbutils/sys"}
+gstreamer-play-sys = { path = "./gstreamer-play/sys" }
+gstreamer-player-sys = { path = "./gstreamer-player/sys" }
+gstreamer-rtp-sys = { path = "./gstreamer-rtp/sys" }
 gstreamer-rtsp-sys = { path = "./gstreamer-rtsp/sys"}
+gstreamer-rtsp-server-sys = { path = "./gstreamer-rtsp-server/sys" }
 gstreamer-sdp-sys = { path = "./gstreamer-sdp/sys"}
+gstreamer-tag-sys = { path = "./gstreamer-tag/sys" }
 gstreamer-sys = { path = "./gstreamer/sys"}
+gstreamer-validate-sys = { path = "./gstreamer-validate/sys" }
 gstreamer-video-sys = { path = "./gstreamer-video/sys"}
+gstreamer-webrtc-sys = { path = "./gstreamer-webrtc/sys" }
 ges = { package = "gstreamer-editing-services", path = "./gstreamer-editing-services" }
 gst = { package = "gstreamer", path = "./gstreamer" }
 gst-allocators = { package = "gstreamer-allocators", path = "./gstreamer-allocators" }

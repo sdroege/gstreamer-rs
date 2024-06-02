@@ -2,6 +2,7 @@
 
 use std::{marker::PhantomData, mem};
 
+use crate::ffi;
 use glib::translate::*;
 
 pub static BUFFER_POOL_OPTION_VIDEO_AFFINE_TRANSFORMATION_META: &glib::GStr = unsafe {

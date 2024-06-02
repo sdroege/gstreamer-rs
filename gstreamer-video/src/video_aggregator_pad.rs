@@ -1,7 +1,7 @@
 use glib::{object::IsA, translate::*};
 use gst::prelude::*;
 
-use crate::{auto::VideoAggregatorPad, subclass::AggregateFramesToken};
+use crate::{ffi, subclass::AggregateFramesToken, VideoAggregatorPad};
 
 mod sealed {
     pub trait Sealed {}

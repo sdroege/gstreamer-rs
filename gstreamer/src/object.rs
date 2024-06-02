@@ -2,7 +2,7 @@
 
 use glib::{prelude::*, signal::SignalHandlerId, translate::*};
 
-use crate::{ClockTime, Object, ObjectFlags};
+use crate::{ffi, ClockTime, Object, ObjectFlags};
 
 mod sealed {
     pub trait Sealed {}

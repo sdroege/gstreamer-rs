@@ -2,7 +2,7 @@
 
 use glib::{prelude::*, translate::*};
 
-use crate::{WebRTCICE, WebRTCICEStream};
+use crate::{ffi, WebRTCICE, WebRTCICEStream};
 
 mod sealed {
     pub trait Sealed {}

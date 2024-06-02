@@ -8,7 +8,7 @@ use glib::{
 };
 use gst::{ffi as gst_ffi, prelude::*, Message, Object, Seqnum};
 
-use crate::NavigationMessageType;
+use crate::{ffi, NavigationMessageType};
 
 macro_rules! message_builder_generic_impl {
     ($new_fn:expr) => {

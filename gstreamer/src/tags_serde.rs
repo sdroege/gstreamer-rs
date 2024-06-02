@@ -172,7 +172,7 @@ impl<'de, 'a> Visitor<'de> for TagValuesVisitor<'a> {
     fn visit_seq<A: SeqAccess<'de>>(self, mut seq: A) -> Result<(), A::Error> {
         let tag_type: glib::Type = unsafe {
             let tag_name = self.0.to_glib_none();
-            from_glib(ffi::gst_tag_get_type(tag_name.0))
+            from_glib(crate::ffi::gst_tag_get_type(tag_name.0))
         };
 
         loop {

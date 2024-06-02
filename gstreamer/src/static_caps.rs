@@ -4,7 +4,7 @@ use std::{fmt, marker::PhantomData, ptr};
 
 use glib::{prelude::*, translate::*};
 
-use crate::Caps;
+use crate::{ffi, Caps};
 
 #[doc(alias = "GstStaticCaps")]
 #[derive(Clone, Copy)]
