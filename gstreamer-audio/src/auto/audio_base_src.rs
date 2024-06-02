@@ -40,6 +40,7 @@ pub trait AudioBaseSrcExt: IsA<AudioBaseSrc> + sealed::Sealed + 'static {
 
     #[doc(alias = "gst_audio_base_src_get_provide_clock")]
     #[doc(alias = "get_provide_clock")]
+    #[doc(alias = "provide-clock")]
     fn is_provide_clock(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_audio_base_src_get_provide_clock(
@@ -50,11 +51,13 @@ pub trait AudioBaseSrcExt: IsA<AudioBaseSrc> + sealed::Sealed + 'static {
 
     //#[doc(alias = "gst_audio_base_src_get_slave_method")]
     //#[doc(alias = "get_slave_method")]
+    //#[doc(alias = "slave-method")]
     //fn slave_method(&self) -> /*Ignored*/AudioBaseSrcSlaveMethod {
     //    unsafe { TODO: call ffi:gst_audio_base_src_get_slave_method() }
     //}
 
     #[doc(alias = "gst_audio_base_src_set_provide_clock")]
+    #[doc(alias = "provide-clock")]
     fn set_provide_clock(&self, provide: bool) {
         unsafe {
             ffi::gst_audio_base_src_set_provide_clock(
@@ -65,6 +68,7 @@ pub trait AudioBaseSrcExt: IsA<AudioBaseSrc> + sealed::Sealed + 'static {
     }
 
     //#[doc(alias = "gst_audio_base_src_set_slave_method")]
+    //#[doc(alias = "slave-method")]
     //fn set_slave_method(&self, method: /*Ignored*/AudioBaseSrcSlaveMethod) {
     //    unsafe { TODO: call ffi:gst_audio_base_src_set_slave_method() }
     //}

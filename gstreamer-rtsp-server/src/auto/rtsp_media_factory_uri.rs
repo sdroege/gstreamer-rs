@@ -56,6 +56,7 @@ pub trait RTSPMediaFactoryURIExt: IsA<RTSPMediaFactoryURI> + sealed::Sealed + 's
     }
 
     #[doc(alias = "gst_rtsp_media_factory_uri_set_uri")]
+    #[doc(alias = "uri")]
     fn set_uri(&self, uri: &str) {
         unsafe {
             ffi::gst_rtsp_media_factory_uri_set_uri(

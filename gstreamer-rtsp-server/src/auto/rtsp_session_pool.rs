@@ -115,6 +115,7 @@ pub trait RTSPSessionPoolExt: IsA<RTSPSessionPool> + sealed::Sealed + 'static {
 
     #[doc(alias = "gst_rtsp_session_pool_get_max_sessions")]
     #[doc(alias = "get_max_sessions")]
+    #[doc(alias = "max-sessions")]
     fn max_sessions(&self) -> u32 {
         unsafe { ffi::gst_rtsp_session_pool_get_max_sessions(self.as_ref().to_glib_none().0) }
     }
@@ -139,6 +140,7 @@ pub trait RTSPSessionPoolExt: IsA<RTSPSessionPool> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_rtsp_session_pool_set_max_sessions")]
+    #[doc(alias = "max-sessions")]
     fn set_max_sessions(&self, max: u32) {
         unsafe {
             ffi::gst_rtsp_session_pool_set_max_sessions(self.as_ref().to_glib_none().0, max);

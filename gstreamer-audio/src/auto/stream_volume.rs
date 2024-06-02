@@ -41,6 +41,7 @@ mod sealed {
 pub trait StreamVolumeExt: IsA<StreamVolume> + sealed::Sealed + 'static {
     #[doc(alias = "gst_stream_volume_get_mute")]
     #[doc(alias = "get_mute")]
+    #[doc(alias = "mute")]
     fn is_muted(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_stream_volume_get_mute(
@@ -58,6 +59,7 @@ pub trait StreamVolumeExt: IsA<StreamVolume> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_stream_volume_set_mute")]
+    #[doc(alias = "mute")]
     fn set_mute(&self, mute: bool) {
         unsafe {
             ffi::gst_stream_volume_set_mute(self.as_ref().to_glib_none().0, mute.into_glib());
@@ -65,6 +67,7 @@ pub trait StreamVolumeExt: IsA<StreamVolume> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_stream_volume_set_volume")]
+    #[doc(alias = "volume")]
     fn set_volume(&self, format: StreamVolumeFormat, val: f64) {
         unsafe {
             ffi::gst_stream_volume_set_volume(

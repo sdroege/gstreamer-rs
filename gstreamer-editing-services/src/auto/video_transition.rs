@@ -56,6 +56,7 @@ pub trait VideoTransitionExt: IsA<VideoTransition> + sealed::Sealed + 'static {
 
     #[doc(alias = "ges_video_transition_get_transition_type")]
     #[doc(alias = "get_transition_type")]
+    #[doc(alias = "transition-type")]
     fn transition_type(&self) -> VideoStandardTransitionType {
         unsafe {
             from_glib(ffi::ges_video_transition_get_transition_type(
@@ -78,6 +79,7 @@ pub trait VideoTransitionExt: IsA<VideoTransition> + sealed::Sealed + 'static {
     #[cfg_attr(feature = "v1_20", deprecated = "Since 1.20")]
     #[allow(deprecated)]
     #[doc(alias = "ges_video_transition_set_border")]
+    #[doc(alias = "border")]
     fn set_border(&self, value: u32) {
         unsafe {
             ffi::ges_video_transition_set_border(self.as_ref().to_glib_none().0, value);
@@ -97,6 +99,7 @@ pub trait VideoTransitionExt: IsA<VideoTransition> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "ges_video_transition_set_transition_type")]
+    #[doc(alias = "transition-type")]
     fn set_transition_type(&self, type_: VideoStandardTransitionType) -> bool {
         unsafe {
             from_glib(ffi::ges_video_transition_set_transition_type(

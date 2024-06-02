@@ -84,6 +84,7 @@ pub trait RTSPClientExt: IsA<RTSPClient> + sealed::Sealed + 'static {
 
     #[doc(alias = "gst_rtsp_client_get_mount_points")]
     #[doc(alias = "get_mount_points")]
+    #[doc(alias = "mount-points")]
     fn mount_points(&self) -> Option<RTSPMountPoints> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_client_get_mount_points(
@@ -94,6 +95,7 @@ pub trait RTSPClientExt: IsA<RTSPClient> + sealed::Sealed + 'static {
 
     #[doc(alias = "gst_rtsp_client_get_session_pool")]
     #[doc(alias = "get_session_pool")]
+    #[doc(alias = "session-pool")]
     fn session_pool(&self) -> Option<RTSPSessionPool> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_client_get_session_pool(
@@ -200,6 +202,7 @@ pub trait RTSPClientExt: IsA<RTSPClient> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_rtsp_client_set_mount_points")]
+    #[doc(alias = "mount-points")]
     fn set_mount_points(&self, mounts: Option<&impl IsA<RTSPMountPoints>>) {
         unsafe {
             ffi::gst_rtsp_client_set_mount_points(
@@ -217,6 +220,7 @@ pub trait RTSPClientExt: IsA<RTSPClient> + sealed::Sealed + 'static {
     //}
 
     #[doc(alias = "gst_rtsp_client_set_session_pool")]
+    #[doc(alias = "session-pool")]
     fn set_session_pool(&self, pool: Option<&impl IsA<RTSPSessionPool>>) {
         unsafe {
             ffi::gst_rtsp_client_set_session_pool(

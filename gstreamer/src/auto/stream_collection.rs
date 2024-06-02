@@ -35,6 +35,7 @@ impl StreamCollection {
 
     #[doc(alias = "gst_stream_collection_get_upstream_id")]
     #[doc(alias = "get_upstream_id")]
+    #[doc(alias = "upstream-id")]
     pub fn upstream_id(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::gst_stream_collection_get_upstream_id(

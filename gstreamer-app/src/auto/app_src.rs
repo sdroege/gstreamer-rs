@@ -39,12 +39,14 @@ impl AppSrc {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_app_src_get_current_level_buffers")]
     #[doc(alias = "get_current_level_buffers")]
+    #[doc(alias = "current-level-buffers")]
     pub fn current_level_buffers(&self) -> u64 {
         unsafe { ffi::gst_app_src_get_current_level_buffers(self.to_glib_none().0) }
     }
 
     #[doc(alias = "gst_app_src_get_current_level_bytes")]
     #[doc(alias = "get_current_level_bytes")]
+    #[doc(alias = "current-level-bytes")]
     pub fn current_level_bytes(&self) -> u64 {
         unsafe { ffi::gst_app_src_get_current_level_bytes(self.to_glib_none().0) }
     }
@@ -53,6 +55,7 @@ impl AppSrc {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_app_src_get_current_level_time")]
     #[doc(alias = "get_current_level_time")]
+    #[doc(alias = "current-level-time")]
     pub fn current_level_time(&self) -> Option<gst::ClockTime> {
         unsafe {
             from_glib(ffi::gst_app_src_get_current_level_time(
@@ -71,6 +74,7 @@ impl AppSrc {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_app_src_get_leaky_type")]
     #[doc(alias = "get_leaky_type")]
+    #[doc(alias = "leaky-type")]
     pub fn leaky_type(&self) -> AppLeakyType {
         unsafe { from_glib(ffi::gst_app_src_get_leaky_type(self.to_glib_none().0)) }
     }
@@ -79,12 +83,14 @@ impl AppSrc {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_app_src_get_max_buffers")]
     #[doc(alias = "get_max_buffers")]
+    #[doc(alias = "max-buffers")]
     pub fn max_buffers(&self) -> u64 {
         unsafe { ffi::gst_app_src_get_max_buffers(self.to_glib_none().0) }
     }
 
     #[doc(alias = "gst_app_src_get_max_bytes")]
     #[doc(alias = "get_max_bytes")]
+    #[doc(alias = "max-bytes")]
     pub fn max_bytes(&self) -> u64 {
         unsafe { ffi::gst_app_src_get_max_bytes(self.to_glib_none().0) }
     }
@@ -93,6 +99,7 @@ impl AppSrc {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_app_src_get_max_time")]
     #[doc(alias = "get_max_time")]
+    #[doc(alias = "max-time")]
     pub fn max_time(&self) -> Option<gst::ClockTime> {
         unsafe { from_glib(ffi::gst_app_src_get_max_time(self.to_glib_none().0)) }
     }
@@ -105,6 +112,7 @@ impl AppSrc {
 
     #[doc(alias = "gst_app_src_get_stream_type")]
     #[doc(alias = "get_stream_type")]
+    #[doc(alias = "stream-type")]
     pub fn stream_type(&self) -> AppStreamType {
         unsafe { from_glib(ffi::gst_app_src_get_stream_type(self.to_glib_none().0)) }
     }
@@ -148,6 +156,7 @@ impl AppSrc {
     //}
 
     #[doc(alias = "gst_app_src_set_caps")]
+    #[doc(alias = "caps")]
     pub fn set_caps(&self, caps: Option<&gst::Caps>) {
         unsafe {
             ffi::gst_app_src_set_caps(self.to_glib_none().0, caps.to_glib_none().0);
@@ -155,6 +164,7 @@ impl AppSrc {
     }
 
     #[doc(alias = "gst_app_src_set_duration")]
+    #[doc(alias = "duration")]
     pub fn set_duration(&self, duration: impl Into<Option<gst::ClockTime>>) {
         unsafe {
             ffi::gst_app_src_set_duration(self.to_glib_none().0, duration.into().into_glib());
@@ -164,6 +174,7 @@ impl AppSrc {
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_app_src_set_leaky_type")]
+    #[doc(alias = "leaky-type")]
     pub fn set_leaky_type(&self, leaky: AppLeakyType) {
         unsafe {
             ffi::gst_app_src_set_leaky_type(self.to_glib_none().0, leaky.into_glib());
@@ -173,6 +184,7 @@ impl AppSrc {
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_app_src_set_max_buffers")]
+    #[doc(alias = "max-buffers")]
     pub fn set_max_buffers(&self, max: u64) {
         unsafe {
             ffi::gst_app_src_set_max_buffers(self.to_glib_none().0, max);
@@ -180,6 +192,7 @@ impl AppSrc {
     }
 
     #[doc(alias = "gst_app_src_set_max_bytes")]
+    #[doc(alias = "max-bytes")]
     pub fn set_max_bytes(&self, max: u64) {
         unsafe {
             ffi::gst_app_src_set_max_bytes(self.to_glib_none().0, max);
@@ -189,6 +202,7 @@ impl AppSrc {
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_app_src_set_max_time")]
+    #[doc(alias = "max-time")]
     pub fn set_max_time(&self, max: impl Into<Option<gst::ClockTime>>) {
         unsafe {
             ffi::gst_app_src_set_max_time(self.to_glib_none().0, max.into().into_glib());
@@ -196,6 +210,7 @@ impl AppSrc {
     }
 
     #[doc(alias = "gst_app_src_set_size")]
+    #[doc(alias = "size")]
     pub fn set_size(&self, size: i64) {
         unsafe {
             ffi::gst_app_src_set_size(self.to_glib_none().0, size);
@@ -203,6 +218,7 @@ impl AppSrc {
     }
 
     #[doc(alias = "gst_app_src_set_stream_type")]
+    #[doc(alias = "stream-type")]
     pub fn set_stream_type(&self, type_: AppStreamType) {
         unsafe {
             ffi::gst_app_src_set_stream_type(self.to_glib_none().0, type_.into_glib());

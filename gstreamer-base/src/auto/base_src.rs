@@ -52,6 +52,7 @@ pub trait BaseSrcExt: IsA<BaseSrc> + sealed::Sealed + 'static {
 
     #[doc(alias = "gst_base_src_get_do_timestamp")]
     #[doc(alias = "get_do_timestamp")]
+    #[doc(alias = "do-timestamp")]
     fn does_timestamp(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_base_src_get_do_timestamp(
@@ -126,6 +127,7 @@ pub trait BaseSrcExt: IsA<BaseSrc> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_base_src_set_automatic_eos")]
+    #[doc(alias = "automatic-eos")]
     fn set_automatic_eos(&self, automatic_eos: bool) {
         unsafe {
             ffi::gst_base_src_set_automatic_eos(
@@ -136,6 +138,7 @@ pub trait BaseSrcExt: IsA<BaseSrc> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_base_src_set_blocksize")]
+    #[doc(alias = "blocksize")]
     fn set_blocksize(&self, blocksize: u32) {
         unsafe {
             ffi::gst_base_src_set_blocksize(self.as_ref().to_glib_none().0, blocksize);
@@ -153,6 +156,7 @@ pub trait BaseSrcExt: IsA<BaseSrc> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_base_src_set_do_timestamp")]
+    #[doc(alias = "do-timestamp")]
     fn set_do_timestamp(&self, timestamp: bool) {
         unsafe {
             ffi::gst_base_src_set_do_timestamp(

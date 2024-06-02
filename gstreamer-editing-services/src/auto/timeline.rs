@@ -143,6 +143,7 @@ pub trait TimelineExt: IsA<Timeline> + sealed::Sealed + 'static {
 
     #[doc(alias = "ges_timeline_get_auto_transition")]
     #[doc(alias = "get_auto_transition")]
+    #[doc(alias = "auto-transition")]
     fn is_auto_transition(&self) -> bool {
         unsafe {
             from_glib(ffi::ges_timeline_get_auto_transition(
@@ -252,6 +253,7 @@ pub trait TimelineExt: IsA<Timeline> + sealed::Sealed + 'static {
 
     #[doc(alias = "ges_timeline_get_snapping_distance")]
     #[doc(alias = "get_snapping_distance")]
+    #[doc(alias = "snapping-distance")]
     fn snapping_distance(&self) -> Option<gst::ClockTime> {
         unsafe {
             from_glib(ffi::ges_timeline_get_snapping_distance(
@@ -393,6 +395,7 @@ pub trait TimelineExt: IsA<Timeline> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "ges_timeline_set_auto_transition")]
+    #[doc(alias = "auto-transition")]
     fn set_auto_transition(&self, auto_transition: bool) {
         unsafe {
             ffi::ges_timeline_set_auto_transition(
@@ -403,6 +406,7 @@ pub trait TimelineExt: IsA<Timeline> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "ges_timeline_set_snapping_distance")]
+    #[doc(alias = "snapping-distance")]
     fn set_snapping_distance(&self, snapping_distance: gst::ClockTime) {
         unsafe {
             ffi::ges_timeline_set_snapping_distance(

@@ -737,6 +737,7 @@ pub trait RTSPStreamExt: IsA<RTSPStream> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_rtsp_stream_set_control")]
+    #[doc(alias = "control")]
     fn set_control(&self, control: Option<&str>) {
         unsafe {
             ffi::gst_rtsp_stream_set_control(
@@ -783,6 +784,7 @@ pub trait RTSPStreamExt: IsA<RTSPStream> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_rtsp_stream_set_profiles")]
+    #[doc(alias = "profiles")]
     fn set_profiles(&self, profiles: gst_rtsp::RTSPProfile) {
         unsafe {
             ffi::gst_rtsp_stream_set_profiles(self.as_ref().to_glib_none().0, profiles.into_glib());
@@ -790,6 +792,7 @@ pub trait RTSPStreamExt: IsA<RTSPStream> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_rtsp_stream_set_protocols")]
+    #[doc(alias = "protocols")]
     fn set_protocols(&self, protocols: gst_rtsp::RTSPLowerTrans) {
         unsafe {
             ffi::gst_rtsp_stream_set_protocols(

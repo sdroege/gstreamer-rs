@@ -55,6 +55,7 @@ mod sealed {
 pub trait RTSPThreadPoolExt: IsA<RTSPThreadPool> + sealed::Sealed + 'static {
     #[doc(alias = "gst_rtsp_thread_pool_get_max_threads")]
     #[doc(alias = "get_max_threads")]
+    #[doc(alias = "max-threads")]
     fn max_threads(&self) -> i32 {
         unsafe { ffi::gst_rtsp_thread_pool_get_max_threads(self.as_ref().to_glib_none().0) }
     }
@@ -72,6 +73,7 @@ pub trait RTSPThreadPoolExt: IsA<RTSPThreadPool> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_rtsp_thread_pool_set_max_threads")]
+    #[doc(alias = "max-threads")]
     fn set_max_threads(&self, max_threads: i32) {
         unsafe {
             ffi::gst_rtsp_thread_pool_set_max_threads(self.as_ref().to_glib_none().0, max_threads);

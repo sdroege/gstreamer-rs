@@ -47,6 +47,7 @@ pub trait TextOverlayClipExt: IsA<TextOverlayClip> + sealed::Sealed + 'static {
 
     #[doc(alias = "ges_text_overlay_clip_get_font_desc")]
     #[doc(alias = "get_font_desc")]
+    #[doc(alias = "font-desc")]
     fn font_desc(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::ges_text_overlay_clip_get_font_desc(
@@ -98,6 +99,7 @@ pub trait TextOverlayClipExt: IsA<TextOverlayClip> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "ges_text_overlay_clip_set_color")]
+    #[doc(alias = "color")]
     fn set_color(&self, color: u32) {
         unsafe {
             ffi::ges_text_overlay_clip_set_color(self.as_ref().to_glib_none().0, color);
@@ -105,6 +107,7 @@ pub trait TextOverlayClipExt: IsA<TextOverlayClip> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "ges_text_overlay_clip_set_font_desc")]
+    #[doc(alias = "font-desc")]
     fn set_font_desc(&self, font_desc: Option<&str>) {
         unsafe {
             ffi::ges_text_overlay_clip_set_font_desc(
@@ -125,6 +128,7 @@ pub trait TextOverlayClipExt: IsA<TextOverlayClip> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "ges_text_overlay_clip_set_text")]
+    #[doc(alias = "text")]
     fn set_text(&self, text: Option<&str>) {
         unsafe {
             ffi::ges_text_overlay_clip_set_text(
@@ -145,6 +149,7 @@ pub trait TextOverlayClipExt: IsA<TextOverlayClip> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "ges_text_overlay_clip_set_xpos")]
+    #[doc(alias = "xpos")]
     fn set_xpos(&self, position: f64) {
         unsafe {
             ffi::ges_text_overlay_clip_set_xpos(self.as_ref().to_glib_none().0, position);
@@ -152,6 +157,7 @@ pub trait TextOverlayClipExt: IsA<TextOverlayClip> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "ges_text_overlay_clip_set_ypos")]
+    #[doc(alias = "ypos")]
     fn set_ypos(&self, position: f64) {
         unsafe {
             ffi::ges_text_overlay_clip_set_ypos(self.as_ref().to_glib_none().0, position);

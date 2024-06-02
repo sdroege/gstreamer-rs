@@ -112,6 +112,7 @@ pub trait RTSPMediaExt: IsA<RTSPMedia> + sealed::Sealed + 'static {
 
     #[doc(alias = "gst_rtsp_media_get_buffer_size")]
     #[doc(alias = "get_buffer_size")]
+    #[doc(alias = "buffer-size")]
     fn buffer_size(&self) -> u32 {
         unsafe { ffi::gst_rtsp_media_get_buffer_size(self.as_ref().to_glib_none().0) }
     }
@@ -142,6 +143,7 @@ pub trait RTSPMediaExt: IsA<RTSPMedia> + sealed::Sealed + 'static {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_rtsp_media_get_dscp_qos")]
     #[doc(alias = "get_dscp_qos")]
+    #[doc(alias = "dscp-qos")]
     fn dscp_qos(&self) -> i32 {
         unsafe { ffi::gst_rtsp_media_get_dscp_qos(self.as_ref().to_glib_none().0) }
     }
@@ -160,6 +162,7 @@ pub trait RTSPMediaExt: IsA<RTSPMedia> + sealed::Sealed + 'static {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     #[doc(alias = "gst_rtsp_media_get_ensure_keyunit_on_start")]
     #[doc(alias = "get_ensure_keyunit_on_start")]
+    #[doc(alias = "ensure-keyunit-on-start")]
     fn is_ensure_keyunit_on_start(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_rtsp_media_get_ensure_keyunit_on_start(
@@ -172,6 +175,7 @@ pub trait RTSPMediaExt: IsA<RTSPMedia> + sealed::Sealed + 'static {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     #[doc(alias = "gst_rtsp_media_get_ensure_keyunit_on_start_timeout")]
     #[doc(alias = "get_ensure_keyunit_on_start_timeout")]
+    #[doc(alias = "ensure-keyunit-on-start-timeout")]
     fn ensure_keyunit_on_start_timeout(&self) -> u32 {
         unsafe {
             ffi::gst_rtsp_media_get_ensure_keyunit_on_start_timeout(self.as_ref().to_glib_none().0)
@@ -188,6 +192,7 @@ pub trait RTSPMediaExt: IsA<RTSPMedia> + sealed::Sealed + 'static {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_rtsp_media_get_max_mcast_ttl")]
     #[doc(alias = "get_max_mcast_ttl")]
+    #[doc(alias = "max-mcast-ttl")]
     fn max_mcast_ttl(&self) -> u32 {
         unsafe { ffi::gst_rtsp_media_get_max_mcast_ttl(self.as_ref().to_glib_none().0) }
     }
@@ -316,6 +321,7 @@ pub trait RTSPMediaExt: IsA<RTSPMedia> + sealed::Sealed + 'static {
 
     #[doc(alias = "gst_rtsp_media_get_suspend_mode")]
     #[doc(alias = "get_suspend_mode")]
+    #[doc(alias = "suspend-mode")]
     fn suspend_mode(&self) -> RTSPSuspendMode {
         unsafe {
             from_glib(ffi::gst_rtsp_media_get_suspend_mode(
@@ -326,6 +332,7 @@ pub trait RTSPMediaExt: IsA<RTSPMedia> + sealed::Sealed + 'static {
 
     #[doc(alias = "gst_rtsp_media_get_time_provider")]
     #[doc(alias = "get_time_provider")]
+    #[doc(alias = "time-provider")]
     fn time_provider(&self, address: Option<&str>, port: u16) -> Option<gst_net::NetTimeProvider> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_media_get_time_provider(
@@ -338,6 +345,7 @@ pub trait RTSPMediaExt: IsA<RTSPMedia> + sealed::Sealed + 'static {
 
     #[doc(alias = "gst_rtsp_media_get_transport_mode")]
     #[doc(alias = "get_transport_mode")]
+    #[doc(alias = "transport-mode")]
     fn transport_mode(&self) -> RTSPTransportMode {
         unsafe {
             from_glib(ffi::gst_rtsp_media_get_transport_mode(
@@ -490,6 +498,7 @@ pub trait RTSPMediaExt: IsA<RTSPMedia> + sealed::Sealed + 'static {
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_rtsp_media_set_bind_mcast_address")]
+    #[doc(alias = "bind-mcast-address")]
     fn set_bind_mcast_address(&self, bind_mcast_addr: bool) {
         unsafe {
             ffi::gst_rtsp_media_set_bind_mcast_address(
@@ -500,6 +509,7 @@ pub trait RTSPMediaExt: IsA<RTSPMedia> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_rtsp_media_set_buffer_size")]
+    #[doc(alias = "buffer-size")]
     fn set_buffer_size(&self, size: u32) {
         unsafe {
             ffi::gst_rtsp_media_set_buffer_size(self.as_ref().to_glib_none().0, size);
@@ -507,6 +517,7 @@ pub trait RTSPMediaExt: IsA<RTSPMedia> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_rtsp_media_set_clock")]
+    #[doc(alias = "clock")]
     fn set_clock(&self, clock: Option<&impl IsA<gst::Clock>>) {
         unsafe {
             ffi::gst_rtsp_media_set_clock(
@@ -531,6 +542,7 @@ pub trait RTSPMediaExt: IsA<RTSPMedia> + sealed::Sealed + 'static {
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_rtsp_media_set_dscp_qos")]
+    #[doc(alias = "dscp-qos")]
     fn set_dscp_qos(&self, dscp_qos: i32) {
         unsafe {
             ffi::gst_rtsp_media_set_dscp_qos(self.as_ref().to_glib_none().0, dscp_qos);
@@ -540,6 +552,7 @@ pub trait RTSPMediaExt: IsA<RTSPMedia> + sealed::Sealed + 'static {
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     #[doc(alias = "gst_rtsp_media_set_ensure_keyunit_on_start")]
+    #[doc(alias = "ensure-keyunit-on-start")]
     fn set_ensure_keyunit_on_start(&self, ensure_keyunit_on_start: bool) {
         unsafe {
             ffi::gst_rtsp_media_set_ensure_keyunit_on_start(
@@ -552,6 +565,7 @@ pub trait RTSPMediaExt: IsA<RTSPMedia> + sealed::Sealed + 'static {
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     #[doc(alias = "gst_rtsp_media_set_ensure_keyunit_on_start_timeout")]
+    #[doc(alias = "ensure-keyunit-on-start-timeout")]
     fn set_ensure_keyunit_on_start_timeout(&self, timeout: u32) {
         unsafe {
             ffi::gst_rtsp_media_set_ensure_keyunit_on_start_timeout(
@@ -562,6 +576,7 @@ pub trait RTSPMediaExt: IsA<RTSPMedia> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_rtsp_media_set_eos_shutdown")]
+    #[doc(alias = "eos-shutdown")]
     fn set_eos_shutdown(&self, eos_shutdown: bool) {
         unsafe {
             ffi::gst_rtsp_media_set_eos_shutdown(
@@ -572,6 +587,7 @@ pub trait RTSPMediaExt: IsA<RTSPMedia> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_rtsp_media_set_latency")]
+    #[doc(alias = "latency")]
     fn set_latency(&self, latency: u32) {
         unsafe {
             ffi::gst_rtsp_media_set_latency(self.as_ref().to_glib_none().0, latency);
@@ -581,6 +597,7 @@ pub trait RTSPMediaExt: IsA<RTSPMedia> + sealed::Sealed + 'static {
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_rtsp_media_set_max_mcast_ttl")]
+    #[doc(alias = "max-mcast-ttl")]
     fn set_max_mcast_ttl(&self, ttl: u32) -> bool {
         unsafe {
             from_glib(ffi::gst_rtsp_media_set_max_mcast_ttl(
@@ -616,6 +633,7 @@ pub trait RTSPMediaExt: IsA<RTSPMedia> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_rtsp_media_set_profiles")]
+    #[doc(alias = "profiles")]
     fn set_profiles(&self, profiles: gst_rtsp::RTSPProfile) {
         unsafe {
             ffi::gst_rtsp_media_set_profiles(self.as_ref().to_glib_none().0, profiles.into_glib());
@@ -623,6 +641,7 @@ pub trait RTSPMediaExt: IsA<RTSPMedia> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_rtsp_media_set_protocols")]
+    #[doc(alias = "protocols")]
     fn set_protocols(&self, protocols: gst_rtsp::RTSPLowerTrans) {
         unsafe {
             ffi::gst_rtsp_media_set_protocols(
@@ -665,6 +684,7 @@ pub trait RTSPMediaExt: IsA<RTSPMedia> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_rtsp_media_set_reusable")]
+    #[doc(alias = "reusable")]
     fn set_reusable(&self, reusable: bool) {
         unsafe {
             ffi::gst_rtsp_media_set_reusable(self.as_ref().to_glib_none().0, reusable.into_glib());
@@ -672,6 +692,7 @@ pub trait RTSPMediaExt: IsA<RTSPMedia> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_rtsp_media_set_shared")]
+    #[doc(alias = "shared")]
     fn set_shared(&self, shared: bool) {
         unsafe {
             ffi::gst_rtsp_media_set_shared(self.as_ref().to_glib_none().0, shared.into_glib());
@@ -690,6 +711,7 @@ pub trait RTSPMediaExt: IsA<RTSPMedia> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_rtsp_media_set_stop_on_disconnect")]
+    #[doc(alias = "stop-on-disconnect")]
     fn set_stop_on_disconnect(&self, stop_on_disconnect: bool) {
         unsafe {
             ffi::gst_rtsp_media_set_stop_on_disconnect(
@@ -700,6 +722,7 @@ pub trait RTSPMediaExt: IsA<RTSPMedia> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_rtsp_media_set_suspend_mode")]
+    #[doc(alias = "suspend-mode")]
     fn set_suspend_mode(&self, mode: RTSPSuspendMode) {
         unsafe {
             ffi::gst_rtsp_media_set_suspend_mode(self.as_ref().to_glib_none().0, mode.into_glib());
@@ -707,6 +730,7 @@ pub trait RTSPMediaExt: IsA<RTSPMedia> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_rtsp_media_set_transport_mode")]
+    #[doc(alias = "transport-mode")]
     fn set_transport_mode(&self, mode: RTSPTransportMode) {
         unsafe {
             ffi::gst_rtsp_media_set_transport_mode(
@@ -775,28 +799,38 @@ pub trait RTSPMediaExt: IsA<RTSPMedia> + sealed::Sealed + 'static {
         ObjectExt::property(self.as_ref(), "bind-mcast-address")
     }
 
+    #[cfg(not(feature = "v1_16"))]
+    #[cfg_attr(docsrs, doc(cfg(not(feature = "v1_16"))))]
     #[doc(alias = "bind-mcast-address")]
-    fn set_property_bind_mcast_address(&self, bind_mcast_address: bool) {
+    fn set_bind_mcast_address(&self, bind_mcast_address: bool) {
         ObjectExt::set_property(self.as_ref(), "bind-mcast-address", bind_mcast_address)
     }
 
+    #[cfg(not(feature = "v1_18"))]
+    #[cfg_attr(docsrs, doc(cfg(not(feature = "v1_18"))))]
     #[doc(alias = "dscp-qos")]
-    fn get_property_dscp_qos(&self) -> i32 {
+    fn dscp_qos(&self) -> i32 {
         ObjectExt::property(self.as_ref(), "dscp-qos")
     }
 
+    #[cfg(not(feature = "v1_18"))]
+    #[cfg_attr(docsrs, doc(cfg(not(feature = "v1_18"))))]
     #[doc(alias = "dscp-qos")]
-    fn set_property_dscp_qos(&self, dscp_qos: i32) {
+    fn set_dscp_qos(&self, dscp_qos: i32) {
         ObjectExt::set_property(self.as_ref(), "dscp-qos", dscp_qos)
     }
 
+    #[cfg(not(feature = "v1_16"))]
+    #[cfg_attr(docsrs, doc(cfg(not(feature = "v1_16"))))]
     #[doc(alias = "max-mcast-ttl")]
-    fn get_property_max_mcast_ttl(&self) -> u32 {
+    fn max_mcast_ttl(&self) -> u32 {
         ObjectExt::property(self.as_ref(), "max-mcast-ttl")
     }
 
+    #[cfg(not(feature = "v1_16"))]
+    #[cfg_attr(docsrs, doc(cfg(not(feature = "v1_16"))))]
     #[doc(alias = "max-mcast-ttl")]
-    fn set_property_max_mcast_ttl(&self, max_mcast_ttl: u32) {
+    fn set_max_mcast_ttl(&self, max_mcast_ttl: u32) {
         ObjectExt::set_property(self.as_ref(), "max-mcast-ttl", max_mcast_ttl)
     }
 

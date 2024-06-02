@@ -125,12 +125,14 @@ pub trait AudioDecoderExt: IsA<AudioDecoder> + sealed::Sealed + 'static {
 
     #[doc(alias = "gst_audio_decoder_get_max_errors")]
     #[doc(alias = "get_max_errors")]
+    #[doc(alias = "max-errors")]
     fn max_errors(&self) -> i32 {
         unsafe { ffi::gst_audio_decoder_get_max_errors(self.as_ref().to_glib_none().0) }
     }
 
     #[doc(alias = "gst_audio_decoder_get_min_latency")]
     #[doc(alias = "get_min_latency")]
+    #[doc(alias = "min-latency")]
     fn min_latency(&self) -> gst::ClockTime {
         unsafe {
             try_from_glib(ffi::gst_audio_decoder_get_min_latency(
@@ -167,6 +169,7 @@ pub trait AudioDecoderExt: IsA<AudioDecoder> + sealed::Sealed + 'static {
 
     #[doc(alias = "gst_audio_decoder_get_plc")]
     #[doc(alias = "get_plc")]
+    #[doc(alias = "plc")]
     fn is_plc(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_audio_decoder_get_plc(
@@ -256,6 +259,7 @@ pub trait AudioDecoderExt: IsA<AudioDecoder> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_audio_decoder_set_max_errors")]
+    #[doc(alias = "max-errors")]
     fn set_max_errors(&self, num: i32) {
         unsafe {
             ffi::gst_audio_decoder_set_max_errors(self.as_ref().to_glib_none().0, num);
@@ -263,6 +267,7 @@ pub trait AudioDecoderExt: IsA<AudioDecoder> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_audio_decoder_set_min_latency")]
+    #[doc(alias = "min-latency")]
     fn set_min_latency(&self, num: gst::ClockTime) {
         unsafe {
             ffi::gst_audio_decoder_set_min_latency(self.as_ref().to_glib_none().0, num.into_glib());
@@ -280,6 +285,7 @@ pub trait AudioDecoderExt: IsA<AudioDecoder> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_audio_decoder_set_plc")]
+    #[doc(alias = "plc")]
     fn set_plc(&self, enabled: bool) {
         unsafe {
             ffi::gst_audio_decoder_set_plc(self.as_ref().to_glib_none().0, enabled.into_glib());
@@ -294,6 +300,7 @@ pub trait AudioDecoderExt: IsA<AudioDecoder> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_audio_decoder_set_tolerance")]
+    #[doc(alias = "tolerance")]
     fn set_tolerance(&self, tolerance: gst::ClockTime) {
         unsafe {
             ffi::gst_audio_decoder_set_tolerance(

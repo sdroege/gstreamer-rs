@@ -52,6 +52,7 @@ pub trait DeviceExt: IsA<Device> + sealed::Sealed + 'static {
 
     #[doc(alias = "gst_device_get_device_class")]
     #[doc(alias = "get_device_class")]
+    #[doc(alias = "device-class")]
     fn device_class(&self) -> glib::GString {
         unsafe {
             from_glib_full(ffi::gst_device_get_device_class(
@@ -62,6 +63,7 @@ pub trait DeviceExt: IsA<Device> + sealed::Sealed + 'static {
 
     #[doc(alias = "gst_device_get_display_name")]
     #[doc(alias = "get_display_name")]
+    #[doc(alias = "display-name")]
     fn display_name(&self) -> glib::GString {
         unsafe {
             from_glib_full(ffi::gst_device_get_display_name(

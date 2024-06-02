@@ -52,6 +52,7 @@ pub trait TitleClipExt: IsA<TitleClip> + sealed::Sealed + 'static {
     #[allow(deprecated)]
     #[doc(alias = "ges_title_clip_get_font_desc")]
     #[doc(alias = "get_font_desc")]
+    #[doc(alias = "font-desc")]
     fn font_desc(&self) -> Option<glib::GString> {
         unsafe {
             from_glib_full(ffi::ges_title_clip_get_font_desc(
@@ -119,6 +120,7 @@ pub trait TitleClipExt: IsA<TitleClip> + sealed::Sealed + 'static {
     #[deprecated = "Since 1.6"]
     #[allow(deprecated)]
     #[doc(alias = "ges_title_clip_set_background")]
+    #[doc(alias = "background")]
     fn set_background(&self, background: u32) {
         unsafe {
             ffi::ges_title_clip_set_background(self.as_ref().to_glib_none().0, background);
@@ -128,6 +130,7 @@ pub trait TitleClipExt: IsA<TitleClip> + sealed::Sealed + 'static {
     #[deprecated = "Since 1.6"]
     #[allow(deprecated)]
     #[doc(alias = "ges_title_clip_set_color")]
+    #[doc(alias = "color")]
     fn set_color(&self, color: u32) {
         unsafe {
             ffi::ges_title_clip_set_color(self.as_ref().to_glib_none().0, color);
@@ -137,6 +140,7 @@ pub trait TitleClipExt: IsA<TitleClip> + sealed::Sealed + 'static {
     #[deprecated = "Since 1.6"]
     #[allow(deprecated)]
     #[doc(alias = "ges_title_clip_set_font_desc")]
+    #[doc(alias = "font-desc")]
     fn set_font_desc(&self, font_desc: Option<&str>) {
         unsafe {
             ffi::ges_title_clip_set_font_desc(
@@ -149,6 +153,7 @@ pub trait TitleClipExt: IsA<TitleClip> + sealed::Sealed + 'static {
     #[deprecated = "Since 1.6"]
     #[allow(deprecated)]
     #[doc(alias = "ges_title_clip_set_halignment")]
+    #[doc(alias = "halignment")]
     fn set_halignment(&self, halign: TextHAlign) {
         unsafe {
             ffi::ges_title_clip_set_halignment(self.as_ref().to_glib_none().0, halign.into_glib());
@@ -158,6 +163,7 @@ pub trait TitleClipExt: IsA<TitleClip> + sealed::Sealed + 'static {
     #[deprecated = "Since 1.6"]
     #[allow(deprecated)]
     #[doc(alias = "ges_title_clip_set_text")]
+    #[doc(alias = "text")]
     fn set_text(&self, text: Option<&str>) {
         unsafe {
             ffi::ges_title_clip_set_text(self.as_ref().to_glib_none().0, text.to_glib_none().0);
@@ -167,6 +173,7 @@ pub trait TitleClipExt: IsA<TitleClip> + sealed::Sealed + 'static {
     #[deprecated = "Since 1.6"]
     #[allow(deprecated)]
     #[doc(alias = "ges_title_clip_set_valignment")]
+    #[doc(alias = "valignment")]
     fn set_valignment(&self, valign: TextVAlign) {
         unsafe {
             ffi::ges_title_clip_set_valignment(self.as_ref().to_glib_none().0, valign.into_glib());
@@ -176,6 +183,7 @@ pub trait TitleClipExt: IsA<TitleClip> + sealed::Sealed + 'static {
     #[deprecated = "Since 1.6"]
     #[allow(deprecated)]
     #[doc(alias = "ges_title_clip_set_xpos")]
+    #[doc(alias = "xpos")]
     fn set_xpos(&self, position: f64) {
         unsafe {
             ffi::ges_title_clip_set_xpos(self.as_ref().to_glib_none().0, position);
@@ -185,6 +193,7 @@ pub trait TitleClipExt: IsA<TitleClip> + sealed::Sealed + 'static {
     #[deprecated = "Since 1.6"]
     #[allow(deprecated)]
     #[doc(alias = "ges_title_clip_set_ypos")]
+    #[doc(alias = "ypos")]
     fn set_ypos(&self, position: f64) {
         unsafe {
             ffi::ges_title_clip_set_ypos(self.as_ref().to_glib_none().0, position);

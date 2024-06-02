@@ -47,18 +47,21 @@ impl Stream {
 
     #[doc(alias = "gst_stream_get_stream_flags")]
     #[doc(alias = "get_stream_flags")]
+    #[doc(alias = "stream-flags")]
     pub fn stream_flags(&self) -> StreamFlags {
         unsafe { from_glib(ffi::gst_stream_get_stream_flags(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_stream_get_stream_id")]
     #[doc(alias = "get_stream_id")]
+    #[doc(alias = "stream-id")]
     pub fn stream_id(&self) -> Option<glib::GString> {
         unsafe { from_glib_none(ffi::gst_stream_get_stream_id(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_stream_get_stream_type")]
     #[doc(alias = "get_stream_type")]
+    #[doc(alias = "stream-type")]
     pub fn stream_type(&self) -> StreamType {
         unsafe { from_glib(ffi::gst_stream_get_stream_type(self.to_glib_none().0)) }
     }
@@ -70,6 +73,7 @@ impl Stream {
     }
 
     #[doc(alias = "gst_stream_set_caps")]
+    #[doc(alias = "caps")]
     pub fn set_caps(&self, caps: Option<&Caps>) {
         unsafe {
             ffi::gst_stream_set_caps(self.to_glib_none().0, caps.to_glib_none().0);
@@ -77,6 +81,7 @@ impl Stream {
     }
 
     #[doc(alias = "gst_stream_set_stream_flags")]
+    #[doc(alias = "stream-flags")]
     pub fn set_stream_flags(&self, flags: StreamFlags) {
         unsafe {
             ffi::gst_stream_set_stream_flags(self.to_glib_none().0, flags.into_glib());
@@ -84,6 +89,7 @@ impl Stream {
     }
 
     #[doc(alias = "gst_stream_set_stream_type")]
+    #[doc(alias = "stream-type")]
     pub fn set_stream_type(&self, stream_type: StreamType) {
         unsafe {
             ffi::gst_stream_set_stream_type(self.to_glib_none().0, stream_type.into_glib());
@@ -91,6 +97,7 @@ impl Stream {
     }
 
     #[doc(alias = "gst_stream_set_tags")]
+    #[doc(alias = "tags")]
     pub fn set_tags(&self, tags: Option<&TagList>) {
         unsafe {
             ffi::gst_stream_set_tags(self.to_glib_none().0, tags.to_glib_none().0);

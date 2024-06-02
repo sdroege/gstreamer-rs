@@ -39,12 +39,14 @@ impl AppSink {
 
     #[doc(alias = "gst_app_sink_get_drop")]
     #[doc(alias = "get_drop")]
+    #[doc(alias = "drop")]
     pub fn is_drop(&self) -> bool {
         unsafe { from_glib(ffi::gst_app_sink_get_drop(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_app_sink_get_max_buffers")]
     #[doc(alias = "get_max_buffers")]
+    #[doc(alias = "max-buffers")]
     pub fn max_buffers(&self) -> u32 {
         unsafe { ffi::gst_app_sink_get_max_buffers(self.to_glib_none().0) }
     }
@@ -53,6 +55,7 @@ impl AppSink {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     #[doc(alias = "gst_app_sink_get_max_bytes")]
     #[doc(alias = "get_max_bytes")]
+    #[doc(alias = "max-bytes")]
     pub fn max_bytes(&self) -> u64 {
         unsafe { ffi::gst_app_sink_get_max_bytes(self.to_glib_none().0) }
     }
@@ -61,12 +64,14 @@ impl AppSink {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     #[doc(alias = "gst_app_sink_get_max_time")]
     #[doc(alias = "get_max_time")]
+    #[doc(alias = "max-time")]
     pub fn max_time(&self) -> Option<gst::ClockTime> {
         unsafe { from_glib(ffi::gst_app_sink_get_max_time(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_app_sink_get_wait_on_eos")]
     #[doc(alias = "get_wait_on_eos")]
+    #[doc(alias = "wait-on-eos")]
     pub fn is_wait_on_eos(&self) -> bool {
         unsafe { from_glib(ffi::gst_app_sink_get_wait_on_eos(self.to_glib_none().0)) }
     }
@@ -118,6 +123,7 @@ impl AppSink {
     //}
 
     #[doc(alias = "gst_app_sink_set_caps")]
+    #[doc(alias = "caps")]
     pub fn set_caps(&self, caps: Option<&gst::Caps>) {
         unsafe {
             ffi::gst_app_sink_set_caps(self.to_glib_none().0, caps.to_glib_none().0);
@@ -125,6 +131,7 @@ impl AppSink {
     }
 
     #[doc(alias = "gst_app_sink_set_drop")]
+    #[doc(alias = "drop")]
     pub fn set_drop(&self, drop: bool) {
         unsafe {
             ffi::gst_app_sink_set_drop(self.to_glib_none().0, drop.into_glib());
@@ -132,6 +139,7 @@ impl AppSink {
     }
 
     #[doc(alias = "gst_app_sink_set_max_buffers")]
+    #[doc(alias = "max-buffers")]
     pub fn set_max_buffers(&self, max: u32) {
         unsafe {
             ffi::gst_app_sink_set_max_buffers(self.to_glib_none().0, max);
@@ -141,6 +149,7 @@ impl AppSink {
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     #[doc(alias = "gst_app_sink_set_max_bytes")]
+    #[doc(alias = "max-bytes")]
     pub fn set_max_bytes(&self, max: u64) {
         unsafe {
             ffi::gst_app_sink_set_max_bytes(self.to_glib_none().0, max);
@@ -150,6 +159,7 @@ impl AppSink {
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     #[doc(alias = "gst_app_sink_set_max_time")]
+    #[doc(alias = "max-time")]
     pub fn set_max_time(&self, max: impl Into<Option<gst::ClockTime>>) {
         unsafe {
             ffi::gst_app_sink_set_max_time(self.to_glib_none().0, max.into().into_glib());
@@ -157,6 +167,7 @@ impl AppSink {
     }
 
     #[doc(alias = "gst_app_sink_set_wait_on_eos")]
+    #[doc(alias = "wait-on-eos")]
     pub fn set_wait_on_eos(&self, wait: bool) {
         unsafe {
             ffi::gst_app_sink_set_wait_on_eos(self.to_glib_none().0, wait.into_glib());

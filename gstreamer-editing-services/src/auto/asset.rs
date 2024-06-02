@@ -156,6 +156,7 @@ pub trait AssetExt: IsA<Asset> + sealed::Sealed + 'static {
 
     #[doc(alias = "ges_asset_get_extractable_type")]
     #[doc(alias = "get_extractable_type")]
+    #[doc(alias = "extractable-type")]
     fn extractable_type(&self) -> glib::types::Type {
         unsafe {
             from_glib(ffi::ges_asset_get_extractable_type(
@@ -179,6 +180,7 @@ pub trait AssetExt: IsA<Asset> + sealed::Sealed + 'static {
 
     #[doc(alias = "ges_asset_get_proxy_target")]
     #[doc(alias = "get_proxy_target")]
+    #[doc(alias = "proxy-target")]
     #[must_use]
     fn proxy_target(&self) -> Option<Asset> {
         unsafe {
@@ -198,6 +200,7 @@ pub trait AssetExt: IsA<Asset> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "ges_asset_set_proxy")]
+    #[doc(alias = "proxy")]
     fn set_proxy(&self, proxy: Option<&impl IsA<Asset>>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(

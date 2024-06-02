@@ -72,6 +72,7 @@ pub trait ClipAssetExt: IsA<ClipAsset> + sealed::Sealed + 'static {
 
     #[doc(alias = "ges_clip_asset_get_supported_formats")]
     #[doc(alias = "get_supported_formats")]
+    #[doc(alias = "supported-formats")]
     fn supported_formats(&self) -> TrackType {
         unsafe {
             from_glib(ffi::ges_clip_asset_get_supported_formats(
@@ -81,6 +82,7 @@ pub trait ClipAssetExt: IsA<ClipAsset> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "ges_clip_asset_set_supported_formats")]
+    #[doc(alias = "supported-formats")]
     fn set_supported_formats(&self, supportedformats: TrackType) {
         unsafe {
             ffi::ges_clip_asset_set_supported_formats(

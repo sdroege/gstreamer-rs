@@ -68,6 +68,7 @@ pub trait VideoEncoderExt: IsA<VideoEncoder> + sealed::Sealed + 'static {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_video_encoder_get_min_force_key_unit_interval")]
     #[doc(alias = "get_min_force_key_unit_interval")]
+    #[doc(alias = "min-force-key-unit-interval")]
     fn min_force_key_unit_interval(&self) -> Option<gst::ClockTime> {
         unsafe {
             from_glib(ffi::gst_video_encoder_get_min_force_key_unit_interval(
@@ -110,6 +111,7 @@ pub trait VideoEncoderExt: IsA<VideoEncoder> + sealed::Sealed + 'static {
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_video_encoder_set_min_force_key_unit_interval")]
+    #[doc(alias = "min-force-key-unit-interval")]
     fn set_min_force_key_unit_interval(&self, interval: impl Into<Option<gst::ClockTime>>) {
         unsafe {
             ffi::gst_video_encoder_set_min_force_key_unit_interval(

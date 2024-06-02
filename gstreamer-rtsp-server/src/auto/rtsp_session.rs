@@ -169,6 +169,7 @@ pub trait RTSPSessionExt: IsA<RTSPSession> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_rtsp_session_set_timeout")]
+    #[doc(alias = "timeout")]
     fn set_timeout(&self, timeout: u32) {
         unsafe {
             ffi::gst_rtsp_session_set_timeout(self.as_ref().to_glib_none().0, timeout);

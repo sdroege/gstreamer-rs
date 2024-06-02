@@ -33,6 +33,7 @@ impl DiscovererManager {
 
     #[doc(alias = "ges_discoverer_manager_get_use_cache")]
     #[doc(alias = "get_use_cache")]
+    #[doc(alias = "use-cache")]
     pub fn uses_cache(&self) -> bool {
         unsafe {
             from_glib(ffi::ges_discoverer_manager_get_use_cache(
@@ -42,6 +43,7 @@ impl DiscovererManager {
     }
 
     #[doc(alias = "ges_discoverer_manager_set_timeout")]
+    #[doc(alias = "timeout")]
     pub fn set_timeout(&self, timeout: impl Into<Option<gst::ClockTime>>) {
         unsafe {
             ffi::ges_discoverer_manager_set_timeout(
@@ -52,19 +54,24 @@ impl DiscovererManager {
     }
 
     #[doc(alias = "ges_discoverer_manager_set_use_cache")]
+    #[doc(alias = "use-cache")]
     pub fn set_use_cache(&self, use_cache: bool) {
         unsafe {
             ffi::ges_discoverer_manager_set_use_cache(self.to_glib_none().0, use_cache.into_glib());
         }
     }
 
+    #[cfg(not(feature = "v1_24"))]
+    #[cfg_attr(docsrs, doc(cfg(not(feature = "v1_24"))))]
     #[doc(alias = "use-cache")]
-    pub fn get_property_use_cache(&self) -> bool {
+    pub fn uses_cache(&self) -> bool {
         ObjectExt::property(self, "use-cache")
     }
 
+    #[cfg(not(feature = "v1_24"))]
+    #[cfg_attr(docsrs, doc(cfg(not(feature = "v1_24"))))]
     #[doc(alias = "use-cache")]
-    pub fn set_property_use_cache(&self, use_cache: bool) {
+    pub fn set_use_cache(&self, use_cache: bool) {
         ObjectExt::set_property(self, "use-cache", use_cache)
     }
 

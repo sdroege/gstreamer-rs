@@ -42,6 +42,7 @@ pub trait PipelineExt: IsA<Pipeline> + sealed::Sealed + 'static {
 
     #[doc(alias = "gst_pipeline_get_auto_flush_bus")]
     #[doc(alias = "get_auto_flush_bus")]
+    #[doc(alias = "auto-flush-bus")]
     fn is_auto_flush_bus(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_pipeline_get_auto_flush_bus(
@@ -99,6 +100,7 @@ pub trait PipelineExt: IsA<Pipeline> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_pipeline_set_auto_flush_bus")]
+    #[doc(alias = "auto-flush-bus")]
     fn set_auto_flush_bus(&self, auto_flush: bool) {
         unsafe {
             ffi::gst_pipeline_set_auto_flush_bus(
@@ -109,6 +111,7 @@ pub trait PipelineExt: IsA<Pipeline> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_pipeline_set_delay")]
+    #[doc(alias = "delay")]
     fn set_delay(&self, delay: ClockTime) {
         unsafe {
             ffi::gst_pipeline_set_delay(self.as_ref().to_glib_none().0, delay.into_glib());
@@ -116,6 +119,7 @@ pub trait PipelineExt: IsA<Pipeline> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_pipeline_set_latency")]
+    #[doc(alias = "latency")]
     fn set_latency(&self, latency: impl Into<Option<ClockTime>>) {
         unsafe {
             ffi::gst_pipeline_set_latency(

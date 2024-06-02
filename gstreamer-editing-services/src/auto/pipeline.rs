@@ -137,6 +137,7 @@ pub trait GESPipelineExt: IsA<Pipeline> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "ges_pipeline_set_mode")]
+    #[doc(alias = "mode")]
     fn set_mode(&self, mode: PipelineFlags) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -165,6 +166,7 @@ pub trait GESPipelineExt: IsA<Pipeline> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "ges_pipeline_set_timeline")]
+    #[doc(alias = "timeline")]
     fn set_timeline(&self, timeline: &impl IsA<Timeline>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(

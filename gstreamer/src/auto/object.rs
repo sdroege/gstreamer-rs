@@ -235,6 +235,7 @@ pub trait GstObjectExt: IsA<Object> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_object_set_parent")]
+    #[doc(alias = "parent")]
     fn set_parent(&self, parent: &impl IsA<Object>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(

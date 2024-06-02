@@ -56,6 +56,7 @@ pub trait BaseSinkExt: IsA<BaseSink> + sealed::Sealed + 'static {
 
     #[doc(alias = "gst_base_sink_get_last_sample")]
     #[doc(alias = "get_last_sample")]
+    #[doc(alias = "last-sample")]
     fn last_sample(&self) -> Option<gst::Sample> {
         unsafe {
             from_glib_full(ffi::gst_base_sink_get_last_sample(
@@ -77,12 +78,14 @@ pub trait BaseSinkExt: IsA<BaseSink> + sealed::Sealed + 'static {
 
     #[doc(alias = "gst_base_sink_get_max_bitrate")]
     #[doc(alias = "get_max_bitrate")]
+    #[doc(alias = "max-bitrate")]
     fn max_bitrate(&self) -> u64 {
         unsafe { ffi::gst_base_sink_get_max_bitrate(self.as_ref().to_glib_none().0) }
     }
 
     #[doc(alias = "gst_base_sink_get_max_lateness")]
     #[doc(alias = "get_max_lateness")]
+    #[doc(alias = "max-lateness")]
     fn max_lateness(&self) -> i64 {
         unsafe { ffi::gst_base_sink_get_max_lateness(self.as_ref().to_glib_none().0) }
     }
@@ -91,6 +94,7 @@ pub trait BaseSinkExt: IsA<BaseSink> + sealed::Sealed + 'static {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_base_sink_get_processing_deadline")]
     #[doc(alias = "get_processing_deadline")]
+    #[doc(alias = "processing-deadline")]
     fn processing_deadline(&self) -> gst::ClockTime {
         unsafe {
             try_from_glib(ffi::gst_base_sink_get_processing_deadline(
@@ -102,6 +106,7 @@ pub trait BaseSinkExt: IsA<BaseSink> + sealed::Sealed + 'static {
 
     #[doc(alias = "gst_base_sink_get_render_delay")]
     #[doc(alias = "get_render_delay")]
+    #[doc(alias = "render-delay")]
     fn render_delay(&self) -> gst::ClockTime {
         unsafe {
             try_from_glib(ffi::gst_base_sink_get_render_delay(
@@ -121,23 +126,27 @@ pub trait BaseSinkExt: IsA<BaseSink> + sealed::Sealed + 'static {
 
     #[doc(alias = "gst_base_sink_get_sync")]
     #[doc(alias = "get_sync")]
+    #[doc(alias = "sync")]
     fn is_sync(&self) -> bool {
         unsafe { from_glib(ffi::gst_base_sink_get_sync(self.as_ref().to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_base_sink_get_throttle_time")]
     #[doc(alias = "get_throttle_time")]
+    #[doc(alias = "throttle-time")]
     fn throttle_time(&self) -> u64 {
         unsafe { ffi::gst_base_sink_get_throttle_time(self.as_ref().to_glib_none().0) }
     }
 
     #[doc(alias = "gst_base_sink_get_ts_offset")]
     #[doc(alias = "get_ts_offset")]
+    #[doc(alias = "ts-offset")]
     fn ts_offset(&self) -> gst::ClockTimeDiff {
         unsafe { ffi::gst_base_sink_get_ts_offset(self.as_ref().to_glib_none().0) }
     }
 
     #[doc(alias = "gst_base_sink_set_blocksize")]
+    #[doc(alias = "blocksize")]
     fn set_blocksize(&self, blocksize: u32) {
         unsafe {
             ffi::gst_base_sink_set_blocksize(self.as_ref().to_glib_none().0, blocksize);
@@ -155,6 +164,7 @@ pub trait BaseSinkExt: IsA<BaseSink> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_base_sink_set_max_bitrate")]
+    #[doc(alias = "max-bitrate")]
     fn set_max_bitrate(&self, max_bitrate: u64) {
         unsafe {
             ffi::gst_base_sink_set_max_bitrate(self.as_ref().to_glib_none().0, max_bitrate);
@@ -162,6 +172,7 @@ pub trait BaseSinkExt: IsA<BaseSink> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_base_sink_set_max_lateness")]
+    #[doc(alias = "max-lateness")]
     fn set_max_lateness(&self, max_lateness: i64) {
         unsafe {
             ffi::gst_base_sink_set_max_lateness(self.as_ref().to_glib_none().0, max_lateness);
@@ -171,6 +182,7 @@ pub trait BaseSinkExt: IsA<BaseSink> + sealed::Sealed + 'static {
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_base_sink_set_processing_deadline")]
+    #[doc(alias = "processing-deadline")]
     fn set_processing_deadline(&self, processing_deadline: gst::ClockTime) {
         unsafe {
             ffi::gst_base_sink_set_processing_deadline(
@@ -181,6 +193,7 @@ pub trait BaseSinkExt: IsA<BaseSink> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_base_sink_set_render_delay")]
+    #[doc(alias = "render-delay")]
     fn set_render_delay(&self, delay: gst::ClockTime) {
         unsafe {
             ffi::gst_base_sink_set_render_delay(self.as_ref().to_glib_none().0, delay.into_glib());
@@ -188,6 +201,7 @@ pub trait BaseSinkExt: IsA<BaseSink> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_base_sink_set_sync")]
+    #[doc(alias = "sync")]
     fn set_sync(&self, sync: bool) {
         unsafe {
             ffi::gst_base_sink_set_sync(self.as_ref().to_glib_none().0, sync.into_glib());
@@ -195,6 +209,7 @@ pub trait BaseSinkExt: IsA<BaseSink> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_base_sink_set_throttle_time")]
+    #[doc(alias = "throttle-time")]
     fn set_throttle_time(&self, throttle: u64) {
         unsafe {
             ffi::gst_base_sink_set_throttle_time(self.as_ref().to_glib_none().0, throttle);
@@ -202,6 +217,7 @@ pub trait BaseSinkExt: IsA<BaseSink> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_base_sink_set_ts_offset")]
+    #[doc(alias = "ts-offset")]
     fn set_ts_offset(&self, offset: gst::ClockTimeDiff) {
         unsafe {
             ffi::gst_base_sink_set_ts_offset(self.as_ref().to_glib_none().0, offset);

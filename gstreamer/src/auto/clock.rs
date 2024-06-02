@@ -267,6 +267,7 @@ pub trait ClockExt: IsA<Clock> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_clock_set_timeout")]
+    #[doc(alias = "timeout")]
     fn set_timeout(&self, timeout: impl Into<Option<ClockTime>>) {
         unsafe {
             ffi::gst_clock_set_timeout(self.as_ref().to_glib_none().0, timeout.into().into_glib());

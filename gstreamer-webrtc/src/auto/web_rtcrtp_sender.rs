@@ -31,6 +31,7 @@ impl WebRTCRTPSender {
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_webrtc_rtp_sender_set_priority")]
+    #[doc(alias = "priority")]
     pub fn set_priority(&self, priority: WebRTCPriorityType) {
         unsafe {
             ffi::gst_webrtc_rtp_sender_set_priority(self.to_glib_none().0, priority.into_glib());

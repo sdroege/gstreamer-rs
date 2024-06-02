@@ -56,6 +56,7 @@ pub trait UriClipExt: IsA<UriClip> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "ges_uri_clip_set_is_image")]
+    #[doc(alias = "is-image")]
     fn set_is_image(&self, is_image: bool) {
         unsafe {
             ffi::ges_uri_clip_set_is_image(self.as_ref().to_glib_none().0, is_image.into_glib());
@@ -63,6 +64,7 @@ pub trait UriClipExt: IsA<UriClip> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "ges_uri_clip_set_mute")]
+    #[doc(alias = "mute")]
     fn set_mute(&self, mute: bool) {
         unsafe {
             ffi::ges_uri_clip_set_mute(self.as_ref().to_glib_none().0, mute.into_glib());

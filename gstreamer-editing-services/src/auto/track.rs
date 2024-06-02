@@ -92,6 +92,7 @@ pub trait GESTrackExt: IsA<Track> + sealed::Sealed + 'static {
 
     #[doc(alias = "ges_track_get_mixing")]
     #[doc(alias = "get_mixing")]
+    #[doc(alias = "mixing")]
     fn is_mixing(&self) -> bool {
         unsafe { from_glib(ffi::ges_track_get_mixing(self.as_ref().to_glib_none().0)) }
     }
@@ -100,6 +101,7 @@ pub trait GESTrackExt: IsA<Track> + sealed::Sealed + 'static {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_track_get_restriction_caps")]
     #[doc(alias = "get_restriction_caps")]
+    #[doc(alias = "restriction-caps")]
     fn restriction_caps(&self) -> Option<gst::Caps> {
         unsafe {
             from_glib_full(ffi::ges_track_get_restriction_caps(
@@ -156,6 +158,7 @@ pub trait GESTrackExt: IsA<Track> + sealed::Sealed + 'static {
     //}
 
     #[doc(alias = "ges_track_set_mixing")]
+    #[doc(alias = "mixing")]
     fn set_mixing(&self, mixing: bool) {
         unsafe {
             ffi::ges_track_set_mixing(self.as_ref().to_glib_none().0, mixing.into_glib());
@@ -163,6 +166,7 @@ pub trait GESTrackExt: IsA<Track> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "ges_track_set_restriction_caps")]
+    #[doc(alias = "restriction-caps")]
     fn set_restriction_caps(&self, caps: &gst::Caps) {
         unsafe {
             ffi::ges_track_set_restriction_caps(
@@ -208,8 +212,10 @@ pub trait GESTrackExt: IsA<Track> + sealed::Sealed + 'static {
         ObjectExt::set_property(self.as_ref(), "id", id)
     }
 
+    #[cfg(not(feature = "v1_18"))]
+    #[cfg_attr(docsrs, doc(cfg(not(feature = "v1_18"))))]
     #[doc(alias = "restriction-caps")]
-    fn get_property_restriction_caps(&self) -> Option<gst::Caps> {
+    fn restriction_caps(&self) -> Option<gst::Caps> {
         ObjectExt::property(self.as_ref(), "restriction-caps")
     }
 

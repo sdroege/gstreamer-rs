@@ -127,6 +127,7 @@ pub trait VideoDecoderExt: IsA<VideoDecoder> + sealed::Sealed + 'static {
 
     #[doc(alias = "gst_video_decoder_get_max_errors")]
     #[doc(alias = "get_max_errors")]
+    #[doc(alias = "max-errors")]
     fn max_errors(&self) -> i32 {
         unsafe { ffi::gst_video_decoder_get_max_errors(self.as_ref().to_glib_none().0) }
     }
@@ -271,6 +272,7 @@ pub trait VideoDecoderExt: IsA<VideoDecoder> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_video_decoder_set_max_errors")]
+    #[doc(alias = "max-errors")]
     fn set_max_errors(&self, num: i32) {
         unsafe {
             ffi::gst_video_decoder_set_max_errors(self.as_ref().to_glib_none().0, num);

@@ -153,6 +153,7 @@ pub trait AggregatorExt: IsA<Aggregator> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_aggregator_set_latency")]
+    #[doc(alias = "latency")]
     fn set_latency(
         &self,
         min_latency: gst::ClockTime,

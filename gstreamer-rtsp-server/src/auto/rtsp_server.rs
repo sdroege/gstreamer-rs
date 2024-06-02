@@ -174,6 +174,7 @@ pub trait RTSPServerExt: IsA<RTSPServer> + sealed::Sealed + 'static {
 
     #[doc(alias = "gst_rtsp_server_get_bound_port")]
     #[doc(alias = "get_bound_port")]
+    #[doc(alias = "bound-port")]
     fn bound_port(&self) -> i32 {
         unsafe { ffi::gst_rtsp_server_get_bound_port(self.as_ref().to_glib_none().0) }
     }
@@ -182,12 +183,14 @@ pub trait RTSPServerExt: IsA<RTSPServer> + sealed::Sealed + 'static {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_rtsp_server_get_content_length_limit")]
     #[doc(alias = "get_content_length_limit")]
+    #[doc(alias = "content-length-limit")]
     fn content_length_limit(&self) -> u32 {
         unsafe { ffi::gst_rtsp_server_get_content_length_limit(self.as_ref().to_glib_none().0) }
     }
 
     #[doc(alias = "gst_rtsp_server_get_mount_points")]
     #[doc(alias = "get_mount_points")]
+    #[doc(alias = "mount-points")]
     fn mount_points(&self) -> Option<RTSPMountPoints> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_server_get_mount_points(
@@ -208,6 +211,7 @@ pub trait RTSPServerExt: IsA<RTSPServer> + sealed::Sealed + 'static {
 
     #[doc(alias = "gst_rtsp_server_get_session_pool")]
     #[doc(alias = "get_session_pool")]
+    #[doc(alias = "session-pool")]
     fn session_pool(&self) -> Option<RTSPSessionPool> {
         unsafe {
             from_glib_full(ffi::gst_rtsp_server_get_session_pool(
@@ -227,6 +231,7 @@ pub trait RTSPServerExt: IsA<RTSPServer> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_rtsp_server_set_address")]
+    #[doc(alias = "address")]
     fn set_address(&self, address: &str) {
         unsafe {
             ffi::gst_rtsp_server_set_address(
@@ -247,6 +252,7 @@ pub trait RTSPServerExt: IsA<RTSPServer> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_rtsp_server_set_backlog")]
+    #[doc(alias = "backlog")]
     fn set_backlog(&self, backlog: i32) {
         unsafe {
             ffi::gst_rtsp_server_set_backlog(self.as_ref().to_glib_none().0, backlog);
@@ -256,6 +262,7 @@ pub trait RTSPServerExt: IsA<RTSPServer> + sealed::Sealed + 'static {
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_rtsp_server_set_content_length_limit")]
+    #[doc(alias = "content-length-limit")]
     fn set_content_length_limit(&self, limit: u32) {
         unsafe {
             ffi::gst_rtsp_server_set_content_length_limit(self.as_ref().to_glib_none().0, limit);
@@ -263,6 +270,7 @@ pub trait RTSPServerExt: IsA<RTSPServer> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_rtsp_server_set_mount_points")]
+    #[doc(alias = "mount-points")]
     fn set_mount_points(&self, mounts: Option<&impl IsA<RTSPMountPoints>>) {
         unsafe {
             ffi::gst_rtsp_server_set_mount_points(
@@ -273,6 +281,7 @@ pub trait RTSPServerExt: IsA<RTSPServer> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_rtsp_server_set_service")]
+    #[doc(alias = "service")]
     fn set_service(&self, service: &str) {
         unsafe {
             ffi::gst_rtsp_server_set_service(
@@ -283,6 +292,7 @@ pub trait RTSPServerExt: IsA<RTSPServer> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_rtsp_server_set_session_pool")]
+    #[doc(alias = "session-pool")]
     fn set_session_pool(&self, pool: Option<&impl IsA<RTSPSessionPool>>) {
         unsafe {
             ffi::gst_rtsp_server_set_session_pool(
@@ -324,13 +334,17 @@ pub trait RTSPServerExt: IsA<RTSPServer> + sealed::Sealed + 'static {
         }
     }
 
+    #[cfg(not(feature = "v1_18"))]
+    #[cfg_attr(docsrs, doc(cfg(not(feature = "v1_18"))))]
     #[doc(alias = "content-length-limit")]
-    fn get_property_content_length_limit(&self) -> u32 {
+    fn content_length_limit(&self) -> u32 {
         ObjectExt::property(self.as_ref(), "content-length-limit")
     }
 
+    #[cfg(not(feature = "v1_18"))]
+    #[cfg_attr(docsrs, doc(cfg(not(feature = "v1_18"))))]
     #[doc(alias = "content-length-limit")]
-    fn set_property_content_length_limit(&self, content_length_limit: u32) {
+    fn set_content_length_limit(&self, content_length_limit: u32) {
         ObjectExt::set_property(self.as_ref(), "content-length-limit", content_length_limit)
     }
 

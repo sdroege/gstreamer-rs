@@ -80,6 +80,7 @@ pub trait TestClipExt: IsA<TestClip> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "ges_test_clip_set_mute")]
+    #[doc(alias = "mute")]
     fn set_mute(&self, mute: bool) {
         unsafe {
             ffi::ges_test_clip_set_mute(self.as_ref().to_glib_none().0, mute.into_glib());
@@ -87,6 +88,7 @@ pub trait TestClipExt: IsA<TestClip> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "ges_test_clip_set_volume")]
+    #[doc(alias = "volume")]
     fn set_volume(&self, volume: f64) {
         unsafe {
             ffi::ges_test_clip_set_volume(self.as_ref().to_glib_none().0, volume);
@@ -94,6 +96,7 @@ pub trait TestClipExt: IsA<TestClip> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "ges_test_clip_set_vpattern")]
+    #[doc(alias = "vpattern")]
     fn set_vpattern(&self, vpattern: VideoTestPattern) {
         unsafe {
             ffi::ges_test_clip_set_vpattern(self.as_ref().to_glib_none().0, vpattern.into_glib());

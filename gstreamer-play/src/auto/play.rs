@@ -36,6 +36,7 @@ impl Play {
 
     #[doc(alias = "gst_play_get_audio_video_offset")]
     #[doc(alias = "get_audio_video_offset")]
+    #[doc(alias = "audio-video-offset")]
     pub fn audio_video_offset(&self) -> i64 {
         unsafe { ffi::gst_play_get_audio_video_offset(self.to_glib_none().0) }
     }
@@ -48,12 +49,14 @@ impl Play {
 
     #[doc(alias = "gst_play_get_current_audio_track")]
     #[doc(alias = "get_current_audio_track")]
+    #[doc(alias = "current-audio-track")]
     pub fn current_audio_track(&self) -> Option<PlayAudioInfo> {
         unsafe { from_glib_full(ffi::gst_play_get_current_audio_track(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_play_get_current_subtitle_track")]
     #[doc(alias = "get_current_subtitle_track")]
+    #[doc(alias = "current-subtitle-track")]
     pub fn current_subtitle_track(&self) -> Option<PlaySubtitleInfo> {
         unsafe {
             from_glib_full(ffi::gst_play_get_current_subtitle_track(
@@ -64,6 +67,7 @@ impl Play {
 
     #[doc(alias = "gst_play_get_current_video_track")]
     #[doc(alias = "get_current_video_track")]
+    #[doc(alias = "current-video-track")]
     pub fn current_video_track(&self) -> Option<PlayVideoInfo> {
         unsafe { from_glib_full(ffi::gst_play_get_current_video_track(self.to_glib_none().0)) }
     }
@@ -86,6 +90,7 @@ impl Play {
 
     #[doc(alias = "gst_play_get_media_info")]
     #[doc(alias = "get_media_info")]
+    #[doc(alias = "media-info")]
     pub fn media_info(&self) -> Option<PlayMediaInfo> {
         unsafe { from_glib_full(ffi::gst_play_get_media_info(self.to_glib_none().0)) }
     }
@@ -110,6 +115,7 @@ impl Play {
 
     #[doc(alias = "gst_play_get_mute")]
     #[doc(alias = "get_mute")]
+    #[doc(alias = "mute")]
     pub fn is_muted(&self) -> bool {
         unsafe { from_glib(ffi::gst_play_get_mute(self.to_glib_none().0)) }
     }
@@ -140,6 +146,7 @@ impl Play {
 
     #[doc(alias = "gst_play_get_subtitle_video_offset")]
     #[doc(alias = "get_subtitle_video_offset")]
+    #[doc(alias = "subtitle-video-offset")]
     pub fn subtitle_video_offset(&self) -> i64 {
         unsafe { ffi::gst_play_get_subtitle_video_offset(self.to_glib_none().0) }
     }
@@ -200,6 +207,7 @@ impl Play {
     }
 
     #[doc(alias = "gst_play_set_audio_video_offset")]
+    #[doc(alias = "audio-video-offset")]
     pub fn set_audio_video_offset(&self, offset: i64) {
         unsafe {
             ffi::gst_play_set_audio_video_offset(self.to_glib_none().0, offset);
@@ -228,6 +236,7 @@ impl Play {
     }
 
     #[doc(alias = "gst_play_set_mute")]
+    #[doc(alias = "mute")]
     pub fn set_mute(&self, val: bool) {
         unsafe {
             ffi::gst_play_set_mute(self.to_glib_none().0, val.into_glib());
@@ -235,6 +244,7 @@ impl Play {
     }
 
     #[doc(alias = "gst_play_set_rate")]
+    #[doc(alias = "rate")]
     pub fn set_rate(&self, rate: f64) {
         unsafe {
             ffi::gst_play_set_rate(self.to_glib_none().0, rate);
@@ -266,6 +276,7 @@ impl Play {
     }
 
     #[doc(alias = "gst_play_set_subtitle_video_offset")]
+    #[doc(alias = "subtitle-video-offset")]
     pub fn set_subtitle_video_offset(&self, offset: i64) {
         unsafe {
             ffi::gst_play_set_subtitle_video_offset(self.to_glib_none().0, offset);
@@ -273,6 +284,7 @@ impl Play {
     }
 
     #[doc(alias = "gst_play_set_uri")]
+    #[doc(alias = "uri")]
     pub fn set_uri(&self, uri: Option<&str>) {
         unsafe {
             ffi::gst_play_set_uri(self.to_glib_none().0, uri.to_glib_none().0);
@@ -314,6 +326,7 @@ impl Play {
     }
 
     #[doc(alias = "gst_play_set_volume")]
+    #[doc(alias = "volume")]
     pub fn set_volume(&self, val: f64) {
         unsafe {
             ffi::gst_play_set_volume(self.to_glib_none().0, val);

@@ -40,6 +40,7 @@ pub trait AudioBaseSinkExt: IsA<AudioBaseSink> + sealed::Sealed + 'static {
 
     #[doc(alias = "gst_audio_base_sink_get_alignment_threshold")]
     #[doc(alias = "get_alignment_threshold")]
+    #[doc(alias = "alignment-threshold")]
     fn alignment_threshold(&self) -> gst::ClockTime {
         unsafe {
             try_from_glib(ffi::gst_audio_base_sink_get_alignment_threshold(
@@ -51,6 +52,7 @@ pub trait AudioBaseSinkExt: IsA<AudioBaseSink> + sealed::Sealed + 'static {
 
     #[doc(alias = "gst_audio_base_sink_get_discont_wait")]
     #[doc(alias = "get_discont_wait")]
+    #[doc(alias = "discont-wait")]
     fn discont_wait(&self) -> gst::ClockTime {
         unsafe {
             try_from_glib(ffi::gst_audio_base_sink_get_discont_wait(
@@ -62,12 +64,14 @@ pub trait AudioBaseSinkExt: IsA<AudioBaseSink> + sealed::Sealed + 'static {
 
     #[doc(alias = "gst_audio_base_sink_get_drift_tolerance")]
     #[doc(alias = "get_drift_tolerance")]
+    #[doc(alias = "drift-tolerance")]
     fn drift_tolerance(&self) -> i64 {
         unsafe { ffi::gst_audio_base_sink_get_drift_tolerance(self.as_ref().to_glib_none().0) }
     }
 
     #[doc(alias = "gst_audio_base_sink_get_provide_clock")]
     #[doc(alias = "get_provide_clock")]
+    #[doc(alias = "provide-clock")]
     fn is_provide_clock(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_audio_base_sink_get_provide_clock(
@@ -78,6 +82,7 @@ pub trait AudioBaseSinkExt: IsA<AudioBaseSink> + sealed::Sealed + 'static {
 
     //#[doc(alias = "gst_audio_base_sink_get_slave_method")]
     //#[doc(alias = "get_slave_method")]
+    //#[doc(alias = "slave-method")]
     //fn slave_method(&self) -> /*Ignored*/AudioBaseSinkSlaveMethod {
     //    unsafe { TODO: call ffi:gst_audio_base_sink_get_slave_method() }
     //}
@@ -90,6 +95,7 @@ pub trait AudioBaseSinkExt: IsA<AudioBaseSink> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_audio_base_sink_set_alignment_threshold")]
+    #[doc(alias = "alignment-threshold")]
     fn set_alignment_threshold(&self, alignment_threshold: gst::ClockTime) {
         unsafe {
             ffi::gst_audio_base_sink_set_alignment_threshold(
@@ -105,6 +111,7 @@ pub trait AudioBaseSinkExt: IsA<AudioBaseSink> + sealed::Sealed + 'static {
     //}
 
     #[doc(alias = "gst_audio_base_sink_set_discont_wait")]
+    #[doc(alias = "discont-wait")]
     fn set_discont_wait(&self, discont_wait: gst::ClockTime) {
         unsafe {
             ffi::gst_audio_base_sink_set_discont_wait(
@@ -115,6 +122,7 @@ pub trait AudioBaseSinkExt: IsA<AudioBaseSink> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_audio_base_sink_set_drift_tolerance")]
+    #[doc(alias = "drift-tolerance")]
     fn set_drift_tolerance(&self, drift_tolerance: i64) {
         unsafe {
             ffi::gst_audio_base_sink_set_drift_tolerance(
@@ -125,6 +133,7 @@ pub trait AudioBaseSinkExt: IsA<AudioBaseSink> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_audio_base_sink_set_provide_clock")]
+    #[doc(alias = "provide-clock")]
     fn set_provide_clock(&self, provide: bool) {
         unsafe {
             ffi::gst_audio_base_sink_set_provide_clock(
@@ -135,6 +144,7 @@ pub trait AudioBaseSinkExt: IsA<AudioBaseSink> + sealed::Sealed + 'static {
     }
 
     //#[doc(alias = "gst_audio_base_sink_set_slave_method")]
+    //#[doc(alias = "slave-method")]
     //fn set_slave_method(&self, method: /*Ignored*/AudioBaseSinkSlaveMethod) {
     //    unsafe { TODO: call ffi:gst_audio_base_sink_set_slave_method() }
     //}

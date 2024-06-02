@@ -56,6 +56,7 @@ pub trait TrackElementAssetExt: IsA<TrackElementAsset> + sealed::Sealed + 'stati
 
     #[doc(alias = "ges_track_element_asset_get_track_type")]
     #[doc(alias = "get_track_type")]
+    #[doc(alias = "track-type")]
     fn track_type(&self) -> TrackType {
         unsafe {
             from_glib(ffi::ges_track_element_asset_get_track_type(
@@ -65,6 +66,7 @@ pub trait TrackElementAssetExt: IsA<TrackElementAsset> + sealed::Sealed + 'stati
     }
 
     #[doc(alias = "ges_track_element_asset_set_track_type")]
+    #[doc(alias = "track-type")]
     fn set_track_type(&self, type_: TrackType) {
         unsafe {
             ffi::ges_track_element_asset_set_track_type(

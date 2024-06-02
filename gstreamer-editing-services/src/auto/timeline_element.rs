@@ -191,6 +191,7 @@ pub trait TimelineElementExt: IsA<TimelineElement> + sealed::Sealed + 'static {
 
     #[doc(alias = "ges_timeline_element_get_max_duration")]
     #[doc(alias = "get_max_duration")]
+    #[doc(alias = "max-duration")]
     fn max_duration(&self) -> Option<gst::ClockTime> {
         unsafe {
             from_glib(ffi::ges_timeline_element_get_max_duration(
@@ -461,6 +462,7 @@ pub trait TimelineElementExt: IsA<TimelineElement> + sealed::Sealed + 'static {
     //}
 
     #[doc(alias = "ges_timeline_element_set_duration")]
+    #[doc(alias = "duration")]
     fn set_duration(&self, duration: impl Into<Option<gst::ClockTime>>) -> bool {
         unsafe {
             from_glib(ffi::ges_timeline_element_set_duration(
@@ -481,6 +483,7 @@ pub trait TimelineElementExt: IsA<TimelineElement> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "ges_timeline_element_set_max_duration")]
+    #[doc(alias = "max-duration")]
     fn set_max_duration(&self, maxduration: impl Into<Option<gst::ClockTime>>) -> bool {
         unsafe {
             from_glib(ffi::ges_timeline_element_set_max_duration(
@@ -491,6 +494,7 @@ pub trait TimelineElementExt: IsA<TimelineElement> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "ges_timeline_element_set_name")]
+    #[doc(alias = "name")]
     fn set_name(&self, name: Option<&str>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -504,6 +508,7 @@ pub trait TimelineElementExt: IsA<TimelineElement> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "ges_timeline_element_set_parent")]
+    #[doc(alias = "parent")]
     fn set_parent(&self, parent: &impl IsA<TimelineElement>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(
@@ -519,6 +524,7 @@ pub trait TimelineElementExt: IsA<TimelineElement> + sealed::Sealed + 'static {
     #[deprecated = "Since 1.10"]
     #[allow(deprecated)]
     #[doc(alias = "ges_timeline_element_set_priority")]
+    #[doc(alias = "priority")]
     fn set_priority(&self, priority: u32) -> bool {
         unsafe {
             from_glib(ffi::ges_timeline_element_set_priority(
@@ -529,6 +535,7 @@ pub trait TimelineElementExt: IsA<TimelineElement> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "ges_timeline_element_set_start")]
+    #[doc(alias = "start")]
     fn set_start(&self, start: gst::ClockTime) -> bool {
         unsafe {
             from_glib(ffi::ges_timeline_element_set_start(
@@ -539,6 +546,7 @@ pub trait TimelineElementExt: IsA<TimelineElement> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "ges_timeline_element_set_timeline")]
+    #[doc(alias = "timeline")]
     fn set_timeline(&self, timeline: &impl IsA<Timeline>) -> Result<(), glib::error::BoolError> {
         unsafe {
             glib::result_from_gboolean!(

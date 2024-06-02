@@ -449,6 +449,7 @@ pub trait PadExt: IsA<Pad> + sealed::Sealed + 'static {
     //}
 
     #[doc(alias = "gst_pad_set_offset")]
+    #[doc(alias = "offset")]
     fn set_offset(&self, offset: i64) {
         unsafe {
             ffi::gst_pad_set_offset(self.as_ref().to_glib_none().0, offset);

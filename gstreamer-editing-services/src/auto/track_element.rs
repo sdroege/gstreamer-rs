@@ -98,6 +98,7 @@ pub trait TrackElementExt: IsA<TrackElement> + sealed::Sealed + 'static {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_track_element_get_auto_clamp_control_sources")]
     #[doc(alias = "get_auto_clamp_control_sources")]
+    #[doc(alias = "auto-clamp-control-sources")]
     fn is_auto_clamp_control_sources(&self) -> bool {
         unsafe {
             from_glib(ffi::ges_track_element_get_auto_clamp_control_sources(
@@ -203,6 +204,7 @@ pub trait TrackElementExt: IsA<TrackElement> + sealed::Sealed + 'static {
 
     #[doc(alias = "ges_track_element_get_track_type")]
     #[doc(alias = "get_track_type")]
+    #[doc(alias = "track-type")]
     fn track_type(&self) -> TrackType {
         unsafe {
             from_glib(ffi::ges_track_element_get_track_type(
@@ -290,6 +292,7 @@ pub trait TrackElementExt: IsA<TrackElement> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "ges_track_element_set_active")]
+    #[doc(alias = "active")]
     fn set_active(&self, active: bool) -> bool {
         unsafe {
             from_glib(ffi::ges_track_element_set_active(
@@ -302,6 +305,7 @@ pub trait TrackElementExt: IsA<TrackElement> + sealed::Sealed + 'static {
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_track_element_set_auto_clamp_control_sources")]
+    #[doc(alias = "auto-clamp-control-sources")]
     fn set_auto_clamp_control_sources(&self, auto_clamp: bool) {
         unsafe {
             ffi::ges_track_element_set_auto_clamp_control_sources(
@@ -370,6 +374,7 @@ pub trait TrackElementExt: IsA<TrackElement> + sealed::Sealed + 'static {
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_track_element_set_has_internal_source")]
+    #[doc(alias = "has-internal-source")]
     fn set_has_internal_source(&self, has_internal_source: bool) -> bool {
         unsafe {
             from_glib(ffi::ges_track_element_set_has_internal_source(
@@ -380,6 +385,7 @@ pub trait TrackElementExt: IsA<TrackElement> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "ges_track_element_set_track_type")]
+    #[doc(alias = "track-type")]
     fn set_track_type(&self, type_: TrackType) {
         unsafe {
             ffi::ges_track_element_set_track_type(

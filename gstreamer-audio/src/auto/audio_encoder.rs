@@ -108,6 +108,7 @@ pub trait AudioEncoderExt: IsA<AudioEncoder> + sealed::Sealed + 'static {
 
     #[doc(alias = "gst_audio_encoder_get_hard_resync")]
     #[doc(alias = "get_hard_resync")]
+    #[doc(alias = "hard-resync")]
     fn is_hard_resync(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_audio_encoder_get_hard_resync(
@@ -142,6 +143,7 @@ pub trait AudioEncoderExt: IsA<AudioEncoder> + sealed::Sealed + 'static {
 
     #[doc(alias = "gst_audio_encoder_get_mark_granule")]
     #[doc(alias = "get_mark_granule")]
+    #[doc(alias = "mark-granule")]
     fn is_mark_granule(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_audio_encoder_get_mark_granule(
@@ -152,6 +154,7 @@ pub trait AudioEncoderExt: IsA<AudioEncoder> + sealed::Sealed + 'static {
 
     #[doc(alias = "gst_audio_encoder_get_perfect_timestamp")]
     #[doc(alias = "get_perfect_timestamp")]
+    #[doc(alias = "perfect-timestamp")]
     fn is_perfect_timestamp(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_audio_encoder_get_perfect_timestamp(
@@ -245,6 +248,7 @@ pub trait AudioEncoderExt: IsA<AudioEncoder> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_audio_encoder_set_hard_resync")]
+    #[doc(alias = "hard-resync")]
     fn set_hard_resync(&self, enabled: bool) {
         unsafe {
             ffi::gst_audio_encoder_set_hard_resync(
@@ -283,6 +287,7 @@ pub trait AudioEncoderExt: IsA<AudioEncoder> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_audio_encoder_set_perfect_timestamp")]
+    #[doc(alias = "perfect-timestamp")]
     fn set_perfect_timestamp(&self, enabled: bool) {
         unsafe {
             ffi::gst_audio_encoder_set_perfect_timestamp(
@@ -293,6 +298,7 @@ pub trait AudioEncoderExt: IsA<AudioEncoder> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_audio_encoder_set_tolerance")]
+    #[doc(alias = "tolerance")]
     fn set_tolerance(&self, tolerance: gst::ClockTime) {
         unsafe {
             ffi::gst_audio_encoder_set_tolerance(

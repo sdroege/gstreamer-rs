@@ -146,6 +146,7 @@ pub trait LayerExt: IsA<Layer> + sealed::Sealed + 'static {
 
     #[doc(alias = "ges_layer_get_auto_transition")]
     #[doc(alias = "get_auto_transition")]
+    #[doc(alias = "auto-transition")]
     fn is_auto_transition(&self) -> bool {
         unsafe {
             from_glib(ffi::ges_layer_get_auto_transition(
@@ -233,6 +234,7 @@ pub trait LayerExt: IsA<Layer> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "ges_layer_set_auto_transition")]
+    #[doc(alias = "auto-transition")]
     fn set_auto_transition(&self, auto_transition: bool) {
         unsafe {
             ffi::ges_layer_set_auto_transition(
@@ -245,6 +247,7 @@ pub trait LayerExt: IsA<Layer> + sealed::Sealed + 'static {
     #[cfg_attr(feature = "v1_16", deprecated = "Since 1.16")]
     #[allow(deprecated)]
     #[doc(alias = "ges_layer_set_priority")]
+    #[doc(alias = "priority")]
     fn set_priority(&self, priority: u32) {
         unsafe {
             ffi::ges_layer_set_priority(self.as_ref().to_glib_none().0, priority);
