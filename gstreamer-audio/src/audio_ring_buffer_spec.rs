@@ -8,6 +8,7 @@ use gst::Caps;
 use crate::{ffi, AudioInfo, AudioRingBufferFormatType};
 
 #[repr(transparent)]
+#[doc(alias = "GstAudioRingBufferSpec")]
 pub struct AudioRingBufferSpec(pub(crate) ffi::GstAudioRingBufferSpec);
 
 impl AudioRingBufferSpec {
