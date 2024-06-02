@@ -460,6 +460,7 @@ impl DebugCategory {
         if std::io::Write::write_fmt(&mut w, args).is_err() {
             return;
         }
+        w.push(0);
 
         self.log_id_literal_unfiltered_internal(id, level, file, function, line, unsafe {
             glib::GStr::from_utf8_with_nul_unchecked(&w)
@@ -1498,8 +1499,14 @@ mod tests {
             Some("Blablabla"),
         );
 
+        cat.set_threshold(crate::DebugLevel::Trace);
+
         trace!(cat, id: "123", "test");
         trace!(cat, id: glib::GString::from("123"), "test");
         trace!(cat, id: &glib::GString::from("123"), "test");
+
+        // Try with a formatted string too (which is a different code path in the bindings)
+        let log_id = glib::GString::from("456");
+        trace!(cat, id: &log_id , "{log_id:?}");
     }
 }
