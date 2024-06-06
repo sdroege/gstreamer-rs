@@ -16,7 +16,7 @@ for crate in gstreamer* gstreamer-gl/{egl,wayland,x11}; do
         echo "Building and testing $crate with $FEATURES"
 
         cargo build --locked --color=always --manifest-path "$crate/Cargo.toml" $FEATURES
-        G_DEBUG=fatal_warnings cargo test --color=always --manifest-path "$crate/Cargo.toml" $FEATURES
+        RUST_BACKTRACE=1 G_DEBUG=fatal_warnings cargo test --color=always --manifest-path "$crate/Cargo.toml" $FEATURES
     fi
 done
 

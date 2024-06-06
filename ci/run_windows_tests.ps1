@@ -76,6 +76,7 @@ foreach($features in $features_matrix) {
         }
 
         $env:G_DEBUG="fatal_warnings"
+        $env:RUST_BACKTRACE="1"
         cargo test --no-fail-fast --color=always --manifest-path $crate/Cargo.toml $env:LocalFeatures
 
         if (!$?) {
