@@ -33,5 +33,5 @@ for crate in gstreamer/sys \
              gstreamer-video/sys \
              gstreamer-webrtc/sys; do
     echo "Testing $crate with --all-features)"
-    cargo test --locked --color=always --manifest-path $crate/Cargo.toml --all-features
+    RUST_BACKTRACE=1 cargo test --locked --color=always --manifest-path $crate/Cargo.toml --all-features
 done
