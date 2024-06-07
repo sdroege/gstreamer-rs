@@ -42,46 +42,46 @@ name = "GstAudio.AudioFormat"
 status = "generate"
     [[object.member]]
     name = "f32"
-    alias = true
+    ignore = true
     [[object.member]]
     name = "f64"
-    alias = true
+    ignore = true
     [[object.member]]
     name = "s16"
-    alias = true
+    ignore = true
     [[object.member]]
     name = "s18"
-    alias = true
+    ignore = true
     [[object.member]]
     name = "s20"
-    alias = true
+    ignore = true
     [[object.member]]
     name = "s24"
-    alias = true
+    ignore = true
     [[object.member]]
     name = "s24_32"
-    alias = true
+    ignore = true
     [[object.member]]
     name = "s32"
-    alias = true
+    ignore = true
     [[object.member]]
     name = "u16"
-    alias = true
+    ignore = true
     [[object.member]]
     name = "u18"
-    alias = true
+    ignore = true
     [[object.member]]
     name = "u20"
-    alias = true
+    ignore = true
     [[object.member]]
     name = "u24"
-    alias = true
+    ignore = true
     [[object.member]]
     name = "u24_32"
-    alias = true
+    ignore = true
     [[object.member]]
     name = "u32"
-    alias = true
+    ignore = true
 
 [[object]]
 name = "GstAudio.*"
