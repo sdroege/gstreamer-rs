@@ -985,6 +985,14 @@ impl ::std::fmt::Debug for GstAudioRingBufferClass {
     }
 }
 
+#[repr(C)]
+pub struct _GstAudioRingBufferPrivate {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
+
+pub type GstAudioRingBufferPrivate = _GstAudioRingBufferPrivate;
+
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct GstAudioRingBufferSpec {
@@ -1429,7 +1437,8 @@ pub struct GstAudioRingBuffer {
     pub may_start: c_int,
     pub active: gboolean,
     pub cb_data_notify: glib::GDestroyNotify,
-    pub _gst_reserved: [gpointer; 3],
+    pub priv_: *mut GstAudioRingBufferPrivate,
+    pub _gst_reserved: [gpointer; 2],
 }
 
 impl ::std::fmt::Debug for GstAudioRingBuffer {
@@ -2290,6 +2299,12 @@ extern "C" {
     ) -> gboolean;
     pub fn gst_audio_ring_buffer_delay(buf: *mut GstAudioRingBuffer) -> c_uint;
     pub fn gst_audio_ring_buffer_device_is_open(buf: *mut GstAudioRingBuffer) -> gboolean;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_audio_ring_buffer_get_segbase(buf: *mut GstAudioRingBuffer) -> u64;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_audio_ring_buffer_get_segdone(buf: *mut GstAudioRingBuffer) -> u64;
     pub fn gst_audio_ring_buffer_is_acquired(buf: *mut GstAudioRingBuffer) -> gboolean;
     pub fn gst_audio_ring_buffer_is_active(buf: *mut GstAudioRingBuffer) -> gboolean;
     pub fn gst_audio_ring_buffer_is_flushing(buf: *mut GstAudioRingBuffer) -> gboolean;
@@ -2331,6 +2346,9 @@ extern "C" {
     pub fn gst_audio_ring_buffer_set_errored(buf: *mut GstAudioRingBuffer);
     pub fn gst_audio_ring_buffer_set_flushing(buf: *mut GstAudioRingBuffer, flushing: gboolean);
     pub fn gst_audio_ring_buffer_set_sample(buf: *mut GstAudioRingBuffer, sample: u64);
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_audio_ring_buffer_set_segdone(buf: *mut GstAudioRingBuffer, segdone: u64);
     pub fn gst_audio_ring_buffer_set_timestamp(
         buf: *mut GstAudioRingBuffer,
         readseg: c_int,

@@ -961,6 +961,15 @@ extern "C" {
     pub fn gst_missing_plugin_message_get_installer_detail(
         msg: *mut gst::GstMessage,
     ) -> *mut c_char;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_missing_plugin_message_get_stream_id(msg: *mut gst::GstMessage) -> *const c_char;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_missing_plugin_message_set_stream_id(
+        msg: *mut gst::GstMessage,
+        stream_id: *const c_char,
+    );
     pub fn gst_missing_uri_sink_installer_detail_new(protocol: *const c_char) -> *mut c_char;
     pub fn gst_missing_uri_sink_message_new(
         element: *mut gst::GstElement,

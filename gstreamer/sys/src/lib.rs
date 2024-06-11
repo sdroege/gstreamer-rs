@@ -5572,6 +5572,9 @@ extern "C" {
     #[cfg(feature = "v1_18_3")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18_3")))]
     pub fn gst_message_copy(msg: *const GstMessage) -> *mut GstMessage;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_message_get_details(message: *mut GstMessage) -> *const GstStructure;
     pub fn gst_message_get_num_redirect_entries(message: *mut GstMessage) -> size_t;
     pub fn gst_message_get_seqnum(message: *mut GstMessage) -> u32;
     pub fn gst_message_get_stream_status_object(message: *mut GstMessage)
@@ -5615,6 +5618,12 @@ extern "C" {
         message: *mut GstMessage,
         structure: *mut *const GstStructure,
     );
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_message_parse_error_writable_details(
+        message: *mut GstMessage,
+        structure: *mut *mut GstStructure,
+    );
     pub fn gst_message_parse_group_id(message: *mut GstMessage, group_id: *mut c_uint) -> gboolean;
     pub fn gst_message_parse_have_context(message: *mut GstMessage, context: *mut *mut GstContext);
     pub fn gst_message_parse_info(
@@ -5625,6 +5634,12 @@ extern "C" {
     pub fn gst_message_parse_info_details(
         message: *mut GstMessage,
         structure: *mut *const GstStructure,
+    );
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_message_parse_info_writable_details(
+        message: *mut GstMessage,
+        structure: *mut *mut GstStructure,
     );
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
@@ -5743,6 +5758,12 @@ extern "C" {
         message: *mut GstMessage,
         structure: *mut *const GstStructure,
     );
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_message_parse_warning_writable_details(
+        message: *mut GstMessage,
+        structure: *mut *mut GstStructure,
+    );
     #[cfg(feature = "v1_18_3")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18_3")))]
     pub fn gst_message_ref(msg: *mut GstMessage) -> *mut GstMessage;
@@ -5753,6 +5774,9 @@ extern "C" {
         avg_out: c_int,
         buffering_left: i64,
     );
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_message_set_details(message: *mut GstMessage, details: *mut GstStructure);
     pub fn gst_message_set_group_id(message: *mut GstMessage, group_id: c_uint);
     pub fn gst_message_set_qos_stats(
         message: *mut GstMessage,
@@ -5780,6 +5804,9 @@ extern "C" {
     #[cfg(feature = "v1_18_3")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18_3")))]
     pub fn gst_message_unref(msg: *mut GstMessage);
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_message_writable_details(message: *mut GstMessage) -> *mut GstStructure;
     pub fn gst_message_writable_structure(message: *mut GstMessage) -> *mut GstStructure;
     #[cfg(feature = "v1_18_3")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18_3")))]
@@ -9174,6 +9201,12 @@ extern "C" {
         message_string: *const c_char,
     );
     //pub fn gst_debug_log_valist(category: *mut GstDebugCategory, level: GstDebugLevel, file: *const c_char, function: *const c_char, line: c_int, object: *mut gobject::GObject, format: *const c_char, args: /*Unimplemented*/va_list);
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_debug_print_object(ptr: gconstpointer) -> *mut c_char;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_debug_print_segment(segment: *const GstSegment) -> *mut c_char;
     pub fn gst_debug_print_stack_trace();
     pub fn gst_debug_remove_log_function(func: GstLogFunction) -> c_uint;
     pub fn gst_debug_remove_log_function_by_data(data: gpointer) -> c_uint;

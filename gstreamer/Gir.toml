@@ -277,6 +277,16 @@ status = "generate"
     ignore = true
 
     [[object.function]]
+    name = "debug_print_object"
+    # Can directly use the Debug impl
+    ignore = true
+
+    [[object.function]]
+    name = "debug_print_segment"
+    # Can directly use the Debug impl
+    ignore = true
+
+    [[object.function]]
     name = "debug_get_stack_trace"
     # can be called before gst_init()
     assertion = "skip"
