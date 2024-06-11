@@ -4,7 +4,7 @@
 // DO NOT EDIT
 
 use crate::ffi;
-use glib::{prelude::*, translate::*};
+use glib::{prelude::*, translate::*, GStr};
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
@@ -241,6 +241,157 @@ impl ToValue for DiscovererResult {
 impl From<DiscovererResult> for glib::Value {
     #[inline]
     fn from(v: DiscovererResult) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+#[doc(alias = "GstInstallPluginsReturn")]
+pub enum InstallPluginsReturn {
+    #[doc(alias = "GST_INSTALL_PLUGINS_SUCCESS")]
+    Success,
+    #[doc(alias = "GST_INSTALL_PLUGINS_NOT_FOUND")]
+    NotFound,
+    #[doc(alias = "GST_INSTALL_PLUGINS_ERROR")]
+    Error,
+    #[doc(alias = "GST_INSTALL_PLUGINS_PARTIAL_SUCCESS")]
+    PartialSuccess,
+    #[doc(alias = "GST_INSTALL_PLUGINS_USER_ABORT")]
+    UserAbort,
+    #[doc(alias = "GST_INSTALL_PLUGINS_CRASHED")]
+    Crashed,
+    #[doc(alias = "GST_INSTALL_PLUGINS_INVALID")]
+    Invalid,
+    #[doc(alias = "GST_INSTALL_PLUGINS_STARTED_OK")]
+    StartedOk,
+    #[doc(alias = "GST_INSTALL_PLUGINS_INTERNAL_FAILURE")]
+    InternalFailure,
+    #[doc(alias = "GST_INSTALL_PLUGINS_HELPER_MISSING")]
+    HelperMissing,
+    #[doc(alias = "GST_INSTALL_PLUGINS_INSTALL_IN_PROGRESS")]
+    InstallInProgress,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+impl InstallPluginsReturn {
+    pub fn name<'a>(self) -> &'a GStr {
+        unsafe {
+            GStr::from_ptr(
+                ffi::gst_install_plugins_return_get_name(self.into_glib())
+                    .as_ref()
+                    .expect("gst_install_plugins_return_get_name returned NULL"),
+            )
+        }
+    }
+}
+
+impl std::fmt::Display for InstallPluginsReturn {
+    #[inline]
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        f.write_str(&self.name())
+    }
+}
+
+#[doc(hidden)]
+impl IntoGlib for InstallPluginsReturn {
+    type GlibType = ffi::GstInstallPluginsReturn;
+
+    #[inline]
+    fn into_glib(self) -> ffi::GstInstallPluginsReturn {
+        match self {
+            Self::Success => ffi::GST_INSTALL_PLUGINS_SUCCESS,
+            Self::NotFound => ffi::GST_INSTALL_PLUGINS_NOT_FOUND,
+            Self::Error => ffi::GST_INSTALL_PLUGINS_ERROR,
+            Self::PartialSuccess => ffi::GST_INSTALL_PLUGINS_PARTIAL_SUCCESS,
+            Self::UserAbort => ffi::GST_INSTALL_PLUGINS_USER_ABORT,
+            Self::Crashed => ffi::GST_INSTALL_PLUGINS_CRASHED,
+            Self::Invalid => ffi::GST_INSTALL_PLUGINS_INVALID,
+            Self::StartedOk => ffi::GST_INSTALL_PLUGINS_STARTED_OK,
+            Self::InternalFailure => ffi::GST_INSTALL_PLUGINS_INTERNAL_FAILURE,
+            Self::HelperMissing => ffi::GST_INSTALL_PLUGINS_HELPER_MISSING,
+            Self::InstallInProgress => ffi::GST_INSTALL_PLUGINS_INSTALL_IN_PROGRESS,
+            Self::__Unknown(value) => value,
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstInstallPluginsReturn> for InstallPluginsReturn {
+    #[inline]
+    unsafe fn from_glib(value: ffi::GstInstallPluginsReturn) -> Self {
+        skip_assert_initialized!();
+
+        match value {
+            ffi::GST_INSTALL_PLUGINS_SUCCESS => Self::Success,
+            ffi::GST_INSTALL_PLUGINS_NOT_FOUND => Self::NotFound,
+            ffi::GST_INSTALL_PLUGINS_ERROR => Self::Error,
+            ffi::GST_INSTALL_PLUGINS_PARTIAL_SUCCESS => Self::PartialSuccess,
+            ffi::GST_INSTALL_PLUGINS_USER_ABORT => Self::UserAbort,
+            ffi::GST_INSTALL_PLUGINS_CRASHED => Self::Crashed,
+            ffi::GST_INSTALL_PLUGINS_INVALID => Self::Invalid,
+            ffi::GST_INSTALL_PLUGINS_STARTED_OK => Self::StartedOk,
+            ffi::GST_INSTALL_PLUGINS_INTERNAL_FAILURE => Self::InternalFailure,
+            ffi::GST_INSTALL_PLUGINS_HELPER_MISSING => Self::HelperMissing,
+            ffi::GST_INSTALL_PLUGINS_INSTALL_IN_PROGRESS => Self::InstallInProgress,
+            value => Self::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for InstallPluginsReturn {
+    #[inline]
+    #[doc(alias = "gst_install_plugins_return_get_type")]
+    fn static_type() -> glib::Type {
+        unsafe { from_glib(ffi::gst_install_plugins_return_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for InstallPluginsReturn {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        Self::ParamSpec::builder_with_default
+    }
+}
+
+impl glib::value::ValueType for InstallPluginsReturn {
+    type Type = Self;
+}
+
+unsafe impl<'a> glib::value::FromValue<'a> for InstallPluginsReturn {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    #[inline]
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl ToValue for InstallPluginsReturn {
+    #[inline]
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    #[inline]
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
+impl From<InstallPluginsReturn> for glib::Value {
+    #[inline]
+    fn from(v: InstallPluginsReturn) -> Self {
         skip_assert_initialized!();
         ToValue::to_value(&v)
     }

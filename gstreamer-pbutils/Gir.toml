@@ -21,6 +21,8 @@ generate = [
     "GstPbutils.AudioVisualizerShader",
     "GstPbutils.DiscovererInfo",
     "GstPbutils.DiscovererResult",
+    "GstPbutils.InstallPluginsContext",
+    "GstPbutils.InstallPluginsReturn",
     "GstPbutils.PbUtilsCapsDescriptionFlags",
 ]
 

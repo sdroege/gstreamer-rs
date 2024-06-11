@@ -27,6 +27,7 @@ macro_rules! skip_assert_initialized {
     () => {};
 }
 
+#[allow(clippy::needless_borrow)]
 mod auto;
 pub use crate::auto::*;
 
@@ -46,6 +47,8 @@ mod discoverer_container_info;
 pub mod discoverer_stream_info;
 mod discoverer_subtitle_info;
 mod discoverer_video_info;
+pub mod missing_plugins;
+pub use missing_plugins::MissingPluginMessage;
 
 pub mod encoding_profile;
 

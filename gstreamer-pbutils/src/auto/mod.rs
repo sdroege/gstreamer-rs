@@ -42,9 +42,13 @@ pub use self::encoding_target::EncodingTarget;
 mod encoding_video_profile;
 pub use self::encoding_video_profile::EncodingVideoProfile;
 
+mod install_plugins_context;
+pub use self::install_plugins_context::InstallPluginsContext;
+
 mod enums;
 pub use self::enums::AudioVisualizerShader;
 pub use self::enums::DiscovererResult;
+pub use self::enums::InstallPluginsReturn;
 
 mod flags;
 pub use self::flags::DiscovererSerializeFlags;
