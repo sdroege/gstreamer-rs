@@ -78,6 +78,41 @@ impl MessageRef {
         }
     }
 
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "gst_message_writable_details")]
+    #[inline]
+    pub fn details(&self) -> Option<&StructureRef> {
+        unsafe {
+            let structure = ffi::gst_message_writable_details(self.as_mut_ptr());
+            if structure.is_null() {
+                None
+            } else {
+                Some(StructureRef::from_glib_borrow(structure))
+            }
+        }
+    }
+
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "gst_message_writable_details")]
+    #[inline]
+    pub fn details_mut(&mut self) -> &mut StructureRef {
+        unsafe {
+            StructureRef::from_glib_borrow_mut(ffi::gst_message_writable_details(self.as_mut_ptr()))
+        }
+    }
+
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "gst_message_set_details")]
+    #[inline]
+    pub fn set_details(&mut self, structure: Structure) {
+        unsafe {
+            ffi::gst_message_set_details(self.as_mut_ptr(), structure.into_glib_ptr());
+        }
+    }
+
     #[doc(alias = "gst_message_has_name")]
     #[inline]
     pub fn has_name(&self, name: &str) -> bool {
@@ -400,6 +435,19 @@ impl Error {
             }
         }
     }
+
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "gst_message_parse_error_writable_details")]
+    pub fn writable_details(&mut self) -> &mut StructureRef {
+        unsafe {
+            let mut details = ptr::null_mut();
+
+            ffi::gst_message_parse_error_writable_details(self.as_mut_ptr(), &mut details);
+
+            StructureRef::from_glib_borrow_mut(details)
+        }
+    }
 }
 
 impl std::fmt::Display for Error {
@@ -492,6 +540,19 @@ impl Warning {
             }
         }
     }
+
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "gst_message_parse_warning_writable_details")]
+    pub fn writable_details(&mut self) -> &mut StructureRef {
+        unsafe {
+            let mut details = ptr::null_mut();
+
+            ffi::gst_message_parse_warning_writable_details(self.as_mut_ptr(), &mut details);
+
+            StructureRef::from_glib_borrow_mut(details)
+        }
+    }
 }
 
 impl std::fmt::Display for Warning {
@@ -582,6 +643,19 @@ impl Info {
             } else {
                 Some(StructureRef::from_glib_borrow(details))
             }
+        }
+    }
+
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "gst_message_parse_info_writable_details")]
+    pub fn writable_details(&mut self) -> &mut StructureRef {
+        unsafe {
+            let mut details = ptr::null_mut();
+
+            ffi::gst_message_parse_info_writable_details(self.as_mut_ptr(), &mut details);
+
+            StructureRef::from_glib_borrow_mut(details)
         }
     }
 }
@@ -2470,6 +2544,8 @@ impl std::fmt::Debug for InstantRateRequest<Message> {
 struct MessageBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<Seqnum>,
+    #[cfg(feature = "v1_26")]
+    details: Option<Structure>,
     other_fields: Vec<(&'a str, glib::SendValue)>,
 }
 
@@ -2478,6 +2554,8 @@ impl<'a> MessageBuilder<'a> {
         Self {
             src: None,
             seqnum: None,
+            #[cfg(feature = "v1_26")]
+            details: None,
             other_fields: Vec::new(),
         }
     }
@@ -2492,6 +2570,14 @@ impl<'a> MessageBuilder<'a> {
     fn seqnum(self, seqnum: Seqnum) -> Self {
         Self {
             seqnum: Some(seqnum),
+            ..self
+        }
+    }
+
+    #[cfg(feature = "v1_26")]
+    fn details(self, details: Structure) -> Self {
+        Self {
+            details: Some(details),
             ..self
         }
     }
@@ -2554,6 +2640,29 @@ macro_rules! message_builder_generic_impl {
             }
         }
 
+        #[cfg(feature = "v1_26")]
+        #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+        #[doc(alias = "gst_message_set_details")]
+        #[allow(clippy::needless_update)]
+        pub fn details(self, details: Structure) -> Self {
+            Self {
+                builder: self.builder.details(details),
+                ..self
+            }
+        }
+
+        #[cfg(feature = "v1_26")]
+        #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+        #[doc(alias = "gst_message_set_details")]
+        #[allow(clippy::needless_update)]
+        pub fn details_if_some(self, details: Option<Structure>) -> Self {
+            if let Some(details) = details {
+                self.details(details)
+            } else {
+                self
+            }
+        }
+
         #[allow(clippy::needless_update)]
         pub fn other_field(self, name: &'a str, value: impl ToSendValue) -> Self {
             Self {
@@ -2591,6 +2700,11 @@ macro_rules! message_builder_generic_impl {
                 let msg = $new_fn(&mut self, src);
                 if let Some(seqnum) = self.builder.seqnum {
                     ffi::gst_message_set_seqnum(msg, seqnum.0.get());
+                }
+
+                #[cfg(feature = "v1_26")]
+                if let Some(details) = self.builder.details {
+                    ffi::gst_message_set_details(msg, details.into_glib_ptr());
                 }
 
                 if !self.builder.other_fields.is_empty() {
@@ -2669,6 +2783,7 @@ impl<'a> ErrorBuilder<'a> {
         }
     }
 
+    #[cfg(not(feature = "v1_26"))]
     pub fn details(self, details: Structure) -> Self {
         Self {
             details: Some(details),
@@ -2676,6 +2791,7 @@ impl<'a> ErrorBuilder<'a> {
         }
     }
 
+    #[cfg(not(feature = "v1_26"))]
     pub fn details_if_some(self, details: Option<Structure>) -> Self {
         if let Some(details) = details {
             self.details(details)
@@ -2734,6 +2850,7 @@ impl<'a> WarningBuilder<'a> {
         }
     }
 
+    #[cfg(not(feature = "v1_26"))]
     pub fn details(self, details: Structure) -> Self {
         Self {
             details: Some(details),
@@ -2741,6 +2858,7 @@ impl<'a> WarningBuilder<'a> {
         }
     }
 
+    #[cfg(not(feature = "v1_26"))]
     pub fn details_if_some(self, details: Option<Structure>) -> Self {
         if let Some(details) = details {
             self.details(details)
@@ -2799,6 +2917,7 @@ impl<'a> InfoBuilder<'a> {
         }
     }
 
+    #[cfg(not(feature = "v1_26"))]
     pub fn details(self, details: Structure) -> Self {
         Self {
             details: Some(details),
@@ -2806,6 +2925,7 @@ impl<'a> InfoBuilder<'a> {
         }
     }
 
+    #[cfg(not(feature = "v1_26"))]
     pub fn details_if_some(self, details: Option<Structure>) -> Self {
         if let Some(details) = details {
             self.details(details)
