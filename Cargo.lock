@@ -169,7 +169,7 @@ checksum = "514de17de45fdb8dc022b1a7975556c53c86f9f0aa5f534b98977b171857c2c9"
 [[package]]
 name = "cairo-rs"
 version = "0.20.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#7cd06421c5027e2c1b4cc657529e6acd8bac1ea3"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#0a0d3166157123035acc396c00ce8816011b1697"
 dependencies = [
  "bitflags 2.5.0",
  "cairo-sys-rs",
@@ -181,7 +181,7 @@ dependencies = [
 [[package]]
 name = "cairo-sys-rs"
 version = "0.20.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#7cd06421c5027e2c1b4cc657529e6acd8bac1ea3"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#0a0d3166157123035acc396c00ce8816011b1697"
 dependencies = [
  "glib-sys",
  "libc",
@@ -678,7 +678,7 @@ dependencies = [
 [[package]]
 name = "gio"
 version = "0.20.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#7cd06421c5027e2c1b4cc657529e6acd8bac1ea3"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#0a0d3166157123035acc396c00ce8816011b1697"
 dependencies = [
  "futures-channel",
  "futures-core",
@@ -695,7 +695,7 @@ dependencies = [
 [[package]]
 name = "gio-sys"
 version = "0.20.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#7cd06421c5027e2c1b4cc657529e6acd8bac1ea3"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#0a0d3166157123035acc396c00ce8816011b1697"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -724,7 +724,7 @@ dependencies = [
 [[package]]
 name = "glib"
 version = "0.20.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#7cd06421c5027e2c1b4cc657529e6acd8bac1ea3"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#0a0d3166157123035acc396c00ce8816011b1697"
 dependencies = [
  "bitflags 2.5.0",
  "futures-channel",
@@ -745,7 +745,7 @@ dependencies = [
 [[package]]
 name = "glib-macros"
 version = "0.20.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#7cd06421c5027e2c1b4cc657529e6acd8bac1ea3"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#0a0d3166157123035acc396c00ce8816011b1697"
 dependencies = [
  "heck",
  "proc-macro-crate",
@@ -757,7 +757,7 @@ dependencies = [
 [[package]]
 name = "glib-sys"
 version = "0.20.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#7cd06421c5027e2c1b4cc657529e6acd8bac1ea3"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#0a0d3166157123035acc396c00ce8816011b1697"
 dependencies = [
  "libc",
  "system-deps",
@@ -820,7 +820,7 @@ dependencies = [
 [[package]]
 name = "gobject-sys"
 version = "0.20.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#7cd06421c5027e2c1b4cc657529e6acd8bac1ea3"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#0a0d3166157123035acc396c00ce8816011b1697"
 dependencies = [
  "glib-sys",
  "libc",
@@ -1898,7 +1898,7 @@ dependencies = [
 [[package]]
 name = "pango"
 version = "0.20.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#7cd06421c5027e2c1b4cc657529e6acd8bac1ea3"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#0a0d3166157123035acc396c00ce8816011b1697"
 dependencies = [
  "gio",
  "glib",
@@ -1909,7 +1909,7 @@ dependencies = [
 [[package]]
 name = "pango-sys"
 version = "0.20.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#7cd06421c5027e2c1b4cc657529e6acd8bac1ea3"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#0a0d3166157123035acc396c00ce8816011b1697"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -1920,7 +1920,7 @@ dependencies = [
 [[package]]
 name = "pangocairo"
 version = "0.20.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#7cd06421c5027e2c1b4cc657529e6acd8bac1ea3"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#0a0d3166157123035acc396c00ce8816011b1697"
 dependencies = [
  "cairo-rs",
  "glib",
@@ -1932,7 +1932,7 @@ dependencies = [
 [[package]]
 name = "pangocairo-sys"
 version = "0.20.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#7cd06421c5027e2c1b4cc657529e6acd8bac1ea3"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#0a0d3166157123035acc396c00ce8816011b1697"
 dependencies = [
  "cairo-sys-rs",
  "glib-sys",
@@ -2706,9 +2706,9 @@ dependencies = [
 
 [[package]]
 name = "windows-result"
-version = "0.1.1"
+version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "749f0da9cc72d82e600d8d2e44cadd0b9eedb9038f71a1c58556ac1c5791813b"
+checksum = "5e383302e8ec8515204254685643de10811af0ed97ea37210dc26fb0032647f8"
 dependencies = [
  "windows-targets 0.52.5",
 ]
