@@ -351,7 +351,7 @@ pub mod prelude {
         param_spec::GstParamSpecBuilderExt,
         pipeline::GstPipelineExtManual,
         plugin_feature::PluginFeatureExtManual,
-        slice::Dump,
+        slice::ByteSliceExt,
         tag_setter::TagSetterExtManual,
         tags::{CustomTag, Tag},
         task_pool::{TaskHandle, TaskPoolExtManual},
