@@ -2,7 +2,10 @@
 
 use std::{borrow::Borrow, ffi::CStr, fmt, mem, num::NonZeroU32, ops::Deref, ptr};
 
-use glib::translate::*;
+use glib::{
+    translate::*,
+    value::{SendValue, ValueType},
+};
 
 use crate::{
     ffi,
@@ -2612,6 +2615,16 @@ macro_rules! message_builder_generic_impl {
                 ..self
             }
         }
+
+        #[allow(clippy::needless_update)]
+        pub fn src_if<O: IsA<Object> + Cast + Clone>(self, src: &O, predicate: bool) -> Self {
+            if predicate {
+                self.src(src)
+            } else {
+                self
+            }
+        }
+
         #[allow(clippy::needless_update)]
         pub fn src_if_some<O: IsA<Object> + Cast + Clone>(self, src: Option<&O>) -> Self {
             if let Some(src) = src {
@@ -2627,6 +2640,16 @@ macro_rules! message_builder_generic_impl {
             Self {
                 builder: self.builder.seqnum(seqnum),
                 ..self
+            }
+        }
+
+        #[doc(alias = "gst_message_set_seqnum")]
+        #[allow(clippy::needless_update)]
+        pub fn seqnum_if(self, seqnum: Seqnum, predicate: bool) -> Self {
+            if predicate {
+                self.seqnum(seqnum)
+            } else {
+                self
             }
         }
 
@@ -2655,6 +2678,18 @@ macro_rules! message_builder_generic_impl {
         #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
         #[doc(alias = "gst_message_set_details")]
         #[allow(clippy::needless_update)]
+        pub fn details_if(self, details: Structure, predicate: bool) -> Self {
+            if predicate {
+                self.details(details)
+            } else {
+                self
+            }
+        }
+
+        #[cfg(feature = "v1_26")]
+        #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+        #[doc(alias = "gst_message_set_details")]
+        #[allow(clippy::needless_update)]
         pub fn details_if_some(self, details: Option<Structure>) -> Self {
             if let Some(details) = details {
                 self.details(details)
@@ -2663,6 +2698,10 @@ macro_rules! message_builder_generic_impl {
             }
         }
 
+        // rustdoc-stripper-ignore-next
+        /// Sets field `name` to the given value `value`.
+        ///
+        /// Overrides any default or previously defined value for `name`.
         #[allow(clippy::needless_update)]
         pub fn other_field(self, name: &'a str, value: impl ToSendValue) -> Self {
             Self {
@@ -2671,14 +2710,7 @@ macro_rules! message_builder_generic_impl {
             }
         }
 
-        #[allow(clippy::needless_update)]
-        pub fn other_field_if_some(self, name: &'a str, value: Option<impl ToSendValue>) -> Self {
-            if let Some(value) = value {
-                self.other_field(name, value)
-            } else {
-                self
-            }
-        }
+        impl_builder_gvalue_extra_setters!(other_field);
 
         #[deprecated = "use build.other_field() instead"]
         #[allow(clippy::needless_update)]
@@ -2775,6 +2807,14 @@ impl<'a> ErrorBuilder<'a> {
         }
     }
 
+    pub fn debug_if(self, debug: &'a str, predicate: bool) -> Self {
+        if predicate {
+            self.debug(debug)
+        } else {
+            self
+        }
+    }
+
     pub fn debug_if_some(self, debug: Option<&'a str>) -> Self {
         if let Some(debug) = debug {
             self.debug(debug)
@@ -2788,6 +2828,15 @@ impl<'a> ErrorBuilder<'a> {
         Self {
             details: Some(details),
             ..self
+        }
+    }
+
+    #[cfg(not(feature = "v1_26"))]
+    pub fn details_if(self, details: Structure, predicate: bool) -> Self {
+        if predicate {
+            self.details(details)
+        } else {
+            self
         }
     }
 
@@ -2842,6 +2891,14 @@ impl<'a> WarningBuilder<'a> {
         }
     }
 
+    pub fn debug_if(self, debug: &'a str, predicate: bool) -> Self {
+        if predicate {
+            self.debug(debug)
+        } else {
+            self
+        }
+    }
+
     pub fn debug_if_some(self, debug: Option<&'a str>) -> Self {
         if let Some(debug) = debug {
             self.debug(debug)
@@ -2855,6 +2912,15 @@ impl<'a> WarningBuilder<'a> {
         Self {
             details: Some(details),
             ..self
+        }
+    }
+
+    #[cfg(not(feature = "v1_26"))]
+    pub fn details_if(self, details: Structure, predicate: bool) -> Self {
+        if predicate {
+            self.details(details)
+        } else {
+            self
         }
     }
 
@@ -2909,6 +2975,14 @@ impl<'a> InfoBuilder<'a> {
         }
     }
 
+    pub fn debug_if(self, debug: &'a str, predicate: bool) -> Self {
+        if predicate {
+            self.debug(debug)
+        } else {
+            self
+        }
+    }
+
     pub fn debug_if_some(self, debug: Option<&'a str>) -> Self {
         if let Some(debug) = debug {
             self.debug(debug)
@@ -2922,6 +2996,15 @@ impl<'a> InfoBuilder<'a> {
         Self {
             details: Some(details),
             ..self
+        }
+    }
+
+    #[cfg(not(feature = "v1_26"))]
+    pub fn details_if(self, details: Structure, predicate: bool) -> Self {
+        if predicate {
+            self.details(details)
+        } else {
+            self
         }
     }
 
@@ -3225,6 +3308,14 @@ impl<'a> StreamStatusBuilder<'a> {
         }
     }
 
+    pub fn status_object_if(self, status_object: impl ToSendValue, predicate: bool) -> Self {
+        if predicate {
+            self.status_object(status_object)
+        } else {
+            self
+        }
+    }
+
     pub fn status_object_if_some(self, status_object: Option<impl ToSendValue>) -> Self {
         if let Some(status_object) = status_object {
             self.status_object(status_object)
@@ -3397,6 +3488,14 @@ impl<'a> AsyncDoneBuilder<'a> {
         self
     }
 
+    pub fn running_time_if(self, running_time: crate::ClockTime, predicate: bool) -> Self {
+        if predicate {
+            self.running_time(running_time)
+        } else {
+            self
+        }
+    }
+
     pub fn running_time_if_some(self, running_time: Option<crate::ClockTime>) -> Self {
         if let Some(running_time) = running_time {
             self.running_time(running_time)
@@ -3504,6 +3603,14 @@ impl<'a> QosBuilder<'a> {
         self
     }
 
+    pub fn running_time_if(self, running_time: crate::ClockTime, predicate: bool) -> Self {
+        if predicate {
+            self.running_time(running_time)
+        } else {
+            self
+        }
+    }
+
     pub fn running_time_if_some(self, running_time: Option<crate::ClockTime>) -> Self {
         if let Some(running_time) = running_time {
             self.running_time(running_time)
@@ -3515,6 +3622,14 @@ impl<'a> QosBuilder<'a> {
     pub fn stream_time(mut self, stream_time: impl Into<Option<crate::ClockTime>>) -> Self {
         self.stream_time = stream_time.into();
         self
+    }
+
+    pub fn stream_time_if(self, stream_time: crate::ClockTime, predicate: bool) -> Self {
+        if predicate {
+            self.stream_time(stream_time)
+        } else {
+            self
+        }
     }
 
     pub fn stream_time_if_some(self, stream_time: Option<crate::ClockTime>) -> Self {
@@ -3530,6 +3645,14 @@ impl<'a> QosBuilder<'a> {
         self
     }
 
+    pub fn timestamp_if(self, timestamp: crate::ClockTime, predicate: bool) -> Self {
+        if predicate {
+            self.timestamp(timestamp)
+        } else {
+            self
+        }
+    }
+
     pub fn timestamp_if_some(self, timestamp: Option<crate::ClockTime>) -> Self {
         if let Some(timestamp) = timestamp {
             self.timestamp(timestamp)
@@ -3541,6 +3664,14 @@ impl<'a> QosBuilder<'a> {
     pub fn duration(mut self, duration: impl Into<Option<crate::ClockTime>>) -> Self {
         self.duration = duration.into();
         self
+    }
+
+    pub fn duration_if(self, duration: crate::ClockTime, predicate: bool) -> Self {
+        if predicate {
+            self.duration(duration)
+        } else {
+            self
+        }
     }
 
     pub fn duration_if_some(self, duration: Option<crate::ClockTime>) -> Self {
@@ -3688,6 +3819,14 @@ impl<'a> StreamStartBuilder<'a> {
         }
     }
 
+    pub fn group_id_if(self, group_id: GroupId, predicate: bool) -> Self {
+        if predicate {
+            self.group_id(group_id)
+        } else {
+            self
+        }
+    }
+
     pub fn group_id_if_some(self, group_id: Option<GroupId>) -> Self {
         if let Some(group_id) = group_id {
             self.group_id(group_id)
@@ -3813,9 +3952,40 @@ impl<'a> PropertyNotifyBuilder<'a> {
         }
     }
 
+    pub fn value_if(self, value: impl ToSendValue, predicate: bool) -> Self {
+        if predicate {
+            self.value(value)
+        } else {
+            self
+        }
+    }
+
     pub fn value_if_some(self, value: Option<impl ToSendValue>) -> Self {
         if let Some(value) = value {
             self.value(value)
+        } else {
+            self
+        }
+    }
+
+    pub fn value_from_iter<V: ValueType + ToSendValue + FromIterator<SendValue>>(
+        self,
+        name: &'a str,
+        iter: impl IntoIterator<Item = impl ToSendValue>,
+    ) -> Self {
+        let iter = iter.into_iter().map(|item| item.to_send_value());
+        self.other_field(name, V::from_iter(iter))
+    }
+
+    pub fn value_field_if_not_empty<V: ValueType + ToSendValue + FromIterator<SendValue>>(
+        self,
+        name: &'a str,
+        iter: impl IntoIterator<Item = impl ToSendValue>,
+    ) -> Self {
+        let mut iter = iter.into_iter().peekable();
+        if iter.peek().is_some() {
+            let iter = iter.map(|item| item.to_send_value());
+            self.other_field(name, V::from_iter(iter))
         } else {
             self
         }
@@ -3883,11 +4053,35 @@ impl<'a> StreamsSelectedBuilder<'a> {
         }
     }
 
+    pub fn streams_if(
+        self,
+        streams: impl IntoIterator<Item = impl std::borrow::Borrow<crate::Stream>>,
+        predicate: bool,
+    ) -> Self {
+        if predicate {
+            self.streams(streams)
+        } else {
+            self
+        }
+    }
+
     pub fn streams_if_some(
         self,
         streams: Option<impl IntoIterator<Item = impl std::borrow::Borrow<crate::Stream>>>,
     ) -> Self {
         if let Some(streams) = streams {
+            self.streams(streams)
+        } else {
+            self
+        }
+    }
+
+    pub fn streams_if_not_empty(
+        self,
+        streams: impl IntoIterator<Item = impl std::borrow::Borrow<crate::Stream>>,
+    ) -> Self {
+        let mut streams = streams.into_iter().peekable();
+        if streams.peek().is_some() {
             self.streams(streams)
         } else {
             self
@@ -3934,6 +4128,14 @@ impl<'a> RedirectBuilder<'a> {
         }
     }
 
+    pub fn tag_list_if(self, tag_list: &'a TagList, predicate: bool) -> Self {
+        if predicate {
+            self.tag_list(tag_list)
+        } else {
+            self
+        }
+    }
+
     pub fn tag_list_if_some(self, tag_list: Option<&'a TagList>) -> Self {
         if let Some(tag_list) = tag_list {
             self.tag_list(tag_list)
@@ -3946,6 +4148,14 @@ impl<'a> RedirectBuilder<'a> {
         Self {
             entry_struct: Some(entry_struct),
             ..self
+        }
+    }
+
+    pub fn entry_struct_if(self, entry_struct: Structure, predicate: bool) -> Self {
+        if predicate {
+            self.entry_struct(entry_struct)
+        } else {
+            self
         }
     }
 
@@ -3965,6 +4175,19 @@ impl<'a> RedirectBuilder<'a> {
         Self {
             entries: Some(entries),
             ..self
+        }
+    }
+
+    #[allow(clippy::type_complexity)]
+    pub fn entries_if(
+        self,
+        entries: &'a [(&'a str, Option<&'a TagList>, Option<&'a Structure>)],
+        predicate: bool,
+    ) -> Self {
+        if predicate {
+            self.entries(entries)
+        } else {
+            self
         }
     }
 

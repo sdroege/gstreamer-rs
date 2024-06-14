@@ -21,6 +21,15 @@ macro_rules! message_builder_generic_impl {
         }
 
         #[allow(clippy::needless_update)]
+        pub fn src_if<O: IsA<Object> + Cast + Clone>(self, src: &O, predicate: bool) -> Self {
+            if predicate {
+                self.src(src)
+            } else {
+                self
+            }
+        }
+
+        #[allow(clippy::needless_update)]
         pub fn src_if_some<O: IsA<Object> + Cast + Clone>(self, src: Option<&O>) -> Self {
             if let Some(src) = src {
                 self.src(src)
@@ -35,6 +44,16 @@ macro_rules! message_builder_generic_impl {
             Self {
                 builder: self.builder.seqnum(seqnum),
                 ..self
+            }
+        }
+
+        #[doc(alias = "gst_message_set_seqnum")]
+        #[allow(clippy::needless_update)]
+        pub fn seqnum_if(self, seqnum: Seqnum, predicate: bool) -> Self {
+            if predicate {
+                self.seqnum(seqnum)
+            } else {
+                self
             }
         }
 
@@ -55,13 +74,7 @@ macro_rules! message_builder_generic_impl {
             }
         }
 
-        pub fn other_field_if_some(self, name: &'a str, value: Option<impl ToSendValue>) -> Self {
-            if let Some(value) = value {
-                self.other_field(name, value)
-            } else {
-                self
-            }
-        }
+        gst::impl_builder_gvalue_extra_setters!(other_field);
 
         #[deprecated = "use builder.other_field() instead"]
         #[allow(clippy::needless_update)]

@@ -116,6 +116,22 @@ impl StreamCollectionBuilder {
     }
 
     #[doc(alias = "gst_stream_collection_add_stream")]
+    pub fn stream_if(self, stream: Stream, predicate: bool) -> Self {
+        if predicate {
+            unsafe {
+                ffi::gst_stream_collection_add_stream(
+                    (self.0).to_glib_none().0,
+                    stream.into_glib_ptr(),
+                );
+            }
+
+            self
+        } else {
+            self
+        }
+    }
+
+    #[doc(alias = "gst_stream_collection_add_stream")]
     pub fn stream_if_some(self, stream: Option<Stream>) -> Self {
         if let Some(stream) = stream {
             self.stream(stream)
@@ -137,8 +153,34 @@ impl StreamCollectionBuilder {
         self
     }
 
+    pub fn streams_if(self, streams: impl IntoIterator<Item = Stream>, predicate: bool) -> Self {
+        if predicate {
+            for stream in streams.into_iter() {
+                unsafe {
+                    ffi::gst_stream_collection_add_stream(
+                        (self.0).to_glib_none().0,
+                        stream.into_glib_ptr(),
+                    );
+                }
+            }
+
+            self
+        } else {
+            self
+        }
+    }
+
     pub fn streams_if_some(self, streams: Option<impl IntoIterator<Item = Stream>>) -> Self {
         if let Some(streams) = streams {
+            self.streams(streams)
+        } else {
+            self
+        }
+    }
+
+    pub fn streams_if_not_empty(self, streams: impl IntoIterator<Item = Stream>) -> Self {
+        let mut streams = streams.into_iter().peekable();
+        if streams.peek().is_some() {
             self.streams(streams)
         } else {
             self

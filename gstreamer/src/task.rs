@@ -22,6 +22,20 @@ impl<F: FnMut(&Task) + Send + 'static> TaskBuilder<F> {
             ..self
         }
     }
+
+    #[doc(alias = "gst_task_set_enter_callback")]
+    pub fn enter_callback_if<E: FnMut(&Task) + Send + 'static>(
+        self,
+        enter_callback: E,
+        predicate: bool,
+    ) -> Self {
+        if predicate {
+            self.enter_callback(enter_callback)
+        } else {
+            self
+        }
+    }
+
     #[doc(alias = "gst_task_set_enter_callback")]
     pub fn enter_callback_if_some<E: FnMut(&Task) + Send + 'static>(
         self,
@@ -43,6 +57,19 @@ impl<F: FnMut(&Task) + Send + 'static> TaskBuilder<F> {
     }
 
     #[doc(alias = "gst_task_set_leave_callback")]
+    pub fn leave_callback_if<E: FnMut(&Task) + Send + 'static>(
+        self,
+        leave_callback: E,
+        predicate: bool,
+    ) -> Self {
+        if predicate {
+            self.leave_callback(leave_callback)
+        } else {
+            self
+        }
+    }
+
+    #[doc(alias = "gst_task_set_leave_callback")]
     pub fn leave_callback_if_some<E: FnMut(&Task) + Send + 'static>(
         self,
         leave_callback: Option<E>,
@@ -59,6 +86,15 @@ impl<F: FnMut(&Task) + Send + 'static> TaskBuilder<F> {
         Self {
             lock: Some(lock.clone()),
             ..self
+        }
+    }
+
+    #[doc(alias = "gst_task_set_lock")]
+    pub fn lock_if(self, lock: &TaskLock, predicate: bool) -> Self {
+        if predicate {
+            self.lock(lock)
+        } else {
+            self
         }
     }
 

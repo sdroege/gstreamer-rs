@@ -83,6 +83,14 @@ impl<'a> ActionParameterBuilder<'a> {
         self
     }
 
+    pub fn add_possible_variable_if(self, possible_variable: &str, predicate: bool) -> Self {
+        if predicate {
+            self.add_possible_variable(possible_variable)
+        } else {
+            self
+        }
+    }
+
     pub fn add_possible_variable_if_some(self, possible_variable: Option<&str>) -> Self {
         if let Some(possible_variable) = possible_variable {
             self.add_possible_variable(possible_variable)
@@ -99,6 +107,14 @@ impl<'a> ActionParameterBuilder<'a> {
     pub fn default_value(mut self, default_value: &'a str) -> Self {
         self.default_value = Some(default_value);
         self
+    }
+
+    pub fn default_value_if(self, default_value: &'a str, predicate: bool) -> Self {
+        if predicate {
+            self.default_value(default_value)
+        } else {
+            self
+        }
     }
 
     pub fn default_value_if_some(self, default_value: Option<&'a str>) -> Self {
@@ -118,6 +134,14 @@ impl<'a> ActionParameterBuilder<'a> {
     pub fn add_type(mut self, types: &str) -> Self {
         self.types.push(types.to_owned());
         self
+    }
+
+    pub fn add_type_if(self, types: &str, predicate: bool) -> Self {
+        if predicate {
+            self.add_type(types)
+        } else {
+            self
+        }
     }
 
     pub fn add_type_if_some(self, types: Option<&str>) -> Self {
@@ -198,6 +222,19 @@ impl<'a> ActionTypeBuilder<'a> {
         self
     }
 
+    pub fn implementer_namespace_if(
+        mut self,
+        implementer_namespace: &'a str,
+        predicate: bool,
+    ) -> Self {
+        if predicate {
+            self.implementer_namespace = Some(implementer_namespace);
+            self
+        } else {
+            self
+        }
+    }
+
     pub fn implementer_namespace_if_some(self, implementer_namespace: Option<&'a str>) -> Self {
         if let Some(implementer_namespace) = implementer_namespace {
             self.implementer_namespace(implementer_namespace)
@@ -209,6 +246,15 @@ impl<'a> ActionTypeBuilder<'a> {
     pub fn description(mut self, description: &'a str) -> Self {
         self.description = Some(description);
         self
+    }
+
+    pub fn description_if(mut self, description: &'a str, predicate: bool) -> Self {
+        if predicate {
+            self.description = Some(description);
+            self
+        } else {
+            self
+        }
     }
 
     pub fn description_if_some(self, description: Option<&'a str>) -> Self {
@@ -224,6 +270,15 @@ impl<'a> ActionTypeBuilder<'a> {
         self
     }
 
+    pub fn parameter_if(mut self, parameter: ActionParameter, predicate: bool) -> Self {
+        if predicate {
+            self.parameters.push(parameter);
+            self
+        } else {
+            self
+        }
+    }
+
     pub fn parameter_if_some(self, parameter: Option<ActionParameter>) -> Self {
         if let Some(parameter) = parameter {
             self.parameter(parameter)
@@ -235,6 +290,15 @@ impl<'a> ActionTypeBuilder<'a> {
     pub fn flags(mut self, flags: crate::ActionTypeFlags) -> Self {
         self.flags |= flags;
         self
+    }
+
+    pub fn flags_if(mut self, flags: crate::ActionTypeFlags, predicate: bool) -> Self {
+        if predicate {
+            self.flags |= flags;
+            self
+        } else {
+            self
+        }
     }
 
     pub fn flags_if_some(self, flags: Option<crate::ActionTypeFlags>) -> Self {

@@ -2101,6 +2101,16 @@ macro_rules! event_builder_generic_impl {
 
         #[doc(alias = "gst_event_set_seqnum")]
         #[allow(clippy::needless_update)]
+        pub fn seqnum_if(self, seqnum: Seqnum, predicate: bool) -> Self {
+            if predicate {
+                self.seqnum(seqnum)
+            } else {
+                self
+            }
+        }
+
+        #[doc(alias = "gst_event_set_seqnum")]
+        #[allow(clippy::needless_update)]
         pub fn seqnum_if_some(self, seqnum: Option<Seqnum>) -> Self {
             if let Some(seqnum) = seqnum {
                 self.seqnum(seqnum)
@@ -2120,6 +2130,16 @@ macro_rules! event_builder_generic_impl {
 
         #[doc(alias = "gst_event_set_running_time_offset")]
         #[allow(clippy::needless_update)]
+        pub fn running_time_offset_if(self, running_time_offset: i64, predicate: bool) -> Self {
+            if predicate {
+                self.running_time_offset(running_time_offset)
+            } else {
+                self
+            }
+        }
+
+        #[doc(alias = "gst_event_set_running_time_offset")]
+        #[allow(clippy::needless_update)]
         pub fn running_time_offset_if_some(self, running_time_offset: Option<i64>) -> Self {
             if let Some(running_time_offset) = running_time_offset {
                 self.running_time_offset(running_time_offset)
@@ -2128,6 +2148,10 @@ macro_rules! event_builder_generic_impl {
             }
         }
 
+        // rustdoc-stripper-ignore-next
+        /// Sets field `name` to the given value `value`.
+        ///
+        /// Overrides any default or previously defined value for `name`.
         #[allow(clippy::needless_update)]
         pub fn other_field(self, name: &'a str, value: impl ToSendValue) -> Self {
             Self {
@@ -2136,14 +2160,7 @@ macro_rules! event_builder_generic_impl {
             }
         }
 
-        #[allow(clippy::needless_update)]
-        pub fn other_field_if_some(self, name: &'a str, value: Option<impl ToSendValue>) -> Self {
-            if let Some(value) = value {
-                self.other_field(name, value)
-            } else {
-                self
-            }
-        }
+        impl_builder_gvalue_extra_setters!(other_field);
 
         #[deprecated = "use build.other_field() instead"]
         #[allow(clippy::needless_update)]
@@ -2249,6 +2266,14 @@ impl<'a> StreamStartBuilder<'a> {
         }
     }
 
+    pub fn flags_if(self, flags: crate::StreamFlags, predicate: bool) -> Self {
+        if predicate {
+            self.flags(flags)
+        } else {
+            self
+        }
+    }
+
     pub fn flags_if_some(self, flags: Option<crate::StreamFlags>) -> Self {
         if let Some(flags) = flags {
             self.flags(flags)
@@ -2264,6 +2289,14 @@ impl<'a> StreamStartBuilder<'a> {
         }
     }
 
+    pub fn group_id_if(self, group_id: GroupId, predicate: bool) -> Self {
+        if predicate {
+            self.group_id(group_id)
+        } else {
+            self
+        }
+    }
+
     pub fn group_id_if_some(self, group_id: Option<GroupId>) -> Self {
         if let Some(group_id) = group_id {
             self.group_id(group_id)
@@ -2276,6 +2309,14 @@ impl<'a> StreamStartBuilder<'a> {
         Self {
             stream: Some(stream),
             ..self
+        }
+    }
+
+    pub fn stream_if(self, stream: crate::Stream, predicate: bool) -> Self {
+        if predicate {
+            self.stream(stream)
+        } else {
+            self
         }
     }
 
@@ -2555,6 +2596,14 @@ impl<'a> ProtectionBuilder<'a> {
         }
     }
 
+    pub fn origin_if(self, origin: &'a str, predicate: bool) -> Self {
+        if predicate {
+            self.origin(origin)
+        } else {
+            self
+        }
+    }
+
     pub fn origin_if_some(self, origin: Option<&'a str>) -> Self {
         if let Some(origin) = origin {
             self.origin(origin)
@@ -2622,6 +2671,16 @@ impl<'a> GapBuilder<'a> {
 
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
+    pub fn gap_flags_if(self, flags: crate::GapFlags, predicate: bool) -> Self {
+        if predicate {
+            self.gap_flags(flags)
+        } else {
+            self
+        }
+    }
+
+    #[cfg(feature = "v1_20")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gap_flags_if_some(self, flags: Option<crate::GapFlags>) -> Self {
         if let Some(flags) = flags {
             self.gap_flags(flags)
@@ -2633,6 +2692,14 @@ impl<'a> GapBuilder<'a> {
     pub fn duration(mut self, duration: impl Into<Option<ClockTime>>) -> Self {
         self.duration = duration.into();
         self
+    }
+
+    pub fn duration_if(self, duration: ClockTime, predicate: bool) -> Self {
+        if predicate {
+            self.duration(duration)
+        } else {
+            self
+        }
     }
 
     pub fn duration_if_some(self, duration: Option<ClockTime>) -> Self {
@@ -2707,6 +2774,14 @@ impl<'a> QosBuilder<'a> {
     pub fn timestamp(mut self, timestamp: impl Into<Option<ClockTime>>) -> Self {
         self.timestamp = timestamp.into();
         self
+    }
+
+    pub fn timestamp_if(self, timestamp: ClockTime, predicate: bool) -> Self {
+        if predicate {
+            self.timestamp(timestamp)
+        } else {
+            self
+        }
     }
 
     pub fn timestamp_if_some(self, timestamp: Option<ClockTime>) -> Self {

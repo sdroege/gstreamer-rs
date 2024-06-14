@@ -61,6 +61,18 @@ impl AppSrcCallbacksBuilder {
         }
     }
 
+    pub fn need_data_if<F: FnMut(&AppSrc, u32) + Send + 'static>(
+        self,
+        need_data: F,
+        predicate: bool,
+    ) -> Self {
+        if predicate {
+            self.need_data(need_data)
+        } else {
+            self
+        }
+    }
+
     pub fn need_data_if_some<F: FnMut(&AppSrc, u32) + Send + 'static>(
         self,
         need_data: Option<F>,
@@ -76,6 +88,18 @@ impl AppSrcCallbacksBuilder {
         Self {
             enough_data: Some(Box::new(enough_data)),
             ..self
+        }
+    }
+
+    pub fn enough_data_if<F: Fn(&AppSrc) + Send + Sync + 'static>(
+        self,
+        enough_data: F,
+        predicate: bool,
+    ) -> Self {
+        if predicate {
+            self.enough_data(enough_data)
+        } else {
+            self
         }
     }
 
@@ -97,6 +121,18 @@ impl AppSrcCallbacksBuilder {
         Self {
             seek_data: Some(Box::new(seek_data)),
             ..self
+        }
+    }
+
+    pub fn seek_data_if<F: Fn(&AppSrc, u64) -> bool + Send + Sync + 'static>(
+        self,
+        seek_data: F,
+        predicate: bool,
+    ) -> Self {
+        if predicate {
+            self.seek_data(seek_data)
+        } else {
+            self
         }
     }
 

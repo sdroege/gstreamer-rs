@@ -16,6 +16,15 @@ macro_rules! message_builder_generic_impl {
         }
 
         #[allow(clippy::needless_update)]
+        pub fn src_if<O: IsA<Element> + Cast + Clone>(self, src: &O, predicate: bool) -> Self {
+            if predicate {
+                self.src(src)
+            } else {
+                self
+            }
+        }
+
+        #[allow(clippy::needless_update)]
         pub fn src_if_some<O: IsA<Element> + Cast + Clone>(self, src: Option<&O>) -> Self {
             if let Some(src) = src {
                 self.src(src)
@@ -30,6 +39,16 @@ macro_rules! message_builder_generic_impl {
             Self {
                 builder: self.builder.seqnum(seqnum),
                 ..self
+            }
+        }
+
+        #[doc(alias = "gst_message_set_seqnum")]
+        #[allow(clippy::needless_update)]
+        pub fn seqnum_if(self, seqnum: Seqnum, predicate: bool) -> Self {
+            if predicate {
+                self.seqnum(seqnum)
+            } else {
+                self
             }
         }
 
@@ -50,6 +69,17 @@ macro_rules! message_builder_generic_impl {
             Self {
                 builder: self.builder.details(details),
                 ..self
+            }
+        }
+
+        #[cfg(feature = "v1_26")]
+        #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+        #[doc(alias = "gst_message_set_details")]
+        pub fn details_if(self, details: gst::Structure, predicate: bool) -> Self {
+            if predicate {
+                self.details(details)
+            } else {
+                self
             }
         }
 
@@ -77,6 +107,17 @@ macro_rules! message_builder_generic_impl {
         #[cfg(feature = "v1_26")]
         #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
         #[doc(alias = "gst_missing_plugin_message_set_stream_id")]
+        pub fn stream_id_if(self, stream_id: &'a str, predicate: bool) -> Self {
+            if predicate {
+                self.stream_id(stream_id)
+            } else {
+                self
+            }
+        }
+
+        #[cfg(feature = "v1_26")]
+        #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+        #[doc(alias = "gst_missing_plugin_message_set_stream_id")]
         pub fn stream_id_if_some(self, stream_id: Option<&'a str>) -> Self {
             if let Some(stream_id) = stream_id {
                 self.stream_id(stream_id)
@@ -85,6 +126,10 @@ macro_rules! message_builder_generic_impl {
             }
         }
 
+        // rustdoc-stripper-ignore-next
+        /// Sets field `name` to the given value `value`.
+        ///
+        /// Overrides any default or previously defined value for `name`.
         pub fn other_field(self, name: &'a str, value: impl ToSendValue) -> Self {
             Self {
                 builder: self.builder.other_field(name, value),
@@ -92,13 +137,7 @@ macro_rules! message_builder_generic_impl {
             }
         }
 
-        pub fn other_field_if_some(self, name: &'a str, value: Option<impl ToSendValue>) -> Self {
-            if let Some(value) = value {
-                self.other_field(name, value)
-            } else {
-                self
-            }
-        }
+        gst::impl_builder_gvalue_extra_setters!(other_field);
 
         #[deprecated = "use builder.other_field() instead"]
         #[allow(clippy::needless_update)]

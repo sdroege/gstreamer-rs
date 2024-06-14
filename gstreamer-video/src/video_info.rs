@@ -447,6 +447,18 @@ impl<'a> VideoInfoBuilder<'a> {
         }
     }
 
+    pub fn interlace_mode_if(
+        self,
+        interlace_mode: crate::VideoInterlaceMode,
+        predicate: bool,
+    ) -> VideoInfoBuilder<'a> {
+        if predicate {
+            self.interlace_mode(interlace_mode)
+        } else {
+            self
+        }
+    }
+
     pub fn interlace_mode_if_some(
         self,
         interlace_mode: Option<crate::VideoInterlaceMode>,
@@ -465,6 +477,14 @@ impl<'a> VideoInfoBuilder<'a> {
         }
     }
 
+    pub fn flags_if(self, flags: crate::VideoFlags, predicate: bool) -> Self {
+        if predicate {
+            self.flags(flags)
+        } else {
+            self
+        }
+    }
+
     pub fn flags_if_some(self, flags: Option<crate::VideoFlags>) -> Self {
         if let Some(flags) = flags {
             self.flags(flags)
@@ -477,6 +497,14 @@ impl<'a> VideoInfoBuilder<'a> {
         Self {
             size: Some(size),
             ..self
+        }
+    }
+
+    pub fn size_if(self, size: usize, predicate: bool) -> Self {
+        if predicate {
+            self.size(size)
+        } else {
+            self
         }
     }
 
@@ -495,6 +523,14 @@ impl<'a> VideoInfoBuilder<'a> {
         }
     }
 
+    pub fn views_if(self, views: u32, predicate: bool) -> Self {
+        if predicate {
+            self.views(views)
+        } else {
+            self
+        }
+    }
+
     pub fn views_if_some(self, views: Option<u32>) -> Self {
         if let Some(views) = views {
             self.views(views)
@@ -510,6 +546,14 @@ impl<'a> VideoInfoBuilder<'a> {
         }
     }
 
+    pub fn chroma_site_if(self, chroma_site: crate::VideoChromaSite, predicate: bool) -> Self {
+        if predicate {
+            self.chroma_site(chroma_site)
+        } else {
+            self
+        }
+    }
+
     pub fn chroma_site_if_some(self, chroma_site: Option<crate::VideoChromaSite>) -> Self {
         if let Some(chroma_site) = chroma_site {
             self.chroma_site(chroma_site)
@@ -522,6 +566,18 @@ impl<'a> VideoInfoBuilder<'a> {
         Self {
             colorimetry: Some(colorimetry),
             ..self
+        }
+    }
+
+    pub fn colorimetry_if(
+        self,
+        colorimetry: &'a crate::VideoColorimetry,
+        predicate: bool,
+    ) -> VideoInfoBuilder<'a> {
+        if predicate {
+            self.colorimetry(colorimetry)
+        } else {
+            self
         }
     }
 
@@ -543,6 +599,14 @@ impl<'a> VideoInfoBuilder<'a> {
         }
     }
 
+    pub fn par_if<T: Into<gst::Fraction>>(self, par: T, predicate: bool) -> Self {
+        if predicate {
+            self.par(par)
+        } else {
+            self
+        }
+    }
+
     pub fn par_if_some<T: Into<gst::Fraction>>(self, par: Option<T>) -> Self {
         if let Some(par) = par {
             self.par(par)
@@ -555,6 +619,14 @@ impl<'a> VideoInfoBuilder<'a> {
         Self {
             fps: Some(fps.into()),
             ..self
+        }
+    }
+
+    pub fn fps_if<T: Into<gst::Fraction>>(self, fps: T, predicate: bool) -> Self {
+        if predicate {
+            self.fps(fps)
+        } else {
+            self
         }
     }
 
@@ -573,6 +645,14 @@ impl<'a> VideoInfoBuilder<'a> {
         }
     }
 
+    pub fn offset_if(self, offset: &'a [usize], predicate: bool) -> VideoInfoBuilder<'a> {
+        if predicate {
+            self.offset(offset)
+        } else {
+            self
+        }
+    }
+
     pub fn offset_if_some(self, offset: Option<&'a [usize]>) -> VideoInfoBuilder<'a> {
         if let Some(offset) = offset {
             self.offset(offset)
@@ -585,6 +665,14 @@ impl<'a> VideoInfoBuilder<'a> {
         Self {
             stride: Some(stride),
             ..self
+        }
+    }
+
+    pub fn stride_if(self, stride: &'a [i32], predicate: bool) -> VideoInfoBuilder<'a> {
+        if predicate {
+            self.stride(stride)
+        } else {
+            self
         }
     }
 
@@ -603,6 +691,18 @@ impl<'a> VideoInfoBuilder<'a> {
         }
     }
 
+    pub fn multiview_mode_if(
+        self,
+        multiview_mode: crate::VideoMultiviewMode,
+        predicate: bool,
+    ) -> Self {
+        if predicate {
+            self.multiview_mode(multiview_mode)
+        } else {
+            self
+        }
+    }
+
     pub fn multiview_mode_if_some(self, multiview_mode: Option<crate::VideoMultiviewMode>) -> Self {
         if let Some(multiview_mode) = multiview_mode {
             self.multiview_mode(multiview_mode)
@@ -615,6 +715,18 @@ impl<'a> VideoInfoBuilder<'a> {
         Self {
             multiview_flags: Some(multiview_flags),
             ..self
+        }
+    }
+
+    pub fn multiview_flags_if(
+        self,
+        multiview_flags: crate::VideoMultiviewFlags,
+        predicate: bool,
+    ) -> Self {
+        if predicate {
+            self.multiview_flags(multiview_flags)
+        } else {
+            self
         }
     }
 
@@ -633,6 +745,14 @@ impl<'a> VideoInfoBuilder<'a> {
         Self {
             field_order: Some(field_order),
             ..self
+        }
+    }
+
+    pub fn field_order_if(self, field_order: crate::VideoFieldOrder, predicate: bool) -> Self {
+        if predicate {
+            self.field_order(field_order)
+        } else {
+            self
         }
     }
 

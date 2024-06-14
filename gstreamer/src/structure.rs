@@ -12,7 +12,7 @@ use std::{
 use glib::{
     prelude::*,
     translate::*,
-    value::{FromValue, SendValue},
+    value::{FromValue, SendValue, Value},
     IntoGStr,
 };
 
@@ -493,12 +493,37 @@ impl StructureRef {
         }
     }
 
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` to the given value `value`.
+    ///
+    /// Overrides any default or previously defined value for `name`.
     #[doc(alias = "gst_structure_set")]
     pub fn set(&mut self, name: impl IntoGStr, value: impl Into<glib::Value> + Send) {
         let value = glib::SendValue::from_owned(value);
         self.set_value(name, value);
     }
 
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` to the given inner value if `value` is `Some`.
+    ///
+    /// This has no effect if the `predicate` evaluates to `false`,
+    /// i.e. default or previous value for `name` is kept.
+    #[doc(alias = "gst_structure_set")]
+    pub fn set_if(
+        &mut self,
+        name: impl IntoGStr,
+        value: impl Into<glib::Value> + Send,
+        predicate: bool,
+    ) {
+        if predicate {
+            self.set(name, value);
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` to the given inner value if `value` is `Some`.
+    ///
+    /// This has no effect if the value is `None`, i.e. default or previous value for `name` is kept.
     #[doc(alias = "gst_structure_set")]
     pub fn set_if_some(
         &mut self,
@@ -510,6 +535,42 @@ impl StructureRef {
         }
     }
 
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` using the given `ValueType` `V` built from `iter`'s the `Item`s.
+    ///
+    /// Overrides any default or previously defined value for `name`.
+    #[inline]
+    pub fn set_from_iter<V: ValueType + Into<Value> + FromIterator<SendValue> + Send>(
+        &mut self,
+        name: impl IntoGStr,
+        iter: impl IntoIterator<Item = impl ToSendValue>,
+    ) {
+        let iter = iter.into_iter().map(|item| item.to_send_value());
+        self.set(name, V::from_iter(iter));
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` using the given `ValueType` `V` built from `iter`'s Item`s,
+    /// if `iter` is not empty.
+    ///
+    /// This has no effect if `iter` is empty, i.e. previous value for `name` is unchanged.
+    #[inline]
+    pub fn set_if_not_empty<V: ValueType + Into<Value> + FromIterator<SendValue> + Send>(
+        &mut self,
+        name: impl IntoGStr,
+        iter: impl IntoIterator<Item = impl ToSendValue>,
+    ) {
+        let mut iter = iter.into_iter().peekable();
+        if iter.peek().is_some() {
+            let iter = iter.map(|item| item.to_send_value());
+            self.set(name, V::from_iter(iter));
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` to the given value `value`.
+    ///
+    /// Overrides any default or previously defined value for `name`.
     #[doc(alias = "gst_structure_set_value")]
     pub fn set_value(&mut self, name: impl IntoGStr, value: SendValue) {
         unsafe {
@@ -519,6 +580,22 @@ impl StructureRef {
         }
     }
 
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` to the given inner value if `value` is `Some`.
+    ///
+    /// This has no effect if the `predicate` evaluates to `false`,
+    /// i.e. default or previous value for `name` is kept.
+    #[doc(alias = "gst_structure_set_value")]
+    pub fn set_value_if(&mut self, name: impl IntoGStr, value: SendValue, predicate: bool) {
+        if predicate {
+            self.set_value(name, value);
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` to the given inner value if `value` is `Some`.
+    ///
+    /// This has no effect if the value is `None`, i.e. default or previous value for `name` is kept.
     #[doc(alias = "gst_structure_set_value")]
     pub fn set_value_if_some(&mut self, name: impl IntoGStr, value: Option<SendValue>) {
         if let Some(value) = value {
@@ -1167,22 +1244,17 @@ impl Builder {
         }
     }
 
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` to the given value `value`.
+    ///
+    /// Overrides any default or previously defined value for `name`.
+    #[inline]
     pub fn field(mut self, name: impl IntoGStr, value: impl Into<glib::Value> + Send) -> Self {
         self.s.set(name, value);
         self
     }
 
-    pub fn field_if_some(
-        self,
-        name: impl IntoGStr,
-        value: Option<impl Into<glib::Value> + Send>,
-    ) -> Self {
-        if let Some(value) = value {
-            self.field(name, value)
-        } else {
-            self
-        }
-    }
+    impl_builder_gvalue_extra_setters!(field);
 
     #[must_use = "Building the structure without using it has no effect"]
     pub fn build(self) -> Structure {
@@ -1207,6 +1279,7 @@ mod tests {
         s.set("f2", &String::from("bcd"));
         s.set("f3", 123i32);
         s.set("f5", Some("efg"));
+        s.set("f7", 42i32);
 
         assert_eq!(s.get::<&str>("f1"), Ok("abc"));
         assert_eq!(s.get::<Option<&str>>("f2"), Ok(Some("bcd")));
@@ -1216,6 +1289,7 @@ mod tests {
         assert_eq!(s.get_optional::<i32>("f3"), Ok(Some(123i32)));
         assert_eq!(s.get_optional::<i32>("f4"), Ok(None));
         assert_eq!(s.get::<&str>("f5"), Ok("efg"));
+        assert_eq!(s.get::<i32>("f7"), Ok(42i32));
 
         assert_eq!(
             s.get::<i32>("f2"),
@@ -1237,10 +1311,13 @@ mod tests {
         );
         assert_eq!(s.get::<i32>("f4"), Err(GetError::new_field_not_found("f4")));
 
-        assert_eq!(s.fields().collect::<Vec<_>>(), vec!["f1", "f2", "f3", "f5"]);
+        assert_eq!(
+            s.fields().collect::<Vec<_>>(),
+            vec!["f1", "f2", "f3", "f5", "f7"]
+        );
 
         let v = s.iter().map(|(f, v)| (f, v.clone())).collect::<Vec<_>>();
-        assert_eq!(v.len(), 4);
+        assert_eq!(v.len(), 5);
         assert_eq!(v[0].0, "f1");
         assert_eq!(v[0].1.get::<&str>(), Ok("abc"));
         assert_eq!(v[1].0, "f2");
@@ -1249,6 +1326,8 @@ mod tests {
         assert_eq!(v[2].1.get::<i32>(), Ok(123i32));
         assert_eq!(v[3].0, "f5");
         assert_eq!(v[3].1.get::<&str>(), Ok("efg"));
+        assert_eq!(v[4].0, "f7");
+        assert_eq!(v[4].1.get::<i32>(), Ok(42i32));
 
         let s2 = Structure::builder("test")
             .field("f1", "abc")
@@ -1257,6 +1336,8 @@ mod tests {
             .field_if_some("f4", Option::<i32>::None)
             .field_if_some("f5", Some("efg"))
             .field_if_some("f6", Option::<&str>::None)
+            .field_if("f7", 42i32, true)
+            .field_if("f8", 21i32, false)
             .build();
         assert_eq!(s, s2);
 
@@ -1268,6 +1349,8 @@ mod tests {
         s3.set_if_some("f4", Option::<i32>::None);
         s3.set_if_some("f5", Some("efg"));
         s3.set_if_some("f6", Option::<&str>::None);
+        s3.set_if("f7", 42i32, true);
+        s3.set_if("f8", 21i32, false);
         assert_eq!(s, s3);
     }
 
@@ -1336,5 +1419,65 @@ mod tests {
             .build();
 
         assert_eq!(format!("{s:?}"), "Structure(test { f1: (gchararray) \"abc\", f2: (gchararray) \"bcd\", f3: (gint) 123, f4: Structure(nested { badger: (gboolean) TRUE }), f5: Array([(gchararray) \"a\", (gchararray) \"b\", (gchararray) \"c\"]), f6: List([(gchararray) \"d\", (gchararray) \"e\", (gchararray) \"f\"]) })");
+    }
+
+    #[test]
+    fn builder_field_from_iter() {
+        crate::init().unwrap();
+
+        let s = Structure::builder("test")
+            .field_from_iter::<crate::Array>("array", [&1, &2, &3])
+            .field_from_iter::<crate::List>("list", [&4, &5, &6])
+            .build();
+        assert!(s
+            .get::<crate::Array>("array")
+            .unwrap()
+            .iter()
+            .map(|val| val.get::<i32>().unwrap())
+            .eq([1, 2, 3]));
+        assert!(s
+            .get::<crate::List>("list")
+            .unwrap()
+            .iter()
+            .map(|val| val.get::<i32>().unwrap())
+            .eq([4, 5, 6]));
+
+        let array = Vec::<i32>::new();
+        let s = Structure::builder("test")
+            .field_from_iter::<crate::Array>("array", &array)
+            .field_from_iter::<crate::List>("list", &array)
+            .build();
+        assert!(s.get::<crate::Array>("array").unwrap().as_ref().is_empty());
+        assert!(s.get::<crate::List>("list").unwrap().as_ref().is_empty());
+    }
+
+    #[test]
+    fn builder_field_if_not_empty() {
+        crate::init().unwrap();
+
+        let s = Structure::builder("test")
+            .field_if_not_empty::<crate::Array>("array", [&1, &2, &3])
+            .field_if_not_empty::<crate::List>("list", [&4, &5, &6])
+            .build();
+        assert!(s
+            .get::<crate::Array>("array")
+            .unwrap()
+            .iter()
+            .map(|val| val.get::<i32>().unwrap())
+            .eq([1, 2, 3]));
+        assert!(s
+            .get::<crate::List>("list")
+            .unwrap()
+            .iter()
+            .map(|val| val.get::<i32>().unwrap())
+            .eq([4, 5, 6]));
+
+        let array = Vec::<i32>::new();
+        let s = Structure::builder("test")
+            .field_if_not_empty::<crate::Array>("array", &array)
+            .field_if_not_empty::<crate::List>("list", &array)
+            .build();
+        assert!(!s.has_field("array"));
+        assert!(!s.has_field("list"));
     }
 }

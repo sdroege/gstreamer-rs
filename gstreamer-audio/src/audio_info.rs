@@ -97,6 +97,18 @@ impl<'a> AudioInfoBuilder<'a> {
         }
     }
 
+    pub fn positions_if(
+        self,
+        positions: &'a [crate::AudioChannelPosition],
+        predicate: bool,
+    ) -> AudioInfoBuilder<'a> {
+        if predicate {
+            self.positions(positions)
+        } else {
+            self
+        }
+    }
+
     pub fn positions_if_some(
         self,
         positions: Option<&'a [crate::AudioChannelPosition]>,
@@ -115,6 +127,14 @@ impl<'a> AudioInfoBuilder<'a> {
         }
     }
 
+    pub fn flags_if(self, flags: crate::AudioFlags, predicate: bool) -> Self {
+        if predicate {
+            self.flags(flags)
+        } else {
+            self
+        }
+    }
+
     pub fn flags_if_some(self, flags: Option<crate::AudioFlags>) -> Self {
         if let Some(flags) = flags {
             self.flags(flags)
@@ -127,6 +147,14 @@ impl<'a> AudioInfoBuilder<'a> {
         Self {
             layout: Some(layout),
             ..self
+        }
+    }
+
+    pub fn layout_if(self, layout: crate::AudioLayout, predicate: bool) -> Self {
+        if predicate {
+            self.layout(layout)
+        } else {
+            self
         }
     }
 

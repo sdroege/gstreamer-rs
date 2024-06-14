@@ -119,6 +119,17 @@ impl<'a> PadTemplateBuilder<'a> {
         }
     }
 
+    pub fn gtype_if(self, gtype: glib::Type, predicate: bool) -> Self {
+        if predicate {
+            PadTemplateBuilder {
+                gtype: Some(gtype),
+                ..self
+            }
+        } else {
+            self
+        }
+    }
+
     pub fn gtype_if_some(self, gtype: Option<glib::Type>) -> Self {
         if let Some(gtype) = gtype {
             self.gtype(gtype)
@@ -133,6 +144,19 @@ impl<'a> PadTemplateBuilder<'a> {
         PadTemplateBuilder {
             documentation_caps: Some(documentation_caps),
             ..self
+        }
+    }
+
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    pub fn documentation_caps_if(self, documentation_caps: &'a Caps, predicate: bool) -> Self {
+        if predicate {
+            PadTemplateBuilder {
+                documentation_caps: Some(documentation_caps),
+                ..self
+            }
+        } else {
+            self
         }
     }
 

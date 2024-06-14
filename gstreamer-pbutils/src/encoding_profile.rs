@@ -348,6 +348,9 @@ pub trait EncodingProfileBuilder<'a>: Sized {
     fn presence(self, presence: u32) -> Self;
     #[doc(alias = "gst_encoding_profile_set_presence")]
     #[must_use]
+    fn presence_if(self, presence: u32, predicate: bool) -> Self;
+    #[doc(alias = "gst_encoding_profile_set_presence")]
+    #[must_use]
     fn presence_if_some(self, presence: Option<u32>) -> Self;
     #[doc(alias = "gst_encoding_profile_set_allow_dynamic_output")]
     #[must_use]
@@ -373,6 +376,10 @@ pub trait EncodingProfileBuilder<'a>: Sized {
     #[doc(alias = "gst_encoding_profile_set_element_properties")]
     #[must_use]
     fn element_properties(self, element_properties: ElementProperties) -> Self;
+    #[cfg(feature = "v1_20")]
+    #[doc(alias = "gst_encoding_profile_set_element_properties")]
+    #[must_use]
+    fn element_properties_if(self, element_properties: ElementProperties, predecate: bool) -> Self;
     #[cfg(feature = "v1_20")]
     #[doc(alias = "gst_encoding_profile_set_element_properties")]
     #[must_use]
@@ -405,6 +412,14 @@ macro_rules! declare_encoding_profile_builder_common(
             fn presence(mut self, presence: u32) -> $name<'a> {
                 self.base.presence = presence;
                 self
+            }
+
+            fn presence_if(self, presence: u32, predicate: bool) -> $name<'a> {
+                if predicate {
+                    self.presence(presence)
+                } else {
+                    self
+                }
             }
 
             fn presence_if_some(self, presence: Option<u32>) -> $name<'a> {
@@ -460,6 +475,15 @@ macro_rules! declare_encoding_profile_builder_common(
             fn element_properties(mut self, element_properties: ElementProperties) -> $name<'a> {
                 self.base.element_properties = Some(element_properties);
                 self
+            }
+
+            #[cfg(feature = "v1_20")]
+            fn element_properties_if(self, element_properties: ElementProperties, predicate: bool) -> $name<'a> {
+                if predicate {
+                    self.element_properties(element_properties)
+                } else {
+                    self
+                }
             }
 
             #[cfg(feature = "v1_20")]

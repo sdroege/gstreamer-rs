@@ -72,9 +72,8 @@ pub use crate::error::*;
 #[macro_use]
 pub mod miniobject;
 pub use miniobject::{MiniObject, MiniObjectRef};
-pub mod message;
-pub use crate::message::{Message, MessageErrorDomain, MessageRef, MessageView};
 
+#[macro_use]
 mod value;
 pub use crate::value::{
     Array, ArrayRef, Bitmask, Fraction, FractionRange, IntRange, List, ListRef,
@@ -85,6 +84,9 @@ mod value_serde;
 
 #[cfg(feature = "serde")]
 mod flag_serde;
+
+pub mod message;
+pub use crate::message::{Message, MessageErrorDomain, MessageRef, MessageView};
 
 pub mod structure;
 pub use crate::structure::{Structure, StructureRef};

@@ -90,6 +90,14 @@ impl<T> AudioCapsBuilder<T> {
         }
     }
 
+    pub fn format_if(self, format: AudioFormat, predicate: bool) -> Self {
+        if predicate {
+            self.format(format)
+        } else {
+            self
+        }
+    }
+
     pub fn format_if_some(self, format: Option<AudioFormat>) -> Self {
         if let Some(format) = format {
             self.format(format)
@@ -107,6 +115,18 @@ impl<T> AudioCapsBuilder<T> {
         }
     }
 
+    pub fn format_list_if(
+        self,
+        formats: impl IntoIterator<Item = AudioFormat>,
+        predicate: bool,
+    ) -> Self {
+        if predicate {
+            self.format_list(formats)
+        } else {
+            self
+        }
+    }
+
     pub fn format_list_if_some(
         self,
         formats: Option<impl IntoIterator<Item = AudioFormat>>,
@@ -118,9 +138,26 @@ impl<T> AudioCapsBuilder<T> {
         }
     }
 
+    pub fn format_list_if_not_empty(self, formats: impl IntoIterator<Item = AudioFormat>) -> Self {
+        let mut formats = formats.into_iter().peekable();
+        if formats.peek().is_some() {
+            self.format_list(formats)
+        } else {
+            self
+        }
+    }
+
     pub fn rate(self, rate: i32) -> Self {
         Self {
             builder: self.builder.field(glib::gstr!("rate"), rate),
+        }
+    }
+
+    pub fn rate_if(self, rate: i32, predicate: bool) -> Self {
+        if predicate {
+            self.rate(rate)
+        } else {
+            self
         }
     }
 
@@ -140,6 +177,14 @@ impl<T> AudioCapsBuilder<T> {
         }
     }
 
+    pub fn rate_range_if(self, rates: impl RangeBounds<i32>, predicate: bool) -> Self {
+        if predicate {
+            self.rate_range(rates)
+        } else {
+            self
+        }
+    }
+
     pub fn rate_range_if_some(self, rates: Option<impl RangeBounds<i32>>) -> Self {
         if let Some(rates) = rates {
             self.rate_range(rates)
@@ -156,8 +201,25 @@ impl<T> AudioCapsBuilder<T> {
         }
     }
 
+    pub fn rate_list_if(self, rates: impl IntoIterator<Item = i32>, predicate: bool) -> Self {
+        if predicate {
+            self.rate_list(rates)
+        } else {
+            self
+        }
+    }
+
     pub fn rate_list_if_some(self, rates: Option<impl IntoIterator<Item = i32>>) -> Self {
         if let Some(rates) = rates {
+            self.rate_list(rates)
+        } else {
+            self
+        }
+    }
+
+    pub fn rate_list_if_not_empty(self, rates: impl IntoIterator<Item = i32>) -> Self {
+        let mut rates = rates.into_iter().peekable();
+        if rates.peek().is_some() {
             self.rate_list(rates)
         } else {
             self
@@ -167,6 +229,14 @@ impl<T> AudioCapsBuilder<T> {
     pub fn channels(self, channels: i32) -> Self {
         Self {
             builder: self.builder.field(glib::gstr!("channels"), channels),
+        }
+    }
+
+    pub fn channels_if(self, channels: i32, predicate: bool) -> Self {
+        if predicate {
+            self.channels(channels)
+        } else {
+            self
         }
     }
 
@@ -186,6 +256,14 @@ impl<T> AudioCapsBuilder<T> {
         }
     }
 
+    pub fn channels_range_if(self, channels: impl RangeBounds<i32>, predicate: bool) -> Self {
+        if predicate {
+            self.channels_range(channels)
+        } else {
+            self
+        }
+    }
+
     pub fn channels_range_if_some(self, channels: Option<impl RangeBounds<i32>>) -> Self {
         if let Some(channels) = channels {
             self.channels_range(channels)
@@ -202,8 +280,29 @@ impl<T> AudioCapsBuilder<T> {
         }
     }
 
+    pub fn channels_list_if(
+        self,
+        channels: impl IntoIterator<Item = i32>,
+        predicate: bool,
+    ) -> Self {
+        if predicate {
+            self.channels_list(channels)
+        } else {
+            self
+        }
+    }
+
     pub fn channels_list_if_some(self, channels: Option<impl IntoIterator<Item = i32>>) -> Self {
         if let Some(channels) = channels {
+            self.channels_list(channels)
+        } else {
+            self
+        }
+    }
+
+    pub fn channels_list_if_not_empty(self, channels: impl IntoIterator<Item = i32>) -> Self {
+        let mut channels = channels.into_iter().peekable();
+        if channels.peek().is_some() {
             self.channels_list(channels)
         } else {
             self
@@ -215,6 +314,14 @@ impl<T> AudioCapsBuilder<T> {
             builder: self
                 .builder
                 .field(glib::gstr!("layout"), layout_str(layout)),
+        }
+    }
+
+    pub fn layout_if(self, layout: AudioLayout, predicate: bool) -> Self {
+        if predicate {
+            self.layout(layout)
+        } else {
+            self
         }
     }
 
@@ -235,6 +342,18 @@ impl<T> AudioCapsBuilder<T> {
         }
     }
 
+    pub fn layout_list_if(
+        self,
+        layouts: impl IntoIterator<Item = AudioLayout>,
+        predicate: bool,
+    ) -> Self {
+        if predicate {
+            self.layout_list(layouts)
+        } else {
+            self
+        }
+    }
+
     pub fn layout_list_if_some(
         self,
         layouts: Option<impl IntoIterator<Item = AudioLayout>>,
@@ -246,11 +365,28 @@ impl<T> AudioCapsBuilder<T> {
         }
     }
 
+    pub fn layout_list_if_not_empty(self, layouts: impl IntoIterator<Item = AudioLayout>) -> Self {
+        let mut layouts = layouts.into_iter().peekable();
+        if layouts.peek().is_some() {
+            self.layout_list(layouts)
+        } else {
+            self
+        }
+    }
+
     pub fn channel_mask(self, channel_mask: u64) -> Self {
         Self {
             builder: self
                 .builder
                 .field("channel-mask", gst::Bitmask::new(channel_mask)),
+        }
+    }
+
+    pub fn channel_mask_if(self, channel_mask: u64, predicate: bool) -> Self {
+        if predicate {
+            self.channel_mask(channel_mask)
+        } else {
+            self
         }
     }
 
@@ -275,19 +411,18 @@ impl<T> AudioCapsBuilder<T> {
         }
     }
 
-    pub fn field(self, name: &str, value: impl Into<glib::Value> + Send) -> Self {
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` to the given value `value`.
+    ///
+    /// Overrides any default or previously defined value for `name`.
+    #[inline]
+    pub fn field(self, name: impl IntoGStr, value: impl Into<glib::Value> + Send) -> Self {
         Self {
             builder: self.builder.field(name, value),
         }
     }
 
-    pub fn field_if_some(self, name: &str, value: Option<impl Into<glib::Value> + Send>) -> Self {
-        if let Some(value) = value {
-            self.field(name, value)
-        } else {
-            self
-        }
-    }
+    gst::impl_builder_gvalue_extra_setters!(field);
 
     #[must_use]
     pub fn build(self) -> gst::Caps {
@@ -321,7 +456,7 @@ fn layout_str(layout: AudioLayout) -> &'static glib::GStr {
 
 #[cfg(test)]
 mod tests {
-    use super::AudioCapsBuilder;
+    use super::{AudioCapsBuilder, AudioFormat};
 
     #[test]
     fn default_encoding() {
@@ -335,5 +470,43 @@ mod tests {
         gst::init().unwrap();
         let caps = AudioCapsBuilder::for_encoding("audio/mpeg").build();
         assert_eq!(caps.structure(0).unwrap().name(), "audio/mpeg");
+    }
+
+    #[test]
+    fn format_if() {
+        gst::init().unwrap();
+
+        let formats = [AudioFormat::S24be, AudioFormat::S16be, AudioFormat::U8];
+        let caps_with_format = AudioCapsBuilder::for_encoding("audio/x-raw")
+            .format_list(formats)
+            .build();
+        assert!(caps_with_format
+            .structure(0)
+            .unwrap()
+            .get::<gst::List>("format")
+            .unwrap()
+            .iter()
+            .map(|f| f.get::<String>().unwrap())
+            .eq(formats.iter().map(|f| f.to_string())));
+
+        let caps = AudioCapsBuilder::for_encoding("audio/x-raw")
+            .format_list_if_some(Some(formats))
+            .build();
+        assert_eq!(caps, caps_with_format);
+
+        let caps = AudioCapsBuilder::for_encoding("audio/x-raw")
+            .format_list_if_some(Option::<Vec<AudioFormat>>::None)
+            .build();
+        assert!(!caps.structure(0).unwrap().has_field("format"));
+
+        let caps = AudioCapsBuilder::for_encoding("audio/x-raw")
+            .format_list_if_not_empty(formats)
+            .build();
+        assert_eq!(caps, caps_with_format);
+
+        let caps = AudioCapsBuilder::for_encoding("audio/x-raw")
+            .format_list_if_not_empty(Vec::<AudioFormat>::new())
+            .build();
+        assert!(!caps.structure(0).unwrap().has_field("format"));
     }
 }

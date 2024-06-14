@@ -123,6 +123,14 @@ impl PipelineBuilder {
         }
     }
 
+    pub fn delay_if(self, delay: u64, predicate: bool) -> Self {
+        if predicate {
+            self.delay(delay)
+        } else {
+            self
+        }
+    }
+
     pub fn delay_if_some(self, delay: Option<u64>) -> Self {
         if let Some(delay) = delay {
             self.delay(delay)
@@ -136,6 +144,14 @@ impl PipelineBuilder {
             Self {
                 builder: self.builder.property("latency", latency),
             }
+        } else {
+            self
+        }
+    }
+
+    pub fn latency_if(self, latency: impl Into<Option<crate::ClockTime>>, predicate: bool) -> Self {
+        if predicate {
+            self.latency(latency)
         } else {
             self
         }
@@ -180,6 +196,14 @@ impl PipelineBuilder {
     pub fn name(self, name: impl Into<glib::GString>) -> Self {
         Self {
             builder: self.builder.property("name", name.into()),
+        }
+    }
+
+    pub fn name_if(self, name: impl Into<glib::GString>, predicate: bool) -> Self {
+        if predicate {
+            self.name(name)
+        } else {
+            self
         }
     }
 

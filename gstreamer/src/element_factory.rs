@@ -225,6 +225,8 @@ impl<'a> ElementBuilder<'a> {
 
     // rustdoc-stripper-ignore-next
     /// Sets property `name` to the given value `value`.
+    ///
+    /// Overrides any default or previously defined value for `name`.
     #[inline]
     pub fn property(self, name: &'a str, value: impl Into<glib::Value> + 'a) -> Self {
         Self {
@@ -237,23 +239,10 @@ impl<'a> ElementBuilder<'a> {
         }
     }
 
-    // rustdoc-stripper-ignore-next
-    /// Sets property `name` to the given value `value` if it is `Some`.
-    #[inline]
-    pub fn property_if_some(
-        self,
-        name: &'a str,
-        value: Option<impl Into<glib::Value> + 'a>,
-    ) -> Self {
-        if let Some(value) = value {
-            self.property(name, value)
-        } else {
-            self
-        }
-    }
+    impl_builder_gvalue_extra_setters!(property);
 
     // rustdoc-stripper-ignore-next
-    /// Set property `name` to the given string value `value`.
+    /// Sets property `name` to the given string value `value`.
     #[inline]
     pub fn property_from_str(self, name: &'a str, value: &'a str) -> Self {
         Self {
@@ -267,7 +256,7 @@ impl<'a> ElementBuilder<'a> {
     }
 
     // rustdoc-stripper-ignore-next
-    /// Set property `name` to the given string value `value` if it is `Some`.
+    /// Sets property `name` to the given string value `value` if it is `Some`.
     #[inline]
     pub fn property_from_str_if_some(self, name: &'a str, value: Option<&'a str>) -> Self {
         if let Some(value) = value {
@@ -278,7 +267,7 @@ impl<'a> ElementBuilder<'a> {
     }
 
     // rustdoc-stripper-ignore-next
-    /// Build the element with the provided properties.
+    /// Builds the element with the provided properties.
     ///
     /// This fails if there is no such element factory or the element factory can't be loaded.
     ///

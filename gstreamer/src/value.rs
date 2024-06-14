@@ -1463,6 +1463,199 @@ impl GstValueExt for glib::Value {
     }
 }
 
+#[doc(hidden)]
+#[macro_export]
+macro_rules! impl_builder_gvalue_extra_setters (
+    (field) => {
+        // rustdoc-stripper-ignore-next
+        /// Sets field `name` to the given inner value if the `predicate` evaluates to `true`.
+        ///
+        /// This has no effect if the `predicate` evaluates to `false`,
+        /// i.e. default or previous value for `name` is kept.
+        #[inline]
+        pub fn field_if(self, name: impl $crate::glib::IntoGStr, value: impl Into<$crate::glib::Value> + Send, predicate: bool) -> Self {
+            if predicate {
+                self.field(name, value)
+            } else {
+                self
+            }
+        }
+
+        // rustdoc-stripper-ignore-next
+        /// Sets field `name` to the given inner value if `value` is `Some`.
+        ///
+        /// This has no effect if the value is `None`, i.e. default or previous value for `name` is kept.
+        #[inline]
+        pub fn field_if_some(self, name: impl $crate::glib::IntoGStr, value: Option<impl Into<$crate::glib::Value> + Send>) -> Self {
+            if let Some(value) = value {
+                self.field(name, value)
+            } else {
+                self
+            }
+        }
+
+        // rustdoc-stripper-ignore-next
+        /// Sets field `name` using the given `ValueType` `V` built from `iter`'s the `Item`s.
+        ///
+        /// Overrides any default or previously defined value for `name`.
+        #[inline]
+        pub fn field_from_iter<V: $crate::glib::value::ValueType + Into<$crate::glib::Value> + FromIterator<$crate::glib::SendValue> + Send>(
+            self,
+            name: impl $crate::glib::IntoGStr,
+            iter: impl IntoIterator<Item = impl $crate::glib::value::ToSendValue>,
+        ) -> Self {
+            let iter = iter.into_iter().map(|item| item.to_send_value());
+            self.field(name, V::from_iter(iter))
+        }
+
+        // rustdoc-stripper-ignore-next
+        /// Sets field `name` using the given `ValueType` `V` built from `iter`'s Item`s,
+        /// if `iter` is not empty.
+        ///
+        /// This has no effect if `iter` is empty, i.e. previous value for `name` is unchanged.
+        #[inline]
+        pub fn field_if_not_empty<V: $crate::glib::value::ValueType + Into<$crate::glib::Value> + FromIterator<$crate::glib::SendValue> + Send>(
+            self,
+            name: impl $crate::glib::IntoGStr,
+            iter: impl IntoIterator<Item = impl $crate::glib::value::ToSendValue>,
+        ) -> Self {
+            let mut iter = iter.into_iter().peekable();
+            if iter.peek().is_some() {
+                let iter = iter.map(|item| item.to_send_value());
+                self.field(name, V::from_iter(iter))
+            } else {
+                self
+            }
+        }
+    };
+
+    (other_field) => {
+        // rustdoc-stripper-ignore-next
+        /// Sets field `name` to the given inner value if the `predicate` evaluates to `true`.
+        ///
+        /// This has no effect if the `predicate` evaluates to `false`,
+        /// i.e. default or previous value for `name` is kept.
+        #[inline]
+        pub fn other_field_if(self, name: &'a str, value: impl $crate::glib::value::ToSendValue, predicate: bool) -> Self {
+            if predicate {
+                self.other_field(name, value)
+            } else {
+                self
+            }
+        }
+
+        // rustdoc-stripper-ignore-next
+        /// Sets field `name` to the given inner value if `value` is `Some`.
+        ///
+        /// This has no effect if the value is `None`, i.e. default or previous value for `name` is kept.
+        #[inline]
+        pub fn other_field_if_some(self, name: &'a str, value: Option<impl $crate::glib::value::ToSendValue>) -> Self {
+            if let Some(value) = value {
+                self.other_field(name, value)
+            } else {
+                self
+            }
+        }
+
+        // rustdoc-stripper-ignore-next
+        /// Sets field `name` using the given `ValueType` `V` built from `iter`'s the `Item`s.
+        ///
+        /// Overrides any default or previously defined value for `name`.
+        #[inline]
+        pub fn other_field_from_iter<V: $crate::glib::value::ValueType + $crate::glib::value::ToSendValue + FromIterator<$crate::glib::SendValue>>(
+            self,
+            name: &'a str,
+            iter: impl IntoIterator<Item = impl $crate::glib::value::ToSendValue>,
+        ) -> Self {
+            let iter = iter.into_iter().map(|item| item.to_send_value());
+            self.other_field(name, V::from_iter(iter))
+        }
+
+        // rustdoc-stripper-ignore-next
+        /// Sets field `name` using the given `ValueType` `V` built from `iter`'s Item`s,
+        /// if `iter` is not empty.
+        ///
+        /// This has no effect if `iter` is empty, i.e. previous value for `name` is unchanged.
+        #[inline]
+        pub fn other_field_if_not_empty<V: $crate::glib::value::ValueType + $crate::glib::value::ToSendValue + FromIterator<$crate::glib::SendValue>>(
+            self,
+            name: &'a str,
+            iter: impl IntoIterator<Item = impl $crate::glib::value::ToSendValue>,
+        ) -> Self {
+            let mut iter = iter.into_iter().peekable();
+            if iter.peek().is_some() {
+                let iter = iter.map(|item| item.to_send_value());
+                self.other_field(name, V::from_iter(iter))
+            } else {
+                self
+            }
+        }
+     };
+
+    (property) => {
+        // rustdoc-stripper-ignore-next
+        /// Sets property `name` to the given inner value if the `predicate` evaluates to `true`.
+        ///
+        /// This has no effect if the `predicate` evaluates to `false`,
+        /// i.e. default or previous value for `name` is kept.
+        #[inline]
+        pub fn property_if(self, name: &'a str, value: impl Into<$crate::glib::Value> + 'a, predicate: bool) -> Self {
+            if predicate {
+                self.property(name, value)
+            } else {
+                self
+            }
+        }
+
+        // rustdoc-stripper-ignore-next
+        /// Sets property `name` to the given inner value if `value` is `Some`.
+        ///
+        /// This has no effect if the value is `None`, i.e. default or previous value for `name` is kept.
+        #[inline]
+        pub fn property_if_some(self, name: &'a str, value: Option<impl Into<$crate::glib::Value> + 'a>) -> Self {
+            if let Some(value) = value {
+                self.property(name, value)
+            } else {
+                self
+            }
+        }
+
+        // rustdoc-stripper-ignore-next
+        /// Sets property `name` using the given `ValueType` `V` built from `iter`'s the `Item`s.
+        ///
+        /// Overrides any default or previously defined value for `name`.
+        #[inline]
+        pub fn property_from_iter<V: $crate::glib::value::ValueType + Into<$crate::glib::Value> + FromIterator<$crate::glib::SendValue>>(
+            self,
+            name: &'a str,
+            iter: impl IntoIterator<Item = impl $crate::glib::value::ToSendValue>,
+        ) -> Self {
+            let iter = iter.into_iter().map(|item| item.to_send_value());
+            self.property(name, V::from_iter(iter))
+        }
+
+        // rustdoc-stripper-ignore-next
+        /// Sets property `name` using the given `ValueType` `V` built from `iter`'s Item`s,
+        /// if `iter` is not empty.
+        ///
+        /// This has no effect if `iter` is empty, i.e. previous value for `name` is unchanged.
+        #[inline]
+        pub fn property_if_not_empty<V: $crate::glib::value::ValueType + Into<$crate::glib::Value> + FromIterator<$crate::glib::SendValue>>(
+            self,
+            name: &'a str,
+            iter: impl IntoIterator<Item = impl $crate::glib::value::ToSendValue>,
+        ) -> Self {
+            let mut iter = iter.into_iter().peekable();
+            if iter.peek().is_some() {
+                let iter = iter.map(|item| item.to_send_value());
+                self.property(name, V::from_iter(iter))
+            } else {
+                self
+            }
+        }
+     };
+);
+
 #[cfg(test)]
 mod tests {
     use super::*;

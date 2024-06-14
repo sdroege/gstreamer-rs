@@ -2,7 +2,11 @@
 
 use std::{fmt, marker::PhantomData, ptr, str};
 
-use glib::{prelude::*, translate::*, value::ToSendValue};
+use glib::{
+    prelude::*,
+    translate::*,
+    value::{SendValue, ToSendValue},
+};
 
 use crate::{caps_features::*, ffi, structure::*, CapsIntersectMode};
 
@@ -298,6 +302,10 @@ impl std::iter::Extend<Caps> for CapsRef {
 }
 
 impl CapsRef {
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` to the given value `value`.
+    ///
+    /// Overrides any default or previously defined value for `name`.
     #[doc(alias = "gst_caps_set_value")]
     #[doc(alias = "gst_caps_set_simple")]
     pub fn set(&mut self, name: impl IntoGStr, value: impl ToSendValue + Sync) {
@@ -305,12 +313,96 @@ impl CapsRef {
         self.set_value(name, value);
     }
 
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` to the given inner value if `value` is `Some`.
+    ///
+    /// This has no effect if the `predicate` evaluates to `false`,
+    /// i.e. default or previous value for `name` is kept.
+    #[doc(alias = "gst_caps_set_value")]
+    #[doc(alias = "gst_caps_set_simple")]
+    pub fn set_if(&mut self, name: impl IntoGStr, value: impl ToSendValue + Sync, predicate: bool) {
+        if predicate {
+            self.set(name, value);
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` to the given inner value if `value` is `Some`.
+    ///
+    /// This has no effect if the value is `None`, i.e. default or previous value for `name` is kept.
+    #[doc(alias = "gst_caps_set_value")]
+    #[doc(alias = "gst_caps_set_simple")]
+    pub fn set_if_some(&mut self, name: impl IntoGStr, value: Option<impl ToSendValue + Sync>) {
+        if let Some(value) = value {
+            self.set(name, value);
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` using the given `ValueType` `V` built from `iter`'s the `Item`s.
+    ///
+    /// Overrides any default or previously defined value for `name`.
+    #[inline]
+    pub fn set_from_iter<V: ValueType + ToSendValue + FromIterator<SendValue> + Sync>(
+        &mut self,
+        name: impl IntoGStr,
+        iter: impl IntoIterator<Item = impl ToSendValue>,
+    ) {
+        let iter = iter.into_iter().map(|item| item.to_send_value());
+        self.set(name, V::from_iter(iter));
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` using the given `ValueType` `V` built from `iter`'s Item`s,
+    /// if `iter` is not empty.
+    ///
+    /// This has no effect if `iter` is empty, i.e. previous value for `name` is unchanged.
+    #[inline]
+    pub fn set_if_not_empty<V: ValueType + ToSendValue + FromIterator<SendValue> + Sync>(
+        &mut self,
+        name: impl IntoGStr,
+        iter: impl IntoIterator<Item = impl ToSendValue>,
+    ) {
+        let mut iter = iter.into_iter().peekable();
+        if iter.peek().is_some() {
+            let iter = iter.map(|item| item.to_send_value());
+            self.set(name, V::from_iter(iter));
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` to the given value `value`.
+    ///
+    /// Overrides any default or previously defined value for `name`.
     #[doc(alias = "gst_caps_set_value")]
     pub fn set_value(&mut self, name: impl IntoGStr, value: glib::SendValue) {
         unsafe {
             name.run_with_gstr(|name| {
                 ffi::gst_caps_set_value(self.as_mut_ptr(), name.as_ptr(), value.to_glib_none().0)
             });
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` to the given inner value if `value` is `Some`.
+    ///
+    /// This has no effect if the `predicate` evaluates to `false`,
+    /// i.e. default or previous value for `name` is kept.
+    #[doc(alias = "gst_caps_set_value")]
+    pub fn set_value_if(&mut self, name: impl IntoGStr, value: SendValue, predicate: bool) {
+        if predicate {
+            self.set_value(name, value);
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` to the given inner value if `value` is `Some`.
+    ///
+    /// This has no effect if the value is `None`, i.e. default or previous value for `name` is kept.
+    #[doc(alias = "gst_caps_set_value")]
+    pub fn set_value_if_some(&mut self, name: impl IntoGStr, value: Option<SendValue>) {
+        if let Some(value) = value {
+            self.set_value(name, value);
         }
     }
 
@@ -1014,22 +1106,17 @@ impl Builder<NoFeature> {
 }
 
 impl<T> Builder<T> {
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` to the given value `value`.
+    ///
+    /// Overrides any default or previously defined value for `name`.
+    #[inline]
     pub fn field(mut self, name: impl IntoGStr, value: impl Into<glib::Value> + Send) -> Self {
         self.s.set(name, value);
         self
     }
 
-    pub fn field_if_some(
-        self,
-        name: impl IntoGStr,
-        value: Option<impl Into<glib::Value> + Send>,
-    ) -> Self {
-        if let Some(value) = value {
-            self.field(name, value)
-        } else {
-            self
-        }
-    }
+    impl_builder_gvalue_extra_setters!(field);
 
     #[must_use = "Building the caps without using them has no effect"]
     pub fn build(self) -> Caps {

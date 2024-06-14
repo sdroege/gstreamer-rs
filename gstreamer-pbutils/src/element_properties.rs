@@ -137,24 +137,20 @@ pub struct ElementPropertiesGeneralBuilder {
 }
 
 impl ElementPropertiesGeneralBuilder {
-    pub fn field<T>(mut self, property_name: &str, value: T) -> Self
-    where
-        T: Into<glib::Value> + Send,
-    {
+    // rustdoc-stripper-ignore-next
+    /// Sets property `property_name` to the given value `value`.
+    ///
+    /// Overrides any default or previously defined value for `property_name`.
+    pub fn field(
+        mut self,
+        property_name: impl glib::IntoGStr,
+        value: impl Into<glib::Value> + Send,
+    ) -> Self {
         self.structure.set(property_name, value);
         self
     }
 
-    pub fn field_if_some<T>(self, property_name: &str, value: Option<T>) -> Self
-    where
-        T: Into<glib::Value> + Send,
-    {
-        if let Some(value) = value {
-            self.field(property_name, value)
-        } else {
-            self
-        }
-    }
+    gst::impl_builder_gvalue_extra_setters!(field);
 
     pub fn field_value(mut self, property_name: &str, value: glib::SendValue) -> Self {
         self.structure.set_value(property_name, value);
@@ -184,6 +180,14 @@ impl ElementPropertiesMapBuilder {
     pub fn item(mut self, item: ElementPropertiesMapItem) -> Self {
         self.map.push(item.into_inner().to_send_value());
         self
+    }
+
+    pub fn item_if(self, item: ElementPropertiesMapItem, predicate: bool) -> Self {
+        if predicate {
+            self.item(item)
+        } else {
+            self
+        }
     }
 
     pub fn item_if_some(self, item: Option<ElementPropertiesMapItem>) -> Self {
@@ -271,24 +275,20 @@ pub struct ElementPropertiesMapItemBuilder {
 }
 
 impl ElementPropertiesMapItemBuilder {
-    pub fn field<T>(mut self, property_name: &str, value: T) -> Self
-    where
-        T: Into<glib::Value> + Send,
-    {
+    // rustdoc-stripper-ignore-next
+    /// Sets property `property_name` to the given value `value`.
+    ///
+    /// Overrides any default or previously defined value for `property_name`.
+    pub fn field(
+        mut self,
+        property_name: impl glib::IntoGStr,
+        value: impl Into<glib::Value> + Send,
+    ) -> Self {
         self.structure.set(property_name, value);
         self
     }
 
-    pub fn field_if_some<T>(self, property_name: &str, value: Option<T>) -> Self
-    where
-        T: Into<glib::Value> + Send,
-    {
-        if let Some(value) = value {
-            self.field(property_name, value)
-        } else {
-            self
-        }
-    }
+    gst::impl_builder_gvalue_extra_setters!(field);
 
     pub fn field_value(mut self, property_name: &str, value: glib::SendValue) -> Self {
         self.structure.set_value(property_name, value);

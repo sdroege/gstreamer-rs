@@ -278,6 +278,14 @@ impl BinBuilder {
         }
     }
 
+    pub fn name_if(self, name: impl Into<glib::GString>, predicate: bool) -> Self {
+        if predicate {
+            self.name(name)
+        } else {
+            self
+        }
+    }
+
     pub fn name_if_some(self, name: Option<impl Into<glib::GString>>) -> Self {
         if let Some(name) = name {
             self.name(name)

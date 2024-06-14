@@ -19,6 +19,14 @@ macro_rules! event_builder_generic_impl {
             }
         }
 
+        pub fn seqnum_if(self, seqnum: gst::Seqnum, predicate: bool) -> Self {
+            if predicate {
+                self.seqnum(seqnum)
+            } else {
+                self
+            }
+        }
+
         pub fn seqnum_if_some(self, seqnum: Option<gst::Seqnum>) -> Self {
             if let Some(seqnum) = seqnum {
                 self.seqnum(seqnum)
@@ -31,6 +39,14 @@ macro_rules! event_builder_generic_impl {
             Self {
                 running_time_offset: Some(running_time_offset),
                 ..self
+            }
+        }
+
+        pub fn running_time_offset_if(self, running_time_offset: i64, predicate: bool) -> Self {
+            if predicate {
+                self.running_time_offset(running_time_offset)
+            } else {
+                self
             }
         }
 
@@ -52,13 +68,7 @@ macro_rules! event_builder_generic_impl {
             }
         }
 
-        pub fn other_field_if_some(self, name: &'a str, value: Option<impl ToSendValue>) -> Self {
-            if let Some(value) = value {
-                self.other_field(name, value)
-            } else {
-                self
-            }
-        }
+        gst::impl_builder_gvalue_extra_setters!(other_field);
 
         #[deprecated = "use build.other_field() instead"]
         pub fn other_fields(
@@ -138,6 +148,14 @@ impl<'a> DownstreamForceKeyUnitEventBuilder<'a> {
         }
     }
 
+    pub fn timestamp_if(self, timestamp: gst::ClockTime, predicate: bool) -> Self {
+        if predicate {
+            self.timestamp(timestamp)
+        } else {
+            self
+        }
+    }
+
     pub fn timestamp_if_some(self, timestamp: Option<gst::ClockTime>) -> Self {
         if let Some(timestamp) = timestamp {
             self.timestamp(timestamp)
@@ -153,6 +171,14 @@ impl<'a> DownstreamForceKeyUnitEventBuilder<'a> {
         }
     }
 
+    pub fn stream_time_if(self, stream_time: gst::ClockTime, predicate: bool) -> Self {
+        if predicate {
+            self.stream_time(stream_time)
+        } else {
+            self
+        }
+    }
+
     pub fn stream_time_if_some(self, stream_time: Option<gst::ClockTime>) -> Self {
         if let Some(stream_time) = stream_time {
             self.stream_time(stream_time)
@@ -165,6 +191,14 @@ impl<'a> DownstreamForceKeyUnitEventBuilder<'a> {
         Self {
             running_time: running_time.into(),
             ..self
+        }
+    }
+
+    pub fn running_time_if(self, running_time: gst::ClockTime, predicate: bool) -> Self {
+        if predicate {
+            self.running_time(running_time)
+        } else {
+            self
         }
     }
 
@@ -193,6 +227,14 @@ impl<'a> DownstreamForceKeyUnitEventBuilder<'a> {
 
     pub fn count(self, count: u32) -> Self {
         Self { count, ..self }
+    }
+
+    pub fn count_if(self, count: u32, predicate: bool) -> Self {
+        if predicate {
+            self.count(count)
+        } else {
+            self
+        }
     }
 
     pub fn count_if_some(self, count: Option<u32>) -> Self {
@@ -292,6 +334,14 @@ impl<'a> UpstreamForceKeyUnitEventBuilder<'a> {
         }
     }
 
+    pub fn running_time_if(self, running_time: gst::ClockTime, predicate: bool) -> Self {
+        if predicate {
+            self.running_time(running_time)
+        } else {
+            self
+        }
+    }
+
     pub fn running_time_if_some(self, running_time: Option<gst::ClockTime>) -> Self {
         if let Some(running_time) = running_time {
             self.running_time(running_time)
@@ -317,6 +367,14 @@ impl<'a> UpstreamForceKeyUnitEventBuilder<'a> {
 
     pub fn count(self, count: u32) -> Self {
         Self { count, ..self }
+    }
+
+    pub fn count_if(self, count: u32, predicate: bool) -> Self {
+        if predicate {
+            self.count(count)
+        } else {
+            self
+        }
     }
 
     pub fn count_if_some(self, count: Option<u32>) -> Self {

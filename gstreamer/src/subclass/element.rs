@@ -563,7 +563,7 @@ unsafe extern "C" fn element_post_message<T: ElementImpl>(
 
 #[cfg(test)]
 mod tests {
-    use std::sync::atomic;
+    use std::sync::{atomic, Arc, Mutex, OnceLock};
 
     use super::*;
     use crate::ElementFactory;
@@ -576,6 +576,7 @@ mod tests {
             pub(super) sinkpad: crate::Pad,
             pub(super) n_buffers: atomic::AtomicU32,
             pub(super) reached_playing: atomic::AtomicBool,
+            pub(super) array: Arc<Mutex<Vec<String>>>,
         }
 
         impl TestElement {
@@ -658,6 +659,10 @@ mod tests {
                 Self {
                     n_buffers: atomic::AtomicU32::new(0),
                     reached_playing: atomic::AtomicBool::new(false),
+                    array: Arc::new(Mutex::new(vec![
+                        "default0".to_string(),
+                        "default1".to_string(),
+                    ])),
                     srcpad,
                     sinkpad,
                 }
@@ -671,6 +676,30 @@ mod tests {
                 let element = self.obj();
                 element.add_pad(&self.sinkpad).unwrap();
                 element.add_pad(&self.srcpad).unwrap();
+            }
+
+            fn properties() -> &'static [glib::ParamSpec] {
+                static PROPERTIES: OnceLock<Vec<glib::ParamSpec>> = OnceLock::new();
+                PROPERTIES.get_or_init(|| vec![crate::ParamSpecArray::builder("array").build()])
+            }
+
+            fn set_property(&self, _id: usize, value: &glib::Value, pspec: &glib::ParamSpec) {
+                match pspec.name() {
+                    "array" => {
+                        let value = value.get::<crate::Array>().unwrap();
+                        let mut array = self.array.lock().unwrap();
+                        array.clear();
+                        array.extend(value.iter().map(|v| v.get().unwrap()));
+                    }
+                    _ => unimplemented!(),
+                }
+            }
+
+            fn property(&self, _id: usize, pspec: &glib::ParamSpec) -> glib::Value {
+                match pspec.name() {
+                    "array" => crate::Array::new(&*self.array.lock().unwrap()).to_value(),
+                    _ => unimplemented!(),
+                }
             }
         }
 
@@ -741,9 +770,40 @@ mod tests {
         }
     }
 
+    fn plugin_init(plugin: &crate::Plugin) -> Result<(), glib::BoolError> {
+        crate::Element::register(
+            Some(plugin),
+            "testelement",
+            crate::Rank::MARGINAL,
+            TestElement::static_type(),
+        )
+    }
+
+    crate::plugin_define!(
+        rssubclasstestelem,
+        env!("CARGO_PKG_DESCRIPTION"),
+        plugin_init,
+        env!("CARGO_PKG_VERSION"),
+        "MPL-2.0",
+        env!("CARGO_PKG_NAME"),
+        env!("CARGO_PKG_NAME"),
+        env!("CARGO_PKG_REPOSITORY"),
+        "1970-01-01"
+    );
+
+    fn init() {
+        use std::sync::Once;
+        static INIT: Once = Once::new();
+
+        INIT.call_once(|| {
+            crate::init().unwrap();
+            plugin_register_static().expect("gstreamer subclass element test");
+        });
+    }
+
     #[test]
     fn test_element_subclass() {
-        crate::init().unwrap();
+        init();
 
         let element = TestElement::new(Some("test"));
 
@@ -777,5 +837,48 @@ mod tests {
         let imp = element.imp();
         assert_eq!(imp.n_buffers.load(atomic::Ordering::SeqCst), 100);
         assert!(imp.reached_playing.load(atomic::Ordering::SeqCst));
+    }
+
+    #[test]
+    fn property_from_iter_if_not_empty() {
+        init();
+
+        let elem = crate::ElementFactory::make("testelement").build().unwrap();
+        assert!(elem
+            .property::<crate::Array>("array")
+            .iter()
+            .map(|val| val.get::<&str>().unwrap())
+            .eq(["default0", "default1"]));
+
+        let elem = crate::ElementFactory::make("testelement")
+            .property_from_iter::<crate::Array>("array", ["value0", "value1"])
+            .build()
+            .unwrap();
+        assert!(elem
+            .property::<crate::Array>("array")
+            .iter()
+            .map(|val| val.get::<&str>().unwrap())
+            .eq(["value0", "value1"]));
+
+        let array = Vec::<String>::new();
+        let elem = crate::ElementFactory::make("testelement")
+            .property_if_not_empty::<crate::Array>("array", &array)
+            .build()
+            .unwrap();
+        assert!(elem
+            .property::<crate::Array>("array")
+            .iter()
+            .map(|val| val.get::<&str>().unwrap())
+            .eq(["default0", "default1"]));
+
+        let elem = crate::ElementFactory::make("testelement")
+            .property_if_not_empty::<crate::Array>("array", ["value0", "value1"])
+            .build()
+            .unwrap();
+        assert!(elem
+            .property::<crate::Array>("array")
+            .iter()
+            .map(|val| val.get::<&str>().unwrap())
+            .eq(["value0", "value1"]));
     }
 }
