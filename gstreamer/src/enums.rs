@@ -76,7 +76,7 @@ impl StateChangeReturn {
     pub fn into_result(self) -> Result<StateChangeSuccess, StateChangeError> {
         match self {
             StateChangeReturn::Failure => Err(StateChangeError),
-            _ => Ok(unsafe { std::mem::transmute(self) }),
+            _ => Ok(unsafe { std::mem::transmute::<StateChangeReturn, StateChangeSuccess>(self) }),
         }
     }
 
@@ -171,7 +171,7 @@ impl FromGlib<ffi::GstFlowReturn> for FlowReturn {
         {
             FlowReturn::Ok
         } else {
-            std::mem::transmute(value)
+            std::mem::transmute::<i32, FlowReturn>(value)
         }
     }
 }
@@ -225,9 +225,9 @@ impl FlowReturn {
     #[inline]
     pub fn into_result(self) -> Result<FlowSuccess, FlowError> {
         if self.into_glib() >= 0 {
-            Ok(unsafe { std::mem::transmute(self) })
+            Ok(unsafe { std::mem::transmute::<FlowReturn, FlowSuccess>(self) })
         } else {
-            Err(unsafe { std::mem::transmute(self) })
+            Err(unsafe { std::mem::transmute::<FlowReturn, FlowError>(self) })
         }
     }
 
@@ -321,7 +321,7 @@ impl FromGlib<ffi::GstPadLinkReturn> for PadLinkReturn {
         } else if value < ffi::GST_PAD_LINK_REFUSED {
             PadLinkReturn::Refused
         } else {
-            std::mem::transmute(value)
+            std::mem::transmute::<i32, PadLinkReturn>(value)
         }
     }
 }
@@ -377,7 +377,7 @@ impl PadLinkReturn {
         if self == PadLinkReturn::Ok {
             Ok(PadLinkSuccess)
         } else {
-            Err(unsafe { std::mem::transmute(self) })
+            Err(unsafe { std::mem::transmute::<PadLinkReturn, PadLinkError>(self) })
         }
     }
 
@@ -428,7 +428,7 @@ impl ClockReturn {
         match self {
             ClockReturn::Ok => Ok(ClockSuccess::Ok),
             ClockReturn::Done => Ok(ClockSuccess::Done),
-            _ => Err(unsafe { std::mem::transmute(self) }),
+            _ => Err(unsafe { std::mem::transmute::<ClockReturn, ClockError>(self) }),
         }
     }
 

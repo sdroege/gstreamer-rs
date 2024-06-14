@@ -124,7 +124,7 @@ macro_rules! define_tracer_hooks {
                     ffi::gst_tracing_register_hook(
                         instance.to_glib_none().0 as *mut ffi::GstTracer,
                         hook_type.as_ptr() as *const _,
-                        Some(std::mem::transmute::<_, extern "C" fn()>(callback)),
+                        Some(std::mem::transmute::<*const (), extern "C" fn()>(callback)),
                     );
                 }
             }

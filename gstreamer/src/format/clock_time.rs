@@ -565,8 +565,8 @@ impl TryFrom<Duration> for ClockTime {
 
         let nanos = d.as_nanos();
 
-        // Note: `std::u64::MAX` is `ClockTime::NONE`.
-        if nanos >= std::u64::MAX as u128 {
+        // Note: `u64::MAX` is `ClockTime::NONE`.
+        if nanos >= u64::MAX as u128 {
             return Err(DurationError);
         }
 
@@ -1305,7 +1305,7 @@ mod tests {
     fn display() {
         let none = Option::<ClockTime>::None;
         let some = Some(45_834_908_569_837 * ClockTime::NSECOND);
-        let lots = ClockTime::from_nseconds(std::u64::MAX - 1);
+        let lots = ClockTime::from_nseconds(u64::MAX - 1);
 
         // Simple
 

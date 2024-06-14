@@ -53,7 +53,7 @@ pub trait RTSPSessionPoolExtManual: sealed::Sealed + IsA<RTSPSessionPool> + 'sta
             glib::ffi::g_source_set_callback(
                 source,
                 Some(transmute::<
-                    _,
+                    *const (),
                     unsafe extern "C" fn(glib::ffi::gpointer) -> i32,
                 >(trampoline_watch::<F> as *const ())),
                 into_raw_watch(func),

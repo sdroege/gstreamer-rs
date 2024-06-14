@@ -5,7 +5,7 @@ use std::{
     marker::PhantomData,
     mem, ops,
     ops::{Bound, ControlFlow, Range, RangeBounds},
-    ptr, slice, u64, usize,
+    ptr, slice,
 };
 
 use glib::translate::*;

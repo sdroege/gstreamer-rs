@@ -241,9 +241,10 @@ unsafe extern "C" fn factory_create_pipeline<T: RTSPMediaFactoryImpl>(
         media as *mut _,
         pipeline_quark.into_glib(),
         pipeline as *mut _,
-        Some(transmute::<_, unsafe extern "C" fn(glib::ffi::gpointer)>(
-            glib::gobject_ffi::g_object_unref as *const (),
-        )),
+        Some(transmute::<
+            *const (),
+            unsafe extern "C" fn(glib::ffi::gpointer),
+        >(glib::gobject_ffi::g_object_unref as *const ())),
     );
 
     pipeline as *mut _

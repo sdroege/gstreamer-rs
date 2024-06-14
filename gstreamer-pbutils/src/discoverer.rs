@@ -29,7 +29,7 @@ impl Discoverer {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::timeout\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(transmute::<*const (), unsafe extern "C" fn()>(
                     notify_timeout_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

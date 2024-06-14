@@ -45,7 +45,7 @@ pub trait RTPBaseDepayloadExtManual: sealed::Sealed + IsA<RTPBaseDepayload> + 's
             glib::signal::connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::extensions\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_extensions_trampoline::<Self, F> as *const (),
                 )),
                 Box::into_raw(f),

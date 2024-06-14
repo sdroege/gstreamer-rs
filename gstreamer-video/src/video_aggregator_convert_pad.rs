@@ -52,7 +52,7 @@ pub trait VideoAggregatorConvertPadExtManual:
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::converter-config\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(transmute::<*const (), unsafe extern "C" fn()>(
                     notify_converter_config_trampoline::<Self, F> as *const (),
                 )),
                 Box::into_raw(f),

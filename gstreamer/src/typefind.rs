@@ -148,8 +148,6 @@ unsafe extern "C" fn type_find_suggest<T: TypeFindImpl + ?Sized>(
 unsafe extern "C" fn type_find_get_length<T: TypeFindImpl + ?Sized>(
     data: glib::ffi::gpointer,
 ) -> u64 {
-    use std::u64;
-
     let find = &*(data as *mut &mut T);
     find.length().unwrap_or(u64::MAX)
 }

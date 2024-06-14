@@ -1452,12 +1452,12 @@ macro_rules! impl_signed_div_mul_trait(
                 match self {
                     Positive(lhs) => {
                         $into_inner(lhs)
-                            .mul_div_floor(num.abs() as $inner, denom.abs() as $inner)
+                            .mul_div_floor(num.unsigned_abs(), denom.unsigned_abs())
                             .and_then(|val| Self::signed_from_inner(val, num.signum() * denom.signum()))
                     }
                     Negative(lhs) => {
                         $into_inner(lhs)
-                            .mul_div_floor(num.abs() as $inner, denom.abs() as $inner)
+                            .mul_div_floor(num.unsigned_abs(), denom.unsigned_abs())
                             .and_then(|val| Self::signed_from_inner(val, -num.signum() * denom.signum()))
                     }
                 }
@@ -1469,12 +1469,12 @@ macro_rules! impl_signed_div_mul_trait(
                 match self {
                     Positive(lhs) => {
                         $into_inner(lhs)
-                            .mul_div_round(num.abs() as $inner, denom.abs() as $inner)
+                            .mul_div_round(num.unsigned_abs(), denom.unsigned_abs())
                             .and_then(|val| Self::signed_from_inner(val, num.signum() * denom.signum()))
                     }
                     Negative(lhs) => {
                         $into_inner(lhs)
-                            .mul_div_round(num.abs() as $inner, denom.abs() as $inner)
+                            .mul_div_round(num.unsigned_abs(), denom.unsigned_abs())
                             .and_then(|val| Self::signed_from_inner(val, -num.signum() * denom.signum()))
                     }
                 }
@@ -1486,12 +1486,12 @@ macro_rules! impl_signed_div_mul_trait(
                 match self {
                     Positive(lhs) => {
                         $into_inner(lhs)
-                            .mul_div_ceil(num.abs() as $inner, denom.abs() as $inner)
+                            .mul_div_ceil(num.unsigned_abs(), denom.unsigned_abs())
                             .and_then(|val| Self::signed_from_inner(val, num.signum() * denom.signum()))
                     }
                     Negative(lhs) => {
                         $into_inner(lhs)
-                            .mul_div_ceil(num.abs() as $inner, denom.abs() as $inner)
+                            .mul_div_ceil(num.unsigned_abs(), denom.unsigned_abs())
                             .and_then(|val| Self::signed_from_inner(val, -num.signum() * denom.signum()))
                     }
                 }

@@ -152,8 +152,18 @@ impl VideoMasteringDisplayInfo {
         skip_assert_initialized!();
 
         VideoMasteringDisplayInfo(ffi::GstVideoMasteringDisplayInfo {
-            display_primaries: unsafe { mem::transmute(display_primaries) },
-            white_point: unsafe { mem::transmute(white_point) },
+            display_primaries: unsafe {
+                mem::transmute::<
+                    [VideoMasteringDisplayInfoCoordinate; 3],
+                    [ffi::GstVideoMasteringDisplayInfoCoordinates; 3],
+                >(display_primaries)
+            },
+            white_point: unsafe {
+                mem::transmute::<
+                    VideoMasteringDisplayInfoCoordinate,
+                    ffi::GstVideoMasteringDisplayInfoCoordinates,
+                >(white_point)
+            },
             max_display_mastering_luminance,
             min_display_mastering_luminance,
             _gst_reserved: [ptr::null_mut(); 4],
@@ -168,7 +178,12 @@ impl VideoMasteringDisplayInfo {
         &mut self,
         display_primaries: [VideoMasteringDisplayInfoCoordinate; 3],
     ) {
-        self.0.display_primaries = unsafe { mem::transmute(display_primaries) };
+        self.0.display_primaries = unsafe {
+            mem::transmute::<
+                [VideoMasteringDisplayInfoCoordinate; 3],
+                [ffi::GstVideoMasteringDisplayInfoCoordinates; 3],
+            >(display_primaries)
+        };
     }
 
     pub fn white_point(&self) -> VideoMasteringDisplayInfoCoordinate {
@@ -176,7 +191,12 @@ impl VideoMasteringDisplayInfo {
     }
 
     pub fn set_white_point(&mut self, white_point: VideoMasteringDisplayInfoCoordinate) {
-        self.0.white_point = unsafe { mem::transmute(white_point) };
+        self.0.white_point = unsafe {
+            mem::transmute::<
+                VideoMasteringDisplayInfoCoordinate,
+                ffi::GstVideoMasteringDisplayInfoCoordinates,
+            >(white_point)
+        };
     }
 
     pub fn max_display_mastering_luminance(&self) -> u32 {
