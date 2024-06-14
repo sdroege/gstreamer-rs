@@ -65,7 +65,7 @@ pub trait AggregatorExtManual: sealed::Sealed + IsA<Aggregator> + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::min-upstream-latency\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(transmute::<*const (), unsafe extern "C" fn()>(
                     notify_min_upstream_latency_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -184,7 +184,7 @@ pub trait AggregatorExtManual: sealed::Sealed + IsA<Aggregator> + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"samples-selected\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(transmute::<*const (), unsafe extern "C" fn()>(
                     samples_selected_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

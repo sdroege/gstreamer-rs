@@ -484,7 +484,7 @@ macro_rules! define_mtd_iter {
                     meta,
                     state: std::ptr::null_mut(),
                     mtd_type: T::mtd_type(),
-                    an_meta_id: std::u32::MAX,
+                    an_meta_id: u32::MAX,
                     rel_type: RelTypes::ANY.into_glib(),
                     phantom: PhantomData,
                 }
@@ -513,7 +513,7 @@ macro_rules! define_mtd_iter {
                 unsafe {
                     let mut mtd = ffi::GstAnalyticsMtd::unsafe_from(&**self.meta);
                     let ret = {
-                        if self.an_meta_id == std::u32::MAX {
+                        if self.an_meta_id == u32::MAX {
                             ffi::gst_analytics_relation_meta_iterate(
                                 self.meta.as_mut_ptr(),
                                 &mut self.state,

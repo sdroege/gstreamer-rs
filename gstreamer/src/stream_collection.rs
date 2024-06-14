@@ -176,7 +176,7 @@ impl StreamCollection {
             connect_raw(
                 self.as_ptr() as *mut _,
                 signal_name.as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(transmute::<*const (), unsafe extern "C" fn()>(
                     stream_notify_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

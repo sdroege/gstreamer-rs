@@ -107,7 +107,7 @@ impl FromGlib<ffi::GstValidateActionReturn> for ActionReturn {
         {
             ActionReturn::Error
         } else {
-            std::mem::transmute(value)
+            std::mem::transmute::<i32, ActionReturn>(value)
         }
     }
 }
@@ -129,21 +129,21 @@ impl ActionReturn {
     pub fn into_result(self) -> Result<ActionSuccess, ActionError> {
         match self {
             Self::Error | Self::ErrorReported | Self::None => {
-                Err(unsafe { std::mem::transmute(self) })
+                Err(unsafe { std::mem::transmute::<ActionReturn, ActionError>(self) })
             }
-            _ => Ok(unsafe { std::mem::transmute(self) }),
+            _ => Ok(unsafe { std::mem::transmute::<ActionReturn, ActionSuccess>(self) }),
         }
     }
 
     #[inline]
     pub fn from_error(v: ActionError) -> Self {
         skip_assert_initialized!();
-        unsafe { std::mem::transmute(v) }
+        unsafe { std::mem::transmute::<ActionError, ActionReturn>(v) }
     }
 
     #[inline]
     pub fn from_ok(v: ActionSuccess) -> Self {
         skip_assert_initialized!();
-        unsafe { std::mem::transmute(v) }
+        unsafe { std::mem::transmute::<ActionSuccess, ActionReturn>(v) }
     }
 }

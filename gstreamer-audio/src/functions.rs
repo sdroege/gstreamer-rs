@@ -1,7 +1,5 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use std::i32;
-
 use glib::translate::{from_glib_full, IntoGlibPtr, ToGlibPtr};
 
 #[doc(alias = "gst_audio_buffer_clip")]
@@ -39,7 +37,7 @@ pub fn audio_buffer_truncate(
             buffer.into_glib_ptr(),
             bpf as i32,
             trim,
-            samples.unwrap_or(std::usize::MAX),
+            samples.unwrap_or(usize::MAX),
         ))
     }
 }

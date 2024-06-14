@@ -602,8 +602,8 @@ unsafe extern "C" fn audio_decoder_parse<T: AudioDecoderImpl>(
     gst::panic_to_error!(imp, gst::FlowReturn::Error, {
         match imp.parse(&from_glib_borrow(adapter)) {
             Ok((new_offset, new_len)) => {
-                assert!(new_offset <= std::i32::MAX as u32);
-                assert!(new_len <= std::i32::MAX as u32);
+                assert!(new_offset <= i32::MAX as u32);
+                assert!(new_len <= i32::MAX as u32);
                 *offset = new_offset as i32;
                 *len = new_len as i32;
                 Ok(gst::FlowSuccess::Ok)

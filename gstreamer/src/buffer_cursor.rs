@@ -1,6 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use std::{fmt, io, marker::PhantomData, mem, ptr, u64, usize};
+use std::{fmt, io, marker::PhantomData, mem, ptr};
 
 use crate::{
     buffer::{Readable, Writable},

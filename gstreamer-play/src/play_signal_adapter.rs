@@ -34,7 +34,7 @@ impl PlaySignalAdapter {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"duration-changed\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(transmute::<*const (), unsafe extern "C" fn()>(
                     duration_changed_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -65,7 +65,7 @@ impl PlaySignalAdapter {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"position-updated\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(transmute::<*const (), unsafe extern "C" fn()>(
                     position_updated_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -97,7 +97,7 @@ impl PlaySignalAdapter {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"seek-done\0".as_ptr() as *const _,
-                Some(transmute::<_, unsafe extern "C" fn()>(
+                Some(transmute::<*const (), unsafe extern "C" fn()>(
                     seek_done_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

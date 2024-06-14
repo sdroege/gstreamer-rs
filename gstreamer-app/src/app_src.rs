@@ -329,7 +329,7 @@ impl AppSrc {
             glib::signal::connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::do-timestamp\0".as_ptr() as *const _,
-                Some(mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_do_timestamp_trampoline::<F> as *const (),
                 )),
                 Box::into_raw(f),

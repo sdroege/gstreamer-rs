@@ -1,6 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use std::{i32, mem, ptr};
+use std::{mem, ptr};
 
 use glib::translate::{from_glib, from_glib_full, IntoGlib, ToGlibPtr};
 

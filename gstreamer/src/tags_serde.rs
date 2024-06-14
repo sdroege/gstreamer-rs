@@ -463,7 +463,7 @@ mod tests {
             120 * ClockTime::SECOND,
         );
         assert_eq!(tags.index::<Bitrate>(0).unwrap().get(), 96_000);
-        assert!((tags.index::<TrackGain>(0).unwrap().get() - 1f64).abs() < std::f64::EPSILON);
+        assert!((tags.index::<TrackGain>(0).unwrap().get() - 1f64).abs() < f64::EPSILON);
         assert_eq!(
             tags.index::<Date>(0).unwrap().get(),
             glib::Date::from_dmy(28, glib::DateMonth::May, 2018).unwrap()
@@ -499,7 +499,7 @@ mod tests {
         assert_eq!(tags.index::<Title>(0).unwrap().get(), "a title");
         assert_eq!(tags.index::<Title>(1).unwrap().get(), "another title");
         assert_eq!(tags.index::<Bitrate>(0).unwrap().get(), 96_000);
-        assert!((tags.index::<TrackGain>(0).unwrap().get() - 1f64).abs() < std::f64::EPSILON);
+        assert!((tags.index::<TrackGain>(0).unwrap().get() - 1f64).abs() < f64::EPSILON);
         assert_eq!(
             tags.index::<Date>(0).unwrap().get(),
             glib::Date::from_dmy(28, glib::DateMonth::May, 2018).unwrap()
@@ -575,7 +575,7 @@ mod tests {
             (tags_de.index::<TrackGain>(0).unwrap().get()
                 - tags.index::<TrackGain>(0).unwrap().get())
             .abs()
-                < std::f64::EPSILON
+                < f64::EPSILON
         );
         assert_eq!(
             tags_de.index::<Date>(0).unwrap().get(),

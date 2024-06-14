@@ -10,8 +10,6 @@
 // This is the format we request:
 // Audio / Signed 16bit / 1 channel / arbitrary sample rate
 
-use std::i16;
-
 use anyhow::Error;
 use byte_slice_cast::*;
 use derive_more::{Display, Error};

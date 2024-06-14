@@ -172,12 +172,12 @@ mod tests {
 
         let segment: Segment = ron::de::from_str(segment_ron).unwrap();
         assert_eq!(segment.flags(), SegmentFlags::RESET | SegmentFlags::SEGMENT);
-        assert!((segment.rate() - 1f64).abs() < std::f64::EPSILON);
-        assert!((segment.applied_rate() - 0.9f64).abs() < std::f64::EPSILON);
+        assert!((segment.rate() - 1f64).abs() < f64::EPSILON);
+        assert!((segment.applied_rate() - 0.9f64).abs() < f64::EPSILON);
         assert_eq!(segment.format(), Format::Time);
         assert_eq!(segment.flags(), SegmentFlags::RESET | SegmentFlags::SEGMENT);
-        assert!((segment.rate() - 1f64).abs() < std::f64::EPSILON);
-        assert!((segment.applied_rate() - 0.9f64).abs() < std::f64::EPSILON);
+        assert!((segment.rate() - 1f64).abs() < f64::EPSILON);
+        assert!((segment.applied_rate() - 0.9f64).abs() < f64::EPSILON);
         assert_eq!(segment.format(), Format::Time);
         assert_eq!(
             segment.base(),
@@ -233,8 +233,8 @@ mod tests {
 
         let fmt_seg: FormattedSegment<Time> = ron::de::from_str(segment_ron).unwrap();
         assert_eq!(fmt_seg.flags(), SegmentFlags::RESET | SegmentFlags::SEGMENT);
-        assert!((fmt_seg.rate() - 1f64).abs() < std::f64::EPSILON);
-        assert!((fmt_seg.applied_rate() - 0.9f64).abs() < std::f64::EPSILON);
+        assert!((fmt_seg.rate() - 1f64).abs() < f64::EPSILON);
+        assert!((fmt_seg.applied_rate() - 0.9f64).abs() < f64::EPSILON);
         assert_eq!(fmt_seg.format(), Format::Time);
         assert_eq!(fmt_seg.base(), Some(ClockTime::from_nseconds(123)));
         assert_eq!(fmt_seg.offset(), Some(ClockTime::from_nseconds(42)));
@@ -265,8 +265,8 @@ mod tests {
 
         let segment_de: Segment = ron::de::from_str(segment_se.as_str()).unwrap();
         assert_eq!(segment_de.flags(), segment.flags());
-        assert!((segment_de.rate() - segment.rate()).abs() < std::f64::EPSILON);
-        assert!((segment_de.applied_rate() - segment.applied_rate()).abs() < std::f64::EPSILON);
+        assert!((segment_de.rate() - segment.rate()).abs() < f64::EPSILON);
+        assert!((segment_de.applied_rate() - segment.applied_rate()).abs() < f64::EPSILON);
         assert_eq!(segment_de.format(), segment.format());
         assert_eq!(segment_de.base(), segment.base());
         assert_eq!(segment_de.offset(), segment.offset());

@@ -8,8 +8,6 @@
 // {audiotestsrc} - {fakesink}
 #![allow(clippy::question_mark)]
 
-use std::i16;
-
 use byte_slice_cast::*;
 use gst::prelude::*;
 
