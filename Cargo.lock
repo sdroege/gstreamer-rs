@@ -169,7 +169,7 @@ checksum = "514de17de45fdb8dc022b1a7975556c53c86f9f0aa5f534b98977b171857c2c9"
 [[package]]
 name = "cairo-rs"
 version = "0.20.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#0a0d3166157123035acc396c00ce8816011b1697"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#d88a7c473e2af36a4718a648406b7894d288ec1b"
 dependencies = [
  "bitflags 2.5.0",
  "cairo-sys-rs",
@@ -181,7 +181,7 @@ dependencies = [
 [[package]]
 name = "cairo-sys-rs"
 version = "0.20.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#0a0d3166157123035acc396c00ce8816011b1697"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#d88a7c473e2af36a4718a648406b7894d288ec1b"
 dependencies = [
  "glib-sys",
  "libc",
@@ -392,15 +392,15 @@ checksum = "e8566979429cf69b49a5c740c60791108e86440e8be149bbea4fe54d2c32d6e2"
 
 [[package]]
 name = "derive_more"
-version = "0.99.17"
+version = "0.99.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4fb810d30a7c1953f91334de7244731fc3f3c10d7fe163338a35b9f640960321"
+checksum = "5f33878137e4dafd7fa914ad4e259e18a4e8e532b9617a2d0150262bf53abfce"
 dependencies = [
  "convert_case",
  "proc-macro2",
  "quote",
  "rustc_version",
- "syn 1.0.109",
+ "syn",
 ]
 
 [[package]]
@@ -556,7 +556,7 @@ checksum = "1a5c6c585bc94aaf2c7b51dd4c2ba22680844aba4c687be581871a6f518c5742"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.66",
+ "syn",
 ]
 
 [[package]]
@@ -621,7 +621,7 @@ checksum = "87750cf4b7a4c0625b1529e4c543c2182106e4dedc60a2a6455e00d212c489ac"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.66",
+ "syn",
 ]
 
 [[package]]
@@ -678,7 +678,7 @@ dependencies = [
 [[package]]
 name = "gio"
 version = "0.20.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#0a0d3166157123035acc396c00ce8816011b1697"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#d88a7c473e2af36a4718a648406b7894d288ec1b"
 dependencies = [
  "futures-channel",
  "futures-core",
@@ -695,7 +695,7 @@ dependencies = [
 [[package]]
 name = "gio-sys"
 version = "0.20.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#0a0d3166157123035acc396c00ce8816011b1697"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#d88a7c473e2af36a4718a648406b7894d288ec1b"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -724,7 +724,7 @@ dependencies = [
 [[package]]
 name = "glib"
 version = "0.20.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#0a0d3166157123035acc396c00ce8816011b1697"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#d88a7c473e2af36a4718a648406b7894d288ec1b"
 dependencies = [
  "bitflags 2.5.0",
  "futures-channel",
@@ -745,19 +745,19 @@ dependencies = [
 [[package]]
 name = "glib-macros"
 version = "0.20.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#0a0d3166157123035acc396c00ce8816011b1697"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#d88a7c473e2af36a4718a648406b7894d288ec1b"
 dependencies = [
  "heck",
  "proc-macro-crate",
  "proc-macro2",
  "quote",
- "syn 2.0.66",
+ "syn",
 ]
 
 [[package]]
 name = "glib-sys"
 version = "0.20.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#0a0d3166157123035acc396c00ce8816011b1697"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#d88a7c473e2af36a4718a648406b7894d288ec1b"
 dependencies = [
  "libc",
  "system-deps",
@@ -820,7 +820,7 @@ dependencies = [
 [[package]]
 name = "gobject-sys"
 version = "0.20.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#0a0d3166157123035acc396c00ce8816011b1697"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#d88a7c473e2af36a4718a648406b7894d288ec1b"
 dependencies = [
  "glib-sys",
  "libc",
@@ -1560,9 +1560,9 @@ checksum = "2304e00983f87ffb38b55b444b5e3b60a884b5d30c0fca7d82fe33449bbe55ea"
 
 [[package]]
 name = "hermit-abi"
-version = "0.3.9"
+version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d231dfb89cfffdbc30e7fc41579ed6066ad03abda9e567ccafae602b97ec5024"
+checksum = "fbf6a919d6cf397374f7dfeeea91d974c7c0a7221d0d0f4f20d859d329e53fcc"
 
 [[package]]
 name = "icrate"
@@ -1716,9 +1716,9 @@ dependencies = [
 
 [[package]]
 name = "memchr"
-version = "2.7.2"
+version = "2.7.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6c8640c5d730cb13ebd907d8d04b52f55ac9a2eec55b440c8892f40d56c76c1d"
+checksum = "78ca9ab1a0babb1e7d5695e3530886289c18cf2f87ec19a575a0abdce112e3a3"
 
 [[package]]
 name = "memfd"
@@ -1831,7 +1831,7 @@ dependencies = [
  "proc-macro-crate",
  "proc-macro2",
  "quote",
- "syn 2.0.66",
+ "syn",
 ]
 
 [[package]]
@@ -1898,7 +1898,7 @@ dependencies = [
 [[package]]
 name = "pango"
 version = "0.20.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#0a0d3166157123035acc396c00ce8816011b1697"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#d88a7c473e2af36a4718a648406b7894d288ec1b"
 dependencies = [
  "gio",
  "glib",
@@ -1909,7 +1909,7 @@ dependencies = [
 [[package]]
 name = "pango-sys"
 version = "0.20.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#0a0d3166157123035acc396c00ce8816011b1697"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#d88a7c473e2af36a4718a648406b7894d288ec1b"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -1920,7 +1920,7 @@ dependencies = [
 [[package]]
 name = "pangocairo"
 version = "0.20.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#0a0d3166157123035acc396c00ce8816011b1697"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#d88a7c473e2af36a4718a648406b7894d288ec1b"
 dependencies = [
  "cairo-rs",
  "glib",
@@ -1932,7 +1932,7 @@ dependencies = [
 [[package]]
 name = "pangocairo-sys"
 version = "0.20.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#0a0d3166157123035acc396c00ce8816011b1697"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=master#d88a7c473e2af36a4718a648406b7894d288ec1b"
 dependencies = [
  "cairo-sys-rs",
  "glib-sys",
@@ -1992,9 +1992,9 @@ dependencies = [
 
 [[package]]
 name = "polling"
-version = "3.7.1"
+version = "3.7.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5e6a007746f34ed64099e88783b0ae369eaa3da6392868ba262e2af9b8fbaea1"
+checksum = "a3ed00ed3fbf728b5816498ecd316d1716eecaced9c0c8d2c5a6740ca214985b"
 dependencies = [
  "cfg-if",
  "concurrent-queue",
@@ -2158,7 +2158,7 @@ checksum = "500cbc0ebeb6f46627f50f3f5811ccf6bf00643be300b4c3eabc0ef55dc5b5ba"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.66",
+ "syn",
 ]
 
 [[package]]
@@ -2244,17 +2244,6 @@ dependencies = [
 
 [[package]]
 name = "syn"
-version = "1.0.109"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "72b64191b275b66ffe2469e8af2c1cfe3bafa67b529ead792a6d0160888b4237"
-dependencies = [
- "proc-macro2",
- "quote",
- "unicode-ident",
-]
-
-[[package]]
-name = "syn"
 version = "2.0.66"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c42f3f41a2de00b01c0aaad383c5a45241efc8b2d1eda5661812fda5f3cdcff5"
@@ -2324,7 +2313,7 @@ checksum = "46c3384250002a6d5af4d114f2845d37b57521033f30d5c3f46c4d70e1197533"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.66",
+ "syn",
 ]
 
 [[package]]
@@ -2477,7 +2466,7 @@ dependencies = [
  "once_cell",
  "proc-macro2",
  "quote",
- "syn 2.0.66",
+ "syn",
  "wasm-bindgen-shared",
 ]
 
@@ -2511,7 +2500,7 @@ checksum = "e94f17b526d0a461a191c78ea52bbce64071ed5c04c9ffe424dcb38f74171bb7"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.66",
+ "syn",
  "wasm-bindgen-backend",
  "wasm-bindgen-shared",
 ]
@@ -2690,7 +2679,7 @@ checksum = "9107ddc059d5b6fbfbffdfa7a7fe3e22a226def0b2608f72e9d552763d3e1ad7"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.66",
+ "syn",
 ]
 
 [[package]]
@@ -2701,7 +2690,7 @@ checksum = "29bee4b38ea3cde66011baa44dba677c432a78593e202392d1e9070cf2a7fca7"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.66",
+ "syn",
 ]
 
 [[package]]
@@ -3063,5 +3052,5 @@ checksum = "15e934569e47891f7d9411f1a451d947a60e000ab3bd24fbb970f000387d1b3b"
 dependencies = [
  "proc-macro2",
  "quote",
- "syn 2.0.66",
+ "syn",
 ]
