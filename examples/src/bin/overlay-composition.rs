@@ -119,8 +119,9 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
     overlay.connect_closure(
         "draw",
         false,
-        glib::closure!(@strong drawer => move |_overlay: &gst::Element,
-                                               sample: &gst::Sample| {
+        glib::closure!(
+            #[strong] drawer,
+            move |_overlay: &gst::Element, sample: &gst::Sample| {
             use std::f64::consts::PI;
 
             let drawer = drawer.lock().unwrap();

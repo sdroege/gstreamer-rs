@@ -387,11 +387,15 @@ mod tests {
         let called = Arc::new(Mutex::new(false));
         let succeeding_action_type = crate::ActionTypeBuilder::new(
             "succeeds",
-            glib::clone!(@strong called => move |_, _action| {
-                *called.lock().unwrap() = true;
+            glib::clone!(
+                #[strong]
+                called,
+                move |_, _action| {
+                    *called.lock().unwrap() = true;
 
-                Ok(crate::ActionSuccess::Ok)
-            }),
+                    Ok(crate::ActionSuccess::Ok)
+                }
+            ),
         )
         .parameter(
             crate::ActionParameterBuilder::new("always", "Does the action always succeeds")

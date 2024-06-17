@@ -132,116 +132,125 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
     overlay.connect_closure(
         "draw",
         false,
-        glib::closure!(@strong drawer => move |_overlay: &gst::Element,
-                                               sample: &gst::Sample| {
-            use std::f64::consts::PI;
+        glib::closure!(
+            #[strong]
+            drawer,
+            move |_overlay: &gst::Element, sample: &gst::Sample| {
+                use std::f64::consts::PI;
 
-            let drawer = drawer.lock().unwrap();
+                let drawer = drawer.lock().unwrap();
 
-            let buffer = sample.buffer().unwrap();
-            let timestamp = buffer.pts().unwrap();
+                let buffer = sample.buffer().unwrap();
+                let timestamp = buffer.pts().unwrap();
 
-            let info = drawer.info.as_ref().unwrap();
-            let text_layout = &drawer.text_layout;
-            let bitmap = drawer.bitmap.as_ref().unwrap();
-            let render_target = drawer.render_target.as_ref().unwrap();
+                let info = drawer.info.as_ref().unwrap();
+                let text_layout = &drawer.text_layout;
+                let bitmap = drawer.bitmap.as_ref().unwrap();
+                let render_target = drawer.render_target.as_ref().unwrap();
 
-            let global_angle = 360. * (timestamp % (10 * gst::ClockTime::SECOND)).nseconds() as f64
-                / (10.0 * gst::ClockTime::SECOND.nseconds() as f64);
-            let center_x = (info.width() / 2) as f32;
-            let center_y = (info.height() / 2) as f32;
-            let top_margin = (info.height() / 20) as f32;
-
-            unsafe {
-                // Begin drawing
-                render_target.BeginDraw();
-
-                // Clear background
-                render_target.Clear(Some(&D2D1_COLOR_F {
-                    r: 0f32,
-                    g: 0f32,
-                    b: 0f32,
-                    a: 0f32,
-                }));
-
-                // This loop will render 10 times the string "GStreamer" in a circle
-                for i in 0..10 {
-                    let angle = (360. * f64::from(i)) / 10.0;
-                    let red = ((1.0 + f64::cos((angle - 60.0) * PI / 180.0)) / 2.0) as f32;
-                    let text_brush = render_target
-                        .CreateSolidColorBrush(
-                            &D2D1_COLOR_F {
-                                r: red,
-                                g: 0f32,
-                                b: 1f32 - red,
-                                a: 1f32,
-                            },
-                            None,
-                        )
-                        .unwrap();
-
-                    let angle = (angle + global_angle) as f32;
-                    let matrix = Matrix3x2::rotation(angle, center_x, center_y);
-                    render_target.SetTransform(&matrix);
-                    render_target.DrawTextLayout(
-                        D2D_POINT_2F { x: 0f32, y: top_margin },
-                        text_layout,
-                        &text_brush,
-                        D2D1_DRAW_TEXT_OPTIONS_NONE,
-                    );
-                }
-
-                // EndDraw may not be successful for some reasons.
-                // Ignores any error in this example
-                let _ = render_target.EndDraw(None, None);
-
-                // Make sure all operations is completed before copying
-                // bitmap to buffer
-                let _ = render_target.Flush(None::<*mut u64>, None::<*mut u64>);
-            }
-
-            let mut buffer = gst::Buffer::with_size((info.width() * info.height() * 4) as usize).unwrap();
-            {
-                let buffer_mut = buffer.get_mut().unwrap();
-                let mut map = buffer_mut.map_writable().unwrap();
-                let dst = map.as_mut_slice_of::<u8>().unwrap();
+                let global_angle = 360.
+                    * (timestamp % (10 * gst::ClockTime::SECOND)).nseconds() as f64
+                    / (10.0 * gst::ClockTime::SECOND.nseconds() as f64);
+                let center_x = (info.width() / 2) as f32;
+                let center_y = (info.height() / 2) as f32;
+                let top_margin = (info.height() / 20) as f32;
 
                 unsafe {
-                    // Bitmap size is equal to the background image size.
-                    // Copy entire memory
-                    bitmap.CopyPixels(std::ptr::null(), info.width() * 4, dst).unwrap();
+                    // Begin drawing
+                    render_target.BeginDraw();
+
+                    // Clear background
+                    render_target.Clear(Some(&D2D1_COLOR_F {
+                        r: 0f32,
+                        g: 0f32,
+                        b: 0f32,
+                        a: 0f32,
+                    }));
+
+                    // This loop will render 10 times the string "GStreamer" in a circle
+                    for i in 0..10 {
+                        let angle = (360. * f64::from(i)) / 10.0;
+                        let red = ((1.0 + f64::cos((angle - 60.0) * PI / 180.0)) / 2.0) as f32;
+                        let text_brush = render_target
+                            .CreateSolidColorBrush(
+                                &D2D1_COLOR_F {
+                                    r: red,
+                                    g: 0f32,
+                                    b: 1f32 - red,
+                                    a: 1f32,
+                                },
+                                None,
+                            )
+                            .unwrap();
+
+                        let angle = (angle + global_angle) as f32;
+                        let matrix = Matrix3x2::rotation(angle, center_x, center_y);
+                        render_target.SetTransform(&matrix);
+                        render_target.DrawTextLayout(
+                            D2D_POINT_2F {
+                                x: 0f32,
+                                y: top_margin,
+                            },
+                            text_layout,
+                            &text_brush,
+                            D2D1_DRAW_TEXT_OPTIONS_NONE,
+                        );
+                    }
+
+                    // EndDraw may not be successful for some reasons.
+                    // Ignores any error in this example
+                    let _ = render_target.EndDraw(None, None);
+
+                    // Make sure all operations is completed before copying
+                    // bitmap to buffer
+                    let _ = render_target.Flush(None::<*mut u64>, None::<*mut u64>);
                 }
+
+                let mut buffer =
+                    gst::Buffer::with_size((info.width() * info.height() * 4) as usize).unwrap();
+                {
+                    let buffer_mut = buffer.get_mut().unwrap();
+                    let mut map = buffer_mut.map_writable().unwrap();
+                    let dst = map.as_mut_slice_of::<u8>().unwrap();
+
+                    unsafe {
+                        // Bitmap size is equal to the background image size.
+                        // Copy entire memory
+                        bitmap
+                            .CopyPixels(std::ptr::null(), info.width() * 4, dst)
+                            .unwrap();
+                    }
+                }
+
+                gst_video::VideoMeta::add_full(
+                    buffer.get_mut().unwrap(),
+                    gst_video::VideoFrameFlags::empty(),
+                    gst_video::VideoFormat::Bgra,
+                    info.width(),
+                    info.height(),
+                    &[0],
+                    &[(info.width() * 4) as i32],
+                )
+                .unwrap();
+
+                // Turn the buffer into a VideoOverlayRectangle, then place
+                // that into a VideoOverlayComposition and return it.
+                //
+                // A VideoOverlayComposition can take a Vec of such rectangles
+                // spaced around the video frame, but we're just outputting 1
+                // here
+                let rect = gst_video::VideoOverlayRectangle::new_raw(
+                    &buffer,
+                    0,
+                    0,
+                    info.width(),
+                    info.height(),
+                    gst_video::VideoOverlayFormatFlags::PREMULTIPLIED_ALPHA,
+                );
+
+                gst_video::VideoOverlayComposition::new(Some(&rect)).unwrap()
             }
-
-            gst_video::VideoMeta::add_full(
-                buffer.get_mut().unwrap(),
-                gst_video::VideoFrameFlags::empty(),
-                gst_video::VideoFormat::Bgra,
-                info.width(),
-                info.height(),
-                &[0],
-                &[(info.width() * 4) as i32],
-            )
-            .unwrap();
-
-            // Turn the buffer into a VideoOverlayRectangle, then place
-            // that into a VideoOverlayComposition and return it.
-            //
-            // A VideoOverlayComposition can take a Vec of such rectangles
-            // spaced around the video frame, but we're just outputting 1
-            // here
-            let rect = gst_video::VideoOverlayRectangle::new_raw(
-                &buffer,
-                0,
-                0,
-                info.width(),
-                info.height(),
-                gst_video::VideoOverlayFormatFlags::PREMULTIPLIED_ALPHA,
-            );
-
-            gst_video::VideoOverlayComposition::new(Some(&rect))
-                .unwrap()
-        }),
+        ),
     );
 
     // Add a signal handler to the overlay's "caps-changed" signal. This could e.g.

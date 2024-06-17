@@ -195,20 +195,25 @@ impl StreamProducer {
         let fku_probe_id = srcpad
             .add_probe(
                 gst::PadProbeType::EVENT_UPSTREAM,
-                glib::clone!(@weak appsink, @weak consumer => @default-panic, move |_pad, info| {
-                    let Some(event) = info.event() else {
-                        return gst::PadProbeReturn::Ok;
-                    };
+                glib::clone!(
+                    #[weak]
+                    appsink,
+                    #[upgrade_or_panic]
+                    move |_pad, info| {
+                        let Some(event) = info.event() else {
+                            return gst::PadProbeReturn::Ok;
+                        };
 
-                    if gst_video::UpstreamForceKeyUnitEvent::parse(event).is_ok() {
-                        gst::debug!(CAT, obj: &appsink,  "Requesting keyframe");
-                        // Do not use `gst_element_send_event()` as it takes the state lock which may lead to dead locks.
-                        let pad = appsink.static_pad("sink").unwrap();
-                        let _ = pad.push_event(event.clone());
+                        if gst_video::UpstreamForceKeyUnitEvent::parse(event).is_ok() {
+                            gst::debug!(CAT, obj: &appsink,  "Requesting keyframe");
+                            // Do not use `gst_element_send_event()` as it takes the state lock which may lead to dead locks.
+                            let pad = appsink.static_pad("sink").unwrap();
+                            let _ = pad.push_event(event.clone());
+                        }
+
+                        gst::PadProbeReturn::Ok
                     }
-
-                    gst::PadProbeReturn::Ok
-                }),
+                ),
             )
             .unwrap();
 
@@ -410,7 +415,7 @@ impl<'a> From<&'a gst_app::AppSink> for StreamProducer {
 
         appsink.set_callbacks(
             gst_app::AppSinkCallbacks::builder()
-                .new_sample(glib::clone!(@strong consumers => move |appsink| {
+                .new_sample(glib::clone!(#[strong] consumers, move |appsink| {
                     let mut consumers = consumers.lock().unwrap();
 
                     let sample = match appsink.pull_sample() {
@@ -429,7 +434,7 @@ impl<'a> From<&'a gst_app::AppSink> for StreamProducer {
 
                     StreamProducer::process_sample(sample, appsink, consumers)
                 }))
-                .new_preroll(glib::clone!(@strong consumers => move |appsink| {
+                .new_preroll(glib::clone!(#[strong] consumers, move |appsink| {
                     let mut consumers = consumers.lock().unwrap();
 
                     let sample = match appsink.pull_preroll() {
@@ -448,7 +453,7 @@ impl<'a> From<&'a gst_app::AppSink> for StreamProducer {
                         Ok(gst::FlowSuccess::Ok)
                     }
                 }))
-                .new_event(glib::clone!(@strong consumers => move |appsink| {
+                .new_event(glib::clone!(#[strong] consumers, move |appsink| {
                     match appsink.pull_object().map(|obj| obj.downcast::<gst::Event>()) {
                         Ok(Ok(event)) => {
                             let (events_to_forward, appsrcs) = {
@@ -472,7 +477,7 @@ impl<'a> From<&'a gst_app::AppSink> for StreamProducer {
 
                     false
                 }))
-                .eos(glib::clone!(@strong consumers => move |appsink| {
+                .eos(glib::clone!(#[strong] consumers, move |appsink| {
                     let stream_consumers = consumers
                         .lock()
                         .unwrap();
@@ -499,21 +504,25 @@ impl<'a> From<&'a gst_app::AppSink> for StreamProducer {
         let sinkpad = appsink.static_pad("sink").unwrap();
         sinkpad.add_probe(
             gst::PadProbeType::EVENT_UPSTREAM,
-            glib::clone!(@strong consumers => move |_pad, info| {
-                let Some(event) = info.event() else {
-                    return gst::PadProbeReturn::Ok;
-                };
+            glib::clone!(
+                #[strong]
+                consumers,
+                move |_pad, info| {
+                    let Some(event) = info.event() else {
+                        return gst::PadProbeReturn::Ok;
+                    };
 
-                let gst::EventView::Latency(event) = event.view() else {
-                    return gst::PadProbeReturn::Ok;
-                };
+                    let gst::EventView::Latency(event) = event.view() else {
+                        return gst::PadProbeReturn::Ok;
+                    };
 
-                let latency = event.latency();
-                let mut consumers = consumers.lock().unwrap();
-                consumers.current_latency = Some(latency);
+                    let latency = event.latency();
+                    let mut consumers = consumers.lock().unwrap();
+                    consumers.current_latency = Some(latency);
 
-                gst::PadProbeReturn::Ok
-            }),
+                    gst::PadProbeReturn::Ok
+                }
+            ),
         );
 
         StreamProducer {
