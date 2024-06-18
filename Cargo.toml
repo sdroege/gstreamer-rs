@@ -112,7 +112,7 @@ categories = ["api-bindings", "multimedia"]
 repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs"
 homepage = "https://gstreamer.freedesktop.org"
 edition = "2021"
-rust-version = "1.70"
+rust-version = "1.71"
 
 [workspace.dependencies]
 gio = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "master" }
