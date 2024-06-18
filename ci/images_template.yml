@@ -1,7 +1,7 @@
 variables:
-  GST_RS_IMG_TAG: "2024-06-18.0"
+  GST_RS_IMG_TAG: "2024-06-18.1"
   GST_RS_STABLE: "1.79.0"
-  GST_RS_MSRV: "1.71.0"
+  GST_RS_MSRV: "1.71.1"
   # The branch we use to build GStreamer from in the docker images
   # Ex. main, 1.24, my-test-branch
   GST_UPSTREAM_BRANCH: 'main'
