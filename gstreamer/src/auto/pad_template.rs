@@ -89,7 +89,7 @@ impl PadTemplate {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"pad-created\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     pad_created_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

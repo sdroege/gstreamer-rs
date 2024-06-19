@@ -254,7 +254,7 @@ pub trait BaseSrcExt: IsA<BaseSrc> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::automatic-eos\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_automatic_eos_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -283,7 +283,7 @@ pub trait BaseSrcExt: IsA<BaseSrc> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::blocksize\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_blocksize_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -312,7 +312,7 @@ pub trait BaseSrcExt: IsA<BaseSrc> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::do-timestamp\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_do_timestamp_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -341,7 +341,7 @@ pub trait BaseSrcExt: IsA<BaseSrc> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::num-buffers\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_num_buffers_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -370,7 +370,7 @@ pub trait BaseSrcExt: IsA<BaseSrc> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::typefind\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_typefind_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

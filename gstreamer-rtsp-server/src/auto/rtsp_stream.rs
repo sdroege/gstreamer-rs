@@ -990,7 +990,7 @@ pub trait RTSPStreamExt: IsA<RTSPStream> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"new-rtcp-encoder\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     new_rtcp_encoder_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1022,7 +1022,7 @@ pub trait RTSPStreamExt: IsA<RTSPStream> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"new-rtp-encoder\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     new_rtp_encoder_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1054,7 +1054,7 @@ pub trait RTSPStreamExt: IsA<RTSPStream> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"new-rtp-rtcp-decoder\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     new_rtp_rtcp_decoder_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1083,7 +1083,7 @@ pub trait RTSPStreamExt: IsA<RTSPStream> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::control\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_control_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1112,7 +1112,7 @@ pub trait RTSPStreamExt: IsA<RTSPStream> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::profiles\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_profiles_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -1141,7 +1141,7 @@ pub trait RTSPStreamExt: IsA<RTSPStream> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::protocols\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_protocols_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

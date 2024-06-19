@@ -128,7 +128,7 @@ pub trait AggregatorPadExt: IsA<AggregatorPad> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"buffer-consumed\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     buffer_consumed_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -159,7 +159,7 @@ pub trait AggregatorPadExt: IsA<AggregatorPad> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::emit-signals\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_emit_signals_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

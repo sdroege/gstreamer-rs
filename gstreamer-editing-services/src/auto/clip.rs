@@ -426,7 +426,7 @@ pub trait ClipExt: IsA<Clip> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::duration-limit\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_duration_limit_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -449,7 +449,7 @@ pub trait ClipExt: IsA<Clip> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::layer\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_layer_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -475,7 +475,7 @@ pub trait ClipExt: IsA<Clip> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::supported-formats\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_supported_formats_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

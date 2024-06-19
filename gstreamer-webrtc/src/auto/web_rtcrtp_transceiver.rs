@@ -107,7 +107,7 @@ impl WebRTCRTPTransceiver {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::codec-preferences\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_codec_preferences_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -137,7 +137,7 @@ impl WebRTCRTPTransceiver {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::current-direction\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_current_direction_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -167,7 +167,7 @@ impl WebRTCRTPTransceiver {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::direction\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_direction_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -197,7 +197,7 @@ impl WebRTCRTPTransceiver {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::kind\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_kind_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -227,7 +227,7 @@ impl WebRTCRTPTransceiver {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"notify::mid\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_mid_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),

@@ -236,7 +236,7 @@ pub trait ProjectExt: IsA<Project> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"asset-added\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     asset_added_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -265,7 +265,7 @@ pub trait ProjectExt: IsA<Project> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"asset-loading\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     asset_loading_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -294,7 +294,7 @@ pub trait ProjectExt: IsA<Project> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"asset-removed\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     asset_removed_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -330,7 +330,7 @@ pub trait ProjectExt: IsA<Project> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"error-loading\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     error_loading_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -368,7 +368,7 @@ pub trait ProjectExt: IsA<Project> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"error-loading-asset\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     error_loading_asset_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -394,7 +394,7 @@ pub trait ProjectExt: IsA<Project> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"loaded\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     loaded_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -422,7 +422,7 @@ pub trait ProjectExt: IsA<Project> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"loading\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     loading_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -459,7 +459,7 @@ pub trait ProjectExt: IsA<Project> + sealed::Sealed + 'static {
             connect_raw(
                 self.as_ptr() as *mut _,
                 b"missing-uri\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     missing_uri_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
