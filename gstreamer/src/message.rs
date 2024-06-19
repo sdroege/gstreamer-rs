@@ -119,7 +119,7 @@ impl MessageRef {
     #[doc(alias = "gst_message_has_name")]
     #[inline]
     pub fn has_name(&self, name: &str) -> bool {
-        self.structure().map_or(false, |s| s.has_name(name))
+        self.structure().is_some_and(|s| s.has_name(name))
     }
 
     pub fn view(&self) -> MessageView {

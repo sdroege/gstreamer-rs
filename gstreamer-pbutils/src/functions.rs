@@ -79,9 +79,7 @@ pub fn codec_utils_aac_caps_set_level_and_profile(
 
     let s = caps.structure(0).unwrap();
     assert_eq!(s.name(), "audio/mpeg");
-    assert!(s
-        .get::<i32>("mpegversion")
-        .map_or(false, |v| v == 2 || v == 4));
+    assert!(s.get::<i32>("mpegversion").is_ok_and(|v| v == 2 || v == 4));
 
     let len = audio_config.len() as u32;
     unsafe {
@@ -199,7 +197,7 @@ pub fn codec_utils_mpeg4video_caps_set_level_and_profile(
 
     let s = caps.structure(0).unwrap();
     assert_eq!(s.name(), "video/mpeg");
-    assert!(s.get::<i32>("mpegversion").map_or(false, |v| v == 4));
+    assert!(s.get::<i32>("mpegversion").is_ok_and(|v| v == 4));
 
     let len = vis_obj_seq.len() as u32;
     unsafe {
