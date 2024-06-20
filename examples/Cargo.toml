@@ -30,8 +30,9 @@ byte-slice-cast = "1"
 cairo-rs = { workspace = true, features=["use_glib"], optional = true }
 derive_more = "0.99.5"
 futures = "0.3"
-glutin = { version = "0.31", optional = true, default-features = false }
-glutin-winit = { version = "0.4", optional = true, default-features = false }
+# Since there's nothing Windows-specific to enable on gstreamer-rs, unconditionally enable glutin's WGL backend
+glutin = { version = "0.31", optional = true, default-features = false, features = ["wgl"] }
+glutin-winit = { version = "0.4", optional = true, default-features = false, features = ["wgl"] }
 image = { version = "0.24", optional = true, default-features = false, features = ["png", "jpeg"] }
 memfd = { version = "0.6", optional = true }
 memmap2 = { version = "0.9", optional = true }

@@ -434,8 +434,8 @@ impl App {
 
         println!("Using raw GL context {:?}", raw_gl_context);
 
-        #[cfg(not(target_os = "linux"))]
-        compile_error!("This example only has Linux support");
+        #[cfg(not(any(target_os = "linux", windows)))]
+        compile_error!("This example only has Linux and Windows support");
 
         let api = App::map_gl_api(gl_config.api());
 
@@ -449,7 +449,6 @@ impl App {
                     unsafe { gst_gl_egl::GLDisplayEGL::with_egl_display(egl_display as usize) }
                         .context("Failed to create GLDisplayEGL from raw `EGLDisplay`")?
                         .upcast::<gst_gl::GLDisplay>();
-
                 (egl_context as usize, gl_display, gst_gl::GLPlatform::EGL)
             }
             #[cfg(feature = "gst-gl-x11")]
@@ -462,6 +461,11 @@ impl App {
                         .context("Failed to create GLDisplayX11 from raw X11 `Display`")?
                         .upcast::<gst_gl::GLDisplay>();
                 (glx_context as usize, gl_display, gst_gl::GLPlatform::GLX)
+            }
+            #[cfg(windows)]
+            (glutin::display::RawDisplay::Wgl, glutin::context::RawContext::Wgl(wgl_context)) => {
+                let gl_display = gst_gl::GLDisplay::new();
+                (wgl_context as usize, gl_display, gst_gl::GLPlatform::WGL)
             }
             #[allow(unreachable_patterns)]
             handler => anyhow::bail!("Unsupported platform: {handler:?}."),
