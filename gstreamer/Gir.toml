@@ -668,6 +668,14 @@ manual_traits = ["ClockExtManual"]
     name = "unadjust_with_calibration"
     # Associated function
     manual = true
+    [[object.function]]
+    name = "get_calibration"
+    # Wrong types for the rate
+    manual = true
+    [[object.function]]
+    name = "set_calibration"
+    # Wrong types for the rate
+    manual = true
 
     [[object.function]]
     name = "new_periodic_id"
@@ -719,21 +727,6 @@ manual_traits = ["ClockExtManual"]
         mandatory = true
 
     [[object.function]]
-    name = "get_calibration"
-        [[object.function.parameter]]
-        name = "internal"
-        mandatory = true
-        [[object.function.parameter]]
-        name = "external"
-        mandatory = true
-        [[object.function.parameter]]
-        name = "rate_num"
-        mandatory = true
-        [[object.function.parameter]]
-        name = "rate_denom"
-        mandatory = true
-
-    [[object.function]]
     name = "get_internal_time"
         [object.function.return]
         mandatory = true
@@ -741,21 +734,6 @@ manual_traits = ["ClockExtManual"]
     [[object.function]]
     name = "get_resolution"
         [object.function.return]
-        mandatory = true
-
-    [[object.function]]
-    name = "set_calibration"
-        [[object.function.parameter]]
-        name = "internal"
-        mandatory = true
-        [[object.function.parameter]]
-        name = "external"
-        mandatory = true
-        [[object.function.parameter]]
-        name = "rate_num"
-        mandatory = true
-        [[object.function.parameter]]
-        name = "rate_denom"
         mandatory = true
 
     [[object.function]]

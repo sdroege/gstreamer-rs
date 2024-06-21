@@ -146,30 +146,6 @@ pub trait ClockExt: IsA<Clock> + sealed::Sealed + 'static {
         }
     }
 
-    #[doc(alias = "gst_clock_get_calibration")]
-    #[doc(alias = "get_calibration")]
-    fn calibration(&self) -> (ClockTime, ClockTime, ClockTime, ClockTime) {
-        unsafe {
-            let mut internal = std::mem::MaybeUninit::uninit();
-            let mut external = std::mem::MaybeUninit::uninit();
-            let mut rate_num = std::mem::MaybeUninit::uninit();
-            let mut rate_denom = std::mem::MaybeUninit::uninit();
-            ffi::gst_clock_get_calibration(
-                self.as_ref().to_glib_none().0,
-                internal.as_mut_ptr(),
-                external.as_mut_ptr(),
-                rate_num.as_mut_ptr(),
-                rate_denom.as_mut_ptr(),
-            );
-            (
-                try_from_glib(internal.assume_init()).expect("mandatory glib value is None"),
-                try_from_glib(external.assume_init()).expect("mandatory glib value is None"),
-                try_from_glib(rate_num.assume_init()).expect("mandatory glib value is None"),
-                try_from_glib(rate_denom.assume_init()).expect("mandatory glib value is None"),
-            )
-        }
-    }
-
     #[doc(alias = "gst_clock_get_internal_time")]
     #[doc(alias = "get_internal_time")]
     fn internal_time(&self) -> ClockTime {
@@ -214,25 +190,6 @@ pub trait ClockExt: IsA<Clock> + sealed::Sealed + 'static {
     #[doc(alias = "gst_clock_is_synced")]
     fn is_synced(&self) -> bool {
         unsafe { from_glib(ffi::gst_clock_is_synced(self.as_ref().to_glib_none().0)) }
-    }
-
-    #[doc(alias = "gst_clock_set_calibration")]
-    fn set_calibration(
-        &self,
-        internal: ClockTime,
-        external: ClockTime,
-        rate_num: ClockTime,
-        rate_denom: ClockTime,
-    ) {
-        unsafe {
-            ffi::gst_clock_set_calibration(
-                self.as_ref().to_glib_none().0,
-                internal.into_glib(),
-                external.into_glib(),
-                rate_num.into_glib(),
-                rate_denom.into_glib(),
-            );
-        }
     }
 
     #[doc(alias = "gst_clock_set_master")]

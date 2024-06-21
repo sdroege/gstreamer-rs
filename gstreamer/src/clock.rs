@@ -380,8 +380,8 @@ impl Clock {
         internal_target: ClockTime,
         cinternal: ClockTime,
         cexternal: ClockTime,
-        cnum: ClockTime,
-        cdenom: ClockTime,
+        cnum: u64,
+        cdenom: u64,
     ) -> ClockTime {
         skip_assert_initialized!();
         unsafe {
@@ -390,8 +390,8 @@ impl Clock {
                 internal_target.into_glib(),
                 cinternal.into_glib(),
                 cexternal.into_glib(),
-                cnum.into_glib(),
-                cdenom.into_glib(),
+                cnum,
+                cdenom,
             ))
             .expect("undefined ClockTime")
         }
@@ -402,8 +402,8 @@ impl Clock {
         external_target: ClockTime,
         cinternal: ClockTime,
         cexternal: ClockTime,
-        cnum: ClockTime,
-        cdenom: ClockTime,
+        cnum: u64,
+        cdenom: u64,
     ) -> ClockTime {
         skip_assert_initialized!();
         unsafe {
@@ -412,8 +412,8 @@ impl Clock {
                 external_target.into_glib(),
                 cinternal.into_glib(),
                 cexternal.into_glib(),
-                cnum.into_glib(),
-                cdenom.into_glib(),
+                cnum,
+                cdenom,
             ))
             .expect("undefined ClockTime")
         }
@@ -513,6 +513,49 @@ pub trait ClockExtManual: sealed::Sealed + IsA<Clock> + 'static {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;
             let _guard = self.as_ref().object_lock();
             from_glib((*ptr).flags)
+        }
+    }
+
+    #[doc(alias = "gst_clock_get_calibration")]
+    #[doc(alias = "get_calibration")]
+    fn calibration(&self) -> (ClockTime, ClockTime, u64, u64) {
+        unsafe {
+            let mut internal = std::mem::MaybeUninit::uninit();
+            let mut external = std::mem::MaybeUninit::uninit();
+            let mut rate_num = std::mem::MaybeUninit::uninit();
+            let mut rate_denom = std::mem::MaybeUninit::uninit();
+            ffi::gst_clock_get_calibration(
+                self.as_ref().to_glib_none().0,
+                internal.as_mut_ptr(),
+                external.as_mut_ptr(),
+                rate_num.as_mut_ptr(),
+                rate_denom.as_mut_ptr(),
+            );
+            (
+                try_from_glib(internal.assume_init()).expect("mandatory glib value is None"),
+                try_from_glib(external.assume_init()).expect("mandatory glib value is None"),
+                rate_num.assume_init(),
+                rate_denom.assume_init(),
+            )
+        }
+    }
+
+    #[doc(alias = "gst_clock_set_calibration")]
+    fn set_calibration(
+        &self,
+        internal: ClockTime,
+        external: ClockTime,
+        rate_num: u64,
+        rate_denom: u64,
+    ) {
+        unsafe {
+            ffi::gst_clock_set_calibration(
+                self.as_ref().to_glib_none().0,
+                internal.into_glib(),
+                external.into_glib(),
+                rate_num,
+                rate_denom,
+            );
         }
     }
 }
