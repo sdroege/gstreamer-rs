@@ -26,7 +26,7 @@ pub trait ChildProxyExtManual: sealed::Sealed + IsA<ChildProxy> + 'static {
             if ret {
                 Ok((from_glib_full(target), from_glib_none(pspec)))
             } else {
-                Err(glib::bool_error!("Failed to find child property"))
+                Err(glib::bool_error!("Failed to find child property '{name}'"))
             }
         }
     }
