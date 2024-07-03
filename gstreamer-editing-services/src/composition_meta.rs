@@ -20,8 +20,19 @@ impl FrameCompositionMeta {
     }
 
     #[inline]
+    pub fn set_alpha(&mut self, alpha: f64) {
+        self.0.alpha = alpha;
+    }
+
+    #[inline]
     pub fn position(&self) -> (f64, f64) {
         (self.0.posx, self.0.posy)
+    }
+
+    #[inline]
+    pub fn set_position(&mut self, posx: f64, posy: f64) {
+        self.0.posx = posx;
+        self.0.posy = posy;
     }
 
     #[inline]
@@ -30,13 +41,28 @@ impl FrameCompositionMeta {
     }
 
     #[inline]
+    pub fn set_pos_x(&mut self, pos_x: f64) {
+        self.0.posx = pos_x;
+    }
+
+    #[inline]
     pub fn pos_y(&self) -> f64 {
         self.0.posy
     }
 
     #[inline]
+    pub fn set_pos_y(&mut self, pos_y: f64) {
+        self.0.posy = pos_y;
+    }
+
+    #[inline]
     pub fn size(&self) -> (f64, f64) {
         (self.0.width, self.0.height)
+    }
+
+    pub fn set_size(&mut self, width: f64, height: f64) {
+        self.0.width = width;
+        self.0.height = height;
     }
 
     #[inline]
@@ -45,8 +71,18 @@ impl FrameCompositionMeta {
     }
 
     #[inline]
+    pub fn set_width(&mut self, width: f64) {
+        self.0.width = width;
+    }
+
+    #[inline]
     pub fn height(&self) -> f64 {
         self.0.height
+    }
+
+    #[inline]
+    pub fn set_height(&mut self, height: f64) {
+        self.0.height = height;
     }
 
     #[inline]
@@ -55,8 +91,18 @@ impl FrameCompositionMeta {
     }
 
     #[inline]
+    pub fn set_zorder(&mut self, zorder: u32) {
+        self.0.zorder = zorder;
+    }
+
+    #[inline]
     pub fn operator(&self) -> i32 {
         self.0.operator
+    }
+
+    #[inline]
+    pub fn set_operator(&mut self, operator: i32) {
+        self.0.operator = operator;
     }
 }
 
