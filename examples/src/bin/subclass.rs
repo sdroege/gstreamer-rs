@@ -142,7 +142,7 @@ mod fir_filter {
                 // Drop state
                 self.history.lock().unwrap().clear();
 
-                gst::info!(CAT, imp: self, "Stopped");
+                gst::info!(CAT, imp = self, "Stopped");
 
                 Ok(())
             }
@@ -155,7 +155,7 @@ mod fir_filter {
                 // Get coefficients and return directly if we have none
                 let coeffs = self.coeffs.lock().unwrap();
                 if coeffs.is_empty() {
-                    gst::trace!(CAT, imp: self, "No coefficients set -- passthrough");
+                    gst::trace!(CAT, imp = self, "No coefficients set -- passthrough");
                     return Ok(gst::FlowSuccess::Ok);
                 }
 
@@ -183,7 +183,7 @@ mod fir_filter {
 
                 gst::trace!(
                     CAT,
-                    imp: self,
+                    imp = self,
                     "Transforming {} samples with filter of length {}",
                     samples.len(),
                     coeffs.len()

@@ -110,7 +110,7 @@ pub trait PushSrcImplExt: sealed::Sealed + ObjectSubclass {
                     if buffer_ptr.is_null() && pending_buffer_list.is_none() {
                         gst::error!(
                             gst::CAT_RUST,
-                            obj: instance,
+                            obj = instance,
                             "No buffer and no buffer list returned"
                         );
                         return Err(gst::FlowError::Error);
@@ -119,7 +119,7 @@ pub trait PushSrcImplExt: sealed::Sealed + ObjectSubclass {
                     if !buffer_ptr.is_null() && pending_buffer_list.is_some() {
                         gst::error!(
                             gst::CAT_RUST,
-                            obj: instance,
+                            obj = instance,
                             "Both buffer and buffer list returned"
                         );
                         return Err(gst::FlowError::Error);
@@ -131,7 +131,7 @@ pub trait PushSrcImplExt: sealed::Sealed + ObjectSubclass {
 
                             gst::debug!(
                                 gst::CAT_PERFORMANCE,
-                                obj: instance,
+                                obj = instance,
                                 "Returned new buffer from parent create function, copying into passed buffer"
                             );
 
@@ -140,7 +140,7 @@ pub trait PushSrcImplExt: sealed::Sealed + ObjectSubclass {
                                 Err(_) => {
                                     gst::error!(
                                         gst::CAT_RUST,
-                                        obj: instance,
+                                        obj = instance,
                                         "Failed to map passed buffer writable"
                                     );
                                     return Err(gst::FlowError::Error);
@@ -159,7 +159,7 @@ pub trait PushSrcImplExt: sealed::Sealed + ObjectSubclass {
                                 Err(_) => {
                                     gst::error!(
                                         gst::CAT_RUST,
-                                        obj: instance,
+                                        obj = instance,
                                         "Failed to copy buffer metadata"
                                     );
 
@@ -259,7 +259,7 @@ unsafe extern "C" fn push_src_create<T: PushSrcImpl>(
                     if passed_buffer.as_ptr() != new_buffer.as_ptr() {
                         gst::debug!(
                             gst::CAT_PERFORMANCE,
-                            imp: imp,
+                            imp = imp,
                             "Returned new buffer from create function, copying into passed buffer"
                         );
 
@@ -268,7 +268,7 @@ unsafe extern "C" fn push_src_create<T: PushSrcImpl>(
                             Err(_) => {
                                 gst::error!(
                                     gst::CAT_RUST,
-                                    imp: imp,
+                                    imp = imp,
                                     "Failed to map passed buffer writable"
                                 );
                                 return gst::FlowReturn::Error;
@@ -287,7 +287,7 @@ unsafe extern "C" fn push_src_create<T: PushSrcImpl>(
                             Err(_) => {
                                 gst::error!(
                                     gst::CAT_RUST,
-                                    imp: imp,
+                                    imp = imp,
                                     "Failed to copy buffer metadata"
                                 );
 

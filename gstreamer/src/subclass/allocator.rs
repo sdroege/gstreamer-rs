@@ -89,7 +89,7 @@ unsafe extern "C" fn alloc<T: AllocatorImpl>(
     imp.alloc(size, params)
         .map(|memory| memory.into_glib_ptr())
         .unwrap_or_else(|error| {
-            error!(crate::CAT_RUST, obj: instance, "{:?}", error);
+            error!(crate::CAT_RUST, obj = instance, "{:?}", error);
 
             ptr::null_mut()
         })

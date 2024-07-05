@@ -111,7 +111,11 @@ unsafe extern "C" fn task_pool_push<T: TaskPoolImpl>(
 unsafe extern "C" fn task_pool_join<T: TaskPoolImpl>(ptr: *mut ffi::GstTaskPool, id: gpointer) {
     if id.is_null() {
         let wrap: Borrowed<TaskPool> = from_glib_borrow(ptr);
-        crate::warning!(crate::CAT_RUST, obj: wrap.as_ref(), "Tried to join null handle");
+        crate::warning!(
+            crate::CAT_RUST,
+            obj = wrap.as_ref(),
+            "Tried to join null handle"
+        );
         return;
     }
 
@@ -127,7 +131,11 @@ unsafe extern "C" fn task_pool_dispose_handle<T: TaskPoolImpl>(
 ) {
     if id.is_null() {
         let wrap: Borrowed<TaskPool> = from_glib_borrow(ptr);
-        crate::warning!(crate::CAT_RUST, obj: wrap.as_ref(), "Tried to dispose null handle");
+        crate::warning!(
+            crate::CAT_RUST,
+            obj = wrap.as_ref(),
+            "Tried to dispose null handle"
+        );
         return;
     }
 

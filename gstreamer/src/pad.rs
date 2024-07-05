@@ -1277,7 +1277,7 @@ where
             if let Some(passed_buffer) = passed_buffer {
                 crate::debug!(
                     crate::CAT_PERFORMANCE,
-                    obj: pad.unsafe_cast_ref::<glib::Object>(),
+                    obj = pad.unsafe_cast_ref::<glib::Object>(),
                     "Returned new buffer from getrange function, copying into passed buffer"
                 );
 
@@ -1286,7 +1286,7 @@ where
                     Err(_) => {
                         crate::error!(
                             crate::CAT_RUST,
-                            obj: pad.unsafe_cast_ref::<glib::Object>(),
+                            obj = pad.unsafe_cast_ref::<glib::Object>(),
                             "Failed to map passed buffer writable"
                         );
                         return ffi::GST_FLOW_ERROR;
@@ -1305,7 +1305,7 @@ where
                     Err(_) => {
                         crate::error!(
                             crate::CAT_RUST,
-                            obj: pad.unsafe_cast_ref::<glib::Object>(),
+                            obj = pad.unsafe_cast_ref::<glib::Object>(),
                             "Failed to copy buffer metadata"
                         );
 

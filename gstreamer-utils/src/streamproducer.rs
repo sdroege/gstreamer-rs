@@ -181,11 +181,23 @@ impl StreamProducer {
     ) -> Result<(), AddConsumerError> {
         let mut consumers = self.consumers.lock().unwrap();
         if consumers.consumers.contains_key(consumer) {
-            gst::error!(CAT, obj: &self.appsink, "Consumer {} ({:?}) already added", consumer.name(), consumer);
+            gst::error!(
+                CAT,
+                obj = &self.appsink,
+                "Consumer {} ({:?}) already added",
+                consumer.name(),
+                consumer
+            );
             return Err(AddConsumerError::AlreadyAdded);
         }
 
-        gst::debug!(CAT, obj: &self.appsink, "Adding consumer {} ({:?})", consumer.name(), consumer);
+        gst::debug!(
+            CAT,
+            obj = &self.appsink,
+            "Adding consumer {} ({:?})",
+            consumer.name(),
+            consumer
+        );
 
         Self::configure_consumer(consumer);
 
@@ -205,7 +217,7 @@ impl StreamProducer {
                         };
 
                         if gst_video::UpstreamForceKeyUnitEvent::parse(event).is_ok() {
-                            gst::debug!(CAT, obj: &appsink,  "Requesting keyframe");
+                            gst::debug!(CAT, obj = &appsink, "Requesting keyframe");
                             // Do not use `gst_element_send_event()` as it takes the state lock which may lead to dead locks.
                             let pad = appsink.static_pad("sink").unwrap();
                             let _ = pad.push_event(event.clone());
@@ -232,7 +244,7 @@ impl StreamProducer {
         let appsink_pad = self.appsink.static_pad("sink").unwrap();
         appsink_pad.sticky_events_foreach(|event| {
             if events_to_forward.contains(&event.type_()) {
-                gst::debug!(CAT, obj: &self.appsink, "forward sticky event {:?}", event);
+                gst::debug!(CAT, obj = &self.appsink, "forward sticky event {:?}", event);
                 consumer.send_event(event.clone());
             }
 
@@ -258,7 +270,12 @@ impl StreamProducer {
             (false, true)
         };
 
-        gst::trace!(CAT, obj: appsink, "processing sample {:?}", sample.buffer());
+        gst::trace!(
+            CAT,
+            obj = appsink,
+            "processing sample {:?}",
+            sample.buffer()
+        );
 
         let latency = consumers.current_latency;
         let latency_updated = mem::replace(&mut consumers.latency_updated, false);
@@ -302,7 +319,7 @@ impl StreamProducer {
                 if !is_keyframe && consumer.needs_keyframe.load(atomic::Ordering::SeqCst) {
                     // If we need a keyframe (and this one isn't) request a keyframe upstream
                     if !needs_keyframe_request {
-                        gst::debug!(CAT, obj: appsink, "Requesting keyframe for first buffer");
+                        gst::debug!(CAT, obj = appsink, "Requesting keyframe for first buffer");
                         needs_keyframe_request = true;
                     }
 
@@ -310,7 +327,7 @@ impl StreamProducer {
 
                     gst::debug!(
                         CAT,
-                        obj: appsink,
+                        obj = appsink,
                         "Ignoring frame for {} while waiting for a keyframe",
                         consumer.appsrc.name()
                     );
@@ -340,7 +357,7 @@ impl StreamProducer {
 
         for consumer in current_consumers {
             if let Err(err) = consumer.push_sample(&sample) {
-                gst::warning!(CAT, obj: appsink, "Failed to push sample: {}", err);
+                gst::warning!(CAT, obj = appsink, "Failed to push sample: {}", err);
             }
         }
         Ok(gst::FlowSuccess::Ok)
@@ -357,10 +374,22 @@ impl StreamProducer {
             .remove(consumer)
             .is_some()
         {
-            gst::debug!(CAT, obj: &self.appsink, "Removed consumer {} ({:?})", name, consumer);
+            gst::debug!(
+                CAT,
+                obj = &self.appsink,
+                "Removed consumer {} ({:?})",
+                name,
+                consumer
+            );
             consumer.set_callbacks(gst_app::AppSrcCallbacks::builder().build());
         } else {
-            gst::debug!(CAT, obj: &self.appsink, "Consumer {} ({:?}) not found", name, consumer);
+            gst::debug!(
+                CAT,
+                obj = &self.appsink,
+                "Consumer {} ({:?}) not found",
+                name,
+                consumer
+            );
         }
     }
 
@@ -415,89 +444,116 @@ impl<'a> From<&'a gst_app::AppSink> for StreamProducer {
 
         appsink.set_callbacks(
             gst_app::AppSinkCallbacks::builder()
-                .new_sample(glib::clone!(#[strong] consumers, move |appsink| {
-                    let mut consumers = consumers.lock().unwrap();
+                .new_sample(glib::clone!(
+                    #[strong]
+                    consumers,
+                    move |appsink| {
+                        let mut consumers = consumers.lock().unwrap();
 
-                    let sample = match appsink.pull_sample() {
-                        Ok(sample) => sample,
-                        Err(_err) => {
-                            gst::debug!(CAT, obj: appsink, "Failed to pull sample");
-                            return Err(gst::FlowError::Flushing);
+                        let sample = match appsink.pull_sample() {
+                            Ok(sample) => sample,
+                            Err(_err) => {
+                                gst::debug!(CAT, obj = appsink, "Failed to pull sample");
+                                return Err(gst::FlowError::Flushing);
+                            }
+                        };
+
+                        let just_forwarded_preroll =
+                            mem::replace(&mut consumers.just_forwarded_preroll, false);
+
+                        if just_forwarded_preroll {
+                            return Ok(gst::FlowSuccess::Ok);
                         }
-                    };
-
-                    let just_forwarded_preroll = mem::replace(&mut consumers.just_forwarded_preroll, false);
-
-                    if just_forwarded_preroll {
-                        return Ok(gst::FlowSuccess::Ok);
-                    }
-
-                    StreamProducer::process_sample(sample, appsink, consumers)
-                }))
-                .new_preroll(glib::clone!(#[strong] consumers, move |appsink| {
-                    let mut consumers = consumers.lock().unwrap();
-
-                    let sample = match appsink.pull_preroll() {
-                        Ok(sample) => sample,
-                        Err(_err) => {
-                            gst::debug!(CAT, obj: appsink, "Failed to pull preroll");
-                            return Err(gst::FlowError::Flushing);
-                        }
-                    };
-
-                    if consumers.forward_preroll {
-                        consumers.just_forwarded_preroll = true;
 
                         StreamProducer::process_sample(sample, appsink, consumers)
-                    } else {
-                        Ok(gst::FlowSuccess::Ok)
                     }
-                }))
-                .new_event(glib::clone!(#[strong] consumers, move |appsink| {
-                    match appsink.pull_object().map(|obj| obj.downcast::<gst::Event>()) {
-                        Ok(Ok(event)) => {
-                            let (events_to_forward, appsrcs) = {
-                                // clone so we don't keep the lock while pushing events
-                                let consumers = consumers.lock().unwrap();
-                                let events = consumers.events_to_forward.clone();
-                                let appsrcs = consumers.consumers.keys().cloned().collect::<Vec<_>>();
+                ))
+                .new_preroll(glib::clone!(
+                    #[strong]
+                    consumers,
+                    move |appsink| {
+                        let mut consumers = consumers.lock().unwrap();
 
-                                (events, appsrcs)
-                            };
+                        let sample = match appsink.pull_preroll() {
+                            Ok(sample) => sample,
+                            Err(_err) => {
+                                gst::debug!(CAT, obj = appsink, "Failed to pull preroll");
+                                return Err(gst::FlowError::Flushing);
+                            }
+                        };
 
-                            if events_to_forward.contains(&event.type_()){
-                                for appsrc in appsrcs {
-                                    appsrc.send_event(event.clone());
+                        if consumers.forward_preroll {
+                            consumers.just_forwarded_preroll = true;
+
+                            StreamProducer::process_sample(sample, appsink, consumers)
+                        } else {
+                            Ok(gst::FlowSuccess::Ok)
+                        }
+                    }
+                ))
+                .new_event(glib::clone!(
+                    #[strong]
+                    consumers,
+                    move |appsink| {
+                        match appsink
+                            .pull_object()
+                            .map(|obj| obj.downcast::<gst::Event>())
+                        {
+                            Ok(Ok(event)) => {
+                                let (events_to_forward, appsrcs) = {
+                                    // clone so we don't keep the lock while pushing events
+                                    let consumers = consumers.lock().unwrap();
+                                    let events = consumers.events_to_forward.clone();
+                                    let appsrcs =
+                                        consumers.consumers.keys().cloned().collect::<Vec<_>>();
+
+                                    (events, appsrcs)
+                                };
+
+                                if events_to_forward.contains(&event.type_()) {
+                                    for appsrc in appsrcs {
+                                        appsrc.send_event(event.clone());
+                                    }
                                 }
                             }
+                            Ok(Err(_)) => {} // pulled another unsupported object type, ignore
+                            Err(_err) => gst::warning!(CAT, obj = appsink, "Failed to pull event"),
                         }
-                        Ok(Err(_)) => {}, // pulled another unsupported object type, ignore
-                        Err(_err) => gst::warning!(CAT, obj: appsink, "Failed to pull event"),
+
+                        false
                     }
+                ))
+                .eos(glib::clone!(
+                    #[strong]
+                    consumers,
+                    move |appsink| {
+                        let stream_consumers = consumers.lock().unwrap();
 
-                    false
-                }))
-                .eos(glib::clone!(#[strong] consumers, move |appsink| {
-                    let stream_consumers = consumers
-                        .lock()
-                        .unwrap();
+                        if stream_consumers
+                            .events_to_forward
+                            .contains(&gst::EventType::Eos)
+                        {
+                            let current_consumers = stream_consumers
+                                .consumers
+                                .values()
+                                .map(|c| c.appsrc.clone())
+                                .collect::<Vec<_>>();
+                            drop(stream_consumers);
 
-                    if stream_consumers.events_to_forward.contains(&gst::EventType::Eos) {
-                        let current_consumers = stream_consumers
-                            .consumers
-                            .values()
-                            .map(|c| c.appsrc.clone())
-                            .collect::<Vec<_>>();
-                        drop(stream_consumers);
-
-                        for consumer in current_consumers {
-                            gst::debug!(CAT, obj: appsink, "set EOS on consumer {}", consumer.name());
-                            let _ = consumer.end_of_stream();
+                            for consumer in current_consumers {
+                                gst::debug!(
+                                    CAT,
+                                    obj = appsink,
+                                    "set EOS on consumer {}",
+                                    consumer.name()
+                                );
+                                let _ = consumer.end_of_stream();
+                            }
+                        } else {
+                            gst::debug!(CAT, obj = appsink, "don't forward EOS to consumers");
                         }
-                    } else {
-                        gst::debug!(CAT, obj: appsink, "don't forward EOS to consumers");
                     }
-                }))
+                ))
                 .build(),
         );
 
@@ -591,7 +647,7 @@ impl StreamConsumer {
                 .enough_data(move |appsrc| {
                     gst::debug!(
                         CAT,
-                        obj: appsrc,
+                        obj = appsrc,
                         "consumer {} ({:?}) is not consuming fast enough, old samples are getting dropped",
                         appsrc.name(),
                         appsrc,

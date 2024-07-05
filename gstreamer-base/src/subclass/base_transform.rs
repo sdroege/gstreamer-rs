@@ -1215,7 +1215,7 @@ unsafe extern "C" fn base_transform_copy_metadata<T: BaseTransformImpl>(
     if gst::ffi::gst_mini_object_is_writable(outbuf as *mut _) == glib::ffi::GFALSE {
         let instance = imp.obj();
         let obj = instance.unsafe_cast_ref::<BaseTransform>();
-        gst::warning!(gst::CAT_RUST, obj: obj, "buffer {:?} not writable", outbuf);
+        gst::warning!(gst::CAT_RUST, obj = obj, "buffer {:?} not writable", outbuf);
         return glib::ffi::GFALSE;
     }
 

@@ -459,7 +459,7 @@ mod video_filter {
                 frame: &mut VideoFrameRef<&mut gst::BufferRef>,
             ) -> Result<gst::FlowSuccess, gst::FlowError> {
                 self.transform_fd_mem_ip(frame).map_err(|err| {
-                    gst::error!(CAT, imp: self, "Failed to transform frame`: {}", err);
+                    gst::error!(CAT, imp = self, "Failed to transform frame`: {}", err);
                     gst::FlowError::Error
                 })?;
 

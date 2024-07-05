@@ -116,7 +116,7 @@ impl BaseTransformImpl for IirFilter {
         }
 
         let mut map = buf.map_writable().map_err(|_| {
-            gst::error!(CAT, imp: self, "Failed to map buffer writable");
+            gst::error!(CAT, imp = self, "Failed to map buffer writable");
             gst::FlowError::Error
         })?;
 
@@ -166,7 +166,7 @@ impl AudioFilterImpl for IirFilter {
     fn setup(&self, info: &gst_audio::AudioInfo) -> Result<(), gst::LoggableError> {
         self.parent_setup(info)?;
 
-        gst::debug!(CAT, imp: self, "Rate changed to {}", info.rate());
+        gst::debug!(CAT, imp = self, "Rate changed to {}", info.rate());
         let obj = self.obj();
         (obj.class().as_ref().set_rate)(&obj, info.rate());
 
@@ -177,7 +177,7 @@ impl AudioFilterImpl for IirFilter {
 /// Wrappers for public methods and associated helper functions.
 impl IirFilter {
     pub(super) fn set_coeffs(&self, a: Vec<f64>, b: Vec<f64>) {
-        gst::debug!(CAT, imp: self, "Setting coefficients a: {a:?}, b: {b:?}");
+        gst::debug!(CAT, imp = self, "Setting coefficients a: {a:?}, b: {b:?}");
         *self.coeffs.lock().unwrap() = Some((a, b));
     }
 }

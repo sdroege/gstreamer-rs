@@ -114,7 +114,7 @@ impl Drop for TaskPoolTaskHandle {
                 if #[cfg(feature = "v1_20")] {
                     unsafe { task_pool.dispose_handle(self.handle) }
                 } else {
-                    crate::warning!(crate::CAT_RUST, obj: &task_pool, "Leaked task handle");
+                    crate::warning!(crate::CAT_RUST, obj = &task_pool, "Leaked task handle");
                 }
             }
         }

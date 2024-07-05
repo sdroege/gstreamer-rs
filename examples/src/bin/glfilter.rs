@@ -80,7 +80,7 @@ mod mirror {
 
                 gst::debug!(
                     CAT,
-                    imp: self,
+                    imp = self,
                     "Compiling fragment shader {}",
                     FRAGMENT_SHADER
                 );
@@ -99,7 +99,7 @@ mod mirror {
 
                 gst::debug!(
                     CAT,
-                    imp: self,
+                    imp = self,
                     "Successfully compiled and linked {:?}",
                     shader
                 );

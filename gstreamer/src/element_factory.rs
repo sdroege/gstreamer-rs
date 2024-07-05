@@ -304,7 +304,7 @@ impl<'a> ElementBuilder<'a> {
         let factory = factory.load().map_err(|_| {
             crate::warning!(
                 crate::CAT_RUST,
-                obj: factory,
+                obj = factory,
                 "loading element factory '{}' failed",
                 factory.name(),
             );
@@ -318,7 +318,7 @@ impl<'a> ElementBuilder<'a> {
         if !element_type.is_valid() {
             crate::warning!(
                 crate::CAT_RUST,
-                obj: &factory,
+                obj = &factory,
                 "element factory '{}' has no type",
                 factory.name()
             );
@@ -422,7 +422,7 @@ impl<'a> ElementBuilder<'a> {
 
         crate::log!(
             crate::CAT_RUST,
-            obj: &factory,
+            obj = &factory,
             "created element \"{}\"",
             factory.name()
         );
