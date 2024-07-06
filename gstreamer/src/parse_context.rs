@@ -8,15 +8,7 @@ glib::wrapper! {
     pub struct ParseContext(Boxed<ffi::GstParseContext>);
 
     match fn {
-        copy => |ptr| {
-            cfg_if::cfg_if! {
-                if #[cfg(feature = "v1_12_1")] {
-                    ffi::gst_parse_context_copy(ptr)
-                } else {
-                    glib::gobject_ffi::g_boxed_copy(ffi::gst_parse_context_get_type(), ptr as *mut _) as *mut ffi::GstParseContext
-                }
-            }
-        },
+        copy => |ptr| ffi::gst_parse_context_copy(ptr),
         free => |ptr| ffi::gst_parse_context_free(ptr),
         type_ => || ffi::gst_parse_context_get_type(),
     }
