@@ -60,6 +60,7 @@ pub use crate::auto::*;
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
 mod composition_meta;
 pub mod subclass;
+mod uri_clip_asset;
 
 #[cfg(feature = "serde")]
 mod flag_serde;

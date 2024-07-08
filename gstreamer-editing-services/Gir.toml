@@ -494,6 +494,10 @@ status = "generate"
 name = "GES.UriClipAsset"
 status = "generate"
 concurrency = "send+sync"
+    [[object.function]]
+    name = "new"
+    # broken finish function in < 1.16
+    manual = true
 
 [[object]]
 name = "GES.UriSourceAsset"
