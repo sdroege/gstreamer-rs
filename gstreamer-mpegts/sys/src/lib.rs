@@ -383,6 +383,12 @@ pub const GST_MPEGTS_AUDIO_TYPE_CLEAN_EFFECTS: GstMpegtsIso639AudioType = 1;
 pub const GST_MPEGTS_AUDIO_TYPE_HEARING_IMPAIRED: GstMpegtsIso639AudioType = 2;
 pub const GST_MPEGTS_AUDIO_TYPE_VISUAL_IMPAIRED_COMMENTARY: GstMpegtsIso639AudioType = 3;
 
+pub type GstMpegtsMetadataApplicationFormat = c_int;
+pub const GST_MPEGTS_METADATA_APPLICATION_FORMAT_ISAN: GstMpegtsMetadataApplicationFormat = 16;
+pub const GST_MPEGTS_METADATA_APPLICATION_FORMAT_VSAN: GstMpegtsMetadataApplicationFormat = 17;
+pub const GST_MPEGTS_METADATA_APPLICATION_FORMAT_IDENTIFIER_FIELD:
+    GstMpegtsMetadataApplicationFormat = 65535;
+
 pub type GstMpegtsMetadataFormat = c_int;
 #[cfg(feature = "v1_24")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
@@ -1527,7 +1533,7 @@ impl ::std::fmt::Debug for GstMpegtsLogicalChannelDescriptor {
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct GstMpegtsMetadataDescriptor {
-    pub metadata_application_format: u16,
+    pub metadata_application_format: GstMpegtsMetadataApplicationFormat,
     pub metadata_format: GstMpegtsMetadataFormat,
     pub metadata_format_identifier: u32,
     pub metadata_service_id: u8,
@@ -1550,6 +1556,34 @@ impl ::std::fmt::Debug for GstMpegtsMetadataDescriptor {
             .field("metadata_service_id", &self.metadata_service_id)
             .field("decoder_config_flags", &self.decoder_config_flags)
             .field("dsm_cc_flag", &self.dsm_cc_flag)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstMpegtsMetadataPointerDescriptor {
+    pub metadata_application_format: GstMpegtsMetadataApplicationFormat,
+    pub metadata_format: GstMpegtsMetadataFormat,
+    pub metadata_format_identifier: u32,
+    pub metadata_service_id: u8,
+    pub program_number: u16,
+}
+
+impl ::std::fmt::Debug for GstMpegtsMetadataPointerDescriptor {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstMpegtsMetadataPointerDescriptor @ {self:p}"))
+            .field(
+                "metadata_application_format",
+                &self.metadata_application_format,
+            )
+            .field("metadata_format", &self.metadata_format)
+            .field(
+                "metadata_format_identifier",
+                &self.metadata_format_identifier,
+            )
+            .field("metadata_service_id", &self.metadata_service_id)
+            .field("program_number", &self.program_number)
             .finish()
     }
 }
@@ -2446,6 +2480,16 @@ extern "C" {
     pub fn gst_mpegts_descriptor_from_iso_639_language(
         language: *const c_char,
     ) -> *mut GstMpegtsDescriptor;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_mpegts_descriptor_from_metadata(
+        metadata_descriptor: *const GstMpegtsMetadataDescriptor,
+    ) -> *mut GstMpegtsDescriptor;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_mpegts_descriptor_from_metadata_pointer(
+        metadata_pointer_descriptor: *const GstMpegtsMetadataPointerDescriptor,
+    ) -> *mut GstMpegtsDescriptor;
     pub fn gst_mpegts_descriptor_from_registration(
         format_identifier: *const c_char,
         additional_info: *mut u8,
@@ -2527,6 +2571,13 @@ extern "C" {
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_mpegts_metadata_descriptor_get_type() -> GType;
+
+    //=========================================================================
+    // GstMpegtsMetadataPointerDescriptor
+    //=========================================================================
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_mpegts_metadata_pointer_descriptor_get_type() -> GType;
 
     //=========================================================================
     // GstMpegtsNIT

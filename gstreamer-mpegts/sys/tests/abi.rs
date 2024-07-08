@@ -595,6 +595,13 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "GstMpegtsMetadataApplicationFormat",
+        Layout {
+            size: size_of::<GstMpegtsMetadataApplicationFormat>(),
+            alignment: align_of::<GstMpegtsMetadataApplicationFormat>(),
+        },
+    ),
+    (
         "GstMpegtsMetadataDescriptor",
         Layout {
             size: size_of::<GstMpegtsMetadataDescriptor>(),
@@ -606,6 +613,13 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         Layout {
             size: size_of::<GstMpegtsMetadataFormat>(),
             alignment: align_of::<GstMpegtsMetadataFormat>(),
+        },
+    ),
+    (
+        "GstMpegtsMetadataPointerDescriptor",
+        Layout {
+            size: size_of::<GstMpegtsMetadataPointerDescriptor>(),
+            alignment: align_of::<GstMpegtsMetadataPointerDescriptor>(),
         },
     ),
     (
@@ -1037,6 +1051,12 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_MPEGTS_HIERARCHY_4", "3"),
     ("(gint) GST_MPEGTS_HIERARCHY_AUTO", "4"),
     ("(gint) GST_MPEGTS_HIERARCHY_NONE", "0"),
+    (
+        "(gint) GST_MPEGTS_METADATA_APPLICATION_FORMAT_IDENTIFIER_FIELD",
+        "65535",
+    ),
+    ("(gint) GST_MPEGTS_METADATA_APPLICATION_FORMAT_ISAN", "16"),
+    ("(gint) GST_MPEGTS_METADATA_APPLICATION_FORMAT_VSAN", "17"),
     ("(gint) GST_MPEGTS_METADATA_FORMAT_APPLICATION_FORMAT", "63"),
     ("(gint) GST_MPEGTS_METADATA_FORMAT_BIM", "17"),
     ("(gint) GST_MPEGTS_METADATA_FORMAT_IDENTIFIER_FIELD", "255"),
