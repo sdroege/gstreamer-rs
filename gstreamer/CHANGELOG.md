@@ -5,6 +5,47 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.23.0] - 2024-07-11
+### Changed
+- Compatible with gtk-rs-core 0.20 / gtk4-rs 0.9.
+- Update GStreamer gir files to latest (upcoming) 1.26 APIs.
+- Minimum support Rust version is updated from 1.70 to 1.71.1.
+- Move `gst::Meta` tags into separate modules and improve API around them.
+- Improve `gst::Meta` transform functions and make the API more generic, and
+  as part of that add support the video meta transform.
+- Pass an immutable instead of mutable output buffer reference to
+  `gst_rtp::RtpHeaderExtension::write()` function.
+- Make `gst_net::PtpClock::new()` constructor fallible.
+- Change `gst_rtsp_server::RTSPToken` API to be consistent with
+  `gst::Structure`, specifically add a builder.
+- Change `from_glib_ptr_borrow()` functions to work with references instead of
+  raw pointers for improved safety.
+- Improve code generation when building with `panic=abort`.
+- Change `gst::BufferList` APIs to work with ranges instead of index+length.
+- Use various `usize` instead of `u32` for various indices in `gst::Buffer`,
+  `gst::Caps`, `gst::Structure` and related APIs.
+- `gst::Clock` calibration-related API uses plain `u64` instead of
+  `gst::ClockTime` for the clock rate.
+- `gst::debug!` and related macros use `obj = x` instead of `obj: x` for
+  specifying the target object now. Similar for `imp` and `id`. The old syntax
+  is still supported but deprecated. The new syntax works better with tooling,
+  especially rustfmt.
+
+### Added
+- Mutable access to the `gst_webrtc::WebRTCSessionDescription` fields.
+- `gst::StructureBuilder::field_if_some()` and the same for related builders
+  to only set a value if `Some(x)` is provided.
+- `gst::StructureBuilder::field_from_iter()` and `field_if_not_empty()` for
+  various builders.
+- `gst::PadBuilder` API for selecting an automatically generated name.
+- Adapter for the `log` crate around the GStreamer debug log system. This
+  allows the macros from the `log` crate to be output via the GStreamer debug
+  log system.
+- Bindings for the double click `gst_video::Navigation` event.
+- Bindings for `gst_pbutils` missing/install plugins API.
+- Setters for `gst_editing_services::FrameCompositionMeta`.
+- `ges::UriClipAsset::new()`.
+
 ## [0.22.6] - 2024-06-19
 ### Fixed
 - When logging with an id and a formatted log message this would previously panic.
@@ -1720,7 +1761,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.22.6...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.23.0...HEAD
+[0.23.0]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.22.6...0.23.0
 [0.22.6]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.22.5...0.22.6
 [0.22.5]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.22.4...0.22.5
 [0.22.4]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.22.3...0.22.4
