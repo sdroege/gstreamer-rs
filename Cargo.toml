@@ -130,7 +130,7 @@ gstreamer-audio-sys = { path = "./gstreamer-audio/sys", version = "0.23" }
 gstreamer-base-sys = { path = "./gstreamer-base/sys", version = "0.23" }
 gstreamer-check-sys = { path = "./gstreamer-check/sys", version = "0.23" }
 gstreamer-controller-sys = { path = "./gstreamer-controller/sys", version = "0.23" }
-gstreamer-editing-services-sys = { path = "./gstreamer-editing-services/sys"}
+gstreamer-editing-services-sys = { path = "./gstreamer-editing-services/sys", version = "0.23" }
 gstreamer-gl-egl-sys = { path = "./gstreamer-gl/egl/sys", version = "0.23" }
 gstreamer-gl-wayland-sys = { path = "./gstreamer-gl/wayland/sys", version = "0.23" }
 gstreamer-gl-x11-sys = { path = "./gstreamer-gl/x11/sys", version = "0.23" }
