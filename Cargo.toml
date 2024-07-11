@@ -115,55 +115,55 @@ edition = "2021"
 rust-version = "1.71.1"
 
 [workspace.dependencies]
-gio = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "master" }
-gio-sys = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "master" }
-glib = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "master" }
-glib-sys = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "master" }
-gobject-sys = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "master" }
-cairo-rs = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "master" }
-pango = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "master" }
-pangocairo = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "master" }
-gstreamer-allocators-sys = { path = "gstreamer-allocators/sys" }
-gstreamer-analytics-sys = { path = "gstreamer-analytics/sys" }
-gstreamer-app-sys = {  path = "gstreamer-app/sys" }
-gstreamer-audio-sys = { path = "./gstreamer-audio/sys"}
-gstreamer-base-sys = { path = "./gstreamer-base/sys"}
-gstreamer-check-sys = { path = "./gstreamer-check/sys" }
-gstreamer-controller-sys = { path = "./gstreamer-controller/sys" }
+gio = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "0.20", version = "0.20" }
+gio-sys = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "0.20", version = "0.20" }
+glib = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "0.20", version = "0.20" }
+glib-sys = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "0.20", version = "0.20" }
+gobject-sys = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "0.20", version = "0.20" }
+cairo-rs = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "0.20", version = "0.20" }
+pango = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "0.20", version = "0.20" }
+pangocairo = { git = "https://github.com/gtk-rs/gtk-rs-core", branch = "0.20", version = "0.20" }
+gstreamer-allocators-sys = { path = "gstreamer-allocators/sys", version = "0.23" }
+gstreamer-analytics-sys = { path = "gstreamer-analytics/sys", version = "0.23" }
+gstreamer-app-sys = {  path = "gstreamer-app/sys", version = "0.23" }
+gstreamer-audio-sys = { path = "./gstreamer-audio/sys", version = "0.23" }
+gstreamer-base-sys = { path = "./gstreamer-base/sys", version = "0.23" }
+gstreamer-check-sys = { path = "./gstreamer-check/sys", version = "0.23" }
+gstreamer-controller-sys = { path = "./gstreamer-controller/sys", version = "0.23" }
 gstreamer-editing-services-sys = { path = "./gstreamer-editing-services/sys"}
-gstreamer-gl-egl-sys = { path = "./gstreamer-gl/egl/sys"}
-gstreamer-gl-wayland-sys = { path = "./gstreamer-gl/wayland/sys"}
-gstreamer-gl-x11-sys = { path = "./gstreamer-gl/x11/sys"}
-gstreamer-gl-sys = { path = "./gstreamer-gl/sys"}
-gstreamer-mpegts-sys = { path = "./gstreamer-mpegts/sys"}
-gstreamer-net-sys = { path = "./gstreamer-net/sys"}
-gstreamer-pbutils-sys = { path = "./gstreamer-pbutils/sys"}
-gstreamer-play-sys = { path = "./gstreamer-play/sys" }
-gstreamer-player-sys = { path = "./gstreamer-player/sys" }
-gstreamer-rtp-sys = { path = "./gstreamer-rtp/sys" }
-gstreamer-rtsp-sys = { path = "./gstreamer-rtsp/sys"}
-gstreamer-rtsp-server-sys = { path = "./gstreamer-rtsp-server/sys" }
-gstreamer-sdp-sys = { path = "./gstreamer-sdp/sys"}
-gstreamer-tag-sys = { path = "./gstreamer-tag/sys" }
-gstreamer-sys = { path = "./gstreamer/sys"}
-gstreamer-validate-sys = { path = "./gstreamer-validate/sys" }
-gstreamer-video-sys = { path = "./gstreamer-video/sys"}
-gstreamer-webrtc-sys = { path = "./gstreamer-webrtc/sys" }
-ges = { package = "gstreamer-editing-services", path = "./gstreamer-editing-services" }
-gst = { package = "gstreamer", path = "./gstreamer" }
-gst-allocators = { package = "gstreamer-allocators", path = "./gstreamer-allocators" }
-gst-app = { package = "gstreamer-app", path = "./gstreamer-app" }
-gst-audio = { package = "gstreamer-audio", path = "./gstreamer-audio" }
-gst-base = { package = "gstreamer-base", path = "./gstreamer-base" }
-gst-check = { package = "gstreamer-check", path = "./gstreamer-check" }
-gst-gl = { package = "gstreamer-gl", path = "./gstreamer-gl" }
-gst-gl-egl = { package = "gstreamer-gl-egl", path = "./gstreamer-gl/egl" }
-gst-gl-x11 = { package = "gstreamer-gl-x11", path = "./gstreamer-gl/x11" }
-gst-net = { package = "gstreamer-net", path = "./gstreamer-net" }
-gst-pbutils = { package = "gstreamer-pbutils", path = "./gstreamer-pbutils" }
-gst-play = { package = "gstreamer-play", path = "./gstreamer-play" }
-gst-player = { package = "gstreamer-player", path = "./gstreamer-player" }
-gst-rtsp = { package = "gstreamer-rtsp", path = "./gstreamer-rtsp" }
-gst-rtsp-server = { package = "gstreamer-rtsp-server", path = "./gstreamer-rtsp-server" }
-gst-sdp = { package = "gstreamer-sdp", path = "./gstreamer-sdp" }
-gst-video = { package = "gstreamer-video", path = "./gstreamer-video" }
+gstreamer-gl-egl-sys = { path = "./gstreamer-gl/egl/sys", version = "0.23" }
+gstreamer-gl-wayland-sys = { path = "./gstreamer-gl/wayland/sys", version = "0.23" }
+gstreamer-gl-x11-sys = { path = "./gstreamer-gl/x11/sys", version = "0.23" }
+gstreamer-gl-sys = { path = "./gstreamer-gl/sys", version = "0.23" }
+gstreamer-mpegts-sys = { path = "./gstreamer-mpegts/sys", version = "0.23" }
+gstreamer-net-sys = { path = "./gstreamer-net/sys", version = "0.23" }
+gstreamer-pbutils-sys = { path = "./gstreamer-pbutils/sys", version = "0.23" }
+gstreamer-play-sys = { path = "./gstreamer-play/sys", version = "0.23" }
+gstreamer-player-sys = { path = "./gstreamer-player/sys", version = "0.23" }
+gstreamer-rtp-sys = { path = "./gstreamer-rtp/sys", version = "0.23" }
+gstreamer-rtsp-sys = { path = "./gstreamer-rtsp/sys", version = "0.23" }
+gstreamer-rtsp-server-sys = { path = "./gstreamer-rtsp-server/sys", version = "0.23" }
+gstreamer-sdp-sys = { path = "./gstreamer-sdp/sys", version = "0.23" }
+gstreamer-tag-sys = { path = "./gstreamer-tag/sys", version = "0.23" }
+gstreamer-sys = { path = "./gstreamer/sys", version = "0.23" }
+gstreamer-validate-sys = { path = "./gstreamer-validate/sys", version = "0.23" }
+gstreamer-video-sys = { path = "./gstreamer-video/sys", version = "0.23" }
+gstreamer-webrtc-sys = { path = "./gstreamer-webrtc/sys", version = "0.23" }
+ges = { package = "gstreamer-editing-services", path = "./gstreamer-editing-services", version = "0.23" }
+gst = { package = "gstreamer", path = "./gstreamer", version = "0.23" }
+gst-allocators = { package = "gstreamer-allocators", path = "./gstreamer-allocators", version = "0.23" }
+gst-app = { package = "gstreamer-app", path = "./gstreamer-app", version = "0.23" }
+gst-audio = { package = "gstreamer-audio", path = "./gstreamer-audio", version = "0.23" }
+gst-base = { package = "gstreamer-base", path = "./gstreamer-base", version = "0.23" }
+gst-check = { package = "gstreamer-check", path = "./gstreamer-check", version = "0.23" }
+gst-gl = { package = "gstreamer-gl", path = "./gstreamer-gl", version = "0.23" }
+gst-gl-egl = { package = "gstreamer-gl-egl", path = "./gstreamer-gl/egl", version = "0.23" }
+gst-gl-x11 = { package = "gstreamer-gl-x11", path = "./gstreamer-gl/x11", version = "0.23" }
+gst-net = { package = "gstreamer-net", path = "./gstreamer-net", version = "0.23" }
+gst-pbutils = { package = "gstreamer-pbutils", path = "./gstreamer-pbutils", version = "0.23" }
+gst-play = { package = "gstreamer-play", path = "./gstreamer-play", version = "0.23" }
+gst-player = { package = "gstreamer-player", path = "./gstreamer-player", version = "0.23" }
+gst-rtsp = { package = "gstreamer-rtsp", path = "./gstreamer-rtsp", version = "0.23" }
+gst-rtsp-server = { package = "gstreamer-rtsp-server", path = "./gstreamer-rtsp-server", version = "0.23" }
+gst-sdp = { package = "gstreamer-sdp", path = "./gstreamer-sdp", version = "0.23" }
+gst-video = { package = "gstreamer-video", path = "./gstreamer-video", version = "0.23" }
