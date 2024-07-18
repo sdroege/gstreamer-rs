@@ -939,7 +939,7 @@ impl CustomMeta {
         unsafe {
             ffi::gst_meta_register_custom(
                 name.to_glib_none().0,
-                ptr::null_mut(),
+                [ptr::null()].as_mut_ptr(),
                 None,
                 ptr::null_mut(),
                 None,
