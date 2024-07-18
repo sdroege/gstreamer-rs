@@ -14,7 +14,6 @@ use std::{
 };
 
 use anyhow::{Context, Result};
-use derive_more::derive::{Display, Error};
 use glutin::{
     config::GetGlConfig as _,
     context::AsRawContext as _,
@@ -22,17 +21,9 @@ use glutin::{
     prelude::*,
 };
 use glutin_winit::GlWindow as _;
-use gst::element_error;
+use gst::{element_error, PadProbeReturn, PadProbeType, QueryViewMut};
 use gst_gl::prelude::*;
 use raw_window_handle::HasRawWindowHandle as _;
-
-#[derive(Debug, Display, Error)]
-#[display("Received error from {src}: {error} (debug: {debug:?})")]
-struct ErrorMessage {
-    src: glib::GString,
-    error: glib::Error,
-    debug: Option<glib::GString>,
-}
 
 #[rustfmt::skip]
 static VERTICES: [f32; 20] = [
@@ -325,17 +316,16 @@ fn load(gl_display: &impl glutin::display::GlDisplay) -> Gl {
 #[derive(Debug)]
 enum Message {
     Frame(gst_video::VideoInfo, gst::Buffer),
-    BusEvent,
+    BusMessage(gst::Message),
 }
 
 pub(crate) struct App {
     pipeline: gst::Pipeline,
     appsink: gst_app::AppSink,
-    bus: gst::Bus,
     event_loop: winit::event_loop::EventLoop<Message>,
     window: Option<winit::window::Window>,
     not_current_gl_context: Option<glutin::context::NotCurrentContext>,
-    shared_context: gst_gl::GLContext,
+    glutin_context: gst_gl::GLContext,
 }
 
 impl App {
@@ -471,60 +461,82 @@ impl App {
             handler => anyhow::bail!("Unsupported platform: {handler:?}."),
         };
 
-        let shared_context = unsafe {
+        let glutin_context = unsafe {
             gst_gl::GLContext::new_wrapped(&gst_gl_display, raw_gl_context, platform, api)
         }
         .context("Couldn't wrap GL context")?;
 
-        let gl_context = shared_context.clone();
+        {
+            // Make a new context that isn't the wrapped glutin context so that it can be made
+            // current on a new "gstglcontext" thread (see `gst_gl_context_create_thread()`), while
+            // the wrapped glutin context is made current on the winit event loop thread (this main
+            // thread).
+            let shared_context = gst_gl::GLContext::new(&gst_gl_display);
+            shared_context
+                .create(Some(&glutin_context))
+                .context("Couldn't share wrapped Glutin GL context with new GL context")?;
+
+            // Return the shared `GLContext` out of a pad probe for "gst.gl.local_context" to
+            // make the underlying pipeline use it directly, instead of creating a new GL context
+            // that is *shared* with the resulting context from a context `Query` (among other
+            // elements) or `NeedContext` bus message for "gst.gl.app_context", as documented for
+            // `gst_gl_ensure_element_data()`.
+            //
+            // On Windows, such context sharing calls `wglShareLists()` which fails on certain
+            // drivers when one of the contexts is already current on another thread.  This would
+            // happen because the pipeline and specifically the aforementioned "gstglcontext"
+            // thread would be initialized asynchronously from the winit loop which makes our glutin
+            // context current.  By calling `GLContext::create()` above, context sharing happens
+            // directly.
+            //
+            // An alternative approach would be using `gst_gl::GLDisplay::add_context()` to store
+            // the context inside `GLDisplay`, but the pad probe takes precedence.
+
+            // While the pad probe could be installed anywhere, it makes logical sense to insert it
+            // on the appsink where the images are extracted and displayed to a window via the same
+            // GL contexts.
+            appsink
+                .static_pad("sink")
+                .unwrap()
+                .add_probe(PadProbeType::QUERY_DOWNSTREAM, move |pad, probe_info| {
+                    if let Some(q) = probe_info.query_mut() {
+                        if let QueryViewMut::Context(cq) = q.view_mut() {
+                            if gst_gl::functions::gl_handle_context_query(
+                                &pad.parent_element().unwrap(),
+                                cq,
+                                Some(&gst_gl_display),
+                                Some(&shared_context),
+                                None::<&gst_gl::GLContext>,
+                            ) {
+                                return PadProbeReturn::Handled;
+                            }
+                        }
+                    }
+                    PadProbeReturn::Ok
+                })
+                .unwrap();
+        }
+
         let event_proxy = event_loop.create_proxy();
 
         #[allow(clippy::single_match)]
-        bus.set_sync_handler(move |_, msg| {
-            match msg.view() {
-                gst::MessageView::NeedContext(ctxt) => {
-                    let context_type = ctxt.context_type();
-                    if context_type == *gst_gl::GL_DISPLAY_CONTEXT_TYPE {
-                        if let Some(el) =
-                            msg.src().map(|s| s.downcast_ref::<gst::Element>().unwrap())
-                        {
-                            let context = gst::Context::new(context_type, true);
-                            context.set_gl_display(&gst_gl_display);
-                            el.set_context(&context);
-                        }
-                    }
-                    if context_type == "gst.gl.app_context" {
-                        if let Some(el) =
-                            msg.src().map(|s| s.downcast_ref::<gst::Element>().unwrap())
-                        {
-                            let mut context = gst::Context::new(context_type, true);
-                            {
-                                let context = context.get_mut().unwrap();
-                                let s = context.structure_mut();
-                                s.set("context", &gl_context);
-                            }
-                            el.set_context(&context);
-                        }
-                    }
-                }
-                _ => (),
-            }
-
-            if let Err(e) = event_proxy.send_event(Message::BusEvent) {
+        bus.set_sync_handler(move |_bus, msg| {
+            if let Err(e) = event_proxy
+                // Forward all messages to winit's event loop
+                .send_event(Message::BusMessage(msg.to_owned()))
+            {
                 eprintln!("Failed to send BusEvent to event proxy: {e}")
             }
 
-            gst::BusSyncReply::Pass
+            gst::BusSyncReply::Drop
         });
-
         Ok(App {
             pipeline,
             appsink,
-            bus,
             event_loop,
             window,
             not_current_gl_context: Some(not_current_gl_context),
-            shared_context,
+            glutin_context,
         })
     }
 
@@ -658,28 +670,20 @@ impl App {
         }
     }
 
-    fn handle_messages(bus: &gst::Bus) -> Result<()> {
+    /// Should be called from within the event loop
+    fn handle_message(msg: gst::Message) {
         use gst::MessageView;
 
-        for msg in bus.iter() {
-            match msg.view() {
-                MessageView::Eos(..) => break,
-                MessageView::Error(err) => {
-                    return Err(ErrorMessage {
-                        src: msg
-                            .src()
-                            .map(|s| s.path_string())
-                            .unwrap_or_else(|| glib::GString::from("UNKNOWN")),
-                        error: err.error(),
-                        debug: err.debug(),
-                    }
-                    .into());
-                }
-                _ => (),
-            }
+        // Only handle error messages by panicking, to hard-stop the event loop
+        if let MessageView::Error(err) = msg.view() {
+            let src = msg
+                .src()
+                .map(|s| s.path_string())
+                .unwrap_or_else(|| glib::GString::from("UNKNOWN"));
+            let error = err.error();
+            let debug = err.debug();
+            panic!("Received error from {src}: {error} (debug: {debug:?})");
         }
-
-        Ok(())
     }
 }
 
@@ -688,11 +692,10 @@ pub(crate) fn main_loop(app: App) -> Result<()> {
 
     let App {
         pipeline,
-        bus,
         event_loop,
         mut window,
         mut not_current_gl_context,
-        shared_context,
+        glutin_context,
         ..
     } = app;
 
@@ -751,9 +754,7 @@ pub(crate) fn main_loop(app: App) -> Result<()> {
                 }
             }
             // Handle all pending messages when we are awaken by set_sync_handler
-            winit::event::Event::UserEvent(Message::BusEvent) => {
-                App::handle_messages(&bus).unwrap();
-            }
+            winit::event::Event::UserEvent(Message::BusMessage(msg)) => App::handle_message(msg),
             winit::event::Event::Resumed => {
                 let not_current_gl_context = not_current_gl_context
                     .take()
@@ -781,9 +782,9 @@ pub(crate) fn main_loop(app: App) -> Result<()> {
 
                 // Tell GStreamer that the context has been made current (for borrowed contexts,
                 // this does not try to make it current again)
-                shared_context.activate(true).unwrap();
+                glutin_context.activate(true).unwrap();
 
-                shared_context
+                glutin_context
                     .fill_info()
                     .expect("Couldn't fill context info");
 
@@ -812,7 +813,7 @@ pub(crate) fn main_loop(app: App) -> Result<()> {
             if let Some((gl, gl_context, gl_surface)) = &running_state {
                 if let Some(frame) = curr_frame.as_ref() {
                     let sync_meta = frame.buffer().meta::<gst_gl::GLSyncMeta>().unwrap();
-                    sync_meta.wait(&shared_context);
+                    sync_meta.wait(&glutin_context);
                     if let Ok(texture) = frame.texture_id(0) {
                         gl.draw_frame(texture as gl::types::GLuint);
                     }
