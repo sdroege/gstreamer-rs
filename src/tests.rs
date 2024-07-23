@@ -316,7 +316,7 @@ fn test_with_object() {
         "test_with_object",
         move || {
             let cat = g::DebugCategory::new("test_with_object", g::DebugColorFlags::empty(), None);
-            g::error!(cat, obj: &p, "with object");
+            g::error!(cat, obj = &p, "with object");
         },
         vec![Expect::GstEvent(GstEvent {
             message: "with object",
@@ -344,7 +344,7 @@ fn test_with_upcast_object() {
         move || {
             let cat =
                 g::DebugCategory::new("test_with_upcast_object", g::DebugColorFlags::empty(), None);
-            g::error!(cat, obj: &obj, "with upcast object");
+            g::error!(cat, obj = &obj, "with upcast object");
         },
         vec![Expect::GstEvent(GstEvent {
             message: "with upcast object",
@@ -375,7 +375,7 @@ fn test_with_pad() {
         "test_with_pad",
         move || {
             let cat = g::DebugCategory::new("test_pad_cat", g::DebugColorFlags::empty(), None);
-            g::error!(cat, obj: &pad, "with pad object");
+            g::error!(cat, obj = &pad, "with pad object");
         },
         vec![Expect::GstEvent(GstEvent {
             message: "with pad object",
@@ -502,7 +502,7 @@ fn test_user_span() {
             unsafe { attach_span(&p, span) };
 
             let cat = g::DebugCategory::new("test_user_span", g::DebugColorFlags::empty(), None);
-            g::error!(cat, obj: &p, "with object");
+            g::error!(cat, obj = &p, "with object");
         },
         vec![Expect::GstEvent(GstEvent {
             message: "with object",

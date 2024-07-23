@@ -273,6 +273,7 @@ fn span_quark() -> &'static gstreamer::glib::Quark {
     //
     // We’re still going to be storing `tracing::Span` within the objects directly, because that’s
     // just more convenient.
+    #[allow(dead_code)]
     struct QDataTracingSpan(tracing::Span);
 
     ELEMENT_SPAN_QUARK.get_or_init(|| {
