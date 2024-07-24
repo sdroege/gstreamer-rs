@@ -5,6 +5,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.22.7] - 2024-07-24
+### Fixed
+- GStreamer criticals when using `gst::meta::CustomMeta::register_simple()`
+
+### Added
+- ges: Add setters to `FrameCompositionMeta`
+
+### Changed
+- Include `GstChildProxy` child property name in error message when lookup fails
+
 ## [0.22.6] - 2024-06-19
 ### Fixed
 - When logging with an id and a formatted log message this would previously panic.
@@ -1720,7 +1730,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.22.6...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.22.7...HEAD
+[0.22.7]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.22.6...0.22.7
 [0.22.6]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.22.5...0.22.6
 [0.22.5]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.22.4...0.22.5
 [0.22.4]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.22.3...0.22.4
