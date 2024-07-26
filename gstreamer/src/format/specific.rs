@@ -336,6 +336,30 @@ impl Percent {
         // FIXME floating point arithmetic is not allowed in constant functions (rustc 1.64.0)
         Percent::try_from(ratio).expect("`Percent` ratio out of range")
     }
+
+    // rustdoc-stripper-ignore-next
+    /// The percent value in the range [0, 100].
+    #[track_caller]
+    #[inline]
+    pub fn percent(&self) -> u32 {
+        self.0 / ffi::GST_FORMAT_PERCENT_SCALE as u32
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// The per million value in the range [0, 100000].
+    #[track_caller]
+    #[inline]
+    pub fn ppm(&self) -> u32 {
+        self.0
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// The ratio value in the range [0.0, 1.0].
+    #[track_caller]
+    #[inline]
+    pub fn ratio(&self) -> f32 {
+        self.0 as f32 / ffi::GST_FORMAT_PERCENT_MAX as f32
+    }
 }
 
 impl_common_ops_for_newtype_uint!(Percent, u32, one: ffi::GST_FORMAT_PERCENT_SCALE as u32);

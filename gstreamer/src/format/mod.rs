@@ -115,6 +115,9 @@
 //!
 //! // `Percent` can be built from a percent integer value:
 //! let a_quarter = 25.percent();
+//! assert_eq!(a_quarter.percent(), 25);
+//! assert_eq!(a_quarter.ppm(), 250000);
+//! assert_eq!(a_quarter.ratio(), 0.25);
 //! // ... from a floating point ratio:
 //! let a_quarter_from_ratio = 0.25.percent_ratio();
 //! assert_eq!(a_quarter, a_quarter_from_ratio);
