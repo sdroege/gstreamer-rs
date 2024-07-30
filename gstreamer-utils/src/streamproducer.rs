@@ -393,7 +393,7 @@ impl StreamProducer {
         }
     }
 
-    /// configure event types the appsrc should forward to all consumers (default: `Eos`).
+    /// configure event types the appsink should forward to all its consumers (default: `Eos`).
     pub fn set_forward_events(&self, events_to_forward: impl IntoIterator<Item = gst::EventType>) {
         self.consumers.lock().unwrap().events_to_forward = events_to_forward.into_iter().collect();
     }
