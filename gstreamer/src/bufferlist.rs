@@ -64,8 +64,8 @@ impl BufferListRef {
         assert!(start_idx < n);
 
         let end_idx = match range.end_bound() {
-            std::ops::Bound::Included(idx) => *idx,
-            std::ops::Bound::Excluded(idx) => idx.checked_add(1).unwrap(),
+            std::ops::Bound::Included(idx) => idx.checked_add(1).unwrap(),
+            std::ops::Bound::Excluded(idx) => *idx,
             std::ops::Bound::Unbounded => n,
         };
         assert!(end_idx <= n);
@@ -405,21 +405,29 @@ mod tests {
     use super::*;
     use crate::ClockTime;
 
-    #[test]
-    fn test_foreach() {
-        crate::init().unwrap();
+    fn make_buffer_list(size: usize) -> BufferList {
+        skip_assert_initialized!();
 
         let mut buffer_list = BufferList::new();
         {
             let buffer_list = buffer_list.get_mut().unwrap();
-            let mut buffer = Buffer::new();
-            buffer.get_mut().unwrap().set_pts(ClockTime::ZERO);
-            buffer_list.add(buffer);
-
-            let mut buffer = Buffer::new();
-            buffer.get_mut().unwrap().set_pts(ClockTime::SECOND);
-            buffer_list.add(buffer);
+            for i in 0..size {
+                let mut buffer = Buffer::new();
+                buffer
+                    .get_mut()
+                    .unwrap()
+                    .set_pts(ClockTime::SECOND * i as u64);
+                buffer_list.add(buffer);
+            }
         }
+        buffer_list
+    }
+
+    #[test]
+    fn test_foreach() {
+        crate::init().unwrap();
+
+        let buffer_list = make_buffer_list(2);
 
         let mut res = vec![];
         buffer_list.foreach(|buffer, idx| {
@@ -437,21 +445,7 @@ mod tests {
     fn test_foreach_mut() {
         crate::init().unwrap();
 
-        let mut buffer_list = BufferList::new();
-        {
-            let buffer_list = buffer_list.get_mut().unwrap();
-            let mut buffer = Buffer::new();
-            buffer.get_mut().unwrap().set_pts(ClockTime::ZERO);
-            buffer_list.add(buffer);
-
-            let mut buffer = Buffer::new();
-            buffer.get_mut().unwrap().set_pts(ClockTime::SECOND);
-            buffer_list.add(buffer);
-
-            let mut buffer = Buffer::new();
-            buffer.get_mut().unwrap().set_pts(2 * ClockTime::SECOND);
-            buffer_list.add(buffer);
-        }
+        let mut buffer_list = make_buffer_list(3);
 
         let mut res = vec![];
         buffer_list.get_mut().unwrap().foreach_mut(|buffer, idx| {
@@ -514,5 +508,43 @@ mod tests {
             .collect::<Vec<_>>();
 
         assert_eq!(res, &[1, 2, 4, 5, 7, 8]);
+    }
+
+    #[test]
+    fn test_remove() {
+        crate::init().unwrap();
+
+        let mut buffer_list = make_buffer_list(10);
+
+        buffer_list.make_mut().remove(0..2);
+
+        let buffers_left = buffer_list
+            .iter()
+            .map(|buf| buf.pts().unwrap() / ClockTime::SECOND)
+            .collect::<Vec<_>>();
+
+        assert_eq!(buffers_left, &[2, 3, 4, 5, 6, 7, 8, 9]);
+
+        buffer_list.make_mut().remove(0..=2);
+
+        let buffers_left = buffer_list
+            .iter()
+            .map(|buf| buf.pts().unwrap() / ClockTime::SECOND)
+            .collect::<Vec<_>>();
+
+        assert_eq!(buffers_left, &[5, 6, 7, 8, 9]);
+
+        buffer_list.make_mut().remove(2..);
+
+        let buffers_left = buffer_list
+            .iter()
+            .map(|buf| buf.pts().unwrap() / ClockTime::SECOND)
+            .collect::<Vec<_>>();
+
+        assert_eq!(buffers_left, &[5, 6]);
+
+        buffer_list.make_mut().remove(..);
+
+        assert!(buffer_list.is_empty());
     }
 }
