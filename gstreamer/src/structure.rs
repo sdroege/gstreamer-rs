@@ -1276,7 +1276,7 @@ mod tests {
         assert_eq!(s.name(), "test");
 
         s.set("f1", "abc");
-        s.set("f2", &String::from("bcd"));
+        s.set("f2", String::from("bcd"));
         s.set("f3", 123i32);
         s.set("f5", Some("efg"));
         s.set("f7", 42i32);

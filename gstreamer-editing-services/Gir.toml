@@ -87,7 +87,6 @@ generate = [
     "GES.TextOverlay",
     "GES.TextOverlayClip",
     "GES.TextVAlign",
-    "GES.TitleClip",
     "GES.TitleSource",
     "GES.TrackType",
     "GES.Transition",
@@ -435,6 +434,18 @@ manual_traits = ["TimelineElementExtManual"]
         mandatory = true
         [object.function.return]
         bool_return_is_error = "Failed to trim"
+
+[[object]]
+name = "GES.TitleClip"
+status = "generate"
+    [[object.function]]
+    pattern = "[^n].*"
+    # all functions except constructor are deprecated since 1.6
+    ignore = true
+    [[object.property]]
+    pattern = ".*"
+    # all properties are deprecated since 1.6
+    ignore = true
 
 [[object]]
 name = "GES.Track"

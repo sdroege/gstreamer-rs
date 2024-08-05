@@ -238,7 +238,6 @@ pub(crate) mod traits {
     pub use super::text_overlay_clip::TextOverlayClipExt;
     pub use super::timeline::TimelineExt;
     pub use super::timeline_element::TimelineElementExt;
-    pub use super::title_clip::TitleClipExt;
     pub use super::title_source::TitleSourceExt;
     pub use super::track::GESTrackExt;
     pub use super::track_element::TrackElementExt;

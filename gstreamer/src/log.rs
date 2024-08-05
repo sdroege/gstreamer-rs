@@ -1002,7 +1002,8 @@ macro_rules! log_with_level(
             // FIXME: Once there's a function_name! macro that returns a string literal we can
             // directly pass it as `&GStr` forward
 
-            let obj = unsafe { $obj.unsafe_cast_ref::<$crate::glib::Object>() };
+            let obj = &$obj;
+            let obj = unsafe { obj.unsafe_cast_ref::<$crate::glib::Object>() };
             let function_name = $crate::glib::function_name!();
 
             // Check if formatting is necessary or not
@@ -1045,7 +1046,8 @@ macro_rules! log_with_level(
             // FIXME: Once there's a function_name! macro that returns a string literal we can
             // directly pass it as `&GStr` forward
 
-            let obj = unsafe { $obj.unsafe_cast_ref::<$crate::glib::Object>() };
+            let obj = &$obj;
+            let obj = unsafe { obj.unsafe_cast_ref::<$crate::glib::Object>() };
             $crate::DebugCategory::log_unfiltered(
                 cat,
                 Some(obj),
