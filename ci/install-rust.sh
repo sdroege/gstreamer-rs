@@ -36,11 +36,9 @@ if [ "$RUST_IMAGE_FULL" = "1" ]; then
 fi
 
 if [ "$RUST_VERSION" = "nightly" ]; then
-    # FIXME: Don't build cargo-c with --locked for now because otherwise a
-    # version of ahash is used that doesn't build on nightly anymore
-    cargo install cargo-c --version 0.9.22+cargo-0.72
+    cargo install --locked cargo-c --version 0.10.3+cargo-0.81
 else
-    cargo install --locked cargo-c --version 0.9.22+cargo-0.72
+    cargo install --locked cargo-c --version 0.9.26+cargo-0.74
 fi
 
 if [ "$RUST_VERSION" = "nightly" ]; then
