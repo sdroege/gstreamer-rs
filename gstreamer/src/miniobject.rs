@@ -522,6 +522,7 @@ macro_rules! mini_object_wrapper (
         impl $crate::glib::types::StaticType for $ref_name {
             #[inline]
             fn static_type() -> $crate::glib::types::Type {
+                #[allow(clippy::macro_metavars_in_unsafe)]
                 unsafe { $crate::glib::translate::from_glib($get_type()) }
             }
         }
