@@ -169,6 +169,7 @@ pub type GstWebRTCICEOnCandidateFunc =
 
 // Records
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstWebRTCDTLSTransportClass {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -177,6 +178,7 @@ pub struct _GstWebRTCDTLSTransportClass {
 pub type GstWebRTCDTLSTransportClass = _GstWebRTCDTLSTransportClass;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstWebRTCDataChannelClass {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -367,6 +369,7 @@ impl ::std::fmt::Debug for GstWebRTCICETransportClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstWebRTCRTPReceiverClass {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -375,6 +378,7 @@ pub struct _GstWebRTCRTPReceiverClass {
 pub type GstWebRTCRTPReceiverClass = _GstWebRTCRTPReceiverClass;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstWebRTCRTPSenderClass {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -383,6 +387,7 @@ pub struct _GstWebRTCRTPSenderClass {
 pub type GstWebRTCRTPSenderClass = _GstWebRTCRTPSenderClass;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstWebRTCRTPTransceiverClass {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -391,6 +396,7 @@ pub struct _GstWebRTCRTPTransceiverClass {
 pub type GstWebRTCRTPTransceiverClass = _GstWebRTCRTPTransceiverClass;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstWebRTCSCTPTransportClass {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -416,6 +422,7 @@ impl ::std::fmt::Debug for GstWebRTCSessionDescription {
 
 // Classes
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstWebRTCDTLSTransport {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -429,6 +436,7 @@ impl ::std::fmt::Debug for GstWebRTCDTLSTransport {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstWebRTCDataChannel {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -510,6 +518,7 @@ impl ::std::fmt::Debug for GstWebRTCICETransport {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstWebRTCRTPReceiver {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -523,6 +532,7 @@ impl ::std::fmt::Debug for GstWebRTCRTPReceiver {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstWebRTCRTPSender {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -536,6 +546,7 @@ impl ::std::fmt::Debug for GstWebRTCRTPSender {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstWebRTCRTPTransceiver {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -549,6 +560,7 @@ impl ::std::fmt::Debug for GstWebRTCRTPTransceiver {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstWebRTCSCTPTransport {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,

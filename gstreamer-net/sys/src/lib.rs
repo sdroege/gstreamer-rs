@@ -74,6 +74,7 @@ impl ::std::fmt::Debug for GstNetClientClockClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstNetClientClockPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -130,6 +131,7 @@ impl ::std::fmt::Debug for GstNetTimeProviderClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstNetTimeProviderPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -168,6 +170,7 @@ impl ::std::fmt::Debug for GstPtpClockClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstPtpClockPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,

@@ -1019,6 +1019,7 @@ impl ::std::fmt::Debug for GstVideoAggregatorConvertPadClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstVideoAggregatorConvertPadPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1079,6 +1080,7 @@ impl ::std::fmt::Debug for GstVideoAggregatorPadClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstVideoAggregatorPadPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1104,6 +1106,7 @@ impl ::std::fmt::Debug for GstVideoAggregatorParallelConvertPadClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstVideoAggregatorPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1190,6 +1193,7 @@ impl ::std::fmt::Debug for GstVideoBufferPoolClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstVideoBufferPoolPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1218,6 +1222,7 @@ impl ::std::fmt::Debug for GstVideoCaptionMeta {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstVideoChromaResample {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1391,6 +1396,7 @@ impl ::std::fmt::Debug for GstVideoContentLightLevel {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstVideoConverter {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1506,6 +1512,7 @@ impl ::std::fmt::Debug for GstVideoDecoderClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstVideoDecoderPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1528,6 +1535,7 @@ impl ::std::fmt::Debug for GstVideoDirectionInterface {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstVideoDither {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1606,6 +1614,7 @@ impl ::std::fmt::Debug for GstVideoEncoderClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstVideoEncoderPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1978,6 +1987,7 @@ impl ::std::fmt::Debug for GstVideoOrientationInterface {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstVideoOverlayComposition {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -2030,6 +2040,7 @@ impl ::std::fmt::Debug for GstVideoOverlayInterface {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstVideoOverlayRectangle {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -2142,6 +2153,7 @@ impl ::std::fmt::Debug for GstVideoSEIUserDataUnregisteredMeta {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstVideoScaler {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -2172,6 +2184,7 @@ impl ::std::fmt::Debug for GstVideoSinkClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstVideoSinkPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -2281,6 +2294,7 @@ impl ::std::fmt::Debug for GstVideoTimeCodeMeta {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstVideoVBIEncoder {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -2294,6 +2308,7 @@ impl ::std::fmt::Debug for GstVideoVBIEncoder {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstVideoVBIParser {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -2471,6 +2486,7 @@ impl ::std::fmt::Debug for GstVideoFilter {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstVideoMultiviewFlagsSet {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -2505,6 +2521,7 @@ impl ::std::fmt::Debug for GstVideoSink {
 
 // Interfaces
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstColorBalance {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -2517,6 +2534,7 @@ impl ::std::fmt::Debug for GstColorBalance {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstNavigation {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -2529,6 +2547,7 @@ impl ::std::fmt::Debug for GstNavigation {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstVideoDirection {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -2541,6 +2560,7 @@ impl ::std::fmt::Debug for GstVideoDirection {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstVideoOrientation {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -2553,6 +2573,7 @@ impl ::std::fmt::Debug for GstVideoOrientation {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstVideoOverlay {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,

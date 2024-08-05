@@ -99,6 +99,7 @@ impl ::std::fmt::Debug for GstAppSinkClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstAppSinkPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -158,6 +159,7 @@ impl ::std::fmt::Debug for GstAppSrcClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstAppSrcPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,

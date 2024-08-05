@@ -265,6 +265,7 @@ impl ::std::fmt::Debug for GstRTPBaseAudioPayloadClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstRTPBaseAudioPayloadPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -305,6 +306,7 @@ impl ::std::fmt::Debug for GstRTPBaseDepayloadClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstRTPBaseDepayloadPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -357,6 +359,7 @@ impl ::std::fmt::Debug for GstRTPBasePayloadClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstRTPBasePayloadPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,

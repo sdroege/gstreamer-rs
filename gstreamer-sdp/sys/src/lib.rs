@@ -124,6 +124,7 @@ pub const GST_SDP_BWTYPE_TIAS: &[u8] = b"TIAS\0";
 
 // Records
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstMIKEYDecryptInfo {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -132,6 +133,7 @@ pub struct _GstMIKEYDecryptInfo {
 pub type GstMIKEYDecryptInfo = _GstMIKEYDecryptInfo;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstMIKEYEncryptInfo {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,

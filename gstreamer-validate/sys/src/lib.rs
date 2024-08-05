@@ -221,6 +221,7 @@ impl ::std::fmt::Debug for GstValidateActionParameter {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstValidateActionPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -264,6 +265,7 @@ impl ::std::fmt::Debug for GstValidateActionType {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstValidateActionTypePrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -362,6 +364,7 @@ impl ::std::fmt::Debug for GstValidateMediaDescriptorParserClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstValidateMediaDescriptorParserPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -370,6 +373,7 @@ pub struct _GstValidateMediaDescriptorParserPrivate {
 pub type GstValidateMediaDescriptorParserPrivate = _GstValidateMediaDescriptorParserPrivate;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstValidateMediaDescriptorPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -393,6 +397,7 @@ impl ::std::fmt::Debug for GstValidateMediaDescriptorWriterClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstValidateMediaDescriptorWriterPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -475,6 +480,7 @@ impl ::std::fmt::Debug for GstValidateOverrideClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstValidateOverridePrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -519,6 +525,7 @@ impl ::std::fmt::Debug for GstValidatePadMonitorClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstValidatePadSeekData {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -627,6 +634,7 @@ impl ::std::fmt::Debug for GstValidateRunnerClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstValidateRunnerPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -650,6 +658,7 @@ impl ::std::fmt::Debug for GstValidateScenarioClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstValidateScenarioPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -658,6 +667,7 @@ pub struct _GstValidateScenarioPrivate {
 pub type GstValidateScenarioPrivate = _GstValidateScenarioPrivate;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstValidateStreamInfo {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -952,6 +962,7 @@ impl ::std::fmt::Debug for GstValidateScenario {
 
 // Interfaces
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstValidateReporter {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,

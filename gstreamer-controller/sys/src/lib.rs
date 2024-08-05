@@ -195,6 +195,7 @@ impl ::std::fmt::Debug for GstInterpolationControlSourceClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstInterpolationControlSourcePrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -218,6 +219,7 @@ impl ::std::fmt::Debug for GstLFOControlSourceClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstLFOControlSourcePrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -255,6 +257,7 @@ impl ::std::fmt::Debug for GstTimedValueControlSourceClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstTimedValueControlSourcePrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -278,6 +281,7 @@ impl ::std::fmt::Debug for GstTriggerControlSourceClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstTriggerControlSourcePrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,

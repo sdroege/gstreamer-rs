@@ -141,6 +141,7 @@ pub type GstTypeFindHelperGetRangeFunction = Option<
 
 // Records
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstAdapterClass {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -296,6 +297,7 @@ impl ::std::fmt::Debug for GstAggregatorPadClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstAggregatorPadPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -304,6 +306,7 @@ pub struct _GstAggregatorPadPrivate {
 pub type GstAggregatorPadPrivate = _GstAggregatorPadPrivate;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstAggregatorPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -396,6 +399,7 @@ impl ::std::fmt::Debug for GstBaseParseFrame {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstBaseParsePrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -473,6 +477,7 @@ impl ::std::fmt::Debug for GstBaseSinkClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstBaseSinkPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -567,6 +572,7 @@ impl ::std::fmt::Debug for GstBaseSrcClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstBaseSrcPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -735,6 +741,7 @@ impl ::std::fmt::Debug for GstBaseTransformClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstBaseTransformPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -850,6 +857,7 @@ impl ::std::fmt::Debug for GstCollectData {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstCollectDataPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -887,6 +895,7 @@ impl ::std::fmt::Debug for GstCollectPadsClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstCollectPadsPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -938,6 +947,7 @@ impl ::std::fmt::Debug for GstDataQueueItem {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstDataQueuePrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -964,6 +974,7 @@ impl ::std::fmt::Debug for GstDataQueueSize {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstFlowCombiner {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1001,6 +1012,7 @@ impl ::std::fmt::Debug for GstPushSrcClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstQueueArray {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1009,6 +1021,7 @@ pub struct _GstQueueArray {
 pub type GstQueueArray = _GstQueueArray;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstTypeFindData {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1018,6 +1031,7 @@ pub type GstTypeFindData = _GstTypeFindData;
 
 // Classes
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstAdapter {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,

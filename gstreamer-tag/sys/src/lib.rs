@@ -162,6 +162,7 @@ impl ::std::fmt::Debug for GstTagDemuxClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstTagDemuxPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -191,6 +192,7 @@ impl ::std::fmt::Debug for GstTagMuxClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstTagMuxPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -247,6 +249,7 @@ impl ::std::fmt::Debug for GstTagMux {
 
 // Interfaces
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstTagXmpWriter {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,

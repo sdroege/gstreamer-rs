@@ -59,6 +59,7 @@ impl ::std::fmt::Debug for GstHarness {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstHarnessPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -67,6 +68,7 @@ pub struct _GstHarnessPrivate {
 pub type GstHarnessPrivate = _GstHarnessPrivate;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstHarnessThread {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -75,6 +77,7 @@ pub struct _GstHarnessThread {
 pub type GstHarnessThread = _GstHarnessThread;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstStreamConsistency {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -97,6 +100,7 @@ impl ::std::fmt::Debug for GstTestClockClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstTestClockPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,

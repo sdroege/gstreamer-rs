@@ -355,6 +355,7 @@ impl ::std::fmt::Debug for GstRTSPAuthParam {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstRTSPConnection {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -645,6 +646,7 @@ impl ::std::fmt::Debug for GstRTSPUrl {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstRTSPWatch {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -705,6 +707,7 @@ impl ::std::fmt::Debug for GstRTSPWatchFuncs {
 
 // Interfaces
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstRTSPExtension {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,

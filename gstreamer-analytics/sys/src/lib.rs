@@ -118,6 +118,7 @@ impl ::std::fmt::Debug for GstAnalyticsODMtd {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstAnalyticsRelationMeta {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,

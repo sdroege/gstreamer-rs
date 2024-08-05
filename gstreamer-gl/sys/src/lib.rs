@@ -343,6 +343,7 @@ impl ::std::fmt::Debug for GstGLBaseFilterClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstGLBaseFilterPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -447,6 +448,7 @@ impl ::std::fmt::Debug for GstGLBaseMixerPadClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstGLBaseMixerPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -479,6 +481,7 @@ impl ::std::fmt::Debug for GstGLBaseSrcClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstGLBaseSrcPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -556,6 +559,7 @@ impl ::std::fmt::Debug for GstGLBufferPoolClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstGLBufferPoolPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -578,6 +582,7 @@ impl ::std::fmt::Debug for GstGLColorConvertClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstGLColorConvertPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -639,6 +644,7 @@ impl ::std::fmt::Debug for GstGLContextClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstGLContextPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -666,6 +672,7 @@ impl ::std::fmt::Debug for GstGLDisplayClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstGLDisplayPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -730,6 +737,7 @@ impl ::std::fmt::Debug for GstGLFramebufferClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstGLFramebufferPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -738,6 +746,7 @@ pub struct _GstGLFramebufferPrivate {
 pub type GstGLFramebufferPrivate = _GstGLFramebufferPrivate;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstGLFuncs {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -867,6 +876,7 @@ impl ::std::fmt::Debug for GstGLMixerPadClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstGLMixerPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -981,6 +991,7 @@ impl ::std::fmt::Debug for GstGLSLStageClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstGLSLStagePrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1002,6 +1013,7 @@ impl ::std::fmt::Debug for GstGLShaderClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstGLShaderPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1068,6 +1080,7 @@ impl ::std::fmt::Debug for GstGLUploadClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstGLUploadPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1115,6 +1128,7 @@ impl ::std::fmt::Debug for GstGLViewConvertClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstGLViewConvertPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1175,6 +1189,7 @@ impl ::std::fmt::Debug for GstGLWindowClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstGLWindowPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,

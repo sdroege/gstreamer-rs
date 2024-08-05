@@ -193,6 +193,7 @@ impl ::std::fmt::Debug for GstRTSPAddressPoolClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstRTSPAddressPoolPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -238,6 +239,7 @@ impl ::std::fmt::Debug for GstRTSPAuthClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstRTSPAuthPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -455,6 +457,7 @@ impl ::std::fmt::Debug for GstRTSPClientClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstRTSPClientPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -616,6 +619,7 @@ impl ::std::fmt::Debug for GstRTSPMediaFactoryClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstRTSPMediaFactoryPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -639,6 +643,7 @@ impl ::std::fmt::Debug for GstRTSPMediaFactoryURIClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstRTSPMediaFactoryURIPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -647,6 +652,7 @@ pub struct _GstRTSPMediaFactoryURIPrivate {
 pub type GstRTSPMediaFactoryURIPrivate = _GstRTSPMediaFactoryURIPrivate;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstRTSPMediaPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -674,6 +680,7 @@ impl ::std::fmt::Debug for GstRTSPMountPointsClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstRTSPMountPointsPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -730,6 +737,7 @@ impl ::std::fmt::Debug for GstRTSPOnvifMediaFactoryClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstRTSPOnvifMediaFactoryPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -738,6 +746,7 @@ pub struct _GstRTSPOnvifMediaFactoryPrivate {
 pub type GstRTSPOnvifMediaFactoryPrivate = _GstRTSPOnvifMediaFactoryPrivate;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstRTSPOnvifMediaPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -794,6 +803,7 @@ impl ::std::fmt::Debug for GstRTSPServerClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstRTSPServerPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -832,6 +842,7 @@ impl ::std::fmt::Debug for GstRTSPSessionMediaClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstRTSPSessionMediaPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -862,6 +873,7 @@ impl ::std::fmt::Debug for GstRTSPSessionPoolClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstRTSPSessionPoolPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -870,6 +882,7 @@ pub struct _GstRTSPSessionPoolPrivate {
 pub type GstRTSPSessionPoolPrivate = _GstRTSPSessionPoolPrivate;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstRTSPSessionPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -893,6 +906,7 @@ impl ::std::fmt::Debug for GstRTSPStreamClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstRTSPStreamPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -916,6 +930,7 @@ impl ::std::fmt::Debug for GstRTSPStreamTransportClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstRTSPStreamTransportPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -977,6 +992,7 @@ impl ::std::fmt::Debug for GstRTSPThreadPoolClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstRTSPThreadPoolPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,

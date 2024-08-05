@@ -117,6 +117,7 @@ impl ::std::fmt::Debug for GstShmAllocatorClass {
 
 // Classes
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstDRMDumbAllocator {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -159,6 +160,7 @@ impl ::std::fmt::Debug for GstFdAllocator {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstShmAllocator {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -173,6 +175,7 @@ impl ::std::fmt::Debug for GstShmAllocator {
 
 // Interfaces
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstPhysMemoryAllocator {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
