@@ -215,7 +215,7 @@ fn example_main() -> Result<(), Error> {
                 ("Failed to insert sink"),
                 details: gst::Structure::builder("error-details")
                             .field("error",
-                                   &ErrorValue(Arc::new(Mutex::new(Some(err)))))
+                                   ErrorValue(Arc::new(Mutex::new(Some(err)))))
                             .build()
             );
         }

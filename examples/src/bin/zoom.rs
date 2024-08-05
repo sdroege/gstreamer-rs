@@ -177,7 +177,6 @@ fn example_main() {
                     state.clicked = false;
                 }
             }
-            #[cfg(feature = "v1_18")]
             NavigationEvent::MouseScroll { x, y, delta_y, .. } => {
                 if delta_y > 0.0 {
                     zoom(mixer_sink_pad, x as i32, y as i32, true);

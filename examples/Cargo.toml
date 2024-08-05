@@ -208,3 +208,7 @@ required-features = ["windows"]
 
 [[bin]]
 name = "audio_multichannel_interleave"
+
+[[bin]]
+name = "zoom"
+required-features = ["gst-video/v1_18"]
