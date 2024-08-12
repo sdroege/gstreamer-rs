@@ -408,20 +408,19 @@ coverage:
     LLVM_PROFILE_FILE: "gstreamer-rs-%p-%m.profraw"
   script:
     - *cargo_test
-    # generate html report
-    - grcov . --binary-path ./target/debug/ -s . -t html --branch --ignore-not-existing --ignore "*target*" --ignore "*/sys/*" --ignore "examples/*" --ignore "tutorials/*" --ignore "*/build.rs" -o ./coverage/
-    # generate cobertura report for gitlab integration
-    - grcov . --binary-path ./target/debug/ -s . -t cobertura --branch --ignore-not-existing --ignore "*target*" --ignore "*/sys/*" --ignore "examples/*" --ignore "tutorials/*" --ignore "*/build.rs" -o coverage.xml
+    # generate html and cobertura report for gitlab integration
+    - mkdir -p coverage
+    - grcov . --binary-path ./target/debug/ -s . -t html,cobertura --branch --ignore-not-existing --ignore "*target*" --ignore "*/sys/*" --ignore "examples/*" --ignore "tutorials/*" --ignore "*/build.rs" -o ./coverage/
     # output coverage summary for gitlab parsing.
     # TODO: use grcov once https://github.com/mozilla/grcov/issues/556 is fixed
-    - grep % coverage/index.html | head -1 ; true
+    - grep % coverage/html/index.html | head -1 ; true
   artifacts:
     paths:
       - 'coverage'
     reports:
       coverage_report:
         coverage_format: cobertura
-        path: coverage.xml
+        path: "coverage/cobertura.xml"
 
 doc-stripping:
   variables:
