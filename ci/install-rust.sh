@@ -26,22 +26,22 @@ if [ "$RUST_IMAGE_FULL" = "1" ]; then
   rustup component add clippy-preview
   rustup component add rustfmt
 
-  cargo install --locked --force cargo-deny
+  cargo install --locked cargo-deny
     if [ "$RUST_VERSION" = "1.71.1" ]; then
-        cargo install --locked --force cargo-outdated
+        cargo install --locked cargo-outdated
     else
         # Don't use --locked because time-0.3.30 does not build with 1.80 or newer
-        cargo install --force cargo-outdated
+        cargo install cargo-outdated
     fi
-  cargo install --locked --force typos-cli --version "1.19.0"
+  cargo install --locked typos-cli --version "1.19.0"
 
   # Coverage tools
   rustup component add llvm-tools-preview
   if [ "$RUST_VERSION" = "1.71.1" ]; then
-      cargo install --locked --force grcov
+      cargo install --locked grcov
   else
       # Don't use --locked because time-0.3.30 does not build with 1.80 or newer
-      cargo install --force grcov
+      cargo install grcov
   fi
 fi
 
@@ -55,5 +55,5 @@ if [ "$RUST_VERSION" = "nightly" ]; then
   rustup component add rustfmt --toolchain nightly
 
   # Documentation tools
-  cargo install --locked --force rustdoc-stripper
+  cargo install --locked rustdoc-stripper
 fi
