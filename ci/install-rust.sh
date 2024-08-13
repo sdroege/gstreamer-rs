@@ -27,28 +27,28 @@ if [ "$RUST_IMAGE_FULL" = "1" ]; then
   rustup component add rustfmt
 
   cargo install --locked --force cargo-deny
-    if [ "$RUST_VERSION" = "nightly" -o "$RUST_VERSION" = "1.80.0" ]; then
+    if [ "$RUST_VERSION" = "1.71.1" ]; then
+        cargo install --locked --force cargo-outdated
+    else
         # Don't use --locked because time-0.3.30 does not build with 1.80 or newer
         cargo install --force cargo-outdated
-    else
-        cargo install --locked --force cargo-outdated
     fi
   cargo install --locked --force typos-cli --version "1.19.0"
 
   # Coverage tools
   rustup component add llvm-tools-preview
-  if [ "$RUST_VERSION" = "nightly" -o "$RUST_VERSION" = "1.80.0" ]; then
+  if [ "$RUST_VERSION" = "1.71.1" ]; then
+      cargo install --locked --force grcov
+  else
       # Don't use --locked because time-0.3.30 does not build with 1.80 or newer
       cargo install --force grcov
-  else
-      cargo install --locked --force grcov
   fi
 fi
 
-if [ "$RUST_VERSION" = "nightly" -o "$RUST_VERSION" = "1.80.0" ]; then
-    cargo install --locked cargo-c --version 0.10.3+cargo-0.81
-else
+if [ "$RUST_VERSION" = "1.71.1" ]; then
     cargo install --locked cargo-c --version 0.9.26+cargo-0.74
+else
+    cargo install --locked cargo-c --version 0.10.3+cargo-0.81
 fi
 
 if [ "$RUST_VERSION" = "nightly" ]; then
