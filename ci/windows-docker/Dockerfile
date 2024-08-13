@@ -4,7 +4,10 @@ FROM "registry.freedesktop.org/gstreamer/gstreamer/amd64/windows:2023-07-17.0-ma
 
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
 
-ARG DEFAULT_BRANCH="1.24"
+# These arguments are always required to be specified with --build-arg
+# when building the image.
+# See DOCKER_BUILD_ARGS in .gitlab-ci.yml for an example
+ARG DEFAULT_BRANCH="invalid"
 ARG RUST_VERSION="invalid"
 
 RUN choco install -y pkgconfiglite nasm llvm openssl
