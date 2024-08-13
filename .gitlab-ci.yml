@@ -17,7 +17,7 @@
 # Updating the nightly image should be done by simply running a scheduled ci
 # pipeline on the upstream repo with the $UPDATE_NIGHTLY variable defined.
 
-.templates_sha: &templates_sha b2e24205598dc1d80b5f2c88cf7618051e30e9fd
+.templates_sha: &templates_sha 6a40df92957c8ce9ee741aaccc5daaaf70545b1e
 
 include:
   - project: 'freedesktop/ci-templates'
