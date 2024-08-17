@@ -24,11 +24,11 @@ PLUGINS="-D gst-plugins-base:ogg=enabled \
          -D gst-plugins-bad:opus=enabled \
          -D gst-plugins-ugly:x264=enabled"
 
-echo "subproject('gtk')" >> meson.build
 meson setup build \
     -D prefix=/usr/local \
     -D gpl=enabled \
     -D ugly=enabled \
+    -D gtk=enabled \
     -D examples=disabled \
     -D gtk_doc=disabled \
     -D introspection=disabled \

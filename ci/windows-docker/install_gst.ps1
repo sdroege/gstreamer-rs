@@ -38,13 +38,11 @@ $MESON_ARGS = @(`
   "-Dpython=disabled", `
   "-Dlibav=disabled", `
   "-Dvaapi=disabled", `
+  "-Dgtk=enabled", `
   "-Dgst-plugins-base:pango=enabled", `
   "-Dgst-plugins-good:cairo=enabled", `
   "-Dgst-plugins-good:lame=disabled"
 )
-
-$PSDefaultParameterValues['Out-File:Encoding'] = 'utf8'
-echo "subproject('gtk')" >> meson.build
 
 Write-Output "Building gstreamer"
 meson setup --vsenv $MESON_ARGS _build
