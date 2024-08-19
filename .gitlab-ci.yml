@@ -147,8 +147,7 @@ trigger:
     FDO_DISTRIBUTION_EXEC: >-
       bash ci/install-gst.sh --force-fallback-for=glib &&
       bash ci/install-dav1d.sh &&
-      pip3 install --break-system-packages git+http://gitlab.freedesktop.org/freedesktop/ci-templates &&
-      pip3 install --break-system-packages tomli
+      pip3 install --break-system-packages git+http://gitlab.freedesktop.org/freedesktop/ci-templates
 
 .build-final-image:
   extends:
