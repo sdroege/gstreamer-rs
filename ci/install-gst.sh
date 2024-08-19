@@ -30,8 +30,6 @@ meson setup build \
     -Dprefix=/usr/local \
     -Dgpl=enabled \
     -Dugly=enabled \
-    -Dgtk=enabled \
-    -Dgtk:vulkan=disabled \
     -Dexamples=disabled \
     -Dgtk_doc=disabled \
     -Dintrospection=disabled \
