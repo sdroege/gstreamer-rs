@@ -11,6 +11,9 @@
 # - setting it to the current date and the version suffix to 0
 # - incrementing the version suffix
 #
+# Same for GST_RS_IMG_WINDOWS_TAG. There's a separate tag for it to cater for
+# image-only updates that only affect Windows or only Linux.
+#
 # After each update commit your changes and push to your personal repo.
 # After review and ci approval merge the branch as usual.
 #
@@ -44,10 +47,10 @@ variables:
   FDO_UPSTREAM_REPO: gstreamer/gstreamer-rs
 
   # DIY CI-templates like setup for windows
-  WINDOWS_RUST_MINIMUM_IMAGE: "$CI_REGISTRY_IMAGE/windows:$GST_RS_IMG_TAG-main-$GST_RS_MSRV"
-  WINDOWS_RUST_MINIMUM_UPSTREAM_IMAGE: "$CI_REGISTRY/$FDO_UPSTREAM_REPO/windows:$GST_RS_IMG_TAG-main-$GST_RS_MSRV"
-  WINDOWS_RUST_STABLE_IMAGE: "$CI_REGISTRY_IMAGE/windows:$GST_RS_IMG_TAG-main-$GST_RS_STABLE"
-  WINDOWS_RUST_STABLE_UPSTREAM_IMAGE: "$CI_REGISTRY/$FDO_UPSTREAM_REPO/windows:$GST_RS_IMG_TAG-main-$GST_RS_STABLE"
+  WINDOWS_RUST_MINIMUM_IMAGE: "$CI_REGISTRY_IMAGE/windows:$GST_RS_IMG_WINDOWS_TAG-main-$GST_RS_MSRV"
+  WINDOWS_RUST_MINIMUM_UPSTREAM_IMAGE: "$CI_REGISTRY/$FDO_UPSTREAM_REPO/windows:$GST_RS_IMG_WINDOWS_TAG-main-$GST_RS_MSRV"
+  WINDOWS_RUST_STABLE_IMAGE: "$CI_REGISTRY_IMAGE/windows:$GST_RS_IMG_WINDOWS_TAG-main-$GST_RS_STABLE"
+  WINDOWS_RUST_STABLE_UPSTREAM_IMAGE: "$CI_REGISTRY/$FDO_UPSTREAM_REPO/windows:$GST_RS_IMG_WINDOWS_TAG-main-$GST_RS_STABLE"
 
   RUST_DOCS_FLAGS: "--cfg docsrs --extern-html-root-url=muldiv=https://docs.rs/muldiv/1.0.0/muldiv/ -Z unstable-options --generate-link-to-definition"
   NAMESPACE: gstreamer
