@@ -16,26 +16,28 @@ git clone https://gitlab.freedesktop.org/gstreamer/gstreamer.git \
 cd gstreamer
 
 # plugins required by tests
-PLUGINS="-D gst-plugins-base:ogg=enabled \
-         -D gst-plugins-base:vorbis=enabled \
-         -D gst-plugins-base:theora=enabled \
-         -D gst-plugins-good:matroska=enabled \
-         -D gst-plugins-good:vpx=enabled \
-         -D gst-plugins-bad:opus=enabled \
-         -D gst-plugins-ugly:x264=enabled"
+PLUGINS=(
+    -Dgst-plugins-base:ogg=enabled
+    -Dgst-plugins-base:vorbis=enabled
+    -Dgst-plugins-base:theora=enabled
+    -Dgst-plugins-good:matroska=enabled
+    -Dgst-plugins-good:vpx=enabled
+    -Dgst-plugins-bad:opus=enabled
+    -Dgst-plugins-ugly:x264=enabled
+)
 
 meson setup build \
-    -D prefix=/usr/local \
-    -D gpl=enabled \
-    -D ugly=enabled \
-    -D gtk=enabled \
-    -D examples=disabled \
-    -D gtk_doc=disabled \
-    -D introspection=disabled \
-    -D libav=disabled \
-    -D python=disabled \
-    -D vaapi=disabled \
-    $PLUGINS
+    -Dprefix=/usr/local \
+    -Dgpl=enabled \
+    -Dugly=enabled \
+    -Dgtk=enabled \
+    -Dexamples=disabled \
+    -Dgtk_doc=disabled \
+    -Dintrospection=disabled \
+    -Dlibav=disabled \
+    -Dpython=disabled \
+    -Dvaapi=disabled \
+    "${PLUGINS[@]}" "$@"
 meson compile -C build
 meson install -C build
 ldconfig
