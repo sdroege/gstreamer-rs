@@ -304,7 +304,7 @@ fn main() -> Result<()> {
     // Add pad probe to calculate framerate
     let sinkpad = videosink.static_pad("sink").unwrap();
     let overlay_context_weak = Arc::downgrade(&overlay_context);
-    sinkpad.add_probe(gst::PadProbeType::BUFFER, move |_, probe_info| {
+    sinkpad.add_probe(gst::PadProbeType::BUFFER, move |_pad, _probe_info| {
         let overlay_context = overlay_context_weak.upgrade().unwrap();
         let mut context = overlay_context.lock().unwrap();
         context.timestamp_queue.push_back(SystemTime::now());
