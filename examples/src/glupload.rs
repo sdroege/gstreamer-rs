@@ -11,6 +11,7 @@ use std::{
     mem,
     num::NonZeroU32,
     ptr,
+    sync::Mutex,
 };
 
 use anyhow::{Context, Result};
@@ -477,7 +478,9 @@ impl App {
         .context("Couldn't wrap GL context")?;
 
         let gl_context = shared_context.clone();
-        let event_proxy = event_loop.create_proxy();
+        // FIXME: Once MSRV is 1.72 the Mutex is not necessary anymore because
+        // std::sync::mpsc::Sender is Sync by itself
+        let event_proxy = Mutex::new(event_loop.create_proxy());
 
         #[allow(clippy::single_match)]
         bus.set_sync_handler(move |_, msg| {
@@ -510,7 +513,7 @@ impl App {
                 _ => (),
             }
 
-            if let Err(e) = event_proxy.send_event(Message::BusEvent) {
+            if let Err(e) = event_proxy.lock().unwrap().send_event(Message::BusEvent) {
                 eprintln!("Failed to send BusEvent to event proxy: {e}")
             }
 
