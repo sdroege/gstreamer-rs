@@ -8,6 +8,8 @@ cargo --version
 cpus=$(nproc || sysctl -n hw.ncpu)
 CARGO_FLAGS="-j${FDO_CI_CONCURRENT:-$cpus}"
 
+parent="${CI_PROJECT_DIR:-$(pwd)}"
+
 for crate in gstreamer*/sys gstreamer-gl/*/sys; do
     if [ -e "$crate/Cargo.toml" ]; then
         echo "Building $crate with --all-features"
@@ -42,5 +44,9 @@ for crate in gstreamer/sys \
              gstreamer-video/sys \
              gstreamer-webrtc/sys; do
     echo "Testing $crate with --all-features)"
-    RUST_BACKTRACE=1 cargo test $CARGO_FLAGS --locked --color=always --manifest-path $crate/Cargo.toml --all-features
+    RUST_BACKTRACE=1 cargo nextest run  --profile ci $CARGO_FLAGS --locked --color=always --manifest-path $crate/Cargo.toml --all-features
+
+    new_report_dir="$parent/junit_reports/$crate"
+    mkdir -p "$new_report_dir"
+    mv "$parent/target/nextest/ci/junit.xml" "$new_report_dir/junit.xml"
 done
