@@ -42,6 +42,43 @@
     "--all-features"
 )
 
+function Move-Junit {
+    param (
+        $Features
+    )
+
+    if ($env:CI_PROJECT_DIR) {
+        $parent = $env:CI_PROJECT_DIR
+    } else {
+        $parent = $PWD.path
+    }
+    Write-Host "Parent directory: $parent"
+
+    $new_report_dir = "$parent/junit_reports/$crate/"
+    If(!(test-path -PathType container $new_report_dir))
+    {
+        New-Item -Path "$new_report_dir" -ItemType "directory"
+        if (!$?) {
+            Write-Host "Failed to create directory: $new_report_dir"
+            Exit 1
+        }
+    }
+
+    if ($Features -eq "--all-features") {
+        $suffix = "all"
+    } elseif ($Features -eq "--no-default-features") {
+        $suffix = "no-default"
+    } else {
+        $suffix = "default"
+    }
+
+    Move-Item "$parent/target/nextest/ci/junit.xml" "$new_report_dir/junit-$suffix.xml"
+    if (!$?) {
+        Write-Host "Failed to move junit file"
+        Exit 1
+    }
+}
+
 foreach($features in $features_matrix) {
     foreach($crate in $crates)
     {
@@ -77,11 +114,12 @@ foreach($features in $features_matrix) {
 
         $env:G_DEBUG="fatal_warnings"
         $env:RUST_BACKTRACE="1"
-        cargo test --no-fail-fast --color=always --manifest-path $crate/Cargo.toml $env:LocalFeatures
-
+        cargo nextest run --profile=ci --no-fail-fast --color=always --manifest-path $crate/Cargo.toml $env:LocalFeatures
         if (!$?) {
             Write-Host "Tests failed to for crate: $crate"
             Exit 1
         }
+
+        Move-Junit -Features $features
     }
 }

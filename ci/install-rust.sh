@@ -45,6 +45,13 @@ if [ "$RUST_IMAGE_FULL" = "1" ]; then
   fi
 fi
 
+# Multiple dependencies of cargo-nextest require 1.74/1.75 nowadays
+if [ "$RUST_VERSION" = "1.71.1" ]; then
+  cargo install --locked cargo-nextest@0.9.67
+else
+  cargo install --locked cargo-nextest
+fi
+
 if [ "$RUST_VERSION" = "1.71.1" ]; then
     cargo install --locked cargo-c --version 0.9.26+cargo-0.74
 else

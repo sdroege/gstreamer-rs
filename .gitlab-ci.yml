@@ -225,6 +225,11 @@ update-nightly:
   stage: "test"
   script:
     - *cargo_test
+  artifacts:
+    paths:
+      - 'junit_reports'
+    reports:
+      junit: "junit_reports/**/junit.xml"
 
 test msrv:
   extends:
@@ -290,6 +295,11 @@ test nightly all-features:
   stage: "test"
   script:
     - ./ci/run-sys-cargo-test.sh
+  artifacts:
+    paths:
+      - 'junit_reports'
+    reports:
+      junit: "junit_reports/**/junit.xml"
 
 test stable sys:
   extends:
@@ -438,7 +448,9 @@ coverage:
   artifacts:
     paths:
       - 'coverage'
+      - 'junit_reports'
     reports:
+      junit: "junit_reports/**/junit.xml"
       coverage_report:
         coverage_format: cobertura
         path: "coverage/cobertura.xml"
@@ -577,6 +589,11 @@ windows rust docker msrv:
     - 'windows'
     - '2022'
     - "gstreamer-windows"
+  artifacts:
+    paths:
+      - 'junit_reports'
+    reports:
+      junit: "junit_reports/**/*.xml"
   script:
     # Skip -sys tests as they don't work
     # https://github.com/gtk-rs/gtk3-rs/issues/54
