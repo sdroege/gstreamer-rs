@@ -76,6 +76,7 @@ trigger:
   stage: 'trigger'
   variables:
     GIT_STRATEGY: none
+    GIT_SUBMODULE_STRATEGY: "none"
   tags: [ 'placeholder-job' ]
   script:
     - echo "Trigger job done, now running the pipeline."
@@ -316,6 +317,8 @@ rustfmt:
   extends: .img-stable
   stage: "lint"
   tags: [ 'placeholder-job' ]
+  variables:
+    GIT_SUBMODULE_STRATEGY: "none"
   script:
     - cargo fmt --version
     - cargo fmt -- --color=always --check
@@ -327,6 +330,8 @@ check commits:
   extends: .img-stable
   stage: "lint"
   tags: [ 'placeholder-job' ]
+  variables:
+    GIT_SUBMODULE_STRATEGY: "none"
   script:
     - ci-fairy check-commits --textwidth 0 --no-signed-off-by
   needs:
@@ -337,6 +342,8 @@ typos:
   extends: .img-stable
   stage: "lint"
   tags: [ 'placeholder-job' ]
+  variables:
+    GIT_SUBMODULE_STRATEGY: "none"
   script:
     - typos
   needs:
@@ -384,6 +391,8 @@ gir-checks:
 outdated:
   extends: .img-stable
   stage: 'extras'
+  variables:
+    GIT_SUBMODULE_STRATEGY: "none"
   needs:
     - job: 'build-stable'
       artifacts: false
