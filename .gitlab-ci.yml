@@ -380,7 +380,8 @@ gir-checks:
     GIT_SUBMODULE_STRATEGY: recursive
   extends: .img-stable
   stage: 'extras'
-  tags: [ 'placeholder-job' ]
+  tags:
+    - "gstreamer"
   needs:
     - job: 'build-stable'
       artifacts: false
@@ -437,6 +438,8 @@ doc-stripping:
   variables:
     GIT_SUBMODULE_STRATEGY: recursive
   extends: .img-nightly
+  tags:
+    - "gstreamer"
   stage: 'extras'
   needs:
     - job: 'build-nightly'
@@ -451,6 +454,8 @@ regen-check:
   variables:
     GIT_SUBMODULE_STRATEGY: recursive
   extends: .img-nightly
+  tags:
+    - "gstreamer"
   stage: 'extras'
   needs:
     - job: 'build-nightly'
@@ -465,6 +470,8 @@ docs:
     GIT_SUBMODULE_STRATEGY: recursive
   extends: .img-nightly
   stage: 'extras'
+  tags:
+    - "gstreamer"
   needs:
     - job: 'build-nightly'
       artifacts: false
