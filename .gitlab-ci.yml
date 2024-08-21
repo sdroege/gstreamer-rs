@@ -107,7 +107,7 @@ trigger:
     FDO_DISTRIBUTION_VERSION: 'bookworm-slim'
   before_script:
     - source ./ci/env.sh
-    - mkdir .cargo && echo -e "[net]\ngit-fetch-with-cli = true" > .cargo/config
+    - mkdir .cargo && echo -e "[net]\ngit-fetch-with-cli = true" > .cargo/config.toml
 
 .debian:12-base:
   extends: .debian:12
