@@ -519,6 +519,7 @@ pages:
     - 'windows'
     - 'shell'
     - '2022'
+    - "gstreamer-windows"
   script:
     # We need to pass an array and to resolve the env vars, so we can't use a variable:
     - $DOCKER_BUILD_ARGS = @("--build-arg", "DEFAULT_BRANCH=$GST_UPSTREAM_BRANCH", "--build-arg", "RUST_VERSION=$RUST_VERSION")
@@ -550,6 +551,7 @@ windows rust docker msrv:
     - 'docker'
     - 'windows'
     - '2022'
+    - "gstreamer-windows"
   script:
     # Skip -sys tests as they don't work
     # https://github.com/gtk-rs/gtk3-rs/issues/54
