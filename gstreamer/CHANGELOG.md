@@ -5,6 +5,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.23.1] - 2024-08-27
+### Fixed
+- Support `gst_utils::StreamProducer` API on platforms without 64 bit atomics.
+- Fix off-by-one in `gst::BufferList::remove()` range end handling.
+- Pass an empty tag array instead of NULL in `gst::CustomMeta::register_simple()`.
+- Fix various new clippy warnings.
+
+### Added
+- Add getters for `gst::format::Percent`.
+
 ## [0.23.0] - 2024-07-11
 ### Changed
 - Compatible with gtk-rs-core 0.20 / gtk4-rs 0.9.
@@ -1761,7 +1771,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.23.0...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.23.1...HEAD
+[0.23.1]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.23.0...0.23.1
 [0.23.0]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.22.6...0.23.0
 [0.22.6]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.22.5...0.22.6
 [0.22.5]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.22.4...0.22.5
