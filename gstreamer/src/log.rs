@@ -622,37 +622,6 @@ macro_rules! error(
     ($cat:expr, id = $id:expr, $($args:tt)*) => { {
         $crate::log_with_level!($cat, $crate::DebugLevel::Error, id = $id, $($args)*)
     }};
-
-    ($cat:expr, obj: $obj:expr, $($args:tt)*) => { {
-        {
-            #[deprecated = "Using old-style obj format. Use `obj = ` instead of `obj: ` for better tooling support"]
-            macro_rules! error(
-                () => {}
-            );
-            error!();
-        }
-        $crate::log_with_level!($cat, $crate::DebugLevel::Error, obj = $obj, $($args)*)
-    }};
-    ($cat:expr, imp: $imp:expr, $($args:tt)*) => { {
-        {
-            #[deprecated = "Using old-style imp format. Use `imp = ` instead of `imp: ` for better tooling support"]
-            macro_rules! error(
-                () => {}
-            );
-            error!();
-        }
-        $crate::log_with_level!($cat, $crate::DebugLevel::Error, imp = $imp, $($args)*)
-    }};
-    ($cat:expr, id: $id:expr, $($args:tt)*) => { {
-        {
-            #[deprecated = "Using old-style id format. Use `id = ` instead of `id: ` for better tooling support"]
-            macro_rules! error(
-                () => {}
-            );
-            error!();
-        }
-        $crate::log_with_level!($cat, $crate::DebugLevel::Error, id = $id, $($args)*)
-    }};
     ($cat:expr, $($args:tt)*) => { {
         $crate::log_with_level!($cat, $crate::DebugLevel::Error, $($args)*)
     }};
@@ -667,37 +636,6 @@ macro_rules! warning(
         $crate::log_with_level!($cat, $crate::DebugLevel::Warning, imp = $imp, $($args)*)
     }};
     ($cat:expr, id = $id:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat, $crate::DebugLevel::Warning, id = $id, $($args)*)
-    }};
-
-    ($cat:expr, obj: $obj:expr, $($args:tt)*) => { {
-        {
-            #[deprecated = "Using old-style obj format. Use `obj = ` instead of `obj: ` for better tooling support"]
-            macro_rules! warning(
-                () => {}
-            );
-            warning!();
-        }
-        $crate::log_with_level!($cat, $crate::DebugLevel::Warning, obj = $obj, $($args)*)
-    }};
-    ($cat:expr, imp: $imp:expr, $($args:tt)*) => { {
-        {
-            #[deprecated = "Using old-style imp format. Use `imp = ` instead of `imp: ` for better tooling support"]
-            macro_rules! warning(
-                () => {}
-            );
-            warning!();
-        }
-        $crate::log_with_level!($cat, $crate::DebugLevel::Warning, imp = $imp, $($args)*)
-    }};
-    ($cat:expr, id: $id:expr, $($args:tt)*) => { {
-        {
-            #[deprecated = "Using old-style id format. Use `id = ` instead of `id: ` for better tooling support"]
-            macro_rules! warning(
-                () => {}
-            );
-            warning!();
-        }
         $crate::log_with_level!($cat, $crate::DebugLevel::Warning, id = $id, $($args)*)
     }};
     ($cat:expr, $($args:tt)*) => { {
@@ -716,37 +654,6 @@ macro_rules! fixme(
     ($cat:expr, id = $id:expr, $($args:tt)*) => { {
         $crate::log_with_level!($cat, $crate::DebugLevel::Fixme, id = $id, $($args)*)
     }};
-
-    ($cat:expr, obj: $obj:expr, $($args:tt)*) => { {
-        {
-            #[deprecated = "Using old-style obj format. Use `obj = ` instead of `obj: ` for better tooling support"]
-            macro_rules! fixme(
-                () => {}
-            );
-            fixme!();
-        }
-        $crate::log_with_level!($cat, $crate::DebugLevel::Fixme, obj = $obj, $($args)*)
-    }};
-    ($cat:expr, imp: $imp:expr, $($args:tt)*) => { {
-        {
-            #[deprecated = "Using old-style imp format. Use `imp = ` instead of `imp: ` for better tooling support"]
-            macro_rules! fixme(
-                () => {}
-            );
-            fixme!();
-        }
-        $crate::log_with_level!($cat, $crate::DebugLevel::Fixme, imp = $imp, $($args)*)
-    }};
-    ($cat:expr, id: $id:expr, $($args:tt)*) => { {
-        {
-            #[deprecated = "Using old-style id format. Use `id = ` instead of `id: ` for better tooling support"]
-            macro_rules! fixme(
-                () => {}
-            );
-            fixme!();
-        }
-        $crate::log_with_level!($cat, $crate::DebugLevel::Fixme, id = $id, $($args)*)
-    }};
     ($cat:expr, $($args:tt)*) => { {
         $crate::log_with_level!($cat, $crate::DebugLevel::Fixme, $($args)*)
     }};
@@ -761,37 +668,6 @@ macro_rules! info(
         $crate::log_with_level!($cat, $crate::DebugLevel::Info, imp = $imp, $($args)*)
     }};
     ($cat:expr, id = $id:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat, $crate::DebugLevel::Info, id = $id, $($args)*)
-    }};
-
-    ($cat:expr, obj: $obj:expr, $($args:tt)*) => { {
-        {
-            #[deprecated = "Using old-style obj format. Use `obj = ` instead of `obj: ` for better tooling support"]
-            macro_rules! info(
-                () => {}
-            );
-            info!();
-        }
-        $crate::log_with_level!($cat, $crate::DebugLevel::Info, obj = $obj, $($args)*)
-    }};
-    ($cat:expr, imp: $imp:expr, $($args:tt)*) => { {
-        {
-            #[deprecated = "Using old-style imp format. Use `imp = ` instead of `imp: ` for better tooling support"]
-            macro_rules! info(
-                () => {}
-            );
-            info!();
-        }
-        $crate::log_with_level!($cat, $crate::DebugLevel::Info, imp = $imp, $($args)*)
-    }};
-    ($cat:expr, id: $id:expr, $($args:tt)*) => { {
-        {
-            #[deprecated = "Using old-style id format. Use `id = ` instead of `id: ` for better tooling support"]
-            macro_rules! info(
-                () => {}
-            );
-            info!();
-        }
         $crate::log_with_level!($cat, $crate::DebugLevel::Info, id = $id, $($args)*)
     }};
     ($cat:expr, $($args:tt)*) => { {
@@ -810,37 +686,6 @@ macro_rules! debug(
     ($cat:expr, id = $id:expr, $($args:tt)*) => { {
         $crate::log_with_level!($cat, $crate::DebugLevel::Debug, id = $id, $($args)*)
     }};
-
-    ($cat:expr, obj: $obj:expr, $($args:tt)*) => { {
-        {
-            #[deprecated = "Using old-style obj format. Use `obj = ` instead of `obj: ` for better tooling support"]
-            macro_rules! debug(
-                () => {}
-            );
-            debug!();
-        }
-        $crate::log_with_level!($cat, $crate::DebugLevel::Debug, obj = $obj, $($args)*)
-    }};
-    ($cat:expr, imp: $imp:expr, $($args:tt)*) => { {
-        {
-            #[deprecated = "Using old-style imp format. Use `imp = ` instead of `imp: ` for better tooling support"]
-            macro_rules! debug(
-                () => {}
-            );
-            debug!();
-        }
-        $crate::log_with_level!($cat, $crate::DebugLevel::Debug, imp = $imp, $($args)*)
-    }};
-    ($cat:expr, id: $id:expr, $($args:tt)*) => { {
-        {
-            #[deprecated = "Using old-style id format. Use `id = ` instead of `id: ` for better tooling support"]
-            macro_rules! debug(
-                () => {}
-            );
-            debug!();
-        }
-        $crate::log_with_level!($cat, $crate::DebugLevel::Debug, id = $id, $($args)*)
-    }};
     ($cat:expr, $($args:tt)*) => { {
         $crate::log_with_level!($cat, $crate::DebugLevel::Debug, $($args)*)
     }};
@@ -855,37 +700,6 @@ macro_rules! log(
         $crate::log_with_level!($cat, $crate::DebugLevel::Log, imp = $imp, $($args)*)
     }};
     ($cat:expr, id = $id:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat, $crate::DebugLevel::Log, id = $id, $($args)*)
-    }};
-
-    ($cat:expr, obj: $obj:expr, $($args:tt)*) => { {
-        {
-            #[deprecated = "Using old-style obj format. Use `obj = ` instead of `obj: ` for better tooling support"]
-            macro_rules! log(
-                () => {}
-            );
-            log!();
-        }
-        $crate::log_with_level!($cat, $crate::DebugLevel::Log, obj = $obj, $($args)*)
-    }};
-    ($cat:expr, imp: $imp:expr, $($args:tt)*) => { {
-        {
-            #[deprecated = "Using old-style imp format. Use `imp = ` instead of `imp: ` for better tooling support"]
-            macro_rules! log(
-                () => {}
-            );
-            log!();
-        }
-        $crate::log_with_level!($cat, $crate::DebugLevel::Log, imp = $imp, $($args)*)
-    }};
-    ($cat:expr, id: $id:expr, $($args:tt)*) => { {
-        {
-            #[deprecated = "Using old-style id format. Use `id = ` instead of `id: ` for better tooling support"]
-            macro_rules! log(
-                () => {}
-            );
-            log!();
-        }
         $crate::log_with_level!($cat, $crate::DebugLevel::Log, id = $id, $($args)*)
     }};
     ($cat:expr, $($args:tt)*) => { {
@@ -904,37 +718,6 @@ macro_rules! trace(
     ($cat:expr, id = $id:expr, $($args:tt)*) => { {
         $crate::log_with_level!($cat, $crate::DebugLevel::Trace, id = $id, $($args)*)
     }};
-
-    ($cat:expr, obj: $obj:expr, $($args:tt)*) => { {
-        {
-            #[deprecated = "Using old-style obj format. Use `obj = ` instead of `obj: ` for better tooling support"]
-            macro_rules! trace(
-                () => {}
-            );
-            trace!();
-        }
-        $crate::log_with_level!($cat, $crate::DebugLevel::Trace, obj = $obj, $($args)*)
-    }};
-    ($cat:expr, imp: $imp:expr, $($args:tt)*) => { {
-        {
-            #[deprecated = "Using old-style imp format. Use `imp = ` instead of `imp: ` for better tooling support"]
-            macro_rules! trace(
-                () => {}
-            );
-            trace!();
-        }
-        $crate::log_with_level!($cat, $crate::DebugLevel::Trace, imp = $imp, $($args)*)
-    }};
-    ($cat:expr, id: $id:expr, $($args:tt)*) => { {
-        {
-            #[deprecated = "Using old-style id format. Use `id = ` instead of `id: `"]
-            macro_rules! trace(
-                () => {}
-            );
-            trace!();
-        }
-        $crate::log_with_level!($cat, $crate::DebugLevel::Trace, id = $id, $($args)*)
-    }};
     ($cat:expr, $($args:tt)*) => { {
         $crate::log_with_level!($cat, $crate::DebugLevel::Trace, $($args)*)
     }};
@@ -949,37 +732,6 @@ macro_rules! memdump(
         $crate::log_with_level!($cat, $crate::DebugLevel::Memdump, imp = $imp, $($args)*)
     }};
     ($cat:expr, id = $id:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat, $crate::DebugLevel::Memdump, id = $id, $($args)*)
-    }};
-
-    ($cat:expr, obj: $obj:expr, $($args:tt)*) => { {
-        {
-            #[deprecated = "Using old-style obj format. Use `obj = ` instead of `obj: ` for better tooling support"]
-            macro_rules! memdump(
-                () => {}
-            );
-            memdump!();
-        }
-        $crate::log_with_level!($cat, $crate::DebugLevel::Memdump, obj = $obj, $($args)*)
-    }};
-    ($cat:expr, imp: $imp:expr, $($args:tt)*) => { {
-        {
-            #[deprecated = "Using old-style imp format. Use `imp = ` instead of `imp: ` for better tooling support"]
-            macro_rules! memdump(
-                () => {}
-            );
-            memdump!();
-        }
-        $crate::log_with_level!($cat, $crate::DebugLevel::Memdump, imp = $imp, $($args)*)
-    }};
-    ($cat:expr, id: $id:expr, $($args:tt)*) => { {
-        {
-            #[deprecated = "Using old-style id format. Use `id = ` instead of `id: ` for better tooling support"]
-            macro_rules! memdump(
-                () => {}
-            );
-            memdump!();
-        }
         $crate::log_with_level!($cat, $crate::DebugLevel::Memdump, id = $id, $($args)*)
     }};
     ($cat:expr, $($args:tt)*) => { {

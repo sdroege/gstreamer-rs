@@ -70,20 +70,6 @@ macro_rules! event_builder_generic_impl {
 
         gst::impl_builder_gvalue_extra_setters!(other_field);
 
-        #[deprecated = "use build.other_field() instead"]
-        pub fn other_fields(
-            self,
-            other_fields: &[(&'a str, &'a (dyn ToSendValue + Sync))],
-        ) -> Self {
-            let mut s = self;
-
-            for (name, value) in other_fields {
-                s = s.other_field(name, value.to_send_value());
-            }
-
-            s
-        }
-
         #[must_use = "Building the event without using it has no effect"]
         #[allow(clippy::redundant_closure_call)]
         pub fn build(mut self) -> gst::Event {

@@ -2076,16 +2076,6 @@ impl<'a> EventBuilder<'a> {
             ..self
         }
     }
-
-    fn other_fields(self, other_fields: &[(&'a str, &'a (dyn ToSendValue + Sync))]) -> Self {
-        let mut s = self;
-
-        for (name, value) in other_fields {
-            s = s.other_field(name, value.to_send_value());
-        }
-
-        s
-    }
 }
 
 macro_rules! event_builder_generic_impl {
@@ -2161,18 +2151,6 @@ macro_rules! event_builder_generic_impl {
         }
 
         impl_builder_gvalue_extra_setters!(other_field);
-
-        #[deprecated = "use build.other_field() instead"]
-        #[allow(clippy::needless_update)]
-        pub fn other_fields(
-            self,
-            other_fields: &[(&'a str, &'a (dyn ToSendValue + Sync))],
-        ) -> Self {
-            Self {
-                builder: self.builder.other_fields(other_fields),
-                ..self
-            }
-        }
 
         #[must_use = "Building the event without using it has no effect"]
         #[allow(clippy::redundant_closure_call)]
@@ -3142,7 +3120,7 @@ mod tests {
         }
 
         let flush_start_evt = FlushStart::builder()
-            .other_fields(&[("extra-field", &true)])
+            .other_field("extra-field", true)
             .build();
         match flush_start_evt.view() {
             EventView::FlushStart(flush_start_evt) => {
