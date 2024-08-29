@@ -29,7 +29,7 @@ where
         delegate,
     };
     use objc::{
-        class, msg_send,
+        msg_send,
         runtime::{Object, Sel},
         sel, sel_impl,
     };
