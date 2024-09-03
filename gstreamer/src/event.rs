@@ -165,6 +165,13 @@ impl EventRef {
         }
     }
 
+    #[doc(alias = "gst_event_set_seqnum")]
+    pub fn set_seqnum(&mut self, seqnum: Seqnum) {
+        unsafe {
+            ffi::gst_event_set_seqnum(self.as_mut_ptr(), seqnum.0.get());
+        }
+    }
+
     #[doc(alias = "get_running_time_offset")]
     #[doc(alias = "gst_event_get_running_time_offset")]
     pub fn running_time_offset(&self) -> i64 {
@@ -672,6 +679,13 @@ impl StreamStart {
             } else {
                 Some(GroupId(NonZeroU32::new_unchecked(group_id)))
             }
+        }
+    }
+
+    #[doc(alias = "gst_event_set_group_id")]
+    pub fn set_group_id(&mut self, group_id: GroupId) {
+        unsafe {
+            ffi::gst_event_set_group_id(self.as_mut_ptr(), group_id.0.get());
         }
     }
 
