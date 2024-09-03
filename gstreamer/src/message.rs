@@ -57,6 +57,13 @@ impl MessageRef {
         }
     }
 
+    #[doc(alias = "gst_message_set_seqnum")]
+    pub fn set_seqnum(&self, seqnum: Seqnum) {
+        unsafe {
+            ffi::gst_message_set_seqnum(self.as_mut_ptr(), seqnum.0.get());
+        }
+    }
+
     #[doc(alias = "get_structure")]
     #[doc(alias = "gst_message_get_structure")]
     #[inline]
@@ -2135,6 +2142,13 @@ impl StreamStart {
             } else {
                 None
             }
+        }
+    }
+
+    #[doc(alias = "gst_message_set_group_id")]
+    pub fn set_group_id(&mut self, group_id: GroupId) {
+        unsafe {
+            ffi::gst_message_set_group_id(self.as_mut_ptr(), group_id.0.get());
         }
     }
 }
