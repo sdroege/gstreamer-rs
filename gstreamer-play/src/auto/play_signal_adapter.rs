@@ -61,7 +61,7 @@ impl PlaySignalAdapter {
             F: Fn(&PlaySignalAdapter, i32) + Send + 'static,
         >(
             this: *mut ffi::GstPlaySignalAdapter,
-            object: libc::c_int,
+            object: std::ffi::c_int,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
@@ -229,7 +229,7 @@ impl PlaySignalAdapter {
             F: Fn(&PlaySignalAdapter, &str) + Send + 'static,
         >(
             this: *mut ffi::GstPlaySignalAdapter,
-            object: *mut libc::c_char,
+            object: *mut std::ffi::c_char,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
@@ -260,8 +260,8 @@ impl PlaySignalAdapter {
             F: Fn(&PlaySignalAdapter, u32, u32) + Send + 'static,
         >(
             this: *mut ffi::GstPlaySignalAdapter,
-            object: libc::c_uint,
-            p0: libc::c_uint,
+            object: std::ffi::c_uint,
+            p0: std::ffi::c_uint,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
@@ -289,7 +289,7 @@ impl PlaySignalAdapter {
             F: Fn(&PlaySignalAdapter, f64) + Send + 'static,
         >(
             this: *mut ffi::GstPlaySignalAdapter,
-            object: libc::c_double,
+            object: std::ffi::c_double,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);

@@ -351,7 +351,7 @@ pub trait ProjectExt: IsA<Project> + sealed::Sealed + 'static {
         >(
             this: *mut ffi::GESProject,
             error: *mut glib::ffi::GError,
-            id: *mut libc::c_char,
+            id: *mut std::ffi::c_char,
             extractable_type: glib::ffi::GType,
             f: glib::ffi::gpointer,
         ) {
@@ -445,7 +445,7 @@ pub trait ProjectExt: IsA<Project> + sealed::Sealed + 'static {
             error: *mut glib::ffi::GError,
             wrong_asset: *mut ffi::GESAsset,
             f: glib::ffi::gpointer,
-        ) -> *mut libc::c_char {
+        ) -> *mut std::ffi::c_char {
             let f: &F = &*(f as *const F);
             f(
                 Project::from_glib_borrow(this).unsafe_cast_ref(),

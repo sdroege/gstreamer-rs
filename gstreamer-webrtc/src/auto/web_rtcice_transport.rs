@@ -82,7 +82,7 @@ impl WebRTCICETransport {
             F: Fn(&WebRTCICETransport, &str) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstWebRTCICETransport,
-            object: *mut libc::c_char,
+            object: *mut std::ffi::c_char,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);

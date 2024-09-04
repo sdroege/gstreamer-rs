@@ -429,7 +429,7 @@ impl Player {
     pub fn connect_buffering<F: Fn(&Self, i32) + Send + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn buffering_trampoline<F: Fn(&Player, i32) + Send + 'static>(
             this: *mut ffi::GstPlayer,
-            object: libc::c_int,
+            object: std::ffi::c_int,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
@@ -578,7 +578,7 @@ impl Player {
     pub fn connect_uri_loaded<F: Fn(&Self, &str) + Send + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn uri_loaded_trampoline<F: Fn(&Player, &str) + Send + 'static>(
             this: *mut ffi::GstPlayer,
-            object: *mut libc::c_char,
+            object: *mut std::ffi::c_char,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
@@ -609,8 +609,8 @@ impl Player {
             F: Fn(&Player, i32, i32) + Send + 'static,
         >(
             this: *mut ffi::GstPlayer,
-            object: libc::c_int,
-            p0: libc::c_int,
+            object: std::ffi::c_int,
+            p0: std::ffi::c_int,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);

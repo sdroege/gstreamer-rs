@@ -162,7 +162,7 @@ impl Discoverer {
             F: Fn(&Discoverer, &str) -> Option<DiscovererInfo> + Send + Sync + 'static,
         >(
             this: *mut ffi::GstDiscoverer,
-            uri: *mut libc::c_char,
+            uri: *mut std::ffi::c_char,
             f: glib::ffi::gpointer,
         ) -> *mut ffi::GstDiscovererInfo {
             let f: &F = &*(f as *const F);

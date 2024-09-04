@@ -70,7 +70,7 @@ pub trait MetaContainerExt: IsA<MetaContainer> + sealed::Sealed + 'static {
         let func_data: P = func;
         unsafe extern "C" fn func_func<P: FnMut(&MetaContainer, &str, &glib::Value)>(
             container: *const ffi::GESMetaContainer,
-            key: *const libc::c_char,
+            key: *const std::ffi::c_char,
             value: *const glib::gobject_ffi::GValue,
             user_data: glib::ffi::gpointer,
         ) {
@@ -598,7 +598,7 @@ pub trait MetaContainerExt: IsA<MetaContainer> + sealed::Sealed + 'static {
             F: Fn(&P, &str, Option<&glib::Value>) + 'static,
         >(
             this: *mut ffi::GESMetaContainer,
-            key: *mut libc::c_char,
+            key: *mut std::ffi::c_char,
             value: *mut glib::gobject_ffi::GValue,
             f: glib::ffi::gpointer,
         ) {

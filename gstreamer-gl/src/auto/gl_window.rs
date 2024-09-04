@@ -216,8 +216,8 @@ pub trait GLWindowExt: IsA<GLWindow> + sealed::Sealed + 'static {
             F: Fn(&P, &str, &str) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstGLWindow,
-            id: *mut libc::c_char,
-            key: *mut libc::c_char,
+            id: *mut std::ffi::c_char,
+            key: *mut std::ffi::c_char,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
@@ -250,10 +250,10 @@ pub trait GLWindowExt: IsA<GLWindow> + sealed::Sealed + 'static {
             F: Fn(&P, &str, i32, f64, f64) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstGLWindow,
-            id: *mut libc::c_char,
-            button: libc::c_int,
-            x: libc::c_double,
-            y: libc::c_double,
+            id: *mut std::ffi::c_char,
+            button: std::ffi::c_int,
+            x: std::ffi::c_double,
+            y: std::ffi::c_double,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
@@ -290,10 +290,10 @@ pub trait GLWindowExt: IsA<GLWindow> + sealed::Sealed + 'static {
             F: Fn(&P, f64, f64, f64, f64) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstGLWindow,
-            x: libc::c_double,
-            y: libc::c_double,
-            delta_x: libc::c_double,
-            delta_y: libc::c_double,
+            x: std::ffi::c_double,
+            y: std::ffi::c_double,
+            delta_x: std::ffi::c_double,
+            delta_y: std::ffi::c_double,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
