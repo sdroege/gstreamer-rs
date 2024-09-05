@@ -1355,7 +1355,7 @@ mod tests {
     fn test_display() {
         crate::init().unwrap();
 
-        format!("{}", TagList::new());
+        let _ = format!("{}", TagList::new());
     }
 
     #[test]

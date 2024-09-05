@@ -1317,7 +1317,7 @@ mod tests {
         crate::init().unwrap();
 
         let caps = Caps::builder("foo/bar").build();
-        format!("{caps}");
+        let _ = format!("{caps}");
     }
 
     #[test]

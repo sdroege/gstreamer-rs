@@ -1396,8 +1396,8 @@ mod tests {
     fn test_display() {
         gst::init().unwrap();
 
-        format!("{}", "sRGB".parse::<crate::VideoColorimetry>().unwrap());
-        format!("{}", crate::VideoFieldOrder::TopFieldFirst);
-        format!("{}", crate::VideoInterlaceMode::Progressive);
+        let _ = format!("{}", "sRGB".parse::<crate::VideoColorimetry>().unwrap());
+        let _ = format!("{}", crate::VideoFieldOrder::TopFieldFirst);
+        let _ = format!("{}", crate::VideoInterlaceMode::Progressive);
     }
 }
