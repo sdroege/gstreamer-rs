@@ -18,7 +18,7 @@ pub struct ObjectLockGuard<'a, T: ?Sized> {
 
 impl<'a, T> ObjectLockGuard<'a, T>
 where
-    T: IsA<crate::Object> + ?Sized,
+    T: IsA<crate::Object>,
 {
     #[inline]
     pub fn acquire(obj: &'a T) -> ObjectLockGuard<'a, T> {
