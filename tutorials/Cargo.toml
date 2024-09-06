@@ -23,6 +23,12 @@ futures = "0.3"
 cocoa = "0.26"
 objc = "0.2.7"
 
+[target.'cfg(target_os = "macos")'.build-dependencies]
+system-deps = "7"
+
+[package.metadata.system-deps]
+"gstreamer-1.0" = "1.14"
+
 [[bin]]
 name = "basic-tutorial-13"
 required-features = ["termion"]

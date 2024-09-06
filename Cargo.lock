@@ -547,6 +547,7 @@ dependencies = [
  "pango",
  "pangocairo",
  "raw-window-handle",
+ "system-deps",
  "uds",
  "windows",
  "winit",
@@ -2447,6 +2448,7 @@ dependencies = [
  "gstreamer-pbutils",
  "gstreamer-video",
  "objc",
+ "system-deps",
  "termion",
 ]
 
