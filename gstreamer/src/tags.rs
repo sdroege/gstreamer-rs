@@ -466,7 +466,7 @@ impl TagListRef {
 
     #[doc(alias = "get_index")]
     #[doc(alias = "gst_tag_list_get_index")]
-    pub fn index<'a, T: Tag<'a>>(&self, idx: u32) -> Option<&'a TagValue<T::TagType>> {
+    pub fn index<'a, T: Tag<'a>>(&'a self, idx: u32) -> Option<&'a TagValue<T::TagType>> {
         self.index_generic(T::TAG_NAME, idx).map(|value| {
             if !value.is::<T::TagType>() {
                 panic!(
