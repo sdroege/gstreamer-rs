@@ -113,6 +113,47 @@ impl<'a> PadProbeInfo<'a> {
             _ => None,
         }
     }
+
+    // rustdoc-stripper-ignore-next
+    /// Takes over the buffer in the probe info. As the data is no longer valid for the caller, the
+    /// probe will be considered dropped after this point.
+    pub fn take_buffer(&mut self) -> Option<Buffer> {
+        if matches!(self.data, Some(PadProbeData::Buffer(..))) {
+            match self.data.take() {
+                Some(PadProbeData::Buffer(b)) => Some(b),
+                _ => unreachable!(),
+            }
+        } else {
+            None
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Takes over the buffer in the probe info. As the data is no longer valid for the caller, the
+    /// probe will be considered dropped after this point.
+    pub fn take_buffer_list(&mut self) -> Option<BufferList> {
+        if matches!(self.data, Some(PadProbeData::BufferList(..))) {
+            match self.data.take() {
+                Some(PadProbeData::BufferList(b)) => Some(b),
+                _ => unreachable!(),
+            }
+        } else {
+            None
+        }
+    }
+    // rustdoc-stripper-ignore-next
+    /// Takes over the event in the probe info. As the data is no longer valid for the caller, the
+    /// probe will be considered dropped after this point.
+    pub fn take_event(&mut self) -> Option<Event> {
+        if matches!(self.data, Some(PadProbeData::Event(..))) {
+            match self.data.take() {
+                Some(PadProbeData::Event(e)) => Some(e),
+                _ => unreachable!(),
+            }
+        } else {
+            None
+        }
+    }
 }
 
 #[derive(Debug)]
@@ -1006,6 +1047,19 @@ unsafe fn update_probe_info(
                 // Buffer or Event consumed by probe
             }
             other => panic!("Bad data for {data_type:?} pad probe returning Handled: {other:?}"),
+        }
+    } else if ret == PadProbeReturn::Drop {
+        // We may have consumed the object via PadProbeInfo::take_*() functions
+        match probe_info.data {
+            None if data_type == Some(Buffer::static_type())
+                || data_type == Some(BufferList::static_type())
+                || data_type == Some(Event::static_type()) =>
+            {
+                (*info).data = ptr::null_mut();
+            }
+            _ => {
+                // Nothing to do, it's going to be dropped
+            }
         }
     } else {
         match probe_info.data {
