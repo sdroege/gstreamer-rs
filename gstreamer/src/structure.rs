@@ -504,7 +504,7 @@ impl StructureRef {
     }
 
     // rustdoc-stripper-ignore-next
-    /// Sets field `name` to the given inner value if `value` is `Some`.
+    /// Sets field `name` to the given `value` if the `predicate` evaluates to `true`.
     ///
     /// This has no effect if the `predicate` evaluates to `false`,
     /// i.e. default or previous value for `name` is kept.
@@ -581,7 +581,7 @@ impl StructureRef {
     }
 
     // rustdoc-stripper-ignore-next
-    /// Sets field `name` to the given inner value if `value` is `Some`.
+    /// Sets field `name` to the given `value` if the `predicate` evaluates to `true`.
     ///
     /// This has no effect if the `predicate` evaluates to `false`,
     /// i.e. default or previous value for `name` is kept.
