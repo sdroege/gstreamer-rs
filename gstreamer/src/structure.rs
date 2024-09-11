@@ -490,7 +490,9 @@ impl StructureRef {
     #[doc(alias = "gst_structure_get_name")]
     pub fn name<'a>(&self) -> &'a str {
         unsafe {
-            CStr::from_ptr(ffi::gst_structure_get_name(&self.0))
+            let name = ffi::gst_structure_get_name(&self.0);
+            // Ensure the name is static whatever the GStreamer version being used.
+            CStr::from_ptr(glib::ffi::g_intern_string(name))
                 .to_str()
                 .unwrap()
         }
@@ -588,7 +590,12 @@ impl StructureRef {
             let field_name = ffi::gst_structure_nth_field_name(&self.0, idx);
             assert!(!field_name.is_null());
 
-            Some(CStr::from_ptr(field_name).to_str().unwrap())
+            // Ensure the name is static whatever the GStreamer version being used.
+            Some(
+                CStr::from_ptr(glib::ffi::g_intern_string(field_name))
+                    .to_str()
+                    .unwrap(),
+            )
         }
     }
 
@@ -902,6 +909,8 @@ impl<'a> Iterator for FieldIterator<'a> {
             return None;
         }
 
+        // Safety: nth_field_name() ensures static lifetime for the returned string,
+        // whatever the GStreamer version being used.
         let field_name = self.structure.nth_field_name(self.idx as u32).unwrap();
         self.idx += 1;
 
@@ -922,6 +931,8 @@ impl<'a> DoubleEndedIterator for FieldIterator<'a> {
         }
 
         self.n_fields -= 1;
+        // Safety: nth_field_name() ensures static lifetime for the returned string,
+        // whatever the GStreamer version being used.
         Some(self.structure.nth_field_name(self.n_fields as u32).unwrap())
     }
 }
@@ -932,6 +943,8 @@ impl<'a> std::iter::FusedIterator for FieldIterator<'a> {}
 
 #[derive(Debug)]
 pub struct Iter<'a> {
+    // Safety: FieldIterator ensures static lifetime for the returned Item,
+    // whatever the GStreamer version being used.
     iter: FieldIterator<'a>,
 }
 
@@ -1187,5 +1200,22 @@ mod tests {
             .build();
 
         assert_eq!(format!("{:?}", s), "Structure(test { f1: (gchararray) \"abc\", f2: (gchararray) \"bcd\", f3: (gint) 123, f4: Structure(nested { badger: (gboolean) TRUE }), f5: Array([(gchararray) \"a\", (gchararray) \"b\", (gchararray) \"c\"]), f6: List([(gchararray) \"d\", (gchararray) \"e\", (gchararray) \"f\"]) })");
+    }
+
+    #[test]
+    fn test_name_and_field_name_lt() {
+        crate::init().unwrap();
+
+        let (name, field_name) = {
+            let s = Structure::builder("name")
+                .field("field0", "val0")
+                .field("field1", "val1")
+                .build();
+
+            (s.name(), s.nth_field_name(0).unwrap())
+        };
+
+        assert_eq!(name, "name");
+        assert_eq!(field_name, "field0");
     }
 }
