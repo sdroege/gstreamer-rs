@@ -2451,7 +2451,7 @@ mod tests {
         {
             let events = events.clone();
             pad.add_probe(crate::PadProbeType::EVENT_UPSTREAM, move |_, info| {
-                if let Some(PadProbeData::Event(event)) = info.data.take() {
+                if let Some(event) = info.take_event() {
                     let mut events = events.lock().unwrap();
                     events.push(event);
                 } else {
@@ -2464,7 +2464,7 @@ mod tests {
         {
             let buffers = buffers.clone();
             pad.add_probe(crate::PadProbeType::BUFFER, move |_, info| {
-                if let Some(PadProbeData::Buffer(buffer)) = info.data.take() {
+                if let Some(buffer) = info.take_buffer() {
                     let mut buffers = buffers.lock().unwrap();
                     info.flow_res = if buffers.is_empty() {
                         Ok(FlowSuccess::Ok)
