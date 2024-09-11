@@ -401,6 +401,8 @@ impl CapsFeaturesRef {
                 return None;
             }
 
+            // Safety: we can return a GStr based on the feature here because
+            // the lifetime of the returned value is constrained by &self.
             Some(glib::GStr::from_ptr(feature))
         }
     }
@@ -573,6 +575,8 @@ impl<'a> Iterator for Iter<'a> {
 
             self.idx += 1;
 
+            // Safety: we can return a GStr based on the feature here because the lifetime
+            // of the returned Item is constrained by the underlying CapsFeatureRef.
             Some(glib::GStr::from_ptr(feature))
         }
     }
@@ -599,6 +603,9 @@ impl<'a> Iterator for Iter<'a> {
                 let feature =
                     ffi::gst_caps_features_get_nth(self.caps_features.as_ptr(), end as u32);
                 debug_assert!(!feature.is_null());
+
+                // Safety: we can return a GStr based on the feature here because the lifetime
+                // of the returned Item is constrained by the underlying CapsFeatureRef.
                 Some(glib::GStr::from_ptr(feature))
             }
         }
@@ -614,6 +621,9 @@ impl<'a> Iterator for Iter<'a> {
                     self.n_features as u32 - 1,
                 );
                 debug_assert!(!feature.is_null());
+
+                // Safety: we can return a GStr based on the feature here because the lifetime
+                // of the returned Item is constrained by the underlying CapsFeatureRef.
                 Some(glib::GStr::from_ptr(feature))
             }
         }
@@ -633,6 +643,8 @@ impl<'a> DoubleEndedIterator for Iter<'a> {
                 ffi::gst_caps_features_get_nth(self.caps_features.as_ptr(), self.n_features as u32);
             debug_assert!(!feature.is_null());
 
+            // Safety: we can return a GStr based on the feature here because the lifetime
+            // of the returned Item is constrained by the underlying CapsFeatureRef.
             Some(glib::GStr::from_ptr(feature))
         }
     }
@@ -651,6 +663,8 @@ impl<'a> DoubleEndedIterator for Iter<'a> {
                 );
                 debug_assert!(!feature.is_null());
 
+                // Safety: we can return a GStr based on the feature here because the lifetime
+                // of the returned Item is constrained by the underlying CapsFeatureRef.
                 Some(glib::GStr::from_ptr(feature))
             }
         }
