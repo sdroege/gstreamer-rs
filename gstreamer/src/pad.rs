@@ -1045,6 +1045,7 @@ unsafe fn update_probe_info(
                 || data_type == Some(Event::static_type()) =>
             {
                 // Buffer or Event consumed by probe
+                (*info).data = ptr::null_mut();
             }
             other => panic!("Bad data for {data_type:?} pad probe returning Handled: {other:?}"),
         }
