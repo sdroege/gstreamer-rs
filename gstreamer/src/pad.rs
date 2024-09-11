@@ -2416,8 +2416,8 @@ mod tests {
         assert_eq!(counter.load(std::sync::atomic::Ordering::SeqCst), 1);
     }
 
-    #[test]
-    fn test_probe() {
+    fn do_probe_with_return(probe_return: crate::PadProbeReturn) {
+        skip_assert_initialized!();
         crate::init().unwrap();
 
         let (major, minor, micro, _) = crate::version();
@@ -2457,7 +2457,7 @@ mod tests {
                 } else {
                     unreachable!();
                 }
-                crate::PadProbeReturn::Handled
+                probe_return
             });
         }
 
@@ -2475,7 +2475,7 @@ mod tests {
                 } else {
                     unreachable!();
                 }
-                crate::PadProbeReturn::Handled
+                probe_return
             });
         }
 
@@ -2491,7 +2491,15 @@ mod tests {
         assert!(pad.push_event(crate::event::Segment::new(segment.as_ref())));
 
         assert_eq!(pad.push(crate::Buffer::new()), Ok(FlowSuccess::Ok));
-        assert_eq!(pad.push(crate::Buffer::new()), flow_override);
+        assert_eq!(
+            pad.push(crate::Buffer::new()),
+            // On Drop, we will get an Ok, not whatever value we returned
+            if probe_return == crate::PadProbeReturn::Drop {
+                Ok(FlowSuccess::Ok)
+            } else {
+                flow_override
+            }
+        );
 
         let events = events.lock().unwrap();
         let buffers = buffers.lock().unwrap();
@@ -2512,6 +2520,18 @@ mod tests {
             events.iter().all(|e| e.is_writable()),
             "An event ref leaked!"
         );
+    }
+
+    #[test]
+    fn test_probe() {
+        crate::init().unwrap();
+        do_probe_with_return(crate::PadProbeReturn::Handled);
+    }
+
+    #[test]
+    fn test_probe_drop() {
+        crate::init().unwrap();
+        do_probe_with_return(crate::PadProbeReturn::Drop);
     }
 
     #[test]
