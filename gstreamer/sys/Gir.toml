@@ -157,6 +157,10 @@ status = "generate"
     version = "1.18.3"
 
 [[object]]
+name = "Gst.IdStr"
+status = "manual"
+
+[[object]]
 name = "Gst.MiniObject"
 status = "generate"
     [[object.function]]

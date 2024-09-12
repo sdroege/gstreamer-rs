@@ -57,6 +57,7 @@ manual = [
     "Gst.DebugMessage",
     "Gst.DeviceProviderClass", # for docs only
     "Gst.ElementClass", # for docs only
+    "Gst.IdStr",
     "Gst.Rank",
     "Gst.Segment",
     "Gst.StaticCaps",
