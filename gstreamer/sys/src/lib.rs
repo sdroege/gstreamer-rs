@@ -15,6 +15,10 @@
 use glib_sys as glib;
 use gobject_sys as gobject;
 
+mod manual;
+
+pub use manual::*;
+
 #[cfg(unix)]
 #[allow(unused_imports)]
 use libc::{dev_t, gid_t, pid_t, socklen_t, uid_t};
@@ -1986,19 +1990,6 @@ pub struct _GstGhostPadPrivate {
 }
 
 pub type GstGhostPadPrivate = _GstGhostPadPrivate;
-
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct GstIdStr {
-    pub pointer: gpointer,
-    pub padding: [u8; 8],
-}
-
-impl ::std::fmt::Debug for GstIdStr {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstIdStr @ {self:p}")).finish()
-    }
-}
 
 #[derive(Copy, Clone)]
 #[repr(C)]
