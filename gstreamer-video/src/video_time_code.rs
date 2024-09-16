@@ -239,6 +239,7 @@ impl ValidVideoTimeCode {
     }
 
     #[doc(alias = "gst_video_time_code_add_interval")]
+    #[must_use = "this returns the result of the operation, without modifying the original"]
     pub fn add_interval(
         &self,
         tc_inter: &VideoTimeCodeInterval,
