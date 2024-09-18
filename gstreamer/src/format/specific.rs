@@ -346,7 +346,7 @@ impl Percent {
     }
 
     // rustdoc-stripper-ignore-next
-    /// The per million value in the range [0, 100000].
+    /// The per million value in the range [0, 1_000_000].
     #[track_caller]
     #[inline]
     pub fn ppm(&self) -> u32 {
