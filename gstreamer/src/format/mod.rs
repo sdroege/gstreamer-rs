@@ -1,7 +1,7 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 // rustdoc-stripper-ignore-next
-//! This modules gathers GStreamer's formatted value concepts together.
+//! This module gathers GStreamer's formatted value concepts together.
 //!
 //! GStreamer uses formatted values to differentiate value units in some APIs.
 //! In C this is done by qualifying an integer value by a companion enum
