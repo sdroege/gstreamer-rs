@@ -5,10 +5,13 @@ set -ex
 rustc --version
 cargo --version
 
+cpus=$(nproc || sysctl -n hw.ncpu)
+CARGO_FLAGS="-j${FDO_CI_CONCURRENT:-$cpus}"
+
 for crate in gstreamer*/sys gstreamer-gl/*/sys; do
     if [ -e "$crate/Cargo.toml" ]; then
         echo "Building $crate with --all-features"
-        cargo build --locked --color=always --manifest-path "$crate/Cargo.toml" --all-features
+        cargo build $CARGO_FLAGS --locked --color=always --manifest-path "$crate/Cargo.toml" --all-features
     fi
 done
 
@@ -33,5 +36,5 @@ for crate in gstreamer/sys \
              gstreamer-video/sys \
              gstreamer-webrtc/sys; do
     echo "Testing $crate with --all-features)"
-    RUST_BACKTRACE=1 cargo test --locked --color=always --manifest-path $crate/Cargo.toml --all-features
+    RUST_BACKTRACE=1 cargo test $CARGO_FLAGS --locked --color=always --manifest-path $crate/Cargo.toml --all-features
 done
