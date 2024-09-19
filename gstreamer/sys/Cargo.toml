@@ -2,6 +2,7 @@
 system-deps = "7"
 
 [dependencies]
+cfg-if = "1.0"
 libc = "0.2"
 
 [dependencies.glib-sys]

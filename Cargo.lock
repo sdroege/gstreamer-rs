@@ -1458,6 +1458,7 @@ dependencies = [
 name = "gstreamer-sys"
 version = "0.24.0"
 dependencies = [
+ "cfg-if",
  "glib-sys",
  "gobject-sys",
  "libc",
