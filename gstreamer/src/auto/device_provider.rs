@@ -163,7 +163,7 @@ pub trait DeviceProviderExt: IsA<DeviceProvider> + sealed::Sealed + 'static {
             F: Fn(&P, &str) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstDeviceProvider,
-            object: *mut libc::c_char,
+            object: *mut std::ffi::c_char,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
@@ -195,7 +195,7 @@ pub trait DeviceProviderExt: IsA<DeviceProvider> + sealed::Sealed + 'static {
             F: Fn(&P, &str) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstDeviceProvider,
-            object: *mut libc::c_char,
+            object: *mut std::ffi::c_char,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);

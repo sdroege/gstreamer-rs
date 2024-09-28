@@ -16,14 +16,15 @@ use glib_sys as glib;
 use gstreamer_sdp_sys as gst_sdp;
 use gstreamer_sys as gst;
 
-#[allow(unused_imports)]
-use libc::{
-    c_char, c_double, c_float, c_int, c_long, c_short, c_uchar, c_uint, c_ulong, c_ushort, c_void,
-    intptr_t, off_t, size_t, ssize_t, time_t, uintptr_t, FILE,
-};
 #[cfg(unix)]
 #[allow(unused_imports)]
 use libc::{dev_t, gid_t, pid_t, socklen_t, uid_t};
+#[allow(unused_imports)]
+use libc::{intptr_t, off_t, size_t, ssize_t, time_t, uintptr_t, FILE};
+#[allow(unused_imports)]
+use std::ffi::{
+    c_char, c_double, c_float, c_int, c_long, c_short, c_uchar, c_uint, c_ulong, c_ushort, c_void,
+};
 
 #[allow(unused_imports)]
 use glib::{gboolean, gconstpointer, gpointer, GType};
@@ -169,6 +170,7 @@ pub type GstWebRTCICEOnCandidateFunc =
 
 // Records
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstWebRTCDTLSTransportClass {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -177,6 +179,7 @@ pub struct _GstWebRTCDTLSTransportClass {
 pub type GstWebRTCDTLSTransportClass = _GstWebRTCDTLSTransportClass;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstWebRTCDataChannelClass {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -367,6 +370,7 @@ impl ::std::fmt::Debug for GstWebRTCICETransportClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstWebRTCRTPReceiverClass {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -375,6 +379,7 @@ pub struct _GstWebRTCRTPReceiverClass {
 pub type GstWebRTCRTPReceiverClass = _GstWebRTCRTPReceiverClass;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstWebRTCRTPSenderClass {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -383,6 +388,7 @@ pub struct _GstWebRTCRTPSenderClass {
 pub type GstWebRTCRTPSenderClass = _GstWebRTCRTPSenderClass;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstWebRTCRTPTransceiverClass {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -391,6 +397,7 @@ pub struct _GstWebRTCRTPTransceiverClass {
 pub type GstWebRTCRTPTransceiverClass = _GstWebRTCRTPTransceiverClass;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstWebRTCSCTPTransportClass {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -416,6 +423,7 @@ impl ::std::fmt::Debug for GstWebRTCSessionDescription {
 
 // Classes
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstWebRTCDTLSTransport {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -429,6 +437,7 @@ impl ::std::fmt::Debug for GstWebRTCDTLSTransport {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstWebRTCDataChannel {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -510,6 +519,7 @@ impl ::std::fmt::Debug for GstWebRTCICETransport {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstWebRTCRTPReceiver {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -523,6 +533,7 @@ impl ::std::fmt::Debug for GstWebRTCRTPReceiver {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstWebRTCRTPSender {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -536,6 +547,7 @@ impl ::std::fmt::Debug for GstWebRTCRTPSender {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstWebRTCRTPTransceiver {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -549,6 +561,7 @@ impl ::std::fmt::Debug for GstWebRTCRTPTransceiver {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstWebRTCSCTPTransport {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -561,7 +574,6 @@ impl ::std::fmt::Debug for GstWebRTCSCTPTransport {
     }
 }
 
-#[link(name = "gstwebrtc-1.0")]
 extern "C" {
 
     //=========================================================================

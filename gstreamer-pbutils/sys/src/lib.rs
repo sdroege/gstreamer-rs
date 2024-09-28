@@ -18,14 +18,15 @@ use gstreamer_audio_sys as gst_audio;
 use gstreamer_sys as gst;
 use gstreamer_video_sys as gst_video;
 
-#[allow(unused_imports)]
-use libc::{
-    c_char, c_double, c_float, c_int, c_long, c_short, c_uchar, c_uint, c_ulong, c_ushort, c_void,
-    intptr_t, off_t, size_t, ssize_t, time_t, uintptr_t, FILE,
-};
 #[cfg(unix)]
 #[allow(unused_imports)]
 use libc::{dev_t, gid_t, pid_t, socklen_t, uid_t};
+#[allow(unused_imports)]
+use libc::{intptr_t, off_t, size_t, ssize_t, time_t, uintptr_t, FILE};
+#[allow(unused_imports)]
+use std::ffi::{
+    c_char, c_double, c_float, c_int, c_long, c_short, c_uchar, c_uint, c_ulong, c_ushort, c_void,
+};
 
 #[allow(unused_imports)]
 use glib::{gboolean, gconstpointer, gpointer, GType};
@@ -139,6 +140,7 @@ impl ::std::fmt::Debug for GstAudioVisualizerClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstAudioVisualizerPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -176,6 +178,7 @@ impl ::std::fmt::Debug for GstDiscovererClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstDiscovererPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -184,6 +187,7 @@ pub struct _GstDiscovererPrivate {
 pub type GstDiscovererPrivate = _GstDiscovererPrivate;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstEncodingAudioProfileClass {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -192,6 +196,7 @@ pub struct _GstEncodingAudioProfileClass {
 pub type GstEncodingAudioProfileClass = _GstEncodingAudioProfileClass;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstEncodingContainerProfileClass {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -200,6 +205,7 @@ pub struct _GstEncodingContainerProfileClass {
 pub type GstEncodingContainerProfileClass = _GstEncodingContainerProfileClass;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstEncodingProfileClass {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -208,6 +214,7 @@ pub struct _GstEncodingProfileClass {
 pub type GstEncodingProfileClass = _GstEncodingProfileClass;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstEncodingVideoProfileClass {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -216,6 +223,7 @@ pub struct _GstEncodingVideoProfileClass {
 pub type GstEncodingVideoProfileClass = _GstEncodingVideoProfileClass;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstInstallPluginsContext {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -267,6 +275,7 @@ impl ::std::fmt::Debug for GstDiscoverer {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstDiscovererAudioInfo {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -280,6 +289,7 @@ impl ::std::fmt::Debug for GstDiscovererAudioInfo {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstDiscovererContainerInfo {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -293,6 +303,7 @@ impl ::std::fmt::Debug for GstDiscovererContainerInfo {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstDiscovererInfo {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -306,6 +317,7 @@ impl ::std::fmt::Debug for GstDiscovererInfo {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstDiscovererStreamInfo {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -319,6 +331,7 @@ impl ::std::fmt::Debug for GstDiscovererStreamInfo {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstDiscovererSubtitleInfo {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -332,6 +345,7 @@ impl ::std::fmt::Debug for GstDiscovererSubtitleInfo {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstDiscovererVideoInfo {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -345,6 +359,7 @@ impl ::std::fmt::Debug for GstDiscovererVideoInfo {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstEncodingAudioProfile {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -358,6 +373,7 @@ impl ::std::fmt::Debug for GstEncodingAudioProfile {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstEncodingContainerProfile {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -371,6 +387,7 @@ impl ::std::fmt::Debug for GstEncodingContainerProfile {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstEncodingProfile {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -384,6 +401,7 @@ impl ::std::fmt::Debug for GstEncodingProfile {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstEncodingTarget {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -397,6 +415,7 @@ impl ::std::fmt::Debug for GstEncodingTarget {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstEncodingVideoProfile {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -409,7 +428,6 @@ impl ::std::fmt::Debug for GstEncodingVideoProfile {
     }
 }
 
-#[link(name = "gstpbutils-1.0")]
 extern "C" {
 
     //=========================================================================

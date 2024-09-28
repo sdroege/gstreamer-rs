@@ -220,8 +220,8 @@ pub trait WebRTCICEExt: IsA<WebRTCICE> + sealed::Sealed + 'static {
         let func_data: Box_<P> = Box_::new(func);
         unsafe extern "C" fn func_func<P: Fn(&WebRTCICE, u32, &str) + Send + Sync + 'static>(
             ice: *mut ffi::GstWebRTCICE,
-            stream_id: libc::c_uint,
-            candidate: *const libc::c_char,
+            stream_id: std::ffi::c_uint,
+            candidate: *const std::ffi::c_char,
             user_data: glib::ffi::gpointer,
         ) {
             let ice = from_glib_borrow(ice);
@@ -333,7 +333,7 @@ pub trait WebRTCICEExt: IsA<WebRTCICE> + sealed::Sealed + 'static {
             F: Fn(&P, &str) -> bool + Send + Sync + 'static,
         >(
             this: *mut ffi::GstWebRTCICE,
-            address: *mut libc::c_char,
+            address: *mut std::ffi::c_char,
             f: glib::ffi::gpointer,
         ) -> glib::ffi::gboolean {
             let f: &F = &*(f as *const F);

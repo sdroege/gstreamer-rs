@@ -272,8 +272,8 @@ pub trait RTPBaseDepayloadExt: IsA<RTPBaseDepayload> + sealed::Sealed + 'static 
             F: Fn(&P, u32, Option<&str>) -> Option<RTPHeaderExtension> + Send + Sync + 'static,
         >(
             this: *mut ffi::GstRTPBaseDepayload,
-            ext_id: libc::c_uint,
-            ext_uri: *mut libc::c_char,
+            ext_id: std::ffi::c_uint,
+            ext_uri: *mut std::ffi::c_char,
             f: glib::ffi::gpointer,
         ) -> *mut ffi::GstRTPHeaderExtension {
             let f: &F = &*(f as *const F);

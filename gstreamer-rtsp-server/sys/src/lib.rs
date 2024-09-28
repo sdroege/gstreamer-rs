@@ -20,14 +20,15 @@ use gstreamer_rtsp_sys as gst_rtsp;
 use gstreamer_sdp_sys as gst_sdp;
 use gstreamer_sys as gst;
 
-#[allow(unused_imports)]
-use libc::{
-    c_char, c_double, c_float, c_int, c_long, c_short, c_uchar, c_uint, c_ulong, c_ushort, c_void,
-    intptr_t, off_t, size_t, ssize_t, time_t, uintptr_t, FILE,
-};
 #[cfg(unix)]
 #[allow(unused_imports)]
 use libc::{dev_t, gid_t, pid_t, socklen_t, uid_t};
+#[allow(unused_imports)]
+use libc::{intptr_t, off_t, size_t, ssize_t, time_t, uintptr_t, FILE};
+#[allow(unused_imports)]
+use std::ffi::{
+    c_char, c_double, c_float, c_int, c_long, c_short, c_uchar, c_uint, c_ulong, c_ushort, c_void,
+};
 
 #[allow(unused_imports)]
 use glib::{gboolean, gconstpointer, gpointer, GType};
@@ -193,6 +194,7 @@ impl ::std::fmt::Debug for GstRTSPAddressPoolClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstRTSPAddressPoolPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -238,6 +240,7 @@ impl ::std::fmt::Debug for GstRTSPAuthClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstRTSPAuthPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -455,6 +458,7 @@ impl ::std::fmt::Debug for GstRTSPClientClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstRTSPClientPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -616,6 +620,7 @@ impl ::std::fmt::Debug for GstRTSPMediaFactoryClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstRTSPMediaFactoryPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -639,6 +644,7 @@ impl ::std::fmt::Debug for GstRTSPMediaFactoryURIClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstRTSPMediaFactoryURIPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -647,6 +653,7 @@ pub struct _GstRTSPMediaFactoryURIPrivate {
 pub type GstRTSPMediaFactoryURIPrivate = _GstRTSPMediaFactoryURIPrivate;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstRTSPMediaPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -674,6 +681,7 @@ impl ::std::fmt::Debug for GstRTSPMountPointsClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstRTSPMountPointsPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -730,6 +738,7 @@ impl ::std::fmt::Debug for GstRTSPOnvifMediaFactoryClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstRTSPOnvifMediaFactoryPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -738,6 +747,7 @@ pub struct _GstRTSPOnvifMediaFactoryPrivate {
 pub type GstRTSPOnvifMediaFactoryPrivate = _GstRTSPOnvifMediaFactoryPrivate;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstRTSPOnvifMediaPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -794,6 +804,7 @@ impl ::std::fmt::Debug for GstRTSPServerClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstRTSPServerPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -832,6 +843,7 @@ impl ::std::fmt::Debug for GstRTSPSessionMediaClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstRTSPSessionMediaPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -862,6 +874,7 @@ impl ::std::fmt::Debug for GstRTSPSessionPoolClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstRTSPSessionPoolPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -870,6 +883,7 @@ pub struct _GstRTSPSessionPoolPrivate {
 pub type GstRTSPSessionPoolPrivate = _GstRTSPSessionPoolPrivate;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstRTSPSessionPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -893,6 +907,7 @@ impl ::std::fmt::Debug for GstRTSPStreamClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstRTSPStreamPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -916,6 +931,7 @@ impl ::std::fmt::Debug for GstRTSPStreamTransportClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstRTSPStreamTransportPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -977,6 +993,7 @@ impl ::std::fmt::Debug for GstRTSPThreadPoolClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstRTSPThreadPoolPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1303,7 +1320,6 @@ impl ::std::fmt::Debug for GstRTSPThreadPool {
     }
 }
 
-#[link(name = "gstrtspserver-1.0")]
 extern "C" {
 
     //=========================================================================

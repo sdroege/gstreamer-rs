@@ -18,14 +18,15 @@ use gobject_sys as gobject;
 use gstreamer_pbutils_sys as gst_pbutils;
 use gstreamer_sys as gst;
 
-#[allow(unused_imports)]
-use libc::{
-    c_char, c_double, c_float, c_int, c_long, c_short, c_uchar, c_uint, c_ulong, c_ushort, c_void,
-    intptr_t, off_t, size_t, ssize_t, time_t, uintptr_t, FILE,
-};
 #[cfg(unix)]
 #[allow(unused_imports)]
 use libc::{dev_t, gid_t, pid_t, socklen_t, uid_t};
+#[allow(unused_imports)]
+use libc::{intptr_t, off_t, size_t, ssize_t, time_t, uintptr_t, FILE};
+#[allow(unused_imports)]
+use std::ffi::{
+    c_char, c_double, c_float, c_int, c_long, c_short, c_uchar, c_uint, c_ulong, c_ushort, c_void,
+};
 
 #[allow(unused_imports)]
 use glib::{gboolean, gconstpointer, gpointer, GType};
@@ -348,6 +349,7 @@ impl ::std::fmt::Debug for GESAssetClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESAssetPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -372,6 +374,7 @@ impl ::std::fmt::Debug for GESAudioSourceClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESAudioSourcePrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -394,6 +397,7 @@ impl ::std::fmt::Debug for GESAudioTestSourceClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESAudioTestSourcePrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -418,6 +422,7 @@ impl ::std::fmt::Debug for GESAudioTrackClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESAudioTrackPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -442,6 +447,7 @@ impl ::std::fmt::Debug for GESAudioTransitionClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESAudioTransitionPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -464,6 +470,7 @@ impl ::std::fmt::Debug for GESAudioUriSourceClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESAudioUriSourcePrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -500,6 +507,7 @@ impl ::std::fmt::Debug for GESBaseEffectClipClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESBaseEffectClipPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -508,6 +516,7 @@ pub struct _GESBaseEffectClipPrivate {
 pub type GESBaseEffectClipPrivate = _GESBaseEffectClipPrivate;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESBaseEffectPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -530,6 +539,7 @@ impl ::std::fmt::Debug for GESBaseTransitionClipClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESBaseTransitionClipPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -564,6 +574,7 @@ impl ::std::fmt::Debug for GESBaseXmlFormatterClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESBaseXmlFormatterPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -591,6 +602,7 @@ impl ::std::fmt::Debug for GESClipAssetClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESClipAssetPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -632,6 +644,7 @@ impl ::std::fmt::Debug for GESClipClass_ABI_abi {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESClipPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -654,6 +667,7 @@ impl ::std::fmt::Debug for GESCommandLineFormatterClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESCommandLineFormatterPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -702,6 +716,7 @@ impl ::std::fmt::Debug for GESContainerClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESContainerPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -724,6 +739,7 @@ impl ::std::fmt::Debug for GESDiscovererManagerClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESDiscovererManagerPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -748,6 +764,7 @@ impl ::std::fmt::Debug for GESEffectAssetClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESEffectAssetPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -785,6 +802,7 @@ impl ::std::fmt::Debug for GESEffectClipClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESEffectClipPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -793,6 +811,7 @@ pub struct _GESEffectClipPrivate {
 pub type GESEffectClipPrivate = _GESEffectClipPrivate;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESEffectPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -870,6 +889,7 @@ impl ::std::fmt::Debug for GESFormatterClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESFormatterPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -922,6 +942,7 @@ impl ::std::fmt::Debug for GESGroupClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESGroupPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -946,6 +967,7 @@ impl ::std::fmt::Debug for GESImageSourceClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESImageSourcePrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -974,6 +996,7 @@ impl ::std::fmt::Debug for GESLayerClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESLayerPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1042,6 +1065,7 @@ impl ::std::fmt::Debug for GESMultiFileSourceClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESMultiFileSourcePrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1078,6 +1102,7 @@ impl ::std::fmt::Debug for GESOperationClipClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESOperationClipPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1086,6 +1111,7 @@ pub struct _GESOperationClipPrivate {
 pub type GESOperationClipPrivate = _GESOperationClipPrivate;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESOperationPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1109,6 +1135,7 @@ impl ::std::fmt::Debug for GESOverlayClipClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESOverlayClipPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1131,6 +1158,7 @@ impl ::std::fmt::Debug for GESPipelineClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESPipelinePrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1139,6 +1167,7 @@ pub struct _GESPipelinePrivate {
 pub type GESPipelinePrivate = _GESPipelinePrivate;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESPitiviFormatterPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1181,6 +1210,7 @@ impl ::std::fmt::Debug for GESProjectClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESProjectPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1235,6 +1265,7 @@ impl ::std::fmt::Debug for GESSourceClipClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESSourceClipPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1243,6 +1274,7 @@ pub struct _GESSourceClipPrivate {
 pub type GESSourceClipPrivate = _GESSourceClipPrivate;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESSourcePrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1265,6 +1297,7 @@ impl ::std::fmt::Debug for GESTestClipClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESTestClipPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1302,6 +1335,7 @@ impl ::std::fmt::Debug for GESTextOverlayClipClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESTextOverlayClipPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1310,6 +1344,7 @@ pub struct _GESTextOverlayClipPrivate {
 pub type GESTextOverlayClipPrivate = _GESTextOverlayClipPrivate;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESTextOverlayPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1438,6 +1473,7 @@ impl ::std::fmt::Debug for GESTimelineElementClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESTimelineElementPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1446,6 +1482,7 @@ pub struct _GESTimelineElementPrivate {
 pub type GESTimelineElementPrivate = _GESTimelineElementPrivate;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESTimelinePrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1468,6 +1505,7 @@ impl ::std::fmt::Debug for GESTitleClipClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESTitleClipPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1491,6 +1529,7 @@ impl ::std::fmt::Debug for GESTitleSourceClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESTitleSourcePrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1534,6 +1573,7 @@ impl ::std::fmt::Debug for GESTrackElementAssetClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESTrackElementAssetPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1600,6 +1640,7 @@ impl ::std::fmt::Debug for GESTrackElementClass_ABI_abi {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESTrackElementPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1608,6 +1649,7 @@ pub struct _GESTrackElementPrivate {
 pub type GESTrackElementPrivate = _GESTrackElementPrivate;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESTrackPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1644,6 +1686,7 @@ impl ::std::fmt::Debug for GESTransitionClipClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESTransitionClipPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1652,6 +1695,7 @@ pub struct _GESTransitionClipPrivate {
 pub type GESTransitionClipPrivate = _GESTransitionClipPrivate;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESTransitionPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1686,6 +1730,7 @@ impl ::std::fmt::Debug for GESUriClipAssetClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESUriClipAssetPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1708,6 +1753,7 @@ impl ::std::fmt::Debug for GESUriClipClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESUriClipPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1716,6 +1762,7 @@ pub struct _GESUriClipPrivate {
 pub type GESUriClipPrivate = _GESUriClipPrivate;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESUriSource {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1740,6 +1787,7 @@ impl ::std::fmt::Debug for GESUriSourceAssetClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESUriSourceAssetPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1791,6 +1839,7 @@ impl ::std::fmt::Debug for GESVideoSourceClass_ABI_abi {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESVideoSourcePrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1815,6 +1864,7 @@ impl ::std::fmt::Debug for GESVideoTestSourceClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESVideoTestSourcePrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1839,6 +1889,7 @@ impl ::std::fmt::Debug for GESVideoTrackClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESVideoTrackPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1862,6 +1913,7 @@ impl ::std::fmt::Debug for GESVideoTransitionClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESVideoTransitionPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1884,6 +1936,7 @@ impl ::std::fmt::Debug for GESVideoUriSourceClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESVideoUriSourcePrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1908,6 +1961,7 @@ impl ::std::fmt::Debug for GESXmlFormatterClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GESXmlFormatterPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -2146,6 +2200,7 @@ impl ::std::fmt::Debug for GESContainer {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GESDiscovererManager {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -2280,6 +2335,7 @@ impl ::std::fmt::Debug for GESLayer {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GESMarker {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -2292,6 +2348,7 @@ impl ::std::fmt::Debug for GESMarker {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GESMarkerList {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -2802,6 +2859,7 @@ impl ::std::fmt::Debug for GESXmlFormatter {
 
 // Interfaces
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GESExtractable {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -2814,6 +2872,7 @@ impl ::std::fmt::Debug for GESExtractable {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GESMetaContainer {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -2825,7 +2884,6 @@ impl ::std::fmt::Debug for GESMetaContainer {
     }
 }
 
-#[link(name = "ges-1.0")]
 extern "C" {
 
     //=========================================================================

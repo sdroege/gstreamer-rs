@@ -128,7 +128,7 @@ pub trait ChildProxyExt: IsA<ChildProxy> + sealed::Sealed + 'static {
         >(
             this: *mut ffi::GstChildProxy,
             object: *mut glib::gobject_ffi::GObject,
-            name: *mut libc::c_char,
+            name: *mut std::ffi::c_char,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
@@ -162,7 +162,7 @@ pub trait ChildProxyExt: IsA<ChildProxy> + sealed::Sealed + 'static {
         >(
             this: *mut ffi::GstChildProxy,
             object: *mut glib::gobject_ffi::GObject,
-            name: *mut libc::c_char,
+            name: *mut std::ffi::c_char,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);

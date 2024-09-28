@@ -96,7 +96,7 @@ pub trait ColorBalanceExt: IsA<ColorBalance> + sealed::Sealed + 'static {
         >(
             this: *mut ffi::GstColorBalance,
             channel: *mut ffi::GstColorBalanceChannel,
-            value: libc::c_int,
+            value: std::ffi::c_int,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);

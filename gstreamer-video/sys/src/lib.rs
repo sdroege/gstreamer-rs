@@ -17,14 +17,15 @@ use gobject_sys as gobject;
 use gstreamer_base_sys as gst_base;
 use gstreamer_sys as gst;
 
-#[allow(unused_imports)]
-use libc::{
-    c_char, c_double, c_float, c_int, c_long, c_short, c_uchar, c_uint, c_ulong, c_ushort, c_void,
-    intptr_t, off_t, size_t, ssize_t, time_t, uintptr_t, FILE,
-};
 #[cfg(unix)]
 #[allow(unused_imports)]
 use libc::{dev_t, gid_t, pid_t, socklen_t, uid_t};
+#[allow(unused_imports)]
+use libc::{intptr_t, off_t, size_t, ssize_t, time_t, uintptr_t, FILE};
+#[allow(unused_imports)]
+use std::ffi::{
+    c_char, c_double, c_float, c_int, c_long, c_short, c_uchar, c_uint, c_ulong, c_ushort, c_void,
+};
 
 #[allow(unused_imports)]
 use glib::{gboolean, gconstpointer, gpointer, GType};
@@ -1019,6 +1020,7 @@ impl ::std::fmt::Debug for GstVideoAggregatorConvertPadClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstVideoAggregatorConvertPadPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1079,6 +1081,7 @@ impl ::std::fmt::Debug for GstVideoAggregatorPadClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstVideoAggregatorPadPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1104,6 +1107,7 @@ impl ::std::fmt::Debug for GstVideoAggregatorParallelConvertPadClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstVideoAggregatorPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1190,6 +1194,7 @@ impl ::std::fmt::Debug for GstVideoBufferPoolClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstVideoBufferPoolPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1218,6 +1223,7 @@ impl ::std::fmt::Debug for GstVideoCaptionMeta {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstVideoChromaResample {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1391,6 +1397,7 @@ impl ::std::fmt::Debug for GstVideoContentLightLevel {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstVideoConverter {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1506,6 +1513,7 @@ impl ::std::fmt::Debug for GstVideoDecoderClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstVideoDecoderPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1528,6 +1536,7 @@ impl ::std::fmt::Debug for GstVideoDirectionInterface {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstVideoDither {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1606,6 +1615,7 @@ impl ::std::fmt::Debug for GstVideoEncoderClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstVideoEncoderPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1978,6 +1988,7 @@ impl ::std::fmt::Debug for GstVideoOrientationInterface {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstVideoOverlayComposition {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -2030,6 +2041,7 @@ impl ::std::fmt::Debug for GstVideoOverlayInterface {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstVideoOverlayRectangle {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -2142,6 +2154,7 @@ impl ::std::fmt::Debug for GstVideoSEIUserDataUnregisteredMeta {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstVideoScaler {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -2172,6 +2185,7 @@ impl ::std::fmt::Debug for GstVideoSinkClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstVideoSinkPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -2281,6 +2295,7 @@ impl ::std::fmt::Debug for GstVideoTimeCodeMeta {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstVideoVBIEncoder {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -2294,6 +2309,7 @@ impl ::std::fmt::Debug for GstVideoVBIEncoder {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstVideoVBIParser {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -2471,6 +2487,7 @@ impl ::std::fmt::Debug for GstVideoFilter {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstVideoMultiviewFlagsSet {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -2505,6 +2522,7 @@ impl ::std::fmt::Debug for GstVideoSink {
 
 // Interfaces
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstColorBalance {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -2517,6 +2535,7 @@ impl ::std::fmt::Debug for GstColorBalance {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstNavigation {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -2529,6 +2548,7 @@ impl ::std::fmt::Debug for GstNavigation {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstVideoDirection {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -2541,6 +2561,7 @@ impl ::std::fmt::Debug for GstVideoDirection {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstVideoOrientation {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -2553,6 +2574,7 @@ impl ::std::fmt::Debug for GstVideoOrientation {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstVideoOverlay {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -2564,7 +2586,6 @@ impl ::std::fmt::Debug for GstVideoOverlay {
     }
 }
 
-#[link(name = "gstvideo-1.0")]
 extern "C" {
 
     //=========================================================================

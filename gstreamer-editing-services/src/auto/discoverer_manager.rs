@@ -135,7 +135,7 @@ impl DiscovererManager {
             F: Fn(&DiscovererManager, &str) -> Option<gst_pbutils::DiscovererInfo> + 'static,
         >(
             this: *mut ffi::GESDiscovererManager,
-            uri: *mut libc::c_char,
+            uri: *mut std::ffi::c_char,
             f: glib::ffi::gpointer,
         ) -> *mut gst_pbutils::ffi::GstDiscovererInfo {
             let f: &F = &*(f as *const F);

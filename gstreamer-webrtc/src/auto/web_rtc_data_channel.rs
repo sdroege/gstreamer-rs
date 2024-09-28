@@ -287,7 +287,7 @@ impl WebRTCDataChannel {
             F: Fn(&WebRTCDataChannel, Option<&str>) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstWebRTCDataChannel,
-            data: *mut libc::c_char,
+            data: *mut std::ffi::c_char,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
@@ -382,7 +382,7 @@ impl WebRTCDataChannel {
             F: Fn(&WebRTCDataChannel, Option<&str>) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstWebRTCDataChannel,
-            data: *mut libc::c_char,
+            data: *mut std::ffi::c_char,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);

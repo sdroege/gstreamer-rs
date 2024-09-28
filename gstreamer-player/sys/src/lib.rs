@@ -17,14 +17,15 @@ use gobject_sys as gobject;
 use gstreamer_sys as gst;
 use gstreamer_video_sys as gst_video;
 
-#[allow(unused_imports)]
-use libc::{
-    c_char, c_double, c_float, c_int, c_long, c_short, c_uchar, c_uint, c_ulong, c_ushort, c_void,
-    intptr_t, off_t, size_t, ssize_t, time_t, uintptr_t, FILE,
-};
 #[cfg(unix)]
 #[allow(unused_imports)]
 use libc::{dev_t, gid_t, pid_t, socklen_t, uid_t};
+#[allow(unused_imports)]
+use libc::{intptr_t, off_t, size_t, ssize_t, time_t, uintptr_t, FILE};
+#[allow(unused_imports)]
+use std::ffi::{
+    c_char, c_double, c_float, c_int, c_long, c_short, c_uchar, c_uint, c_ulong, c_ushort, c_void,
+};
 
 #[allow(unused_imports)]
 use glib::{gboolean, gconstpointer, gpointer, GType};
@@ -57,6 +58,7 @@ pub type GstPlayerSignalDispatcherFunc = Option<unsafe extern "C" fn(gpointer)>;
 
 // Records
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstPlayerAudioInfoClass {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -65,6 +67,7 @@ pub struct _GstPlayerAudioInfoClass {
 pub type GstPlayerAudioInfoClass = _GstPlayerAudioInfoClass;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstPlayerClass {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -73,6 +76,7 @@ pub struct _GstPlayerClass {
 pub type GstPlayerClass = _GstPlayerClass;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstPlayerGMainContextSignalDispatcherClass {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -81,6 +85,7 @@ pub struct _GstPlayerGMainContextSignalDispatcherClass {
 pub type GstPlayerGMainContextSignalDispatcherClass = _GstPlayerGMainContextSignalDispatcherClass;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstPlayerMediaInfoClass {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -113,6 +118,7 @@ impl ::std::fmt::Debug for GstPlayerSignalDispatcherInterface {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstPlayerStreamInfoClass {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -121,6 +127,7 @@ pub struct _GstPlayerStreamInfoClass {
 pub type GstPlayerStreamInfoClass = _GstPlayerStreamInfoClass;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstPlayerSubtitleInfoClass {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -129,6 +136,7 @@ pub struct _GstPlayerSubtitleInfoClass {
 pub type GstPlayerSubtitleInfoClass = _GstPlayerSubtitleInfoClass;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstPlayerVideoInfoClass {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -137,6 +145,7 @@ pub struct _GstPlayerVideoInfoClass {
 pub type GstPlayerVideoInfoClass = _GstPlayerVideoInfoClass;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstPlayerVideoOverlayVideoRendererClass {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -180,6 +189,7 @@ impl ::std::fmt::Debug for GstPlayerVisualization {
 
 // Classes
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstPlayer {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -192,6 +202,7 @@ impl ::std::fmt::Debug for GstPlayer {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstPlayerAudioInfo {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -205,6 +216,7 @@ impl ::std::fmt::Debug for GstPlayerAudioInfo {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstPlayerGMainContextSignalDispatcher {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -218,6 +230,7 @@ impl ::std::fmt::Debug for GstPlayerGMainContextSignalDispatcher {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstPlayerMediaInfo {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -231,6 +244,7 @@ impl ::std::fmt::Debug for GstPlayerMediaInfo {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstPlayerStreamInfo {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -244,6 +258,7 @@ impl ::std::fmt::Debug for GstPlayerStreamInfo {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstPlayerSubtitleInfo {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -257,6 +272,7 @@ impl ::std::fmt::Debug for GstPlayerSubtitleInfo {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstPlayerVideoInfo {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -270,6 +286,7 @@ impl ::std::fmt::Debug for GstPlayerVideoInfo {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstPlayerVideoOverlayVideoRenderer {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -284,6 +301,7 @@ impl ::std::fmt::Debug for GstPlayerVideoOverlayVideoRenderer {
 
 // Interfaces
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstPlayerSignalDispatcher {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -296,6 +314,7 @@ impl ::std::fmt::Debug for GstPlayerSignalDispatcher {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstPlayerVideoRenderer {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -307,7 +326,6 @@ impl ::std::fmt::Debug for GstPlayerVideoRenderer {
     }
 }
 
-#[link(name = "gstplayer-1.0")]
 extern "C" {
 
     //=========================================================================

@@ -889,7 +889,7 @@ pub trait RTSPMediaExt: IsA<RTSPMedia> + sealed::Sealed + 'static {
             F: Fn(&P, i32) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstRTSPMedia,
-            object: libc::c_int,
+            object: std::ffi::c_int,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
@@ -1007,7 +1007,7 @@ pub trait RTSPMediaExt: IsA<RTSPMedia> + sealed::Sealed + 'static {
             F: Fn(&P, i32) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstRTSPMedia,
-            object: libc::c_int,
+            object: std::ffi::c_int,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
