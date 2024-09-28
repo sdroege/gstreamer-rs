@@ -5,6 +5,25 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.23.2] - 2024-09-28
+### Fixed
+- Lifetime of `gst::TagList::index()` return value is correctly bound to `&self` now.
+- Don't assume `gst::Structure` name / field names have `'static` lifetime.
+- Set pad probe data to `NULL` if `HANDLED` is returned and the item is an
+  event, buffer or buffer list.
+- Don't unnecessarily add `#[link]` attribute to the `extern "C"` sections to
+  allow linking against gstreamer-full and make static linking easier.
+
+### Changed
+- Add `#[must_use]` to `gst_video::VideoTimeCode::add_interval()`.
+
+### Added
+- Add API to take events/buffers from a `gst::PadProbeInfo`.
+- Add `gst::EventViewMut` and `gst::Event::view_mut()`, and a few setters for
+  event fields.
+- Add `gst::MessageViewMut` and `gst::Message::view_mut()`, and a few setters
+  for message fields.
+
 ## [0.23.1] - 2024-08-27
 ### Fixed
 - Support `gst_utils::StreamProducer` API on platforms without 64 bit atomics.
@@ -1771,7 +1790,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.23.1...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.23.2...HEAD
+[0.23.2]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.23.1...0.23.2
 [0.23.1]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.23.0...0.23.1
 [0.23.0]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.22.6...0.23.0
 [0.22.6]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.22.5...0.22.6
