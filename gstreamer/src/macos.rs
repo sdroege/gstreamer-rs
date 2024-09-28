@@ -2,7 +2,6 @@
 
 type GstMainFuncSimple = Option<unsafe extern "C" fn(glib::ffi::gpointer)>;
 
-#[link(name = "gstreamer-1.0")]
 extern "C" {
     #[cfg(feature = "v1_22")]
     fn gst_macos_main_simple(func: GstMainFuncSimple, user_data: glib::ffi::gpointer);
