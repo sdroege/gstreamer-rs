@@ -82,6 +82,10 @@ pub use crate::value::{
 #[macro_use]
 mod value_serde;
 
+#[macro_use]
+mod id_str;
+pub use crate::id_str::IdStr;
+
 #[cfg(feature = "serde")]
 mod flag_serde;
 

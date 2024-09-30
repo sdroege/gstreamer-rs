@@ -23,6 +23,7 @@ num-rational = { version = "0.4", default-features = false, features = [] }
 futures-core = "0.3"
 futures-channel = "0.3"
 futures-util = { version = "0.3", default-features = false }
+kstring = "2.0"
 log = { version = "0.4", optional = true }
 muldiv = "1"
 opt-ops = { package = "option-operations", version = "0.5" }
