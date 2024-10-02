@@ -42,6 +42,17 @@
     "--all-features"
 )
 
+if ($env:FDO_CI_CONCURRENT)
+{
+    $ncpus = $env:FDO_CI_CONCURRENT
+}
+else
+{
+    $ncpus = (Get-WmiObject -Class Win32_ComputerSystem).NumberOfLogicalProcessors
+}
+Write-Host "Build Jobs: $ncpus"
+$cargo_opts = @("--color=always", "--jobs=$ncpus")
+
 function Move-Junit {
     param (
         $Features
@@ -100,7 +111,7 @@ foreach($features in $features_matrix) {
         }
 
         Write-Host "with features: $env:LocalFeatures"
-        cargo build --color=always --manifest-path $crate/Cargo.toml --all-targets $env:LocalFeatures
+        cargo build $cargo_opts --manifest-path $crate/Cargo.toml --all-targets $env:LocalFeatures
 
         if (!$?) {
             Write-Host "Failed to build crate: $crate"
@@ -114,7 +125,7 @@ foreach($features in $features_matrix) {
 
         $env:G_DEBUG="fatal_warnings"
         $env:RUST_BACKTRACE="1"
-        cargo nextest run --profile=ci --no-fail-fast --color=always --manifest-path $crate/Cargo.toml $env:LocalFeatures
+        cargo nextest run --profile=ci --no-fail-fast $cargo_opts --manifest-path $crate/Cargo.toml $env:LocalFeatures
         if (!$?) {
             Write-Host "Tests failed to for crate: $crate"
             Exit 1
