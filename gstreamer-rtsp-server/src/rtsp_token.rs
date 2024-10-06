@@ -4,6 +4,7 @@ use std::fmt;
 
 use crate::ffi;
 use glib::{translate::*, SendValue};
+use gst::IdStr;
 
 gst::mini_object_wrapper!(RTSPToken, RTSPTokenRef, ffi::GstRTSPToken, || {
     ffi::gst_rtsp_token_get_type()
@@ -105,6 +106,32 @@ impl Builder {
             .unwrap()
             .structure_mut()
             .set(name, value);
+        self
+    }
+
+    pub fn field_with_static(
+        mut self,
+        name: impl AsRef<glib::GStr> + 'static,
+        value: impl Into<glib::Value> + Send,
+    ) -> Self {
+        self.token
+            .get_mut()
+            .unwrap()
+            .structure_mut()
+            .set_with_static(name, value);
+        self
+    }
+
+    pub fn field_with_id(
+        mut self,
+        name: impl AsRef<IdStr>,
+        value: impl Into<glib::Value> + Send,
+    ) -> Self {
+        self.token
+            .get_mut()
+            .unwrap()
+            .structure_mut()
+            .set_with_id(name, value);
         self
     }
 

@@ -1,7 +1,7 @@
 use std::ops::{Bound::*, RangeBounds};
 
 use glib::translate::*;
-use gst::Caps;
+use gst::{Caps, IdStr};
 
 use crate::VideoFormat;
 
@@ -527,6 +527,36 @@ impl<T> VideoCapsBuilder<T> {
     pub fn field(self, name: impl IntoGStr, value: impl Into<glib::Value> + Send) -> Self {
         Self {
             builder: self.builder.field(name, value),
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` to the given value `value`.
+    ///
+    /// Overrides any default or previously defined value for `name`.
+    #[inline]
+    pub fn field_with_static(
+        self,
+        name: impl AsRef<glib::GStr> + 'static,
+        value: impl Into<glib::Value> + Send,
+    ) -> Self {
+        Self {
+            builder: self.builder.field_with_static(name, value),
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` to the given value `value`.
+    ///
+    /// Overrides any default or previously defined value for `name`.
+    #[inline]
+    pub fn field_with_id(
+        self,
+        name: impl AsRef<IdStr>,
+        value: impl Into<glib::Value> + Send,
+    ) -> Self {
+        Self {
+            builder: self.builder.field_with_id(name, value),
         }
     }
 

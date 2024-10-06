@@ -9,36 +9,44 @@ use std::{
     ptr, str,
 };
 
+use cfg_if::cfg_if;
 use glib::{
     prelude::*,
     translate::*,
     value::{FromValue, SendValue, Value},
-    IntoGStr,
+    GStr, IntoGStr,
 };
 
-use crate::{ffi, Fraction};
+use crate::{ffi, Fraction, IdStr};
 
 #[derive(Clone, Debug, Eq, PartialEq, thiserror::Error)]
 pub enum GetError<E: std::error::Error> {
     #[error("GetError: Structure field with name {name} not found")]
-    FieldNotFound { name: &'static str },
+    FieldNotFound { name: IdStr },
     #[error("GetError: Structure field with name {name} not retrieved")]
     ValueGetError {
-        name: &'static str,
+        name: IdStr,
         #[source]
         error: E,
     },
 }
 
 impl<E: std::error::Error> GetError<E> {
-    fn new_field_not_found(name: &'static str) -> Self {
+    #[inline]
+    fn new_field_not_found(name: impl AsRef<IdStr>) -> Self {
         skip_assert_initialized!();
-        GetError::FieldNotFound { name }
+        GetError::FieldNotFound {
+            name: name.as_ref().clone(),
+        }
     }
 
-    fn from_value_get_error(name: &'static str, error: E) -> Self {
+    #[inline]
+    fn from_value_get_error(name: impl AsRef<IdStr>, error: E) -> Self {
         skip_assert_initialized!();
-        GetError::ValueGetError { name, error }
+        GetError::ValueGetError {
+            name: name.as_ref().clone(),
+            error,
+        }
     }
 }
 
@@ -55,11 +63,57 @@ impl Structure {
         Builder::new(name)
     }
 
+    #[doc(alias = "gst_structure_new_static_str_empty")]
+    pub fn builder_static(name: impl AsRef<GStr> + 'static) -> Builder {
+        skip_assert_initialized!();
+        Builder::from_static(name)
+    }
+
+    #[doc(alias = "gst_structure_new_id_str")]
+    pub fn builder_from_id(name: impl AsRef<IdStr>) -> Builder {
+        skip_assert_initialized!();
+        Builder::from_id(name)
+    }
+
     #[doc(alias = "gst_structure_new_empty")]
     pub fn new_empty(name: impl IntoGStr) -> Structure {
         assert_initialized_main_thread!();
         unsafe {
             let ptr = name.run_with_gstr(|name| ffi::gst_structure_new_empty(name.as_ptr()));
+            debug_assert!(!ptr.is_null());
+            Structure(ptr::NonNull::new_unchecked(ptr))
+        }
+    }
+
+    #[doc(alias = "gst_structure_new_static_str_empty")]
+    pub fn new_empty_from_static(name: impl AsRef<GStr> + 'static) -> Structure {
+        assert_initialized_main_thread!();
+        unsafe {
+            cfg_if! {
+                if #[cfg(feature = "v1_26")] {
+                    let ptr =
+                        ffi::gst_structure_new_static_str_empty(name.as_ref().as_ptr());
+                } else {
+                    let ptr = ffi::gst_structure_new_empty(name.as_ref().as_ptr());
+                }
+            }
+            debug_assert!(!ptr.is_null());
+            Structure(ptr::NonNull::new_unchecked(ptr))
+        }
+    }
+
+    #[doc(alias = "gst_structure_new_id_str_empty")]
+    pub fn new_empty_from_id(name: impl AsRef<IdStr>) -> Structure {
+        assert_initialized_main_thread!();
+        unsafe {
+            cfg_if! {
+                if #[cfg(feature = "v1_26")] {
+                    let ptr = ffi::gst_structure_new_id_str_empty(name.as_ref().as_ptr());
+                } else {
+                    let ptr = ffi::gst_structure_new_empty(name.as_ref().as_gstr().as_ptr());
+                }
+            }
+
             debug_assert!(!ptr.is_null());
             Structure(ptr::NonNull::new_unchecked(ptr))
         }
@@ -75,6 +129,34 @@ impl Structure {
 
         iter.into_iter()
             .for_each(|(f, v)| structure.set_value(f, v));
+
+        structure
+    }
+
+    #[allow(clippy::should_implement_trait)]
+    pub fn from_iter_with_static(
+        name: impl AsRef<GStr> + 'static,
+        iter: impl IntoIterator<Item = (impl AsRef<GStr> + 'static, SendValue)>,
+    ) -> Structure {
+        skip_assert_initialized!();
+        let mut structure = Structure::new_empty_from_static(name);
+
+        iter.into_iter()
+            .for_each(|(f, v)| structure.set_value_with_static(f, v));
+
+        structure
+    }
+
+    #[allow(clippy::should_implement_trait)]
+    pub fn from_iter_with_id(
+        name: impl AsRef<IdStr>,
+        iter: impl IntoIterator<Item = (impl AsRef<IdStr>, SendValue)>,
+    ) -> Structure {
+        skip_assert_initialized!();
+        let mut structure = Structure::new_empty_from_id(name);
+
+        iter.into_iter()
+            .for_each(|(f, v)| structure.set_value_with_id(f, v));
 
         structure
     }
@@ -421,8 +503,31 @@ impl StructureRef {
         name: impl IntoGStr,
     ) -> Result<T, GetError<<<T as FromValue<'a>>::Checker as glib::value::ValueTypeChecker>::Error>>
     {
-        let name = glib::Quark::from_str(name);
-        self.get_by_quark(name)
+        name.run_with_gstr(|name| {
+            self.value(name)
+                .map_err(|err| match err {
+                    GetError::FieldNotFound { name } => GetError::FieldNotFound { name },
+                    _ => unreachable!(),
+                })?
+                .get()
+                .map_err(|err| GetError::from_value_get_error(IdStr::from(name), err))
+        })
+    }
+
+    #[doc(alias = "gst_structure_id_str_get")]
+    #[inline]
+    pub fn get_by_id<'a, T: FromValue<'a>>(
+        &'a self,
+        name: impl AsRef<IdStr>,
+    ) -> Result<T, GetError<<<T as FromValue<'a>>::Checker as glib::value::ValueTypeChecker>::Error>>
+    {
+        self.value_by_id(name.as_ref())
+            .map_err(|err| match err {
+                GetError::FieldNotFound { name } => GetError::FieldNotFound { name },
+                _ => unreachable!(),
+            })?
+            .get()
+            .map_err(|err| GetError::from_value_get_error(name, err))
     }
 
     #[doc(alias = "gst_structure_get")]
@@ -433,8 +538,28 @@ impl StructureRef {
         Option<T>,
         GetError<<<T as FromValue<'a>>::Checker as glib::value::ValueTypeChecker>::Error>,
     > {
-        let name = glib::Quark::from_str(name);
-        self.get_optional_by_quark(name)
+        name.run_with_gstr(|name| {
+            self.value(name)
+                .ok()
+                .map(|v| v.get())
+                .transpose()
+                .map_err(|err| GetError::from_value_get_error(IdStr::from(name), err))
+        })
+    }
+
+    #[doc(alias = "gst_structure_id_str_get")]
+    pub fn get_optional_by_id<'a, T: FromValue<'a>>(
+        &'a self,
+        name: impl AsRef<IdStr>,
+    ) -> Result<
+        Option<T>,
+        GetError<<<T as FromValue<'a>>::Checker as glib::value::ValueTypeChecker>::Error>,
+    > {
+        self.value_by_id(name.as_ref())
+            .ok()
+            .map(|v| v.get())
+            .transpose()
+            .map_err(|err| GetError::from_value_get_error(name, err))
     }
 
     #[doc(alias = "get_value")]
@@ -443,10 +568,43 @@ impl StructureRef {
         &self,
         name: impl IntoGStr,
     ) -> Result<&SendValue, GetError<std::convert::Infallible>> {
-        let name = glib::Quark::from_str(name);
-        self.value_by_quark(name)
+        unsafe {
+            name.run_with_gstr(|name| {
+                let value = ffi::gst_structure_get_value(&self.0, name.as_ptr());
+
+                if value.is_null() {
+                    return Err(GetError::new_field_not_found(IdStr::from(name)));
+                }
+
+                Ok(&*(value as *const SendValue))
+            })
+        }
     }
 
+    #[doc(alias = "gst_structure_id_str_get_value")]
+    pub fn value_by_id(
+        &self,
+        name: impl AsRef<IdStr>,
+    ) -> Result<&SendValue, GetError<std::convert::Infallible>> {
+        unsafe {
+            cfg_if! {
+                if #[cfg(feature = "v1_26")] {
+                    let value = ffi::gst_structure_id_str_get_value(&self.0, name.as_ref().as_ptr());
+                } else {
+                    let value = ffi::gst_structure_get_value(&self.0, name.as_ref().as_gstr().as_ptr());
+                }
+            }
+
+            if value.is_null() {
+                return Err(GetError::new_field_not_found(name));
+            }
+
+            Ok(&*(value as *const SendValue))
+        }
+    }
+
+    #[deprecated = "use `get_by_id()` instead"]
+    #[allow(deprecated)]
     #[doc(alias = "gst_structure_id_get")]
     pub fn get_by_quark<'a, T: FromValue<'a>>(
         &'a self,
@@ -459,9 +617,11 @@ impl StructureRef {
                 _ => unreachable!(),
             })?
             .get()
-            .map_err(|err| GetError::from_value_get_error(name.as_str(), err))
+            .map_err(|err| GetError::from_value_get_error(IdStr::from(name.as_str()), err))
     }
 
+    #[deprecated = "use `get_optional_by_id()` instead"]
+    #[allow(deprecated)]
     #[doc(alias = "gst_structure_id_get")]
     pub fn get_optional_by_quark<'a, T: FromValue<'a>>(
         &'a self,
@@ -474,9 +634,10 @@ impl StructureRef {
             .ok()
             .map(|v| v.get())
             .transpose()
-            .map_err(|err| GetError::from_value_get_error(name.as_str(), err))
+            .map_err(|err| GetError::from_value_get_error(IdStr::from(name.as_str()), err))
     }
 
+    #[deprecated = "use `value_by_id()` instead"]
     #[doc(alias = "gst_structure_id_get_value")]
     pub fn value_by_quark(
         &self,
@@ -486,7 +647,7 @@ impl StructureRef {
             let value = ffi::gst_structure_id_get_value(&self.0, name.into_glib());
 
             if value.is_null() {
-                return Err(GetError::new_field_not_found(name.as_str()));
+                return Err(GetError::new_field_not_found(IdStr::from(name.as_str())));
             }
 
             Ok(&*(value as *const SendValue))
@@ -501,6 +662,30 @@ impl StructureRef {
     pub fn set(&mut self, name: impl IntoGStr, value: impl Into<glib::Value> + Send) {
         let value = glib::SendValue::from_owned(value);
         self.set_value(name, value);
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` to the given value `value`.
+    ///
+    /// Overrides any default or previously defined value for `name`.
+    #[doc(alias = "gst_structure_set_static_str")]
+    pub fn set_with_static(
+        &mut self,
+        name: impl AsRef<GStr> + 'static,
+        value: impl Into<glib::Value> + Send,
+    ) {
+        let value = glib::SendValue::from_owned(value);
+        self.set_value_with_static(name, value);
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` to the given value `value`.
+    ///
+    /// Overrides any default or previously defined value for `name`.
+    #[doc(alias = "gst_structure_id_str_set")]
+    pub fn set_with_id(&mut self, name: impl AsRef<IdStr>, value: impl Into<glib::Value> + Send) {
+        let value = glib::SendValue::from_owned(value);
+        self.set_value_with_id(name, value);
     }
 
     // rustdoc-stripper-ignore-next
@@ -521,6 +706,40 @@ impl StructureRef {
     }
 
     // rustdoc-stripper-ignore-next
+    /// Sets field `name` to the given `value` if the `predicate` evaluates to `true`.
+    ///
+    /// This has no effect if the `predicate` evaluates to `false`,
+    /// i.e. default or previous value for `name` is kept.
+    #[doc(alias = "gst_structure_set_static_str")]
+    pub fn set_with_static_if(
+        &mut self,
+        name: impl AsRef<GStr> + 'static,
+        value: impl Into<glib::Value> + Send,
+        predicate: bool,
+    ) {
+        if predicate {
+            self.set_with_static(name, value);
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` to the given `value` if the `predicate` evaluates to `true`.
+    ///
+    /// This has no effect if the `predicate` evaluates to `false`,
+    /// i.e. default or previous value for `name` is kept.
+    #[doc(alias = "gst_structure_id_str_set")]
+    pub fn set_with_id_if(
+        &mut self,
+        name: impl AsRef<IdStr>,
+        value: impl Into<glib::Value> + Send,
+        predicate: bool,
+    ) {
+        if predicate {
+            self.set_with_id(name, value);
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
     /// Sets field `name` to the given inner value if `value` is `Some`.
     ///
     /// This has no effect if the value is `None`, i.e. default or previous value for `name` is kept.
@@ -536,6 +755,36 @@ impl StructureRef {
     }
 
     // rustdoc-stripper-ignore-next
+    /// Sets field `name` to the given inner value if `value` is `Some`.
+    ///
+    /// This has no effect if the value is `None`, i.e. default or previous value for `name` is kept.
+    #[doc(alias = "gst_structure_set_static_str")]
+    pub fn set_with_static_if_some(
+        &mut self,
+        name: impl AsRef<GStr> + 'static,
+        value: Option<impl Into<glib::Value> + Send>,
+    ) {
+        if let Some(value) = value {
+            self.set_with_static(name, value);
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` to the given inner value if `value` is `Some`.
+    ///
+    /// This has no effect if the value is `None`, i.e. default or previous value for `name` is kept.
+    #[doc(alias = "gst_structure_id_str_set")]
+    pub fn set_with_id_if_some(
+        &mut self,
+        name: impl AsRef<IdStr>,
+        value: Option<impl Into<glib::Value> + Send>,
+    ) {
+        if let Some(value) = value {
+            self.set_with_id(name, value);
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
     /// Sets field `name` using the given `ValueType` `V` built from `iter`'s the `Item`s.
     ///
     /// Overrides any default or previously defined value for `name`.
@@ -547,6 +796,36 @@ impl StructureRef {
     ) {
         let iter = iter.into_iter().map(|item| item.to_send_value());
         self.set(name, V::from_iter(iter));
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` using the given `ValueType` `V` built from `iter`'s the `Item`s.
+    ///
+    /// Overrides any default or previously defined value for `name`.
+    #[inline]
+    pub fn set_with_static_from_iter<
+        V: ValueType + Into<Value> + FromIterator<SendValue> + Send,
+    >(
+        &mut self,
+        name: impl AsRef<GStr> + 'static,
+        iter: impl IntoIterator<Item = impl ToSendValue>,
+    ) {
+        let iter = iter.into_iter().map(|item| item.to_send_value());
+        self.set_with_static(name, V::from_iter(iter));
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` using the given `ValueType` `V` built from `iter`'s the `Item`s.
+    ///
+    /// Overrides any default or previously defined value for `name`.
+    #[inline]
+    pub fn set_with_id_from_iter<V: ValueType + Into<Value> + FromIterator<SendValue> + Send>(
+        &mut self,
+        name: impl AsRef<IdStr>,
+        iter: impl IntoIterator<Item = impl ToSendValue>,
+    ) {
+        let iter = iter.into_iter().map(|item| item.to_send_value());
+        self.set_with_id(name, V::from_iter(iter));
     }
 
     // rustdoc-stripper-ignore-next
@@ -568,6 +847,44 @@ impl StructureRef {
     }
 
     // rustdoc-stripper-ignore-next
+    /// Sets field `name` using the given `ValueType` `V` built from `iter`'s Item`s,
+    /// if `iter` is not empty.
+    ///
+    /// This has no effect if `iter` is empty, i.e. previous value for `name` is unchanged.
+    #[inline]
+    pub fn set_with_static_if_not_empty<
+        V: ValueType + Into<Value> + FromIterator<SendValue> + Send,
+    >(
+        &mut self,
+        name: impl AsRef<GStr> + 'static,
+        iter: impl IntoIterator<Item = impl ToSendValue>,
+    ) {
+        let mut iter = iter.into_iter().peekable();
+        if iter.peek().is_some() {
+            let iter = iter.map(|item| item.to_send_value());
+            self.set_with_static(name, V::from_iter(iter));
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` using the given `ValueType` `V` built from `iter`'s Item`s,
+    /// if `iter` is not empty.
+    ///
+    /// This has no effect if `iter` is empty, i.e. previous value for `name` is unchanged.
+    #[inline]
+    pub fn set_with_id_if_not_empty<V: ValueType + Into<Value> + FromIterator<SendValue> + Send>(
+        &mut self,
+        name: impl AsRef<IdStr>,
+        iter: impl IntoIterator<Item = impl ToSendValue>,
+    ) {
+        let mut iter = iter.into_iter().peekable();
+        if iter.peek().is_some() {
+            let iter = iter.map(|item| item.to_send_value());
+            self.set_with_id(name, V::from_iter(iter));
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
     /// Sets field `name` to the given value `value`.
     ///
     /// Overrides any default or previously defined value for `name`.
@@ -577,6 +894,56 @@ impl StructureRef {
             name.run_with_gstr(|name| {
                 ffi::gst_structure_take_value(&mut self.0, name.as_ptr(), &mut value.into_raw())
             });
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` to the given value `value`.
+    ///
+    /// Overrides any default or previously defined value for `name`.
+    #[doc(alias = "gst_structure_set_value_static_str")]
+    pub fn set_value_with_static(&mut self, name: impl AsRef<GStr> + 'static, value: SendValue) {
+        unsafe {
+            cfg_if! {
+                if #[cfg(feature = "v1_26")] {
+                    ffi::gst_structure_take_value_static_str(
+                        &mut self.0,
+                        name.as_ref().as_ptr(),
+                        &mut value.into_raw(),
+                    )
+                } else {
+                    ffi::gst_structure_take_value(
+                        &mut self.0,
+                        name.as_ref().as_ptr(),
+                        &mut value.into_raw(),
+                    )
+                }
+            }
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` to the given value `value`.
+    ///
+    /// Overrides any default or previously defined value for `name`.
+    #[doc(alias = "gst_structure_id_str_set_value")]
+    pub fn set_value_with_id(&mut self, name: impl AsRef<IdStr>, value: SendValue) {
+        unsafe {
+            cfg_if! {
+                if #[cfg(feature = "v1_26")] {
+                    ffi::gst_structure_id_str_take_value(
+                        &mut self.0,
+                        name.as_ref().as_ptr(),
+                        &mut value.into_raw(),
+                    )
+                } else {
+                    ffi::gst_structure_take_value(
+                        &mut self.0,
+                        name.as_ref().as_gstr().as_ptr(),
+                        &mut value.into_raw(),
+                    )
+                }
+            }
         }
     }
 
@@ -593,6 +960,40 @@ impl StructureRef {
     }
 
     // rustdoc-stripper-ignore-next
+    /// Sets field `name` to the given `value` if the `predicate` evaluates to `true`.
+    ///
+    /// This has no effect if the `predicate` evaluates to `false`,
+    /// i.e. default or previous value for `name` is kept.
+    #[doc(alias = "gst_structure_set_value_static_str")]
+    pub fn set_value_with_static_if(
+        &mut self,
+        name: impl AsRef<GStr> + 'static,
+        value: SendValue,
+        predicate: bool,
+    ) {
+        if predicate {
+            self.set_value_with_static(name, value);
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` to the given `value` if the `predicate` evaluates to `true`.
+    ///
+    /// This has no effect if the `predicate` evaluates to `false`,
+    /// i.e. default or previous value for `name` is kept.
+    #[doc(alias = "gst_structure_id_str_set_value")]
+    pub fn set_value_with_id_if(
+        &mut self,
+        name: impl AsRef<IdStr>,
+        value: SendValue,
+        predicate: bool,
+    ) {
+        if predicate {
+            self.set_value_with_id(name, value);
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
     /// Sets field `name` to the given inner value if `value` is `Some`.
     ///
     /// This has no effect if the value is `None`, i.e. default or previous value for `name` is kept.
@@ -603,12 +1004,42 @@ impl StructureRef {
         }
     }
 
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` to the given inner value if `value` is `Some`.
+    ///
+    /// This has no effect if the value is `None`, i.e. default or previous value for `name` is kept.
+    #[doc(alias = "gst_structure_set_value_static_str")]
+    pub fn set_value_with_static_if_some(
+        &mut self,
+        name: impl AsRef<GStr> + 'static,
+        value: Option<SendValue>,
+    ) {
+        if let Some(value) = value {
+            self.set_value_with_static(name, value);
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` to the given inner value if `value` is `Some`.
+    ///
+    /// This has no effect if the value is `None`, i.e. default or previous value for `name` is kept.
+    #[doc(alias = "gst_structure_id_str_set_value")]
+    pub fn set_value_with_id_if_some(&mut self, name: impl AsRef<IdStr>, value: Option<SendValue>) {
+        if let Some(value) = value {
+            self.set_value_with_id(name, value);
+        }
+    }
+
+    #[deprecated = "use `set_by_id()` instead"]
+    #[allow(deprecated)]
     #[doc(alias = "gst_structure_id_set")]
     pub fn set_by_quark(&mut self, name: glib::Quark, value: impl Into<glib::Value> + Send) {
         let value = glib::SendValue::from_owned(value);
         self.set_value_by_quark(name, value);
     }
 
+    #[deprecated = "use `set_by_id_if_some()` instead"]
+    #[allow(deprecated)]
     #[doc(alias = "gst_structure_id_set")]
     pub fn set_by_quark_if_some(
         &mut self,
@@ -620,6 +1051,7 @@ impl StructureRef {
         }
     }
 
+    #[deprecated = "use `set_by_id_value()` instead"]
     #[doc(alias = "gst_structure_id_set_value")]
     pub fn set_value_by_quark(&mut self, name: glib::Quark, value: SendValue) {
         unsafe {
@@ -627,6 +1059,8 @@ impl StructureRef {
         }
     }
 
+    #[deprecated = "use `set_by_id_value_if_some()` instead"]
+    #[allow(deprecated)]
     #[doc(alias = "gst_structure_id_set_value")]
     pub fn set_value_by_quark_if_some(&mut self, name: glib::Quark, value: Option<SendValue>) {
         if let Some(value) = value {
@@ -636,14 +1070,18 @@ impl StructureRef {
 
     #[doc(alias = "get_name")]
     #[doc(alias = "gst_structure_get_name")]
-    pub fn name<'a>(&self) -> &'a glib::GStr {
-        unsafe {
-            let name = ffi::gst_structure_get_name(&self.0);
-            // Ensure the name is static whatever the GStreamer version being used.
-            glib::GStr::from_ptr(glib::ffi::g_intern_string(name))
-        }
+    pub fn name(&self) -> &glib::GStr {
+        unsafe { glib::GStr::from_ptr(ffi::gst_structure_get_name(&self.0)) }
     }
 
+    #[cfg(feature = "v1_26")]
+    #[doc(alias = "get_name")]
+    #[doc(alias = "gst_structure_get_name_id_str")]
+    pub fn name_id(&self) -> &IdStr {
+        unsafe { &*(ffi::gst_structure_get_name_id_str(&self.0) as *const crate::IdStr) }
+    }
+
+    #[deprecated = "use `name()` instead, or `name_id()` with feature v1_26"]
     #[doc(alias = "gst_structure_get_name_id")]
     pub fn name_quark(&self) -> glib::Quark {
         unsafe { from_glib(ffi::gst_structure_get_name_id(&self.0)) }
@@ -656,10 +1094,56 @@ impl StructureRef {
         }
     }
 
+    #[doc(alias = "gst_structure_set_name_static_str")]
+    pub fn set_name_from_static(&mut self, name: impl AsRef<GStr> + 'static) {
+        unsafe {
+            cfg_if! {
+                if #[cfg(feature = "v1_26")] {
+                    ffi::gst_structure_set_name_static_str(
+                        &mut self.0,
+                        name.as_ref().as_ptr(),
+                    )
+                } else {
+                    ffi::gst_structure_set_name(&mut self.0, name.as_ref().as_ptr())
+                }
+            }
+        }
+    }
+
+    #[doc(alias = "gst_structure_set_name_id_str")]
+    pub fn set_name_from_id(&mut self, name: impl AsRef<IdStr>) {
+        unsafe {
+            cfg_if! {
+                if #[cfg(feature = "v1_26")] {
+                    ffi::gst_structure_set_name_id_str(
+                        &mut self.0,
+                        name.as_ref().as_ptr(),
+                    )
+                } else {
+                    ffi::gst_structure_set_name(&mut self.0, name.as_ref().as_gstr().as_ptr())
+                }
+            }
+        }
+    }
+
     #[doc(alias = "gst_structure_set_name")]
     pub fn set_name_if_some(&mut self, name: Option<impl IntoGStr>) {
         if let Some(name) = name {
             self.set_name(name);
+        }
+    }
+
+    #[doc(alias = "gst_structure_set_name_static_str")]
+    pub fn set_name_from_static_if_some(&mut self, name: Option<impl AsRef<GStr> + 'static>) {
+        if let Some(name) = name {
+            self.set_name_from_static(name);
+        }
+    }
+
+    #[doc(alias = "gst_structure_set_name_id_str")]
+    pub fn set_name_from_id_if_some(&mut self, name: Option<impl AsRef<IdStr>>) {
+        if let Some(name) = name {
+            self.set_name_from_id(name);
         }
     }
 
@@ -677,6 +1161,25 @@ impl StructureRef {
         }
     }
 
+    #[doc(alias = "gst_structure_id_str_has_field")]
+    pub fn has_field_by_id(&self, field: impl AsRef<IdStr>) -> bool {
+        unsafe {
+            cfg_if! {
+                if #[cfg(feature = "v1_26")] {
+                    from_glib(ffi::gst_structure_id_str_has_field(
+                        &self.0,
+                        field.as_ref().as_ptr(),
+                    ))
+                } else {
+                    from_glib(ffi::gst_structure_has_field(
+                        &self.0,
+                        field.as_ref().as_gstr().as_ptr(),
+                    ))
+                }
+            }
+        }
+    }
+
     #[doc(alias = "gst_structure_has_field_typed")]
     pub fn has_field_with_type(&self, field: impl IntoGStr, type_: glib::Type) -> bool {
         unsafe {
@@ -690,11 +1193,34 @@ impl StructureRef {
         }
     }
 
+    #[doc(alias = "gst_structure_id_str_has_field_typed")]
+    pub fn has_field_with_type_by_id(&self, field: impl AsRef<IdStr>, type_: glib::Type) -> bool {
+        unsafe {
+            cfg_if! {
+                if #[cfg(feature = "v1_26")] {
+                    from_glib(ffi::gst_structure_id_str_has_field_typed(
+                        &self.0,
+                        field.as_ref().as_ptr(),
+                        type_.into_glib(),
+                    ))
+                } else {
+                    from_glib(ffi::gst_structure_has_field_typed(
+                        &self.0,
+                        field.as_ref().as_gstr().as_ptr(),
+                        type_.into_glib(),
+                    ))
+                }
+            }
+        }
+    }
+
+    #[deprecated = "use `has_field_by_id()`"]
     #[doc(alias = "gst_structure_id_has_field")]
     pub fn has_field_by_quark(&self, field: glib::Quark) -> bool {
         unsafe { from_glib(ffi::gst_structure_id_has_field(&self.0, field.into_glib())) }
     }
 
+    #[deprecated = "use `has_field_with_type_by_id()`"]
     #[doc(alias = "gst_structure_id_has_field_typed")]
     pub fn has_field_with_type_by_quark(&self, field: glib::Quark, type_: glib::Type) -> bool {
         unsafe {
@@ -722,6 +1248,26 @@ impl StructureRef {
         }
     }
 
+    #[doc(alias = "gst_structure_id_str_remove_field")]
+    pub fn remove_field_by_id(&mut self, field: impl AsRef<IdStr>) {
+        unsafe {
+            cfg_if! {
+                if #[cfg(feature = "v1_26")] {
+                    ffi::gst_structure_id_str_remove_field(&mut self.0, field.as_ref().as_ptr())
+                } else {
+                    ffi::gst_structure_remove_field(&mut self.0, field.as_ref().as_gstr().as_ptr())
+                }
+            }
+        }
+    }
+
+    #[doc(alias = "gst_structure_id_str_remove_fields")]
+    pub fn remove_field_by_ids(&mut self, fields: impl IntoIterator<Item = impl AsRef<IdStr>>) {
+        for f in fields.into_iter() {
+            self.remove_field_by_id(f)
+        }
+    }
+
     #[doc(alias = "gst_structure_remove_all_fields")]
     pub fn remove_all_fields(&mut self) {
         unsafe {
@@ -737,9 +1283,19 @@ impl StructureRef {
         Iter::new(self)
     }
 
+    #[cfg(feature = "v1_26")]
+    pub fn field_ids(&self) -> FieldIdIterator {
+        FieldIdIterator::new(self)
+    }
+
+    #[cfg(feature = "v1_26")]
+    pub fn id_iter(&self) -> IdIter {
+        IdIter::new(self)
+    }
+
     #[doc(alias = "get_nth_field_name")]
     #[doc(alias = "gst_structure_nth_field_name")]
-    pub fn nth_field_name<'a>(&self, idx: usize) -> Option<&'a glib::GStr> {
+    pub fn nth_field_name(&self, idx: usize) -> Option<&glib::GStr> {
         if idx >= self.n_fields() {
             return None;
         }
@@ -748,8 +1304,23 @@ impl StructureRef {
             let field_name = ffi::gst_structure_nth_field_name(&self.0, idx as u32);
             debug_assert!(!field_name.is_null());
 
-            // Ensure the name is static whatever the GStreamer version being used.
-            Some(glib::GStr::from_ptr(glib::ffi::g_intern_string(field_name)))
+            Some(glib::GStr::from_ptr(field_name))
+        }
+    }
+
+    #[cfg(feature = "v1_26")]
+    #[doc(alias = "get_nth_field_name")]
+    #[doc(alias = "gst_structure_id_str_nth_field_name")]
+    pub fn nth_field_by_id(&self, idx: usize) -> Option<&IdStr> {
+        if idx >= self.n_fields() {
+            return None;
+        }
+
+        unsafe {
+            let field_name = ffi::gst_structure_id_str_nth_field_name(&self.0, idx as u32);
+            debug_assert!(!field_name.is_null());
+
+            Some(&*(field_name as *const crate::IdStr))
         }
     }
 
@@ -898,6 +1469,7 @@ impl StructureRef {
         }
     }
 
+    #[deprecated = "Use `iter()` instead, or `id_iter()` with feature v1_26"]
     #[doc(alias = "gst_structure_foreach")]
     pub fn foreach<F: FnMut(glib::Quark, &glib::Value) -> std::ops::ControlFlow<()>>(
         &self,
@@ -925,11 +1497,103 @@ impl StructureRef {
         }
     }
 
+    #[cfg(feature = "v1_26")]
+    // rustdoc-stripper-ignore-next
+    /// Executes the provided `func` on each field, possibly modifying the value.
+    #[doc(alias = "gst_structure_map_in_place_id_str")]
+    pub fn map_in_place_by_id<F: FnMut(&IdStr, &mut glib::Value) -> std::ops::ControlFlow<()>>(
+        &mut self,
+        mut func: F,
+    ) {
+        unsafe {
+            unsafe extern "C" fn trampoline<
+                F: FnMut(&IdStr, &mut glib::Value) -> std::ops::ControlFlow<()>,
+            >(
+                fieldname: *const ffi::GstIdStr,
+                value: *mut glib::gobject_ffi::GValue,
+                user_data: glib::ffi::gpointer,
+            ) -> glib::ffi::gboolean {
+                let func = &mut *(user_data as *mut F);
+                let res = func(
+                    &*(fieldname as *const IdStr),
+                    &mut *(value as *mut glib::Value),
+                );
+
+                matches!(res, std::ops::ControlFlow::Continue(_)).into_glib()
+            }
+            let func = &mut func as *mut F;
+            let _ = ffi::gst_structure_map_in_place_id_str(
+                self.as_mut_ptr(),
+                Some(trampoline::<F>),
+                func as glib::ffi::gpointer,
+            );
+        }
+    }
+
+    #[cfg(feature = "v1_26")]
+    // rustdoc-stripper-ignore-next
+    /// Executes the provided `func` on each field with an owned value.
+    ///
+    /// * If `func` returns `Some(value)`, the field's value is replaced with
+    ///   `value`.
+    /// * If `func` returns `None`, the field is removed.
+    #[doc(alias = "gst_structure_filter_and_map_in_place_id_str")]
+    pub fn filter_map_in_place_by_id<F: FnMut(&IdStr, glib::Value) -> Option<glib::Value>>(
+        &mut self,
+        mut func: F,
+    ) {
+        unsafe {
+            unsafe extern "C" fn trampoline<
+                F: FnMut(&IdStr, glib::Value) -> Option<glib::Value>,
+            >(
+                fieldname: *const ffi::GstIdStr,
+                value: *mut glib::gobject_ffi::GValue,
+                user_data: glib::ffi::gpointer,
+            ) -> glib::ffi::gboolean {
+                let func = &mut *(user_data as *mut F);
+
+                let v = mem::replace(
+                    &mut *(value as *mut glib::Value),
+                    glib::Value::uninitialized(),
+                );
+                match func(&*(fieldname as *const IdStr), v) {
+                    None => glib::ffi::GFALSE,
+                    Some(v) => {
+                        *value = v.into_raw();
+                        glib::ffi::GTRUE
+                    }
+                }
+            }
+
+            let func = &mut func as *mut F;
+            ffi::gst_structure_filter_and_map_in_place_id_str(
+                self.as_mut_ptr(),
+                Some(trampoline::<F>),
+                func as glib::ffi::gpointer,
+            );
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Executes the provided `func` on each field, possibly modifying the value,
+    /// as long as `ControlFlow::Continue(())` is returned.
+    ///
+    /// Using `Quark`s is deprecated, however this method is kept because there
+    /// are no other means to achieve this pre-GStreamer-1.26. With feature v1_26,
+    /// use [map_in_place_by_id] instead.
+    ///
+    /// # Returns:
+    ///
+    /// * `ControlFlow::Continue(())` if `func` returned this for all fields,
+    /// * `ControlFlow::Break(())` otherwise.
+    ///
+    /// [map_in_place_by_id]: crate::StructureRef::map_in_place_by_id
+    #[cfg_attr(feature = "v1_26", deprecated = "use `map_in_place_by_id()` instead")]
     #[doc(alias = "gst_structure_map_in_place")]
     pub fn map_in_place<F: FnMut(glib::Quark, &mut glib::Value) -> std::ops::ControlFlow<()>>(
         &mut self,
         mut func: F,
-    ) -> bool {
+    ) -> std::ops::ControlFlow<()> {
         unsafe {
             unsafe extern "C" fn trampoline<
                 F: FnMut(glib::Quark, &mut glib::Value) -> std::ops::ControlFlow<()>,
@@ -944,14 +1608,34 @@ impl StructureRef {
                 matches!(res, std::ops::ControlFlow::Continue(_)).into_glib()
             }
             let func = &mut func as *mut F;
-            from_glib(ffi::gst_structure_map_in_place(
+            if from_glib(ffi::gst_structure_map_in_place(
                 self.as_mut_ptr(),
                 Some(trampoline::<F>),
                 func as glib::ffi::gpointer,
-            ))
+            )) {
+                std::ops::ControlFlow::Continue(())
+            } else {
+                std::ops::ControlFlow::Break(())
+            }
         }
     }
 
+    // rustdoc-stripper-ignore-next
+    /// Executes the provided `func` on each field with an owned value.
+    ///
+    /// * If `func` returns `Some(value)`, the field's value is replaced with
+    ///   `value`.
+    /// * If `func` returns `None`, the field is removed.
+    ///
+    /// Using `Quark`s is deprecated, however this method is kept because there
+    /// are no other means to achieve this pre-GStreamer-1.26. With feature v1_26,
+    /// use [filter_map_in_place_by_id] instead.
+    ///
+    /// [filter_map_in_place_by_id]: crate::StructureRef::filter_map_in_place_by_id
+    #[cfg_attr(
+        feature = "v1_26",
+        deprecated = "use `filter_map_in_place_by_id()` instead"
+    )]
     #[doc(alias = "gst_structure_filter_and_map_in_place")]
     pub fn filter_map_in_place<F: FnMut(glib::Quark, glib::Value) -> Option<glib::Value>>(
         &mut self,
@@ -1097,15 +1781,13 @@ impl<'a> FieldIterator<'a> {
 }
 
 impl<'a> Iterator for FieldIterator<'a> {
-    type Item = &'static glib::GStr;
+    type Item = &'a glib::GStr;
 
     fn next(&mut self) -> Option<Self::Item> {
         if self.idx >= self.n_fields {
             return None;
         }
 
-        // Safety: nth_field_name() ensures static lifetime for the returned string,
-        // whatever the GStreamer version being used.
         let field_name = self.structure.nth_field_name(self.idx).unwrap();
         self.idx += 1;
 
@@ -1136,10 +1818,71 @@ impl<'a> ExactSizeIterator for FieldIterator<'a> {}
 
 impl<'a> std::iter::FusedIterator for FieldIterator<'a> {}
 
+#[cfg(feature = "v1_26")]
+#[derive(Debug)]
+pub struct FieldIdIterator<'a> {
+    structure: &'a StructureRef,
+    idx: usize,
+    n_fields: usize,
+}
+
+#[cfg(feature = "v1_26")]
+impl<'a> FieldIdIterator<'a> {
+    fn new(structure: &'a StructureRef) -> FieldIdIterator<'a> {
+        skip_assert_initialized!();
+        let n_fields = structure.n_fields();
+
+        FieldIdIterator {
+            structure,
+            idx: 0,
+            n_fields,
+        }
+    }
+}
+
+#[cfg(feature = "v1_26")]
+impl<'a> Iterator for FieldIdIterator<'a> {
+    type Item = &'a IdStr;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.idx >= self.n_fields {
+            return None;
+        }
+
+        let field_name = self.structure.nth_field_by_id(self.idx).unwrap();
+        self.idx += 1;
+
+        Some(field_name)
+    }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        let remaining = self.n_fields - self.idx;
+
+        (remaining, Some(remaining))
+    }
+}
+
+#[cfg(feature = "v1_26")]
+impl<'a> DoubleEndedIterator for FieldIdIterator<'a> {
+    fn next_back(&mut self) -> Option<Self::Item> {
+        if self.idx == self.n_fields {
+            return None;
+        }
+
+        self.n_fields -= 1;
+        // Safety: nth_field_name() ensures static lifetime for the returned string,
+        // whatever the GStreamer version being used.
+        Some(self.structure.nth_field_by_id(self.n_fields).unwrap())
+    }
+}
+
+#[cfg(feature = "v1_26")]
+impl<'a> ExactSizeIterator for FieldIdIterator<'a> {}
+#[cfg(feature = "v1_26")]
+impl<'a> std::iter::FusedIterator for FieldIdIterator<'a> {}
+
 #[derive(Debug)]
 pub struct Iter<'a> {
-    // Safety: FieldIterator ensures static lifetime for the returned Item,
-    // whatever the GStreamer version being used.
     iter: FieldIterator<'a>,
 }
 
@@ -1153,7 +1896,7 @@ impl<'a> Iter<'a> {
 }
 
 impl<'a> Iterator for Iter<'a> {
-    type Item = (&'static glib::GStr, &'a SendValue);
+    type Item = (&'a glib::GStr, &'a SendValue);
 
     fn next(&mut self) -> Option<Self::Item> {
         let f = self.iter.next()?;
@@ -1201,9 +1944,77 @@ impl<'a> ExactSizeIterator for Iter<'a> {}
 
 impl<'a> std::iter::FusedIterator for Iter<'a> {}
 
+#[cfg(feature = "v1_26")]
+#[derive(Debug)]
+pub struct IdIter<'a> {
+    iter: FieldIdIterator<'a>,
+}
+
+#[cfg(feature = "v1_26")]
+impl<'a> IdIter<'a> {
+    fn new(structure: &'a StructureRef) -> IdIter<'a> {
+        skip_assert_initialized!();
+        IdIter {
+            iter: FieldIdIterator::new(structure),
+        }
+    }
+}
+
+#[cfg(feature = "v1_26")]
+impl<'a> Iterator for IdIter<'a> {
+    type Item = (&'a IdStr, &'a SendValue);
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let f = self.iter.next()?;
+        let v = self.iter.structure.value_by_id(f);
+        Some((f, v.unwrap()))
+    }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        self.iter.size_hint()
+    }
+
+    fn count(self) -> usize {
+        self.iter.count()
+    }
+
+    fn nth(&mut self, n: usize) -> Option<Self::Item> {
+        let f = self.iter.nth(n)?;
+        let v = self.iter.structure.value_by_id(f);
+        Some((f, v.unwrap()))
+    }
+
+    fn last(self) -> Option<Self::Item> {
+        let structure = self.iter.structure;
+        let f = self.iter.last()?;
+        let v = structure.value_by_id(f);
+        Some((f, v.unwrap()))
+    }
+}
+
+#[cfg(feature = "v1_26")]
+impl<'a> DoubleEndedIterator for IdIter<'a> {
+    fn next_back(&mut self) -> Option<Self::Item> {
+        let f = self.iter.next_back()?;
+        let v = self.iter.structure.value_by_id(f);
+        Some((f, v.unwrap()))
+    }
+
+    fn nth_back(&mut self, n: usize) -> Option<Self::Item> {
+        let f = self.iter.nth_back(n)?;
+        let v = self.iter.structure.value_by_id(f);
+        Some((f, v.unwrap()))
+    }
+}
+
+#[cfg(feature = "v1_26")]
+impl<'a> ExactSizeIterator for IdIter<'a> {}
+#[cfg(feature = "v1_26")]
+impl<'a> std::iter::FusedIterator for IdIter<'a> {}
+
 impl<'a> IntoIterator for &'a StructureRef {
     type IntoIter = Iter<'a>;
-    type Item = (&'static glib::GStr, &'a SendValue);
+    type Item = (&'a glib::GStr, &'a SendValue);
 
     fn into_iter(self) -> Self::IntoIter {
         self.iter()
@@ -1234,7 +2045,24 @@ impl std::iter::Extend<(glib::GString, SendValue)> for StructureRef {
     }
 }
 
+impl<'a> std::iter::Extend<(&'a IdStr, SendValue)> for StructureRef {
+    #[allow(deprecated)]
+    fn extend<T: IntoIterator<Item = (&'a IdStr, SendValue)>>(&mut self, iter: T) {
+        iter.into_iter()
+            .for_each(|(f, v)| self.set_value_with_id(f, v));
+    }
+}
+
+impl std::iter::Extend<(IdStr, SendValue)> for StructureRef {
+    #[allow(deprecated)]
+    fn extend<T: IntoIterator<Item = (IdStr, SendValue)>>(&mut self, iter: T) {
+        iter.into_iter()
+            .for_each(|(f, v)| self.set_value_with_id(f, v));
+    }
+}
+
 impl std::iter::Extend<(glib::Quark, SendValue)> for StructureRef {
+    #[allow(deprecated)]
     fn extend<T: IntoIterator<Item = (glib::Quark, SendValue)>>(&mut self, iter: T) {
         iter.into_iter()
             .for_each(|(f, v)| self.set_value_by_quark(f, v));
@@ -1255,6 +2083,20 @@ impl Builder {
         }
     }
 
+    fn from_static(name: impl AsRef<GStr> + 'static) -> Self {
+        skip_assert_initialized!();
+        Builder {
+            s: Structure::new_empty_from_static(name),
+        }
+    }
+
+    pub fn from_id(name: impl AsRef<IdStr>) -> Builder {
+        skip_assert_initialized!();
+        Builder {
+            s: Structure::new_empty_from_id(name),
+        }
+    }
+
     // rustdoc-stripper-ignore-next
     /// Sets field `name` to the given value `value`.
     ///
@@ -1262,6 +2104,34 @@ impl Builder {
     #[inline]
     pub fn field(mut self, name: impl IntoGStr, value: impl Into<glib::Value> + Send) -> Self {
         self.s.set(name, value);
+        self
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` to the given value `value`.
+    ///
+    /// Overrides any default or previously defined value for `name`.
+    #[inline]
+    pub fn field_with_static(
+        mut self,
+        name: impl AsRef<GStr> + 'static,
+        value: impl Into<glib::Value> + Send,
+    ) -> Self {
+        self.s.set_with_static(name, value);
+        self
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` to the given value `value`.
+    ///
+    /// Overrides any default or previously defined value for `name`.
+    #[inline]
+    pub fn field_with_id(
+        mut self,
+        name: impl AsRef<IdStr>,
+        value: impl Into<glib::Value> + Send,
+    ) -> Self {
+        self.s.set_with_id(name, value);
         self
     }
 
@@ -1276,6 +2146,7 @@ impl Builder {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use glib::gstr;
 
     #[test]
     fn new_set_get() {
@@ -1305,22 +2176,25 @@ mod tests {
         assert_eq!(
             s.get::<i32>("f2"),
             Err(GetError::from_value_get_error(
-                "f2",
+                idstr!("f2"),
                 value::ValueTypeMismatchError::new(Type::STRING, Type::I32),
             ))
         );
         assert_eq!(
             s.get::<bool>("f3"),
             Err(GetError::from_value_get_error(
-                "f3",
+                idstr!("f3"),
                 value::ValueTypeMismatchError::new(Type::I32, Type::BOOL),
             ))
         );
         assert_eq!(
             s.get::<&str>("f4"),
-            Err(GetError::new_field_not_found("f4"))
+            Err(GetError::new_field_not_found(idstr!("f4")))
         );
-        assert_eq!(s.get::<i32>("f4"), Err(GetError::new_field_not_found("f4")));
+        assert_eq!(
+            s.get::<i32>("f4"),
+            Err(GetError::new_field_not_found(idstr!("f4")))
+        );
 
         assert_eq!(
             s.fields().collect::<Vec<_>>(),
@@ -1366,6 +2240,106 @@ mod tests {
     }
 
     #[test]
+    fn new_set_get_static() {
+        use glib::{value, Type};
+
+        crate::init().unwrap();
+
+        let mut s = Structure::new_empty_from_static(gstr!("test"));
+        assert_eq!(s.name(), "test");
+
+        static F1: &GStr = gstr!("f1");
+        static F2: &GStr = gstr!("f2");
+        static F3: &GStr = gstr!("f3");
+
+        s.set_with_static(F1, "abc");
+        s.set_with_static_if(F2, String::from("bcd"), true);
+        s.set_with_static_if(F3, "not_set", false);
+
+        assert_eq!(s.get::<&str>(F1), Ok("abc"));
+        assert_eq!(s.get::<Option<&str>>(F2), Ok(Some("bcd")));
+        assert_eq!(s.get_optional::<&str>(F1), Ok(Some("abc")));
+        assert_eq!(s.get_optional::<&str>(F3), Ok(None));
+
+        assert_eq!(
+            s.get::<i32>(F2),
+            Err(GetError::from_value_get_error(
+                idstr!("f2"),
+                value::ValueTypeMismatchError::new(Type::STRING, Type::I32),
+            ))
+        );
+        assert_eq!(
+            s.get::<&str>(F3),
+            Err(GetError::new_field_not_found(idstr!("f3")))
+        );
+
+        let s2 = Structure::builder("test")
+            .field_with_static(F1, "abc")
+            .field_with_static(F2, String::from("bcd"))
+            .build();
+        assert_eq!(s, s2);
+
+        let mut s3 = Structure::new_empty("test");
+
+        s3.set_with_static_if_some(F1, Some("abc"));
+        s3.set_with_static_if_some(F2, Some(String::from("bcd")));
+
+        assert_eq!(s, s3);
+    }
+
+    #[test]
+    fn new_set_get_id_str() {
+        use glib::{value, Type};
+
+        crate::init().unwrap();
+
+        let mut s = Structure::new_empty_from_id(idstr!("test"));
+        assert_eq!(s.name(), "test");
+        #[cfg(feature = "v1_26")]
+        assert_eq!(s.name_id(), "test");
+
+        let f1 = idstr!("f1");
+        let f2 = idstr!("f2");
+        let f3 = idstr!("f3");
+
+        s.set_with_id(&f1, "abc");
+        s.set_with_id_if(&f2, String::from("bcd"), true);
+        s.set_with_id_if(&f3, "not_set", false);
+
+        assert_eq!(s.get_by_id::<&str>(&f1), Ok("abc"));
+        assert_eq!(s.get_by_id::<&str>(f1.clone()), Ok("abc"));
+        assert_eq!(s.get_by_id::<Option<&str>>(&f2), Ok(Some("bcd")));
+        assert_eq!(s.get_by_id::<Option<&str>>(f2.clone()), Ok(Some("bcd")));
+        assert_eq!(s.get_optional_by_id::<&str>(&f1), Ok(Some("abc")));
+        assert_eq!(s.get_optional_by_id::<&str>(&f3), Ok(None));
+
+        assert_eq!(
+            s.get_by_id::<i32>(&f2),
+            Err(GetError::from_value_get_error(
+                f2.clone(),
+                value::ValueTypeMismatchError::new(Type::STRING, Type::I32),
+            ))
+        );
+        assert_eq!(
+            s.get_by_id::<&str>(&f3),
+            Err(GetError::new_field_not_found(f3.clone()))
+        );
+
+        let s2 = Structure::builder("test")
+            .field_with_id(&f1, "abc")
+            .field_with_id(&f2, String::from("bcd"))
+            .build();
+        assert_eq!(s, s2);
+
+        let mut s3 = Structure::new_empty("test");
+
+        s3.set_with_id_if_some(f1, Some("abc"));
+        s3.set_with_id_if_some(f2, Some(String::from("bcd")));
+
+        assert_eq!(s, s3);
+    }
+
+    #[test]
     fn test_string_conversion() {
         crate::init().unwrap();
 
@@ -1396,8 +2370,8 @@ mod tests {
 
         let s = Structure::builder("test")
             .field("f1", "abc")
-            .field("f2", String::from("bcd"))
-            .field("f3", 123i32)
+            .field_with_static(gstr!("f2"), String::from("bcd"))
+            .field_with_id(idstr!("f3"), 123i32)
             .build();
 
         let s2 = Structure::from_iter(
@@ -1410,7 +2384,7 @@ mod tests {
         assert_eq!(s2.name(), "test");
         assert_eq!(s2.get::<&str>("f1"), Ok("abc"));
         assert!(s2.get::<&str>("f2").is_err());
-        assert!(s2.get::<&str>("f3").is_err());
+        assert!(s2.get_by_id::<&str>(idstr!("f3")).is_err());
     }
 
     #[test]
@@ -1436,9 +2410,12 @@ mod tests {
     fn builder_field_from_iter() {
         crate::init().unwrap();
 
+        static SLIST: &GStr = gstr!("slist");
+        let ilist = idstr!("ilist");
         let s = Structure::builder("test")
             .field_from_iter::<crate::Array>("array", [&1, &2, &3])
-            .field_from_iter::<crate::List>("list", [&4, &5, &6])
+            .field_with_static_from_iter::<crate::List>(SLIST, [&4, &5, &6])
+            .field_with_id_from_iter::<crate::List>(&ilist, [&7, &8, &9])
             .build();
         assert!(s
             .get::<crate::Array>("array")
@@ -1447,28 +2424,43 @@ mod tests {
             .map(|val| val.get::<i32>().unwrap())
             .eq([1, 2, 3]));
         assert!(s
-            .get::<crate::List>("list")
+            .get::<crate::List>("slist")
             .unwrap()
             .iter()
             .map(|val| val.get::<i32>().unwrap())
             .eq([4, 5, 6]));
+        assert!(s
+            .get_by_id::<crate::List>(&ilist)
+            .unwrap()
+            .iter()
+            .map(|val| val.get::<i32>().unwrap())
+            .eq([7, 8, 9]));
 
         let array = Vec::<i32>::new();
         let s = Structure::builder("test")
             .field_from_iter::<crate::Array>("array", &array)
-            .field_from_iter::<crate::List>("list", &array)
+            .field_with_static_from_iter::<crate::List>(SLIST, &array)
+            .field_with_id_from_iter::<crate::List>(&ilist, &array)
             .build();
         assert!(s.get::<crate::Array>("array").unwrap().as_ref().is_empty());
-        assert!(s.get::<crate::List>("list").unwrap().as_ref().is_empty());
+        assert!(s.get::<crate::List>(SLIST).unwrap().as_ref().is_empty());
+        assert!(s
+            .get_by_id::<crate::List>(ilist)
+            .unwrap()
+            .as_ref()
+            .is_empty());
     }
 
     #[test]
     fn builder_field_if_not_empty() {
         crate::init().unwrap();
 
-        let s = Structure::builder("test")
+        static SLIST: &GStr = gstr!("slist");
+        let ilist = idstr!("ilist");
+        let s = Structure::builder_from_id(idstr!("test"))
             .field_if_not_empty::<crate::Array>("array", [&1, &2, &3])
-            .field_if_not_empty::<crate::List>("list", [&4, &5, &6])
+            .field_with_static_if_not_empty::<crate::List>(SLIST, [&4, &5, &6])
+            .field_with_id_if_not_empty::<crate::List>(&ilist, [&7, &8, &9])
             .build();
         assert!(s
             .get::<crate::Array>("array")
@@ -1477,35 +2469,146 @@ mod tests {
             .map(|val| val.get::<i32>().unwrap())
             .eq([1, 2, 3]));
         assert!(s
-            .get::<crate::List>("list")
+            .get::<crate::List>("slist")
             .unwrap()
             .iter()
             .map(|val| val.get::<i32>().unwrap())
             .eq([4, 5, 6]));
+        assert!(s
+            .get_by_id::<crate::List>(&ilist)
+            .unwrap()
+            .iter()
+            .map(|val| val.get::<i32>().unwrap())
+            .eq([7, 8, 9]));
 
         let array = Vec::<i32>::new();
         let s = Structure::builder("test")
             .field_if_not_empty::<crate::Array>("array", &array)
-            .field_if_not_empty::<crate::List>("list", &array)
+            .field_with_static_if_not_empty::<crate::List>(SLIST, &array)
+            .field_with_id_if_not_empty::<crate::List>(ilist, &array)
             .build();
         assert!(!s.has_field("array"));
-        assert!(!s.has_field("list"));
+        assert!(!s.has_field("slist"));
+        assert!(!s.has_field("ilist"));
     }
 
     #[test]
-    fn test_name_and_field_name_lt() {
+    fn nth_field_remove_field() {
         crate::init().unwrap();
 
-        let (name, field_name) = {
-            let s = Structure::builder("name")
-                .field("field0", "val0")
-                .field("field1", "val1")
-                .build();
+        let f3 = idstr!("f3");
+        let f5 = idstr!("f5");
+        let f8 = idstr!("f8");
+        let mut s = Structure::builder("test")
+            .field("f1", "abc")
+            .field("f2", "bcd")
+            .field_with_id(&f3, "cde")
+            .field("f4", "def")
+            .field_with_id(&f5, "efg")
+            .field("f6", "fgh")
+            .field("f7", "ghi")
+            .field_with_id(&f8, "hij")
+            .build();
 
-            (s.name(), s.nth_field_name(0).unwrap())
-        };
+        assert_eq!(s.iter().next().unwrap().0, "f1");
+        assert_eq!(
+            s.fields().collect::<Vec<_>>(),
+            vec!["f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8"]
+        );
+        assert!(s.has_field("f8"));
+        assert_eq!(s.nth_field_name(7), Some(gstr!("f8")));
+        assert!(s.nth_field_name(8).is_none());
 
-        assert_eq!(name, "name");
-        assert_eq!(field_name, "field0");
+        #[cfg(feature = "v1_26")]
+        assert_eq!(s.id_iter().next().unwrap().0, "f1");
+        #[cfg(feature = "v1_26")]
+        assert_eq!(
+            s.field_ids().collect::<Vec<_>>(),
+            vec!["f1", "f2", "f3", "f4", "f5", "f6", "f7", "f8"]
+        );
+        #[cfg(feature = "v1_26")]
+        assert!(s.has_field_by_id(&f8));
+        #[cfg(feature = "v1_26")]
+        assert_eq!(s.nth_field_by_id(7), Some(&f8));
+        #[cfg(feature = "v1_26")]
+        assert!(s.nth_field_by_id(8).is_none());
+
+        assert_eq!(s.nth_field_name(1), Some(gstr!("f2")));
+        s.remove_field("f2");
+        assert_eq!(s.nth_field_name(1), Some(gstr!("f3")));
+        assert!(s.nth_field_name(7).is_none());
+        assert_eq!(
+            s.fields().collect::<Vec<_>>(),
+            vec!["f1", "f3", "f4", "f5", "f6", "f7", "f8"]
+        );
+
+        assert_eq!(s.nth_field_name(1), Some(gstr!("f3")));
+        s.remove_field_by_id(&f3);
+        assert_eq!(s.nth_field_name(1), Some(gstr!("f4")));
+        assert!(s.nth_field_name(6).is_none());
+        #[cfg(feature = "v1_26")]
+        assert_eq!(s.nth_field_by_id(2), Some(&f5));
+        #[cfg(feature = "v1_26")]
+        assert!(s.nth_field_by_id(6).is_none());
+        assert_eq!(
+            s.fields().collect::<Vec<_>>(),
+            vec!["f1", "f4", "f5", "f6", "f7", "f8"]
+        );
+
+        s.remove_fields(["f4", "f6"]);
+        assert_eq!(s.fields().collect::<Vec<_>>(), vec!["f1", "f5", "f7", "f8"]);
+
+        s.remove_field_by_ids([&f5, &f8]);
+        assert_eq!(s.fields().collect::<Vec<_>>(), vec!["f1", "f7"]);
+        #[cfg(feature = "v1_26")]
+        assert_eq!(s.field_ids().collect::<Vec<_>>(), vec!["f1", "f7"]);
+
+        s.remove_all_fields();
+        assert!(s.is_empty());
+    }
+
+    #[cfg(feature = "v1_26")]
+    #[test]
+    fn map_in_place() {
+        crate::init().unwrap();
+
+        let f1 = idstr!("f1");
+        let f2 = idstr!("f2");
+        let f3 = idstr!("f3");
+        let mut s = Structure::builder_from_id(idstr!("test"))
+            .field_with_id(&f1, "abc")
+            .field_with_id(&f2, "bcd")
+            .field_with_id(&f3, false)
+            .build();
+        assert!(!s.get_by_id::<bool>(&f3).unwrap());
+
+        s.map_in_place_by_id(|name, value| {
+            if *name == f3 {
+                *value = true.into()
+            }
+
+            std::ops::ControlFlow::Continue(())
+        });
+        assert!(s.get_by_id::<bool>(&f3).unwrap());
+
+        s.map_in_place_by_id(|name, value| {
+            match name.as_str() {
+                "f2" => return std::ops::ControlFlow::Break(()),
+                "f3" => *value = false.into(),
+                _ => (),
+            }
+            std::ops::ControlFlow::Continue(())
+        });
+        assert!(s.get_by_id::<bool>(&f3).unwrap());
+
+        s.filter_map_in_place_by_id(|name, value| {
+            if *name == f3 && value.get::<bool>().unwrap() {
+                None
+            } else {
+                Some(value)
+            }
+        });
+
+        assert_eq!(s.field_ids().collect::<Vec<_>>(), vec![&f1, &f2]);
     }
 }

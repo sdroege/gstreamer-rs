@@ -1,6 +1,6 @@
 use std::ops::{Deref, DerefMut};
 
-use gst::prelude::*;
+use gst::{prelude::*, IdStr};
 
 // rustdoc-stripper-ignore-next
 /// Wrapper around `gst::Structure` for `element-properties`
@@ -150,6 +150,32 @@ impl ElementPropertiesGeneralBuilder {
         self
     }
 
+    // rustdoc-stripper-ignore-next
+    /// Sets property `property_name` to the given value `value`.
+    ///
+    /// Overrides any default or previously defined value for `property_name`.
+    pub fn field_with_static(
+        mut self,
+        property_name: impl AsRef<glib::GStr> + 'static,
+        value: impl Into<glib::Value> + Send,
+    ) -> Self {
+        self.structure.set_with_static(property_name, value);
+        self
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Sets property `property_name` to the given value `value`.
+    ///
+    /// Overrides any default or previously defined value for `property_name`.
+    pub fn field_with_id(
+        mut self,
+        property_name: impl AsRef<IdStr>,
+        value: impl Into<glib::Value> + Send,
+    ) -> Self {
+        self.structure.set_with_id(property_name, value);
+        self
+    }
+
     gst::impl_builder_gvalue_extra_setters!(field);
 
     pub fn field_value(mut self, property_name: &str, value: glib::SendValue) -> Self {
@@ -285,6 +311,32 @@ impl ElementPropertiesMapItemBuilder {
         value: impl Into<glib::Value> + Send,
     ) -> Self {
         self.structure.set(property_name, value);
+        self
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Sets property `property_name` to the given value `value`.
+    ///
+    /// Overrides any default or previously defined value for `property_name`.
+    pub fn field_with_static(
+        mut self,
+        property_name: impl AsRef<glib::GStr> + 'static,
+        value: impl Into<glib::Value> + Send,
+    ) -> Self {
+        self.structure.set_with_static(property_name, value);
+        self
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Sets property `property_name` to the given value `value`.
+    ///
+    /// Overrides any default or previously defined value for `property_name`.
+    pub fn field_with_id(
+        mut self,
+        property_name: impl AsRef<IdStr>,
+        value: impl Into<glib::Value> + Send,
+    ) -> Self {
+        self.structure.set_with_id(property_name, value);
         self
     }
 

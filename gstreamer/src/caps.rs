@@ -8,7 +8,7 @@ use glib::{
     value::{SendValue, ToSendValue},
 };
 
-use crate::{caps_features::*, ffi, structure::*, CapsIntersectMode};
+use crate::{caps_features::*, ffi, structure::*, CapsIntersectMode, IdStr};
 
 mini_object_wrapper!(Caps, CapsRef, ffi::GstCaps, || { ffi::gst_caps_get_type() });
 
@@ -1113,6 +1113,34 @@ impl<T> Builder<T> {
     #[inline]
     pub fn field(mut self, name: impl IntoGStr, value: impl Into<glib::Value> + Send) -> Self {
         self.s.set(name, value);
+        self
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` to the given value `value`.
+    ///
+    /// Overrides any default or previously defined value for `name`.
+    #[inline]
+    pub fn field_with_static(
+        mut self,
+        name: impl AsRef<glib::GStr> + 'static,
+        value: impl Into<glib::Value> + Send,
+    ) -> Self {
+        self.s.set_with_static(name, value);
+        self
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` to the given value `value`.
+    ///
+    /// Overrides any default or previously defined value for `name`.
+    #[inline]
+    pub fn field_with_id(
+        mut self,
+        name: impl AsRef<IdStr>,
+        value: impl Into<glib::Value> + Send,
+    ) -> Self {
+        self.s.set_with_id(name, value);
         self
     }
 
