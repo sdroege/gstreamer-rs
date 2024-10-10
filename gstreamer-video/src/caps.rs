@@ -43,6 +43,30 @@ impl VideoCapsBuilder<gst::caps::NoFeature> {
         }
     }
 
+    // rustdoc-stripper-ignore-next
+    /// Constructs an `VideoCapsBuilder` for the specified encoding.
+    ///
+    /// The resulting `Caps` will use the `encoding` argument as name
+    /// and will not contain any additional fields unless explicitly added.
+    pub fn for_encoding_from_static(encoding: impl AsRef<glib::GStr> + 'static) -> Self {
+        assert_initialized_main_thread!();
+        VideoCapsBuilder {
+            builder: Caps::builder_from_static(encoding),
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Constructs an `VideoCapsBuilder` for the specified encoding.
+    ///
+    /// The resulting `Caps` will use the `encoding` argument as name
+    /// and will not contain any additional fields unless explicitly added.
+    pub fn for_encoding_from_id(encoding: impl AsRef<IdStr>) -> Self {
+        assert_initialized_main_thread!();
+        VideoCapsBuilder {
+            builder: Caps::builder_from_id(encoding),
+        }
+    }
+
     pub fn any_features(self) -> VideoCapsBuilder<gst::caps::HasFeatures> {
         VideoCapsBuilder {
             builder: self.builder.any_features(),
@@ -55,6 +79,24 @@ impl VideoCapsBuilder<gst::caps::NoFeature> {
     ) -> VideoCapsBuilder<gst::caps::HasFeatures> {
         VideoCapsBuilder {
             builder: self.builder.features(features),
+        }
+    }
+
+    pub fn features_from_statics(
+        self,
+        features: impl IntoIterator<Item = impl AsRef<glib::GStr> + 'static>,
+    ) -> VideoCapsBuilder<gst::caps::HasFeatures> {
+        VideoCapsBuilder {
+            builder: self.builder.features_from_statics(features),
+        }
+    }
+
+    pub fn features_from_ids(
+        self,
+        features: impl IntoIterator<Item = impl AsRef<IdStr>>,
+    ) -> VideoCapsBuilder<gst::caps::HasFeatures> {
+        VideoCapsBuilder {
+            builder: self.builder.features_from_ids(features),
         }
     }
 }

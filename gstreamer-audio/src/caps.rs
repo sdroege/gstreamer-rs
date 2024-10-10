@@ -61,6 +61,30 @@ impl AudioCapsBuilder<gst::caps::NoFeature> {
         }
     }
 
+    // rustdoc-stripper-ignore-next
+    /// Constructs an `AudioCapsBuilder` for the specified encoding.
+    ///
+    /// The resulting `Caps` will use the `encoding` argument as name
+    /// and will not contain any additional fields unless explicitly added.
+    pub fn for_encoding_from_static(encoding: impl AsRef<glib::GStr> + 'static) -> Self {
+        assert_initialized_main_thread!();
+        AudioCapsBuilder {
+            builder: Caps::builder_from_static(encoding),
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Constructs an `AudioCapsBuilder` for the specified encoding.
+    ///
+    /// The resulting `Caps` will use the `encoding` argument as name
+    /// and will not contain any additional fields unless explicitly added.
+    pub fn for_encoding_from_id(encoding: impl AsRef<IdStr>) -> Self {
+        assert_initialized_main_thread!();
+        AudioCapsBuilder {
+            builder: Caps::builder_from_id(encoding),
+        }
+    }
+
     pub fn any_features(self) -> AudioCapsBuilder<gst::caps::HasFeatures> {
         AudioCapsBuilder {
             builder: self.builder.any_features(),
@@ -73,6 +97,24 @@ impl AudioCapsBuilder<gst::caps::NoFeature> {
     ) -> AudioCapsBuilder<gst::caps::HasFeatures> {
         AudioCapsBuilder {
             builder: self.builder.features(features),
+        }
+    }
+
+    pub fn features_from_statics(
+        self,
+        features: impl IntoIterator<Item = impl AsRef<glib::GStr> + 'static>,
+    ) -> AudioCapsBuilder<gst::caps::HasFeatures> {
+        AudioCapsBuilder {
+            builder: self.builder.features_from_statics(features),
+        }
+    }
+
+    pub fn features_from_ids(
+        self,
+        features: impl IntoIterator<Item = impl AsRef<IdStr>>,
+    ) -> AudioCapsBuilder<gst::caps::HasFeatures> {
+        AudioCapsBuilder {
+            builder: self.builder.features_from_ids(features),
         }
     }
 }

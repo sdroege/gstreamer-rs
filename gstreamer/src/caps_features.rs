@@ -9,7 +9,8 @@ use std::{
     ptr, str,
 };
 
-use crate::ffi;
+use crate::{ffi, IdStr};
+use cfg_if::cfg_if;
 use glib::{prelude::*, translate::*};
 use std::sync::LazyLock;
 
@@ -32,6 +33,34 @@ impl CapsFeatures {
         f
     }
 
+    #[doc(alias = "gst_caps_features_new_static_str")]
+    pub fn new_from_static(
+        features: impl IntoIterator<Item = impl AsRef<glib::GStr> + 'static>,
+    ) -> Self {
+        skip_assert_initialized!();
+        let mut f = Self::new_empty();
+
+        for feature in features {
+            f.add_from_static(feature);
+        }
+
+        f
+    }
+
+    #[doc(alias = "gst_caps_features_new_id_str")]
+    pub fn new_from_id(features: impl IntoIterator<Item = impl AsRef<IdStr>>) -> Self {
+        skip_assert_initialized!();
+        let mut f = Self::new_empty();
+
+        for feature in features {
+            f.add_from_id(feature);
+        }
+
+        f
+    }
+
+    #[deprecated = "use `new_by_id()` instead"]
+    #[allow(deprecated)]
     #[doc(alias = "gst_caps_features_new_id")]
     pub fn from_quarks(features: impl IntoIterator<Item = glib::Quark>) -> Self {
         skip_assert_initialized!();
@@ -372,6 +401,26 @@ impl CapsFeaturesRef {
         }
     }
 
+    #[doc(alias = "gst_caps_features_contains_id_str")]
+    pub fn contains_by_id(&self, feature: impl AsRef<IdStr>) -> bool {
+        unsafe {
+            cfg_if! {
+                if #[cfg(feature = "v1_26")] {
+                    from_glib(ffi::gst_caps_features_contains_id_str(
+                        self.as_ptr(),
+                        feature.as_ref().as_ptr(),
+                    ))
+                } else {
+                    from_glib(ffi::gst_caps_features_contains(
+                        self.as_ptr(),
+                        feature.as_ref().as_gstr().as_ptr(),
+                    ))
+                }
+            }
+        }
+    }
+
+    #[deprecated = "use `contains_by_id()` instead"]
     #[doc(alias = "gst_caps_features_contains_id")]
     pub fn contains_quark(&self, feature: glib::Quark) -> bool {
         unsafe {
@@ -401,12 +450,29 @@ impl CapsFeaturesRef {
                 return None;
             }
 
-            // Safety: we can return a GStr based on the feature here because
-            // the lifetime of the returned value is constrained by &self.
             Some(glib::GStr::from_ptr(feature))
         }
     }
 
+    #[cfg(feature = "v1_26")]
+    #[doc(alias = "get_nth_by_id")]
+    #[doc(alias = "gst_caps_features_get_nth_id_str")]
+    pub fn nth_id(&self, idx: usize) -> Option<&IdStr> {
+        if idx >= self.size() {
+            return None;
+        }
+
+        unsafe {
+            let feature = ffi::gst_caps_features_get_nth_id_str(self.as_ptr(), idx as u32);
+            if feature.is_null() {
+                return None;
+            }
+
+            Some(&*(feature as *const IdStr))
+        }
+    }
+
+    #[deprecated = "use `nth_by_id()` instead"]
     #[doc(alias = "gst_caps_features_get_nth_id")]
     pub fn nth_quark(&self, idx: usize) -> Option<glib::Quark> {
         if idx >= self.size() {
@@ -428,6 +494,32 @@ impl CapsFeaturesRef {
         }
     }
 
+    #[doc(alias = "gst_caps_features_add_static_str")]
+    pub fn add_from_static(&mut self, feature: impl AsRef<glib::GStr> + 'static) {
+        unsafe {
+            cfg_if! {
+                if #[cfg(feature = "v1_26")] {
+                    ffi::gst_caps_features_add_static_str(self.as_mut_ptr(), feature.as_ref().as_ptr())
+                } else {
+                    ffi::gst_caps_features_add(self.as_mut_ptr(), feature.as_ref().as_ptr())
+                }
+            }
+        }
+    }
+
+    #[doc(alias = "gst_caps_features_add_id_str")]
+    pub fn add_from_id(&mut self, feature: impl AsRef<IdStr>) {
+        unsafe {
+            cfg_if! {
+                if #[cfg(feature = "v1_26")] {
+                    ffi::gst_caps_features_add_id_str(self.as_mut_ptr(), feature.as_ref().as_ptr())
+                } else {
+                    ffi::gst_caps_features_add(self.as_mut_ptr(), feature.as_ref().as_gstr().as_ptr())
+                }
+            }
+        }
+    }
+
     #[doc(alias = "gst_caps_features_remove")]
     pub fn remove(&mut self, feature: impl IntoGStr) {
         unsafe {
@@ -437,11 +529,26 @@ impl CapsFeaturesRef {
         }
     }
 
+    #[doc(alias = "gst_caps_features_remove_id_str")]
+    pub fn remove_by_id(&mut self, feature: impl AsRef<IdStr>) {
+        unsafe {
+            cfg_if! {
+                if #[cfg(feature = "v1_26")] {
+                    ffi::gst_caps_features_remove_id_str(self.as_mut_ptr(), feature.as_ref().as_ptr())
+                } else {
+                    ffi::gst_caps_features_remove(self.as_mut_ptr(), feature.as_ref().as_gstr().as_ptr())
+                }
+            }
+        }
+    }
+
+    #[deprecated = "use `add_by_id()` instead"]
     #[doc(alias = "gst_caps_features_add_id")]
     pub fn add_from_quark(&mut self, feature: glib::Quark) {
         unsafe { ffi::gst_caps_features_add_id(self.as_mut_ptr(), feature.into_glib()) }
     }
 
+    #[deprecated = "use `remove_by_id()` instead"]
     #[doc(alias = "gst_caps_features_remove_id")]
     pub fn remove_by_quark(&mut self, feature: glib::Quark) {
         unsafe { ffi::gst_caps_features_remove_id(self.as_mut_ptr(), feature.into_glib()) }
@@ -494,7 +601,14 @@ impl std::iter::Extend<glib::GString> for CapsFeaturesRef {
     }
 }
 
+impl<Id: AsRef<IdStr>> std::iter::Extend<Id> for CapsFeaturesRef {
+    fn extend<T: IntoIterator<Item = Id>>(&mut self, iter: T) {
+        iter.into_iter().for_each(|f| self.add_from_id(f));
+    }
+}
+
 impl std::iter::Extend<glib::Quark> for CapsFeaturesRef {
+    #[allow(deprecated)]
     fn extend<T: IntoIterator<Item = glib::Quark>>(&mut self, iter: T) {
         iter.into_iter().for_each(|f| self.add_from_quark(f));
     }
@@ -706,7 +820,19 @@ impl<'a> From<&'a glib::GStr> for CapsFeatures {
     }
 }
 
+impl<Id: AsRef<IdStr>> From<Id> for CapsFeatures {
+    fn from(value: Id) -> Self {
+        skip_assert_initialized!();
+        let mut features = CapsFeatures::new_empty();
+
+        features.add_from_id(value);
+
+        features
+    }
+}
+
 impl From<glib::Quark> for CapsFeatures {
+    #[allow(deprecated)]
     fn from(value: glib::Quark) -> Self {
         skip_assert_initialized!();
         let mut features = CapsFeatures::new_empty();
@@ -761,7 +887,19 @@ impl<const N: usize> From<[glib::GString; N]> for CapsFeatures {
     }
 }
 
+impl<const N: usize, Id: AsRef<IdStr>> From<[Id; N]> for CapsFeatures {
+    fn from(value: [Id; N]) -> Self {
+        skip_assert_initialized!();
+        let mut features = CapsFeatures::new_empty();
+
+        value.into_iter().for_each(|f| features.add_from_id(f));
+
+        features
+    }
+}
+
 impl<const N: usize> From<[glib::Quark; N]> for CapsFeatures {
+    #[allow(deprecated)]
     fn from(value: [glib::Quark; N]) -> Self {
         skip_assert_initialized!();
         let mut features = CapsFeatures::new_empty();
@@ -818,7 +956,20 @@ impl std::iter::FromIterator<glib::GString> for CapsFeatures {
     }
 }
 
+impl<Id: AsRef<IdStr>> std::iter::FromIterator<Id> for CapsFeatures {
+    #[allow(deprecated)]
+    fn from_iter<T: IntoIterator<Item = Id>>(iter: T) -> Self {
+        skip_assert_initialized!();
+        let mut features = CapsFeatures::new_empty();
+
+        iter.into_iter().for_each(|f| features.add_from_id(f));
+
+        features
+    }
+}
+
 impl std::iter::FromIterator<glib::Quark> for CapsFeatures {
+    #[allow(deprecated)]
     fn from_iter<T: IntoIterator<Item = glib::Quark>>(iter: T) -> Self {
         skip_assert_initialized!();
         let mut features = CapsFeatures::new_empty();
@@ -866,6 +1017,8 @@ pub static CAPS_FEATURES_MEMORY_SYSTEM_MEMORY: LazyLock<CapsFeatures> =
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::idstr;
+    use glib::gstr;
 
     #[test]
     fn test_from_value_optional() {
@@ -877,5 +1030,107 @@ mod tests {
         assert!(a.get::<Option<CapsFeatures>>().unwrap().is_none());
         let b = glib::value::Value::from(&CapsFeatures::new_empty());
         assert!(b.get::<Option<CapsFeatures>>().unwrap().is_some());
+    }
+
+    #[test]
+    fn trait_impls() {
+        crate::init().unwrap();
+
+        let cf = CapsFeatures::from(gstr!("memory:DMABuf"));
+        assert!(cf.contains(gstr!("memory:DMABuf")));
+
+        let cf = CapsFeatures::from([
+            gstr!("memory:DMABuf"),
+            gstr!("meta:GstVideoOverlayComposition"),
+        ]);
+
+        assert!(cf.contains(gstr!("memory:DMABuf")));
+        assert!(cf.contains("meta:GstVideoOverlayComposition"));
+        assert!(!cf.contains("memory:GLMemory"));
+
+        let cf = CapsFeatures::from_iter(vec![
+            gstr!("memory:DMABuf"),
+            gstr!("meta:GstVideoOverlayComposition"),
+        ]);
+
+        assert!(cf.contains(gstr!("memory:DMABuf")));
+        assert!(cf.contains("meta:GstVideoOverlayComposition"));
+        assert!(!cf.contains("memory:GLMemory"));
+
+        let mut cf = CapsFeatures::new_empty();
+        cf.extend([
+            gstr!("memory:DMABuf"),
+            gstr!("meta:GstVideoOverlayComposition"),
+        ]);
+
+        assert!(cf.contains(gstr!("memory:DMABuf")));
+        assert!(cf.contains("meta:GstVideoOverlayComposition"));
+        assert!(!cf.contains("memory:GLMemory"));
+    }
+
+    #[test]
+    fn trait_impls_from_id() {
+        crate::init().unwrap();
+
+        let cf = CapsFeatures::from(idstr!("memory:DMABuf"));
+        assert!(cf.contains_by_id(idstr!("memory:DMABuf")));
+
+        let cf = CapsFeatures::from([
+            idstr!("memory:DMABuf"),
+            idstr!("meta:GstVideoOverlayComposition"),
+        ]);
+
+        assert!(cf.contains_by_id(idstr!("memory:DMABuf")));
+        assert!(cf.contains("meta:GstVideoOverlayComposition"));
+        assert!(!cf.contains("memory:GLMemory"));
+
+        let cf = CapsFeatures::from_iter(vec![
+            idstr!("memory:DMABuf"),
+            idstr!("meta:GstVideoOverlayComposition"),
+        ]);
+
+        assert!(cf.contains_by_id(idstr!("memory:DMABuf")));
+        assert!(cf.contains("meta:GstVideoOverlayComposition"));
+        assert!(!cf.contains("memory:GLMemory"));
+
+        let mut cf = CapsFeatures::new_empty();
+        cf.extend([
+            idstr!("memory:DMABuf"),
+            idstr!("meta:GstVideoOverlayComposition"),
+        ]);
+
+        assert!(cf.contains_by_id(idstr!("memory:DMABuf")));
+        assert!(cf.contains("meta:GstVideoOverlayComposition"));
+        assert!(!cf.contains("memory:GLMemory"));
+    }
+
+    #[test]
+    fn trait_impls_from_ref_id() {
+        crate::init().unwrap();
+
+        let dma_buf = idstr!("memory:DMABuf");
+        let overlay_comp = idstr!("meta:GstVideoOverlayComposition");
+
+        let cf = CapsFeatures::from(&dma_buf);
+        assert!(cf.contains_by_id(&dma_buf));
+
+        let cf = CapsFeatures::from([&dma_buf, &overlay_comp]);
+
+        assert!(cf.contains_by_id(&dma_buf));
+        assert!(cf.contains_by_id(&overlay_comp));
+        assert!(!cf.contains("memory:GLMemory"));
+
+        let cf = CapsFeatures::from_iter(vec![&dma_buf, &overlay_comp]);
+
+        assert!(cf.contains_by_id(&dma_buf));
+        assert!(cf.contains_by_id(&overlay_comp));
+        assert!(!cf.contains("memory:GLMemory"));
+
+        let mut cf = CapsFeatures::new_empty();
+        cf.extend([&dma_buf, &overlay_comp]);
+
+        assert!(cf.contains_by_id(dma_buf));
+        assert!(cf.contains_by_id(overlay_comp));
+        assert!(!cf.contains("memory:GLMemory"));
     }
 }

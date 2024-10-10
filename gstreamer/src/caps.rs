@@ -2,10 +2,12 @@
 
 use std::{fmt, marker::PhantomData, ptr, str};
 
+use cfg_if::cfg_if;
 use glib::{
     prelude::*,
     translate::*,
     value::{SendValue, ToSendValue},
+    GStr,
 };
 
 use crate::{caps_features::*, ffi, structure::*, CapsIntersectMode, IdStr};
@@ -17,6 +19,18 @@ impl Caps {
     pub fn builder(name: impl IntoGStr) -> Builder<NoFeature> {
         assert_initialized_main_thread!();
         Builder::new(name)
+    }
+
+    #[doc(alias = "gst_caps_new_static_str_simple")]
+    pub fn builder_from_static(name: impl AsRef<GStr> + 'static) -> Builder<NoFeature> {
+        assert_initialized_main_thread!();
+        Builder::from_static(name)
+    }
+
+    #[doc(alias = "gst_caps_new_id_str_simple")]
+    pub fn builder_from_id(name: impl AsRef<IdStr>) -> Builder<NoFeature> {
+        assert_initialized_main_thread!();
+        Builder::from_id(name)
     }
 
     #[doc(alias = "gst_caps_new_full")]
@@ -55,6 +69,28 @@ impl Caps {
         let mut caps = Caps::new_empty();
 
         let structure = Structure::new_empty(name);
+        caps.get_mut().unwrap().append_structure(structure);
+
+        caps
+    }
+
+    #[doc(alias = "gst_caps_new_static_str_empty_simple")]
+    pub fn new_empty_simple_from_static(name: impl AsRef<GStr> + 'static) -> Self {
+        skip_assert_initialized!();
+        let mut caps = Caps::new_empty();
+
+        let structure = Structure::new_empty_from_static(name);
+        caps.get_mut().unwrap().append_structure(structure);
+
+        caps
+    }
+
+    #[doc(alias = "gst_caps_new_id_str_empty_simple")]
+    pub fn new_empty_simple_from_id(name: impl AsRef<IdStr>) -> Self {
+        skip_assert_initialized!();
+        let mut caps = Caps::new_empty();
+
+        let structure = Structure::new_empty_from_id(name);
         caps.get_mut().unwrap().append_structure(structure);
 
         caps
@@ -314,6 +350,32 @@ impl CapsRef {
     }
 
     // rustdoc-stripper-ignore-next
+    /// Sets field `name` to the given value `value`.
+    ///
+    /// Overrides any default or previously defined value for `name`.
+    #[doc(alias = "gst_caps_set_value_static_str")]
+    #[doc(alias = "gst_caps_set_simple_static_str")]
+    pub fn set_with_static(
+        &mut self,
+        name: impl AsRef<GStr> + 'static,
+        value: impl ToSendValue + Sync,
+    ) {
+        let value = value.to_send_value();
+        self.set_value_with_static(name, value);
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` to the given value `value`.
+    ///
+    /// Overrides any default or previously defined value for `name`.
+    #[doc(alias = "gst_caps_id_str_set_value")]
+    #[doc(alias = "gst_caps_id_str_set_simple")]
+    pub fn set_with_id(&mut self, name: impl AsRef<IdStr>, value: impl ToSendValue + Sync) {
+        let value = value.to_send_value();
+        self.set_value_with_id(name, value);
+    }
+
+    // rustdoc-stripper-ignore-next
     /// Sets field `name` to the given value if the `predicate` evaluates to `true`.
     ///
     /// This has no effect if the `predicate` evaluates to `false`,
@@ -323,6 +385,42 @@ impl CapsRef {
     pub fn set_if(&mut self, name: impl IntoGStr, value: impl ToSendValue + Sync, predicate: bool) {
         if predicate {
             self.set(name, value);
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` to the given value if the `predicate` evaluates to `true`.
+    ///
+    /// This has no effect if the `predicate` evaluates to `false`,
+    /// i.e. default or previous value for `name` is kept.
+    #[doc(alias = "gst_caps_set_value_static_str")]
+    #[doc(alias = "gst_caps_set_simple_static_str")]
+    pub fn set_with_static_if(
+        &mut self,
+        name: impl AsRef<GStr> + 'static,
+        value: impl ToSendValue + Sync,
+        predicate: bool,
+    ) {
+        if predicate {
+            self.set_with_static(name, value);
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` to the given value if the `predicate` evaluates to `true`.
+    ///
+    /// This has no effect if the `predicate` evaluates to `false`,
+    /// i.e. default or previous value for `name` is kept.
+    #[doc(alias = "gst_caps_id_str_set_value")]
+    #[doc(alias = "gst_caps_id_str_set_simple")]
+    pub fn set_with_id_if(
+        &mut self,
+        name: impl AsRef<IdStr>,
+        value: impl ToSendValue + Sync,
+        predicate: bool,
+    ) {
+        if predicate {
+            self.set_with_id(name, value);
         }
     }
 
@@ -339,6 +437,38 @@ impl CapsRef {
     }
 
     // rustdoc-stripper-ignore-next
+    /// Sets field `name` to the given inner value if `value` is `Some`.
+    ///
+    /// This has no effect if the value is `None`, i.e. default or previous value for `name` is kept.
+    #[doc(alias = "gst_caps_set_value_static_str")]
+    #[doc(alias = "gst_caps_set_simple_static_str")]
+    pub fn set_with_static_if_some(
+        &mut self,
+        name: impl AsRef<GStr> + 'static,
+        value: Option<impl ToSendValue + Sync>,
+    ) {
+        if let Some(value) = value {
+            self.set_with_static(name, value);
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` to the given inner value if `value` is `Some`.
+    ///
+    /// This has no effect if the value is `None`, i.e. default or previous value for `name` is kept.
+    #[doc(alias = "gst_caps_id_str_set_value")]
+    #[doc(alias = "gst_caps_id_str_set_simple")]
+    pub fn set_with_id_if_some(
+        &mut self,
+        name: impl AsRef<IdStr>,
+        value: Option<impl ToSendValue + Sync>,
+    ) {
+        if let Some(value) = value {
+            self.set_with_id(name, value);
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
     /// Sets field `name` using the given `ValueType` `V` built from `iter`'s the `Item`s.
     ///
     /// Overrides any default or previously defined value for `name`.
@@ -350,6 +480,36 @@ impl CapsRef {
     ) {
         let iter = iter.into_iter().map(|item| item.to_send_value());
         self.set(name, V::from_iter(iter));
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` using the given `ValueType` `V` built from `iter`'s the `Item`s.
+    ///
+    /// Overrides any default or previously defined value for `name`.
+    #[inline]
+    pub fn set_with_static_from_iter<
+        V: ValueType + ToSendValue + FromIterator<SendValue> + Sync,
+    >(
+        &mut self,
+        name: impl AsRef<GStr> + 'static,
+        iter: impl IntoIterator<Item = impl ToSendValue>,
+    ) {
+        let iter = iter.into_iter().map(|item| item.to_send_value());
+        self.set_with_static(name, V::from_iter(iter));
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` using the given `ValueType` `V` built from `iter`'s the `Item`s.
+    ///
+    /// Overrides any default or previously defined value for `name`.
+    #[inline]
+    pub fn set_with_id_from_iter<V: ValueType + ToSendValue + FromIterator<SendValue> + Sync>(
+        &mut self,
+        name: impl AsRef<IdStr>,
+        iter: impl IntoIterator<Item = impl ToSendValue>,
+    ) {
+        let iter = iter.into_iter().map(|item| item.to_send_value());
+        self.set_with_id(name, V::from_iter(iter));
     }
 
     // rustdoc-stripper-ignore-next
@@ -371,6 +531,44 @@ impl CapsRef {
     }
 
     // rustdoc-stripper-ignore-next
+    /// Sets field `name` using the given `ValueType` `V` built from `iter`'s Item`s,
+    /// if `iter` is not empty.
+    ///
+    /// This has no effect if `iter` is empty, i.e. previous value for `name` is unchanged.
+    #[inline]
+    pub fn set_with_static_if_not_empty<
+        V: ValueType + ToSendValue + FromIterator<SendValue> + Sync,
+    >(
+        &mut self,
+        name: impl AsRef<GStr> + 'static,
+        iter: impl IntoIterator<Item = impl ToSendValue>,
+    ) {
+        let mut iter = iter.into_iter().peekable();
+        if iter.peek().is_some() {
+            let iter = iter.map(|item| item.to_send_value());
+            self.set_with_static(name, V::from_iter(iter));
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` using the given `ValueType` `V` built from `iter`'s Item`s,
+    /// if `iter` is not empty.
+    ///
+    /// This has no effect if `iter` is empty, i.e. previous value for `name` is unchanged.
+    #[inline]
+    pub fn set_with_id_if_not_empty<V: ValueType + ToSendValue + FromIterator<SendValue> + Sync>(
+        &mut self,
+        name: impl AsRef<IdStr>,
+        iter: impl IntoIterator<Item = impl ToSendValue>,
+    ) {
+        let mut iter = iter.into_iter().peekable();
+        if iter.peek().is_some() {
+            let iter = iter.map(|item| item.to_send_value());
+            self.set_with_id(name, V::from_iter(iter));
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
     /// Sets field `name` to the given value `value`.
     ///
     /// Overrides any default or previously defined value for `name`.
@@ -380,6 +578,52 @@ impl CapsRef {
             name.run_with_gstr(|name| {
                 ffi::gst_caps_set_value(self.as_mut_ptr(), name.as_ptr(), value.to_glib_none().0)
             });
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` to the given value `value`.
+    ///
+    /// Overrides any default or previously defined value for `name`.
+    #[doc(alias = "gst_caps_set_value_static_str")]
+    pub fn set_value_with_static(
+        &mut self,
+        name: impl AsRef<GStr> + 'static,
+        value: glib::SendValue,
+    ) {
+        unsafe {
+            cfg_if! {
+                if #[cfg(feature = "v1_26")] {
+                    ffi::gst_caps_set_value_static_str(
+                        self.as_mut_ptr(),
+                        name.as_ref().as_ptr(),
+                        value.to_glib_none().0,
+                    )
+                } else {
+                    ffi::gst_caps_set_value(self.as_mut_ptr(), name.as_ref().as_ptr(), value.to_glib_none().0)
+                }
+            }
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` to the given value `value`.
+    ///
+    /// Overrides any default or previously defined value for `name`.
+    #[doc(alias = "gst_caps_id_str_set_value")]
+    pub fn set_value_with_id(&mut self, name: impl AsRef<IdStr>, value: glib::SendValue) {
+        unsafe {
+            cfg_if! {
+                if #[cfg(feature = "v1_26")] {
+                    ffi::gst_caps_id_str_set_value(
+                        self.as_mut_ptr(),
+                        name.as_ref().as_ptr(),
+                        value.to_glib_none().0,
+                    )
+                } else {
+                    ffi::gst_caps_set_value(self.as_mut_ptr(), name.as_ref().as_gstr().as_ptr(), value.to_glib_none().0)
+                }
+            }
         }
     }
 
@@ -396,6 +640,40 @@ impl CapsRef {
     }
 
     // rustdoc-stripper-ignore-next
+    /// Sets field `name` to the given `value` if the `predicate` evaluates to `true`.
+    ///
+    /// This has no effect if the `predicate` evaluates to `false`,
+    /// i.e. default or previous value for `name` is kept.
+    #[doc(alias = "gst_caps_set_value_static_str")]
+    pub fn set_value_with_static_if(
+        &mut self,
+        name: impl AsRef<GStr> + 'static,
+        value: SendValue,
+        predicate: bool,
+    ) {
+        if predicate {
+            self.set_value_with_static(name, value);
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` to the given `value` if the `predicate` evaluates to `true`.
+    ///
+    /// This has no effect if the `predicate` evaluates to `false`,
+    /// i.e. default or previous value for `name` is kept.
+    #[doc(alias = "gst_caps_id_str_set_value")]
+    pub fn set_value_with_id_if(
+        &mut self,
+        name: impl AsRef<IdStr>,
+        value: SendValue,
+        predicate: bool,
+    ) {
+        if predicate {
+            self.set_value_with_id(name, value);
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
     /// Sets field `name` to the given inner value if `value` is `Some`.
     ///
     /// This has no effect if the value is `None`, i.e. default or previous value for `name` is kept.
@@ -403,6 +681,32 @@ impl CapsRef {
     pub fn set_value_if_some(&mut self, name: impl IntoGStr, value: Option<SendValue>) {
         if let Some(value) = value {
             self.set_value(name, value);
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` to the given inner value if `value` is `Some`.
+    ///
+    /// This has no effect if the value is `None`, i.e. default or previous value for `name` is kept.
+    #[doc(alias = "gst_caps_set_value_static_str")]
+    pub fn set_value_with_static_if_some(
+        &mut self,
+        name: impl AsRef<GStr> + 'static,
+        value: Option<SendValue>,
+    ) {
+        if let Some(value) = value {
+            self.set_value_with_static(name, value);
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Sets field `name` to the given inner value if `value` is `Some`.
+    ///
+    /// This has no effect if the value is `None`, i.e. default or previous value for `name` is kept.
+    #[doc(alias = "gst_caps_id_str_set_value")]
+    pub fn set_value_with_id_if_some(&mut self, name: impl AsRef<IdStr>, value: Option<SendValue>) {
+        if let Some(value) = value {
+            self.set_value_with_id(name, value);
         }
     }
 
@@ -700,7 +1004,7 @@ impl CapsRef {
     >(
         &mut self,
         mut func: F,
-    ) -> bool {
+    ) {
         unsafe {
             unsafe extern "C" fn trampoline<
                 F: FnMut(&mut CapsFeaturesRef, &mut StructureRef) -> std::ops::ControlFlow<()>,
@@ -718,11 +1022,11 @@ impl CapsRef {
                 matches!(res, std::ops::ControlFlow::Continue(_)).into_glib()
             }
             let func = &mut func as *mut F;
-            from_glib(ffi::gst_caps_map_in_place(
+            let _ = ffi::gst_caps_map_in_place(
                 self.as_mut_ptr(),
                 Some(trampoline::<F>),
                 func as glib::ffi::gpointer,
-            ))
+            );
         }
     }
 
@@ -1085,6 +1389,24 @@ impl Builder<NoFeature> {
         }
     }
 
+    fn from_static(name: impl AsRef<GStr> + 'static) -> Builder<NoFeature> {
+        skip_assert_initialized!();
+        Builder {
+            s: crate::Structure::new_empty_from_static(name),
+            features: None,
+            phantom: PhantomData,
+        }
+    }
+
+    fn from_id(name: impl AsRef<IdStr>) -> Builder<NoFeature> {
+        skip_assert_initialized!();
+        Builder {
+            s: crate::Structure::new_empty_from_id(name),
+            features: None,
+            phantom: PhantomData,
+        }
+    }
+
     pub fn features(
         self,
         features: impl IntoIterator<Item = impl IntoGStr>,
@@ -1092,6 +1414,28 @@ impl Builder<NoFeature> {
         Builder {
             s: self.s,
             features: Some(CapsFeatures::new(features)),
+            phantom: PhantomData,
+        }
+    }
+
+    pub fn features_from_statics(
+        self,
+        features: impl IntoIterator<Item = impl AsRef<GStr> + 'static>,
+    ) -> Builder<HasFeatures> {
+        Builder {
+            s: self.s,
+            features: Some(CapsFeatures::new_from_static(features)),
+            phantom: PhantomData,
+        }
+    }
+
+    pub fn features_from_ids(
+        self,
+        features: impl IntoIterator<Item = impl AsRef<IdStr>>,
+    ) -> Builder<HasFeatures> {
+        Builder {
+            s: self.s,
+            features: Some(CapsFeatures::new_from_id(features)),
             phantom: PhantomData,
         }
     }
@@ -1285,6 +1629,7 @@ impl<T> BuilderFull<T> {
 mod tests {
     use super::*;
     use crate::{Array, Fraction};
+    use glib::gstr;
 
     #[test]
     fn test_builder() {
@@ -1292,10 +1637,10 @@ mod tests {
 
         let mut caps = Caps::builder("foo/bar")
             .field("int", 12)
-            .field("bool", true)
-            .field("string", "bla")
+            .field_with_static(gstr!("bool"), true)
+            .field_with_id(idstr!("string"), "bla")
             .field("fraction", Fraction::new(1, 2))
-            .field("array", Array::new([1, 2]))
+            .field_with_id(idstr!("array"), Array::new([1, 2]))
             .build();
         assert_eq!(
             caps.to_string(),
@@ -1331,8 +1676,8 @@ mod tests {
         let caps = Caps::builder("foo/bar")
             .field_if_some("int0", Option::<i32>::None)
             .field_if_some("int1", Some(12))
-            .field_if_some("string0", Option::<String>::None)
-            .field_if_some("string1", Some("bla"))
+            .field_with_static_if_some(gstr!("string0"), Option::<String>::None)
+            .field_with_id_if_some(idstr!("string1"), Some("bla"))
             .build();
         assert_eq!(
             caps.to_string(),
@@ -1397,7 +1742,7 @@ mod tests {
             .structure_with_any_features_if_some(Some(Structure::builder("audio/x-raw").build()))
             .structure_with_features_if_some(
                 Some(Structure::builder("video/x-raw").build()),
-                CapsFeatures::new(["foo:bla", "foo:baz"]),
+                CapsFeatures::new_from_id([idstr!("foo:bla"), idstr!("foo:baz")]),
             )
             .build();
         assert_eq!(
