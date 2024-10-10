@@ -183,9 +183,51 @@ impl ElementPropertiesGeneralBuilder {
         self
     }
 
+    pub fn field_value_with_static(
+        mut self,
+        property_name: impl AsRef<glib::GStr> + 'static,
+        value: glib::SendValue,
+    ) -> Self {
+        self.structure.set_value_with_static(property_name, value);
+        self
+    }
+
+    pub fn field_value_with_id(
+        mut self,
+        property_name: impl AsRef<IdStr>,
+        value: glib::SendValue,
+    ) -> Self {
+        self.structure.set_value_with_id(property_name, value);
+        self
+    }
+
     pub fn field_value_if_some(self, property_name: &str, value: Option<glib::SendValue>) -> Self {
         if let Some(value) = value {
             self.field_value(property_name, value)
+        } else {
+            self
+        }
+    }
+
+    pub fn field_value_with_static_if_some(
+        self,
+        property_name: impl AsRef<glib::GStr> + 'static,
+        value: Option<glib::SendValue>,
+    ) -> Self {
+        if let Some(value) = value {
+            self.field_value_with_static(property_name, value)
+        } else {
+            self
+        }
+    }
+
+    pub fn field_value_with_id_if_some(
+        self,
+        property_name: impl AsRef<IdStr>,
+        value: Option<glib::SendValue>,
+    ) -> Self {
+        if let Some(value) = value {
+            self.field_value_with_id(property_name, value)
         } else {
             self
         }
@@ -347,9 +389,51 @@ impl ElementPropertiesMapItemBuilder {
         self
     }
 
+    pub fn field_value_with_static(
+        mut self,
+        property_name: impl AsRef<glib::GStr> + 'static,
+        value: glib::SendValue,
+    ) -> Self {
+        self.structure.set_value_with_static(property_name, value);
+        self
+    }
+
+    pub fn field_value_with_id(
+        mut self,
+        property_name: impl AsRef<IdStr>,
+        value: glib::SendValue,
+    ) -> Self {
+        self.structure.set_value_with_id(property_name, value);
+        self
+    }
+
     pub fn field_value_if_some(self, property_name: &str, value: Option<glib::SendValue>) -> Self {
         if let Some(value) = value {
             self.field_value(property_name, value)
+        } else {
+            self
+        }
+    }
+
+    pub fn field_value_with_static_if_some(
+        self,
+        property_name: impl AsRef<glib::GStr> + 'static,
+        value: Option<glib::SendValue>,
+    ) -> Self {
+        if let Some(value) = value {
+            self.field_value_with_static(property_name, value)
+        } else {
+            self
+        }
+    }
+
+    pub fn field_value_with_id_if_some(
+        self,
+        property_name: impl AsRef<IdStr>,
+        value: Option<glib::SendValue>,
+    ) -> Self {
+        if let Some(value) = value {
+            self.field_value_with_id(property_name, value)
         } else {
             self
         }
@@ -363,6 +447,7 @@ impl ElementPropertiesMapItemBuilder {
 #[cfg(test)]
 mod test {
     use super::*;
+    use gst::idstr;
 
     #[test]
     fn element_properties_getters() {
@@ -377,7 +462,7 @@ mod test {
         assert_eq!(elem_props_general.map(), None);
 
         let elem_factory_props_map = ElementPropertiesMapItem::builder("vp8enc")
-            .field("cq-level", 13)
+            .field_with_id(idstr!("cq-level"), 13)
             .field("resize-allowed", false)
             .build();
         let elem_props_map = ElementProperties::builder_map()
