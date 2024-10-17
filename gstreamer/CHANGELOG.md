@@ -5,6 +5,20 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.22.8] - 2024-10-18
+### Fixed
+- Fix binding to wrong C function in `PadExtManual::proxy_query_caps()`
+- Fix `TagListRef::index()` lifetime bind
+- Add workaround for linking against macOS SDK's relocatable dylibs
+- Documentation fixes
+
+### Added
+- utils: streamproducer: Add support for more platforms, especially MIPS.
+- video: Add `#[must_use]` attribute to `VideoTimeCode::add_interval()`
+
+### Changed
+- Anticipate GQuark to GstIdStr lifetime changes
+
 ## [0.22.7] - 2024-07-24
 ### Fixed
 - GStreamer criticals when using `gst::meta::CustomMeta::register_simple()`
