@@ -335,9 +335,10 @@ pub trait PadExtManual: sealed::Sealed + IsA<Pad> + 'static {
         }
     }
 
+    #[doc(alias = "gst_pad_proxy_query_caps")]
     fn proxy_query_caps(&self, query: &mut QueryRef) -> bool {
         unsafe {
-            from_glib(ffi::gst_pad_proxy_query_accept_caps(
+            from_glib(ffi::gst_pad_proxy_query_caps(
                 self.as_ref().to_glib_none().0,
                 query.as_mut_ptr(),
             ))
