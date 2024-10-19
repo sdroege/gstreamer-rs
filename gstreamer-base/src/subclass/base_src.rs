@@ -20,7 +20,7 @@ pub enum CreateSuccess {
     NewBufferList(gst::BufferList),
 }
 
-pub trait BaseSrcImpl: BaseSrcImplExt + ElementImpl {
+pub trait BaseSrcImpl: ElementImpl + ObjectSubclass<Type: IsA<BaseSrc>> {
     fn start(&self) -> Result<(), gst::ErrorMessage> {
         self.parent_start()
     }
@@ -108,12 +108,7 @@ pub trait BaseSrcImpl: BaseSrcImplExt + ElementImpl {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::BaseSrcImplExt> Sealed for T {}
-}
-
-pub trait BaseSrcImplExt: sealed::Sealed + ObjectSubclass {
+pub trait BaseSrcImplExt: BaseSrcImpl {
     fn parent_start(&self) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = Self::type_data();

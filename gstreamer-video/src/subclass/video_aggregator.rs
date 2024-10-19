@@ -9,7 +9,7 @@ use crate::{ffi, VideoAggregator};
 
 pub struct AggregateFramesToken<'a>(pub(crate) &'a VideoAggregator);
 
-pub trait VideoAggregatorImpl: VideoAggregatorImplExt + AggregatorImpl {
+pub trait VideoAggregatorImpl: AggregatorImpl + ObjectSubclass<Type: IsA<VideoAggregator>> {
     fn update_caps(&self, caps: &gst::Caps) -> Result<gst::Caps, gst::LoggableError> {
         self.parent_update_caps(caps)
     }
@@ -30,12 +30,8 @@ pub trait VideoAggregatorImpl: VideoAggregatorImplExt + AggregatorImpl {
         self.parent_find_best_format(downstream_caps)
     }
 }
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::VideoAggregatorImplExt> Sealed for T {}
-}
 
-pub trait VideoAggregatorImplExt: sealed::Sealed + ObjectSubclass {
+pub trait VideoAggregatorImplExt: VideoAggregatorImpl {
     fn parent_update_caps(&self, caps: &gst::Caps) -> Result<gst::Caps, gst::LoggableError> {
         unsafe {
             let data = Self::type_data();

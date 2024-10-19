@@ -7,7 +7,7 @@ use gst::subclass::prelude::*;
 
 use crate::{ffi, BaseSink};
 
-pub trait BaseSinkImpl: BaseSinkImplExt + ElementImpl {
+pub trait BaseSinkImpl: ElementImpl + ObjectSubclass<Type: IsA<BaseSink>> {
     fn start(&self) -> Result<(), gst::ErrorMessage> {
         self.parent_start()
     }
@@ -68,12 +68,7 @@ pub trait BaseSinkImpl: BaseSinkImplExt + ElementImpl {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::BaseSinkImplExt> Sealed for T {}
-}
-
-pub trait BaseSinkImplExt: sealed::Sealed + ObjectSubclass {
+pub trait BaseSinkImplExt: BaseSinkImpl {
     fn parent_start(&self) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = Self::type_data();

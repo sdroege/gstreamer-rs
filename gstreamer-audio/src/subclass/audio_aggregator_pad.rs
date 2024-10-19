@@ -7,7 +7,9 @@ use gst_base::{prelude::*, subclass::prelude::*};
 
 use crate::{ffi, AudioAggregatorPad};
 
-pub trait AudioAggregatorPadImpl: AudioAggregatorPadImplExt + AggregatorPadImpl {
+pub trait AudioAggregatorPadImpl:
+    AggregatorPadImpl + ObjectSubclass<Type: IsA<AudioAggregatorPad>>
+{
     const HANDLE_CONVERSION: bool = false;
 
     fn update_conversion_info(&self) {
@@ -24,12 +26,7 @@ pub trait AudioAggregatorPadImpl: AudioAggregatorPadImplExt + AggregatorPadImpl 
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::AudioAggregatorPadImplExt> Sealed for T {}
-}
-
-pub trait AudioAggregatorPadImplExt: sealed::Sealed + ObjectSubclass {
+pub trait AudioAggregatorPadImplExt: AudioAggregatorPadImpl {
     fn parent_update_conversion_info(&self) {
         unsafe {
             let data = Self::type_data();

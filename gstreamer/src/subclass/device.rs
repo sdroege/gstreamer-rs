@@ -7,7 +7,7 @@ use glib::{prelude::*, subclass::prelude::*, translate::*};
 use super::prelude::*;
 use crate::{ffi, Device, Element, LoggableError};
 
-pub trait DeviceImpl: DeviceImplExt + GstObjectImpl + Send + Sync {
+pub trait DeviceImpl: GstObjectImpl + ObjectSubclass<Type: IsA<Device>> {
     fn create_element(&self, name: Option<&str>) -> Result<Element, LoggableError> {
         self.parent_create_element(name)
     }
@@ -17,12 +17,7 @@ pub trait DeviceImpl: DeviceImplExt + GstObjectImpl + Send + Sync {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::DeviceImplExt> Sealed for T {}
-}
-
-pub trait DeviceImplExt: sealed::Sealed + ObjectSubclass {
+pub trait DeviceImplExt: DeviceImpl {
     fn parent_create_element(&self, name: Option<&str>) -> Result<Element, LoggableError> {
         unsafe {
             let data = Self::type_data();

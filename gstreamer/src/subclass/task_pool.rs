@@ -6,12 +6,12 @@ use std::{
     sync::{Arc, Mutex},
 };
 
-use glib::{ffi::gpointer, subclass::prelude::*, translate::*};
+use glib::{ffi::gpointer, prelude::*, subclass::prelude::*, translate::*};
 
 use super::prelude::*;
 use crate::{ffi, TaskHandle, TaskPool};
 
-pub trait TaskPoolImpl: GstObjectImpl + Send + Sync {
+pub trait TaskPoolImpl: GstObjectImpl + ObjectSubclass<Type: IsA<TaskPool>> {
     // rustdoc-stripper-ignore-next
     /// Handle to be returned from the `push` function to allow the caller to wait for the task's
     /// completion.

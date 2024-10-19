@@ -4,7 +4,7 @@ use crate::{ffi, RTSPAuth, RTSPContext};
 use glib::{prelude::*, subclass::prelude::*, translate::*};
 use libc::c_char;
 
-pub trait RTSPAuthImpl: RTSPAuthImplExt + ObjectImpl + Send + Sync {
+pub trait RTSPAuthImpl: ObjectImpl + ObjectSubclass<Type: IsA<RTSPAuth>> + Send + Sync {
     fn authenticate(&self, ctx: &RTSPContext) -> bool {
         self.parent_authenticate(ctx)
     }
@@ -18,12 +18,7 @@ pub trait RTSPAuthImpl: RTSPAuthImplExt + ObjectImpl + Send + Sync {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::RTSPAuthImplExt> Sealed for T {}
-}
-
-pub trait RTSPAuthImplExt: sealed::Sealed + ObjectSubclass {
+pub trait RTSPAuthImplExt: RTSPAuthImpl {
     fn parent_authenticate(&self, ctx: &RTSPContext) -> bool {
         unsafe {
             let data = Self::type_data();

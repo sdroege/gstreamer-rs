@@ -5,7 +5,7 @@ use gst_base::subclass::prelude::*;
 
 use crate::{ffi, prelude::*, GLBaseFilter};
 
-pub trait GLBaseFilterImpl: GLBaseFilterImplExt + BaseTransformImpl {
+pub trait GLBaseFilterImpl: BaseTransformImpl + ObjectSubclass<Type: IsA<GLBaseFilter>> {
     fn gl_set_caps(&self, incaps: &Caps, outcaps: &Caps) -> Result<(), LoggableError> {
         self.parent_gl_set_caps(incaps, outcaps)
     }
@@ -19,12 +19,7 @@ pub trait GLBaseFilterImpl: GLBaseFilterImplExt + BaseTransformImpl {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::GLBaseFilterImplExt> Sealed for T {}
-}
-
-pub trait GLBaseFilterImplExt: sealed::Sealed + ObjectSubclass {
+pub trait GLBaseFilterImplExt: GLBaseFilterImpl {
     fn parent_gl_set_caps(&self, incaps: &Caps, outcaps: &Caps) -> Result<(), LoggableError> {
         unsafe {
             let data = Self::type_data();

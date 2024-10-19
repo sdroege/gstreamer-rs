@@ -6,7 +6,9 @@ use glib::{prelude::*, subclass::prelude::*, translate::*};
 
 use crate::{ffi, RTSPMediaFactory};
 
-pub trait RTSPMediaFactoryImpl: RTSPMediaFactoryImplExt + ObjectImpl + Send + Sync {
+pub trait RTSPMediaFactoryImpl:
+    ObjectImpl + ObjectSubclass<Type: IsA<RTSPMediaFactory>> + Send + Sync
+{
     fn gen_key(&self, url: &gst_rtsp::RTSPUrl) -> Option<glib::GString> {
         self.parent_gen_key(url)
     }
@@ -36,12 +38,7 @@ pub trait RTSPMediaFactoryImpl: RTSPMediaFactoryImplExt + ObjectImpl + Send + Sy
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::RTSPMediaFactoryImplExt> Sealed for T {}
-}
-
-pub trait RTSPMediaFactoryImplExt: sealed::Sealed + ObjectSubclass {
+pub trait RTSPMediaFactoryImplExt: RTSPMediaFactoryImpl {
     fn parent_gen_key(&self, url: &gst_rtsp::RTSPUrl) -> Option<glib::GString> {
         unsafe {
             let data = Self::type_data();

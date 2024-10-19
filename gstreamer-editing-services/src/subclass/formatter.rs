@@ -3,7 +3,7 @@
 use crate::{ffi, prelude::*, Formatter};
 use glib::{subclass::prelude::*, translate::*};
 
-pub trait FormatterImpl: FormatterImplExt + ObjectImpl + Send + Sync {
+pub trait FormatterImpl: ObjectImpl + ObjectSubclass<Type: IsA<Formatter>> + Send + Sync {
     fn can_load_uri(&self, uri: &str) -> Result<(), glib::Error> {
         self.parent_can_load_uri(uri)
     }
@@ -22,12 +22,7 @@ pub trait FormatterImpl: FormatterImplExt + ObjectImpl + Send + Sync {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::FormatterImplExt> Sealed for T {}
-}
-
-pub trait FormatterImplExt: sealed::Sealed + ObjectSubclass {
+pub trait FormatterImplExt: FormatterImpl {
     fn parent_can_load_uri(&self, uri: &str) -> Result<(), glib::Error> {
         unsafe {
             let data = Self::type_data();

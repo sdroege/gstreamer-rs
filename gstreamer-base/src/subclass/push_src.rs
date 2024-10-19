@@ -3,12 +3,12 @@
 use std::ptr;
 
 use glib::{prelude::*, subclass::prelude::*, translate::*};
-use gst::prelude::*;
+use gst::{prelude::*, subclass::prelude::*};
 
 use super::base_src::{BaseSrcImpl, CreateSuccess};
 use crate::{ffi, prelude::*, PushSrc};
 
-pub trait PushSrcImpl: PushSrcImplExt + BaseSrcImpl {
+pub trait PushSrcImpl: BaseSrcImpl + ObjectSubclass<Type: IsA<PushSrc>> {
     fn fill(&self, buffer: &mut gst::BufferRef) -> Result<gst::FlowSuccess, gst::FlowError> {
         PushSrcImplExt::parent_fill(self, buffer)
     }
@@ -22,12 +22,7 @@ pub trait PushSrcImpl: PushSrcImplExt + BaseSrcImpl {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::PushSrcImplExt> Sealed for T {}
-}
-
-pub trait PushSrcImplExt: sealed::Sealed + ObjectSubclass {
+pub trait PushSrcImplExt: PushSrcImpl {
     fn parent_fill(&self, buffer: &mut gst::BufferRef) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             let data = Self::type_data();

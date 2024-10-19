@@ -5,7 +5,7 @@ use gst_base::{prelude::*, subclass::prelude::*};
 
 use crate::{ffi, VideoFilter, VideoFrameExt, VideoFrameRef, VideoInfo};
 
-pub trait VideoFilterImpl: VideoFilterImplExt + BaseTransformImpl {
+pub trait VideoFilterImpl: BaseTransformImpl + ObjectSubclass<Type: IsA<VideoFilter>> {
     fn set_info(
         &self,
         incaps: &gst::Caps,
@@ -39,12 +39,7 @@ pub trait VideoFilterImpl: VideoFilterImplExt + BaseTransformImpl {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::VideoFilterImplExt> Sealed for T {}
-}
-
-pub trait VideoFilterImplExt: sealed::Sealed + ObjectSubclass {
+pub trait VideoFilterImplExt: VideoFilterImpl {
     fn parent_set_info(
         &self,
         incaps: &gst::Caps,

@@ -5,7 +5,7 @@ use gst::subclass::prelude::*;
 
 use crate::{ffi, Aggregator, AggregatorPad};
 
-pub trait AggregatorPadImpl: AggregatorPadImplExt + PadImpl {
+pub trait AggregatorPadImpl: PadImpl + ObjectSubclass<Type: IsA<AggregatorPad>> {
     fn flush(&self, aggregator: &Aggregator) -> Result<gst::FlowSuccess, gst::FlowError> {
         self.parent_flush(aggregator)
     }
@@ -15,12 +15,7 @@ pub trait AggregatorPadImpl: AggregatorPadImplExt + PadImpl {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::AggregatorPadImplExt> Sealed for T {}
-}
-
-pub trait AggregatorPadImplExt: sealed::Sealed + ObjectSubclass {
+pub trait AggregatorPadImplExt: AggregatorPadImpl {
     fn parent_flush(&self, aggregator: &Aggregator) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             let data = Self::type_data();

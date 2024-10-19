@@ -4,7 +4,9 @@ use glib::{prelude::*, subclass::prelude::*, translate::*};
 
 use crate::{ffi, Player, PlayerVideoRenderer};
 
-pub trait PlayerVideoRendererImpl: ObjectImpl {
+pub trait PlayerVideoRendererImpl:
+    ObjectImpl + ObjectSubclass<Type: IsA<PlayerVideoRenderer>>
+{
     fn create_video_sink(&self, player: &Player) -> gst::Element;
 }
 
@@ -16,12 +18,7 @@ unsafe impl<T: PlayerVideoRendererImpl> IsImplementable<T> for PlayerVideoRender
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::PlayerVideoRendererImplExt> Sealed for T {}
-}
-
-pub trait PlayerVideoRendererImplExt: sealed::Sealed + ObjectSubclass {
+pub trait PlayerVideoRendererImplExt: PlayerVideoRendererImpl {
     fn parent_create_video_sink(&self, player: &Player) -> gst::Element {
         unsafe {
             let type_data = Self::type_data();

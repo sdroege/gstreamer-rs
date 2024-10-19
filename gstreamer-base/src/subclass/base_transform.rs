@@ -14,7 +14,7 @@ pub enum BaseTransformMode {
     Both,
 }
 
-pub trait BaseTransformImpl: BaseTransformImplExt + ElementImpl {
+pub trait BaseTransformImpl: ElementImpl + ObjectSubclass<Type: IsA<BaseTransform>> {
     const MODE: BaseTransformMode;
     const PASSTHROUGH_ON_SAME_CAPS: bool;
     const TRANSFORM_IP_ON_PASSTHROUGH: bool;
@@ -154,12 +154,7 @@ pub trait BaseTransformImpl: BaseTransformImplExt + ElementImpl {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::BaseTransformImplExt> Sealed for T {}
-}
-
-pub trait BaseTransformImplExt: sealed::Sealed + ObjectSubclass {
+pub trait BaseTransformImplExt: BaseTransformImpl {
     fn parent_start(&self) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = Self::type_data();

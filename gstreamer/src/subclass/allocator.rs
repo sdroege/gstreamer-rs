@@ -7,7 +7,7 @@ use glib::{bool_error, prelude::*, subclass::prelude::*, translate::*, BoolError
 use super::prelude::*;
 use crate::{ffi, AllocationParams, Allocator, Memory};
 
-pub trait AllocatorImpl: AllocatorImplExt + GstObjectImpl + Send + Sync {
+pub trait AllocatorImpl: GstObjectImpl + ObjectSubclass<Type: IsA<Allocator>> {
     fn alloc(&self, size: usize, params: Option<&AllocationParams>) -> Result<Memory, BoolError> {
         self.parent_alloc(size, params)
     }
@@ -17,12 +17,7 @@ pub trait AllocatorImpl: AllocatorImplExt + GstObjectImpl + Send + Sync {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::AllocatorImplExt> Sealed for T {}
-}
-
-pub trait AllocatorImplExt: sealed::Sealed + ObjectSubclass {
+pub trait AllocatorImplExt: AllocatorImpl {
     fn parent_alloc(
         &self,
         size: usize,

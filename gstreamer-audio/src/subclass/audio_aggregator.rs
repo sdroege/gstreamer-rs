@@ -7,7 +7,7 @@ use gst_base::{prelude::*, subclass::prelude::*};
 
 use crate::{ffi, AudioAggregator, AudioAggregatorPad};
 
-pub trait AudioAggregatorImpl: AudioAggregatorImplExt + AggregatorImpl {
+pub trait AudioAggregatorImpl: AggregatorImpl + ObjectSubclass<Type: IsA<AudioAggregator>> {
     fn create_output_buffer(&self, num_frames: u32) -> Option<gst::Buffer> {
         self.parent_create_output_buffer(num_frames)
     }
@@ -26,12 +26,7 @@ pub trait AudioAggregatorImpl: AudioAggregatorImplExt + AggregatorImpl {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::AudioAggregatorImplExt> Sealed for T {}
-}
-
-pub trait AudioAggregatorImplExt: sealed::Sealed + ObjectSubclass {
+pub trait AudioAggregatorImplExt: AudioAggregatorImpl {
     fn parent_create_output_buffer(&self, num_frames: u32) -> Option<gst::Buffer> {
         unsafe {
             let data = Self::type_data();

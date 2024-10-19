@@ -64,7 +64,7 @@ impl DeviceProviderMetadata {
     }
 }
 
-pub trait DeviceProviderImpl: DeviceProviderImplExt + GstObjectImpl + Send + Sync {
+pub trait DeviceProviderImpl: GstObjectImpl + ObjectSubclass<Type: IsA<DeviceProvider>> {
     fn metadata() -> Option<&'static DeviceProviderMetadata> {
         None
     }
@@ -82,12 +82,7 @@ pub trait DeviceProviderImpl: DeviceProviderImplExt + GstObjectImpl + Send + Syn
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::DeviceProviderImplExt> Sealed for T {}
-}
-
-pub trait DeviceProviderImplExt: sealed::Sealed + ObjectSubclass {
+pub trait DeviceProviderImplExt: DeviceProviderImpl {
     fn parent_probe(&self) -> Vec<Device> {
         unsafe {
             let data = Self::type_data();

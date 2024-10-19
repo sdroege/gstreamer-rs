@@ -4,7 +4,7 @@ use glib::{prelude::*, subclass::prelude::*, translate::*};
 
 use crate::{ffi, Navigation};
 
-pub trait NavigationImpl: ObjectImpl {
+pub trait NavigationImpl: ObjectImpl + ObjectSubclass<Type: IsA<Navigation>> {
     fn send_event(&self, structure: gst::Structure);
 
     #[cfg(feature = "v1_22")]
@@ -16,12 +16,7 @@ pub trait NavigationImpl: ObjectImpl {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::NavigationImplExt> Sealed for T {}
-}
-
-pub trait NavigationImplExt: sealed::Sealed + ObjectSubclass {
+pub trait NavigationImplExt: NavigationImpl {
     fn parent_send_event(&self, structure: gst::Structure) {
         unsafe {
             let type_data = Self::type_data();

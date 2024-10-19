@@ -7,7 +7,9 @@ use gst_base::{prelude::*, subclass::prelude::*};
 
 use crate::{ffi, subclass::AggregateFramesToken, VideoAggregator, VideoAggregatorPad};
 
-pub trait VideoAggregatorPadImpl: VideoAggregatorPadImplExt + AggregatorPadImpl {
+pub trait VideoAggregatorPadImpl:
+    AggregatorPadImpl + ObjectSubclass<Type: IsA<VideoAggregatorPad>>
+{
     fn update_conversion_info(&self) {
         self.parent_update_conversion_info()
     }
@@ -31,12 +33,7 @@ pub trait VideoAggregatorPadImpl: VideoAggregatorPadImplExt + AggregatorPadImpl 
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::VideoAggregatorPadImplExt> Sealed for T {}
-}
-
-pub trait VideoAggregatorPadImplExt: ObjectSubclass + sealed::Sealed {
+pub trait VideoAggregatorPadImplExt: VideoAggregatorPadImpl {
     fn parent_update_conversion_info(&self) {
         unsafe {
             let data = Self::type_data();

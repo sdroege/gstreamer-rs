@@ -4,7 +4,7 @@ use glib::{prelude::*, subclass::prelude::*, translate::*};
 
 use crate::{ffi, RTSPClient};
 
-pub trait RTSPClientImpl: RTSPClientImplExt + ObjectImpl + Send + Sync {
+pub trait RTSPClientImpl: ObjectImpl + ObjectSubclass<Type: IsA<RTSPClient>> + Send + Sync {
     fn create_sdp(&self, media: &crate::RTSPMedia) -> Option<gst_sdp::SDPMessage> {
         self.parent_create_sdp(media)
     }
@@ -155,12 +155,7 @@ pub trait RTSPClientImpl: RTSPClientImplExt + ObjectImpl + Send + Sync {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::RTSPClientImplExt> Sealed for T {}
-}
-
-pub trait RTSPClientImplExt: sealed::Sealed + ObjectSubclass {
+pub trait RTSPClientImplExt: RTSPClientImpl {
     fn parent_create_sdp(&self, media: &crate::RTSPMedia) -> Option<gst_sdp::SDPMessage> {
         unsafe {
             let data = Self::type_data();

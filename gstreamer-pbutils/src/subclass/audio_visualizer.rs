@@ -7,7 +7,7 @@ use crate::{ffi, AudioVisualizer};
 
 pub struct AudioVisualizerSetupToken<'a>(pub(crate) &'a AudioVisualizer);
 
-pub trait AudioVisualizerImpl: AudioVisualizerImplExt + ElementImpl {
+pub trait AudioVisualizerImpl: ElementImpl + ObjectSubclass<Type: IsA<AudioVisualizer>> {
     fn setup(&self, token: &AudioVisualizerSetupToken) -> Result<(), LoggableError> {
         self.parent_setup(token)
     }
@@ -28,12 +28,7 @@ pub trait AudioVisualizerImpl: AudioVisualizerImplExt + ElementImpl {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::AudioVisualizerImplExt> Sealed for T {}
-}
-
-pub trait AudioVisualizerImplExt: sealed::Sealed + ObjectSubclass {
+pub trait AudioVisualizerImplExt: AudioVisualizerImpl {
     fn parent_setup(&self, token: &AudioVisualizerSetupToken) -> Result<(), LoggableError> {
         assert_eq!(
             self.obj().as_ptr() as *mut ffi::GstAudioVisualizer,

@@ -5,7 +5,7 @@ use gst_base::subclass::prelude::*;
 
 use crate::{ffi, prelude::*, GLBaseSrc, GLMemory, GLAPI};
 
-pub trait GLBaseSrcImpl: GLBaseSrcImplExt + PushSrcImpl {
+pub trait GLBaseSrcImpl: PushSrcImpl + ObjectSubclass<Type: IsA<GLBaseSrc>> {
     const SUPPORTED_GL_API: GLAPI;
 
     fn gl_start(&self) -> Result<(), LoggableError> {
@@ -21,12 +21,7 @@ pub trait GLBaseSrcImpl: GLBaseSrcImplExt + PushSrcImpl {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::GLBaseSrcImplExt> Sealed for T {}
-}
-
-pub trait GLBaseSrcImplExt: sealed::Sealed + ObjectSubclass {
+pub trait GLBaseSrcImplExt: GLBaseSrcImpl {
     fn parent_gl_start(&self) -> Result<(), LoggableError> {
         unsafe {
             let data = Self::type_data();

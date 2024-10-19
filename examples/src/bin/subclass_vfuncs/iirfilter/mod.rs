@@ -27,7 +27,7 @@ pub trait IirFilterExt: IsA<IirFilter> {
 impl<O: IsA<IirFilter>> IirFilterExt for O {}
 
 /// Trait to implement in `IirFilter` subclasses.
-pub trait IirFilterImpl: AudioFilterImpl {
+pub trait IirFilterImpl: AudioFilterImpl + ObjectSubclass<Type: IsA<IirFilter>> {
     /// Called whenever the sample rate is changing.
     fn set_rate(&self, rate: u32) {
         self.parent_set_rate(rate);

@@ -5,18 +5,15 @@ use gst_rtsp::ffi::GstRTSPUrl;
 
 use crate::{ffi, RTSPMountPoints};
 
-pub trait RTSPMountPointsImpl: RTSPMountPointsImplExt + ObjectImpl + Send + Sync {
+pub trait RTSPMountPointsImpl:
+    ObjectImpl + ObjectSubclass<Type: IsA<RTSPMountPoints>> + Send + Sync
+{
     fn make_path(&self, url: &gst_rtsp::RTSPUrl) -> Option<glib::GString> {
         self.parent_make_path(url)
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::RTSPMountPointsImplExt> Sealed for T {}
-}
-
-pub trait RTSPMountPointsImplExt: sealed::Sealed + ObjectSubclass {
+pub trait RTSPMountPointsImplExt: RTSPMountPointsImpl {
     fn parent_make_path(&self, url: &gst_rtsp::RTSPUrl) -> Option<glib::GString> {
         unsafe {
             let data = Self::type_data();

@@ -5,7 +5,7 @@ use gst::subclass::prelude::*;
 
 use crate::{ffi, prelude::*, RTPBasePayload};
 
-pub trait RTPBasePayloadImpl: RTPBasePayloadImplExt + ElementImpl {
+pub trait RTPBasePayloadImpl: ElementImpl + ObjectSubclass<Type: IsA<RTPBasePayload>> {
     fn caps(&self, pad: &gst::Pad, filter: Option<&gst::Caps>) -> gst::Caps {
         self.parent_caps(pad, filter)
     }
@@ -31,12 +31,7 @@ pub trait RTPBasePayloadImpl: RTPBasePayloadImplExt + ElementImpl {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::RTPBasePayloadImplExt> Sealed for T {}
-}
-
-pub trait RTPBasePayloadImplExt: sealed::Sealed + ObjectSubclass {
+pub trait RTPBasePayloadImplExt: RTPBasePayloadImpl {
     fn parent_caps(&self, pad: &gst::Pad, filter: Option<&gst::Caps>) -> gst::Caps {
         unsafe {
             let data = Self::type_data();

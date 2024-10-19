@@ -10,7 +10,7 @@ use crate::{
     VideoCodecFrame, VideoEncoder,
 };
 
-pub trait VideoEncoderImpl: VideoEncoderImplExt + ElementImpl {
+pub trait VideoEncoderImpl: ElementImpl + ObjectSubclass<Type: IsA<VideoEncoder>> {
     fn open(&self) -> Result<(), gst::ErrorMessage> {
         self.parent_open()
     }
@@ -85,12 +85,7 @@ pub trait VideoEncoderImpl: VideoEncoderImplExt + ElementImpl {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::VideoEncoderImplExt> Sealed for T {}
-}
-
-pub trait VideoEncoderImplExt: sealed::Sealed + ObjectSubclass {
+pub trait VideoEncoderImplExt: VideoEncoderImpl {
     fn parent_open(&self) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = Self::type_data();

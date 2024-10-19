@@ -6,19 +6,16 @@ use glib::{prelude::*, subclass::prelude::*, translate::*};
 
 use crate::{ffi, URIHandler, URIType};
 
-pub trait URIHandlerImpl: super::element::ElementImpl {
+pub trait URIHandlerImpl:
+    super::element::ElementImpl + ObjectSubclass<Type: IsA<URIHandler>>
+{
     const URI_TYPE: URIType;
     fn protocols() -> &'static [&'static str];
     fn uri(&self) -> Option<String>;
     fn set_uri(&self, uri: &str) -> Result<(), glib::Error>;
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::URIHandlerImplExt> Sealed for T {}
-}
-
-pub trait URIHandlerImplExt: sealed::Sealed + ObjectSubclass {
+pub trait URIHandlerImplExt: URIHandlerImpl {
     fn parent_protocols() -> Vec<String> {
         unsafe {
             let type_data = Self::type_data();

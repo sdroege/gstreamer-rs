@@ -4,8 +4,11 @@ use glib::{prelude::*, subclass::prelude::*, translate::*};
 
 use super::prelude::*;
 use crate::ffi;
+use crate::RTPHeaderExtension;
 
-pub trait RTPHeaderExtensionImpl: RTPHeaderExtensionImplExt + ElementImpl {
+pub trait RTPHeaderExtensionImpl:
+    ElementImpl + ObjectSubclass<Type: IsA<RTPHeaderExtension>>
+{
     const URI: &'static str;
 
     fn supported_flags(&self) -> crate::RTPHeaderExtensionFlags {
@@ -56,12 +59,7 @@ pub trait RTPHeaderExtensionImpl: RTPHeaderExtensionImplExt + ElementImpl {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::RTPHeaderExtensionImplExt> Sealed for T {}
-}
-
-pub trait RTPHeaderExtensionImplExt: sealed::Sealed + ObjectSubclass {
+pub trait RTPHeaderExtensionImplExt: RTPHeaderExtensionImpl {
     fn parent_supported_flags(&self) -> crate::RTPHeaderExtensionFlags {
         unsafe {
             let data = Self::type_data();
@@ -71,7 +69,7 @@ pub trait RTPHeaderExtensionImplExt: sealed::Sealed + ObjectSubclass {
                 .expect("no parent \"get_supported_flags\" implementation");
             from_glib(f(self
                 .obj()
-                .unsafe_cast_ref::<crate::RTPHeaderExtension>()
+                .unsafe_cast_ref::<RTPHeaderExtension>()
                 .to_glib_none()
                 .0))
         }
@@ -86,7 +84,7 @@ pub trait RTPHeaderExtensionImplExt: sealed::Sealed + ObjectSubclass {
                 .expect("no parent \"get_max_size\" implementation");
             f(
                 self.obj()
-                    .unsafe_cast_ref::<crate::RTPHeaderExtension>()
+                    .unsafe_cast_ref::<RTPHeaderExtension>()
                     .to_glib_none()
                     .0,
                 input.as_ptr(),
@@ -110,7 +108,7 @@ pub trait RTPHeaderExtensionImplExt: sealed::Sealed + ObjectSubclass {
 
             let res = f(
                 self.obj()
-                    .unsafe_cast_ref::<crate::RTPHeaderExtension>()
+                    .unsafe_cast_ref::<RTPHeaderExtension>()
                     .to_glib_none()
                     .0,
                 input.as_ptr(),
@@ -147,7 +145,7 @@ pub trait RTPHeaderExtensionImplExt: sealed::Sealed + ObjectSubclass {
             gst::result_from_gboolean!(
                 f(
                     self.obj()
-                        .unsafe_cast_ref::<crate::RTPHeaderExtension>()
+                        .unsafe_cast_ref::<RTPHeaderExtension>()
                         .to_glib_none()
                         .0,
                     read_flags.into_glib(),
@@ -169,7 +167,7 @@ pub trait RTPHeaderExtensionImplExt: sealed::Sealed + ObjectSubclass {
                 gst::result_from_gboolean!(
                     f(
                         self.obj()
-                            .unsafe_cast_ref::<crate::RTPHeaderExtension>()
+                            .unsafe_cast_ref::<RTPHeaderExtension>()
                             .to_glib_none()
                             .0,
                         caps.as_mut_ptr(),
@@ -194,7 +192,7 @@ pub trait RTPHeaderExtensionImplExt: sealed::Sealed + ObjectSubclass {
                 gst::result_from_gboolean!(
                     f(
                         self.obj()
-                            .unsafe_cast_ref::<crate::RTPHeaderExtension>()
+                            .unsafe_cast_ref::<RTPHeaderExtension>()
                             .to_glib_none()
                             .0,
                         caps.as_mut_ptr(),
@@ -220,7 +218,7 @@ pub trait RTPHeaderExtensionImplExt: sealed::Sealed + ObjectSubclass {
                 gst::result_from_gboolean!(
                     f(
                         self.obj()
-                            .unsafe_cast_ref::<crate::RTPHeaderExtension>()
+                            .unsafe_cast_ref::<RTPHeaderExtension>()
                             .to_glib_none()
                             .0,
                         direction.into_glib(),
@@ -249,7 +247,7 @@ pub trait RTPHeaderExtensionImplExt: sealed::Sealed + ObjectSubclass {
             gst::result_from_gboolean!(
                 f(
                     self.obj()
-                        .unsafe_cast_ref::<crate::RTPHeaderExtension>()
+                        .unsafe_cast_ref::<RTPHeaderExtension>()
                         .to_glib_none()
                         .0,
                     caps.as_mut_ptr(),
@@ -263,7 +261,7 @@ pub trait RTPHeaderExtensionImplExt: sealed::Sealed + ObjectSubclass {
 
 impl<T: RTPHeaderExtensionImpl> RTPHeaderExtensionImplExt for T {}
 
-unsafe impl<T: RTPHeaderExtensionImpl> IsSubclassable<T> for crate::RTPHeaderExtension {
+unsafe impl<T: RTPHeaderExtensionImpl> IsSubclassable<T> for RTPHeaderExtension {
     fn class_init(klass: &mut glib::Class<Self>) {
         Self::parent_class_init::<T>(klass);
         let klass = klass.as_mut();

@@ -7,7 +7,7 @@ use gst::subclass::prelude::*;
 
 use crate::{ffi, prelude::*, BaseParse, BaseParseFrame};
 
-pub trait BaseParseImpl: BaseParseImplExt + ElementImpl {
+pub trait BaseParseImpl: ElementImpl + ObjectSubclass<Type: IsA<BaseParse>> {
     fn start(&self) -> Result<(), gst::ErrorMessage> {
         self.parent_start()
     }
@@ -36,12 +36,7 @@ pub trait BaseParseImpl: BaseParseImplExt + ElementImpl {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::BaseParseImplExt> Sealed for T {}
-}
-
-pub trait BaseParseImplExt: sealed::Sealed + ObjectSubclass {
+pub trait BaseParseImplExt: BaseParseImpl {
     fn parent_start(&self) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = Self::type_data();

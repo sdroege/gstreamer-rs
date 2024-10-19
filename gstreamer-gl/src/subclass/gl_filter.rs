@@ -13,7 +13,7 @@ pub enum GLFilterMode {
     Texture,
 }
 
-pub trait GLFilterImpl: GLFilterImplExt + GLBaseFilterImpl {
+pub trait GLFilterImpl: GLBaseFilterImpl + ObjectSubclass<Type: IsA<GLFilter>> {
     const MODE: GLFilterMode;
     // rustdoc-stripper-ignore-next
     /// Calls [`add_rgba_pad_templates`](ffi::gst_gl_filter_add_rgba_pad_templates)
@@ -46,12 +46,7 @@ pub trait GLFilterImpl: GLFilterImplExt + GLBaseFilterImpl {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::GLFilterImplExt> Sealed for T {}
-}
-
-pub trait GLFilterImplExt: sealed::Sealed + ObjectSubclass {
+pub trait GLFilterImplExt: GLFilterImpl {
     fn parent_set_caps(&self, incaps: &Caps, outcaps: &Caps) -> Result<(), LoggableError> {
         unsafe {
             let data = Self::type_data();

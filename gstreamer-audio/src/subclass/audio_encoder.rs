@@ -7,7 +7,7 @@ use gst::subclass::prelude::*;
 
 use crate::{ffi, prelude::*, AudioEncoder, AudioInfo};
 
-pub trait AudioEncoderImpl: AudioEncoderImplExt + ElementImpl {
+pub trait AudioEncoderImpl: ElementImpl + ObjectSubclass<Type: IsA<AudioEncoder>> {
     fn open(&self) -> Result<(), gst::ErrorMessage> {
         self.parent_open()
     }
@@ -82,12 +82,7 @@ pub trait AudioEncoderImpl: AudioEncoderImplExt + ElementImpl {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::AudioEncoderImplExt> Sealed for T {}
-}
-
-pub trait AudioEncoderImplExt: sealed::Sealed + ObjectSubclass {
+pub trait AudioEncoderImplExt: AudioEncoderImpl {
     fn parent_open(&self) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = Self::type_data();

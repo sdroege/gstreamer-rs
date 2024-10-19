@@ -5,7 +5,7 @@ use gst_base::{prelude::*, subclass::prelude::*};
 
 use crate::{ffi, AudioFilter, AudioInfo};
 
-pub trait AudioFilterImpl: AudioFilterImplExt + BaseTransformImpl {
+pub trait AudioFilterImpl: BaseTransformImpl + ObjectSubclass<Type: IsA<AudioFilter>> {
     fn allowed_caps() -> &'static gst::Caps {
         Self::parent_allowed_caps()
     }
@@ -15,12 +15,7 @@ pub trait AudioFilterImpl: AudioFilterImplExt + BaseTransformImpl {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::AudioFilterImplExt> Sealed for T {}
-}
-
-pub trait AudioFilterImplExt: sealed::Sealed + ObjectSubclass {
+pub trait AudioFilterImplExt: AudioFilterImpl {
     fn parent_setup(&self, info: &AudioInfo) -> Result<(), gst::LoggableError> {
         unsafe {
             let data = Self::type_data();

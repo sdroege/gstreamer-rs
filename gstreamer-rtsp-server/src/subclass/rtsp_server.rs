@@ -4,7 +4,7 @@ use glib::{prelude::*, subclass::prelude::*, translate::*};
 
 use crate::{ffi, RTSPServer};
 
-pub trait RTSPServerImpl: RTSPServerImplExt + ObjectImpl + Send + Sync {
+pub trait RTSPServerImpl: ObjectImpl + ObjectSubclass<Type: IsA<RTSPServer>> + Send + Sync {
     fn create_client(&self) -> Option<crate::RTSPClient> {
         self.parent_create_client()
     }
@@ -14,12 +14,7 @@ pub trait RTSPServerImpl: RTSPServerImplExt + ObjectImpl + Send + Sync {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::RTSPServerImplExt> Sealed for T {}
-}
-
-pub trait RTSPServerImplExt: sealed::Sealed + ObjectSubclass {
+pub trait RTSPServerImplExt: RTSPServerImpl {
     fn parent_create_client(&self) -> Option<crate::RTSPClient>;
 
     fn parent_client_connected(&self, client: &crate::RTSPClient);

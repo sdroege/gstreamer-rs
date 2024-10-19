@@ -22,7 +22,7 @@ impl SDPInfo {
     }
 }
 
-pub trait RTSPMediaImpl: RTSPMediaImplExt + ObjectImpl + Send + Sync {
+pub trait RTSPMediaImpl: ObjectImpl + ObjectSubclass<Type: IsA<RTSPMedia>> + Send + Sync {
     fn handle_message(&self, message: &gst::MessageRef) -> bool {
         self.parent_handle_message(message)
     }
@@ -98,12 +98,7 @@ pub trait RTSPMediaImpl: RTSPMediaImplExt + ObjectImpl + Send + Sync {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::RTSPMediaImplExt> Sealed for T {}
-}
-
-pub trait RTSPMediaImplExt: sealed::Sealed + ObjectSubclass {
+pub trait RTSPMediaImplExt: RTSPMediaImpl {
     fn parent_handle_message(&self, message: &gst::MessageRef) -> bool {
         unsafe {
             let data = Self::type_data();

@@ -7,7 +7,7 @@ use gst_base::subclass::prelude::*;
 use super::prelude::*;
 use crate::{ffi, AudioRingBufferSpec, AudioSink};
 
-pub trait AudioSinkImpl: AudioSinkImplExt + AudioBaseSinkImpl {
+pub trait AudioSinkImpl: AudioBaseSinkImpl + ObjectSubclass<Type: IsA<AudioSink>> {
     fn close(&self) -> Result<(), LoggableError> {
         self.parent_close()
     }
@@ -37,12 +37,7 @@ pub trait AudioSinkImpl: AudioSinkImplExt + AudioBaseSinkImpl {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::AudioSinkImplExt> Sealed for T {}
-}
-
-pub trait AudioSinkImplExt: sealed::Sealed + ObjectSubclass {
+pub trait AudioSinkImplExt: AudioSinkImpl {
     fn parent_close(&self) -> Result<(), LoggableError> {
         unsafe {
             let data = Self::type_data();

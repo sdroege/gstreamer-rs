@@ -5,18 +5,13 @@ use gst_base::subclass::prelude::*;
 
 use crate::{ffi, VideoSink};
 
-pub trait VideoSinkImpl: VideoSinkImplExt + BaseSinkImpl + ElementImpl {
+pub trait VideoSinkImpl: BaseSinkImpl + ObjectSubclass<Type: IsA<VideoSink>> {
     fn show_frame(&self, buffer: &gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError> {
         self.parent_show_frame(buffer)
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::VideoSinkImplExt> Sealed for T {}
-}
-
-pub trait VideoSinkImplExt: sealed::Sealed + ObjectSubclass {
+pub trait VideoSinkImplExt: VideoSinkImpl {
     fn parent_show_frame(&self, buffer: &gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
             let data = Self::type_data();

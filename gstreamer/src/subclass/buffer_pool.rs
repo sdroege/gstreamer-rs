@@ -12,7 +12,7 @@ use libc::c_char;
 use super::prelude::*;
 use crate::{ffi, BufferPool, BufferPoolAcquireParams, BufferPoolConfigRef};
 
-pub trait BufferPoolImpl: BufferPoolImplExt + GstObjectImpl + Send + Sync {
+pub trait BufferPoolImpl: GstObjectImpl + ObjectSubclass<Type: IsA<BufferPool>> {
     fn acquire_buffer(
         &self,
         params: Option<&BufferPoolAcquireParams>,
@@ -64,12 +64,7 @@ pub trait BufferPoolImpl: BufferPoolImplExt + GstObjectImpl + Send + Sync {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::BufferPoolImplExt> Sealed for T {}
-}
-
-pub trait BufferPoolImplExt: sealed::Sealed + ObjectSubclass {
+pub trait BufferPoolImplExt: BufferPoolImpl {
     fn parent_acquire_buffer(
         &self,
         params: Option<&BufferPoolAcquireParams>,

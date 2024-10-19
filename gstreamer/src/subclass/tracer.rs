@@ -10,7 +10,7 @@ use crate::{
 };
 
 #[allow(unused_variables)]
-pub trait TracerImpl: TracerImplExt + GstObjectImpl + Send + Sync {
+pub trait TracerImpl: GstObjectImpl + ObjectSubclass<Type: IsA<Tracer>> {
     fn bin_add_post(&self, ts: u64, bin: &Bin, element: &Element, success: bool) {}
     fn bin_add_pre(&self, ts: u64, bin: &Bin, element: &Element) {}
     fn bin_remove_post(&self, ts: u64, bin: &Bin, success: bool) {}
@@ -85,7 +85,7 @@ pub trait TracerImpl: TracerImplExt + GstObjectImpl + Send + Sync {
 
 unsafe impl<T: TracerImpl> IsSubclassable<T> for Tracer {}
 
-pub trait TracerImplExt: ObjectSubclass {
+pub trait TracerImplExt: TracerImpl {
     // rustdoc-stripper-ignore-next
     /// Register a corresponding hook to be called for this tracer when certain events occur.
     ///

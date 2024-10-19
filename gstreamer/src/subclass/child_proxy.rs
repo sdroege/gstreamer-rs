@@ -5,7 +5,7 @@ use glib::{prelude::*, subclass::prelude::*, translate::*};
 use super::prelude::*;
 use crate::{ffi, ChildProxy};
 
-pub trait ChildProxyImpl: GstObjectImpl + Send + Sync {
+pub trait ChildProxyImpl: GstObjectImpl + ObjectSubclass<Type: IsA<ChildProxy>> {
     fn child_by_name(&self, name: &str) -> Option<glib::Object> {
         self.parent_child_by_name(name)
     }
@@ -21,12 +21,7 @@ pub trait ChildProxyImpl: GstObjectImpl + Send + Sync {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::ChildProxyImplExt> Sealed for T {}
-}
-
-pub trait ChildProxyImplExt: sealed::Sealed + ObjectSubclass {
+pub trait ChildProxyImplExt: ChildProxyImpl {
     fn parent_child_by_name(&self, name: &str) -> Option<glib::Object> {
         unsafe {
             let type_data = Self::type_data();

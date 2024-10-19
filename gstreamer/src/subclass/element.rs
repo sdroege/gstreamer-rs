@@ -67,7 +67,7 @@ impl ElementMetadata {
     }
 }
 
-pub trait ElementImpl: ElementImplExt + GstObjectImpl + Send + Sync {
+pub trait ElementImpl: GstObjectImpl + ObjectSubclass<Type: IsA<Element>> {
     fn metadata() -> Option<&'static ElementMetadata> {
         None
     }
@@ -121,12 +121,7 @@ pub trait ElementImpl: ElementImplExt + GstObjectImpl + Send + Sync {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::ElementImplExt> Sealed for T {}
-}
-
-pub trait ElementImplExt: sealed::Sealed + ObjectSubclass {
+pub trait ElementImplExt: ElementImpl {
     fn parent_change_state(
         &self,
         transition: StateChange,

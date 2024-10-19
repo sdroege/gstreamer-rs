@@ -9,7 +9,7 @@ use gst_base::subclass::prelude::*;
 use super::prelude::*;
 use crate::{ffi, AudioRingBufferSpec, AudioSrc};
 
-pub trait AudioSrcImpl: AudioSrcImplExt + AudioBaseSrcImpl {
+pub trait AudioSrcImpl: AudioBaseSrcImpl + ObjectSubclass<Type: IsA<AudioSrc>> {
     fn close(&self) -> Result<(), LoggableError> {
         self.parent_close()
     }
@@ -39,12 +39,7 @@ pub trait AudioSrcImpl: AudioSrcImplExt + AudioBaseSrcImpl {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::AudioSrcImplExt> Sealed for T {}
-}
-
-pub trait AudioSrcImplExt: sealed::Sealed + ObjectSubclass {
+pub trait AudioSrcImplExt: AudioSrcImpl {
     fn parent_close(&self) -> Result<(), LoggableError> {
         unsafe {
             let data = Self::type_data();

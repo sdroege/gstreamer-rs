@@ -10,7 +10,7 @@ use crate::{
     VideoCodecFrame, VideoDecoder,
 };
 
-pub trait VideoDecoderImpl: VideoDecoderImplExt + ElementImpl {
+pub trait VideoDecoderImpl: ElementImpl + ObjectSubclass<Type: IsA<VideoDecoder>> {
     fn open(&self) -> Result<(), gst::ErrorMessage> {
         self.parent_open()
     }
@@ -107,11 +107,8 @@ pub trait VideoDecoderImpl: VideoDecoderImplExt + ElementImpl {
         self.parent_handle_missing_data(timestamp, duration)
     }
 }
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::VideoDecoderImplExt> Sealed for T {}
-}
-pub trait VideoDecoderImplExt: sealed::Sealed + ObjectSubclass {
+
+pub trait VideoDecoderImplExt: VideoDecoderImpl {
     fn parent_open(&self) -> Result<(), gst::ErrorMessage> {
         unsafe {
             let data = Self::type_data();

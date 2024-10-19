@@ -5,7 +5,7 @@ use glib::{prelude::*, subclass::prelude::*, translate::*};
 use super::prelude::*;
 use crate::{ffi, Pad};
 
-pub trait PadImpl: PadImplExt + GstObjectImpl + Send + Sync {
+pub trait PadImpl: GstObjectImpl + ObjectSubclass<Type: IsA<Pad>> {
     fn linked(&self, peer: &Pad) {
         self.parent_linked(peer)
     }
@@ -15,12 +15,7 @@ pub trait PadImpl: PadImplExt + GstObjectImpl + Send + Sync {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::PadImplExt> Sealed for T {}
-}
-
-pub trait PadImplExt: sealed::Sealed + ObjectSubclass {
+pub trait PadImplExt: PadImpl {
     fn parent_linked(&self, peer: &Pad) {
         unsafe {
             let data = Self::type_data();

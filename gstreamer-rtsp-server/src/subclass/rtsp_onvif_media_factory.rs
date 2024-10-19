@@ -6,19 +6,14 @@ use super::prelude::*;
 use crate::{ffi, RTSPOnvifMediaFactory};
 
 pub trait RTSPOnvifMediaFactoryImpl:
-    RTSPMediaFactoryImplExt + RTSPMediaFactoryImpl + Send + Sync
+    RTSPMediaFactoryImpl + ObjectSubclass<Type: IsA<RTSPOnvifMediaFactory>> + Send + Sync
 {
     fn has_backchannel_support(&self) -> bool {
         self.parent_has_backchannel_support()
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::RTSPOnvifMediaFactoryImplExt> Sealed for T {}
-}
-
-pub trait RTSPOnvifMediaFactoryImplExt: sealed::Sealed + ObjectSubclass {
+pub trait RTSPOnvifMediaFactoryImplExt: RTSPOnvifMediaFactoryImpl {
     fn parent_has_backchannel_support(&self) -> bool {
         unsafe {
             let data = Self::type_data();

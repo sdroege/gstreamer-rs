@@ -5,7 +5,7 @@ use glib::{prelude::*, subclass::prelude::*, translate::*};
 use super::prelude::*;
 use crate::{ffi, Clock, ClockError, ClockId, ClockReturn, ClockSuccess, ClockTime, ClockTimeDiff};
 
-pub trait ClockImpl: ClockImplExt + GstObjectImpl + Send + Sync {
+pub trait ClockImpl: GstObjectImpl + ObjectSubclass<Type: IsA<Clock>> {
     fn change_resolution(&self, old_resolution: ClockTime, new_resolution: ClockTime) -> ClockTime {
         self.parent_change_resolution(old_resolution, new_resolution)
     }
@@ -31,12 +31,7 @@ pub trait ClockImpl: ClockImplExt + GstObjectImpl + Send + Sync {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::ClockImplExt> Sealed for T {}
-}
-
-pub trait ClockImplExt: sealed::Sealed + ObjectSubclass {
+pub trait ClockImplExt: ClockImpl {
     fn parent_change_resolution(
         &self,
         old_resolution: ClockTime,

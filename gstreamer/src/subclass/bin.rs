@@ -5,7 +5,7 @@ use glib::{prelude::*, subclass::prelude::*, translate::*};
 use super::prelude::*;
 use crate::{ffi, Bin, Element, LoggableError, Message};
 
-pub trait BinImpl: BinImplExt + ElementImpl {
+pub trait BinImpl: ElementImpl + ObjectSubclass<Type: IsA<Bin>> {
     fn add_element(&self, element: &Element) -> Result<(), LoggableError> {
         self.parent_add_element(element)
     }
@@ -23,12 +23,7 @@ pub trait BinImpl: BinImplExt + ElementImpl {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::BinImplExt> Sealed for T {}
-}
-
-pub trait BinImplExt: sealed::Sealed + ObjectSubclass {
+pub trait BinImplExt: BinImpl {
     fn parent_add_element(&self, element: &Element) -> Result<(), LoggableError> {
         unsafe {
             let data = Self::type_data();
