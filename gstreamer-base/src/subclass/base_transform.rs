@@ -465,12 +465,10 @@ pub trait BaseTransformImplExt: sealed::Sealed + ObjectSubclass {
                             PrepareOutputBufferSuccess::Buffer(from_glib_full(outbuf))
                         }
                     })
-                    .map_err(|err| {
+                    .inspect_err(|_err| {
                         if outbuf != buf as *mut _ {
                             drop(Option::<gst::Buffer>::from_glib_full(outbuf));
                         }
-
-                        err
                     })
                 })
                 .unwrap_or(Err(gst::FlowError::NotSupported))
