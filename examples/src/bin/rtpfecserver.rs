@@ -6,18 +6,18 @@ mod examples_common;
 use std::env;
 
 use anyhow::Error;
-use derive_more::{Display, Error};
+use derive_more::derive::{Display, Error};
 
 #[derive(Debug, Display, Error)]
-#[display(fmt = "No such pad {_0} in {_1}")]
+#[display("No such pad {_0} in {_1}")]
 struct NoSuchPad(&'static str, String);
 
 #[derive(Debug, Display, Error)]
-#[display(fmt = "Usage: {_0} URI FEC_PERCENTAGE")]
+#[display("Usage: {_0} URI FEC_PERCENTAGE")]
 struct UsageError(#[error(not(source))] String);
 
 #[derive(Debug, Display, Error)]
-#[display(fmt = "Received error from {src}: {error} (debug: {debug:?})")]
+#[display("Received error from {src}: {error} (debug: {debug:?})")]
 struct ErrorMessage {
     src: glib::GString,
     error: glib::Error,

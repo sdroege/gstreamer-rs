@@ -19,18 +19,18 @@
 // This merge-mode can also be supplied to any method that adds new tags.
 
 use anyhow::{anyhow, Error};
-use derive_more::{Display, Error};
+use derive_more::derive::{Display, Error};
 use gst::prelude::*;
 
 #[path = "../examples-common.rs"]
 mod examples_common;
 
 #[derive(Debug, Display, Error)]
-#[display(fmt = "Missing element {_0}")]
+#[display("Missing element {_0}")]
 struct MissingElement(#[error(not(source))] String);
 
 #[derive(Debug, Display, Error)]
-#[display(fmt = "Received error from {src}: {error} (debug: {debug:?})")]
+#[display("Received error from {src}: {error} (debug: {debug:?})")]
 struct ErrorMessage {
     src: glib::GString,
     error: glib::Error,

@@ -8,7 +8,7 @@
 #![allow(clippy::non_send_fields_in_send_ty)]
 
 use anyhow::Error;
-use derive_more::{Display, Error};
+use derive_more::derive::{Display, Error};
 use gst::prelude::*;
 
 #[path = "../examples-common.rs"]
@@ -231,7 +231,7 @@ mod fir_filter {
 }
 
 #[derive(Debug, Display, Error)]
-#[display(fmt = "Received error from {src}: {error} (debug: {debug:?})")]
+#[display("Received error from {src}: {error} (debug: {debug:?})")]
 struct ErrorMessage {
     src: glib::GString,
     error: glib::Error,

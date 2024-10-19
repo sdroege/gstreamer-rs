@@ -20,14 +20,14 @@
 use std::env;
 
 use anyhow::Error;
-use derive_more::{Display, Error};
+use derive_more::derive::{Display, Error};
 use gst::{element_error, prelude::*};
 
 #[path = "../examples-common.rs"]
 mod examples_common;
 
 #[derive(Debug, Display, Error)]
-#[display(fmt = "Received error from {src}: {error} (debug: {debug:?})")]
+#[display("Received error from {src}: {error} (debug: {debug:?})")]
 struct ErrorMessage {
     src: glib::GString,
     error: glib::Error,

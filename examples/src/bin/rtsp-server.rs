@@ -6,18 +6,18 @@
 use std::env;
 
 use anyhow::Error;
-use derive_more::{Display, Error};
+use derive_more::derive::{Display, Error};
 use gst_rtsp_server::prelude::*;
 
 #[path = "../examples-common.rs"]
 mod examples_common;
 
 #[derive(Debug, Display, Error)]
-#[display(fmt = "Could not get mount points")]
+#[display("Could not get mount points")]
 struct NoMountPoints;
 
 #[derive(Debug, Display, Error)]
-#[display(fmt = "Usage: {_0} LAUNCH_LINE")]
+#[display("Usage: {_0} LAUNCH_LINE")]
 struct UsageError(#[error(not(source))] String);
 
 fn main_loop() -> Result<(), Error> {

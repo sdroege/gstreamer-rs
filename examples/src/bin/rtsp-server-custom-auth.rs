@@ -5,14 +5,14 @@
 #![allow(clippy::non_send_fields_in_send_ty)]
 
 use anyhow::Error;
-use derive_more::{Display, Error};
+use derive_more::derive::{Display, Error};
 use gst_rtsp_server::prelude::*;
 
 #[path = "../examples-common.rs"]
 mod examples_common;
 
 #[derive(Debug, Display, Error)]
-#[display(fmt = "Could not get mount points")]
+#[display("Could not get mount points")]
 struct NoMountPoints;
 
 fn main_loop() -> Result<(), Error> {

@@ -10,7 +10,7 @@ use std::sync::{Arc, Mutex};
 use byte_slice_cast::*;
 
 use anyhow::Error;
-use derive_more::{Display, Error};
+use derive_more::derive::{Display, Error};
 use gst::prelude::*;
 use windows::{
     Foundation::Numerics::*,
@@ -26,7 +26,7 @@ use windows::{
 };
 
 #[derive(Debug, Display, Error)]
-#[display(fmt = "Received error from {}: {} (debug: {:?})", src, error, debug)]
+#[display("Received error from {}: {} (debug: {:?})", src, error, debug)]
 struct ErrorMessage {
     src: glib::GString,
     error: glib::Error,

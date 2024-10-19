@@ -17,7 +17,7 @@ use std::{
 };
 
 use anyhow::Error;
-use derive_more::{Display, Error};
+use derive_more::derive::{Display, Error};
 use gst::prelude::*;
 use pango::prelude::*;
 
@@ -25,7 +25,7 @@ use pango::prelude::*;
 mod examples_common;
 
 #[derive(Debug, Display, Error)]
-#[display(fmt = "Received error from {src}: {error} (debug: {debug:?})")]
+#[display("Received error from {src}: {error} (debug: {debug:?})")]
 struct ErrorMessage {
     src: glib::GString,
     error: glib::Error,

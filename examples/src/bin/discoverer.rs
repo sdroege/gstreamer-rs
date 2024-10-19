@@ -11,14 +11,14 @@
 use std::env;
 
 use anyhow::Error;
-use derive_more::{Display, Error};
+use derive_more::derive::{Display, Error};
 use gst_pbutils::{prelude::*, DiscovererInfo, DiscovererStreamInfo};
 
 #[path = "../examples-common.rs"]
 mod examples_common;
 
 #[derive(Debug, Display, Error)]
-#[display(fmt = "Discoverer error {_0}")]
+#[display("Discoverer error {_0}")]
 struct DiscovererError(#[error(not(source))] &'static str);
 
 fn print_tags(info: &DiscovererInfo) {

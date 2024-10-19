@@ -15,7 +15,7 @@ use std::{
 };
 
 use anyhow::{Context, Result};
-use derive_more::{Display, Error};
+use derive_more::derive::{Display, Error};
 use glutin::{
     config::GetGlConfig as _,
     context::AsRawContext as _,
@@ -28,7 +28,7 @@ use gst_gl::prelude::*;
 use raw_window_handle::HasRawWindowHandle as _;
 
 #[derive(Debug, Display, Error)]
-#[display(fmt = "Received error from {src}: {error} (debug: {debug:?})")]
+#[display("Received error from {src}: {error} (debug: {debug:?})")]
 struct ErrorMessage {
     src: glib::GString,
     error: glib::Error,

@@ -28,7 +28,7 @@ gio = { workspace = true, optional = true }
 anyhow = "1.0"
 byte-slice-cast = "1"
 cairo-rs = { workspace = true, features=["use_glib"], optional = true }
-derive_more = "0.99.5"
+derive_more = { version = "1", features = ["display", "error"] }
 futures = "0.3"
 # Since there's nothing Windows-specific to enable on gstreamer-rs, unconditionally enable glutin's WGL backend
 glutin = { version = "0.31", optional = true, default-features = false, features = ["wgl"] }

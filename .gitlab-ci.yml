@@ -419,8 +419,7 @@ outdated:
     - if: $CI_PIPELINE_SOURCE == "schedule"
   script:
     - cargo update --color=always
-    # Ignore derive_more until we can depend on Rust 1.75 or newer
-    - cargo outdated --color=always --root-deps-only --exit-code 1 -v --ignore derive_more
+    - cargo outdated --color=always --root-deps-only --exit-code 1 -v
 
 coverage:
   allow_failure: true
