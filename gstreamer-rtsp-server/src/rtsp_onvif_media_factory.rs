@@ -4,14 +4,7 @@ use glib::{prelude::*, translate::*};
 
 use crate::{ffi, RTSPContext, RTSPOnvifMediaFactory};
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::RTSPOnvifMediaFactory>> Sealed for T {}
-}
-
-pub trait RTSPOnvifMediaFactoryExtManual:
-    sealed::Sealed + IsA<RTSPOnvifMediaFactory> + 'static
-{
+pub trait RTSPOnvifMediaFactoryExtManual: IsA<RTSPOnvifMediaFactory> + 'static {
     #[doc(alias = "gst_rtsp_onvif_media_factory_requires_backchannel")]
     fn requires_backchannel(&self, ctx: &RTSPContext) -> bool {
         skip_assert_initialized!();

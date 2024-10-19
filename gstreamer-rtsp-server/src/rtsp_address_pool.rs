@@ -6,12 +6,7 @@ use glib::{prelude::*, translate::*};
 
 use crate::{ffi, RTSPAddress, RTSPAddressPool, RTSPAddressPoolResult};
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::RTSPAddressPool>> Sealed for T {}
-}
-
-pub trait RTSPAddressPoolExtManual: sealed::Sealed + IsA<RTSPAddressPool> + 'static {
+pub trait RTSPAddressPoolExtManual: IsA<RTSPAddressPool> + 'static {
     #[doc(alias = "gst_rtsp_address_pool_reserve_address")]
     fn reserve_address(
         &self,

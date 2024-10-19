@@ -102,12 +102,7 @@ impl FromGlib<libc::c_ulong> for NotifyWatchId {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Element>> Sealed for T {}
-}
-
-pub trait ElementExtManual: sealed::Sealed + IsA<Element> + 'static {
+pub trait ElementExtManual: IsA<Element> + 'static {
     #[doc(alias = "get_element_class")]
     #[inline]
     fn element_class(&self) -> &glib::Class<Element> {

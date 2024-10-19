@@ -4,12 +4,7 @@ use glib::{prelude::*, translate::*};
 
 use crate::{ffi, RTPBasePayload};
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::RTPBasePayload>> Sealed for T {}
-}
-
-pub trait RTPBasePayloadExtManual: sealed::Sealed + IsA<RTPBasePayload> + 'static {
+pub trait RTPBasePayloadExtManual: IsA<RTPBasePayload> + 'static {
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_rtp_base_payload_set_outcaps_structure")]

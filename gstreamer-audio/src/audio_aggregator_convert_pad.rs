@@ -8,14 +8,7 @@ use glib::{
 
 use crate::{ffi, AudioAggregatorConvertPad};
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::AudioAggregatorConvertPad>> Sealed for T {}
-}
-
-pub trait AudioAggregatorConvertPadExtManual:
-    sealed::Sealed + IsA<AudioAggregatorConvertPad> + 'static
-{
+pub trait AudioAggregatorConvertPadExtManual: IsA<AudioAggregatorConvertPad> + 'static {
     #[doc(alias = "converter-config")]
     fn converter_config(&self) -> Option<crate::AudioConverterConfig> {
         ObjectExt::property::<Option<gst::Structure>>(self.as_ref(), "converter-config")

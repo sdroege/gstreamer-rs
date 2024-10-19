@@ -20,12 +20,7 @@ extern "C" {
     ) -> gst::ffi::GstFlowReturn;
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::AudioDecoder>> Sealed for T {}
-}
-
-pub trait AudioDecoderExtManual: sealed::Sealed + IsA<AudioDecoder> + 'static {
+pub trait AudioDecoderExtManual: IsA<AudioDecoder> + 'static {
     #[doc(alias = "gst_audio_decoder_negotiate")]
     fn negotiate(&self) -> Result<(), gst::FlowError> {
         unsafe {

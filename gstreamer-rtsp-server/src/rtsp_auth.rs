@@ -10,12 +10,7 @@ use glib::{
 
 use crate::{ffi, RTSPAuth, RTSPToken};
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::RTSPAuth>> Sealed for T {}
-}
-
-pub trait RTSPAuthExtManual: sealed::Sealed + IsA<RTSPAuth> + 'static {
+pub trait RTSPAuthExtManual: IsA<RTSPAuth> + 'static {
     #[doc(alias = "gst_rtsp_auth_set_default_token")]
     fn set_default_token(&self, mut token: Option<&mut RTSPToken>) {
         unsafe {

@@ -4,12 +4,7 @@ use glib::{prelude::*, signal::SignalHandlerId, translate::*};
 
 use crate::{ffi, ClockTime, Object, ObjectFlags};
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Object>> Sealed for T {}
-}
-
-pub trait GstObjectExtManual: sealed::Sealed + IsA<Object> + 'static {
+pub trait GstObjectExtManual: IsA<Object> + 'static {
     #[doc(alias = "deep-notify")]
     fn connect_deep_notify<
         F: Fn(&Self, &crate::Object, &glib::ParamSpec) + Send + Sync + 'static,

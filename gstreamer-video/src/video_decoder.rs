@@ -28,12 +28,7 @@ extern "C" {
     ) -> gst::ffi::GstFlowReturn;
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::VideoDecoder>> Sealed for T {}
-}
-
-pub trait VideoDecoderExtManual: sealed::Sealed + IsA<VideoDecoder> + 'static {
+pub trait VideoDecoderExtManual: IsA<VideoDecoder> + 'static {
     #[doc(alias = "gst_video_decoder_allocate_output_frame")]
     fn allocate_output_frame(
         &self,

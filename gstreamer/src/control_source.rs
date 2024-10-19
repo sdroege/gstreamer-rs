@@ -4,12 +4,7 @@ use glib::{prelude::*, translate::*};
 
 use crate::{ClockTime, ControlSource};
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::ControlSource>> Sealed for T {}
-}
-
-pub trait ControlSourceExtManual: sealed::Sealed + IsA<ControlSource> + 'static {
+pub trait ControlSourceExtManual: IsA<ControlSource> + 'static {
     #[doc(alias = "get_value_array")]
     #[doc(alias = "gst_control_source_get_value_array")]
     fn value_array(

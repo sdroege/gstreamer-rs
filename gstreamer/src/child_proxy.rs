@@ -6,12 +6,7 @@ use glib::{prelude::*, translate::*};
 
 use crate::ChildProxy;
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::ChildProxy>> Sealed for T {}
-}
-
-pub trait ChildProxyExtManual: sealed::Sealed + IsA<ChildProxy> + 'static {
+pub trait ChildProxyExtManual: IsA<ChildProxy> + 'static {
     #[doc(alias = "gst_child_proxy_lookup")]
     fn lookup(&self, name: &str) -> Result<(glib::Object, glib::ParamSpec), glib::BoolError> {
         unsafe {

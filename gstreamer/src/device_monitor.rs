@@ -26,12 +26,8 @@ impl FromGlib<libc::c_uint> for DeviceMonitorFilterId {
         DeviceMonitorFilterId(NonZeroU32::new_unchecked(val))
     }
 }
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::DeviceMonitor>> Sealed for T {}
-}
 
-pub trait DeviceMonitorExtManual: sealed::Sealed + IsA<DeviceMonitor> + 'static {
+pub trait DeviceMonitorExtManual: IsA<DeviceMonitor> + 'static {
     #[doc(alias = "gst_device_monitor_add_filter")]
     fn add_filter(
         &self,

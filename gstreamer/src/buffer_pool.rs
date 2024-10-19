@@ -345,12 +345,7 @@ impl FromGlibPtrNone<*mut ffi::GstBufferPoolAcquireParams> for BufferPoolAcquire
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::BufferPool>> Sealed for T {}
-}
-
-pub trait BufferPoolExtManual: sealed::Sealed + IsA<BufferPool> + 'static {
+pub trait BufferPoolExtManual: IsA<BufferPool> + 'static {
     #[doc(alias = "get_config")]
     #[doc(alias = "gst_buffer_pool_get_config")]
     fn config(&self) -> BufferPoolConfig {

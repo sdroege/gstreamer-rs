@@ -195,12 +195,7 @@ pub enum EventForeachAction {
     Replace(Event),
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Pad>> Sealed for T {}
-}
-
-pub trait PadExtManual: sealed::Sealed + IsA<Pad> + 'static {
+pub trait PadExtManual: IsA<Pad> + 'static {
     #[doc(alias = "gst_pad_add_probe")]
     fn add_probe<F>(&self, mask: PadProbeType, func: F) -> Option<PadProbeId>
     where

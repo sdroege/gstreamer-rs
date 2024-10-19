@@ -8,14 +8,7 @@ use glib::{
 
 use crate::{ffi, VideoAggregatorConvertPad};
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::VideoAggregatorConvertPad>> Sealed for T {}
-}
-
-pub trait VideoAggregatorConvertPadExtManual:
-    sealed::Sealed + IsA<VideoAggregatorConvertPad> + 'static
-{
+pub trait VideoAggregatorConvertPadExtManual: IsA<VideoAggregatorConvertPad> + 'static {
     #[doc(alias = "converter-config")]
     fn converter_config(&self) -> Option<crate::VideoConverterConfig> {
         ObjectExt::property::<Option<gst::Structure>>(self.as_ref(), "converter-config")

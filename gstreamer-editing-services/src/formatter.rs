@@ -2,12 +2,7 @@
 use crate::{ffi, prelude::*, Formatter};
 use gst::glib::translate::*;
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Formatter>> Sealed for T {}
-}
-
-pub trait FormatterExtManual: sealed::Sealed + IsA<Formatter> + 'static {
+pub trait FormatterExtManual: IsA<Formatter> + 'static {
     fn can_load_uri(&self, uri: &str) -> Result<(), glib::Error> {
         unsafe {
             let klass = self.class_of::<crate::Formatter>().unwrap();

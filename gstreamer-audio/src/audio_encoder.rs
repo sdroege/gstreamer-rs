@@ -6,12 +6,7 @@ use glib::{prelude::*, translate::*};
 
 use crate::{ffi, AudioEncoder};
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::AudioEncoder>> Sealed for T {}
-}
-
-pub trait AudioEncoderExtManual: sealed::Sealed + IsA<AudioEncoder> + 'static {
+pub trait AudioEncoderExtManual: IsA<AudioEncoder> + 'static {
     #[doc(alias = "gst_audio_encoder_negotiate")]
     fn negotiate(&self) -> Result<(), gst::FlowError> {
         unsafe {

@@ -5,12 +5,7 @@ use gst::prelude::*;
 
 use crate::{ffi, AggregatorPad};
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::AggregatorPad>> Sealed for T {}
-}
-
-pub trait AggregatorPadExtManual: sealed::Sealed + IsA<AggregatorPad> + 'static {
+pub trait AggregatorPadExtManual: IsA<AggregatorPad> + 'static {
     #[doc(alias = "get_segment")]
     fn segment(&self) -> gst::Segment {
         unsafe {

@@ -7,12 +7,7 @@ use glib::{
 
 use crate::{ffi, PluginFeature, Rank};
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::PluginFeature>> Sealed for T {}
-}
-
-pub trait PluginFeatureExtManual: sealed::Sealed + IsA<PluginFeature> + Sized + 'static {
+pub trait PluginFeatureExtManual: IsA<PluginFeature> + 'static {
     #[doc(alias = "get_rank")]
     #[doc(alias = "gst_plugin_feature_get_rank")]
     fn rank(&self) -> Rank {

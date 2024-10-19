@@ -3,12 +3,7 @@ use gst::prelude::*;
 
 use crate::{ffi, subclass::AggregateFramesToken, VideoAggregatorPad};
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::VideoAggregatorPad>> Sealed for T {}
-}
-
-pub trait VideoAggregatorPadExtManual: sealed::Sealed + IsA<VideoAggregatorPad> + 'static {
+pub trait VideoAggregatorPadExtManual: IsA<VideoAggregatorPad> + 'static {
     #[doc(alias = "gst_video_aggregator_pad_has_current_buffer")]
     fn has_current_buffer(&self, _token: &AggregateFramesToken) -> bool {
         unsafe {

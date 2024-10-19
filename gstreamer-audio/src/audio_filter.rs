@@ -5,12 +5,7 @@ use gst_base::prelude::*;
 
 use crate::{ffi, AudioFilter, AudioInfo};
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::AudioFilter>> Sealed for T {}
-}
-
-pub trait AudioFilterExtManual: sealed::Sealed + IsA<AudioFilter> + 'static {
+pub trait AudioFilterExtManual: IsA<AudioFilter> + 'static {
     fn audio_info(&self) -> Option<AudioInfo> {
         unsafe {
             let ptr: &ffi::GstAudioFilter = &*(self.as_ptr() as *const _);

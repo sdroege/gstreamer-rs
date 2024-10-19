@@ -16,20 +16,21 @@ cfg_if::cfg_if! {
     }
 }
 
+use glib::prelude::*;
 use super::Bus;
 
-pub trait WindowsBusExtManual: 'static {
+pub trait WindowsBusExtManual: IsA<Bus> + 'static {
     #[doc(alias = "get_pollfd")]
     #[doc(alias = "gst_bus_get_pollfd")]
     fn pollfd(&self) -> windows::io::RawHandle;
 }
 
-impl WindowsBusExtManual for Bus {
+impl<T: IsA<Bus>> WindowsBusExtManual for T {
     fn pollfd(&self) -> windows::io::RawHandle {
         #[cfg(windows)]
         unsafe {
             let mut pollfd = mem::MaybeUninit::uninit();
-            crate::ffi::gst_bus_get_pollfd(self.to_glib_none().0, pollfd.as_mut_ptr());
+            crate::ffi::gst_bus_get_pollfd(self.as_ref().to_glib_none().0, pollfd.as_mut_ptr());
             let pollfd = pollfd.assume_init();
             pollfd.fd as *mut _
         }

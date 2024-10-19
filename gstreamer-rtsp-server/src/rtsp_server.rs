@@ -4,12 +4,7 @@ use glib::{prelude::*, source::SourceId, translate::*};
 
 use crate::{ffi, RTSPServer};
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::RTSPServer>> Sealed for T {}
-}
-
-pub trait RTSPServerExtManual: sealed::Sealed + IsA<RTSPServer> + 'static {
+pub trait RTSPServerExtManual: IsA<RTSPServer> + 'static {
     #[doc(alias = "gst_rtsp_server_attach")]
     fn attach(
         &self,

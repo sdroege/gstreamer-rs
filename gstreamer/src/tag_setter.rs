@@ -4,12 +4,7 @@ use glib::{prelude::*, translate::*};
 
 use crate::{ffi, tags::*, TagMergeMode, TagSetter};
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::TagSetter>> Sealed for T {}
-}
-
-pub trait TagSetterExtManual: sealed::Sealed + IsA<TagSetter> + 'static {
+pub trait TagSetterExtManual: IsA<TagSetter> + 'static {
     #[doc(alias = "gst_tag_setter_add_tag_value")]
     fn add_tag<'a, T: Tag<'a>>(&self, value: &T::TagType, mode: TagMergeMode) {
         unsafe {

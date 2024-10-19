@@ -8,11 +8,11 @@ use glib::translate::{from_glib, from_glib_none, Borrowed, ToGlibPtr};
 pub enum Readable {}
 pub enum Writable {}
 
-pub trait IsVideoFrame {
+pub unsafe trait IsVideoFrame {
     fn as_raw(&self) -> &ffi::GstVideoFrame;
 }
 
-impl<T> IsVideoFrame for VideoFrame<T> {
+unsafe impl<T> IsVideoFrame for VideoFrame<T> {
     #[inline]
     fn as_raw(&self) -> &ffi::GstVideoFrame {
         &self.frame
@@ -39,12 +39,7 @@ impl<T> fmt::Debug for VideoFrame<T> {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsVideoFrame> Sealed for T {}
-}
-
-pub trait VideoFrameExt: sealed::Sealed + IsVideoFrame {
+pub trait VideoFrameExt: IsVideoFrame {
     #[inline]
     fn as_ptr(&self) -> *const ffi::GstVideoFrame {
         self.as_raw() as _
@@ -556,7 +551,7 @@ pub struct VideoFrameRef<T> {
     phantom: PhantomData<T>,
 }
 
-impl<T> IsVideoFrame for VideoFrameRef<T> {
+unsafe impl<T> IsVideoFrame for VideoFrameRef<T> {
     #[inline]
     fn as_raw(&self) -> &ffi::GstVideoFrame {
         &self.frame

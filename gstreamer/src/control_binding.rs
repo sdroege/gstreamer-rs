@@ -4,12 +4,7 @@ use glib::{prelude::*, translate::*};
 
 use crate::{ClockTime, ControlBinding};
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::ControlBinding>> Sealed for T {}
-}
-
-pub trait ControlBindingExtManual: sealed::Sealed + IsA<ControlBinding> + 'static {
+pub trait ControlBindingExtManual: IsA<ControlBinding> + 'static {
     #[doc(alias = "get_g_value_array")]
     #[doc(alias = "gst_control_binding_get_g_value_array")]
     fn g_value_array(

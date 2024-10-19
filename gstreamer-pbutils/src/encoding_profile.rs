@@ -8,12 +8,7 @@ use crate::{
     ffi, EncodingAudioProfile, EncodingContainerProfile, EncodingProfile, EncodingVideoProfile,
 };
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::EncodingProfile>> Sealed for T {}
-}
-
-pub trait EncodingProfileExtManual: sealed::Sealed + IsA<EncodingProfile> + 'static {
+pub trait EncodingProfileExtManual: IsA<EncodingProfile> + 'static {
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_encoding_profile_get_element_properties")]

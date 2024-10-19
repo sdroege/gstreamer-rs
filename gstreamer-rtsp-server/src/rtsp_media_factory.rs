@@ -4,12 +4,7 @@ use glib::{prelude::*, translate::*};
 
 use crate::{ffi, RTSPMediaFactory};
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::RTSPMediaFactory>> Sealed for T {}
-}
-
-pub trait RTSPMediaFactoryExtManual: sealed::Sealed + IsA<RTSPMediaFactory> + 'static {
+pub trait RTSPMediaFactoryExtManual: IsA<RTSPMediaFactory> + 'static {
     #[doc(alias = "gst_rtsp_media_factory_add_role_from_structure")]
     fn add_role_from_structure(&self, structure: &gst::StructureRef) {
         unsafe {

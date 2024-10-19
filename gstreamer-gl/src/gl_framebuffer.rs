@@ -2,12 +2,7 @@ use glib::{prelude::*, translate::*};
 
 use crate::{ffi, GLFramebuffer, GLMemoryRef};
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::GLFramebuffer>> Sealed for T {}
-}
-
-pub trait GLFramebufferExtManual: sealed::Sealed + IsA<GLFramebuffer> + 'static {
+pub trait GLFramebufferExtManual: IsA<GLFramebuffer> + 'static {
     #[doc(alias = "gst_gl_framebuffer_draw_to_texture")]
     fn draw_to_texture<F: FnOnce()>(&self, mem: &mut GLMemoryRef, func: F) {
         let mut func = std::mem::ManuallyDrop::new(func);

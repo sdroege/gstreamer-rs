@@ -3,12 +3,7 @@ use crate::{ffi, GLContext, GLDisplay};
 use glib::prelude::*;
 use glib::translate::*;
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::GLDisplay>> Sealed for T {}
-}
-
-pub trait GLDisplayExtManual: sealed::Sealed + IsA<GLDisplay> + 'static {
+pub trait GLDisplayExtManual: IsA<GLDisplay> + 'static {
     #[doc(alias = "gst_gl_display_get_handle")]
     #[doc(alias = "get_handle")]
     fn handle(&self) -> usize {

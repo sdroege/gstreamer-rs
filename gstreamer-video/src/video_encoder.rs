@@ -10,12 +10,8 @@ use crate::{
     video_codec_state::{InNegotiation, Readable, VideoCodecState, VideoCodecStateContext},
     VideoCodecFrame, VideoEncoder,
 };
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::VideoEncoder>> Sealed for T {}
-}
 
-pub trait VideoEncoderExtManual: sealed::Sealed + IsA<VideoEncoder> + 'static {
+pub trait VideoEncoderExtManual: IsA<VideoEncoder> + 'static {
     #[doc(alias = "gst_video_encoder_allocate_output_frame")]
     fn allocate_output_frame(
         &self,

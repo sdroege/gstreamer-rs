@@ -4,12 +4,7 @@ use glib::prelude::*;
 
 use crate::value::GstValueExt;
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<glib::Object>> Sealed for T {}
-}
-
-pub trait GObjectExtManualGst: sealed::Sealed + IsA<glib::Object> + 'static {
+pub trait GObjectExtManualGst: IsA<glib::Object> + 'static {
     #[doc(alias = "gst_util_set_object_arg")]
     #[track_caller]
     fn set_property_from_str(&self, name: &str, value: &str) {

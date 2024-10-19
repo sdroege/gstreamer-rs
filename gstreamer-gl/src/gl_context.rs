@@ -45,12 +45,7 @@ impl GLContext {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::GLContext>> Sealed for T {}
-}
-
-pub trait GLContextExtManual: sealed::Sealed + IsA<GLContext> + 'static {
+pub trait GLContextExtManual: IsA<GLContext> + 'static {
     #[doc(alias = "get_gl_context")]
     #[doc(alias = "gst_gl_context_get_gl_context")]
     fn gl_context(&self) -> uintptr_t {

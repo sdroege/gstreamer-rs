@@ -6,12 +6,7 @@ use glib::{prelude::*, translate::*};
 
 use crate::{ffi, RTSPSession, RTSPSessionMedia};
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::RTSPSession>> Sealed for T {}
-}
-
-pub trait RTSPSessionExtManual: sealed::Sealed + IsA<super::RTSPSession> + 'static {
+pub trait RTSPSessionExtManual: IsA<super::RTSPSession> + 'static {
     #[doc(alias = "gst_rtsp_session_dup_media")]
     #[doc(alias = "gst_rtsp_session_get_media")]
     fn media(&self, path: &str) -> (Option<RTSPSessionMedia>, i32) {

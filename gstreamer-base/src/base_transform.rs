@@ -7,12 +7,7 @@ use gst::prelude::*;
 
 use crate::{ffi, BaseTransform};
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::BaseTransform>> Sealed for T {}
-}
-
-pub trait BaseTransformExtManual: sealed::Sealed + IsA<BaseTransform> + 'static {
+pub trait BaseTransformExtManual: IsA<BaseTransform> + 'static {
     #[doc(alias = "get_allocator")]
     #[doc(alias = "gst_base_transform_get_allocator")]
     fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams) {

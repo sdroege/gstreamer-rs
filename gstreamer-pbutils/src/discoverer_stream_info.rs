@@ -31,14 +31,7 @@ impl Iterator for Iter {
 
 impl std::iter::FusedIterator for Iter {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::DiscovererStreamInfo>> Sealed for T {}
-}
-
-pub trait DiscovererStreamInfoExtManual:
-    sealed::Sealed + IsA<DiscovererStreamInfo> + 'static
-{
+pub trait DiscovererStreamInfoExtManual: IsA<DiscovererStreamInfo> + 'static {
     fn next_iter(&self) -> Iter {
         Iter {
             stream_info: self.next(),

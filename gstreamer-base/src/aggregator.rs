@@ -16,12 +16,7 @@ use gst::{format::FormattedValue, prelude::*};
 
 use crate::{ffi, Aggregator, AggregatorPad};
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Aggregator>> Sealed for T {}
-}
-
-pub trait AggregatorExtManual: sealed::Sealed + IsA<Aggregator> + 'static {
+pub trait AggregatorExtManual: IsA<Aggregator> + 'static {
     #[doc(alias = "get_allocator")]
     #[doc(alias = "gst_aggregator_get_allocator")]
     fn allocator(&self) -> (Option<gst::Allocator>, gst::AllocationParams) {

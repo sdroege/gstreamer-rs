@@ -42,12 +42,7 @@ impl Bin {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Bin>> Sealed for T {}
-}
-
-pub trait GstBinExtManual: sealed::Sealed + IsA<Bin> + 'static {
+pub trait GstBinExtManual: IsA<Bin> + 'static {
     #[doc(alias = "gst_bin_add_many")]
     fn add_many(
         &self,

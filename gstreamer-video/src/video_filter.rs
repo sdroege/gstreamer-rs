@@ -6,12 +6,7 @@ use gst_base::prelude::*;
 
 use crate::{ffi, VideoFilter};
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::VideoFilter>> Sealed for T {}
-}
-
-pub trait VideoFilterExtManual: sealed::Sealed + IsA<VideoFilter> + 'static {
+pub trait VideoFilterExtManual: IsA<VideoFilter> + 'static {
     fn input_video_info(&self) -> Option<crate::VideoInfo> {
         unsafe {
             let ptr = self.as_ptr() as *mut ffi::GstVideoFilter;

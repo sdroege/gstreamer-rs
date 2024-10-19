@@ -10,12 +10,7 @@ use gst::{
 
 use crate::{ffi, BaseParse, BaseParseFrame};
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::BaseParse>> Sealed for T {}
-}
-
-pub trait BaseParseExtManual: sealed::Sealed + IsA<BaseParse> + 'static {
+pub trait BaseParseExtManual: IsA<BaseParse> + 'static {
     #[doc(alias = "get_sink_pad")]
     fn sink_pad(&self) -> &gst::Pad {
         unsafe {

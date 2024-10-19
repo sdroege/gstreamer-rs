@@ -4,18 +4,11 @@ use gst::prelude::*;
 
 use crate::{ffi, subclass::AudioVisualizerSetupToken, AudioVisualizer};
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::AudioVisualizer>> Sealed for T {}
-}
-
-pub trait AudioVisualizerExtManual:
-    sealed::Sealed + IsA<AudioVisualizer> + IsA<gst::Element> + 'static
-{
+pub trait AudioVisualizerExtManual: IsA<AudioVisualizer> + 'static {
     // rustdoc-stripper-ignore-next
     /// Returns the number of samples per frame required before calling the render method
     fn req_spf(&self) -> u32 {
-        let sinkpad = self.static_pad("sink").expect("sink pad presence");
+        let sinkpad = self.as_ref().static_pad("sink").expect("sink pad presence");
         let _stream_lock = sinkpad.stream_lock();
 
         let ptr = self.as_ptr() as *mut ffi::GstAudioVisualizer;
@@ -31,7 +24,7 @@ pub trait AudioVisualizerExtManual:
             token.0.as_ptr()
         );
 
-        let sinkpad = self.static_pad("sink").expect("sink pad presence");
+        let sinkpad = self.as_ref().static_pad("sink").expect("sink pad presence");
         let _stream_lock = sinkpad.stream_lock();
 
         let ptr = self.as_ptr() as *mut ffi::GstAudioVisualizer;
@@ -41,7 +34,7 @@ pub trait AudioVisualizerExtManual:
     }
 
     fn audio_info(&self) -> gst_audio::AudioInfo {
-        let sinkpad = self.static_pad("sink").expect("sink pad presence");
+        let sinkpad = self.as_ref().static_pad("sink").expect("sink pad presence");
         let _stream_lock = sinkpad.stream_lock();
 
         let ptr = self.as_ptr() as *mut ffi::GstAudioVisualizer;
@@ -54,7 +47,7 @@ pub trait AudioVisualizerExtManual:
     }
 
     fn video_info(&self) -> gst_video::VideoInfo {
-        let srcpad = self.static_pad("src").expect("src pad presence");
+        let srcpad = self.as_ref().static_pad("src").expect("src pad presence");
         let _stream_lock = srcpad.stream_lock();
 
         let ptr = self.as_ptr() as *mut ffi::GstAudioVisualizer;
@@ -67,4 +60,4 @@ pub trait AudioVisualizerExtManual:
     }
 }
 
-impl<O: IsA<AudioVisualizer> + IsA<gst::Element>> AudioVisualizerExtManual for O {}
+impl<O: IsA<AudioVisualizer>> AudioVisualizerExtManual for O {}

@@ -40,12 +40,7 @@ impl Pipeline {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Pipeline>> Sealed for T {}
-}
-
-pub trait GstPipelineExtManual: sealed::Sealed + IsA<Pipeline> + 'static {
+pub trait GstPipelineExtManual: IsA<Pipeline> + 'static {
     fn set_pipeline_flags(&self, flags: PipelineFlags) {
         unsafe {
             let ptr: *mut ffi::GstObject = self.as_ptr() as *mut _;

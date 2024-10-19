@@ -4,12 +4,7 @@ use glib::{prelude::*, translate::*};
 
 use crate::{ffi, WebRTCICE, WebRTCICEStream};
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::WebRTCICE>> Sealed for T {}
-}
-
-pub trait WebRTCICEExtManual: sealed::Sealed + IsA<WebRTCICE> + 'static {
+pub trait WebRTCICEExtManual: IsA<WebRTCICE> + 'static {
     #[doc(alias = "gst_webrtc_ice_add_candidate")]
     fn add_candidate(&self, stream: &impl IsA<WebRTCICEStream>, candidate: &str) {
         #[cfg(not(feature = "v1_24"))]

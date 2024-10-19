@@ -5,12 +5,7 @@ use glib::translate::*;
 
 use crate::{ffi, RTPBaseDepayload};
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::RTPBaseDepayload>> Sealed for T {}
-}
-
-pub trait RTPBaseDepayloadExtManual: sealed::Sealed + IsA<RTPBaseDepayload> + 'static {
+pub trait RTPBaseDepayloadExtManual: IsA<RTPBaseDepayload> + 'static {
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     fn extensions(&self) -> Vec<crate::RTPHeaderExtension> {

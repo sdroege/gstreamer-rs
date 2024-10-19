@@ -4,12 +4,7 @@ use crate::{ffi, RTSPClient, RTSPSession};
 use glib::{prelude::*, source::SourceId, translate::*};
 use gst_rtsp::rtsp_message::RTSPMessage;
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::RTSPClient>> Sealed for T {}
-}
-
-pub trait RTSPClientExtManual: sealed::Sealed + IsA<RTSPClient> + 'static {
+pub trait RTSPClientExtManual: IsA<RTSPClient> + 'static {
     #[doc(alias = "gst_rtsp_client_attach")]
     fn attach(&self, context: Option<&glib::MainContext>) -> SourceId {
         unsafe {

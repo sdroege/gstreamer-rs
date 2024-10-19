@@ -10,12 +10,8 @@ unsafe extern "C" fn task_pool_trampoline<P: FnOnce() + Send + 'static>(data: gp
     let func = Box::from_raw(data as *mut P);
     func()
 }
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::TaskPool>> Sealed for T {}
-}
 
-pub trait TaskPoolExtManual: sealed::Sealed + IsA<TaskPool> + 'static {
+pub trait TaskPoolExtManual: IsA<TaskPool> + 'static {
     #[doc(alias = "gst_task_pool_push")]
     fn push<P: FnOnce() + Send + 'static>(
         &self,

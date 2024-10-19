@@ -5,12 +5,7 @@ use libc::uintptr_t;
 
 use crate::{ffi, VideoOverlay};
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::VideoOverlay>> Sealed for T {}
-}
-
-pub trait VideoOverlayExtManual: sealed::Sealed + IsA<VideoOverlay> + 'static {
+pub trait VideoOverlayExtManual: IsA<VideoOverlay> + 'static {
     unsafe fn set_window_handle(&self, handle: uintptr_t) {
         ffi::gst_video_overlay_set_window_handle(self.as_ref().to_glib_none().0, handle)
     }

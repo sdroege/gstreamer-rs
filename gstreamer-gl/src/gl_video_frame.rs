@@ -12,14 +12,9 @@ pub enum Writable {}
 // TODO: implement copy for videoframes. This would need to go through all the individual memories
 //       and copy them. Some GL textures can be copied, others cannot.
 
-pub trait IsGLVideoFrame: IsVideoFrame + Sized {}
+pub unsafe trait IsGLVideoFrame: IsVideoFrame {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsGLVideoFrame> Sealed for T {}
-}
-
-pub trait GLVideoFrameExt: sealed::Sealed + IsGLVideoFrame {
+pub trait GLVideoFrameExt: IsGLVideoFrame + VideoFrameExt {
     #[inline]
     fn memory(&self, idx: u32) -> Result<&GLMemoryRef, glib::BoolError> {
         if idx >= self.info().n_planes() {
@@ -80,14 +75,14 @@ pub struct GLVideoFrame<T> {
 unsafe impl<T> Send for GLVideoFrame<T> {}
 unsafe impl<T> Sync for GLVideoFrame<T> {}
 
-impl<T> IsVideoFrame for GLVideoFrame<T> {
+unsafe impl<T> IsVideoFrame for GLVideoFrame<T> {
     #[inline]
     fn as_raw(&self) -> &gst_video::ffi::GstVideoFrame {
         &self.frame
     }
 }
 
-impl<T> IsGLVideoFrame for GLVideoFrame<T> {}
+unsafe impl<T> IsGLVideoFrame for GLVideoFrame<T> {}
 
 impl<T> Debug for GLVideoFrame<T> {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
@@ -272,14 +267,14 @@ pub struct GLVideoFrameRef<T> {
 unsafe impl<T> Send for GLVideoFrameRef<T> {}
 unsafe impl<T> Sync for GLVideoFrameRef<T> {}
 
-impl<T> IsVideoFrame for GLVideoFrameRef<T> {
+unsafe impl<T> IsVideoFrame for GLVideoFrameRef<T> {
     #[inline]
     fn as_raw(&self) -> &gst_video::ffi::GstVideoFrame {
         &self.frame
     }
 }
 
-impl<T> IsGLVideoFrame for GLVideoFrameRef<T> {}
+unsafe impl<T> IsGLVideoFrame for GLVideoFrameRef<T> {}
 
 impl<T> Debug for GLVideoFrameRef<T> {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {

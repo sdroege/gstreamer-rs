@@ -3,12 +3,7 @@ use gst::prelude::*;
 
 use crate::{ffi, AudioAggregatorPad};
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::AudioAggregatorPad>> Sealed for T {}
-}
-
-pub trait AudioAggregatorPadExtManual: sealed::Sealed + IsA<AudioAggregatorPad> + 'static {
+pub trait AudioAggregatorPadExtManual: IsA<AudioAggregatorPad> + 'static {
     fn audio_info(&self) -> Option<crate::AudioInfo> {
         unsafe {
             let ptr = self.as_ptr() as *mut ffi::GstAudioAggregatorPad;

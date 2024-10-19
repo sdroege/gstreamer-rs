@@ -7,12 +7,7 @@ use gst::prelude::*;
 
 use crate::{ffi, BaseSink};
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::BaseSink>> Sealed for T {}
-}
-
-pub trait BaseSinkExtManual: sealed::Sealed + IsA<BaseSink> + 'static {
+pub trait BaseSinkExtManual: IsA<BaseSink> + 'static {
     #[doc(alias = "get_segment")]
     fn segment(&self) -> gst::Segment {
         unsafe {

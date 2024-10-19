@@ -29,12 +29,7 @@ impl DeviceProvider {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::DeviceProvider>> Sealed for T {}
-}
-
-pub trait DeviceProviderExtManual: sealed::Sealed + IsA<DeviceProvider> + 'static {
+pub trait DeviceProviderExtManual: IsA<DeviceProvider> + 'static {
     #[doc(alias = "get_metadata")]
     #[doc(alias = "gst_device_provider_class_get_metadata")]
     fn metadata<'a>(&self, key: &str) -> Option<&'a str> {

@@ -2,12 +2,7 @@ use glib::{object::IsA, translate::*};
 
 use crate::{ffi, RTPHeaderExtension, RTPHeaderExtensionFlags};
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::RTPHeaderExtension>> Sealed for T {}
-}
-
-pub trait RTPHeaderExtensionExtManual: sealed::Sealed + IsA<RTPHeaderExtension> + 'static {
+pub trait RTPHeaderExtensionExtManual: IsA<RTPHeaderExtension> + 'static {
     #[doc(alias = "gst_rtp_header_extension_read")]
     fn read(
         &self,

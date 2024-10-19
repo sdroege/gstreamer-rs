@@ -36,12 +36,7 @@ fn into_raw_watch<F: FnMut(&RTSPSessionPool) -> ControlFlow + Send + 'static>(fu
     Box::into_raw(func) as gpointer
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::RTSPSessionPool>> Sealed for T {}
-}
-
-pub trait RTSPSessionPoolExtManual: sealed::Sealed + IsA<RTSPSessionPool> + 'static {
+pub trait RTSPSessionPoolExtManual: IsA<RTSPSessionPool> + 'static {
     #[doc(alias = "gst_rtsp_session_pool_create_watch")]
     fn create_watch<F>(&self, name: Option<&str>, priority: Priority, func: F) -> glib::Source
     where

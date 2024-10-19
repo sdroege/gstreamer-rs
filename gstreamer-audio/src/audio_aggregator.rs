@@ -10,12 +10,7 @@ use gst::prelude::*;
 
 use crate::{ffi, AudioAggregator, AudioAggregatorPad};
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::AudioAggregator>> Sealed for T {}
-}
-
-pub trait AudioAggregatorExtManual: sealed::Sealed + IsA<AudioAggregator> + 'static {
+pub trait AudioAggregatorExtManual: IsA<AudioAggregator> + 'static {
     #[doc(alias = "gst_audio_aggregator_set_sink_caps")]
     fn set_sink_caps(&self, pad: &impl IsA<AudioAggregatorPad>, caps: &gst::CapsRef) {
         unsafe {

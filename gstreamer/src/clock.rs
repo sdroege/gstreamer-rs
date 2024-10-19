@@ -420,12 +420,7 @@ impl Clock {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Clock>> Sealed for T {}
-}
-
-pub trait ClockExtManual: sealed::Sealed + IsA<Clock> + 'static {
+pub trait ClockExtManual: IsA<Clock> + 'static {
     #[doc(alias = "gst_clock_new_periodic_id")]
     fn new_periodic_id(&self, start_time: ClockTime, interval: ClockTime) -> PeriodicClockId {
         assert_ne!(interval, ClockTime::ZERO);
