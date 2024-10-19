@@ -27,12 +27,7 @@ impl ChildProxy {
 unsafe impl Send for ChildProxy {}
 unsafe impl Sync for ChildProxy {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::ChildProxy>> Sealed for T {}
-}
-
-pub trait ChildProxyExt: IsA<ChildProxy> + sealed::Sealed + 'static {
+pub trait ChildProxyExt: IsA<ChildProxy> + 'static {
     #[doc(alias = "gst_child_proxy_child_added")]
     fn child_added(&self, child: &impl IsA<glib::Object>, name: &str) {
         unsafe {

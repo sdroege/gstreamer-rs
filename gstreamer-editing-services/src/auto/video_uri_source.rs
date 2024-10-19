@@ -19,12 +19,7 @@ impl VideoUriSource {
     pub const NONE: Option<&'static VideoUriSource> = None;
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::VideoUriSource>> Sealed for T {}
-}
-
-pub trait VideoUriSourceExt: IsA<VideoUriSource> + sealed::Sealed + 'static {
+pub trait VideoUriSourceExt: IsA<VideoUriSource> + 'static {
     fn uri(&self) -> Option<glib::GString> {
         ObjectExt::property(self.as_ref(), "uri")
     }

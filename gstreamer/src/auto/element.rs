@@ -54,12 +54,7 @@ impl Element {
 unsafe impl Send for Element {}
 unsafe impl Sync for Element {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Element>> Sealed for T {}
-}
-
-pub trait ElementExt: IsA<Element> + sealed::Sealed + 'static {
+pub trait ElementExt: IsA<Element> + 'static {
     #[doc(alias = "gst_element_abort_state")]
     fn abort_state(&self) {
         unsafe {

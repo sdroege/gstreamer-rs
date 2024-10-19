@@ -49,12 +49,7 @@ impl GLFramebuffer {
 unsafe impl Send for GLFramebuffer {}
 unsafe impl Sync for GLFramebuffer {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::GLFramebuffer>> Sealed for T {}
-}
-
-pub trait GLFramebufferExt: IsA<GLFramebuffer> + sealed::Sealed + 'static {
+pub trait GLFramebufferExt: IsA<GLFramebuffer> + 'static {
     #[doc(alias = "gst_gl_framebuffer_attach")]
     unsafe fn attach(&self, attachment_point: u32, mem: &mut GLBaseMemory) {
         ffi::gst_gl_framebuffer_attach(

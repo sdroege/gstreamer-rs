@@ -41,12 +41,7 @@ impl Default for LFOControlSource {
 unsafe impl Send for LFOControlSource {}
 unsafe impl Sync for LFOControlSource {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::LFOControlSource>> Sealed for T {}
-}
-
-pub trait LFOControlSourceExt: IsA<LFOControlSource> + sealed::Sealed + 'static {
+pub trait LFOControlSourceExt: IsA<LFOControlSource> + 'static {
     fn amplitude(&self) -> f64 {
         ObjectExt::property(self.as_ref(), "amplitude")
     }

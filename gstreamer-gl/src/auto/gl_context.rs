@@ -51,12 +51,7 @@ impl GLContext {
 unsafe impl Send for GLContext {}
 unsafe impl Sync for GLContext {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::GLContext>> Sealed for T {}
-}
-
-pub trait GLContextExt: IsA<GLContext> + sealed::Sealed + 'static {
+pub trait GLContextExt: IsA<GLContext> + 'static {
     #[doc(alias = "gst_gl_context_activate")]
     fn activate(&self, activate: bool) -> Result<(), glib::error::BoolError> {
         unsafe {

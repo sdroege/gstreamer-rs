@@ -23,12 +23,7 @@ impl TitleSource {
     pub const NONE: Option<&'static TitleSource> = None;
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::TitleSource>> Sealed for T {}
-}
-
-pub trait TitleSourceExt: IsA<TitleSource> + sealed::Sealed + 'static {
+pub trait TitleSourceExt: IsA<TitleSource> + 'static {
     #[doc(alias = "ges_title_source_get_background_color")]
     #[doc(alias = "get_background_color")]
     fn background_color(&self) -> u32 {

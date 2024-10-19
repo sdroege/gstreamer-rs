@@ -129,12 +129,7 @@ impl Asset {
 unsafe impl Send for Asset {}
 unsafe impl Sync for Asset {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Asset>> Sealed for T {}
-}
-
-pub trait AssetExt: IsA<Asset> + sealed::Sealed + 'static {
+pub trait AssetExt: IsA<Asset> + 'static {
     #[doc(alias = "ges_asset_extract")]
     fn extract(&self) -> Result<Extractable, glib::Error> {
         unsafe {

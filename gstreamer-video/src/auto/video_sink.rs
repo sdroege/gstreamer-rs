@@ -28,12 +28,7 @@ impl VideoSink {
 unsafe impl Send for VideoSink {}
 unsafe impl Sync for VideoSink {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::VideoSink>> Sealed for T {}
-}
-
-pub trait VideoSinkExt: IsA<VideoSink> + sealed::Sealed + 'static {
+pub trait VideoSinkExt: IsA<VideoSink> + 'static {
     #[doc(alias = "show-preroll-frame")]
     fn shows_preroll_frame(&self) -> bool {
         ObjectExt::property(self.as_ref(), "show-preroll-frame")

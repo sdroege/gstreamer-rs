@@ -22,12 +22,7 @@ impl GhostPad {
 unsafe impl Send for GhostPad {}
 unsafe impl Sync for GhostPad {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::GhostPad>> Sealed for T {}
-}
-
-pub trait GhostPadExt: IsA<GhostPad> + sealed::Sealed + 'static {
+pub trait GhostPadExt: IsA<GhostPad> + 'static {
     #[doc(alias = "gst_ghost_pad_get_target")]
     #[doc(alias = "get_target")]
     fn target(&self) -> Option<Pad> {

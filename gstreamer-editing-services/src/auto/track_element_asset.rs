@@ -27,12 +27,7 @@ impl TrackElementAsset {
 unsafe impl Send for TrackElementAsset {}
 unsafe impl Sync for TrackElementAsset {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::TrackElementAsset>> Sealed for T {}
-}
-
-pub trait TrackElementAssetExt: IsA<TrackElementAsset> + sealed::Sealed + 'static {
+pub trait TrackElementAssetExt: IsA<TrackElementAsset> + 'static {
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_track_element_asset_get_natural_framerate")]

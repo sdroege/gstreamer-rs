@@ -61,12 +61,7 @@ impl DirectControlBinding {
 unsafe impl Send for DirectControlBinding {}
 unsafe impl Sync for DirectControlBinding {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::DirectControlBinding>> Sealed for T {}
-}
-
-pub trait DirectControlBindingExt: IsA<DirectControlBinding> + sealed::Sealed + 'static {
+pub trait DirectControlBindingExt: IsA<DirectControlBinding> + 'static {
     fn is_absolute(&self) -> bool {
         ObjectExt::property(self.as_ref(), "absolute")
     }

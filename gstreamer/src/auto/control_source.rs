@@ -22,12 +22,7 @@ impl ControlSource {
 unsafe impl Send for ControlSource {}
 unsafe impl Sync for ControlSource {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::ControlSource>> Sealed for T {}
-}
-
-pub trait ControlSourceExt: IsA<ControlSource> + sealed::Sealed + 'static {
+pub trait ControlSourceExt: IsA<ControlSource> + 'static {
     #[doc(alias = "gst_control_source_get_value")]
     #[doc(alias = "control_source_get_value")]
     fn value(&self, timestamp: ClockTime) -> Option<f64> {

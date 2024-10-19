@@ -30,12 +30,7 @@ impl Aggregator {
 unsafe impl Send for Aggregator {}
 unsafe impl Sync for Aggregator {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Aggregator>> Sealed for T {}
-}
-
-pub trait AggregatorExt: IsA<Aggregator> + sealed::Sealed + 'static {
+pub trait AggregatorExt: IsA<Aggregator> + 'static {
     #[doc(alias = "gst_aggregator_finish_buffer")]
     fn finish_buffer(&self, buffer: gst::Buffer) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {

@@ -22,12 +22,7 @@ impl RTSPOnvifMedia {
 unsafe impl Send for RTSPOnvifMedia {}
 unsafe impl Sync for RTSPOnvifMedia {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::RTSPOnvifMedia>> Sealed for T {}
-}
-
-pub trait RTSPOnvifMediaExt: IsA<RTSPOnvifMedia> + sealed::Sealed + 'static {
+pub trait RTSPOnvifMediaExt: IsA<RTSPOnvifMedia> + 'static {
     #[doc(alias = "gst_rtsp_onvif_media_collect_backchannel")]
     fn collect_backchannel(&self) -> bool {
         unsafe {

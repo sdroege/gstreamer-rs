@@ -27,12 +27,7 @@ impl Pipeline {
 unsafe impl Send for Pipeline {}
 unsafe impl Sync for Pipeline {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Pipeline>> Sealed for T {}
-}
-
-pub trait PipelineExt: IsA<Pipeline> + sealed::Sealed + 'static {
+pub trait PipelineExt: IsA<Pipeline> + 'static {
     #[doc(alias = "gst_pipeline_auto_clock")]
     fn auto_clock(&self) {
         unsafe {

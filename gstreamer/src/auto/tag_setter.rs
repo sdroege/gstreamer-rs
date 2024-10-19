@@ -22,12 +22,7 @@ impl TagSetter {
 unsafe impl Send for TagSetter {}
 unsafe impl Sync for TagSetter {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::TagSetter>> Sealed for T {}
-}
-
-pub trait TagSetterExt: IsA<TagSetter> + sealed::Sealed + 'static {
+pub trait TagSetterExt: IsA<TagSetter> + 'static {
     //#[doc(alias = "gst_tag_setter_add_tag_valist")]
     //fn add_tag_valist(&self, mode: TagMergeMode, tag: &str, var_args: /*Unknown conversion*//*Unimplemented*/Unsupported) {
     //    unsafe { TODO: call ffi:gst_tag_setter_add_tag_valist() }

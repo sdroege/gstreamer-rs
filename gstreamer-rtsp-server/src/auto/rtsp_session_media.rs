@@ -33,12 +33,7 @@ impl RTSPSessionMedia {
 unsafe impl Send for RTSPSessionMedia {}
 unsafe impl Sync for RTSPSessionMedia {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::RTSPSessionMedia>> Sealed for T {}
-}
-
-pub trait RTSPSessionMediaExt: IsA<RTSPSessionMedia> + sealed::Sealed + 'static {
+pub trait RTSPSessionMediaExt: IsA<RTSPSessionMedia> + 'static {
     //#[doc(alias = "gst_rtsp_session_media_alloc_channels")]
     //fn alloc_channels(&self, range: /*Ignored*/gst_rtsp::RTSPRange) -> bool {
     //    unsafe { TODO: call ffi:gst_rtsp_session_media_alloc_channels() }

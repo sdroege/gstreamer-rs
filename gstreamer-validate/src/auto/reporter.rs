@@ -22,12 +22,7 @@ impl Reporter {
 unsafe impl Send for Reporter {}
 unsafe impl Sync for Reporter {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Reporter>> Sealed for T {}
-}
-
-pub trait ReporterExt: IsA<Reporter> + sealed::Sealed + 'static {
+pub trait ReporterExt: IsA<Reporter> + 'static {
     #[doc(alias = "gst_validate_reporter_get_name")]
     #[doc(alias = "get_name")]
     fn name(&self) -> Option<glib::GString> {

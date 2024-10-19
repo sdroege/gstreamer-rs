@@ -27,12 +27,7 @@ impl TrackElement {
     pub const NONE: Option<&'static TrackElement> = None;
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::TrackElement>> Sealed for T {}
-}
-
-pub trait TrackElementExt: IsA<TrackElement> + sealed::Sealed + 'static {
+pub trait TrackElementExt: IsA<TrackElement> + 'static {
     #[doc(alias = "ges_track_element_add_children_props")]
     fn add_children_props(
         &self,

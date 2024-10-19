@@ -29,12 +29,7 @@ impl WebRTCICE {
 unsafe impl Send for WebRTCICE {}
 unsafe impl Sync for WebRTCICE {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::WebRTCICE>> Sealed for T {}
-}
-
-pub trait WebRTCICEExt: IsA<WebRTCICE> + sealed::Sealed + 'static {
+pub trait WebRTCICEExt: IsA<WebRTCICE> + 'static {
     #[doc(alias = "gst_webrtc_ice_add_stream")]
     fn add_stream(&self, session_id: u32) -> Option<WebRTCICEStream> {
         unsafe {

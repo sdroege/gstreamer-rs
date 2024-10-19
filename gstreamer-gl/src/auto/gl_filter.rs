@@ -22,12 +22,7 @@ impl GLFilter {
 unsafe impl Send for GLFilter {}
 unsafe impl Sync for GLFilter {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::GLFilter>> Sealed for T {}
-}
-
-pub trait GLFilterExt: IsA<GLFilter> + sealed::Sealed + 'static {
+pub trait GLFilterExt: IsA<GLFilter> + 'static {
     #[doc(alias = "gst_gl_filter_draw_fullscreen_quad")]
     fn draw_fullscreen_quad(&self) {
         unsafe {

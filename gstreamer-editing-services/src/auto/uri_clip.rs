@@ -33,12 +33,7 @@ impl UriClip {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::UriClip>> Sealed for T {}
-}
-
-pub trait UriClipExt: IsA<UriClip> + sealed::Sealed + 'static {
+pub trait UriClipExt: IsA<UriClip> + 'static {
     #[doc(alias = "ges_uri_clip_get_uri")]
     #[doc(alias = "get_uri")]
     fn uri(&self) -> glib::GString {

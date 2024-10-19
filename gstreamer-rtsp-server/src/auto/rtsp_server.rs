@@ -60,12 +60,7 @@ impl Default for RTSPServer {
 unsafe impl Send for RTSPServer {}
 unsafe impl Sync for RTSPServer {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::RTSPServer>> Sealed for T {}
-}
-
-pub trait RTSPServerExt: IsA<RTSPServer> + sealed::Sealed + 'static {
+pub trait RTSPServerExt: IsA<RTSPServer> + 'static {
     #[doc(alias = "gst_rtsp_server_client_filter")]
     fn client_filter(
         &self,

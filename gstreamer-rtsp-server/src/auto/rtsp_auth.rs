@@ -61,12 +61,7 @@ impl Default for RTSPAuth {
 unsafe impl Send for RTSPAuth {}
 unsafe impl Sync for RTSPAuth {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::RTSPAuth>> Sealed for T {}
-}
-
-pub trait RTSPAuthExt: IsA<RTSPAuth> + sealed::Sealed + 'static {
+pub trait RTSPAuthExt: IsA<RTSPAuth> + 'static {
     #[doc(alias = "gst_rtsp_auth_add_basic")]
     fn add_basic(&self, basic: &str, token: &RTSPToken) {
         unsafe {

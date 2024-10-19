@@ -32,12 +32,7 @@ impl Navigation {
 unsafe impl Send for Navigation {}
 unsafe impl Sync for Navigation {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Navigation>> Sealed for T {}
-}
-
-pub trait NavigationExt: IsA<Navigation> + sealed::Sealed + 'static {
+pub trait NavigationExt: IsA<Navigation> + 'static {
     #[doc(alias = "gst_navigation_send_command")]
     fn send_command(&self, command: NavigationCommand) {
         unsafe {

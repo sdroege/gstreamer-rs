@@ -27,12 +27,7 @@ impl BaseTransform {
 unsafe impl Send for BaseTransform {}
 unsafe impl Sync for BaseTransform {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::BaseTransform>> Sealed for T {}
-}
-
-pub trait BaseTransformExt: IsA<BaseTransform> + sealed::Sealed + 'static {
+pub trait BaseTransformExt: IsA<BaseTransform> + 'static {
     #[doc(alias = "gst_base_transform_get_buffer_pool")]
     #[doc(alias = "get_buffer_pool")]
     fn buffer_pool(&self) -> Option<gst::BufferPool> {

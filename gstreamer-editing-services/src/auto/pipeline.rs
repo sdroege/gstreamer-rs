@@ -36,12 +36,7 @@ impl Default for Pipeline {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Pipeline>> Sealed for T {}
-}
-
-pub trait GESPipelineExt: IsA<Pipeline> + sealed::Sealed + 'static {
+pub trait GESPipelineExt: IsA<Pipeline> + 'static {
     #[doc(alias = "ges_pipeline_get_mode")]
     #[doc(alias = "get_mode")]
     fn mode(&self) -> PipelineFlags {

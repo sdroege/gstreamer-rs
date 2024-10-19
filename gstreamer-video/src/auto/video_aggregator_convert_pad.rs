@@ -22,14 +22,7 @@ impl VideoAggregatorConvertPad {
 unsafe impl Send for VideoAggregatorConvertPad {}
 unsafe impl Sync for VideoAggregatorConvertPad {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::VideoAggregatorConvertPad>> Sealed for T {}
-}
-
-pub trait VideoAggregatorConvertPadExt:
-    IsA<VideoAggregatorConvertPad> + sealed::Sealed + 'static
-{
+pub trait VideoAggregatorConvertPadExt: IsA<VideoAggregatorConvertPad> + 'static {
     #[doc(alias = "gst_video_aggregator_convert_pad_update_conversion_info")]
     fn update_conversion_info(&self) {
         unsafe {

@@ -33,12 +33,7 @@ impl TextOverlayClip {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::TextOverlayClip>> Sealed for T {}
-}
-
-pub trait TextOverlayClipExt: IsA<TextOverlayClip> + sealed::Sealed + 'static {
+pub trait TextOverlayClipExt: IsA<TextOverlayClip> + 'static {
     #[doc(alias = "ges_text_overlay_clip_get_color")]
     #[doc(alias = "get_color")]
     fn color(&self) -> u32 {

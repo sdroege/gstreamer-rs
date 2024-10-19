@@ -27,12 +27,7 @@ impl BaseSink {
 unsafe impl Send for BaseSink {}
 unsafe impl Sync for BaseSink {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::BaseSink>> Sealed for T {}
-}
-
-pub trait BaseSinkExt: IsA<BaseSink> + sealed::Sealed + 'static {
+pub trait BaseSinkExt: IsA<BaseSink> + 'static {
     //#[doc(alias = "gst_base_sink_do_preroll")]
     //fn do_preroll(&self, obj: /*Ignored*/&gst::MiniObject) -> Result<gst::FlowSuccess, gst::FlowError> {
     //    unsafe { TODO: call ffi:gst_base_sink_do_preroll() }

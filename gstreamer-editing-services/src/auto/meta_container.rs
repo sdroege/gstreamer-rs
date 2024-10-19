@@ -27,12 +27,7 @@ impl MetaContainer {
     pub const NONE: Option<&'static MetaContainer> = None;
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::MetaContainer>> Sealed for T {}
-}
-
-pub trait MetaContainerExt: IsA<MetaContainer> + sealed::Sealed + 'static {
+pub trait MetaContainerExt: IsA<MetaContainer> + 'static {
     #[doc(alias = "ges_meta_container_add_metas_from_string")]
     fn add_metas_from_string(&self, str: &str) -> bool {
         unsafe {

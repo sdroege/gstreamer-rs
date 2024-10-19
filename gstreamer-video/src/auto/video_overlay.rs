@@ -27,12 +27,7 @@ impl VideoOverlay {
 unsafe impl Send for VideoOverlay {}
 unsafe impl Sync for VideoOverlay {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::VideoOverlay>> Sealed for T {}
-}
-
-pub trait VideoOverlayExt: IsA<VideoOverlay> + sealed::Sealed + 'static {
+pub trait VideoOverlayExt: IsA<VideoOverlay> + 'static {
     #[doc(alias = "gst_video_overlay_expose")]
     fn expose(&self) {
         unsafe {

@@ -33,12 +33,7 @@ impl Project {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Project>> Sealed for T {}
-}
-
-pub trait ProjectExt: IsA<Project> + sealed::Sealed + 'static {
+pub trait ProjectExt: IsA<Project> + 'static {
     #[doc(alias = "ges_project_add_asset")]
     fn add_asset(&self, asset: &impl IsA<Asset>) -> bool {
         unsafe {

@@ -39,12 +39,7 @@ impl Default for Runner {
 unsafe impl Send for Runner {}
 unsafe impl Sync for Runner {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Runner>> Sealed for T {}
-}
-
-pub trait RunnerExt: IsA<Runner> + sealed::Sealed + 'static {
+pub trait RunnerExt: IsA<Runner> + 'static {
     #[doc(alias = "gst_validate_runner_add_report")]
     fn add_report(&self, report: &Report) {
         unsafe {

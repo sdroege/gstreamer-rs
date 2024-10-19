@@ -43,12 +43,7 @@ impl BinMonitor {
 unsafe impl Send for BinMonitor {}
 unsafe impl Sync for BinMonitor {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::BinMonitor>> Sealed for T {}
-}
-
-pub trait BinMonitorExt: IsA<BinMonitor> + sealed::Sealed + 'static {
+pub trait BinMonitorExt: IsA<BinMonitor> + 'static {
     #[doc(alias = "gst_validate_bin_monitor_get_scenario")]
     #[doc(alias = "get_scenario")]
     fn scenario(&self) -> Option<Scenario> {

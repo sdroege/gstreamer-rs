@@ -22,12 +22,7 @@ impl VideoAggregator {
 unsafe impl Send for VideoAggregator {}
 unsafe impl Sync for VideoAggregator {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::VideoAggregator>> Sealed for T {}
-}
-
-pub trait VideoAggregatorExt: IsA<VideoAggregator> + sealed::Sealed + 'static {
+pub trait VideoAggregatorExt: IsA<VideoAggregator> + 'static {
     //#[cfg(feature = "v1_20")]
     //#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     //#[doc(alias = "gst_video_aggregator_get_execution_task_pool")]

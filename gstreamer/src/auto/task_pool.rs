@@ -34,12 +34,7 @@ impl Default for TaskPool {
 unsafe impl Send for TaskPool {}
 unsafe impl Sync for TaskPool {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::TaskPool>> Sealed for T {}
-}
-
-pub trait TaskPoolExt: IsA<TaskPool> + sealed::Sealed + 'static {
+pub trait TaskPoolExt: IsA<TaskPool> + 'static {
     #[doc(alias = "gst_task_pool_cleanup")]
     fn cleanup(&self) {
         unsafe {

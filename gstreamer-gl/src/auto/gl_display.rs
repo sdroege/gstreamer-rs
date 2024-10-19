@@ -48,12 +48,7 @@ impl Default for GLDisplay {
 unsafe impl Send for GLDisplay {}
 unsafe impl Sync for GLDisplay {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::GLDisplay>> Sealed for T {}
-}
-
-pub trait GLDisplayExt: IsA<GLDisplay> + sealed::Sealed + 'static {
+pub trait GLDisplayExt: IsA<GLDisplay> + 'static {
     #[doc(alias = "gst_gl_display_create_window")]
     fn create_window(&self) -> Result<GLWindow, glib::BoolError> {
         unsafe {

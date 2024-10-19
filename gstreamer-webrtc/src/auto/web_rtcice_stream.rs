@@ -22,12 +22,7 @@ impl WebRTCICEStream {
 unsafe impl Send for WebRTCICEStream {}
 unsafe impl Sync for WebRTCICEStream {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::WebRTCICEStream>> Sealed for T {}
-}
-
-pub trait WebRTCICEStreamExt: IsA<WebRTCICEStream> + sealed::Sealed + 'static {
+pub trait WebRTCICEStreamExt: IsA<WebRTCICEStream> + 'static {
     #[doc(alias = "gst_webrtc_ice_stream_find_transport")]
     fn find_transport(&self, component: WebRTCICEComponent) -> Option<WebRTCICETransport> {
         unsafe {

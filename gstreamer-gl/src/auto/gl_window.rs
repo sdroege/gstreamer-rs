@@ -33,12 +33,7 @@ impl GLWindow {
 unsafe impl Send for GLWindow {}
 unsafe impl Sync for GLWindow {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::GLWindow>> Sealed for T {}
-}
-
-pub trait GLWindowExt: IsA<GLWindow> + sealed::Sealed + 'static {
+pub trait GLWindowExt: IsA<GLWindow> + 'static {
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_gl_window_controls_viewport")]

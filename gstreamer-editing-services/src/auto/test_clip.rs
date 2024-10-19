@@ -39,12 +39,7 @@ impl TestClip {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::TestClip>> Sealed for T {}
-}
-
-pub trait TestClipExt: IsA<TestClip> + sealed::Sealed + 'static {
+pub trait TestClipExt: IsA<TestClip> + 'static {
     #[doc(alias = "ges_test_clip_get_frequency")]
     #[doc(alias = "get_frequency")]
     fn frequency(&self) -> f64 {

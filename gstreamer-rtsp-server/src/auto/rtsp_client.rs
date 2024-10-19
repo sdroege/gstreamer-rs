@@ -45,12 +45,7 @@ impl Default for RTSPClient {
 unsafe impl Send for RTSPClient {}
 unsafe impl Sync for RTSPClient {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::RTSPClient>> Sealed for T {}
-}
-
-pub trait RTSPClientExt: IsA<RTSPClient> + sealed::Sealed + 'static {
+pub trait RTSPClientExt: IsA<RTSPClient> + 'static {
     #[doc(alias = "gst_rtsp_client_close")]
     fn close(&self) {
         unsafe {

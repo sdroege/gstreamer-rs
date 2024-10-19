@@ -34,12 +34,7 @@ impl Default for RTSPAddressPool {
 unsafe impl Send for RTSPAddressPool {}
 unsafe impl Sync for RTSPAddressPool {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::RTSPAddressPool>> Sealed for T {}
-}
-
-pub trait RTSPAddressPoolExt: IsA<RTSPAddressPool> + sealed::Sealed + 'static {
+pub trait RTSPAddressPoolExt: IsA<RTSPAddressPool> + 'static {
     #[doc(alias = "gst_rtsp_address_pool_acquire_address")]
     fn acquire_address(
         &self,

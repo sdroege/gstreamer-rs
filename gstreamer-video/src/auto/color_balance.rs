@@ -27,12 +27,7 @@ impl ColorBalance {
 unsafe impl Send for ColorBalance {}
 unsafe impl Sync for ColorBalance {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::ColorBalance>> Sealed for T {}
-}
-
-pub trait ColorBalanceExt: IsA<ColorBalance> + sealed::Sealed + 'static {
+pub trait ColorBalanceExt: IsA<ColorBalance> + 'static {
     #[doc(alias = "gst_color_balance_get_balance_type")]
     #[doc(alias = "get_balance_type")]
     fn balance_type(&self) -> ColorBalanceType {

@@ -45,12 +45,7 @@ impl RTSPStream {
 unsafe impl Send for RTSPStream {}
 unsafe impl Sync for RTSPStream {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::RTSPStream>> Sealed for T {}
-}
-
-pub trait RTSPStreamExt: IsA<RTSPStream> + sealed::Sealed + 'static {
+pub trait RTSPStreamExt: IsA<RTSPStream> + 'static {
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_rtsp_stream_add_multicast_client_address")]

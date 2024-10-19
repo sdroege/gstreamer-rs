@@ -40,12 +40,7 @@ impl Default for VideoTransition {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::VideoTransition>> Sealed for T {}
-}
-
-pub trait VideoTransitionExt: IsA<VideoTransition> + sealed::Sealed + 'static {
+pub trait VideoTransitionExt: IsA<VideoTransition> + 'static {
     #[cfg_attr(feature = "v1_20", deprecated = "Since 1.20")]
     #[allow(deprecated)]
     #[doc(alias = "ges_video_transition_get_border")]

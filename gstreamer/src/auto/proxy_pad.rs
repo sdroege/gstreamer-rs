@@ -27,12 +27,7 @@ impl ProxyPad {
 unsafe impl Send for ProxyPad {}
 unsafe impl Sync for ProxyPad {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::ProxyPad>> Sealed for T {}
-}
-
-pub trait ProxyPadExt: IsA<ProxyPad> + sealed::Sealed + 'static {
+pub trait ProxyPadExt: IsA<ProxyPad> + 'static {
     #[doc(alias = "gst_proxy_pad_get_internal")]
     #[doc(alias = "get_internal")]
     #[must_use]

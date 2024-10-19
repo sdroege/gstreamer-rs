@@ -30,12 +30,7 @@ impl RTPBasePayload {
 unsafe impl Send for RTPBasePayload {}
 unsafe impl Sync for RTPBasePayload {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::RTPBasePayload>> Sealed for T {}
-}
-
-pub trait RTPBasePayloadExt: IsA<RTPBasePayload> + sealed::Sealed + 'static {
+pub trait RTPBasePayloadExt: IsA<RTPBasePayload> + 'static {
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_rtp_base_payload_allocate_output_buffer")]

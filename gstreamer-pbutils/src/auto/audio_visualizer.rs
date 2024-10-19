@@ -27,12 +27,7 @@ impl AudioVisualizer {
 unsafe impl Send for AudioVisualizer {}
 unsafe impl Sync for AudioVisualizer {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::AudioVisualizer>> Sealed for T {}
-}
-
-pub trait AudioVisualizerExt: IsA<AudioVisualizer> + sealed::Sealed + 'static {
+pub trait AudioVisualizerExt: IsA<AudioVisualizer> + 'static {
     #[doc(alias = "shade-amount")]
     fn shade_amount(&self) -> u32 {
         ObjectExt::property(self.as_ref(), "shade-amount")

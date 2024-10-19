@@ -39,12 +39,7 @@ impl Default for RTSPMediaFactoryURI {
 unsafe impl Send for RTSPMediaFactoryURI {}
 unsafe impl Sync for RTSPMediaFactoryURI {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::RTSPMediaFactoryURI>> Sealed for T {}
-}
-
-pub trait RTSPMediaFactoryURIExt: IsA<RTSPMediaFactoryURI> + sealed::Sealed + 'static {
+pub trait RTSPMediaFactoryURIExt: IsA<RTSPMediaFactoryURI> + 'static {
     #[doc(alias = "gst_rtsp_media_factory_uri_get_uri")]
     #[doc(alias = "get_uri")]
     fn uri(&self) -> glib::GString {

@@ -22,11 +22,6 @@ impl PhysMemoryAllocator {
 unsafe impl Send for PhysMemoryAllocator {}
 unsafe impl Sync for PhysMemoryAllocator {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::PhysMemoryAllocator>> Sealed for T {}
-}
-
-pub trait PhysMemoryAllocatorExt: IsA<PhysMemoryAllocator> + sealed::Sealed + 'static {}
+pub trait PhysMemoryAllocatorExt: IsA<PhysMemoryAllocator> + 'static {}
 
 impl<O: IsA<PhysMemoryAllocator>> PhysMemoryAllocatorExt for O {}

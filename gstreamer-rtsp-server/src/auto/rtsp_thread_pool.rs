@@ -47,12 +47,7 @@ impl Default for RTSPThreadPool {
 unsafe impl Send for RTSPThreadPool {}
 unsafe impl Sync for RTSPThreadPool {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::RTSPThreadPool>> Sealed for T {}
-}
-
-pub trait RTSPThreadPoolExt: IsA<RTSPThreadPool> + sealed::Sealed + 'static {
+pub trait RTSPThreadPoolExt: IsA<RTSPThreadPool> + 'static {
     #[doc(alias = "gst_rtsp_thread_pool_get_max_threads")]
     #[doc(alias = "get_max_threads")]
     #[doc(alias = "max-threads")]

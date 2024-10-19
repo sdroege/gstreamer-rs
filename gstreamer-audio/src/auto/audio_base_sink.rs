@@ -27,12 +27,7 @@ impl AudioBaseSink {
 unsafe impl Send for AudioBaseSink {}
 unsafe impl Sync for AudioBaseSink {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::AudioBaseSink>> Sealed for T {}
-}
-
-pub trait AudioBaseSinkExt: IsA<AudioBaseSink> + sealed::Sealed + 'static {
+pub trait AudioBaseSinkExt: IsA<AudioBaseSink> + 'static {
     //#[doc(alias = "gst_audio_base_sink_create_ringbuffer")]
     //fn create_ringbuffer(&self) -> /*Ignored*/Option<AudioRingBuffer> {
     //    unsafe { TODO: call ffi:gst_audio_base_sink_create_ringbuffer() }

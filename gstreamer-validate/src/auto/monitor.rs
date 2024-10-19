@@ -43,12 +43,7 @@ impl Monitor {
 unsafe impl Send for Monitor {}
 unsafe impl Sync for Monitor {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Monitor>> Sealed for T {}
-}
-
-pub trait MonitorExt: IsA<Monitor> + sealed::Sealed + 'static {
+pub trait MonitorExt: IsA<Monitor> + 'static {
     //#[doc(alias = "gst_validate_monitor_attach_override")]
     //fn attach_override(&self, override_: /*Ignored*/&Override) {
     //    unsafe { TODO: call ffi:gst_validate_monitor_attach_override() }

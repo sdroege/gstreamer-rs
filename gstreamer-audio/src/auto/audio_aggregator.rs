@@ -27,12 +27,7 @@ impl AudioAggregator {
 unsafe impl Send for AudioAggregator {}
 unsafe impl Sync for AudioAggregator {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::AudioAggregator>> Sealed for T {}
-}
-
-pub trait AudioAggregatorExt: IsA<AudioAggregator> + sealed::Sealed + 'static {
+pub trait AudioAggregatorExt: IsA<AudioAggregator> + 'static {
     #[doc(alias = "alignment-threshold")]
     fn alignment_threshold(&self) -> u64 {
         ObjectExt::property(self.as_ref(), "alignment-threshold")

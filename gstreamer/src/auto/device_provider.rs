@@ -27,12 +27,7 @@ impl DeviceProvider {
 unsafe impl Send for DeviceProvider {}
 unsafe impl Sync for DeviceProvider {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::DeviceProvider>> Sealed for T {}
-}
-
-pub trait DeviceProviderExt: IsA<DeviceProvider> + sealed::Sealed + 'static {
+pub trait DeviceProviderExt: IsA<DeviceProvider> + 'static {
     #[doc(alias = "gst_device_provider_can_monitor")]
     fn can_monitor(&self) -> bool {
         unsafe {

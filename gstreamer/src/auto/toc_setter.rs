@@ -22,12 +22,7 @@ impl TocSetter {
 unsafe impl Send for TocSetter {}
 unsafe impl Sync for TocSetter {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::TocSetter>> Sealed for T {}
-}
-
-pub trait TocSetterExt: IsA<TocSetter> + sealed::Sealed + 'static {
+pub trait TocSetterExt: IsA<TocSetter> + 'static {
     #[doc(alias = "gst_toc_setter_get_toc")]
     #[doc(alias = "get_toc")]
     fn toc(&self) -> Option<Toc> {

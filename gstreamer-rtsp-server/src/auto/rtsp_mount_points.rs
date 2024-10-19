@@ -34,12 +34,7 @@ impl Default for RTSPMountPoints {
 unsafe impl Send for RTSPMountPoints {}
 unsafe impl Sync for RTSPMountPoints {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::RTSPMountPoints>> Sealed for T {}
-}
-
-pub trait RTSPMountPointsExt: IsA<RTSPMountPoints> + sealed::Sealed + 'static {
+pub trait RTSPMountPointsExt: IsA<RTSPMountPoints> + 'static {
     #[doc(alias = "gst_rtsp_mount_points_add_factory")]
     fn add_factory(&self, path: &str, factory: impl IsA<RTSPMediaFactory>) {
         unsafe {

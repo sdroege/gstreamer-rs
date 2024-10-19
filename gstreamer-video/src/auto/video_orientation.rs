@@ -22,12 +22,7 @@ impl VideoOrientation {
 unsafe impl Send for VideoOrientation {}
 unsafe impl Sync for VideoOrientation {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::VideoOrientation>> Sealed for T {}
-}
-
-pub trait VideoOrientationExt: IsA<VideoOrientation> + sealed::Sealed + 'static {
+pub trait VideoOrientationExt: IsA<VideoOrientation> + 'static {
     #[doc(alias = "gst_video_orientation_get_hcenter")]
     #[doc(alias = "get_hcenter")]
     fn hcenter(&self) -> Option<i32> {

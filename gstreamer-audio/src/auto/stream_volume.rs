@@ -33,12 +33,7 @@ impl StreamVolume {
 unsafe impl Send for StreamVolume {}
 unsafe impl Sync for StreamVolume {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::StreamVolume>> Sealed for T {}
-}
-
-pub trait StreamVolumeExt: IsA<StreamVolume> + sealed::Sealed + 'static {
+pub trait StreamVolumeExt: IsA<StreamVolume> + 'static {
     #[doc(alias = "gst_stream_volume_get_mute")]
     #[doc(alias = "get_mute")]
     #[doc(alias = "mute")]

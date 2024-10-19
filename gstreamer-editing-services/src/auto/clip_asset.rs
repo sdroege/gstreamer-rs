@@ -30,12 +30,7 @@ impl ClipAsset {
 unsafe impl Send for ClipAsset {}
 unsafe impl Sync for ClipAsset {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::ClipAsset>> Sealed for T {}
-}
-
-pub trait ClipAssetExt: IsA<ClipAsset> + sealed::Sealed + 'static {
+pub trait ClipAssetExt: IsA<ClipAsset> + 'static {
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_clip_asset_get_frame_time")]

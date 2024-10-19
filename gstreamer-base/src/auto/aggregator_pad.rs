@@ -27,12 +27,7 @@ impl AggregatorPad {
 unsafe impl Send for AggregatorPad {}
 unsafe impl Sync for AggregatorPad {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::AggregatorPad>> Sealed for T {}
-}
-
-pub trait AggregatorPadExt: IsA<AggregatorPad> + sealed::Sealed + 'static {
+pub trait AggregatorPadExt: IsA<AggregatorPad> + 'static {
     #[doc(alias = "gst_aggregator_pad_drop_buffer")]
     fn drop_buffer(&self) -> bool {
         unsafe {

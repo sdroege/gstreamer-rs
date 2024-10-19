@@ -25,12 +25,7 @@ impl MultiFileSource {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::MultiFileSource>> Sealed for T {}
-}
-
-pub trait MultiFileSourceExt: IsA<MultiFileSource> + sealed::Sealed + 'static {
+pub trait MultiFileSourceExt: IsA<MultiFileSource> + 'static {
     fn uri(&self) -> Option<glib::GString> {
         ObjectExt::property(self.as_ref(), "uri")
     }

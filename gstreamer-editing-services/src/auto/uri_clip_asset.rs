@@ -63,12 +63,7 @@ impl UriClipAsset {
 unsafe impl Send for UriClipAsset {}
 unsafe impl Sync for UriClipAsset {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::UriClipAsset>> Sealed for T {}
-}
-
-pub trait UriClipAssetExt: IsA<UriClipAsset> + sealed::Sealed + 'static {
+pub trait UriClipAssetExt: IsA<UriClipAsset> + 'static {
     #[doc(alias = "ges_uri_clip_asset_get_duration")]
     #[doc(alias = "get_duration")]
     fn duration(&self) -> Option<gst::ClockTime> {

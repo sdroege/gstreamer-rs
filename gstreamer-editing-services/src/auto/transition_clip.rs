@@ -40,12 +40,7 @@ impl TransitionClip {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::TransitionClip>> Sealed for T {}
-}
-
-pub trait TransitionClipExt: IsA<TransitionClip> + sealed::Sealed + 'static {
+pub trait TransitionClipExt: IsA<TransitionClip> + 'static {
     fn vtype(&self) -> VideoStandardTransitionType {
         ObjectExt::property(self.as_ref(), "vtype")
     }

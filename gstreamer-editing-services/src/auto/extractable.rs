@@ -19,12 +19,7 @@ impl Extractable {
     pub const NONE: Option<&'static Extractable> = None;
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Extractable>> Sealed for T {}
-}
-
-pub trait ExtractableExt: IsA<Extractable> + sealed::Sealed + 'static {
+pub trait ExtractableExt: IsA<Extractable> + 'static {
     #[doc(alias = "ges_extractable_get_asset")]
     #[doc(alias = "get_asset")]
     fn asset(&self) -> Option<Asset> {

@@ -42,14 +42,7 @@ impl Default for InterpolationControlSource {
 unsafe impl Send for InterpolationControlSource {}
 unsafe impl Sync for InterpolationControlSource {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::InterpolationControlSource>> Sealed for T {}
-}
-
-pub trait InterpolationControlSourceExt:
-    IsA<InterpolationControlSource> + sealed::Sealed + 'static
-{
+pub trait InterpolationControlSourceExt: IsA<InterpolationControlSource> + 'static {
     fn mode(&self) -> InterpolationMode {
         ObjectExt::property(self.as_ref(), "mode")
     }

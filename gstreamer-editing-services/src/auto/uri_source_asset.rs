@@ -22,12 +22,7 @@ impl UriSourceAsset {
 unsafe impl Send for UriSourceAsset {}
 unsafe impl Sync for UriSourceAsset {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::UriSourceAsset>> Sealed for T {}
-}
-
-pub trait UriSourceAssetExt: IsA<UriSourceAsset> + sealed::Sealed + 'static {
+pub trait UriSourceAssetExt: IsA<UriSourceAsset> + 'static {
     #[doc(alias = "ges_uri_source_asset_get_filesource_asset")]
     #[doc(alias = "get_filesource_asset")]
     fn filesource_asset(&self) -> UriClipAsset {

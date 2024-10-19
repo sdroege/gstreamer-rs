@@ -30,12 +30,7 @@ impl Clip {
     pub const NONE: Option<&'static Clip> = None;
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Clip>> Sealed for T {}
-}
-
-pub trait ClipExt: IsA<Clip> + sealed::Sealed + 'static {
+pub trait ClipExt: IsA<Clip> + 'static {
     #[doc(alias = "ges_clip_add_asset")]
     fn add_asset(&self, asset: &impl IsA<Asset>) -> Result<TrackElement, glib::BoolError> {
         unsafe {

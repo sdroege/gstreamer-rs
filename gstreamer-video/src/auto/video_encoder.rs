@@ -27,12 +27,7 @@ impl VideoEncoder {
 unsafe impl Send for VideoEncoder {}
 unsafe impl Sync for VideoEncoder {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::VideoEncoder>> Sealed for T {}
-}
-
-pub trait VideoEncoderExt: IsA<VideoEncoder> + sealed::Sealed + 'static {
+pub trait VideoEncoderExt: IsA<VideoEncoder> + 'static {
     #[doc(alias = "gst_video_encoder_allocate_output_buffer")]
     fn allocate_output_buffer(&self, size: usize) -> gst::Buffer {
         unsafe {

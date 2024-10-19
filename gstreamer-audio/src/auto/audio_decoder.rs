@@ -27,12 +27,7 @@ impl AudioDecoder {
 unsafe impl Send for AudioDecoder {}
 unsafe impl Sync for AudioDecoder {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::AudioDecoder>> Sealed for T {}
-}
-
-pub trait AudioDecoderExt: IsA<AudioDecoder> + sealed::Sealed + 'static {
+pub trait AudioDecoderExt: IsA<AudioDecoder> + 'static {
     #[doc(alias = "gst_audio_decoder_allocate_output_buffer")]
     fn allocate_output_buffer(&self, size: usize) -> gst::Buffer {
         unsafe {

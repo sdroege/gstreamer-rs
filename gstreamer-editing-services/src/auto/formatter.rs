@@ -58,12 +58,7 @@ impl Formatter {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Formatter>> Sealed for T {}
-}
-
-pub trait FormatterExt: IsA<Formatter> + sealed::Sealed + 'static {
+pub trait FormatterExt: IsA<Formatter> + 'static {
     #[cfg_attr(feature = "v1_18", deprecated = "Since 1.18")]
     #[allow(deprecated)]
     #[doc(alias = "ges_formatter_load_from_uri")]

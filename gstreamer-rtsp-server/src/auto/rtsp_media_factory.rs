@@ -41,12 +41,7 @@ impl Default for RTSPMediaFactory {
 unsafe impl Send for RTSPMediaFactory {}
 unsafe impl Sync for RTSPMediaFactory {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::RTSPMediaFactory>> Sealed for T {}
-}
-
-pub trait RTSPMediaFactoryExt: IsA<RTSPMediaFactory> + sealed::Sealed + 'static {
+pub trait RTSPMediaFactoryExt: IsA<RTSPMediaFactory> + 'static {
     //#[doc(alias = "gst_rtsp_media_factory_add_role")]
     //fn add_role(&self, role: &str, fieldname: &str, : /*Unknown conversion*//*Unimplemented*/Basic: VarArgs) {
     //    unsafe { TODO: call ffi:gst_rtsp_media_factory_add_role() }

@@ -39,12 +39,7 @@ impl Default for DeviceMonitor {
 unsafe impl Send for DeviceMonitor {}
 unsafe impl Sync for DeviceMonitor {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::DeviceMonitor>> Sealed for T {}
-}
-
-pub trait DeviceMonitorExt: IsA<DeviceMonitor> + sealed::Sealed + 'static {
+pub trait DeviceMonitorExt: IsA<DeviceMonitor> + 'static {
     #[doc(alias = "gst_device_monitor_get_bus")]
     #[doc(alias = "get_bus")]
     fn bus(&self) -> Bus {

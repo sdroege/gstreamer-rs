@@ -36,12 +36,7 @@ impl Default for RTSPOnvifMediaFactory {
 unsafe impl Send for RTSPOnvifMediaFactory {}
 unsafe impl Sync for RTSPOnvifMediaFactory {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::RTSPOnvifMediaFactory>> Sealed for T {}
-}
-
-pub trait RTSPOnvifMediaFactoryExt: IsA<RTSPOnvifMediaFactory> + sealed::Sealed + 'static {
+pub trait RTSPOnvifMediaFactoryExt: IsA<RTSPOnvifMediaFactory> + 'static {
     #[doc(alias = "gst_rtsp_onvif_media_factory_get_backchannel_bandwidth")]
     #[doc(alias = "get_backchannel_bandwidth")]
     fn backchannel_bandwidth(&self) -> u32 {

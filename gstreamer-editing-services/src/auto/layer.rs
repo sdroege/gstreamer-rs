@@ -40,12 +40,7 @@ impl Default for Layer {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Layer>> Sealed for T {}
-}
-
-pub trait LayerExt: IsA<Layer> + sealed::Sealed + 'static {
+pub trait LayerExt: IsA<Layer> + 'static {
     #[doc(alias = "ges_layer_add_asset")]
     fn add_asset(
         &self,

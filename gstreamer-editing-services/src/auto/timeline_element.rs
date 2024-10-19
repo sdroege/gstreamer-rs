@@ -28,12 +28,7 @@ impl TimelineElement {
     pub const NONE: Option<&'static TimelineElement> = None;
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::TimelineElement>> Sealed for T {}
-}
-
-pub trait TimelineElementExt: IsA<TimelineElement> + sealed::Sealed + 'static {
+pub trait TimelineElementExt: IsA<TimelineElement> + 'static {
     #[doc(alias = "ges_timeline_element_add_child_property")]
     fn add_child_property(
         &self,

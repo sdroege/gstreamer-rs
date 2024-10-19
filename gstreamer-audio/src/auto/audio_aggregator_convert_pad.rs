@@ -27,14 +27,7 @@ impl AudioAggregatorConvertPad {
 unsafe impl Send for AudioAggregatorConvertPad {}
 unsafe impl Sync for AudioAggregatorConvertPad {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::AudioAggregatorConvertPad>> Sealed for T {}
-}
-
-pub trait AudioAggregatorConvertPadExt:
-    IsA<AudioAggregatorConvertPad> + sealed::Sealed + 'static
-{
+pub trait AudioAggregatorConvertPadExt: IsA<AudioAggregatorConvertPad> + 'static {
     //#[doc(alias = "converter-config")]
     //fn converter_config(&self) -> /*Ignored*/Option<gst::Structure> {
     //    ObjectExt::property(self.as_ref(), "converter-config")

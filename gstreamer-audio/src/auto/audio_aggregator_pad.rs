@@ -31,12 +31,7 @@ impl AudioAggregatorPad {
 unsafe impl Send for AudioAggregatorPad {}
 unsafe impl Sync for AudioAggregatorPad {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::AudioAggregatorPad>> Sealed for T {}
-}
-
-pub trait AudioAggregatorPadExt: IsA<AudioAggregatorPad> + sealed::Sealed + 'static {
+pub trait AudioAggregatorPadExt: IsA<AudioAggregatorPad> + 'static {
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "qos-messages")]

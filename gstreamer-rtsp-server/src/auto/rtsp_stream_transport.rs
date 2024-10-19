@@ -25,12 +25,7 @@ impl RTSPStreamTransport {
     //}
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::RTSPStreamTransport>> Sealed for T {}
-}
-
-pub trait RTSPStreamTransportExt: IsA<RTSPStreamTransport> + sealed::Sealed + 'static {
+pub trait RTSPStreamTransportExt: IsA<RTSPStreamTransport> + 'static {
     #[doc(alias = "gst_rtsp_stream_transport_get_rtpinfo")]
     #[doc(alias = "get_rtpinfo")]
     fn rtpinfo(&self, start_time: impl Into<Option<gst::ClockTime>>) -> Option<glib::GString> {

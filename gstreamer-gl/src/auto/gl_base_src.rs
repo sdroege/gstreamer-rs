@@ -27,12 +27,7 @@ impl GLBaseSrc {
 unsafe impl Send for GLBaseSrc {}
 unsafe impl Sync for GLBaseSrc {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::GLBaseSrc>> Sealed for T {}
-}
-
-pub trait GLBaseSrcExt: IsA<GLBaseSrc> + sealed::Sealed + 'static {
+pub trait GLBaseSrcExt: IsA<GLBaseSrc> + 'static {
     #[doc(alias = "timestamp-offset")]
     fn timestamp_offset(&self) -> i64 {
         ObjectExt::property(self.as_ref(), "timestamp-offset")

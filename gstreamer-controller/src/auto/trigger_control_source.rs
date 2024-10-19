@@ -41,12 +41,7 @@ impl Default for TriggerControlSource {
 unsafe impl Send for TriggerControlSource {}
 unsafe impl Sync for TriggerControlSource {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::TriggerControlSource>> Sealed for T {}
-}
-
-pub trait TriggerControlSourceExt: IsA<TriggerControlSource> + sealed::Sealed + 'static {
+pub trait TriggerControlSourceExt: IsA<TriggerControlSource> + 'static {
     fn tolerance(&self) -> i64 {
         ObjectExt::property(self.as_ref(), "tolerance")
     }

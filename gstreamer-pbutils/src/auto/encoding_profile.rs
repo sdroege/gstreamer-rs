@@ -79,12 +79,7 @@ impl std::fmt::Display for EncodingProfile {
 unsafe impl Send for EncodingProfile {}
 unsafe impl Sync for EncodingProfile {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::EncodingProfile>> Sealed for T {}
-}
-
-pub trait EncodingProfileExt: IsA<EncodingProfile> + sealed::Sealed + 'static {
+pub trait EncodingProfileExt: IsA<EncodingProfile> + 'static {
     #[doc(alias = "gst_encoding_profile_copy")]
     #[must_use]
     fn copy(&self) -> EncodingProfile {

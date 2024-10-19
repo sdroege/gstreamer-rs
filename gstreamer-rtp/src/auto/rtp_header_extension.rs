@@ -32,12 +32,7 @@ impl RTPHeaderExtension {
 unsafe impl Send for RTPHeaderExtension {}
 unsafe impl Sync for RTPHeaderExtension {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::RTPHeaderExtension>> Sealed for T {}
-}
-
-pub trait RTPHeaderExtensionExt: IsA<RTPHeaderExtension> + sealed::Sealed + 'static {
+pub trait RTPHeaderExtensionExt: IsA<RTPHeaderExtension> + 'static {
     #[doc(alias = "gst_rtp_header_extension_get_direction")]
     #[doc(alias = "get_direction")]
     fn direction(&self) -> RTPHeaderExtensionDirection {

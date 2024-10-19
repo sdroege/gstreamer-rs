@@ -41,12 +41,7 @@ impl SystemClock {
 unsafe impl Send for SystemClock {}
 unsafe impl Sync for SystemClock {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::SystemClock>> Sealed for T {}
-}
-
-pub trait SystemClockExt: IsA<SystemClock> + sealed::Sealed + 'static {
+pub trait SystemClockExt: IsA<SystemClock> + 'static {
     #[doc(alias = "clock-type")]
     fn clock_type(&self) -> ClockType {
         ObjectExt::property(self.as_ref(), "clock-type")

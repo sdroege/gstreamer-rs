@@ -22,12 +22,7 @@ impl ControlBinding {
 unsafe impl Send for ControlBinding {}
 unsafe impl Sync for ControlBinding {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::ControlBinding>> Sealed for T {}
-}
-
-pub trait ControlBindingExt: IsA<ControlBinding> + sealed::Sealed + 'static {
+pub trait ControlBindingExt: IsA<ControlBinding> + 'static {
     #[doc(alias = "gst_control_binding_get_value")]
     #[doc(alias = "get_value")]
     fn value(&self, timestamp: ClockTime) -> Option<glib::Value> {

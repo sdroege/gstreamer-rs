@@ -22,12 +22,7 @@ impl VideoTestSource {
     pub const NONE: Option<&'static VideoTestSource> = None;
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::VideoTestSource>> Sealed for T {}
-}
-
-pub trait VideoTestSourceExt: IsA<VideoTestSource> + sealed::Sealed + 'static {
+pub trait VideoTestSourceExt: IsA<VideoTestSource> + 'static {
     #[doc(alias = "ges_video_test_source_get_pattern")]
     #[doc(alias = "get_pattern")]
     fn pattern(&self) -> VideoTestPattern {

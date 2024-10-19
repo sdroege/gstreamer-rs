@@ -27,12 +27,7 @@ impl Bin {
 unsafe impl Send for Bin {}
 unsafe impl Sync for Bin {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Bin>> Sealed for T {}
-}
-
-pub trait GstBinExt: IsA<Bin> + sealed::Sealed + 'static {
+pub trait GstBinExt: IsA<Bin> + 'static {
     #[doc(alias = "gst_bin_add")]
     fn add(&self, element: &impl IsA<Element>) -> Result<(), glib::error::BoolError> {
         unsafe {

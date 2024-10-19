@@ -27,12 +27,7 @@ impl GLBaseFilter {
 unsafe impl Send for GLBaseFilter {}
 unsafe impl Sync for GLBaseFilter {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::GLBaseFilter>> Sealed for T {}
-}
-
-pub trait GLBaseFilterExt: IsA<GLBaseFilter> + sealed::Sealed + 'static {
+pub trait GLBaseFilterExt: IsA<GLBaseFilter> + 'static {
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_gl_base_filter_find_gl_context")]

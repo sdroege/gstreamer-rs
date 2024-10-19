@@ -22,12 +22,7 @@ impl PluginFeature {
 unsafe impl Send for PluginFeature {}
 unsafe impl Sync for PluginFeature {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::PluginFeature>> Sealed for T {}
-}
-
-pub trait PluginFeatureExt: IsA<PluginFeature> + sealed::Sealed + 'static {
+pub trait PluginFeatureExt: IsA<PluginFeature> + 'static {
     #[doc(alias = "gst_plugin_feature_check_version")]
     fn check_version(&self, min_major: u32, min_minor: u32, min_micro: u32) -> bool {
         unsafe {

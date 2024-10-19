@@ -22,12 +22,7 @@ impl VideoSource {
     pub const NONE: Option<&'static VideoSource> = None;
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::VideoSource>> Sealed for T {}
-}
-
-pub trait VideoSourceExt: IsA<VideoSource> + sealed::Sealed + 'static {
+pub trait VideoSourceExt: IsA<VideoSource> + 'static {
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_video_source_get_natural_size")]

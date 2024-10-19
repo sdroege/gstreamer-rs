@@ -40,12 +40,7 @@ impl Preset {
 unsafe impl Send for Preset {}
 unsafe impl Sync for Preset {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Preset>> Sealed for T {}
-}
-
-pub trait PresetExt: IsA<Preset> + sealed::Sealed + 'static {
+pub trait PresetExt: IsA<Preset> + 'static {
     #[doc(alias = "gst_preset_delete_preset")]
     fn delete_preset(&self, name: &str) -> Result<(), glib::error::BoolError> {
         unsafe {

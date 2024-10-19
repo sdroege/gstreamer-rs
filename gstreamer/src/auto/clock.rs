@@ -76,12 +76,7 @@ impl Clock {
 unsafe impl Send for Clock {}
 unsafe impl Sync for Clock {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Clock>> Sealed for T {}
-}
-
-pub trait ClockExt: IsA<Clock> + sealed::Sealed + 'static {
+pub trait ClockExt: IsA<Clock> + 'static {
     #[doc(alias = "gst_clock_add_observation")]
     fn add_observation(&self, slave: ClockTime, master: ClockTime) -> Option<f64> {
         unsafe {

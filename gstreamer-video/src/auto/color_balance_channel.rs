@@ -27,12 +27,7 @@ impl ColorBalanceChannel {
 unsafe impl Send for ColorBalanceChannel {}
 unsafe impl Sync for ColorBalanceChannel {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::ColorBalanceChannel>> Sealed for T {}
-}
-
-pub trait ColorBalanceChannelExt: IsA<ColorBalanceChannel> + sealed::Sealed + 'static {
+pub trait ColorBalanceChannelExt: IsA<ColorBalanceChannel> + 'static {
     #[doc(alias = "value-changed")]
     fn connect_value_changed<F: Fn(&Self, i32) + Send + Sync + 'static>(
         &self,

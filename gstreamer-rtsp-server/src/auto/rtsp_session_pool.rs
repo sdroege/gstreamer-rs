@@ -39,12 +39,7 @@ impl Default for RTSPSessionPool {
 unsafe impl Send for RTSPSessionPool {}
 unsafe impl Sync for RTSPSessionPool {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::RTSPSessionPool>> Sealed for T {}
-}
-
-pub trait RTSPSessionPoolExt: IsA<RTSPSessionPool> + sealed::Sealed + 'static {
+pub trait RTSPSessionPoolExt: IsA<RTSPSessionPool> + 'static {
     #[doc(alias = "gst_rtsp_session_pool_cleanup")]
     fn cleanup(&self) -> u32 {
         unsafe { ffi::gst_rtsp_session_pool_cleanup(self.as_ref().to_glib_none().0) }

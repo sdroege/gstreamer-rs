@@ -27,12 +27,7 @@ impl VideoAggregatorPad {
 unsafe impl Send for VideoAggregatorPad {}
 unsafe impl Sync for VideoAggregatorPad {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::VideoAggregatorPad>> Sealed for T {}
-}
-
-pub trait VideoAggregatorPadExt: IsA<VideoAggregatorPad> + sealed::Sealed + 'static {
+pub trait VideoAggregatorPadExt: IsA<VideoAggregatorPad> + 'static {
     #[doc(alias = "gst_video_aggregator_pad_set_needs_alpha")]
     fn set_needs_alpha(&self, needs_alpha: bool) {
         unsafe {

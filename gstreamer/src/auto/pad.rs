@@ -30,12 +30,7 @@ impl Pad {
 unsafe impl Send for Pad {}
 unsafe impl Sync for Pad {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Pad>> Sealed for T {}
-}
-
-pub trait PadExt: IsA<Pad> + sealed::Sealed + 'static {
+pub trait PadExt: IsA<Pad> + 'static {
     #[doc(alias = "gst_pad_activate_mode")]
     fn activate_mode(&self, mode: PadMode, active: bool) -> Result<(), glib::error::BoolError> {
         unsafe {

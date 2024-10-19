@@ -22,12 +22,7 @@ impl BaseEffect {
     pub const NONE: Option<&'static BaseEffect> = None;
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::BaseEffect>> Sealed for T {}
-}
-
-pub trait BaseEffectExt: IsA<BaseEffect> + sealed::Sealed + 'static {
+pub trait BaseEffectExt: IsA<BaseEffect> + 'static {
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_base_effect_is_time_effect")]

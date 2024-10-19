@@ -30,12 +30,7 @@ impl Task {
 unsafe impl Send for Task {}
 unsafe impl Sync for Task {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Task>> Sealed for T {}
-}
-
-pub trait TaskExt: IsA<Task> + sealed::Sealed + 'static {
+pub trait TaskExt: IsA<Task> + 'static {
     #[doc(alias = "gst_task_get_pool")]
     #[doc(alias = "get_pool")]
     fn pool(&self) -> TaskPool {

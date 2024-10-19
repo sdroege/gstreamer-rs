@@ -27,12 +27,7 @@ impl Device {
 unsafe impl Send for Device {}
 unsafe impl Sync for Device {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Device>> Sealed for T {}
-}
-
-pub trait DeviceExt: IsA<Device> + sealed::Sealed + 'static {
+pub trait DeviceExt: IsA<Device> + 'static {
     #[doc(alias = "gst_device_create_element")]
     fn create_element(&self, name: Option<&str>) -> Result<Element, glib::BoolError> {
         unsafe {

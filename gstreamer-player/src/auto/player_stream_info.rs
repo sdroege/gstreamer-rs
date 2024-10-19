@@ -22,12 +22,7 @@ impl PlayerStreamInfo {
 unsafe impl Send for PlayerStreamInfo {}
 unsafe impl Sync for PlayerStreamInfo {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::PlayerStreamInfo>> Sealed for T {}
-}
-
-pub trait PlayerStreamInfoExt: IsA<PlayerStreamInfo> + sealed::Sealed + 'static {
+pub trait PlayerStreamInfoExt: IsA<PlayerStreamInfo> + 'static {
     #[doc(alias = "gst_player_stream_info_get_caps")]
     #[doc(alias = "get_caps")]
     fn caps(&self) -> Option<gst::Caps> {

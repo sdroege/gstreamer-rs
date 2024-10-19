@@ -27,12 +27,7 @@ impl Tracer {
 unsafe impl Send for Tracer {}
 unsafe impl Sync for Tracer {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Tracer>> Sealed for T {}
-}
-
-pub trait TracerExt: IsA<Tracer> + sealed::Sealed + 'static {
+pub trait TracerExt: IsA<Tracer> + 'static {
     fn params(&self) -> Option<glib::GString> {
         ObjectExt::property(self.as_ref(), "params")
     }

@@ -30,12 +30,7 @@ impl Track {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Track>> Sealed for T {}
-}
-
-pub trait GESTrackExt: IsA<Track> + sealed::Sealed + 'static {
+pub trait GESTrackExt: IsA<Track> + 'static {
     #[doc(alias = "ges_track_add_element")]
     fn add_element(&self, object: &impl IsA<TrackElement>) -> Result<(), glib::error::BoolError> {
         unsafe {

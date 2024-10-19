@@ -33,12 +33,7 @@ impl RTSPSession {
 unsafe impl Send for RTSPSession {}
 unsafe impl Sync for RTSPSession {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::RTSPSession>> Sealed for T {}
-}
-
-pub trait RTSPSessionExt: IsA<RTSPSession> + sealed::Sealed + 'static {
+pub trait RTSPSessionExt: IsA<RTSPSession> + 'static {
     #[doc(alias = "gst_rtsp_session_allow_expire")]
     fn allow_expire(&self) {
         unsafe {

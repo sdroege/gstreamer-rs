@@ -36,12 +36,7 @@ impl EffectClip {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::EffectClip>> Sealed for T {}
-}
-
-pub trait EffectClipExt: IsA<EffectClip> + sealed::Sealed + 'static {
+pub trait EffectClipExt: IsA<EffectClip> + 'static {
     #[doc(alias = "audio-bin-description")]
     fn audio_bin_description(&self) -> Option<glib::GString> {
         ObjectExt::property(self.as_ref(), "audio-bin-description")

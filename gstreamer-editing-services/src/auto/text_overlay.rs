@@ -31,12 +31,7 @@ impl TextOverlay {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::TextOverlay>> Sealed for T {}
-}
-
-pub trait TextOverlayExt: IsA<TextOverlay> + sealed::Sealed + 'static {
+pub trait TextOverlayExt: IsA<TextOverlay> + 'static {
     #[doc(alias = "ges_text_overlay_get_color")]
     #[doc(alias = "get_color")]
     fn color(&self) -> u32 {

@@ -36,12 +36,7 @@ impl RTSPMedia {
 unsafe impl Send for RTSPMedia {}
 unsafe impl Sync for RTSPMedia {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::RTSPMedia>> Sealed for T {}
-}
-
-pub trait RTSPMediaExt: IsA<RTSPMedia> + sealed::Sealed + 'static {
+pub trait RTSPMediaExt: IsA<RTSPMedia> + 'static {
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     #[doc(alias = "gst_rtsp_media_can_be_shared")]

@@ -28,12 +28,7 @@ impl BaseSrc {
 unsafe impl Send for BaseSrc {}
 unsafe impl Sync for BaseSrc {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::BaseSrc>> Sealed for T {}
-}
-
-pub trait BaseSrcExt: IsA<BaseSrc> + sealed::Sealed + 'static {
+pub trait BaseSrcExt: IsA<BaseSrc> + 'static {
     #[doc(alias = "gst_base_src_get_blocksize")]
     #[doc(alias = "get_blocksize")]
     fn blocksize(&self) -> u32 {

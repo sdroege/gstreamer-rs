@@ -27,12 +27,7 @@ impl BaseParse {
 unsafe impl Send for BaseParse {}
 unsafe impl Sync for BaseParse {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::BaseParse>> Sealed for T {}
-}
-
-pub trait BaseParseExt: IsA<BaseParse> + sealed::Sealed + 'static {
+pub trait BaseParseExt: IsA<BaseParse> + 'static {
     #[doc(alias = "gst_base_parse_add_index_entry")]
     fn add_index_entry(&self, offset: u64, ts: gst::ClockTime, key: bool, force: bool) -> bool {
         unsafe {

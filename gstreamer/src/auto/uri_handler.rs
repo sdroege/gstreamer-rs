@@ -22,12 +22,7 @@ impl URIHandler {
 unsafe impl Send for URIHandler {}
 unsafe impl Sync for URIHandler {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::URIHandler>> Sealed for T {}
-}
-
-pub trait URIHandlerExt: IsA<URIHandler> + sealed::Sealed + 'static {
+pub trait URIHandlerExt: IsA<URIHandler> + 'static {
     #[doc(alias = "gst_uri_handler_get_protocols")]
     #[doc(alias = "get_protocols")]
     fn protocols(&self) -> Vec<glib::GString> {

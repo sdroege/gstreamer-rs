@@ -31,12 +31,7 @@ impl VideoDecoder {
 unsafe impl Send for VideoDecoder {}
 unsafe impl Sync for VideoDecoder {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::VideoDecoder>> Sealed for T {}
-}
-
-pub trait VideoDecoderExt: IsA<VideoDecoder> + sealed::Sealed + 'static {
+pub trait VideoDecoderExt: IsA<VideoDecoder> + 'static {
     #[doc(alias = "gst_video_decoder_add_to_frame")]
     fn add_to_frame(&self, n_bytes: i32) {
         unsafe {

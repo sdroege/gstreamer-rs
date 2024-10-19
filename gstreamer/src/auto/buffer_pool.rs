@@ -34,12 +34,7 @@ impl Default for BufferPool {
 unsafe impl Send for BufferPool {}
 unsafe impl Sync for BufferPool {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::BufferPool>> Sealed for T {}
-}
-
-pub trait BufferPoolExt: IsA<BufferPool> + sealed::Sealed + 'static {
+pub trait BufferPoolExt: IsA<BufferPool> + 'static {
     #[doc(alias = "gst_buffer_pool_get_options")]
     #[doc(alias = "get_options")]
     fn options(&self) -> Vec<glib::GString> {

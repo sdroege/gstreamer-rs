@@ -31,12 +31,7 @@ impl Container {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Container>> Sealed for T {}
-}
-
-pub trait GESContainerExt: IsA<Container> + sealed::Sealed + 'static {
+pub trait GESContainerExt: IsA<Container> + 'static {
     #[doc(alias = "ges_container_add")]
     fn add(&self, child: &impl IsA<TimelineElement>) -> Result<(), glib::error::BoolError> {
         unsafe {

@@ -27,14 +27,7 @@ impl TimedValueControlSource {
 unsafe impl Send for TimedValueControlSource {}
 unsafe impl Sync for TimedValueControlSource {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::TimedValueControlSource>> Sealed for T {}
-}
-
-pub trait TimedValueControlSourceExt:
-    IsA<TimedValueControlSource> + sealed::Sealed + 'static
-{
+pub trait TimedValueControlSourceExt: IsA<TimedValueControlSource> + 'static {
     //#[doc(alias = "gst_timed_value_control_source_find_control_point_iter")]
     //fn find_control_point_iter(&self, timestamp: impl Into<Option<gst::ClockTime>>) -> /*Ignored*/Option<glib::SequenceIter> {
     //    unsafe { TODO: call ffi:gst_timed_value_control_source_find_control_point_iter() }

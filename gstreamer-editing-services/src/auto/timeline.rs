@@ -63,12 +63,7 @@ impl Default for Timeline {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Timeline>> Sealed for T {}
-}
-
-pub trait TimelineExt: IsA<Timeline> + sealed::Sealed + 'static {
+pub trait TimelineExt: IsA<Timeline> + 'static {
     #[cfg_attr(feature = "v1_18", deprecated = "Since 1.18")]
     #[allow(deprecated)]
     #[doc(alias = "ges_timeline_add_layer")]

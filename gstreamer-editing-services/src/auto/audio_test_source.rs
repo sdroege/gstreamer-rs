@@ -19,12 +19,7 @@ impl AudioTestSource {
     pub const NONE: Option<&'static AudioTestSource> = None;
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::AudioTestSource>> Sealed for T {}
-}
-
-pub trait AudioTestSourceExt: IsA<AudioTestSource> + sealed::Sealed + 'static {
+pub trait AudioTestSourceExt: IsA<AudioTestSource> + 'static {
     #[doc(alias = "ges_audio_test_source_get_freq")]
     #[doc(alias = "get_freq")]
     fn freq(&self) -> f64 {

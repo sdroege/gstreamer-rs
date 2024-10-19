@@ -51,12 +51,7 @@ impl Scenario {
 unsafe impl Send for Scenario {}
 unsafe impl Sync for Scenario {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Scenario>> Sealed for T {}
-}
-
-pub trait ScenarioExt: IsA<Scenario> + sealed::Sealed + 'static {
+pub trait ScenarioExt: IsA<Scenario> + 'static {
     //#[doc(alias = "gst_validate_scenario_execute_seek")]
     //fn execute_seek(&self, action: &Action, rate: f64, format: gst::Format, flags: gst::SeekFlags, start_type: gst::SeekType, start: /*Ignored*/gst::ClockTime, stop_type: gst::SeekType, stop: /*Ignored*/gst::ClockTime) -> i32 {
     //    unsafe { TODO: call ffi:gst_validate_scenario_execute_seek() }

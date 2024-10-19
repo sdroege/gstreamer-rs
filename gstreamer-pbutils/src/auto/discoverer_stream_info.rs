@@ -22,12 +22,7 @@ impl DiscovererStreamInfo {
 unsafe impl Send for DiscovererStreamInfo {}
 unsafe impl Sync for DiscovererStreamInfo {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::DiscovererStreamInfo>> Sealed for T {}
-}
-
-pub trait DiscovererStreamInfoExt: IsA<DiscovererStreamInfo> + sealed::Sealed + 'static {
+pub trait DiscovererStreamInfoExt: IsA<DiscovererStreamInfo> + 'static {
     #[doc(alias = "gst_discoverer_stream_info_get_caps")]
     #[doc(alias = "get_caps")]
     fn caps(&self) -> Option<gst::Caps> {

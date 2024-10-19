@@ -28,12 +28,7 @@ impl Allocator {
 unsafe impl Send for Allocator {}
 unsafe impl Sync for Allocator {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Allocator>> Sealed for T {}
-}
-
-pub trait AllocatorExt: IsA<Allocator> + sealed::Sealed + 'static {
+pub trait AllocatorExt: IsA<Allocator> + 'static {
     #[doc(alias = "gst_allocator_alloc")]
     fn alloc(
         &self,

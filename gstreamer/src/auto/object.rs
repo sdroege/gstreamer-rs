@@ -55,12 +55,7 @@ impl std::fmt::Display for Object {
 unsafe impl Send for Object {}
 unsafe impl Sync for Object {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::Object>> Sealed for T {}
-}
-
-pub trait GstObjectExt: IsA<Object> + sealed::Sealed + 'static {
+pub trait GstObjectExt: IsA<Object> + 'static {
     #[doc(alias = "gst_object_add_control_binding")]
     fn add_control_binding(
         &self,

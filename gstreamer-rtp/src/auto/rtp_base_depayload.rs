@@ -30,12 +30,7 @@ impl RTPBaseDepayload {
 unsafe impl Send for RTPBaseDepayload {}
 unsafe impl Sync for RTPBaseDepayload {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::RTPBaseDepayload>> Sealed for T {}
-}
-
-pub trait RTPBaseDepayloadExt: IsA<RTPBaseDepayload> + sealed::Sealed + 'static {
+pub trait RTPBaseDepayloadExt: IsA<RTPBaseDepayload> + 'static {
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     #[doc(alias = "gst_rtp_base_depayload_delayed")]

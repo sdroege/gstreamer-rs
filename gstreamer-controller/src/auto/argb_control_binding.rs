@@ -50,12 +50,7 @@ impl ARGBControlBinding {
 unsafe impl Send for ARGBControlBinding {}
 unsafe impl Sync for ARGBControlBinding {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::ARGBControlBinding>> Sealed for T {}
-}
-
-pub trait ARGBControlBindingExt: IsA<ARGBControlBinding> + sealed::Sealed + 'static {
+pub trait ARGBControlBindingExt: IsA<ARGBControlBinding> + 'static {
     #[doc(alias = "control-source-a")]
     fn control_source_a(&self) -> Option<gst::ControlSource> {
         ObjectExt::property(self.as_ref(), "control-source-a")
