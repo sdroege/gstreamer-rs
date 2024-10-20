@@ -282,8 +282,8 @@ impl<'a, T: AnalyticsMtd> AnalyticsMtdRef<'a, T> {
     #[doc(alias = "gst_analytics_mtd_get_mtd_type")]
     pub fn mtd_type(&self) -> ffi::GstAnalyticsMtdType {
         unsafe {
-            let mut mtd = ffi::GstAnalyticsMtd::unsafe_from(self);
-            ffi::gst_analytics_mtd_get_mtd_type(&mut mtd)
+            let mtd = ffi::GstAnalyticsMtd::unsafe_from(self);
+            ffi::gst_analytics_mtd_get_mtd_type(&mtd)
         }
     }
 }
