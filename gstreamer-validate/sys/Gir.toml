@@ -6,7 +6,10 @@ min_cfg_version = "1.22"
 work_mode = "sys"
 single_version_file = true
 
-extra_versions = ["1.24"]
+extra_versions = [
+    "1.26",
+    "1.24",
+]
 
 external_libraries = [
     "GLib",

@@ -693,19 +693,19 @@ manual_traits = ["ClockExtManual"]
     [[object.function]]
     name = "add_observation"
         [[object.function.parameter]]
-        name = "slave"
+        name = "observation_internal"
         mandatory = true
         [[object.function.parameter]]
-        name = "master"
+        name = "observation_external"
         mandatory = true
 
     [[object.function]]
     name = "add_observation_unapplied"
         [[object.function.parameter]]
-        name = "slave"
+        name = "observation_internal"
         mandatory = true
         [[object.function.parameter]]
-        name = "master"
+        name = "observation_external"
         mandatory = true
         [[object.function.parameter]]
         name = "internal"
