@@ -30,6 +30,7 @@ manual = [
     "Gst.BufferPool",
     "Gst.ClockTimeDiff",
     "Gst.Element",
+    "Gst.Event",
     "Gst.EventType",
     "Gst.Format",
     "Gst.Memory",
