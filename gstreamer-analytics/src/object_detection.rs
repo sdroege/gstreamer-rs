@@ -84,8 +84,8 @@ impl<'a> AnalyticsMtdRef<'a, AnalyticsODMtd> {
     #[doc(alias = "gst_analytics_od_mtd_get_obj_type")]
     pub fn obj_type(&self) -> Option<glib::Quark> {
         unsafe {
-            let mut mtd = from(ffi::GstAnalyticsMtd::unsafe_from(self));
-            let type_ = ffi::gst_analytics_od_mtd_get_obj_type(&mut mtd);
+            let mtd = from(ffi::GstAnalyticsMtd::unsafe_from(self));
+            let type_ = ffi::gst_analytics_od_mtd_get_obj_type(&mtd);
             if type_ == 0 {
                 None
             } else {
@@ -99,9 +99,9 @@ impl<'a> AnalyticsMtdRef<'a, AnalyticsODMtd> {
         let mut loc = AnalyticsODLocation::default();
 
         let success = unsafe {
-            let mut mtd = from(ffi::GstAnalyticsMtd::unsafe_from(self));
+            let mtd = from(ffi::GstAnalyticsMtd::unsafe_from(self));
             ffi::gst_analytics_od_mtd_get_location(
-                &mut mtd,
+                &mtd,
                 &mut loc.x,
                 &mut loc.y,
                 &mut loc.w,
@@ -120,9 +120,9 @@ impl<'a> AnalyticsMtdRef<'a, AnalyticsODMtd> {
     #[doc(alias = "gst_analytics_od_mtd_get_confidence_lvl")]
     pub fn confidence_level(&self) -> f32 {
         unsafe {
-            let mut mtd = from(ffi::GstAnalyticsMtd::unsafe_from(self));
+            let mtd = from(ffi::GstAnalyticsMtd::unsafe_from(self));
             let mut lvl: f32 = 0.0;
-            ffi::gst_analytics_od_mtd_get_confidence_lvl(&mut mtd, &mut lvl);
+            ffi::gst_analytics_od_mtd_get_confidence_lvl(&mtd, &mut lvl);
             lvl
         }
     }

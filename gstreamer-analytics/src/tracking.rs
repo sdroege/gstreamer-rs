@@ -68,9 +68,9 @@ impl<'a> AnalyticsMtdRef<'a, AnalyticsTrackingMtd> {
         let mut tracking_lost: i32 = 0;
 
         unsafe {
-            let mut mtd = from(ffi::GstAnalyticsMtd::unsafe_from(self));
+            let mtd = from(ffi::GstAnalyticsMtd::unsafe_from(self));
             ffi::gst_analytics_tracking_mtd_get_info(
-                &mut mtd,
+                &mtd,
                 &mut tracking_id,
                 &mut tracking_first_seen,
                 &mut tracking_last_seen,

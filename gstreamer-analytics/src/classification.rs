@@ -95,8 +95,8 @@ impl<'a> AnalyticsMtdRef<'a, AnalyticsClassificationMtd> {
     #[doc(alias = "gst_analytics_cls_mtd_get_length")]
     pub fn len(&self) -> usize {
         unsafe {
-            let mut mtd = from(ffi::GstAnalyticsMtd::unsafe_from(self));
-            ffi::gst_analytics_cls_mtd_get_length(&mut mtd)
+            let mtd = from(ffi::GstAnalyticsMtd::unsafe_from(self));
+            ffi::gst_analytics_cls_mtd_get_length(&mtd)
         }
     }
 
@@ -109,8 +109,8 @@ impl<'a> AnalyticsMtdRef<'a, AnalyticsClassificationMtd> {
         assert!(index < self.len());
 
         unsafe {
-            let mut mtd = from(ffi::GstAnalyticsMtd::unsafe_from(self));
-            ffi::gst_analytics_cls_mtd_get_level(&mut mtd, index)
+            let mtd = from(ffi::GstAnalyticsMtd::unsafe_from(self));
+            ffi::gst_analytics_cls_mtd_get_level(&mtd, index)
         }
     }
 
@@ -119,8 +119,8 @@ impl<'a> AnalyticsMtdRef<'a, AnalyticsClassificationMtd> {
         assert!(index < self.len());
 
         unsafe {
-            let mut mtd = from(ffi::GstAnalyticsMtd::unsafe_from(self));
-            from_glib(ffi::gst_analytics_cls_mtd_get_quark(&mut mtd, index))
+            let mtd = from(ffi::GstAnalyticsMtd::unsafe_from(self));
+            from_glib(ffi::gst_analytics_cls_mtd_get_quark(&mtd, index))
         }
     }
 
