@@ -328,6 +328,12 @@ pub const GST_MTS_DESC_MVC_OPERATION_POINT: GstMpegtsDescriptorType = 51;
 pub const GST_MTS_DESC_MPEG2_STEREOSCOPIC_VIDEO_FORMAT: GstMpegtsDescriptorType = 52;
 pub const GST_MTS_DESC_STEREOSCOPIC_PROGRAM_INFO: GstMpegtsDescriptorType = 53;
 pub const GST_MTS_DESC_STEREOSCOPIC_VIDEO_INFO: GstMpegtsDescriptorType = 54;
+#[cfg(feature = "v1_26")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+pub const GST_MTS_DESC_EXTENSION: GstMpegtsDescriptorType = 63;
+
+pub type GstMpegtsExtendedDescriptorType = c_int;
+pub const GST_MTS_DESC_EXT_JXS_VIDEO: GstMpegtsExtendedDescriptorType = 20;
 
 pub type GstMpegtsHdmvStreamType = c_int;
 pub const GST_MPEGTS_STREAM_TYPE_HDMV_AUDIO_LPCM: GstMpegtsHdmvStreamType = 128;
@@ -649,6 +655,9 @@ pub const GST_MPEGTS_STREAM_TYPE_VIDEO_JP2K: GstMpegtsStreamType = 33;
 pub const GST_MPEGTS_STREAM_TYPE_VIDEO_MPEG2_STEREO_ADDITIONAL_VIEW: GstMpegtsStreamType = 34;
 pub const GST_MPEGTS_STREAM_TYPE_VIDEO_H264_STEREO_ADDITIONAL_VIEW: GstMpegtsStreamType = 35;
 pub const GST_MPEGTS_STREAM_TYPE_VIDEO_HEVC: GstMpegtsStreamType = 36;
+#[cfg(feature = "v1_26")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+pub const GST_MPEGTS_STREAM_TYPE_VIDEO_JPEG_XS: GstMpegtsStreamType = 50;
 pub const GST_MPEGTS_STREAM_TYPE_IPMP_STREAM: GstMpegtsStreamType = 127;
 #[cfg(feature = "v1_20")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
@@ -1500,6 +1509,74 @@ impl ::std::fmt::Debug for GstMpegtsISO639LanguageDescriptor {
 
 #[derive(Copy, Clone)]
 #[repr(C)]
+pub struct GstMpegtsJpegXsDescriptor {
+    pub descriptor_version: u8,
+    pub horizontal_size: u16,
+    pub vertical_size: u16,
+    pub brat: u32,
+    pub frat: u32,
+    pub schar: u16,
+    pub Ppih: u16,
+    pub Plev: u16,
+    pub max_buffer_size: u32,
+    pub buffer_model_type: u8,
+    pub colour_primaries: u8,
+    pub transfer_characteristics: u8,
+    pub matrix_coefficients: u8,
+    pub video_full_range_flag: gboolean,
+    pub still_mode: gboolean,
+    pub mdm_flag: gboolean,
+    pub X_c0: u16,
+    pub Y_c0: u16,
+    pub X_c1: u16,
+    pub Y_c1: u16,
+    pub X_c2: u16,
+    pub Y_c2: u16,
+    pub X_wp: u16,
+    pub Y_wp: u16,
+    pub L_max: u32,
+    pub L_min: u32,
+    pub MaxCLL: u16,
+    pub MaxFALL: u16,
+}
+
+impl ::std::fmt::Debug for GstMpegtsJpegXsDescriptor {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstMpegtsJpegXsDescriptor @ {self:p}"))
+            .field("descriptor_version", &self.descriptor_version)
+            .field("horizontal_size", &self.horizontal_size)
+            .field("vertical_size", &self.vertical_size)
+            .field("brat", &self.brat)
+            .field("frat", &self.frat)
+            .field("schar", &self.schar)
+            .field("Ppih", &self.Ppih)
+            .field("Plev", &self.Plev)
+            .field("max_buffer_size", &self.max_buffer_size)
+            .field("buffer_model_type", &self.buffer_model_type)
+            .field("colour_primaries", &self.colour_primaries)
+            .field("transfer_characteristics", &self.transfer_characteristics)
+            .field("matrix_coefficients", &self.matrix_coefficients)
+            .field("video_full_range_flag", &self.video_full_range_flag)
+            .field("still_mode", &self.still_mode)
+            .field("mdm_flag", &self.mdm_flag)
+            .field("X_c0", &self.X_c0)
+            .field("Y_c0", &self.Y_c0)
+            .field("X_c1", &self.X_c1)
+            .field("Y_c1", &self.Y_c1)
+            .field("X_c2", &self.X_c2)
+            .field("Y_c2", &self.Y_c2)
+            .field("X_wp", &self.X_wp)
+            .field("Y_wp", &self.Y_wp)
+            .field("L_max", &self.L_max)
+            .field("L_min", &self.L_min)
+            .field("MaxCLL", &self.MaxCLL)
+            .field("MaxFALL", &self.MaxFALL)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
 pub struct GstMpegtsLogicalChannel {
     pub service_id: u16,
     pub visible_service: gboolean,
@@ -2261,6 +2338,9 @@ extern "C" {
     // GstMpegtsDescriptor
     //=========================================================================
     pub fn gst_mpegts_descriptor_get_type() -> GType;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_mpegts_descriptor_copy(desc: *mut GstMpegtsDescriptor) -> *mut GstMpegtsDescriptor;
     pub fn gst_mpegts_descriptor_free(desc: *mut GstMpegtsDescriptor);
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
@@ -2416,6 +2496,12 @@ extern "C" {
     pub fn gst_mpegts_descriptor_parse_iso_639_language_nb(
         descriptor: *const GstMpegtsDescriptor,
     ) -> c_uint;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_mpegts_descriptor_parse_jpeg_xs(
+        descriptor: *const GstMpegtsDescriptor,
+        res: *mut GstMpegtsJpegXsDescriptor,
+    ) -> gboolean;
     pub fn gst_mpegts_descriptor_parse_logical_channel(
         descriptor: *const GstMpegtsDescriptor,
         res: *mut GstMpegtsLogicalChannelDescriptor,
@@ -2479,6 +2565,11 @@ extern "C" {
     ) -> *mut GstMpegtsDescriptor;
     pub fn gst_mpegts_descriptor_from_iso_639_language(
         language: *const c_char,
+    ) -> *mut GstMpegtsDescriptor;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_mpegts_descriptor_from_jpeg_xs(
+        jpegxs: *const GstMpegtsJpegXsDescriptor,
     ) -> *mut GstMpegtsDescriptor;
     #[cfg(feature = "v1_26")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
@@ -2554,6 +2645,13 @@ extern "C" {
     pub fn gst_mpegts_iso_639_language_descriptor_free(
         desc: *mut GstMpegtsISO639LanguageDescriptor,
     );
+
+    //=========================================================================
+    // GstMpegtsJpegXsDescriptor
+    //=========================================================================
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_mpegts_jpeg_xs_descriptor_get_type() -> GType;
 
     //=========================================================================
     // GstMpegtsLogicalChannel

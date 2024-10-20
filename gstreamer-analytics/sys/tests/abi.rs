@@ -252,10 +252,24 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "GstAnalyticsSegmentationMtd",
+        Layout {
+            size: size_of::<GstAnalyticsSegmentationMtd>(),
+            alignment: align_of::<GstAnalyticsSegmentationMtd>(),
+        },
+    ),
+    (
         "GstAnalyticsTrackingMtd",
         Layout {
             size: size_of::<GstAnalyticsTrackingMtd>(),
             alignment: align_of::<GstAnalyticsTrackingMtd>(),
+        },
+    ),
+    (
+        "GstSegmentationType",
+        Layout {
+            size: size_of::<GstSegmentationType>(),
+            alignment: align_of::<GstSegmentationType>(),
         },
     ),
 ];
@@ -269,4 +283,6 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(guint) GST_ANALYTICS_REL_TYPE_NONE", "0"),
     ("(guint) GST_ANALYTICS_REL_TYPE_RELATE_TO", "8"),
     ("GST_INF_RELATION_SPAN", "-1"),
+    ("(gint) GST_SEGMENTATION_TYPE_INSTANCE", "1"),
+    ("(gint) GST_SEGMENTATION_TYPE_SEMANTIC", "0"),
 ];

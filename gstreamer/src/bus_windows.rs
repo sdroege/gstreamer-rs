@@ -16,8 +16,8 @@ cfg_if::cfg_if! {
     }
 }
 
-use glib::prelude::*;
 use super::Bus;
+use glib::prelude::*;
 
 pub trait WindowsBusExtManual: IsA<Bus> + 'static {
     #[doc(alias = "get_pollfd")]

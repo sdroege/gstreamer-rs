@@ -178,7 +178,7 @@ pub struct GstValidateAction {
     pub filename: *mut c_char,
     pub debug: *mut c_char,
     pub n_repeats: c_int,
-    pub rangename: *const c_char,
+    pub rangename: *mut c_char,
     pub priv_: *mut GstValidateActionPrivate,
     pub _gst_reserved: [gpointer; 4],
 }

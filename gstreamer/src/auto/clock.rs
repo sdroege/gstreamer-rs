@@ -78,13 +78,17 @@ unsafe impl Sync for Clock {}
 
 pub trait ClockExt: IsA<Clock> + 'static {
     #[doc(alias = "gst_clock_add_observation")]
-    fn add_observation(&self, slave: ClockTime, master: ClockTime) -> Option<f64> {
+    fn add_observation(
+        &self,
+        observation_internal: ClockTime,
+        observation_external: ClockTime,
+    ) -> Option<f64> {
         unsafe {
             let mut r_squared = std::mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_clock_add_observation(
                 self.as_ref().to_glib_none().0,
-                slave.into_glib(),
-                master.into_glib(),
+                observation_internal.into_glib(),
+                observation_external.into_glib(),
                 r_squared.as_mut_ptr(),
             ));
             if ret {
@@ -98,8 +102,8 @@ pub trait ClockExt: IsA<Clock> + 'static {
     #[doc(alias = "gst_clock_add_observation_unapplied")]
     fn add_observation_unapplied(
         &self,
-        slave: ClockTime,
-        master: ClockTime,
+        observation_internal: ClockTime,
+        observation_external: ClockTime,
     ) -> Option<(f64, ClockTime, ClockTime, ClockTime, ClockTime)> {
         unsafe {
             let mut r_squared = std::mem::MaybeUninit::uninit();
@@ -109,8 +113,8 @@ pub trait ClockExt: IsA<Clock> + 'static {
             let mut rate_denom = std::mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_clock_add_observation_unapplied(
                 self.as_ref().to_glib_none().0,
-                slave.into_glib(),
-                master.into_glib(),
+                observation_internal.into_glib(),
+                observation_external.into_glib(),
                 r_squared.as_mut_ptr(),
                 internal.as_mut_ptr(),
                 external.as_mut_ptr(),

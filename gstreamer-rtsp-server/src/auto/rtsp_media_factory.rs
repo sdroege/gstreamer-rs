@@ -259,6 +259,7 @@ pub trait RTSPMediaFactoryExt: IsA<RTSPMediaFactory> + 'static {
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_rtsp_media_factory_is_bind_mcast_address")]
+    #[doc(alias = "bind-mcast-address")]
     fn is_bind_mcast_address(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_rtsp_media_factory_is_bind_mcast_address(
@@ -270,6 +271,7 @@ pub trait RTSPMediaFactoryExt: IsA<RTSPMediaFactory> + 'static {
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_rtsp_media_factory_is_enable_rtcp")]
+    #[doc(alias = "enable-rtcp")]
     fn is_enable_rtcp(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_rtsp_media_factory_is_enable_rtcp(
@@ -279,6 +281,7 @@ pub trait RTSPMediaFactoryExt: IsA<RTSPMediaFactory> + 'static {
     }
 
     #[doc(alias = "gst_rtsp_media_factory_is_eos_shutdown")]
+    #[doc(alias = "eos-shutdown")]
     fn is_eos_shutdown(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_rtsp_media_factory_is_eos_shutdown(
@@ -288,6 +291,7 @@ pub trait RTSPMediaFactoryExt: IsA<RTSPMediaFactory> + 'static {
     }
 
     #[doc(alias = "gst_rtsp_media_factory_is_shared")]
+    #[doc(alias = "shared")]
     fn is_shared(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_rtsp_media_factory_is_shared(
@@ -562,8 +566,10 @@ pub trait RTSPMediaFactoryExt: IsA<RTSPMediaFactory> + 'static {
         }
     }
 
+    #[cfg(not(feature = "v1_16"))]
+    #[cfg_attr(docsrs, doc(cfg(not(feature = "v1_16"))))]
     #[doc(alias = "bind-mcast-address")]
-    fn get_property_bind_mcast_address(&self) -> bool {
+    fn is_bind_mcast_address(&self) -> bool {
         ObjectExt::property(self.as_ref(), "bind-mcast-address")
     }
 

@@ -368,6 +368,7 @@ pub trait RTSPMediaExt: IsA<RTSPMedia> + 'static {
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_rtsp_media_is_bind_mcast_address")]
+    #[doc(alias = "bind-mcast-address")]
     fn is_bind_mcast_address(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_rtsp_media_is_bind_mcast_address(
@@ -377,6 +378,7 @@ pub trait RTSPMediaExt: IsA<RTSPMedia> + 'static {
     }
 
     #[doc(alias = "gst_rtsp_media_is_eos_shutdown")]
+    #[doc(alias = "eos-shutdown")]
     fn is_eos_shutdown(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_rtsp_media_is_eos_shutdown(
@@ -397,6 +399,7 @@ pub trait RTSPMediaExt: IsA<RTSPMedia> + 'static {
     }
 
     #[doc(alias = "gst_rtsp_media_is_reusable")]
+    #[doc(alias = "reusable")]
     fn is_reusable(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_rtsp_media_is_reusable(
@@ -406,6 +409,7 @@ pub trait RTSPMediaExt: IsA<RTSPMedia> + 'static {
     }
 
     #[doc(alias = "gst_rtsp_media_is_shared")]
+    #[doc(alias = "shared")]
     fn is_shared(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_rtsp_media_is_shared(
@@ -415,6 +419,7 @@ pub trait RTSPMediaExt: IsA<RTSPMedia> + 'static {
     }
 
     #[doc(alias = "gst_rtsp_media_is_stop_on_disconnect")]
+    #[doc(alias = "stop-on-disconnect")]
     fn is_stop_on_disconnect(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_rtsp_media_is_stop_on_disconnect(
@@ -424,6 +429,7 @@ pub trait RTSPMediaExt: IsA<RTSPMedia> + 'static {
     }
 
     #[doc(alias = "gst_rtsp_media_is_time_provider")]
+    #[doc(alias = "time-provider")]
     fn is_time_provider(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_rtsp_media_is_time_provider(
@@ -789,8 +795,10 @@ pub trait RTSPMediaExt: IsA<RTSPMedia> + 'static {
         }
     }
 
+    #[cfg(not(feature = "v1_16"))]
+    #[cfg_attr(docsrs, doc(cfg(not(feature = "v1_16"))))]
     #[doc(alias = "bind-mcast-address")]
-    fn get_property_bind_mcast_address(&self) -> bool {
+    fn is_bind_mcast_address(&self) -> bool {
         ObjectExt::property(self.as_ref(), "bind-mcast-address")
     }
 

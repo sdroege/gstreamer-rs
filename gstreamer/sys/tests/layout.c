@@ -73,6 +73,7 @@ int main() {
     printf("%s;%zu;%zu\n", "GstGapFlags", sizeof(GstGapFlags), alignof(GstGapFlags));
     printf("%s;%zu;%zu\n", "GstGhostPad", sizeof(GstGhostPad), alignof(GstGhostPad));
     printf("%s;%zu;%zu\n", "GstGhostPadClass", sizeof(GstGhostPadClass), alignof(GstGhostPadClass));
+    printf("%s;%zu;%zu\n", "GstIdStr", sizeof(GstIdStr), alignof(GstIdStr));
     printf("%s;%zu;%zu\n", "GstIterator", sizeof(GstIterator), alignof(GstIterator));
     printf("%s;%zu;%zu\n", "GstIteratorItem", sizeof(GstIteratorItem), alignof(GstIteratorItem));
     printf("%s;%zu;%zu\n", "GstIteratorResult", sizeof(GstIteratorResult), alignof(GstIteratorResult));

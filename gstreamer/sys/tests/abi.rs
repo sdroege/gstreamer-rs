@@ -658,6 +658,13 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "GstIdStr",
+        Layout {
+            size: size_of::<GstIdStr>(),
+            alignment: align_of::<GstIdStr>(),
+        },
+    ),
+    (
         "GstIterator",
         Layout {
             size: size_of::<GstIterator>(),

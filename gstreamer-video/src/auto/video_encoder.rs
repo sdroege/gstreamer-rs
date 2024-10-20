@@ -38,6 +38,18 @@ pub trait VideoEncoderExt: IsA<VideoEncoder> + 'static {
         }
     }
 
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "gst_video_encoder_drop_frame")]
+    fn drop_frame(&self, frame: VideoCodecFrame) {
+        unsafe {
+            ffi::gst_video_encoder_drop_frame(
+                self.as_ref().to_glib_none().0,
+                frame.into_glib_ptr(),
+            );
+        }
+    }
+
     #[doc(alias = "gst_video_encoder_finish_frame")]
     fn finish_frame(&self, frame: VideoCodecFrame) -> Result<gst::FlowSuccess, gst::FlowError> {
         unsafe {
@@ -100,6 +112,18 @@ pub trait VideoEncoderExt: IsA<VideoEncoder> + 'static {
                 caps.to_glib_none().0,
                 filter.to_glib_none().0,
             ))
+        }
+    }
+
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "gst_video_encoder_release_frame")]
+    fn release_frame(&self, frame: VideoCodecFrame) {
+        unsafe {
+            ffi::gst_video_encoder_release_frame(
+                self.as_ref().to_glib_none().0,
+                frame.into_glib_ptr(),
+            );
         }
     }
 

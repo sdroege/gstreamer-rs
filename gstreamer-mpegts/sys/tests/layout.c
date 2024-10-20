@@ -56,12 +56,14 @@ int main() {
     printf("%s;%zu;%zu\n", "GstMpegtsDvbMultilingualServiceNameItem", sizeof(GstMpegtsDvbMultilingualServiceNameItem), alignof(GstMpegtsDvbMultilingualServiceNameItem));
     printf("%s;%zu;%zu\n", "GstMpegtsEIT", sizeof(GstMpegtsEIT), alignof(GstMpegtsEIT));
     printf("%s;%zu;%zu\n", "GstMpegtsEITEvent", sizeof(GstMpegtsEITEvent), alignof(GstMpegtsEITEvent));
+    printf("%s;%zu;%zu\n", "GstMpegtsExtendedDescriptorType", sizeof(GstMpegtsExtendedDescriptorType), alignof(GstMpegtsExtendedDescriptorType));
     printf("%s;%zu;%zu\n", "GstMpegtsExtendedEventDescriptor", sizeof(GstMpegtsExtendedEventDescriptor), alignof(GstMpegtsExtendedEventDescriptor));
     printf("%s;%zu;%zu\n", "GstMpegtsExtendedEventItem", sizeof(GstMpegtsExtendedEventItem), alignof(GstMpegtsExtendedEventItem));
     printf("%s;%zu;%zu\n", "GstMpegtsHdmvStreamType", sizeof(GstMpegtsHdmvStreamType), alignof(GstMpegtsHdmvStreamType));
     printf("%s;%zu;%zu\n", "GstMpegtsISDBDescriptorType", sizeof(GstMpegtsISDBDescriptorType), alignof(GstMpegtsISDBDescriptorType));
     printf("%s;%zu;%zu\n", "GstMpegtsISO639LanguageDescriptor", sizeof(GstMpegtsISO639LanguageDescriptor), alignof(GstMpegtsISO639LanguageDescriptor));
     printf("%s;%zu;%zu\n", "GstMpegtsIso639AudioType", sizeof(GstMpegtsIso639AudioType), alignof(GstMpegtsIso639AudioType));
+    printf("%s;%zu;%zu\n", "GstMpegtsJpegXsDescriptor", sizeof(GstMpegtsJpegXsDescriptor), alignof(GstMpegtsJpegXsDescriptor));
     printf("%s;%zu;%zu\n", "GstMpegtsLogicalChannel", sizeof(GstMpegtsLogicalChannel), alignof(GstMpegtsLogicalChannel));
     printf("%s;%zu;%zu\n", "GstMpegtsLogicalChannelDescriptor", sizeof(GstMpegtsLogicalChannelDescriptor), alignof(GstMpegtsLogicalChannelDescriptor));
     printf("%s;%zu;%zu\n", "GstMpegtsMetadataApplicationFormat", sizeof(GstMpegtsMetadataApplicationFormat), alignof(GstMpegtsMetadataApplicationFormat));

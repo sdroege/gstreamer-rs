@@ -31,6 +31,11 @@ use glib::{gboolean, gconstpointer, gpointer, GType};
 // Aliases
 pub type GstAnalyticsMtdType = uintptr_t;
 
+// Enums
+pub type GstSegmentationType = c_int;
+pub const GST_SEGMENTATION_TYPE_SEMANTIC: GstSegmentationType = 0;
+pub const GST_SEGMENTATION_TYPE_INSTANCE: GstSegmentationType = 1;
+
 // Constants
 pub const GST_INF_RELATION_SPAN: c_int = -1;
 pub const GST_ANALYTICS_MTD_TYPE_ANY: c_int = 0;
@@ -90,7 +95,8 @@ pub struct GstAnalyticsMtdImpl {
             gpointer,
         ) -> gboolean,
     >,
-    pub _reserved: [gpointer; 20],
+    pub mtd_meta_clear: Option<unsafe extern "C" fn(*mut gst::GstBuffer, *mut GstAnalyticsMtd)>,
+    pub _reserved: [gpointer; 19],
 }
 
 impl ::std::fmt::Debug for GstAnalyticsMtdImpl {
@@ -98,6 +104,7 @@ impl ::std::fmt::Debug for GstAnalyticsMtdImpl {
         f.debug_struct(&format!("GstAnalyticsMtdImpl @ {self:p}"))
             .field("name", &self.name)
             .field("mtd_meta_transform", &self.mtd_meta_transform)
+            .field("mtd_meta_clear", &self.mtd_meta_clear)
             .finish()
     }
 }
@@ -145,6 +152,22 @@ impl ::std::fmt::Debug for GstAnalyticsRelationMetaInitParams {
 
 #[derive(Copy, Clone)]
 #[repr(C)]
+pub struct GstAnalyticsSegmentationMtd {
+    pub id: c_uint,
+    pub meta: *mut GstAnalyticsRelationMeta,
+}
+
+impl ::std::fmt::Debug for GstAnalyticsSegmentationMtd {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstAnalyticsSegmentationMtd @ {self:p}"))
+            .field("id", &self.id)
+            .field("meta", &self.meta)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
 pub struct GstAnalyticsTrackingMtd {
     pub id: c_uint,
     pub meta: *mut GstAnalyticsRelationMeta,
@@ -165,16 +188,16 @@ extern "C" {
     // GstAnalyticsClsMtd
     //=========================================================================
     pub fn gst_analytics_cls_mtd_get_index_by_quark(
-        handle: *mut GstAnalyticsClsMtd,
+        handle: *const GstAnalyticsClsMtd,
         quark: glib::GQuark,
     ) -> c_int;
-    pub fn gst_analytics_cls_mtd_get_length(handle: *mut GstAnalyticsClsMtd) -> size_t;
+    pub fn gst_analytics_cls_mtd_get_length(handle: *const GstAnalyticsClsMtd) -> size_t;
     pub fn gst_analytics_cls_mtd_get_level(
-        handle: *mut GstAnalyticsClsMtd,
+        handle: *const GstAnalyticsClsMtd,
         index: size_t,
     ) -> c_float;
     pub fn gst_analytics_cls_mtd_get_quark(
-        handle: *mut GstAnalyticsClsMtd,
+        handle: *const GstAnalyticsClsMtd,
         index: size_t,
     ) -> glib::GQuark;
     pub fn gst_analytics_cls_mtd_get_mtd_type() -> GstAnalyticsMtdType;
@@ -182,27 +205,27 @@ extern "C" {
     //=========================================================================
     // GstAnalyticsMtd
     //=========================================================================
-    pub fn gst_analytics_mtd_get_id(instance: *mut GstAnalyticsMtd) -> c_uint;
-    pub fn gst_analytics_mtd_get_mtd_type(instance: *mut GstAnalyticsMtd) -> GstAnalyticsMtdType;
-    pub fn gst_analytics_mtd_get_size(instance: *mut GstAnalyticsMtd) -> size_t;
+    pub fn gst_analytics_mtd_get_id(instance: *const GstAnalyticsMtd) -> c_uint;
+    pub fn gst_analytics_mtd_get_mtd_type(instance: *const GstAnalyticsMtd) -> GstAnalyticsMtdType;
+    pub fn gst_analytics_mtd_get_size(instance: *const GstAnalyticsMtd) -> size_t;
     pub fn gst_analytics_mtd_type_get_name(type_: GstAnalyticsMtdType) -> *const c_char;
 
     //=========================================================================
     // GstAnalyticsODMtd
     //=========================================================================
     pub fn gst_analytics_od_mtd_get_confidence_lvl(
-        instance: *mut GstAnalyticsODMtd,
+        instance: *const GstAnalyticsODMtd,
         loc_conf_lvl: *mut c_float,
     ) -> gboolean;
     pub fn gst_analytics_od_mtd_get_location(
-        instance: *mut GstAnalyticsODMtd,
+        instance: *const GstAnalyticsODMtd,
         x: *mut c_int,
         y: *mut c_int,
         w: *mut c_int,
         h: *mut c_int,
         loc_conf_lvl: *mut c_float,
     ) -> gboolean;
-    pub fn gst_analytics_od_mtd_get_obj_type(handle: *mut GstAnalyticsODMtd) -> glib::GQuark;
+    pub fn gst_analytics_od_mtd_get_obj_type(handle: *const GstAnalyticsODMtd) -> glib::GQuark;
     pub fn gst_analytics_od_mtd_get_mtd_type() -> GstAnalyticsMtdType;
 
     //=========================================================================
@@ -237,6 +260,20 @@ extern "C" {
         class_quark: glib::GQuark,
         cls_mtd: *mut GstAnalyticsClsMtd,
     ) -> gboolean;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_analytics_relation_meta_add_segmentation_mtd(
+        instance: *mut GstAnalyticsRelationMeta,
+        buffer: *mut gst::GstBuffer,
+        segmentation_type: GstSegmentationType,
+        region_count: size_t,
+        region_ids: *mut c_uint,
+        masks_loc_x: c_int,
+        masks_loc_y: c_int,
+        masks_loc_w: c_uint,
+        masks_loc_h: c_uint,
+        segmentation_mtd: *mut GstAnalyticsSegmentationMtd,
+    ) -> gboolean;
     pub fn gst_analytics_relation_meta_add_tracking_mtd(
         instance: *mut GstAnalyticsRelationMeta,
         tracking_id: u64,
@@ -244,7 +281,7 @@ extern "C" {
         trk_mtd: *mut GstAnalyticsTrackingMtd,
     ) -> gboolean;
     pub fn gst_analytics_relation_meta_exist(
-        rmeta: *mut GstAnalyticsRelationMeta,
+        rmeta: *const GstAnalyticsRelationMeta,
         an_meta_first_id: c_uint,
         an_meta_second_id: c_uint,
         max_relation_span: c_int,
@@ -271,7 +308,7 @@ extern "C" {
         rlt: *mut GstAnalyticsMtd,
     ) -> gboolean;
     pub fn gst_analytics_relation_meta_get_mtd_data(
-        meta: *mut GstAnalyticsRelationMeta,
+        meta: *const GstAnalyticsRelationMeta,
         an_meta_id: c_uint,
     ) -> gpointer;
     pub fn gst_analytics_relation_meta_get_od_mtd(
@@ -280,7 +317,7 @@ extern "C" {
         rlt: *mut GstAnalyticsODMtd,
     ) -> gboolean;
     pub fn gst_analytics_relation_meta_get_relation(
-        meta: *mut GstAnalyticsRelationMeta,
+        meta: *const GstAnalyticsRelationMeta,
         an_meta_first_id: c_uint,
         an_meta_second_id: c_uint,
     ) -> GstAnalyticsRelTypes;
@@ -304,10 +341,44 @@ extern "C" {
     pub fn gst_analytics_relation_meta_get_info() -> *const gst::GstMetaInfo;
 
     //=========================================================================
+    // GstAnalyticsSegmentationMtd
+    //=========================================================================
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_analytics_segmentation_mtd_get_mask(
+        handle: *const GstAnalyticsSegmentationMtd,
+        masks_loc_x: *mut c_int,
+        masks_loc_y: *mut c_int,
+        masks_loc_w: *mut c_uint,
+        masks_loc_h: *mut c_uint,
+    ) -> *mut gst::GstBuffer;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_analytics_segmentation_mtd_get_region_count(
+        handle: *const GstAnalyticsSegmentationMtd,
+    ) -> size_t;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_analytics_segmentation_mtd_get_region_id(
+        handle: *const GstAnalyticsSegmentationMtd,
+        index: size_t,
+    ) -> c_uint;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_analytics_segmentation_mtd_get_region_index(
+        handle: *const GstAnalyticsSegmentationMtd,
+        index: *mut size_t,
+        id: c_uint,
+    ) -> gboolean;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_analytics_segmentation_mtd_get_mtd_type() -> GstAnalyticsMtdType;
+
+    //=========================================================================
     // GstAnalyticsTrackingMtd
     //=========================================================================
     pub fn gst_analytics_tracking_mtd_get_info(
-        instance: *mut GstAnalyticsTrackingMtd,
+        instance: *const GstAnalyticsTrackingMtd,
         tracking_id: *mut u64,
         tracking_first_seen: *mut gst::GstClockTime,
         tracking_last_seen: *mut gst::GstClockTime,
@@ -333,7 +404,7 @@ extern "C" {
     pub fn gst_buffer_get_analytics_relation_meta(
         buffer: *mut gst::GstBuffer,
     ) -> *mut GstAnalyticsRelationMeta;
-    pub fn gst_analytics_relation_get_length(instance: *mut GstAnalyticsRelationMeta) -> size_t;
+    pub fn gst_analytics_relation_get_length(instance: *const GstAnalyticsRelationMeta) -> size_t;
     pub fn gst_analytics_relation_meta_api_get_type() -> GType;
 
 }
