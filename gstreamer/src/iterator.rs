@@ -200,7 +200,22 @@ where
 {
     pub fn from_vec(items: Vec<T>) -> Self {
         skip_assert_initialized!();
-        Self::new(VecIteratorImpl::new(items))
+        Self::new(ArrayIteratorImpl::new(items))
+    }
+
+    pub fn from_array<A: AsRef<[T]> + Send + Clone + 'static>(items: A) -> Self {
+        skip_assert_initialized!();
+        Self::new(ArrayIteratorImpl::new(items))
+    }
+
+    pub fn from_option(items: Option<T>) -> Self {
+        skip_assert_initialized!();
+        Self::new(OptionIteratorImpl::new(items))
+    }
+
+    pub fn from_single(item: T) -> Self {
+        skip_assert_initialized!();
+        Self::new(OptionIteratorImpl::new(Some(item)))
     }
 }
 
@@ -282,28 +297,32 @@ where
 }
 
 #[derive(Clone)]
-struct VecIteratorImpl<T> {
+struct ArrayIteratorImpl<A, T> {
     pos: usize,
-    items: Vec<T>,
+    items: A,
+    phantom: PhantomData<T>,
 }
 
-impl<T> VecIteratorImpl<T>
-where
-    for<'a> T: StaticType + ToValue + FromValue<'a> + Clone + Send + 'static,
-{
-    fn new(items: Vec<T>) -> Self {
+impl<T, A> ArrayIteratorImpl<A, T> {
+    fn new(items: A) -> Self {
         skip_assert_initialized!();
-        Self { pos: 0, items }
+        Self {
+            pos: 0,
+            items,
+            phantom: PhantomData,
+        }
     }
 }
 
-impl<T> IteratorImpl<T> for VecIteratorImpl<T>
+impl<T, A> IteratorImpl<T> for ArrayIteratorImpl<A, T>
 where
+    A: AsRef<[T]> + Send + Clone + 'static,
     for<'a> T: StaticType + ToValue + FromValue<'a> + Clone + Send + 'static,
 {
     fn next(&mut self) -> Option<Result<T, IteratorError>> {
-        if self.pos < self.items.len() {
-            let res = Ok(self.items[self.pos].clone());
+        let items = self.items.as_ref();
+        if self.pos < items.len() {
+            let res = Ok(items[self.pos].clone());
             self.pos += 1;
             return Some(res);
         }
@@ -313,6 +332,40 @@ where
 
     fn resync(&mut self) {
         self.pos = 0;
+    }
+}
+
+#[derive(Clone)]
+struct OptionIteratorImpl<T> {
+    finished: bool,
+    items: Option<T>,
+}
+
+impl<T> OptionIteratorImpl<T> {
+    fn new(items: Option<T>) -> Self {
+        skip_assert_initialized!();
+        Self {
+            finished: false,
+            items,
+        }
+    }
+}
+
+impl<T> IteratorImpl<T> for OptionIteratorImpl<T>
+where
+    for<'a> T: StaticType + ToValue + FromValue<'a> + Clone + Send + 'static,
+{
+    fn next(&mut self) -> Option<Result<T, IteratorError>> {
+        if self.finished {
+            return None;
+        }
+        let res = Ok(self.items.clone()).transpose();
+        self.finished = true;
+        res
+    }
+
+    fn resync(&mut self) {
+        self.finished = false;
     }
 }
 
