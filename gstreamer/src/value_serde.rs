@@ -6,31 +6,34 @@ use std::{fmt, mem};
 
 use glib::{prelude::*, Date};
 use num_rational::Rational32;
-use once_cell::sync::Lazy;
 use serde::{
     de,
     de::{Deserialize, Deserializer, SeqAccess, Visitor},
     ser,
     ser::{Serialize, SerializeTuple, Serializer},
 };
+use std::sync::LazyLock;
 
 use crate::{date_time_serde, value::*, Buffer, DateTime, List, Sample, Structure};
 
-pub(crate) static ARRAY_OTHER_TYPE_ID: Lazy<glib::Type> = Lazy::new(Array::static_type);
-pub(crate) static BITMASK_OTHER_TYPE_ID: Lazy<glib::Type> = Lazy::new(Bitmask::static_type);
-pub(crate) static DATE_OTHER_TYPE_ID: Lazy<glib::Type> = Lazy::new(Date::static_type);
-pub(crate) static DATE_TIME_OTHER_TYPE_ID: Lazy<glib::Type> = Lazy::new(DateTime::static_type);
-pub(crate) static FRACTION_OTHER_TYPE_ID: Lazy<glib::Type> = Lazy::new(Fraction::static_type);
-pub(crate) static FRACTION_RANGE_OTHER_TYPE_ID: Lazy<glib::Type> =
-    Lazy::new(FractionRange::static_type);
-pub(crate) static INT_RANGE_I32_OTHER_TYPE_ID: Lazy<glib::Type> =
-    Lazy::new(IntRange::<i32>::static_type);
-pub(crate) static INT_RANGE_I64_OTHER_TYPE_ID: Lazy<glib::Type> =
-    Lazy::new(IntRange::<i64>::static_type);
-pub(crate) static LIST_OTHER_TYPE_ID: Lazy<glib::Type> = Lazy::new(List::static_type);
-pub(crate) static SAMPLE_OTHER_TYPE_ID: Lazy<glib::Type> = Lazy::new(Sample::static_type);
-pub(crate) static BUFFER_OTHER_TYPE_ID: Lazy<glib::Type> = Lazy::new(Buffer::static_type);
-pub(crate) static STRUCTURE_OTHER_TYPE_ID: Lazy<glib::Type> = Lazy::new(Structure::static_type);
+pub(crate) static ARRAY_OTHER_TYPE_ID: LazyLock<glib::Type> = LazyLock::new(Array::static_type);
+pub(crate) static BITMASK_OTHER_TYPE_ID: LazyLock<glib::Type> = LazyLock::new(Bitmask::static_type);
+pub(crate) static DATE_OTHER_TYPE_ID: LazyLock<glib::Type> = LazyLock::new(Date::static_type);
+pub(crate) static DATE_TIME_OTHER_TYPE_ID: LazyLock<glib::Type> =
+    LazyLock::new(DateTime::static_type);
+pub(crate) static FRACTION_OTHER_TYPE_ID: LazyLock<glib::Type> =
+    LazyLock::new(Fraction::static_type);
+pub(crate) static FRACTION_RANGE_OTHER_TYPE_ID: LazyLock<glib::Type> =
+    LazyLock::new(FractionRange::static_type);
+pub(crate) static INT_RANGE_I32_OTHER_TYPE_ID: LazyLock<glib::Type> =
+    LazyLock::new(IntRange::<i32>::static_type);
+pub(crate) static INT_RANGE_I64_OTHER_TYPE_ID: LazyLock<glib::Type> =
+    LazyLock::new(IntRange::<i64>::static_type);
+pub(crate) static LIST_OTHER_TYPE_ID: LazyLock<glib::Type> = LazyLock::new(List::static_type);
+pub(crate) static SAMPLE_OTHER_TYPE_ID: LazyLock<glib::Type> = LazyLock::new(Sample::static_type);
+pub(crate) static BUFFER_OTHER_TYPE_ID: LazyLock<glib::Type> = LazyLock::new(Buffer::static_type);
+pub(crate) static STRUCTURE_OTHER_TYPE_ID: LazyLock<glib::Type> =
+    LazyLock::new(Structure::static_type);
 
 impl Serialize for Fraction {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {

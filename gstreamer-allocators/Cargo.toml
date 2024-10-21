@@ -18,7 +18,6 @@ libc = "0.2"
 gstreamer-allocators-sys.workspace = true
 glib.workspace = true
 gst.workspace = true
-once_cell = "1"
 
 [dev-dependencies]
 gir-format-check = "0.1"

@@ -5,7 +5,7 @@ use std::{
 };
 
 use gst::{glib, prelude::*};
-use once_cell::sync::Lazy;
+use std::sync::LazyLock;
 use thiserror::Error;
 
 // Small wrapper around AtomicU64 and a Mutex, to allow it to run regular AtomicU64
@@ -59,7 +59,7 @@ impl WrappedAtomicU64 {
     }
 }
 
-static CAT: Lazy<gst::DebugCategory> = Lazy::new(|| {
+static CAT: LazyLock<gst::DebugCategory> = LazyLock::new(|| {
     gst::DebugCategory::new(
         "utilsrs-stream-producer",
         gst::DebugColorFlags::empty(),

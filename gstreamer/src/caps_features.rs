@@ -11,7 +11,7 @@ use std::{
 
 use crate::ffi;
 use glib::{prelude::*, translate::*};
-use once_cell::sync::Lazy;
+use std::sync::LazyLock;
 
 #[doc(alias = "GstCapsFeatures")]
 #[repr(transparent)]
@@ -860,8 +860,8 @@ unsafe impl Send for CapsFeaturesRef {}
 
 pub static CAPS_FEATURE_MEMORY_SYSTEM_MEMORY: &glib::GStr =
     unsafe { glib::GStr::from_utf8_with_nul_unchecked(ffi::GST_CAPS_FEATURE_MEMORY_SYSTEM_MEMORY) };
-pub static CAPS_FEATURES_MEMORY_SYSTEM_MEMORY: Lazy<CapsFeatures> =
-    Lazy::new(|| CapsFeatures::new([CAPS_FEATURE_MEMORY_SYSTEM_MEMORY]));
+pub static CAPS_FEATURES_MEMORY_SYSTEM_MEMORY: LazyLock<CapsFeatures> =
+    LazyLock::new(|| CapsFeatures::new([CAPS_FEATURE_MEMORY_SYSTEM_MEMORY]));
 
 #[cfg(test)]
 mod tests {

@@ -18,10 +18,10 @@ mod examples_common;
 mod fir_filter {
     use byte_slice_cast::*;
     use gst_base::subclass::prelude::*;
-    use once_cell::sync::Lazy;
+    use std::sync::LazyLock;
 
     // The debug category we use below for our filter
-    pub static CAT: Lazy<gst::DebugCategory> = Lazy::new(|| {
+    pub static CAT: LazyLock<gst::DebugCategory> = LazyLock::new(|| {
         gst::DebugCategory::new(
             "rsfirfilter",
             gst::DebugColorFlags::empty(),

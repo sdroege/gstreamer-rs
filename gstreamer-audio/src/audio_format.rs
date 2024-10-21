@@ -4,10 +4,10 @@ use std::str;
 
 use crate::ffi;
 use glib::translate::{from_glib, IntoGlib};
-use once_cell::sync::Lazy;
+use std::sync::LazyLock;
 
 #[cfg(feature = "v1_18")]
-pub static AUDIO_FORMATS_ALL: Lazy<Box<[crate::AudioFormat]>> = Lazy::new(|| unsafe {
+pub static AUDIO_FORMATS_ALL: LazyLock<Box<[crate::AudioFormat]>> = LazyLock::new(|| unsafe {
     let mut len: u32 = 0;
     let mut res = Vec::with_capacity(len as usize);
     let formats = ffi::gst_audio_formats_raw(&mut len);
@@ -19,7 +19,7 @@ pub static AUDIO_FORMATS_ALL: Lazy<Box<[crate::AudioFormat]>> = Lazy::new(|| uns
 });
 
 #[cfg(not(feature = "v1_18"))]
-pub static AUDIO_FORMATS_ALL: Lazy<Box<[crate::AudioFormat]>> = Lazy::new(|| {
+pub static AUDIO_FORMATS_ALL: LazyLock<Box<[crate::AudioFormat]>> = LazyLock::new(|| {
     #[cfg(target_endian = "little")]
     {
         Box::new([

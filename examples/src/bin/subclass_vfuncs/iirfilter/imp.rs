@@ -4,14 +4,14 @@ use std::{collections::VecDeque, sync::Mutex};
 
 use glib::prelude::*;
 use gst_audio::subclass::prelude::*;
-use once_cell::sync::Lazy;
+use std::sync::LazyLock;
 
 use byte_slice_cast::*;
 
 use atomic_refcell::AtomicRefCell;
 
 // The debug category we use below for our filter
-pub static CAT: Lazy<gst::DebugCategory> = Lazy::new(|| {
+pub static CAT: LazyLock<gst::DebugCategory> = LazyLock::new(|| {
     gst::DebugCategory::new(
         "rsiirfilter",
         gst::DebugColorFlags::empty(),

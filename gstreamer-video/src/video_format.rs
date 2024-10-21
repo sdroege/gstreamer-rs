@@ -4,10 +4,10 @@ use std::str;
 
 use crate::ffi;
 use glib::translate::{from_glib, FromGlib, IntoGlib};
-use once_cell::sync::Lazy;
+use std::sync::LazyLock;
 
 #[cfg(feature = "v1_18")]
-pub static VIDEO_FORMATS_ALL: Lazy<Box<[crate::VideoFormat]>> = Lazy::new(|| unsafe {
+pub static VIDEO_FORMATS_ALL: LazyLock<Box<[crate::VideoFormat]>> = LazyLock::new(|| unsafe {
     let mut len: u32 = 0;
     let mut res = Vec::with_capacity(len as usize);
     let formats = ffi::gst_video_formats_raw(&mut len);
@@ -19,7 +19,7 @@ pub static VIDEO_FORMATS_ALL: Lazy<Box<[crate::VideoFormat]>> = Lazy::new(|| uns
 });
 
 #[cfg(not(feature = "v1_18"))]
-pub static VIDEO_FORMATS_ALL: Lazy<Box<[crate::VideoFormat]>> = Lazy::new(|| {
+pub static VIDEO_FORMATS_ALL: LazyLock<Box<[crate::VideoFormat]>> = LazyLock::new(|| {
     #[cfg(target_endian = "little")]
     {
         Box::new([
@@ -211,7 +211,7 @@ pub static VIDEO_FORMATS_ALL: Lazy<Box<[crate::VideoFormat]>> = Lazy::new(|| {
 });
 
 #[cfg(feature = "v1_24")]
-pub static VIDEO_FORMATS_ANY: Lazy<Box<[crate::VideoFormat]>> = Lazy::new(|| unsafe {
+pub static VIDEO_FORMATS_ANY: LazyLock<Box<[crate::VideoFormat]>> = LazyLock::new(|| unsafe {
     let mut len: u32 = 0;
     let mut res = Vec::with_capacity(len as usize);
     let formats = ffi::gst_video_formats_any(&mut len);

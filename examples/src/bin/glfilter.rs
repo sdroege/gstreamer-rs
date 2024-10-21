@@ -38,11 +38,11 @@ mod mirror {
         subclass::{prelude::*, GLFilterMode},
         *,
     };
-    use once_cell::sync::Lazy;
+    use std::sync::LazyLock;
 
     use super::{gl, FRAGMENT_SHADER};
 
-    pub static CAT: Lazy<gst::DebugCategory> = Lazy::new(|| {
+    pub static CAT: LazyLock<gst::DebugCategory> = LazyLock::new(|| {
         gst::DebugCategory::new(
             "rsglmirrorfilter",
             gst::DebugColorFlags::empty(),

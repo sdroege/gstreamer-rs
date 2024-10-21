@@ -539,7 +539,6 @@ dependencies = [
  "memfd",
  "memmap2",
  "objc",
- "once_cell",
  "pango",
  "pangocairo",
  "raw-window-handle",
@@ -890,7 +889,6 @@ dependencies = [
  "muldiv",
  "num-integer",
  "num-rational",
- "once_cell",
  "option-operations",
  "paste",
  "pin-project-lite",
@@ -911,7 +909,6 @@ dependencies = [
  "gstreamer",
  "gstreamer-allocators-sys",
  "libc",
- "once_cell",
 ]
 
 [[package]]
@@ -991,7 +988,6 @@ dependencies = [
  "gstreamer-base",
  "itertools",
  "libc",
- "once_cell",
  "serde",
  "serde_json",
  "smallvec",
@@ -1126,7 +1122,6 @@ dependencies = [
  "gstreamer-gl-sys",
  "gstreamer-video",
  "libc",
- "once_cell",
  "serde",
  "serde_json",
 ]
@@ -1502,7 +1497,6 @@ dependencies = [
  "gstreamer",
  "gstreamer-app",
  "gstreamer-video",
- "once_cell",
  "thiserror",
 ]
 
@@ -1546,7 +1540,6 @@ dependencies = [
  "gstreamer-video-sys",
  "itertools",
  "libc",
- "once_cell",
  "serde",
  "serde_json",
  "thiserror",

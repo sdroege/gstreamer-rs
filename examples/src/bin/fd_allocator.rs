@@ -365,9 +365,9 @@ mod video_filter {
         use gst_app::gst_base::subclass::BaseTransformMode;
         use gst_video::{prelude::*, subclass::prelude::*, VideoFrameRef};
         use memmap2::MmapMut;
-        use once_cell::sync::Lazy;
+        use std::sync::LazyLock;
 
-        static CAT: Lazy<gst::DebugCategory> = Lazy::new(|| {
+        static CAT: LazyLock<gst::DebugCategory> = LazyLock::new(|| {
             gst::DebugCategory::new(
                 "fdmemoryfilter",
                 gst::DebugColorFlags::empty(),

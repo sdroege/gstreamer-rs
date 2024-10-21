@@ -6,7 +6,7 @@ use glib::{ffi::gpointer, prelude::*, translate::*};
 use libc::c_char;
 #[cfg(feature = "log")]
 use log;
-use once_cell::sync::Lazy;
+use std::sync::LazyLock;
 
 use crate::{ffi, DebugLevel};
 
@@ -563,7 +563,7 @@ impl FromGlibPtrFull<*mut ffi::GstDebugCategory> for DebugCategory {
     }
 }
 
-pub static CAT_RUST: Lazy<DebugCategory> = Lazy::new(|| {
+pub static CAT_RUST: LazyLock<DebugCategory> = LazyLock::new(|| {
     DebugCategory::new(
         "GST_RUST",
         crate::DebugColorFlags::UNDERLINE,
@@ -573,7 +573,7 @@ pub static CAT_RUST: Lazy<DebugCategory> = Lazy::new(|| {
 
 macro_rules! declare_debug_category_from_name(
     ($cat:ident, $cat_name:expr) => (
-        pub static $cat: Lazy<DebugCategory> = Lazy::new(|| DebugCategory::get($cat_name)
+        pub static $cat: LazyLock<DebugCategory> = LazyLock::new(|| DebugCategory::get($cat_name)
             .expect(&format!("Unable to find `DebugCategory` with name {}", $cat_name)));
     );
 );
@@ -1365,7 +1365,7 @@ mod tests {
     }
 
     #[cfg(feature = "log")]
-    static LOGGER: Lazy<DebugCategoryLogger> = Lazy::new(|| {
+    static LOGGER: LazyLock<DebugCategoryLogger> = LazyLock::new(|| {
         DebugCategoryLogger::new(DebugCategory::new(
             "Log_trait",
             crate::DebugColorFlags::empty(),
