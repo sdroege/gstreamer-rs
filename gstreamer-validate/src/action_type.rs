@@ -176,10 +176,7 @@ impl<'a> ActionParameterBuilder<'a> {
     }
 }
 
-type ActionFunction = dyn Fn(
-        &crate::Scenario,
-        glib::translate::Borrowed<crate::Action>,
-    ) -> Result<crate::ActionSuccess, crate::ActionError>
+type ActionFunction = dyn Fn(&crate::Scenario, &mut crate::ActionRef) -> Result<crate::ActionSuccess, crate::ActionError>
     + Sync
     + Send
     + 'static;
@@ -201,7 +198,7 @@ impl<'a> ActionTypeBuilder<'a> {
     pub fn new<
         F: Fn(
                 &crate::Scenario,
-                glib::translate::Borrowed<crate::Action>,
+                &mut crate::ActionRef,
             ) -> Result<crate::ActionSuccess, crate::ActionError>
             + Send
             + Sync
@@ -325,21 +322,20 @@ impl<'a> ActionTypeBuilder<'a> {
         ) -> c_int {
             let action_type = ffi::gst_validate_get_action_type((*action).type_);
             let scenario = from_glib_borrow(scenario);
-            let raction = from_glib_borrow(action);
 
             let func: &ActionFunction = &*(gst::ffi::gst_mini_object_get_qdata(
                 action_type as *mut gst::ffi::GstMiniObject,
                 QUARK_ACTION_TYPE_FUNC.get().unwrap().into_glib(),
             ) as *const Box<ActionFunction>);
 
-            let res = (*func)(&scenario, raction);
+            let res = (*func)(&scenario, crate::ActionRef::from_mut_ptr(action));
 
             if let Err(crate::ActionError::Error(ref err)) = res {
                 scenario
                     .dynamic_cast_ref::<crate::Reporter>()
                     .unwrap()
                     .report_action(
-                        &crate::Action::from_glib_none(action),
+                        &from_glib_borrow(action),
                         glib::Quark::from_str("scenario::execution-error"),
                         err,
                     );
