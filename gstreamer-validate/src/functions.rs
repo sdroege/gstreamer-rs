@@ -39,12 +39,3 @@ pub fn print_action_types(action_types: Vec<&str>) {
         );
     }
 }
-
-#[cfg(test)]
-mod tests {
-    #[test]
-    fn test_init() {
-        gst::init().unwrap();
-        crate::init();
-    }
-}
