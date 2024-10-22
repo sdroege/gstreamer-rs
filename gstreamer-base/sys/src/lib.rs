@@ -1898,6 +1898,12 @@ extern "C" {
         self_: *mut GstAggregator,
         pad: *mut GstAggregatorPad,
     ) -> *mut gst::GstSample;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_aggregator_push_src_event(
+        aggregator: *mut GstAggregator,
+        event: *mut gst::GstEvent,
+    ) -> gboolean;
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_aggregator_selected_samples(

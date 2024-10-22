@@ -4011,6 +4011,12 @@ extern "C" {
         frame: *mut GstVideoCodecFrame,
         size: size_t,
     ) -> gst::GstFlowReturn;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_video_encoder_drop_frame(
+        encoder: *mut GstVideoEncoder,
+        frame: *mut GstVideoCodecFrame,
+    );
     pub fn gst_video_encoder_finish_frame(
         encoder: *mut GstVideoEncoder,
         frame: *mut GstVideoCodecFrame,
@@ -4063,6 +4069,12 @@ extern "C" {
         caps: *mut gst::GstCaps,
         filter: *mut gst::GstCaps,
     ) -> *mut gst::GstCaps;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_video_encoder_release_frame(
+        encoder: *mut GstVideoEncoder,
+        frame: *mut GstVideoCodecFrame,
+    );
     pub fn gst_video_encoder_set_headers(encoder: *mut GstVideoEncoder, headers: *mut glib::GList);
     pub fn gst_video_encoder_set_latency(
         encoder: *mut GstVideoEncoder,

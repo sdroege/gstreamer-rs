@@ -539,6 +539,13 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "GstMpegtsExtendedDescriptorType",
+        Layout {
+            size: size_of::<GstMpegtsExtendedDescriptorType>(),
+            alignment: align_of::<GstMpegtsExtendedDescriptorType>(),
+        },
+    ),
+    (
         "GstMpegtsExtendedEventDescriptor",
         Layout {
             size: size_of::<GstMpegtsExtendedEventDescriptor>(),
@@ -578,6 +585,13 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         Layout {
             size: size_of::<GstMpegtsIso639AudioType>(),
             alignment: align_of::<GstMpegtsIso639AudioType>(),
+        },
+    ),
+    (
+        "GstMpegtsJpegXsDescriptor",
+        Layout {
+            size: size_of::<GstMpegtsJpegXsDescriptor>(),
+            alignment: align_of::<GstMpegtsJpegXsDescriptor>(),
         },
     ),
     (
@@ -1211,6 +1225,7 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ),
     ("(gint) GST_MPEGTS_STREAM_TYPE_VIDEO_HEVC", "36"),
     ("(gint) GST_MPEGTS_STREAM_TYPE_VIDEO_JP2K", "33"),
+    ("(gint) GST_MPEGTS_STREAM_TYPE_VIDEO_JPEG_XS", "50"),
     ("(gint) GST_MPEGTS_STREAM_TYPE_VIDEO_MPEG1", "1"),
     ("(gint) GST_MPEGTS_STREAM_TYPE_VIDEO_MPEG2", "2"),
     (
@@ -1336,6 +1351,7 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_MTS_DESC_DVB_VBI_DATA", "69"),
     ("(gint) GST_MTS_DESC_DVB_VBI_TELETEXT", "70"),
     ("(gint) GST_MTS_DESC_DVB_XAIT_LOCATION", "125"),
+    ("(gint) GST_MTS_DESC_EXTENSION", "63"),
     ("(gint) GST_MTS_DESC_EXTERNAL_ES_ID", "32"),
     ("(gint) GST_MTS_DESC_EXT_DVB_AC4", "21"),
     ("(gint) GST_MTS_DESC_EXT_DVB_AUDIO_PRESELECTION", "25"),
@@ -1358,6 +1374,7 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_MTS_DESC_EXT_DVB_URI_LINKAGE", "19"),
     ("(gint) GST_MTS_DESC_EXT_DVB_VIDEO_DEPTH_RANGE", "16"),
     ("(gint) GST_MTS_DESC_EXT_DVB_XAIT_PID", "12"),
+    ("(gint) GST_MTS_DESC_EXT_JXS_VIDEO", "20"),
     ("(gint) GST_MTS_DESC_FLEX_MUX_TIMING", "44"),
     ("(gint) GST_MTS_DESC_FMC", "31"),
     ("(gint) GST_MTS_DESC_FMX_BUFFER_SIZE", "34"),

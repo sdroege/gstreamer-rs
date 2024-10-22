@@ -1157,10 +1157,16 @@ pub type GstPluginInitFunc = Option<unsafe extern "C" fn(*mut GstPlugin) -> gboo
 pub type GstPromiseChangeFunc = Option<unsafe extern "C" fn(*mut GstPromise, gpointer)>;
 pub type GstStructureFilterMapFunc =
     Option<unsafe extern "C" fn(glib::GQuark, *mut gobject::GValue, gpointer) -> gboolean>;
+pub type GstStructureFilterMapIdStrFunc =
+    Option<unsafe extern "C" fn(*const GstIdStr, *mut gobject::GValue, gpointer) -> gboolean>;
 pub type GstStructureForeachFunc =
     Option<unsafe extern "C" fn(glib::GQuark, *const gobject::GValue, gpointer) -> gboolean>;
+pub type GstStructureForeachIdStrFunc =
+    Option<unsafe extern "C" fn(*const GstIdStr, *const gobject::GValue, gpointer) -> gboolean>;
 pub type GstStructureMapFunc =
     Option<unsafe extern "C" fn(glib::GQuark, *mut gobject::GValue, gpointer) -> gboolean>;
+pub type GstStructureMapIdStrFunc =
+    Option<unsafe extern "C" fn(*const GstIdStr, *mut gobject::GValue, gpointer) -> gboolean>;
 pub type GstTagForeachFunc =
     Option<unsafe extern "C" fn(*const GstTagList, *const c_char, gpointer)>;
 pub type GstTagMergeFunc =
@@ -1980,6 +1986,19 @@ pub struct _GstGhostPadPrivate {
 }
 
 pub type GstGhostPadPrivate = _GstGhostPadPrivate;
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstIdStr {
+    pub pointer: gpointer,
+    pub padding: [u8; 8],
+}
+
+impl ::std::fmt::Debug for GstIdStr {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstIdStr @ {self:p}")).finish()
+    }
+}
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -4783,7 +4802,27 @@ extern "C" {
     pub fn gst_caps_new_empty_simple(media_type: *const c_char) -> *mut GstCaps;
     pub fn gst_caps_new_full(struct1: *mut GstStructure, ...) -> *mut GstCaps;
     //pub fn gst_caps_new_full_valist(structure: *mut GstStructure, var_args: /*Unimplemented*/va_list) -> *mut GstCaps;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_caps_new_id_str_empty_simple(media_type: *const GstIdStr) -> *mut GstCaps;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_caps_new_id_str_simple(
+        media_type: *const GstIdStr,
+        fieldname: *const GstIdStr,
+        ...
+    ) -> *mut GstCaps;
     pub fn gst_caps_new_simple(
+        media_type: *const c_char,
+        fieldname: *const c_char,
+        ...
+    ) -> *mut GstCaps;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_caps_new_static_str_empty_simple(media_type: *const c_char) -> *mut GstCaps;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_caps_new_static_str_simple(
         media_type: *const c_char,
         fieldname: *const c_char,
         ...
@@ -4816,6 +4855,19 @@ extern "C" {
     pub fn gst_caps_get_features(caps: *const GstCaps, index: c_uint) -> *mut GstCapsFeatures;
     pub fn gst_caps_get_size(caps: *const GstCaps) -> c_uint;
     pub fn gst_caps_get_structure(caps: *const GstCaps, index: c_uint) -> *mut GstStructure;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_caps_id_str_set_simple(caps: *mut GstCaps, field: *const GstIdStr, ...);
+    //#[cfg(feature = "v1_26")]
+    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    //pub fn gst_caps_id_str_set_simple_valist(caps: *mut GstCaps, field: *const GstIdStr, varargs: /*Unimplemented*/va_list);
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_caps_id_str_set_value(
+        caps: *mut GstCaps,
+        field: *const GstIdStr,
+        value: *const gobject::GValue,
+    );
     pub fn gst_caps_intersect(caps1: *mut GstCaps, caps2: *mut GstCaps) -> *mut GstCaps;
     pub fn gst_caps_intersect_full(
         caps1: *mut GstCaps,
@@ -4867,8 +4919,21 @@ extern "C" {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_caps_set_features_simple(caps: *mut GstCaps, features: *mut GstCapsFeatures);
     pub fn gst_caps_set_simple(caps: *mut GstCaps, field: *const c_char, ...);
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_caps_set_simple_static_str(caps: *mut GstCaps, field: *const c_char, ...);
+    //#[cfg(feature = "v1_26")]
+    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    //pub fn gst_caps_set_simple_static_str_valist(caps: *mut GstCaps, field: *const c_char, varargs: /*Unimplemented*/va_list);
     //pub fn gst_caps_set_simple_valist(caps: *mut GstCaps, field: *const c_char, varargs: /*Unimplemented*/va_list);
     pub fn gst_caps_set_value(
+        caps: *mut GstCaps,
+        field: *const c_char,
+        value: *const gobject::GValue,
+    );
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_caps_set_value_static_str(
         caps: *mut GstCaps,
         field: *const c_char,
         value: *const gobject::GValue,
@@ -4897,13 +4962,34 @@ extern "C" {
     pub fn gst_caps_features_new_any() -> *mut GstCapsFeatures;
     pub fn gst_caps_features_new_empty() -> *mut GstCapsFeatures;
     pub fn gst_caps_features_new_id(feature1: glib::GQuark, ...) -> *mut GstCapsFeatures;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_caps_features_new_id_str(feature1: *const GstIdStr, ...) -> *mut GstCapsFeatures;
+    //#[cfg(feature = "v1_26")]
+    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    //pub fn gst_caps_features_new_id_str_valist(feature1: *const GstIdStr, varargs: /*Unimplemented*/va_list) -> *mut GstCapsFeatures;
     //pub fn gst_caps_features_new_id_valist(feature1: glib::GQuark, varargs: /*Unimplemented*/va_list) -> *mut GstCapsFeatures;
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_caps_features_new_single(feature: *const c_char) -> *mut GstCapsFeatures;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_caps_features_new_single_static_str(feature: *const c_char) -> *mut GstCapsFeatures;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_caps_features_new_static_str(feature1: *const c_char, ...) -> *mut GstCapsFeatures;
+    //#[cfg(feature = "v1_26")]
+    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    //pub fn gst_caps_features_new_static_str_valist(feature1: *const c_char, varargs: /*Unimplemented*/va_list) -> *mut GstCapsFeatures;
     //pub fn gst_caps_features_new_valist(feature1: *const c_char, varargs: /*Unimplemented*/va_list) -> *mut GstCapsFeatures;
     pub fn gst_caps_features_add(features: *mut GstCapsFeatures, feature: *const c_char);
     pub fn gst_caps_features_add_id(features: *mut GstCapsFeatures, feature: glib::GQuark);
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_caps_features_add_id_str(features: *mut GstCapsFeatures, feature: *const GstIdStr);
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_caps_features_add_static_str(features: *mut GstCapsFeatures, feature: *const c_char);
     pub fn gst_caps_features_contains(
         features: *const GstCapsFeatures,
         feature: *const c_char,
@@ -4912,6 +4998,12 @@ extern "C" {
         features: *const GstCapsFeatures,
         feature: glib::GQuark,
     ) -> gboolean;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_caps_features_contains_id_str(
+        features: *const GstCapsFeatures,
+        feature: *const GstIdStr,
+    ) -> gboolean;
     pub fn gst_caps_features_copy(features: *const GstCapsFeatures) -> *mut GstCapsFeatures;
     pub fn gst_caps_features_free(features: *mut GstCapsFeatures);
     pub fn gst_caps_features_get_nth(features: *const GstCapsFeatures, i: c_uint) -> *const c_char;
@@ -4919,6 +5011,12 @@ extern "C" {
         features: *const GstCapsFeatures,
         i: c_uint,
     ) -> glib::GQuark;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_caps_features_get_nth_id_str(
+        features: *const GstCapsFeatures,
+        i: c_uint,
+    ) -> *const GstIdStr;
     pub fn gst_caps_features_get_size(features: *const GstCapsFeatures) -> c_uint;
     pub fn gst_caps_features_is_any(features: *const GstCapsFeatures) -> gboolean;
     pub fn gst_caps_features_is_equal(
@@ -4927,6 +5025,12 @@ extern "C" {
     ) -> gboolean;
     pub fn gst_caps_features_remove(features: *mut GstCapsFeatures, feature: *const c_char);
     pub fn gst_caps_features_remove_id(features: *mut GstCapsFeatures, feature: glib::GQuark);
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_caps_features_remove_id_str(
+        features: *mut GstCapsFeatures,
+        feature: *const GstIdStr,
+    );
     pub fn gst_caps_features_set_parent_refcount(
         features: *mut GstCapsFeatures,
         refcount: *mut c_int,
@@ -5328,6 +5432,65 @@ extern "C" {
     #[cfg(feature = "v1_18_3")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18_3")))]
     pub fn gst_event_take(old_event: *mut *mut GstEvent, new_event: *mut GstEvent) -> gboolean;
+
+    //=========================================================================
+    // GstIdStr
+    //=========================================================================
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_id_str_get_type() -> GType;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_id_str_new() -> *mut GstIdStr;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_id_str_as_str(s: *const GstIdStr) -> *const c_char;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_id_str_clear(s: *mut GstIdStr);
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_id_str_copy(s: *const GstIdStr) -> *mut GstIdStr;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_id_str_copy_into(d: *mut GstIdStr, s: *const GstIdStr);
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_id_str_free(s: *mut GstIdStr);
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_id_str_get_len(s: *const GstIdStr) -> size_t;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_id_str_init(s: *mut GstIdStr);
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_id_str_is_equal(s1: *const GstIdStr, s2: *const GstIdStr) -> gboolean;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_id_str_is_equal_to_str(s1: *const GstIdStr, s2: *const c_char) -> gboolean;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_id_str_is_equal_to_str_with_len(
+        s1: *const GstIdStr,
+        s2: *const c_char,
+        len: size_t,
+    ) -> gboolean;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_id_str_move(d: *mut GstIdStr, s: *mut GstIdStr);
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_id_str_set(s: *mut GstIdStr, value: *const c_char);
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_id_str_set_static_str(s: *mut GstIdStr, value: *const c_char);
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_id_str_set_static_str_with_len(s: *mut GstIdStr, value: *const c_char, len: size_t);
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_id_str_set_with_len(s: *mut GstIdStr, value: *const c_char, len: size_t);
 
     //=========================================================================
     // GstIterator
@@ -6516,12 +6679,14 @@ extern "C" {
     //=========================================================================
     // GstStaticCaps
     //=========================================================================
+    pub fn gst_static_caps_get_type() -> GType;
     pub fn gst_static_caps_cleanup(static_caps: *mut GstStaticCaps);
     pub fn gst_static_caps_get(static_caps: *mut GstStaticCaps) -> *mut GstCaps;
 
     //=========================================================================
     // GstStaticPadTemplate
     //=========================================================================
+    pub fn gst_static_pad_template_get_type() -> GType;
     pub fn gst_static_pad_template_get(
         pad_template: *mut GstStaticPadTemplate,
     ) -> *mut GstPadTemplate;
@@ -6548,6 +6713,32 @@ extern "C" {
         ...
     ) -> *mut GstStructure;
     pub fn gst_structure_new_id_empty(quark: glib::GQuark) -> *mut GstStructure;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_structure_new_id_str(
+        name: *const GstIdStr,
+        fieldname: *const GstIdStr,
+        ...
+    ) -> *mut GstStructure;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_structure_new_id_str_empty(name: *const GstIdStr) -> *mut GstStructure;
+    //#[cfg(feature = "v1_26")]
+    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    //pub fn gst_structure_new_id_str_valist(name: *const GstIdStr, firstfield: *const GstIdStr, varargs: /*Unimplemented*/va_list) -> *mut GstStructure;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_structure_new_static_str(
+        name: *const c_char,
+        firstfield: *const c_char,
+        ...
+    ) -> *mut GstStructure;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_structure_new_static_str_empty(name: *const c_char) -> *mut GstStructure;
+    //#[cfg(feature = "v1_26")]
+    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    //pub fn gst_structure_new_static_str_valist(name: *const c_char, firstfield: *const c_char, varargs: /*Unimplemented*/va_list) -> *mut GstStructure;
     //pub fn gst_structure_new_valist(name: *const c_char, firstfield: *const c_char, varargs: /*Unimplemented*/va_list) -> *mut GstStructure;
     pub fn gst_structure_can_intersect(
         struct1: *const GstStructure,
@@ -6557,6 +6748,13 @@ extern "C" {
     pub fn gst_structure_filter_and_map_in_place(
         structure: *mut GstStructure,
         func: GstStructureFilterMapFunc,
+        user_data: gpointer,
+    );
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_structure_filter_and_map_in_place_id_str(
+        structure: *mut GstStructure,
+        func: GstStructureFilterMapIdStrFunc,
         user_data: gpointer,
     );
     pub fn gst_structure_fixate(structure: *mut GstStructure);
@@ -6593,6 +6791,13 @@ extern "C" {
     pub fn gst_structure_foreach(
         structure: *const GstStructure,
         func: GstStructureForeachFunc,
+        user_data: gpointer,
+    ) -> gboolean;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_structure_foreach_id_str(
+        structure: *const GstStructure,
+        func: GstStructureForeachIdStrFunc,
         user_data: gpointer,
     ) -> gboolean;
     pub fn gst_structure_free(structure: *mut GstStructure);
@@ -6678,6 +6883,9 @@ extern "C" {
     ) -> gboolean;
     pub fn gst_structure_get_name(structure: *const GstStructure) -> *const c_char;
     pub fn gst_structure_get_name_id(structure: *const GstStructure) -> glib::GQuark;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_structure_get_name_id_str(structure: *const GstStructure) -> *const GstIdStr;
     pub fn gst_structure_get_string(
         structure: *const GstStructure,
         fieldname: *const c_char,
@@ -6733,6 +6941,83 @@ extern "C" {
         field: glib::GQuark,
         value: *const gobject::GValue,
     );
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_structure_id_str_get(
+        structure: *const GstStructure,
+        first_fieldname: *const GstIdStr,
+        ...
+    ) -> gboolean;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_structure_id_str_get_field_type(
+        structure: *const GstStructure,
+        fieldname: *const GstIdStr,
+    ) -> GType;
+    //#[cfg(feature = "v1_26")]
+    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    //pub fn gst_structure_id_str_get_valist(structure: *const GstStructure, first_fieldname: *const GstIdStr, args: /*Unimplemented*/va_list) -> gboolean;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_structure_id_str_get_value(
+        structure: *const GstStructure,
+        fieldname: *const GstIdStr,
+    ) -> *const gobject::GValue;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_structure_id_str_has_field(
+        structure: *const GstStructure,
+        fieldname: *const GstIdStr,
+    ) -> gboolean;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_structure_id_str_has_field_typed(
+        structure: *const GstStructure,
+        fieldname: *const GstIdStr,
+        type_: GType,
+    ) -> gboolean;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_structure_id_str_nth_field_name(
+        structure: *const GstStructure,
+        index: c_uint,
+    ) -> *const GstIdStr;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_structure_id_str_remove_field(
+        structure: *mut GstStructure,
+        fieldname: *const GstIdStr,
+    );
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_structure_id_str_remove_fields(
+        structure: *mut GstStructure,
+        fieldname: *const GstIdStr,
+        ...
+    );
+    //#[cfg(feature = "v1_26")]
+    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    //pub fn gst_structure_id_str_remove_fields_valist(structure: *mut GstStructure, fieldname: *const GstIdStr, varargs: /*Unimplemented*/va_list);
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_structure_id_str_set(structure: *mut GstStructure, fieldname: *const GstIdStr, ...);
+    //#[cfg(feature = "v1_26")]
+    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    //pub fn gst_structure_id_str_set_valist(structure: *mut GstStructure, fieldname: *const GstIdStr, varargs: /*Unimplemented*/va_list);
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_structure_id_str_set_value(
+        structure: *mut GstStructure,
+        fieldname: *const GstIdStr,
+        value: *const gobject::GValue,
+    );
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_structure_id_str_take_value(
+        structure: *mut GstStructure,
+        fieldname: *const GstIdStr,
+        value: *mut gobject::GValue,
+    );
     pub fn gst_structure_id_take_value(
         structure: *mut GstStructure,
         field: glib::GQuark,
@@ -6753,6 +7038,13 @@ extern "C" {
     pub fn gst_structure_map_in_place(
         structure: *mut GstStructure,
         func: GstStructureMapFunc,
+        user_data: gpointer,
+    ) -> gboolean;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_structure_map_in_place_id_str(
+        structure: *mut GstStructure,
+        func: GstStructureMapIdStrFunc,
         user_data: gpointer,
     ) -> gboolean;
     pub fn gst_structure_n_fields(structure: *const GstStructure) -> c_int;
@@ -6788,17 +7080,47 @@ extern "C" {
         array: *const gobject::GValueArray,
     );
     pub fn gst_structure_set_name(structure: *mut GstStructure, name: *const c_char);
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_structure_set_name_id_str(structure: *mut GstStructure, name: *const GstIdStr);
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_structure_set_name_static_str(structure: *mut GstStructure, name: *const c_char);
     pub fn gst_structure_set_parent_refcount(
         structure: *mut GstStructure,
         refcount: *mut c_int,
     ) -> gboolean;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_structure_set_static_str(
+        structure: *mut GstStructure,
+        fieldname: *const c_char,
+        ...
+    );
+    //#[cfg(feature = "v1_26")]
+    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    //pub fn gst_structure_set_static_str_valist(structure: *mut GstStructure, fieldname: *const c_char, varargs: /*Unimplemented*/va_list);
     //pub fn gst_structure_set_valist(structure: *mut GstStructure, fieldname: *const c_char, varargs: /*Unimplemented*/va_list);
     pub fn gst_structure_set_value(
         structure: *mut GstStructure,
         fieldname: *const c_char,
         value: *const gobject::GValue,
     );
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_structure_set_value_static_str(
+        structure: *mut GstStructure,
+        fieldname: *const c_char,
+        value: *const gobject::GValue,
+    );
     pub fn gst_structure_take_value(
+        structure: *mut GstStructure,
+        fieldname: *const c_char,
+        value: *mut gobject::GValue,
+    );
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_structure_take_value_static_str(
         structure: *mut GstStructure,
         fieldname: *const c_char,
         value: *mut gobject::GValue,
@@ -7082,6 +7404,7 @@ extern "C" {
     //=========================================================================
     // GstTypeFind
     //=========================================================================
+    pub fn gst_type_find_get_type() -> GType;
     pub fn gst_type_find_get_length(find: *mut GstTypeFind) -> u64;
     pub fn gst_type_find_peek(find: *mut GstTypeFind, offset: i64, size: c_uint) -> *const u8;
     pub fn gst_type_find_suggest(find: *mut GstTypeFind, probability: c_uint, caps: *mut GstCaps);
@@ -7505,14 +7828,14 @@ extern "C" {
     ) -> GstClockReturn;
     pub fn gst_clock_add_observation(
         clock: *mut GstClock,
-        slave: GstClockTime,
-        master: GstClockTime,
+        observation_internal: GstClockTime,
+        observation_external: GstClockTime,
         r_squared: *mut c_double,
     ) -> gboolean;
     pub fn gst_clock_add_observation_unapplied(
         clock: *mut GstClock,
-        slave: GstClockTime,
-        master: GstClockTime,
+        observation_internal: GstClockTime,
+        observation_external: GstClockTime,
         r_squared: *mut c_double,
         internal: *mut GstClockTime,
         external: *mut GstClockTime,
@@ -9373,8 +9696,6 @@ extern "C" {
     pub fn gst_reference_timestamp_meta_api_get_type() -> GType;
     pub fn gst_segtrap_is_enabled() -> gboolean;
     pub fn gst_segtrap_set_enabled(enabled: gboolean);
-    pub fn gst_static_caps_get_type() -> GType;
-    pub fn gst_static_pad_template_get_type() -> GType;
     pub fn gst_tag_exists(tag: *const c_char) -> gboolean;
     pub fn gst_tag_get_description(tag: *const c_char) -> *const c_char;
     pub fn gst_tag_get_flag(tag: *const c_char) -> GstTagFlag;
@@ -9410,7 +9731,6 @@ extern "C" {
         detail: *const c_char,
         func: gobject::GCallback,
     );
-    pub fn gst_type_find_get_type() -> GType;
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_type_is_plugin_api(type_: GType, flags: *mut GstPluginAPIFlags) -> gboolean;

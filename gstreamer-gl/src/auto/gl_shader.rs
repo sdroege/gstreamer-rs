@@ -144,6 +144,7 @@ impl GLShader {
     }
 
     #[doc(alias = "gst_gl_shader_is_linked")]
+    #[doc(alias = "linked")]
     pub fn is_linked(&self) -> bool {
         unsafe { from_glib(ffi::gst_gl_shader_is_linked(self.to_glib_none().0)) }
     }

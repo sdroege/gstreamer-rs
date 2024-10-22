@@ -1347,6 +1347,7 @@ extern "C" {
     //=========================================================================
     // GstRTSPContext
     //=========================================================================
+    pub fn gst_rtsp_context_get_type() -> GType;
     pub fn gst_rtsp_context_pop_current(ctx: *mut GstRTSPContext);
     pub fn gst_rtsp_context_push_current(ctx: *mut GstRTSPContext);
     #[cfg(feature = "v1_22")]
@@ -2663,7 +2664,6 @@ extern "C" {
     //=========================================================================
     // Other functions
     //=========================================================================
-    pub fn gst_rtsp_context_get_type() -> GType;
     pub fn gst_rtsp_params_get(
         client: *mut GstRTSPClient,
         ctx: *mut GstRTSPContext,

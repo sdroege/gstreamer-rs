@@ -128,6 +128,13 @@ pub trait AggregatorExt: IsA<Aggregator> + sealed::Sealed + 'static {
         }
     }
 
+    //#[cfg(feature = "v1_26")]
+    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    //#[doc(alias = "gst_aggregator_push_src_event")]
+    //fn push_src_event(&self, event: /*Ignored*/gst::Event) -> bool {
+    //    unsafe { TODO: call ffi:gst_aggregator_push_src_event() }
+    //}
+
     #[cfg(feature = "v1_22")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     #[doc(alias = "gst_aggregator_set_force_live")]

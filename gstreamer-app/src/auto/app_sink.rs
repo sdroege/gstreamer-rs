@@ -77,6 +77,7 @@ impl AppSink {
     }
 
     #[doc(alias = "gst_app_sink_is_eos")]
+    #[doc(alias = "eos")]
     pub fn is_eos(&self) -> bool {
         unsafe { from_glib(ffi::gst_app_sink_is_eos(self.to_glib_none().0)) }
     }
