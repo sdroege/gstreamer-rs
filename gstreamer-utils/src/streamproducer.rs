@@ -450,6 +450,11 @@ impl StreamProducer {
         self.consumers.lock().unwrap().events_to_forward = events_to_forward.into_iter().collect();
     }
 
+    /// get event types the appsink should forward to all its consumers
+    pub fn get_forwarded_events(&self) -> Vec<gst::EventType> {
+        self.consumers.lock().unwrap().events_to_forward.clone()
+    }
+
     /// configure whether the preroll sample should be forwarded (default: `true`)
     pub fn set_forward_preroll(&self, forward_preroll: bool) {
         self.consumers.lock().unwrap().forward_preroll = forward_preroll;
