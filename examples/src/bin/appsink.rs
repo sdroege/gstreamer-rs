@@ -156,7 +156,7 @@ fn example_main() {
 }
 
 fn main() {
-    // tutorials_common::run is only required to set up the application environment on macOS
+    // examples_common::run is only required to set up the application environment on macOS
     // (but not necessary in normal Cocoa applications where this is set up automatically)
     examples_common::run(example_main);
 }
