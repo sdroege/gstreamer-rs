@@ -21,6 +21,7 @@ macro_rules! assert_initialized_main_thread {
 }
 
 #[allow(clippy::needless_borrow)]
+#[allow(unused)]
 mod auto;
 pub(crate) use crate::auto::PlayMessage as PlayMessageType;
 pub use crate::auto::*;
@@ -37,7 +38,7 @@ mod play_signal_adapter;
 mod play_video_overlay_video_renderer;
 mod play_visualization;
 
-mod play_message;
+pub mod play_message;
 pub use crate::play_message::PlayMessage;
 
 // Re-export all the traits in a prelude module, so that applications

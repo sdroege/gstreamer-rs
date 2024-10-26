@@ -24,12 +24,12 @@ fn main_loop(uri: &str) -> Result<(), Error> {
     let mut result = Ok(());
     for msg in play.message_bus().iter_timed(gst::ClockTime::NONE) {
         match PlayMessage::parse(&msg) {
-            Ok(PlayMessage::EndOfStream) => {
+            Ok(PlayMessage::EndOfStream(_)) => {
                 play.stop();
                 break;
             }
-            Ok(PlayMessage::Error { error, details: _ }) => {
-                result = Err(error);
+            Ok(PlayMessage::Error(msg)) => {
+                result = Err(msg.error().clone());
                 play.stop();
                 break;
             }
