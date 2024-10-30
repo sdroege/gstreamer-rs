@@ -1,7 +1,7 @@
 use std::{ffi::c_int, ptr};
 
-use crate::ffi;
-use glib::{object::Cast, translate::*};
+use crate::{ffi, Action};
+use glib::translate::*;
 
 #[derive(Debug)]
 #[repr(transparent)]
@@ -176,7 +176,7 @@ impl<'a> ActionParameterBuilder<'a> {
     }
 }
 
-type ActionFunction = dyn Fn(&crate::Scenario, &mut crate::ActionRef) -> Result<crate::ActionSuccess, crate::ActionError>
+type ActionFunction = dyn Fn(&crate::Scenario, &mut crate::Action) -> Result<crate::ActionSuccess, crate::ActionError>
     + Sync
     + Send
     + 'static;
@@ -198,7 +198,7 @@ impl<'a> ActionTypeBuilder<'a> {
     pub fn new<
         F: Fn(
                 &crate::Scenario,
-                &mut crate::ActionRef,
+                &mut crate::Action,
             ) -> Result<crate::ActionSuccess, crate::ActionError>
             + Send
             + Sync
@@ -318,9 +318,9 @@ impl<'a> ActionTypeBuilder<'a> {
 
         unsafe extern "C" fn execute_func_trampoline(
             scenario: *mut ffi::GstValidateScenario,
-            action: *mut ffi::GstValidateAction,
+            mut action_ptr: *mut ffi::GstValidateAction,
         ) -> c_int {
-            let action_type = ffi::gst_validate_get_action_type((*action).type_);
+            let action_type = ffi::gst_validate_get_action_type((*action_ptr).type_);
             let scenario = from_glib_borrow(scenario);
 
             let func: &ActionFunction = &*(gst::ffi::gst_mini_object_get_qdata(
@@ -328,21 +328,21 @@ impl<'a> ActionTypeBuilder<'a> {
                 QUARK_ACTION_TYPE_FUNC.get().unwrap().into_glib(),
             ) as *const Box<ActionFunction>);
 
-            let res = (*func)(&scenario, crate::ActionRef::from_mut_ptr(action));
+            // SAFETY: `execute_func_trampoline` is called with the unic reference of `action_ptr`
+            // so we can safely borrow it mutably
+            let original_ptr = action_ptr;
+            let action = Action::from_glib_ptr_borrow_mut(&mut action_ptr);
+            let res = (*func)(&scenario, action);
 
-            if let Err(crate::ActionError::Error(ref err)) = res {
-                scenario
-                    .dynamic_cast_ref::<crate::Reporter>()
-                    .unwrap()
-                    .report_action(
-                        &from_glib_borrow(action),
-                        glib::Quark::from_str("scenario::execution-error"),
-                        err,
-                    );
-                return ffi::GST_VALIDATE_EXECUTE_ACTION_ERROR_REPORTED;
+            debug_assert_eq!(action.as_ptr(), original_ptr);
+            match res {
+                Err(crate::ActionError::Error(ref err)) => {
+                    action.report_error(err);
+                    ffi::GST_VALIDATE_EXECUTE_ACTION_ERROR_REPORTED
+                }
+                Err(_) => panic!("New action error types should be handled here."),
+                Ok(v) => v.into_glib(),
             }
-
-            res.into_glib()
         }
 
         unsafe {

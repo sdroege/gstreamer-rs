@@ -89,7 +89,6 @@ fn test_action_types() {
     assert!(!*fails_called.lock().unwrap());
     action.execute().expect_err("Action should have failed");
     assert!(*fails_called.lock().unwrap());
-    action.set_done();
 
     gst_validate::ActionParameterBuilder::new("async", "Verify unused param are properly cleaned")
         .default_value("true")
@@ -102,12 +101,26 @@ fn test_action_types() {
         glib::clone!(
             #[strong]
             async_called,
-            move |_, _action| {
+            move |_, action| {
+                let action_mut = action.get_mut().unwrap();
+                action_mut
+                    .structure_mut()
+                    .expect("We should have a structure set in that action")
+                    .set("running-async", true);
+
                 std::thread::spawn(glib::clone!(
                     #[strong]
                     async_called,
+                    #[strong]
+                    action,
                     move || {
                         *async_called.0.lock().unwrap() = true;
+
+                        assert!(action
+                            .structure()
+                            .unwrap()
+                            .get::<bool>("running-async")
+                            .unwrap());
                         action.set_done();
                     }
                 ));
