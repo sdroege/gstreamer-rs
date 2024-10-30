@@ -1,5 +1,7 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+use std::ffi::CStr;
+
 use glib::prelude::*;
 use glib::translate::*;
 
@@ -55,6 +57,13 @@ impl Action {
         }
     }
 
+    pub fn name(&self) -> &str {
+        unsafe {
+            let action: *mut ffi::GstValidateAction = self.to_glib_none().0;
+            CStr::from_ptr((*action).name).to_str().unwrap()
+        }
+    }
+
     #[doc(alias = "gst_validate_execute_action")]
     pub fn execute(&self) -> Result<crate::ActionSuccess, crate::ActionError> {
         unsafe {
@@ -69,5 +78,14 @@ impl Action {
                 Err(crate::ActionError::from_value(res))
             }
         }
+    }
+}
+
+impl std::fmt::Debug for Action {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        f.debug_struct("Action")
+            .field("structure", &self.structure())
+            .field("name", &self.name())
+            .finish()
     }
 }
