@@ -27,15 +27,6 @@ impl ActionRef {
             gst::StructureRef::from_glib_borrow_mut((*action).structure)
         }
     }
-
-    #[doc(alias = "gst_validate_action_set_done")]
-    pub fn set_done(&self) {
-        unsafe {
-            let action = self.as_mut_ptr();
-
-            ffi::gst_validate_action_set_done(action);
-        }
-    }
 }
 
 impl Action {
@@ -65,9 +56,9 @@ impl Action {
     }
 
     #[doc(alias = "gst_validate_execute_action")]
-    pub fn execute(&self) -> Result<crate::ActionSuccess, crate::ActionError> {
+    pub fn execute(self) -> Result<crate::ActionSuccess, crate::ActionError> {
         unsafe {
-            let action: *mut ffi::GstValidateAction = self.to_glib_none().0;
+            let action: *mut ffi::GstValidateAction = self.to_glib_full();
             let action_type = ffi::gst_validate_get_action_type((*action).type_);
 
             let res = ffi::gst_validate_execute_action(action_type, action);
@@ -77,6 +68,13 @@ impl Action {
             } else {
                 Err(crate::ActionError::from_value(res))
             }
+        }
+    }
+
+    #[doc(alias = "gst_validate_action_set_done")]
+    pub fn set_done(self) {
+        unsafe {
+            ffi::gst_validate_action_set_done(self.into_glib_ptr());
         }
     }
 }

@@ -60,7 +60,7 @@ fn test_action_types() {
 
     // Write scenario to temporary file
     let mut file = tempfile::NamedTempFile::new().unwrap();
-    file.write_all(b"succeeds").unwrap();
+    file.write_all(b"stop, on-message=eos").unwrap();
 
     let runner = gst_validate::Runner::new();
     let pipeline = gst::Pipeline::new();
@@ -89,6 +89,7 @@ fn test_action_types() {
     assert!(!*fails_called.lock().unwrap());
     action.execute().expect_err("Action should have failed");
     assert!(*fails_called.lock().unwrap());
+    action.set_done();
 
     gst_validate::ActionParameterBuilder::new("async", "Verify unused param are properly cleaned")
         .default_value("true")
@@ -105,8 +106,6 @@ fn test_action_types() {
                 std::thread::spawn(glib::clone!(
                     #[strong]
                     async_called,
-                    #[strong]
-                    action,
                     move || {
                         *async_called.0.lock().unwrap() = true;
                         action.set_done();
