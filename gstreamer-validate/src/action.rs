@@ -72,10 +72,20 @@ impl Action {
         }
     }
 
+    pub fn report_error(&self, error_message: &str) {
+        if let Some(scenario) = self.scenario() {
+            scenario.upcast_ref::<crate::Reporter>().report_action(
+                self,
+                glib::Quark::from_str("scenario::execution-error"),
+                error_message,
+            )
+        }
+    }
+
     #[doc(alias = "gst_validate_execute_action")]
     pub fn execute(self) -> Result<crate::ActionSuccess, crate::ActionError> {
         unsafe {
-            let action: *mut ffi::GstValidateAction = self.to_glib_full();
+            let action: *mut ffi::GstValidateAction = self.into_glib_ptr();
             let action_type = ffi::gst_validate_get_action_type((*action).type_);
 
             let res = ffi::gst_validate_execute_action(action_type, action);

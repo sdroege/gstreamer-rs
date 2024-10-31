@@ -339,7 +339,6 @@ impl<'a> ActionTypeBuilder<'a> {
                         glib::Quark::from_str("scenario::execution-error"),
                         err,
                     );
-
                 return ffi::GST_VALIDATE_EXECUTE_ACTION_ERROR_REPORTED;
             }
 
