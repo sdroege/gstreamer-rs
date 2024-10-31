@@ -27,6 +27,15 @@ impl ActionRef {
             gst::StructureRef::from_glib_borrow_mut((*action).structure)
         }
     }
+
+    #[doc(alias = "gst_validate_action_get_scenario")]
+    pub fn scenario(&self) -> Option<Scenario> {
+        unsafe {
+            let scenario = ffi::gst_validate_action_get_scenario(self.as_mut_ptr());
+
+            from_glib_full(scenario)
+        }
+    }
 }
 
 impl Action {
