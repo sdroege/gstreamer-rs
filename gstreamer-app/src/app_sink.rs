@@ -1112,7 +1112,7 @@ impl AppSinkBuilder {
 
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
-    pub fn processing_deadline(self, processing_deadline: i64) -> Self {
+    pub fn processing_deadline(self, processing_deadline: gst::ClockTime) -> Self {
         Self {
             builder: self
                 .builder
