@@ -5,6 +5,18 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.23.3] - 2024-11-01
+### Fixed
+- Bind `gst::Pad::proxy_query_caps()` to the correct C function.
+- Update `gst_utils::StreamProducer` appsrc latency upon appsink latency event.
+- Fix type of `gst_app::AppSinkBuilder::processing_deadline()`.
+
+### Added
+- Various new `gst::Iterator` constructors for convenience.
+
+### Changed
+- Updated GStreamer gir files for latest 1.26 APIs.
+
 ## [0.23.2] - 2024-09-28
 ### Fixed
 - Lifetime of `gst::TagList::index()` return value is correctly bound to `&self` now.
@@ -1790,7 +1802,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.23.2...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.23.3...HEAD
+[0.23.3]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.23.2...0.23.3
 [0.23.2]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.23.1...0.23.2
 [0.23.1]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.23.0...0.23.1
 [0.23.0]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.22.6...0.23.0
