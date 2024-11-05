@@ -17,14 +17,17 @@ external_libraries = [
 ]
 
 generate = [
-    "GstAnalytics.RelTypes"
+    "GstAnalytics.RelTypes",
+    "GstAnalytics.TensorDataType",
+    "GstAnalytics.TensorDimOrder"
 ]
 
 manual = [
     "GObject.Object",
     "Gst.Element",
     "Gst.MiniObject",
-    "Gst.Object"
+    "Gst.Object",
+    "GstAnalytics.Tensor"
 ]
 
 
