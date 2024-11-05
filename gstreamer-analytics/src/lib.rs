@@ -15,6 +15,20 @@ macro_rules! skip_assert_initialized {
 mod auto;
 pub use crate::auto::*;
 
+#[cfg(feature = "v1_26")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+mod tensor;
+#[cfg(feature = "v1_26")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+pub use crate::tensor::*;
+
+#[cfg(feature = "v1_26")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+mod tensor_meta;
+#[cfg(feature = "v1_26")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+pub use crate::tensor_meta::*;
+
 mod relation_meta;
 pub use crate::relation_meta::*;
 

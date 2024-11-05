@@ -3,5 +3,13 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
+mod enums;
+#[cfg(feature = "v1_26")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+pub use self::enums::TensorDataType;
+#[cfg(feature = "v1_26")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+pub use self::enums::TensorDimOrder;
+
 mod flags;
 pub use self::flags::RelTypes;
