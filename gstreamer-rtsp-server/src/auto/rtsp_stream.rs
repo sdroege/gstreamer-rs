@@ -877,7 +877,7 @@ pub trait RTSPStreamExt: IsA<RTSPStream> + 'static {
         &self,
         func: Option<&mut dyn (FnMut(&RTSPStream, &RTSPStreamTransport) -> RTSPFilterResult)>,
     ) -> Vec<RTSPStreamTransport> {
-        let func_data: Option<
+        let mut func_data: Option<
             &mut dyn (FnMut(&RTSPStream, &RTSPStreamTransport) -> RTSPFilterResult),
         > = func;
         unsafe extern "C" fn func_func(
@@ -903,14 +903,14 @@ pub trait RTSPStreamExt: IsA<RTSPStream> + 'static {
         } else {
             None
         };
-        let super_callback0: &Option<
+        let super_callback0: &mut Option<
             &mut dyn (FnMut(&RTSPStream, &RTSPStreamTransport) -> RTSPFilterResult),
-        > = &func_data;
+        > = &mut func_data;
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_rtsp_stream_transport_filter(
                 self.as_ref().to_glib_none().0,
                 func,
-                super_callback0 as *const _ as *mut _,
+                super_callback0 as *mut _ as *mut _,
             ))
         }
     }

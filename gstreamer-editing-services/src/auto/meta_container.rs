@@ -62,7 +62,7 @@ pub trait MetaContainerExt: IsA<MetaContainer> + 'static {
 
     #[doc(alias = "ges_meta_container_foreach")]
     fn foreach<P: FnMut(&MetaContainer, &str, &glib::Value)>(&self, func: P) {
-        let func_data: P = func;
+        let mut func_data: P = func;
         unsafe extern "C" fn func_func<P: FnMut(&MetaContainer, &str, &glib::Value)>(
             container: *const ffi::GESMetaContainer,
             key: *const std::ffi::c_char,
@@ -76,12 +76,12 @@ pub trait MetaContainerExt: IsA<MetaContainer> + 'static {
             (*callback)(&container, key.as_str(), &value)
         }
         let func = Some(func_func::<P> as _);
-        let super_callback0: &P = &func_data;
+        let super_callback0: &mut P = &mut func_data;
         unsafe {
             ffi::ges_meta_container_foreach(
                 self.as_ref().to_glib_none().0,
                 func,
-                super_callback0 as *const _ as *mut _,
+                super_callback0 as *mut _ as *mut _,
             );
         }
     }

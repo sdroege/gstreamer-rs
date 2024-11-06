@@ -122,7 +122,7 @@ pub trait ElementExt: IsA<Element> + 'static {
 
     #[doc(alias = "gst_element_foreach_pad")]
     fn foreach_pad<P: FnMut(&Element, &Pad) -> bool>(&self, func: P) -> bool {
-        let func_data: P = func;
+        let mut func_data: P = func;
         unsafe extern "C" fn func_func<P: FnMut(&Element, &Pad) -> bool>(
             element: *mut ffi::GstElement,
             pad: *mut ffi::GstPad,
@@ -134,19 +134,19 @@ pub trait ElementExt: IsA<Element> + 'static {
             (*callback)(&element, &pad).into_glib()
         }
         let func = Some(func_func::<P> as _);
-        let super_callback0: &P = &func_data;
+        let super_callback0: &mut P = &mut func_data;
         unsafe {
             from_glib(ffi::gst_element_foreach_pad(
                 self.as_ref().to_glib_none().0,
                 func,
-                super_callback0 as *const _ as *mut _,
+                super_callback0 as *mut _ as *mut _,
             ))
         }
     }
 
     #[doc(alias = "gst_element_foreach_sink_pad")]
     fn foreach_sink_pad<P: FnMut(&Element, &Pad) -> bool>(&self, func: P) -> bool {
-        let func_data: P = func;
+        let mut func_data: P = func;
         unsafe extern "C" fn func_func<P: FnMut(&Element, &Pad) -> bool>(
             element: *mut ffi::GstElement,
             pad: *mut ffi::GstPad,
@@ -158,19 +158,19 @@ pub trait ElementExt: IsA<Element> + 'static {
             (*callback)(&element, &pad).into_glib()
         }
         let func = Some(func_func::<P> as _);
-        let super_callback0: &P = &func_data;
+        let super_callback0: &mut P = &mut func_data;
         unsafe {
             from_glib(ffi::gst_element_foreach_sink_pad(
                 self.as_ref().to_glib_none().0,
                 func,
-                super_callback0 as *const _ as *mut _,
+                super_callback0 as *mut _ as *mut _,
             ))
         }
     }
 
     #[doc(alias = "gst_element_foreach_src_pad")]
     fn foreach_src_pad<P: FnMut(&Element, &Pad) -> bool>(&self, func: P) -> bool {
-        let func_data: P = func;
+        let mut func_data: P = func;
         unsafe extern "C" fn func_func<P: FnMut(&Element, &Pad) -> bool>(
             element: *mut ffi::GstElement,
             pad: *mut ffi::GstPad,
@@ -182,12 +182,12 @@ pub trait ElementExt: IsA<Element> + 'static {
             (*callback)(&element, &pad).into_glib()
         }
         let func = Some(func_func::<P> as _);
-        let super_callback0: &P = &func_data;
+        let super_callback0: &mut P = &mut func_data;
         unsafe {
             from_glib(ffi::gst_element_foreach_src_pad(
                 self.as_ref().to_glib_none().0,
                 func,
-                super_callback0 as *const _ as *mut _,
+                super_callback0 as *mut _ as *mut _,
             ))
         }
     }
