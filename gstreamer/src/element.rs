@@ -1,6 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use std::{ffi::CStr, future::Future, mem, num::NonZeroU64, pin::Pin};
+use std::{ffi::CStr, future::Future, mem, num::NonZeroU64, ops::ControlFlow, pin::Pin};
 
 use glib::translate::*;
 use itertools::Itertools;
@@ -330,6 +330,81 @@ pub trait ElementExtManual: IsA<Element> + 'static {
             let elt: &ffi::GstElement = &*(self.as_ptr() as *const _);
             let _guard = self.as_ref().object_lock();
             FromGlibPtrContainer::from_glib_none(elt.srcpads)
+        }
+    }
+
+    #[doc(alias = "gst_element_foreach_pad")]
+    fn foreach_pad<F: FnMut(&Element, &Pad) -> ControlFlow<()>>(&self, func: F) {
+        unsafe extern "C" fn trampoline<F: FnMut(&Element, &Pad) -> ControlFlow<()>>(
+            element: *mut ffi::GstElement,
+            pad: *mut ffi::GstPad,
+            user_data: glib::ffi::gpointer,
+        ) -> glib::ffi::gboolean {
+            let element = from_glib_borrow(element);
+            let pad = from_glib_borrow(pad);
+            let callback = user_data as *mut F;
+            (*callback)(&element, &pad).is_continue().into_glib()
+        }
+
+        unsafe {
+            let mut func = func;
+            let func_ptr: &mut F = &mut func;
+
+            let _ = ffi::gst_element_foreach_pad(
+                self.as_ptr() as *mut _,
+                Some(trampoline::<F>),
+                func_ptr as *mut _ as *mut _,
+            );
+        }
+    }
+
+    #[doc(alias = "gst_element_foreach_sink_pad")]
+    fn foreach_sink_pad<F: FnMut(&Element, &Pad) -> ControlFlow<()>>(&self, func: F) {
+        unsafe extern "C" fn trampoline<P: FnMut(&Element, &Pad) -> ControlFlow<()>>(
+            element: *mut ffi::GstElement,
+            pad: *mut ffi::GstPad,
+            user_data: glib::ffi::gpointer,
+        ) -> glib::ffi::gboolean {
+            let element = from_glib_borrow(element);
+            let pad = from_glib_borrow(pad);
+            let callback = user_data as *mut P;
+            (*callback)(&element, &pad).is_continue().into_glib()
+        }
+
+        unsafe {
+            let mut func = func;
+            let func_ptr: &mut F = &mut func;
+
+            let _ = ffi::gst_element_foreach_sink_pad(
+                self.as_ptr() as *mut _,
+                Some(trampoline::<F>),
+                func_ptr as *mut _ as *mut _,
+            );
+        }
+    }
+
+    #[doc(alias = "gst_element_foreach_src_pad")]
+    fn foreach_src_pad<F: FnMut(&Element, &Pad) -> ControlFlow<()>>(&self, func: F) {
+        unsafe extern "C" fn trampoline<P: FnMut(&Element, &Pad) -> ControlFlow<()>>(
+            element: *mut ffi::GstElement,
+            pad: *mut ffi::GstPad,
+            user_data: glib::ffi::gpointer,
+        ) -> glib::ffi::gboolean {
+            let element = from_glib_borrow(element);
+            let pad = from_glib_borrow(pad);
+            let callback = user_data as *mut P;
+            (*callback)(&element, &pad).is_continue().into_glib()
+        }
+
+        unsafe {
+            let mut func = func;
+            let func_ptr: &mut F = &mut func;
+
+            let _ = ffi::gst_element_foreach_src_pad(
+                self.as_ptr() as *mut _,
+                Some(trampoline::<F>),
+                func_ptr as *mut _ as *mut _,
+            );
         }
     }
 
@@ -1242,10 +1317,26 @@ mod tests {
         identity.foreach_pad(|_element, pad| {
             pad_names.push(pad.name());
 
-            true
+            ControlFlow::Continue(())
         });
         pad_names.sort();
         assert_eq!(pad_names, vec![String::from("sink"), String::from("src")]);
+
+        pad_names.clear();
+        identity.foreach_sink_pad(|_element, pad| {
+            pad_names.push(pad.name());
+
+            ControlFlow::Continue(())
+        });
+        assert_eq!(pad_names, vec![String::from("sink")]);
+
+        pad_names.clear();
+        identity.foreach_src_pad(|_element, pad| {
+            pad_names.push(pad.name());
+
+            ControlFlow::Continue(())
+        });
+        assert_eq!(pad_names, vec![String::from("src")]);
     }
 
     #[test]
