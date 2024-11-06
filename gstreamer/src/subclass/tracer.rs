@@ -89,6 +89,15 @@ pub trait TracerImpl: GstObjectImpl + ObjectSubclass<Type: IsA<Tracer>> {
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     fn plugin_feature_loaded(&self, ts: u64, feature: &crate::PluginFeature) {}
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    fn memory_init(&self, ts: u64, mem: &crate::MemoryRefTrace) {}
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    fn memory_free_pre(&self, ts: u64, mem: &crate::MemoryRef) {}
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    fn memory_free_post(&self, ts: u64, mem: std::ptr::NonNull<ffi::GstMemory>) {}
 }
 
 #[cfg(not(feature = "v1_26"))]
@@ -475,5 +484,23 @@ define_tracer_hooks! {
     PluginFeatureLoaded("plugin-feature-loaded") = |this, ts, feature: *mut ffi::GstPluginFeature| {
         let feature = crate::PluginFeature::from_glib_borrow(feature);
         this.plugin_feature_loaded(ts, &feature)
+    };
+
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    MemoryInit("memory-init") = |this, ts, memory: *mut ffi::GstMemory| {
+        let memory = crate::MemoryRefTrace::from_ptr(memory);
+        this.memory_init(ts, memory)
+    };
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    MemoryFreePre("memory-free-pre") = |this, ts, memory: *mut ffi::GstMemory| {
+        let memory = crate::MemoryRef::from_ptr(memory);
+        this.memory_free_pre(ts, memory)
+    };
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    MemoryFreePost("memory-free-post") = |this, ts, memory: *mut ffi::GstMemory| {
+        this.memory_free_post(ts, std::ptr::NonNull::new_unchecked(memory))
     };
 }

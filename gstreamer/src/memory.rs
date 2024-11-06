@@ -949,6 +949,88 @@ macro_rules! memory_object_wrapper {
     };
 }
 
+#[cfg(feature = "v1_26")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+#[doc(alias = "GstMemory")]
+pub struct MemoryRefTrace(ffi::GstMemory);
+#[cfg(feature = "v1_26")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+impl MemoryRefTrace {
+    pub unsafe fn from_ptr<'a>(ptr: *mut ffi::GstMemory) -> &'a MemoryRefTrace {
+        assert!(!ptr.is_null());
+
+        &*(ptr as *const Self)
+    }
+
+    pub fn as_ptr(&self) -> *const ffi::GstMemory {
+        self as *const Self as *const ffi::GstMemory
+    }
+
+    #[doc(alias = "get_allocator")]
+    #[inline]
+    pub fn allocator(&self) -> Option<&Allocator> {
+        unsafe {
+            if self.0.allocator.is_null() {
+                None
+            } else {
+                Some(&*(&self.0.allocator as *const *mut ffi::GstAllocator as *const Allocator))
+            }
+        }
+    }
+
+    #[doc(alias = "get_parent")]
+    #[inline]
+    pub fn parent(&self) -> Option<&MemoryRef> {
+        unsafe {
+            if self.0.parent.is_null() {
+                None
+            } else {
+                Some(MemoryRef::from_ptr(self.0.parent))
+            }
+        }
+    }
+
+    #[doc(alias = "get_maxsize")]
+    #[inline]
+    pub fn maxsize(&self) -> usize {
+        self.0.maxsize
+    }
+
+    #[doc(alias = "get_align")]
+    #[inline]
+    pub fn align(&self) -> usize {
+        self.0.align
+    }
+
+    #[doc(alias = "get_offset")]
+    #[inline]
+    pub fn offset(&self) -> usize {
+        self.0.offset
+    }
+
+    #[doc(alias = "get_size")]
+    #[inline]
+    pub fn size(&self) -> usize {
+        self.0.size
+    }
+
+    #[doc(alias = "get_flags")]
+    #[inline]
+    pub fn flags(&self) -> crate::MemoryFlags {
+        unsafe { from_glib(self.0.mini_object.flags) }
+    }
+
+    #[doc(alias = "gst_memory_is_type")]
+    pub fn is_type(&self, mem_type: &str) -> bool {
+        unsafe {
+            from_glib(ffi::gst_memory_is_type(
+                self as *const Self as *mut ffi::GstMemory,
+                mem_type.to_glib_none().0,
+            ))
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     #[test]

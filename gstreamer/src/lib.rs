@@ -135,6 +135,9 @@ mod buffer_cursor;
 pub use crate::buffer_cursor::{BufferCursor, BufferRefCursor};
 pub mod memory;
 mod memory_wrapped;
+#[cfg(feature = "v1_26")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+pub use crate::memory::MemoryRefTrace;
 pub use crate::memory::{MappedMemory, Memory, MemoryMap, MemoryRef};
 #[cfg(feature = "serde")]
 mod buffer_serde;
