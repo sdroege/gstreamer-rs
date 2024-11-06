@@ -16,7 +16,7 @@ impl Registry {
         filter: P,
         first: bool,
     ) -> glib::List<PluginFeature> {
-        let filter_data: P = filter;
+        let mut filter_data: P = filter;
         unsafe extern "C" fn filter_func<P: FnMut(&PluginFeature) -> bool>(
             feature: *mut ffi::GstPluginFeature,
             user_data: glib::ffi::gpointer,
@@ -27,13 +27,13 @@ impl Registry {
             res.into_glib()
         }
         let filter = Some(filter_func::<P> as _);
-        let super_callback0: &P = &filter_data;
+        let super_callback0: &mut P = &mut filter_data;
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_registry_feature_filter(
                 self.to_glib_none().0,
                 filter,
                 first.into_glib(),
-                super_callback0 as *const _ as *mut _,
+                super_callback0 as *mut _ as *mut _,
             ))
         }
     }
@@ -76,24 +76,24 @@ impl Registry {
         filter: P,
         first: bool,
     ) -> glib::List<Plugin> {
-        let filter_data: P = filter;
+        let mut filter_data: P = filter;
         unsafe extern "C" fn filter_func<P: FnMut(&Plugin) -> bool>(
             plugin: *mut ffi::GstPlugin,
             user_data: glib::ffi::gpointer,
         ) -> glib::ffi::gboolean {
             let plugin = from_glib_borrow(plugin);
-            let callback = user_data as *const _ as *mut P;
+            let callback = user_data as *mut P;
             let res = (*callback)(&plugin);
             res.into_glib()
         }
         let filter = Some(filter_func::<P> as _);
-        let super_callback0: &P = &filter_data;
+        let super_callback0: &mut P = &mut filter_data;
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_registry_plugin_filter(
                 self.to_glib_none().0,
                 filter,
                 first.into_glib(),
-                super_callback0 as *const _ as *mut _,
+                super_callback0 as *mut _ as *mut _,
             ))
         }
     }
