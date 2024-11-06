@@ -19,7 +19,7 @@ rust-version.workspace = true
 gst = { workspace = true, features = ["v1_20"] }
 gst-app = { workspace = true, features = ["v1_20"] }
 gst-video = { workspace = true, features = ["v1_20"] }
-thiserror = "1"
+thiserror = "2"
 
 [dev-dependencies]
 futures = { version = "0.3", features = ["executor"] }
