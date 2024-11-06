@@ -136,7 +136,7 @@ impl BufferListRef {
     }
 
     #[doc(alias = "gst_buffer_list_foreach")]
-    pub fn foreach<F: FnMut(&Buffer, usize) -> ControlFlow<(), ()>>(&self, func: F) -> bool {
+    pub fn foreach<F: FnMut(&Buffer, usize) -> ControlFlow<(), ()>>(&self, func: F) {
         unsafe extern "C" fn trampoline<F: FnMut(&Buffer, usize) -> ControlFlow<(), ()>>(
             buffer: *mut *mut ffi::GstBuffer,
             idx: u32,
@@ -152,11 +152,11 @@ impl BufferListRef {
             let mut func = func;
             let func_ptr: &mut F = &mut func;
 
-            from_glib(ffi::gst_buffer_list_foreach(
+            let _ = ffi::gst_buffer_list_foreach(
                 self.as_ptr() as *mut _,
                 Some(trampoline::<F>),
                 func_ptr as *mut _ as *mut _,
-            ))
+            );
         }
     }
 
@@ -164,7 +164,7 @@ impl BufferListRef {
     pub fn foreach_mut<F: FnMut(Buffer, usize) -> ControlFlow<Option<Buffer>, Option<Buffer>>>(
         &mut self,
         func: F,
-    ) -> bool {
+    ) {
         unsafe extern "C" fn trampoline<
             F: FnMut(Buffer, usize) -> ControlFlow<Option<Buffer>, Option<Buffer>>,
         >(
@@ -202,11 +202,11 @@ impl BufferListRef {
             let mut func = func;
             let func_ptr: &mut F = &mut func;
 
-            from_glib(ffi::gst_buffer_list_foreach(
+            let _ = ffi::gst_buffer_list_foreach(
                 self.as_ptr() as *mut _,
                 Some(trampoline::<F>),
                 func_ptr as *mut _ as *mut _,
-            ))
+            );
         }
     }
 }
