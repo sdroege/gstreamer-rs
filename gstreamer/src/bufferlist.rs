@@ -149,12 +149,13 @@ impl BufferListRef {
         }
 
         unsafe {
-            let func_ptr: &F = &func;
+            let mut func = func;
+            let func_ptr: &mut F = &mut func;
 
             from_glib(ffi::gst_buffer_list_foreach(
                 self.as_ptr() as *mut _,
                 Some(trampoline::<F>),
-                func_ptr as *const _ as *mut _,
+                func_ptr as *mut _ as *mut _,
             ))
         }
     }
@@ -198,12 +199,13 @@ impl BufferListRef {
         }
 
         unsafe {
-            let func_ptr: &F = &func;
+            let mut func = func;
+            let func_ptr: &mut F = &mut func;
 
             from_glib(ffi::gst_buffer_list_foreach(
                 self.as_ptr() as *mut _,
                 Some(trampoline::<F>),
-                func_ptr as *const _ as *mut _,
+                func_ptr as *mut _ as *mut _,
             ))
         }
     }
