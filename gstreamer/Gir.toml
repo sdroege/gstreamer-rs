@@ -1257,6 +1257,17 @@ manual_traits = ["ElementExtManual"]
     # Varargs
     ignore = true
 
+    # Return ControlFlow instead of bool
+    [[object.function]]
+    name = "foreach_pad"
+    manual = true
+    [[object.function]]
+    name = "foreach_sink_pad"
+    manual = true
+    [[object.function]]
+    name = "foreach_src_pad"
+    manual = true
+
 [[object]]
 name = "Gst.ElementFactory"
 status = "generate"
