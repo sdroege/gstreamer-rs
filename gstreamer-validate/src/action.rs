@@ -12,19 +12,27 @@ gst::mini_object_wrapper!(Action, ActionRef, ffi::GstValidateAction, || {
 });
 
 impl ActionRef {
-    pub fn structure(&self) -> &gst::StructureRef {
+    pub fn structure(&self) -> Option<&gst::StructureRef> {
         unsafe {
             let action = &self.0 as *const ffi::GstValidateAction;
 
-            gst::StructureRef::from_glib_borrow((*action).structure)
+            if (*action).structure.is_null() {
+                None
+            } else {
+                Some(gst::StructureRef::from_glib_borrow((*action).structure))
+            }
         }
     }
 
-    pub fn structure_mut(&mut self) -> &mut gst::StructureRef {
+    pub fn structure_mut(&mut self) -> Option<&mut gst::StructureRef> {
         unsafe {
             let action = &mut self.0 as *mut ffi::GstValidateAction;
 
-            gst::StructureRef::from_glib_borrow_mut((*action).structure)
+            if (*action).structure.is_null() {
+                None
+            } else {
+                Some(gst::StructureRef::from_glib_borrow_mut((*action).structure))
+            }
         }
     }
 
