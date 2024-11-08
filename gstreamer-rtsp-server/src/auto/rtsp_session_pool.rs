@@ -65,7 +65,7 @@ pub trait RTSPSessionPoolExt: IsA<RTSPSessionPool> + sealed::Sealed + 'static {
         &self,
         func: Option<&mut dyn (FnMut(&RTSPSessionPool, &RTSPSession) -> RTSPFilterResult)>,
     ) -> Vec<RTSPSession> {
-        let func_data: Option<
+        let mut func_data: Option<
             &mut dyn (FnMut(&RTSPSessionPool, &RTSPSession) -> RTSPFilterResult),
         > = func;
         unsafe extern "C" fn func_func(
@@ -91,14 +91,14 @@ pub trait RTSPSessionPoolExt: IsA<RTSPSessionPool> + sealed::Sealed + 'static {
         } else {
             None
         };
-        let super_callback0: &Option<
+        let super_callback0: &mut Option<
             &mut dyn (FnMut(&RTSPSessionPool, &RTSPSession) -> RTSPFilterResult),
-        > = &func_data;
+        > = &mut func_data;
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_rtsp_session_pool_filter(
                 self.as_ref().to_glib_none().0,
                 func,
-                super_callback0 as *const _ as *mut _,
+                super_callback0 as *mut _ as *mut _,
             ))
         }
     }

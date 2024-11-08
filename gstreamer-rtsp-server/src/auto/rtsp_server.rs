@@ -71,7 +71,7 @@ pub trait RTSPServerExt: IsA<RTSPServer> + sealed::Sealed + 'static {
         &self,
         func: Option<&mut dyn (FnMut(&RTSPServer, &RTSPClient) -> RTSPFilterResult)>,
     ) -> Vec<RTSPClient> {
-        let func_data: Option<&mut dyn (FnMut(&RTSPServer, &RTSPClient) -> RTSPFilterResult)> =
+        let mut func_data: Option<&mut dyn (FnMut(&RTSPServer, &RTSPClient) -> RTSPFilterResult)> =
             func;
         unsafe extern "C" fn func_func(
             server: *mut ffi::GstRTSPServer,
@@ -94,14 +94,14 @@ pub trait RTSPServerExt: IsA<RTSPServer> + sealed::Sealed + 'static {
         } else {
             None
         };
-        let super_callback0: &Option<
+        let super_callback0: &mut Option<
             &mut dyn (FnMut(&RTSPServer, &RTSPClient) -> RTSPFilterResult),
-        > = &func_data;
+        > = &mut func_data;
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_rtsp_server_client_filter(
                 self.as_ref().to_glib_none().0,
                 func,
-                super_callback0 as *const _ as *mut _,
+                super_callback0 as *mut _ as *mut _,
             ))
         }
     }

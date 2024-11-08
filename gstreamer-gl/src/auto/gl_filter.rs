@@ -60,7 +60,7 @@ pub trait GLFilterExt: IsA<GLFilter> + sealed::Sealed + 'static {
         output: &GLMemory,
         func: P,
     ) -> Result<(), glib::error::BoolError> {
-        let func_data: P = func;
+        let mut func_data: P = func;
         unsafe extern "C" fn func_func<P: FnMut(&GLFilter, &GLMemory) -> bool>(
             filter: *mut ffi::GstGLFilter,
             in_tex: *mut ffi::GstGLMemory,
@@ -72,7 +72,7 @@ pub trait GLFilterExt: IsA<GLFilter> + sealed::Sealed + 'static {
             (*callback)(&filter, &in_tex).into_glib()
         }
         let func = Some(func_func::<P> as _);
-        let super_callback0: &P = &func_data;
+        let super_callback0: &mut P = &mut func_data;
         unsafe {
             glib::result_from_gboolean!(
                 ffi::gst_gl_filter_render_to_target(
@@ -80,7 +80,7 @@ pub trait GLFilterExt: IsA<GLFilter> + sealed::Sealed + 'static {
                     mut_override(input.to_glib_none().0),
                     mut_override(output.to_glib_none().0),
                     func,
-                    super_callback0 as *const _ as *mut _
+                    super_callback0 as *mut _ as *mut _
                 ),
                 "`func` returned `false`"
             )

@@ -116,7 +116,7 @@ pub trait PadExt: IsA<Pad> + sealed::Sealed + 'static {
 
     #[doc(alias = "gst_pad_forward")]
     fn forward<P: FnMut(&Pad) -> bool>(&self, forward: P) -> bool {
-        let forward_data: P = forward;
+        let mut forward_data: P = forward;
         unsafe extern "C" fn forward_func<P: FnMut(&Pad) -> bool>(
             pad: *mut ffi::GstPad,
             user_data: glib::ffi::gpointer,
@@ -126,12 +126,12 @@ pub trait PadExt: IsA<Pad> + sealed::Sealed + 'static {
             (*callback)(&pad).into_glib()
         }
         let forward = Some(forward_func::<P> as _);
-        let super_callback0: &P = &forward_data;
+        let super_callback0: &mut P = &mut forward_data;
         unsafe {
             from_glib(ffi::gst_pad_forward(
                 self.as_ref().to_glib_none().0,
                 forward,
-                super_callback0 as *const _ as *mut _,
+                super_callback0 as *mut _ as *mut _,
             ))
         }
     }
