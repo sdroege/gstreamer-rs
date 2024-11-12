@@ -39,7 +39,6 @@ impl IntoGlib for ActionSuccess {
 #[repr(i32)]
 pub enum ActionError {
     Error(String),
-    None = ffi::GST_VALIDATE_EXECUTE_ACTION_NONE,
 }
 
 impl ActionError {
@@ -49,7 +48,6 @@ impl ActionError {
             ffi::GST_VALIDATE_EXECUTE_ACTION_ERROR => {
                 ActionError::Error("Execution failed".to_string())
             }
-            ffi::GST_VALIDATE_EXECUTE_ACTION_NONE => ActionError::None,
             _ => ActionError::Error("Unknown error".to_string()),
         }
     }
@@ -62,7 +60,6 @@ impl IntoGlib for ActionError {
     fn into_glib(self) -> ffi::GstValidateActionReturn {
         match self {
             ActionError::Error(_) => ffi::GST_VALIDATE_EXECUTE_ACTION_ERROR,
-            ActionError::None => ffi::GST_VALIDATE_EXECUTE_ACTION_NONE,
         }
     }
 }
@@ -135,7 +132,6 @@ impl ActionReturn {
             Self::Error | Self::ErrorReported => {
                 Err(ActionError::Error("Execution failed".to_string()))
             }
-            Self::None => Err(ActionError::None),
             _ => Ok(unsafe { std::mem::transmute::<ActionReturn, ActionSuccess>(self) }),
         }
     }
@@ -146,7 +142,6 @@ impl ActionReturn {
 
         match v {
             ActionError::Error(_) => Self::Error,
-            ActionError::None => Self::None,
         }
     }
 

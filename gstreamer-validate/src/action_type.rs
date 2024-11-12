@@ -340,7 +340,6 @@ impl<'a> ActionTypeBuilder<'a> {
                     action.report_error(err);
                     ffi::GST_VALIDATE_EXECUTE_ACTION_ERROR_REPORTED
                 }
-                Err(_) => panic!("New action error types should be handled here."),
                 Ok(v) => v.into_glib(),
             }
         }
