@@ -1683,7 +1683,7 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
 
         // Since 1.14 templates can keep a pad GType with them, so we need to do some
         // additional checks here now
-        if templ.has_property("gtype", Some(glib::Type::static_type())) {
+        if templ.has_property_with_type("gtype", glib::Type::static_type()) {
             let gtype = templ.property::<glib::Type>("gtype");
 
             if gtype == glib::Type::UNIT {
