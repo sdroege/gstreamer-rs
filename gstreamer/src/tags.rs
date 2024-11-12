@@ -6,6 +6,7 @@ use glib::{
     prelude::*,
     translate::*,
     value::{FromValue, SendValue, ToSendValue, Value},
+    GStr,
 };
 
 use crate::{ffi, Sample, TagError, TagMergeMode, TagScope};
@@ -533,8 +534,7 @@ impl TagListRef {
         TagIter::new(self)
     }
 
-    pub fn iter_tag_generic(&self, tag_name: impl IntoGStr) -> GenericTagIter {
-        let tag_name = glib::Quark::from_str(tag_name).as_str();
+    pub fn iter_tag_generic<'a>(&'a self, tag_name: &'a GStr) -> GenericTagIter<'a> {
         GenericTagIter::new(self, tag_name)
     }
 
@@ -746,13 +746,13 @@ where
 #[derive(Debug)]
 pub struct GenericTagIter<'a> {
     taglist: &'a TagListRef,
-    name: &'static glib::GStr,
+    name: &'a GStr,
     idx: usize,
     size: usize,
 }
 
 impl<'a> GenericTagIter<'a> {
-    fn new(taglist: &'a TagListRef, name: &'static glib::GStr) -> GenericTagIter<'a> {
+    fn new(taglist: &'a TagListRef, name: &'a GStr) -> GenericTagIter<'a> {
         skip_assert_initialized!();
         GenericTagIter {
             taglist,
