@@ -31,7 +31,6 @@ generate = [
     "GstValidate.IssueFlags",
     "GstValidate.IssueId",
     "GstValidate.ActionTypeFlags",
-    "GstValidate.ActionType",
 ]
 
 manual = [
@@ -55,3 +54,11 @@ manual = [
 [[object]]
 name = "GstValidate.Scenario"
 status = "generate"
+
+[[object]]
+name = "GstValidate.ActionType"
+status = "generate"
+manual_traits = ["ActionTypeExtManual"]
+    [[object.function]]
+    name = "find"
+    manual = true
