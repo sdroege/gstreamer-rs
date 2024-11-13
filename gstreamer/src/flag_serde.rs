@@ -188,7 +188,13 @@ mod tests {
             )
         );
         check_serialize!(crate::MetaFlags::all(), "\"readonly+pooled+locked\"");
-        check_serialize!(crate::ObjectFlags::all(), "\"may-be-leaked+constructed\"");
+        cfg_if::cfg_if! {
+            if #[cfg(feature = "v1_24")] {
+                check_serialize!(crate::ObjectFlags::all(), "\"may-be-leaked+constructed\"");
+            } else {
+                check_serialize!(crate::ObjectFlags::all(), "\"may-be-leaked\"");
+            }
+        }
         check_serialize!(
             crate::PadFlags::all(),
             concat!(
