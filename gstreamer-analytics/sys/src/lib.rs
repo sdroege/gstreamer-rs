@@ -36,6 +36,30 @@ pub type GstSegmentationType = c_int;
 pub const GST_SEGMENTATION_TYPE_SEMANTIC: GstSegmentationType = 0;
 pub const GST_SEGMENTATION_TYPE_INSTANCE: GstSegmentationType = 1;
 
+pub type GstTensorDataType = c_int;
+pub const GST_TENSOR_DATA_TYPE_INT4: GstTensorDataType = 0;
+pub const GST_TENSOR_DATA_TYPE_INT8: GstTensorDataType = 1;
+pub const GST_TENSOR_DATA_TYPE_INT16: GstTensorDataType = 2;
+pub const GST_TENSOR_DATA_TYPE_INT32: GstTensorDataType = 3;
+pub const GST_TENSOR_DATA_TYPE_INT64: GstTensorDataType = 4;
+pub const GST_TENSOR_DATA_TYPE_UINT4: GstTensorDataType = 5;
+pub const GST_TENSOR_DATA_TYPE_UINT8: GstTensorDataType = 6;
+pub const GST_TENSOR_DATA_TYPE_UINT16: GstTensorDataType = 7;
+pub const GST_TENSOR_DATA_TYPE_UINT32: GstTensorDataType = 8;
+pub const GST_TENSOR_DATA_TYPE_UINT64: GstTensorDataType = 9;
+pub const GST_TENSOR_DATA_TYPE_FLOAT16: GstTensorDataType = 10;
+pub const GST_TENSOR_DATA_TYPE_FLOAT32: GstTensorDataType = 11;
+pub const GST_TENSOR_DATA_TYPE_FLOAT64: GstTensorDataType = 12;
+pub const GST_TENSOR_DATA_TYPE_BFLOAT16: GstTensorDataType = 13;
+
+pub type GstTensorDimOrder = c_int;
+pub const GST_TENSOR_DIM_ORDER_ROW_MAJOR: GstTensorDimOrder = 0;
+pub const GST_TENSOR_DIM_ORDER_COL_MAJOR: GstTensorDimOrder = 1;
+pub const GST_TENSOR_DIM_ORDER_INDEXED: GstTensorDimOrder = 2;
+
+pub type GstTensorLayout = c_int;
+pub const GST_TENSOR_LAYOUT_STRIDED: GstTensorLayout = 0;
+
 // Constants
 pub const GST_INF_RELATION_SPAN: c_int = -1;
 pub const GST_ANALYTICS_MTD_TYPE_ANY: c_int = 0;
@@ -178,6 +202,68 @@ impl ::std::fmt::Debug for GstAnalyticsTrackingMtd {
         f.debug_struct(&format!("GstAnalyticsTrackingMtd @ {self:p}"))
             .field("id", &self.id)
             .field("meta", &self.meta)
+            .finish()
+    }
+}
+
+#[repr(C)]
+#[allow(dead_code)]
+pub struct GstTensor {
+    pub id: glib::GQuark,
+    pub layout: GstTensorLayout,
+    pub data_type: GstTensorDataType,
+    pub batch_size: size_t,
+    pub data: *mut gst::GstBuffer,
+    pub dims_order: GstTensorDimOrder,
+    pub num_dims: size_t,
+    _truncated_record_marker: c_void,
+    // /*Ignored*/field dims has empty c:type
+}
+
+impl ::std::fmt::Debug for GstTensor {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstTensor @ {self:p}"))
+            .field("id", &self.id)
+            .field("layout", &self.layout)
+            .field("data_type", &self.data_type)
+            .field("batch_size", &self.batch_size)
+            .field("data", &self.data)
+            .field("dims_order", &self.dims_order)
+            .field("num_dims", &self.num_dims)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstTensorDim {
+    pub size: size_t,
+    pub order_index: size_t,
+}
+
+impl ::std::fmt::Debug for GstTensorDim {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstTensorDim @ {self:p}"))
+            .field("size", &self.size)
+            .field("order_index", &self.order_index)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstTensorMeta {
+    pub meta: gst::GstMeta,
+    pub num_tensors: size_t,
+    pub tensors: *mut *mut GstTensor,
+}
+
+impl ::std::fmt::Debug for GstTensorMeta {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstTensorMeta @ {self:p}"))
+            .field("meta", &self.meta)
+            .field("num_tensors", &self.num_tensors)
+            .field("tensors", &self.tensors)
             .finish()
     }
 }
@@ -392,6 +478,56 @@ extern "C" {
     pub fn gst_analytics_tracking_mtd_get_mtd_type() -> GstAnalyticsMtdType;
 
     //=========================================================================
+    // GstTensor
+    //=========================================================================
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_tensor_get_type() -> GType;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_tensor_alloc(num_dims: size_t) -> *mut GstTensor;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_tensor_new_simple(
+        id: glib::GQuark,
+        data_type: GstTensorDataType,
+        batch_size: size_t,
+        data: *mut gst::GstBuffer,
+        dims_order: GstTensorDimOrder,
+        num_dims: size_t,
+        dims: *mut size_t,
+    ) -> *mut GstTensor;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_tensor_copy(tensor: *const GstTensor) -> *mut GstTensor;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_tensor_free(tensor: *mut GstTensor);
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_tensor_get_dims(tensor: *mut GstTensor, num_dims: *mut size_t) -> *mut GstTensorDim;
+
+    //=========================================================================
+    // GstTensorMeta
+    //=========================================================================
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_tensor_meta_get(tmeta: *mut GstTensorMeta, index: size_t) -> *const GstTensor;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_tensor_meta_get_index_from_id(meta: *mut GstTensorMeta, id: glib::GQuark) -> c_int;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_tensor_meta_set(
+        tmeta: *mut GstTensorMeta,
+        num_tensors: c_uint,
+        tensors: *mut *mut GstTensor,
+    );
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_tensor_meta_get_info() -> *const gst::GstMetaInfo;
+
+    //=========================================================================
     // Other functions
     //=========================================================================
     pub fn gst_buffer_add_analytics_relation_meta(
@@ -401,10 +537,19 @@ extern "C" {
         buffer: *mut gst::GstBuffer,
         init_params: *mut GstAnalyticsRelationMetaInitParams,
     ) -> *mut GstAnalyticsRelationMeta;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_buffer_add_tensor_meta(buffer: *mut gst::GstBuffer) -> *mut GstTensorMeta;
     pub fn gst_buffer_get_analytics_relation_meta(
         buffer: *mut gst::GstBuffer,
     ) -> *mut GstAnalyticsRelationMeta;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_buffer_get_tensor_meta(buffer: *mut gst::GstBuffer) -> *mut GstTensorMeta;
     pub fn gst_analytics_relation_get_length(instance: *const GstAnalyticsRelationMeta) -> size_t;
     pub fn gst_analytics_relation_meta_api_get_type() -> GType;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_tensor_meta_api_get_type() -> GType;
 
 }

@@ -309,6 +309,20 @@ impl PlayMessage {
         }
     }
 
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "gst_play_message_parse_buffering")]
+    pub fn parse_buffering(msg: &gst::Message) -> u32 {
+        assert_initialized_main_thread!();
+        unsafe {
+            let mut percent = std::mem::MaybeUninit::uninit();
+            ffi::gst_play_message_parse_buffering(msg.to_glib_none().0, percent.as_mut_ptr());
+            percent.assume_init()
+        }
+    }
+
+    #[cfg_attr(feature = "v1_26", deprecated = "Since 1.26")]
+    #[allow(deprecated)]
     #[doc(alias = "gst_play_message_parse_buffering_percent")]
     pub fn parse_buffering_percent(msg: &gst::Message) -> u32 {
         assert_initialized_main_thread!();
@@ -322,6 +336,23 @@ impl PlayMessage {
         }
     }
 
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "gst_play_message_parse_duration_changed")]
+    pub fn parse_duration_changed(msg: &gst::Message) -> Option<gst::ClockTime> {
+        assert_initialized_main_thread!();
+        unsafe {
+            let mut duration = std::mem::MaybeUninit::uninit();
+            ffi::gst_play_message_parse_duration_changed(
+                msg.to_glib_none().0,
+                duration.as_mut_ptr(),
+            );
+            from_glib(duration.assume_init())
+        }
+    }
+
+    #[cfg_attr(feature = "v1_26", deprecated = "Since 1.26")]
+    #[allow(deprecated)]
     #[doc(alias = "gst_play_message_parse_duration_updated")]
     pub fn parse_duration_updated(msg: &gst::Message) -> Option<gst::ClockTime> {
         assert_initialized_main_thread!();
@@ -379,6 +410,18 @@ impl PlayMessage {
         }
     }
 
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "gst_play_message_parse_seek_done")]
+    pub fn parse_seek_done(msg: &gst::Message) -> Option<gst::ClockTime> {
+        assert_initialized_main_thread!();
+        unsafe {
+            let mut position = std::mem::MaybeUninit::uninit();
+            ffi::gst_play_message_parse_seek_done(msg.to_glib_none().0, position.as_mut_ptr());
+            from_glib(position.assume_init())
+        }
+    }
+
     #[doc(alias = "gst_play_message_parse_state_changed")]
     pub fn parse_state_changed(msg: &gst::Message) -> PlayState {
         assert_initialized_main_thread!();
@@ -396,6 +439,18 @@ impl PlayMessage {
             let mut type_ = std::mem::MaybeUninit::uninit();
             ffi::gst_play_message_parse_type(msg.to_glib_none().0, type_.as_mut_ptr());
             from_glib(type_.assume_init())
+        }
+    }
+
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "gst_play_message_parse_uri_loaded")]
+    pub fn parse_uri_loaded(msg: &gst::Message) -> glib::GString {
+        assert_initialized_main_thread!();
+        unsafe {
+            let mut uri = std::ptr::null_mut();
+            ffi::gst_play_message_parse_uri_loaded(msg.to_glib_none().0, &mut uri);
+            from_glib_full(uri)
         }
     }
 

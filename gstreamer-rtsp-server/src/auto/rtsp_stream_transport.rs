@@ -156,10 +156,65 @@ pub trait RTSPStreamTransportExt: IsA<RTSPStreamTransport> + 'static {
         }
     }
 
-    //#[doc(alias = "gst_rtsp_stream_transport_set_callbacks")]
-    //fn set_callbacks<P: Fn(&gst::Buffer, u8) -> bool + 'static, Q: Fn(&gst::Buffer, u8) -> bool + 'static>(&self, send_rtp: P, send_rtcp: Q) {
-    //    unsafe { TODO: call ffi:gst_rtsp_stream_transport_set_callbacks() }
-    //}
+    #[doc(alias = "gst_rtsp_stream_transport_set_callbacks")]
+    fn set_callbacks<
+        P: Fn(&gst::Buffer, u8) -> bool + 'static,
+        Q: Fn(&gst::Buffer, u8) -> bool + 'static,
+    >(
+        &self,
+        send_rtp: P,
+        send_rtcp: Q,
+    ) {
+        let send_rtp_data: P = send_rtp;
+        unsafe extern "C" fn send_rtp_func<
+            P: Fn(&gst::Buffer, u8) -> bool + 'static,
+            Q: Fn(&gst::Buffer, u8) -> bool + 'static,
+        >(
+            buffer: *mut gst::ffi::GstBuffer,
+            channel: u8,
+            user_data: glib::ffi::gpointer,
+        ) -> glib::ffi::gboolean {
+            let buffer = from_glib_borrow(buffer);
+            let callback: &Box_<(P, Q)> = &*(user_data as *mut _);
+            let callback = &callback.0;
+            (*callback)(&buffer, channel).into_glib()
+        }
+        let send_rtp = Some(send_rtp_func::<P, Q> as _);
+        let send_rtcp_data: Q = send_rtcp;
+        unsafe extern "C" fn send_rtcp_func<
+            P: Fn(&gst::Buffer, u8) -> bool + 'static,
+            Q: Fn(&gst::Buffer, u8) -> bool + 'static,
+        >(
+            buffer: *mut gst::ffi::GstBuffer,
+            channel: u8,
+            user_data: glib::ffi::gpointer,
+        ) -> glib::ffi::gboolean {
+            let buffer = from_glib_borrow(buffer);
+            let callback: &Box_<(P, Q)> = &*(user_data as *mut _);
+            let callback = &callback.1;
+            (*callback)(&buffer, channel).into_glib()
+        }
+        let send_rtcp = Some(send_rtcp_func::<P, Q> as _);
+        unsafe extern "C" fn notify_func<
+            P: Fn(&gst::Buffer, u8) -> bool + 'static,
+            Q: Fn(&gst::Buffer, u8) -> bool + 'static,
+        >(
+            data: glib::ffi::gpointer,
+        ) {
+            let _callback: Box_<(P, Q)> = Box_::from_raw(data as *mut _);
+        }
+        let destroy_call4 = Some(notify_func::<P, Q> as _);
+        let super_callback0: Box_<(P, Q)> = Box_::new((send_rtp_data, send_rtcp_data));
+        unsafe {
+            ffi::gst_rtsp_stream_transport_set_callbacks(
+                self.as_ref().to_glib_none().0,
+                send_rtp,
+                send_rtcp,
+                Box_::into_raw(super_callback0) as *mut _,
+                destroy_call4,
+            );
+        }
+    }
 
     #[doc(alias = "gst_rtsp_stream_transport_set_keepalive")]
     fn set_keepalive<P: Fn() + 'static>(&self, keep_alive: P) {
