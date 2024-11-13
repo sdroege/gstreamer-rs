@@ -1685,22 +1685,17 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
         assert_initialized_main_thread!();
 
         let mut type_ = T::static_type();
+        let gtype = templ.gtype();
 
-        // Since 1.14 templates can keep a pad GType with them, so we need to do some
-        // additional checks here now
-        if templ.has_property("gtype", Some(glib::Type::static_type())) {
-            let gtype = templ.property::<glib::Type>("gtype");
-
-            if gtype == glib::Type::UNIT {
-                // Nothing to be done, we can create any kind of pad
-            } else if gtype.is_a(type_) {
-                // We were asked to create a parent type of the template type, e.g. a gst::Pad for
-                // a template that wants a gst_base::AggregatorPad. Not a problem: update the type
-                type_ = gtype;
-            } else {
-                // Otherwise the requested type must be a subclass of the template pad type
-                assert!(type_.is_a(gtype));
-            }
+        if gtype == glib::Type::UNIT {
+            // Nothing to be done, we can create any kind of pad
+        } else if gtype.is_a(type_) {
+            // We were asked to create a parent type of the template type, e.g. a gst::Pad for
+            // a template that wants a gst_base::AggregatorPad. Not a problem: update the type
+            type_ = gtype;
+        } else {
+            // Otherwise the requested type must be a subclass of the template pad type
+            assert!(type_.is_a(gtype));
         }
 
         let mut properties = [
