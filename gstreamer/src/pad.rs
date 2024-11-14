@@ -1746,6 +1746,7 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
     ///
     /// This method is convenient when the `name` is provided as an `Option`.
     /// If the `name` is `None`, this has no effect.
+    #[deprecated = "use `name_if_some()` instead"]
     pub fn maybe_name<N: Into<String>>(self, name: Option<N>) -> Self {
         if let Some(name) = name {
             self.name(name)
@@ -2109,7 +2110,7 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
     /// Panics if the [`Pad`] was built from a [`PadTemplate`](crate::PadTemplate)
     /// with a wildcard-name `name_template` (i.e. containing `%u`, `%s` or `%d`)
     /// and no specific `name` was provided using [`PadBuilder::name`]
-    /// or [`PadBuilder::maybe_name`], or for [`GhostPad`s](crate::GhostPad),
+    /// or [`PadBuilder::name_if_some`], or for [`GhostPad`s](crate::GhostPad),
     /// by defining a `target`.
     ///
     /// Use [`generated_name()`](crate::PadBuilder::generated_name`) to keep the `gst::Object`
@@ -2670,6 +2671,7 @@ mod tests {
     }
 
     #[test]
+    #[allow(deprecated)] // maybe_name() is deprecated
     fn naming() {
         crate::init().unwrap();
 
