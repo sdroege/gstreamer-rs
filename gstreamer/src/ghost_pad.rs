@@ -103,7 +103,7 @@ impl GhostPad {
     /// i.e. if it's not a wildcard-name containing `%u`, `%s` or `%d`,
     /// the `GhostPad` will automatically be named after the `name_template`.
     ///
-    /// Use [`PadBuilder::name`](crate::PadBuilder::name) or [`PadBuilder::maybe_name`](crate::PadBuilder::maybe_name)
+    /// Use [`PadBuilder::name`](crate::PadBuilder::name) or [`PadBuilder::name_if_some`](crate::PadBuilder::name_if_some)
     /// to specify a different name.
     ///
     /// Use [`generated_name()`](crate::PadBuilder::generated_name`) to keep the `gst::Object`
@@ -143,7 +143,7 @@ impl GhostPad {
     /// i.e. if it's not a wildcard-name containing `%u`, `%s` or `%d`,
     /// the `GhostPad` will automatically be named after the `name_template`.
     ///
-    /// Use [`PadBuilder::name`](crate::PadBuilder::name) or [`PadBuilder::maybe_name`](crate::PadBuilder::maybe_name)
+    /// Use [`PadBuilder::name`](crate::PadBuilder::name) or [`PadBuilder::name_if_some`](crate::PadBuilder::name_if_some)
     /// to specify a different name.
     ///
     /// Use [`generated_name()`](crate::PadBuilder::generated_name`) to keep the `gst::Object`
@@ -177,7 +177,7 @@ impl GhostPad {
     ///
     /// The `GhostPad` will automatically be named after the `target` `name`.
     ///
-    /// Use [`PadBuilder::name`](crate::PadBuilder::name) or [`PadBuilder::maybe_name`](crate::PadBuilder::maybe_name)
+    /// Use [`PadBuilder::name`](crate::PadBuilder::name) or [`PadBuilder::name_if_some`](crate::PadBuilder::name_if_some)
     /// to specify a different name.
     ///
     /// Use [`generated_name()`](crate::PadBuilder::generated_name`) to keep the `gst::Object`
@@ -201,7 +201,7 @@ impl GhostPad {
     ///
     /// If the `name_template` is a wildcard-name, then the `target` `name` is used,
     /// if it is compatible. Otherwise, a specific name must be provided using
-    /// [`PadBuilder::name`](crate::PadBuilder::name) or [`PadBuilder::maybe_name`](crate::PadBuilder::maybe_name).
+    /// [`PadBuilder::name`](crate::PadBuilder::name) or [`PadBuilder::name_if_some`](crate::PadBuilder::name_if_some).
     ///
     /// Use [`generated_name()`](crate::PadBuilder::generated_name`) to keep the `gst::Object`
     /// automatically generated unique name.
@@ -224,7 +224,7 @@ impl GhostPad {
     ///
     /// If the `name_template` is a wildcard-name, then the `target` `name` is used,
     /// if it is compatible. Otherwise, a specific name must be provided using
-    /// [`PadBuilder::name`](crate::PadBuilder::name) or [`PadBuilder::maybe_name`](crate::PadBuilder::maybe_name).
+    /// [`PadBuilder::name`](crate::PadBuilder::name) or [`PadBuilder::name_if_some`](crate::PadBuilder::name_if_some).
     ///
     /// Use [`generated_name()`](crate::PadBuilder::generated_name`) to keep the `gst::Object`
     /// automatically generated unique name.
@@ -710,7 +710,7 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
     ///
     /// If the `name_template` is a wildcard-name, then the `target` `name` is used,
     /// if it is compatible. Otherwise, a specific name must be provided using
-    /// [`PadBuilder::name`](crate::PadBuilder::name) or [`PadBuilder::maybe_name`](crate::PadBuilder::maybe_name).
+    /// [`PadBuilder::name`](crate::PadBuilder::name) or [`PadBuilder::name_if_some`](crate::PadBuilder::name_if_some).
     ///
     /// Use [`generated_name()`](crate::PadBuilder::generated_name`) to keep the `gst::Object`
     /// automatically generated unique name.
