@@ -50,3 +50,7 @@ boxed_inline = true
 name = "GstAnalytics.Mtd"
 status = "generate"
 boxed_inline = true
+
+[[object]]
+name = "GstAnalytics.Tensor"
+status = "manual"

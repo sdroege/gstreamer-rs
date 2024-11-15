@@ -15,6 +15,10 @@
 use glib_sys as glib;
 use gstreamer_sys as gst;
 
+mod manual;
+
+pub use manual::*;
+
 #[cfg(unix)]
 #[allow(unused_imports)]
 use libc::{dev_t, gid_t, pid_t, socklen_t, uid_t};
@@ -204,34 +208,6 @@ impl ::std::fmt::Debug for GstAnalyticsTrackingMtd {
         f.debug_struct(&format!("GstAnalyticsTrackingMtd @ {self:p}"))
             .field("id", &self.id)
             .field("meta", &self.meta)
-            .finish()
-    }
-}
-
-#[repr(C)]
-#[allow(dead_code)]
-pub struct GstTensor {
-    pub id: glib::GQuark,
-    pub layout: GstTensorLayout,
-    pub data_type: GstTensorDataType,
-    pub batch_size: size_t,
-    pub data: *mut gst::GstBuffer,
-    pub dims_order: GstTensorDimOrder,
-    pub num_dims: size_t,
-    _truncated_record_marker: c_void,
-    // /*Ignored*/field dims has empty c:type
-}
-
-impl ::std::fmt::Debug for GstTensor {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstTensor @ {self:p}"))
-            .field("id", &self.id)
-            .field("layout", &self.layout)
-            .field("data_type", &self.data_type)
-            .field("batch_size", &self.batch_size)
-            .field("data", &self.data)
-            .field("dims_order", &self.dims_order)
-            .field("num_dims", &self.num_dims)
             .finish()
     }
 }
