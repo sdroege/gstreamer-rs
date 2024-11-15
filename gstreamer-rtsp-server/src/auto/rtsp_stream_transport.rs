@@ -175,7 +175,7 @@ pub trait RTSPStreamTransportExt: IsA<RTSPStreamTransport> + 'static {
             user_data: glib::ffi::gpointer,
         ) -> glib::ffi::gboolean {
             let buffer = from_glib_borrow(buffer);
-            let callback: &Box_<(P, Q)> = &*(user_data as *mut _);
+            let callback: &(P, Q) = &*(user_data as *mut _);
             let callback = &callback.0;
             (*callback)(&buffer, channel).into_glib()
         }
@@ -190,7 +190,7 @@ pub trait RTSPStreamTransportExt: IsA<RTSPStreamTransport> + 'static {
             user_data: glib::ffi::gpointer,
         ) -> glib::ffi::gboolean {
             let buffer = from_glib_borrow(buffer);
-            let callback: &Box_<(P, Q)> = &*(user_data as *mut _);
+            let callback: &(P, Q) = &*(user_data as *mut _);
             let callback = &callback.1;
             (*callback)(&buffer, channel).into_glib()
         }
