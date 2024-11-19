@@ -16,10 +16,9 @@ impl ElementFactory {
     #[track_caller]
     pub fn create(&self) -> ElementBuilder {
         assert_initialized_main_thread!();
-
         ElementBuilder {
             name_or_factory: NameOrFactory::Factory(self),
-            properties: smallvec::SmallVec::new(),
+            builder: crate::Object::builder_for_deferred_type(),
         }
     }
 
@@ -28,10 +27,9 @@ impl ElementFactory {
     #[track_caller]
     pub fn make(factoryname: &str) -> ElementBuilder {
         assert_initialized_main_thread!();
-
         ElementBuilder {
             name_or_factory: NameOrFactory::Name(factoryname),
-            properties: smallvec::SmallVec::new(),
+            builder: crate::Object::builder_for_deferred_type(),
         }
     }
 
@@ -190,7 +188,7 @@ impl ElementFactory {
 #[must_use = "The builder must be built to be used"]
 pub struct ElementBuilder<'a> {
     name_or_factory: NameOrFactory<'a>,
-    properties: smallvec::SmallVec<[(&'a str, ValueOrStr<'a>); 16]>,
+    builder: crate::gobject::GObjectBuilder<'a, Element>,
 }
 
 #[derive(Copy, Clone)]
@@ -199,30 +197,7 @@ enum NameOrFactory<'a> {
     Factory(&'a ElementFactory),
 }
 
-enum ValueOrStr<'a> {
-    Value(glib::Value),
-    Str(&'a str),
-}
-
 impl<'a> ElementBuilder<'a> {
-    // rustdoc-stripper-ignore-next
-    /// Sets the name property to the given `name`.
-    #[inline]
-    pub fn name(self, name: impl Into<glib::GString>) -> Self {
-        self.property("name", name.into())
-    }
-
-    // rustdoc-stripper-ignore-next
-    /// Sets the name property to the given `name` if it is `Some`.
-    #[inline]
-    pub fn name_if_some(self, name: Option<impl Into<glib::GString>>) -> Self {
-        if let Some(name) = name {
-            self.name(name)
-        } else {
-            self
-        }
-    }
-
     // rustdoc-stripper-ignore-next
     /// Sets property `name` to the given value `value`.
     ///
@@ -230,51 +205,34 @@ impl<'a> ElementBuilder<'a> {
     #[inline]
     pub fn property(self, name: &'a str, value: impl Into<glib::Value> + 'a) -> Self {
         Self {
-            name_or_factory: self.name_or_factory,
-            properties: {
-                let mut properties = self.properties;
-                properties.push((name, ValueOrStr::Value(value.into())));
-                properties
-            },
+            builder: self.builder.property(name, value),
+            ..self
         }
     }
-
-    impl_builder_gvalue_extra_setters!(property);
 
     // rustdoc-stripper-ignore-next
     /// Sets property `name` to the given string value `value`.
     #[inline]
     pub fn property_from_str(self, name: &'a str, value: &'a str) -> Self {
         Self {
-            name_or_factory: self.name_or_factory,
-            properties: {
-                let mut properties = self.properties;
-                properties.push((name, ValueOrStr::Str(value)));
-                properties
-            },
+            builder: self.builder.property_from_str(name, value),
+            ..self
         }
     }
 
-    // rustdoc-stripper-ignore-next
-    /// Sets property `name` to the given string value `value` if it is `Some`.
-    #[inline]
-    pub fn property_from_str_if_some(self, name: &'a str, value: Option<&'a str>) -> Self {
-        if let Some(value) = value {
-            self.property_from_str(name, value)
-        } else {
-            self
-        }
-    }
+    impl_builder_gvalue_extra_setters!(property_and_name);
 
     // rustdoc-stripper-ignore-next
-    /// Builds the element with the provided properties.
+    /// Builds the [`Element`] with the provided properties.
     ///
-    /// This fails if there is no such element factory or the element factory can't be loaded.
+    /// This fails if there is no such [`ElementFactory`] or the [`ElementFactory`] can't be loaded.
     ///
     /// # Panics
     ///
-    /// This panics if the element is not instantiable, doesn't have all the given properties or
+    /// This panics if the [`Element`] is not instantiable, doesn't have all the given properties or
     /// property values of the wrong type are provided.
+    ///
+    /// [`Element`]: crate::Element
     #[track_caller]
     #[must_use = "Building the element without using it has no effect"]
     pub fn build(self) -> Result<Element, glib::BoolError> {
@@ -328,68 +286,21 @@ impl<'a> ElementBuilder<'a> {
             ));
         }
 
-        let mut properties = smallvec::SmallVec::<[_; 16]>::with_capacity(self.properties.len());
-        let klass = glib::Class::<Element>::from_type(element_type).unwrap();
-        for (name, value) in self.properties {
-            match value {
-                ValueOrStr::Value(value) => {
-                    properties.push((name, value));
+        let element = self
+            .builder
+            .type_(element_type)
+            .build()
+            .map_err(|err| {
+                use crate::gobject::GObjectError::*;
+                match err {
+                    PropertyNotFound { property, .. } => {
+                        format!("property '{property}' of element factory '{}' not found", factory.name())
+                    },
+                    PropertyFromStr { property, value, .. } => {
+                        format!("property '{property}' of element factory '{}' can't be set from string '{value}'", factory.name())
+                    },
                 }
-                ValueOrStr::Str(value) => {
-                    use crate::value::GstValueExt;
-
-                    let pspec = match klass.find_property(name) {
-                        Some(pspec) => pspec,
-                        None => {
-                            panic!(
-                                "property '{}' of element factory '{}' not found",
-                                name,
-                                factory.name()
-                            );
-                        }
-                    };
-
-                    let value = {
-                        if pspec.value_type() == crate::Structure::static_type() && value == "NULL"
-                        {
-                            None::<crate::Structure>.to_value()
-                        } else {
-                            #[cfg(feature = "v1_20")]
-                            {
-                                glib::Value::deserialize_with_pspec(value, &pspec)
-                                    .unwrap_or_else(|_| {
-                                        panic!(
-                                            "property '{}' of element factory '{}' can't be set from string '{}'",
-                                            name,
-                                            factory.name(),
-                                            value,
-                                        )
-                                    })
-                            }
-                            #[cfg(not(feature = "v1_20"))]
-                            {
-                                glib::Value::deserialize(value, pspec.value_type())
-                                    .unwrap_or_else(|_| {
-                                        panic!(
-                                            "property '{}' of element factory '{}' can't be set from string '{}'",
-                                            name,
-                                            factory.name(),
-                                            value,
-                                        )
-                                    })
-                            }
-                        }
-                    };
-
-                    properties.push((name, value));
-                }
-            }
-        }
-
-        let element = unsafe {
-            glib::Object::with_mut_values(element_type, &mut properties)
-                .unsafe_cast::<crate::Element>()
-        };
+            }).unwrap();
 
         unsafe {
             use std::sync::atomic;
@@ -428,5 +339,29 @@ impl<'a> ElementBuilder<'a> {
         );
 
         Ok(element)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use crate::prelude::*;
+
+    #[test]
+    fn builder() {
+        crate::init().unwrap();
+
+        let fakesink = ElementFactory::make("fakesink")
+            .name("test-fakesink")
+            .property("can-activate-pull", true)
+            .property_from_str("state-error", "ready-to-paused")
+            .build()
+            .unwrap();
+
+        assert_eq!(fakesink.name(), "test-fakesink");
+        assert!(fakesink.property::<bool>("can-activate-pull"));
+        let v = fakesink.property_value("state-error");
+        let (_klass, e) = glib::EnumValue::from_value(&v).unwrap();
+        assert_eq!(e.nick(), "ready-to-paused");
     }
 }

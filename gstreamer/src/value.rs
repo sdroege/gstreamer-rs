@@ -1714,7 +1714,7 @@ macro_rules! impl_builder_gvalue_extra_setters (
         }
      };
 
-    (property) => {
+    (property_and_name) => {
         // rustdoc-stripper-ignore-next
         /// Sets property `name` to the given inner value if the `predicate` evaluates to `true`.
         ///
@@ -1771,6 +1771,67 @@ macro_rules! impl_builder_gvalue_extra_setters (
             if iter.peek().is_some() {
                 let iter = iter.map(|item| item.to_send_value());
                 self.property(name, V::from_iter(iter))
+            } else {
+                self
+            }
+        }
+
+        // rustdoc-stripper-ignore-next
+        /// Sets property `name` to the given string value `value` if the `predicate` evaluates to `true`.
+        ///
+        /// This has no effect if the `predicate` evaluates to `false`,
+        /// i.e. default or previous value for `name` is kept.
+        #[inline]
+        pub fn property_from_str_if(self, name: &'a str, value: &'a str, predicate: bool) -> Self {
+            if predicate {
+                self.property_from_str(name, value)
+            } else {
+                self
+            }
+        }
+
+        // rustdoc-stripper-ignore-next
+        /// Sets property `name` to the given string value `value` if it is `Some`.
+        ///
+        /// This has no effect if the value is `None`, i.e. default or previous value for `name` is kept.
+        #[inline]
+        pub fn property_from_str_if_some(self, name: &'a str, value: Option<&'a str>) -> Self {
+            if let Some(value) = value {
+                self.property_from_str(name, value)
+            } else {
+                self
+            }
+        }
+
+        // rustdoc-stripper-ignore-next
+        /// Sets the name property to the given `name`.
+        #[inline]
+        pub fn name(self, name: impl Into<$crate::glib::GString>) -> Self {
+            self.property("name", name.into())
+        }
+
+        // rustdoc-stripper-ignore-next
+        /// Sets the name property to the given `name` if the `predicate` evaluates to `true`.
+        ///
+        /// This has no effect if the `predicate` evaluates to `false`,
+        /// i.e. default or previous name is kept.
+        #[inline]
+        pub fn name_if(self, name: impl Into<$crate::glib::GString>, predicate: bool) -> Self {
+            if predicate {
+                self.name(name)
+            } else {
+                self
+            }
+        }
+
+        // rustdoc-stripper-ignore-next
+        /// Sets the name property to the given `name` if it is `Some`.
+        ///
+        /// This has no effect if the value is `None`, i.e. default or previous name is kept.
+        #[inline]
+        pub fn name_if_some(self, name: Option<impl Into<$crate::glib::GString>>) -> Self {
+            if let Some(name) = name {
+                self.name(name)
             } else {
                 self
             }

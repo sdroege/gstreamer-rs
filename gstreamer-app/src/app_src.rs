@@ -311,9 +311,13 @@ impl AppSrc {
     /// Creates a new builder-pattern struct instance to construct [`AppSrc`] objects.
     ///
     /// This method returns an instance of [`AppSrcBuilder`](crate::builders::AppSrcBuilder) which can be used to create [`AppSrc`] objects.
-    pub fn builder() -> AppSrcBuilder {
+    pub fn builder<'a>() -> AppSrcBuilder<'a> {
         assert_initialized_main_thread!();
-        AppSrcBuilder::new()
+        AppSrcBuilder {
+            builder: gst::Object::builder(),
+            callbacks: None,
+            automatic_eos: None,
+        }
     }
 
     #[doc(alias = "gst_app_src_set_callbacks")]
@@ -453,26 +457,23 @@ impl AppSrc {
 ///
 /// [builder-pattern]: https://doc.rust-lang.org/1.0.0/style/ownership/builders.html
 #[must_use = "The builder must be built to be used"]
-pub struct AppSrcBuilder {
-    builder: glib::object::ObjectBuilder<'static, AppSrc>,
+pub struct AppSrcBuilder<'a> {
+    builder: gst::gobject::GObjectBuilder<'a, AppSrc>,
     callbacks: Option<AppSrcCallbacks>,
     automatic_eos: Option<bool>,
 }
 
-impl AppSrcBuilder {
-    fn new() -> Self {
-        Self {
-            builder: glib::Object::builder(),
-            callbacks: None,
-            automatic_eos: None,
-        }
-    }
-
+impl<'a> AppSrcBuilder<'a> {
     // rustdoc-stripper-ignore-next
     /// Build the [`AppSrc`].
+    ///
+    /// # Panics
+    ///
+    /// This panics if the [`AppSrc`] doesn't have all the given properties or
+    /// property values of the wrong type are provided.
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> AppSrc {
-        let appsrc = self.builder.build();
+        let appsrc = self.builder.build().unwrap();
 
         if let Some(callbacks) = self.callbacks {
             appsrc.set_callbacks(callbacks);
@@ -506,7 +507,7 @@ impl AppSrcBuilder {
         }
     }
 
-    pub fn caps(self, caps: &gst::Caps) -> Self {
+    pub fn caps(self, caps: &'a gst::Caps) -> Self {
         Self {
             builder: self.builder.property("caps", caps),
             ..self
@@ -621,12 +622,29 @@ impl AppSrcBuilder {
         }
     }
 
-    pub fn name(self, name: impl Into<glib::GString>) -> Self {
+    // rustdoc-stripper-ignore-next
+    /// Sets property `name` to the given value `value`.
+    ///
+    /// Overrides any default or previously defined value for `name`.
+    #[inline]
+    pub fn property(self, name: &'a str, value: impl Into<glib::Value> + 'a) -> Self {
         Self {
-            builder: self.builder.property("name", name.into()),
+            builder: self.builder.property(name, value),
             ..self
         }
     }
+
+    // rustdoc-stripper-ignore-next
+    /// Sets property `name` to the given string value `value`.
+    #[inline]
+    pub fn property_from_str(self, name: &'a str, value: &'a str) -> Self {
+        Self {
+            builder: self.builder.property_from_str(name, value),
+            ..self
+        }
+    }
+
+    gst::impl_builder_gvalue_extra_setters!(property_and_name);
 }
 
 #[derive(Debug)]
@@ -791,5 +809,38 @@ mod tests {
             handoff_count_reference.load(Ordering::Acquire),
             sample_quantity
         );
+    }
+
+    #[test]
+    fn builder_caps_lt() {
+        gst::init().unwrap();
+
+        let caps = &gst::Caps::new_any();
+        {
+            let stream_type = "random-access".to_owned();
+            let appsrc = AppSrc::builder()
+                .property_from_str("stream-type", &stream_type)
+                .caps(caps)
+                .build();
+            assert_eq!(
+                appsrc.property::<crate::AppStreamType>("stream-type"),
+                crate::AppStreamType::RandomAccess
+            );
+            assert!(appsrc.property::<gst::Caps>("caps").is_any());
+        }
+
+        let stream_type = &"random-access".to_owned();
+        {
+            let caps = &gst::Caps::new_any();
+            let appsrc = AppSrc::builder()
+                .property_from_str("stream-type", stream_type)
+                .caps(caps)
+                .build();
+            assert_eq!(
+                appsrc.property::<crate::AppStreamType>("stream-type"),
+                crate::AppStreamType::RandomAccess
+            );
+            assert!(appsrc.property::<gst::Caps>("caps").is_any());
+        }
     }
 }

@@ -35,8 +35,11 @@ impl Pipeline {
     /// Creates a new builder-pattern struct instance to construct [`Pipeline`] objects.
     ///
     /// This method returns an instance of [`PipelineBuilder`] which can be used to create [`Pipeline`] objects.
-    pub fn builder() -> PipelineBuilder {
-        PipelineBuilder::new()
+    pub fn builder<'a>() -> PipelineBuilder<'a> {
+        assert_initialized_main_thread!();
+        PipelineBuilder {
+            builder: crate::Object::builder(),
+        }
     }
 }
 
@@ -80,22 +83,21 @@ impl Default for Pipeline {
 ///
 /// [builder-pattern]: https://doc.rust-lang.org/1.0.0/style/ownership/builders.html
 #[must_use = "The builder must be built to be used"]
-pub struct PipelineBuilder {
-    builder: glib::object::ObjectBuilder<'static, Pipeline>,
+pub struct PipelineBuilder<'a> {
+    builder: crate::gobject::GObjectBuilder<'a, Pipeline>,
 }
 
-impl PipelineBuilder {
-    fn new() -> Self {
-        Self {
-            builder: glib::Object::builder(),
-        }
-    }
-
+impl<'a> PipelineBuilder<'a> {
     // rustdoc-stripper-ignore-next
     /// Build the [`Pipeline`].
+    ///
+    /// # Panics
+    ///
+    /// This panics if the [`Pipeline`] doesn't have all the given properties or
+    /// property values of the wrong type are provided.
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> Pipeline {
-        self.builder.build()
+        self.builder.build().unwrap()
     }
 
     pub fn auto_flush_bus(self, auto_flush_bus: bool) -> Self {
@@ -188,25 +190,25 @@ impl PipelineBuilder {
         }
     }
 
-    pub fn name(self, name: impl Into<glib::GString>) -> Self {
+    // rustdoc-stripper-ignore-next
+    /// Sets property `name` to the given value `value`.
+    ///
+    /// Overrides any default or previously defined value for `name`.
+    #[inline]
+    pub fn property(self, name: &'a str, value: impl Into<glib::Value> + 'a) -> Self {
         Self {
-            builder: self.builder.property("name", name.into()),
+            builder: self.builder.property(name, value),
         }
     }
 
-    pub fn name_if(self, name: impl Into<glib::GString>, predicate: bool) -> Self {
-        if predicate {
-            self.name(name)
-        } else {
-            self
+    // rustdoc-stripper-ignore-next
+    /// Sets property `name` to the given string value `value`.
+    #[inline]
+    pub fn property_from_str(self, name: &'a str, value: &'a str) -> Self {
+        Self {
+            builder: self.builder.property_from_str(name, value),
         }
     }
 
-    pub fn name_if_some(self, name: Option<impl Into<glib::GString>>) -> Self {
-        if let Some(name) = name {
-            self.name(name)
-        } else {
-            self
-        }
-    }
+    impl_builder_gvalue_extra_setters!(property_and_name);
 }

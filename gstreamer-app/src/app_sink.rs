@@ -512,9 +512,13 @@ impl AppSink {
     /// Creates a new builder-pattern struct instance to construct [`AppSink`] objects.
     ///
     /// This method returns an instance of [`AppSinkBuilder`](crate::builders::AppSinkBuilder) which can be used to create [`AppSink`] objects.
-    pub fn builder() -> AppSinkBuilder {
+    pub fn builder<'a>() -> AppSinkBuilder<'a> {
         assert_initialized_main_thread!();
-        AppSinkBuilder::new()
+        AppSinkBuilder {
+            builder: gst::Object::builder(),
+            callbacks: None,
+            drop_out_of_segment: None,
+        }
     }
 
     #[doc(alias = "gst_app_sink_set_callbacks")]
@@ -1173,26 +1177,23 @@ impl AppSink {
 ///
 /// [builder-pattern]: https://doc.rust-lang.org/1.0.0/style/ownership/builders.html
 #[must_use = "The builder must be built to be used"]
-pub struct AppSinkBuilder {
-    builder: glib::object::ObjectBuilder<'static, AppSink>,
+pub struct AppSinkBuilder<'a> {
+    builder: gst::gobject::GObjectBuilder<'a, AppSink>,
     callbacks: Option<AppSinkCallbacks>,
     drop_out_of_segment: Option<bool>,
 }
 
-impl AppSinkBuilder {
-    fn new() -> Self {
-        Self {
-            builder: glib::Object::builder(),
-            callbacks: None,
-            drop_out_of_segment: None,
-        }
-    }
-
+impl<'a> AppSinkBuilder<'a> {
     // rustdoc-stripper-ignore-next
     /// Build the [`AppSink`].
+    ///
+    /// # Panics
+    ///
+    /// This panics if the [`AppSink`] doesn't have all the given properties or
+    /// property values of the wrong type are provided.
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> AppSink {
-        let appsink = self.builder.build();
+        let appsink = self.builder.build().unwrap();
 
         if let Some(callbacks) = self.callbacks {
             appsink.set_callbacks(callbacks);
@@ -1226,7 +1227,7 @@ impl AppSinkBuilder {
         }
     }
 
-    pub fn caps(self, caps: &gst::Caps) -> Self {
+    pub fn caps(self, caps: &'a gst::Caps) -> Self {
         Self {
             builder: self.builder.property("caps", caps),
             ..self
@@ -1350,12 +1351,29 @@ impl AppSinkBuilder {
         }
     }
 
-    pub fn name(self, name: impl Into<glib::GString>) -> Self {
+    // rustdoc-stripper-ignore-next
+    /// Sets property `name` to the given value `value`.
+    ///
+    /// Overrides any default or previously defined value for `name`.
+    #[inline]
+    pub fn property(self, name: &'a str, value: impl Into<glib::Value> + 'a) -> Self {
         Self {
-            builder: self.builder.property("name", name.into()),
+            builder: self.builder.property(name, value),
             ..self
         }
     }
+
+    // rustdoc-stripper-ignore-next
+    /// Sets property `name` to the given string value `value`.
+    #[inline]
+    pub fn property_from_str(self, name: &'a str, value: &'a str) -> Self {
+        Self {
+            builder: self.builder.property_from_str(name, value),
+            ..self
+        }
+    }
+
+    gst::impl_builder_gvalue_extra_setters!(property_and_name);
 }
 
 #[derive(Debug)]

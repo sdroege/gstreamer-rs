@@ -200,7 +200,7 @@ mod device_provider;
 mod device_provider_factory;
 mod enums;
 mod ghost_pad;
-mod gobject;
+pub mod gobject;
 mod iterator;
 mod object;
 mod pad;

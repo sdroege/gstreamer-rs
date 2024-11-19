@@ -37,8 +37,11 @@ impl Bin {
     /// Creates a new builder-pattern struct instance to construct [`Bin`] objects.
     ///
     /// This method returns an instance of [`BinBuilder`] which can be used to create [`Bin`] objects.
-    pub fn builder() -> BinBuilder {
-        BinBuilder::new()
+    pub fn builder<'a>() -> BinBuilder<'a> {
+        assert_initialized_main_thread!();
+        BinBuilder {
+            builder: crate::Object::builder(),
+        }
     }
 }
 
@@ -221,22 +224,21 @@ impl Default for Bin {
 ///
 /// [builder-pattern]: https://doc.rust-lang.org/1.0.0/style/ownership/builders.html
 #[must_use = "The builder must be built to be used"]
-pub struct BinBuilder {
-    builder: glib::object::ObjectBuilder<'static, Bin>,
+pub struct BinBuilder<'a> {
+    builder: crate::gobject::GObjectBuilder<'a, Bin>,
 }
 
-impl BinBuilder {
-    fn new() -> Self {
-        Self {
-            builder: glib::Object::builder(),
-        }
-    }
-
+impl<'a> BinBuilder<'a> {
     // rustdoc-stripper-ignore-next
     /// Build the [`Bin`].
+    ///
+    /// # Panics
+    ///
+    /// This panics if the [`Bin`] doesn't have all the given properties or
+    /// property values of the wrong type are provided.
     #[must_use = "Building the object from the builder is usually expensive and is not expected to have side effects"]
     pub fn build(self) -> Bin {
-        self.builder.build()
+        self.builder.build().unwrap()
     }
 
     pub fn async_handling(self, async_handling: bool) -> Self {
@@ -267,27 +269,27 @@ impl BinBuilder {
         }
     }
 
-    pub fn name(self, name: impl Into<glib::GString>) -> Self {
+    // rustdoc-stripper-ignore-next
+    /// Sets property `name` to the given value `value`.
+    ///
+    /// Overrides any default or previously defined value for `name`.
+    #[inline]
+    pub fn property(self, name: &'a str, value: impl Into<glib::Value> + 'a) -> Self {
         Self {
-            builder: self.builder.property("name", name.into()),
+            builder: self.builder.property(name, value),
         }
     }
 
-    pub fn name_if(self, name: impl Into<glib::GString>, predicate: bool) -> Self {
-        if predicate {
-            self.name(name)
-        } else {
-            self
+    // rustdoc-stripper-ignore-next
+    /// Sets property `name` to the given string value `value`.
+    #[inline]
+    pub fn property_from_str(self, name: &'a str, value: &'a str) -> Self {
+        Self {
+            builder: self.builder.property_from_str(name, value),
         }
     }
 
-    pub fn name_if_some(self, name: Option<impl Into<glib::GString>>) -> Self {
-        if let Some(name) = name {
-            self.name(name)
-        } else {
-            self
-        }
-    }
+    impl_builder_gvalue_extra_setters!(property_and_name);
 }
 
 unsafe extern "C" fn do_latency_trampoline<
@@ -345,5 +347,21 @@ mod tests {
             child_names,
             vec![String::from("identity0"), String::from("identity1")]
         );
+    }
+
+    #[test]
+    fn builder() {
+        crate::init().unwrap();
+
+        let msg_fwd = "message-forward";
+        let bin = Bin::builder()
+            .name("test-bin")
+            .property("async-handling", true)
+            .property_from_str(msg_fwd, "True")
+            .build();
+
+        assert_eq!(bin.name(), "test-bin");
+        assert!(bin.property::<bool>("async-handling"));
+        assert!(bin.property::<bool>("message-forward"));
     }
 }
