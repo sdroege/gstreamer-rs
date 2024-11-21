@@ -1588,7 +1588,6 @@ impl StructureRef {
     /// * `ControlFlow::Break(())` otherwise.
     ///
     /// [map_in_place_by_id]: crate::StructureRef::map_in_place_by_id
-    #[cfg_attr(feature = "v1_26", deprecated = "use `map_in_place_by_id()` instead")]
     #[doc(alias = "gst_structure_map_in_place")]
     pub fn map_in_place<F: FnMut(glib::Quark, &mut glib::Value) -> std::ops::ControlFlow<()>>(
         &mut self,
@@ -1632,10 +1631,6 @@ impl StructureRef {
     /// use [filter_map_in_place_by_id] instead.
     ///
     /// [filter_map_in_place_by_id]: crate::StructureRef::filter_map_in_place_by_id
-    #[cfg_attr(
-        feature = "v1_26",
-        deprecated = "use `filter_map_in_place_by_id()` instead"
-    )]
     #[doc(alias = "gst_structure_filter_and_map_in_place")]
     pub fn filter_map_in_place<F: FnMut(glib::Quark, glib::Value) -> Option<glib::Value>>(
         &mut self,
