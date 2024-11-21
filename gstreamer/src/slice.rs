@@ -26,6 +26,20 @@ impl<'a> ByteSliceExt for &'a [u8] {
     }
 }
 
+impl<'a> ByteSliceExt for &'a mut [u8] {
+    fn dump(&self) -> Dump {
+        self.dump_range(..)
+    }
+
+    fn dump_range(&self, range: impl RangeBounds<usize>) -> Dump {
+        Dump {
+            data: self,
+            start: range.start_bound().cloned(),
+            end: range.end_bound().cloned(),
+        }
+    }
+}
+
 pub struct Dump<'a> {
     pub(crate) data: &'a [u8],
     pub(crate) start: Bound<usize>,
