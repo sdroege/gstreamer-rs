@@ -212,20 +212,13 @@ impl<'a, T> MetaRef<'a, T> {
 
     #[inline]
     pub fn has_tag_by_quark(&self, tag: glib::Quark) -> bool {
-        unsafe {
-            from_glib(ffi::gst_meta_api_type_has_tag(
-                self.api().into_glib(),
-                tag.into_glib(),
-            ))
-        }
+        meta_api_type_has_tag_by_quark(self.api(), tag)
     }
 
     #[inline]
     #[doc(alias = "gst_meta_api_type_get_tags")]
     pub fn tags<'b>(&self) -> &'b [glib::GStringPtr] {
-        unsafe {
-            glib::StrV::from_glib_borrow(ffi::gst_meta_api_type_get_tags(self.api().into_glib()))
-        }
+        meta_api_type_get_tags(self.api())
     }
 
     #[inline]
@@ -1114,6 +1107,32 @@ unsafe impl<'a> MetaTransform<'a> for MetaTransformCopy {
             size,
         })
     }
+}
+
+#[inline]
+#[doc(alias = "gst_meta_api_type_has_tag")]
+pub fn meta_api_type_has_tag<MT: MetaTag>(type_: glib::Type) -> bool {
+    skip_assert_initialized!();
+    meta_api_type_has_tag_by_quark(type_, MT::quark())
+}
+
+#[inline]
+#[doc(alias = "gst_meta_api_type_has_tag")]
+pub fn meta_api_type_has_tag_by_quark(type_: glib::Type, tag: glib::Quark) -> bool {
+    skip_assert_initialized!();
+    unsafe {
+        from_glib(ffi::gst_meta_api_type_has_tag(
+            type_.into_glib(),
+            tag.into_glib(),
+        ))
+    }
+}
+
+#[inline]
+#[doc(alias = "gst_meta_api_type_get_tags")]
+pub fn meta_api_type_get_tags<'b>(type_: glib::Type) -> &'b [glib::GStringPtr] {
+    skip_assert_initialized!();
+    unsafe { glib::StrV::from_glib_borrow(ffi::gst_meta_api_type_get_tags(type_.into_glib())) }
 }
 
 #[cfg(test)]
