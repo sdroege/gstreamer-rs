@@ -1135,6 +1135,32 @@ pub fn meta_api_type_get_tags<'b>(type_: glib::Type) -> &'b [glib::GStringPtr] {
     unsafe { glib::StrV::from_glib_borrow(ffi::gst_meta_api_type_get_tags(type_.into_glib())) }
 }
 
+#[cfg(feature = "v1_26")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+#[doc(alias = "gst_meta_api_type_aggregate_params")]
+pub fn meta_api_type_aggregate_params(
+    type_: glib::Type,
+    params1: &crate::StructureRef,
+    params2: &crate::StructureRef,
+) -> Result<Option<crate::Structure>, glib::BoolError> {
+    skip_assert_initialized!();
+    unsafe {
+        let mut new_params = ptr::null_mut();
+        let res = bool::from_glib(ffi::gst_meta_api_type_aggregate_params(
+            type_.into_glib(),
+            &mut new_params,
+            params1.as_ptr(),
+            params2.as_ptr(),
+        ));
+
+        if res {
+            Ok(from_glib_full(new_params))
+        } else {
+            Err(glib::bool_error!("Failed to aggregate meta type params"))
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
