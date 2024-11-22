@@ -4595,7 +4595,7 @@ extern "C" {
         id: c_int,
     ) -> *mut GstVideoRegionOfInterestMeta;
     pub fn gst_buffer_pool_config_get_video_alignment(
-        config: *mut gst::GstStructure,
+        config: *const gst::GstStructure,
         align: *mut GstVideoAlignment,
     ) -> gboolean;
     pub fn gst_buffer_pool_config_set_video_alignment(
@@ -4681,6 +4681,15 @@ extern "C" {
         destroy_notify: glib::GDestroyNotify,
     );
     pub fn gst_video_crop_meta_api_get_type() -> GType;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_video_dma_drm_format_from_gst_format(
+        format: GstVideoFormat,
+        modifier: *mut u64,
+    ) -> u32;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_video_dma_drm_format_to_gst_format(fourcc: u32, modifier: u64) -> GstVideoFormat;
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_video_dma_drm_fourcc_from_format(format: GstVideoFormat) -> u32;

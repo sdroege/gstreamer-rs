@@ -1016,6 +1016,13 @@ impl ::std::fmt::Debug for GstPad_ABI {
 }
 
 // Callbacks
+pub type GstAllocationMetaParamsAggregator = Option<
+    unsafe extern "C" fn(
+        *mut *mut GstStructure,
+        *const GstStructure,
+        *const GstStructure,
+    ) -> gboolean,
+>;
 pub type GstBufferForeachMetaFunc =
     Option<unsafe extern "C" fn(*mut GstBuffer, *mut *mut GstMeta, gpointer) -> gboolean>;
 pub type GstBufferListFunc =
@@ -6056,9 +6063,23 @@ extern "C" {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_meta_serialize_simple(meta: *const GstMeta, data: *mut glib::GByteArray)
         -> gboolean;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_meta_api_type_aggregate_params(
+        api: GType,
+        aggregated_params: *mut *mut GstStructure,
+        params0: *const GstStructure,
+        params1: *const GstStructure,
+    ) -> gboolean;
     pub fn gst_meta_api_type_get_tags(api: GType) -> *const *const c_char;
     pub fn gst_meta_api_type_has_tag(api: GType, tag: glib::GQuark) -> gboolean;
     pub fn gst_meta_api_type_register(api: *const c_char, tags: *mut *const c_char) -> GType;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_meta_api_type_set_params_aggregator(
+        api: GType,
+        aggregator: GstAllocationMetaParamsAggregator,
+    );
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_meta_deserialize(
