@@ -56,6 +56,41 @@ pub fn dma_drm_fourcc_from_str(v: &str) -> Result<(u32, u64), glib::BoolError> {
     }
 }
 
+#[cfg(feature = "v1_26")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+#[doc(alias = "gst_video_dma_drm_format_from_gst_format")]
+pub fn dma_drm_format_from_gst_format(v: VideoFormat) -> Result<(u32, u64), glib::BoolError> {
+    skip_assert_initialized!();
+    unsafe {
+        let mut modifier = mem::MaybeUninit::uninit();
+        let res =
+            ffi::gst_video_dma_drm_format_from_gst_format(v.into_glib(), modifier.as_mut_ptr());
+        if res == 0 {
+            Err(glib::bool_error!("Unsupported video format"))
+        } else {
+            Ok((res, modifier.assume_init()))
+        }
+    }
+}
+
+#[cfg(feature = "v1_26")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+#[doc(alias = "gst_video_dma_drm_format_to_gst_format")]
+pub fn dma_drm_format_to_gst_format(
+    fourcc: u32,
+    modifier: u64,
+) -> Result<VideoFormat, glib::BoolError> {
+    skip_assert_initialized!();
+    unsafe {
+        let res = ffi::gst_video_dma_drm_format_to_gst_format(fourcc, modifier);
+        if res == ffi::GST_VIDEO_FORMAT_UNKNOWN {
+            Err(glib::bool_error!("Unsupported fourcc format / modifier"))
+        } else {
+            Ok(from_glib(res))
+        }
+    }
+}
+
 #[doc(alias = "GstVideoInfoDmaDrm")]
 #[derive(Clone)]
 #[repr(transparent)]
