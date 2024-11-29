@@ -210,7 +210,7 @@ impl<'a> ToGlibPtrMut<'a, *mut ffi::GstCapsFeatures> for CapsFeatures {
     type Storage = PhantomData<&'a mut Self>;
 
     #[inline]
-    fn to_glib_none_mut(&'a mut self) -> StashMut<*mut ffi::GstCapsFeatures, Self> {
+    fn to_glib_none_mut(&'a mut self) -> StashMut<'a, *mut ffi::GstCapsFeatures, Self> {
         unsafe { StashMut(self.0.as_mut(), PhantomData) }
     }
 }
@@ -630,7 +630,7 @@ impl<'a> Iterator for Iter<'a> {
     }
 }
 
-impl<'a> DoubleEndedIterator for Iter<'a> {
+impl DoubleEndedIterator for Iter<'_> {
     fn next_back(&mut self) -> Option<Self::Item> {
         if self.idx == self.n_features {
             return None;
@@ -671,9 +671,9 @@ impl<'a> DoubleEndedIterator for Iter<'a> {
     }
 }
 
-impl<'a> ExactSizeIterator for Iter<'a> {}
+impl ExactSizeIterator for Iter<'_> {}
 
-impl<'a> std::iter::FusedIterator for Iter<'a> {}
+impl std::iter::FusedIterator for Iter<'_> {}
 
 impl<'a> IntoIterator for &'a CapsFeaturesRef {
     type IntoIter = Iter<'a>;

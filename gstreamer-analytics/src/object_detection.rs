@@ -24,8 +24,8 @@ pub trait AnalyticsRelationMetaODExt: sealed::Sealed {
     ) -> Result<AnalyticsMtdRef<AnalyticsODMtd>, glib::BoolError>;
 }
 
-impl<'a> AnalyticsRelationMetaODExt
-    for gst::MetaRefMut<'a, AnalyticsRelationMeta, gst::meta::Standalone>
+impl AnalyticsRelationMetaODExt
+    for gst::MetaRefMut<'_, AnalyticsRelationMeta, gst::meta::Standalone>
 {
     #[doc(alias = "gst_analytics_relation_meta_add_od_mtd")]
     fn add_od_mtd(
@@ -80,7 +80,7 @@ unsafe fn from(t: ffi::GstAnalyticsMtd) -> ffi::GstAnalyticsODMtd {
     std::mem::transmute(t)
 }
 
-impl<'a> AnalyticsMtdRef<'a, AnalyticsODMtd> {
+impl AnalyticsMtdRef<'_, AnalyticsODMtd> {
     #[doc(alias = "gst_analytics_od_mtd_get_obj_type")]
     pub fn obj_type(&self) -> Option<glib::Quark> {
         unsafe {

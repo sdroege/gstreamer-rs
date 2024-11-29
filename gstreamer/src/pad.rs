@@ -57,7 +57,7 @@ pub struct PadProbeInfo<'a> {
     pub flow_res: Result<FlowSuccess, FlowError>,
 }
 
-impl<'a> PadProbeInfo<'a> {
+impl PadProbeInfo<'_> {
     pub fn buffer(&self) -> Option<&Buffer> {
         match self.data {
             Some(PadProbeData::Buffer(ref buffer)) => Some(buffer),
@@ -166,13 +166,13 @@ pub enum PadProbeData<'a> {
     __Unknown(*mut ffi::GstMiniObject),
 }
 
-unsafe impl<'a> Send for PadProbeData<'a> {}
-unsafe impl<'a> Sync for PadProbeData<'a> {}
+unsafe impl Send for PadProbeData<'_> {}
+unsafe impl Sync for PadProbeData<'_> {}
 
 #[derive(Debug)]
 #[must_use = "if unused the StreamLock will immediately unlock"]
 pub struct StreamLock<'a>(&'a Pad);
-impl<'a> Drop for StreamLock<'a> {
+impl Drop for StreamLock<'_> {
     #[inline]
     fn drop(&mut self) {
         unsafe {

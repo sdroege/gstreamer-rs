@@ -79,7 +79,6 @@ pub trait GstObjectExtManual: sealed::Sealed + IsA<Object> + 'static {
 
     #[doc(alias = "get_g_value_array")]
     #[doc(alias = "gst_object_get_g_value_array")]
-
     fn g_value_array(
         &self,
         property_name: &str,

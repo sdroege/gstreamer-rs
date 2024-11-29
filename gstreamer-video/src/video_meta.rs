@@ -431,7 +431,7 @@ impl<'a> Iterator for ParamsIter<'a> {
     }
 }
 
-impl<'a> std::iter::FusedIterator for ParamsIter<'a> {}
+impl std::iter::FusedIterator for ParamsIter<'_> {}
 
 unsafe impl MetaAPI for VideoRegionOfInterestMeta {
     type GstType = ffi::GstVideoRegionOfInterestMeta;

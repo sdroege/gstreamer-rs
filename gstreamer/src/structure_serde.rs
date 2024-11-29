@@ -17,7 +17,7 @@ use crate::{
 };
 
 struct FieldSe<'a>(&'static str, &'a glib::SendValue);
-impl<'a> Serialize for FieldSe<'a> {
+impl Serialize for FieldSe<'_> {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         ser_value!(self.1, |type_, value| {
             let mut tup = serializer.serialize_tuple(3)?;
@@ -30,7 +30,7 @@ impl<'a> Serialize for FieldSe<'a> {
 }
 
 struct StructureForIter<'a>(&'a StructureRef);
-impl<'a> Serialize for StructureForIter<'a> {
+impl Serialize for StructureForIter<'_> {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         let iter = self.0.iter();
         let size = iter.size_hint().0;
@@ -103,7 +103,7 @@ impl<'de> Deserialize<'de> for FieldDe {
 struct FieldsDe<'a>(&'a mut StructureRef);
 
 struct FieldsVisitor<'a>(&'a mut StructureRef);
-impl<'de, 'a> Visitor<'de> for FieldsVisitor<'a> {
+impl<'de> Visitor<'de> for FieldsVisitor<'_> {
     type Value = ();
 
     fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
@@ -120,7 +120,7 @@ impl<'de, 'a> Visitor<'de> for FieldsVisitor<'a> {
     }
 }
 
-impl<'de, 'a> DeserializeSeed<'de> for FieldsDe<'a> {
+impl<'de> DeserializeSeed<'de> for FieldsDe<'_> {
     type Value = ();
 
     fn deserialize<D: Deserializer<'de>>(self, deserializer: D) -> Result<(), D::Error> {

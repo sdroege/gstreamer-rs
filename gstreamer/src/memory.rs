@@ -352,7 +352,7 @@ impl MemoryRef {
     }
 }
 
-impl<'a, T> MemoryMap<'a, T> {
+impl<T> MemoryMap<'_, T> {
     #[doc(alias = "get_size")]
     #[inline]
     pub fn size(&self) -> usize {
@@ -374,7 +374,7 @@ impl<'a, T> MemoryMap<'a, T> {
     }
 }
 
-impl<'a> MemoryMap<'a, Writable> {
+impl MemoryMap<'_, Writable> {
     #[inline]
     pub fn as_mut_slice(&mut self) -> &mut [u8] {
         if self.map_info.size == 0 {
@@ -384,21 +384,21 @@ impl<'a> MemoryMap<'a, Writable> {
     }
 }
 
-impl<'a, T> AsRef<[u8]> for MemoryMap<'a, T> {
+impl<T> AsRef<[u8]> for MemoryMap<'_, T> {
     #[inline]
     fn as_ref(&self) -> &[u8] {
         self.as_slice()
     }
 }
 
-impl<'a> AsMut<[u8]> for MemoryMap<'a, Writable> {
+impl AsMut<[u8]> for MemoryMap<'_, Writable> {
     #[inline]
     fn as_mut(&mut self) -> &mut [u8] {
         self.as_mut_slice()
     }
 }
 
-impl<'a, T> Deref for MemoryMap<'a, T> {
+impl<T> Deref for MemoryMap<'_, T> {
     type Target = [u8];
 
     #[inline]
@@ -407,14 +407,14 @@ impl<'a, T> Deref for MemoryMap<'a, T> {
     }
 }
 
-impl<'a> DerefMut for MemoryMap<'a, Writable> {
+impl DerefMut for MemoryMap<'_, Writable> {
     #[inline]
     fn deref_mut(&mut self) -> &mut [u8] {
         self.as_mut_slice()
     }
 }
 
-impl<'a, T> fmt::Debug for MemoryMap<'a, T> {
+impl<T> fmt::Debug for MemoryMap<'_, T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_tuple("MemoryMap").field(&self.memory()).finish()
     }
@@ -426,9 +426,9 @@ impl<'a, T> PartialEq for MemoryMap<'a, T> {
     }
 }
 
-impl<'a, T> Eq for MemoryMap<'a, T> {}
+impl<T> Eq for MemoryMap<'_, T> {}
 
-impl<'a, T> Drop for MemoryMap<'a, T> {
+impl<T> Drop for MemoryMap<'_, T> {
     #[inline]
     fn drop(&mut self) {
         unsafe {
@@ -437,8 +437,8 @@ impl<'a, T> Drop for MemoryMap<'a, T> {
     }
 }
 
-unsafe impl<'a, T> Send for MemoryMap<'a, T> {}
-unsafe impl<'a, T> Sync for MemoryMap<'a, T> {}
+unsafe impl<T> Send for MemoryMap<'_, T> {}
+unsafe impl<T> Sync for MemoryMap<'_, T> {}
 
 impl<T> MappedMemory<T> {
     #[inline]
@@ -545,7 +545,7 @@ pub struct Dump<'a> {
     end: Bound<usize>,
 }
 
-impl<'a> Dump<'a> {
+impl Dump<'_> {
     fn fmt(&self, f: &mut fmt::Formatter, debug: bool) -> fmt::Result {
         let map = self.memory.map_readable().expect("Failed to map memory");
         let data = map.as_slice();
@@ -564,13 +564,13 @@ impl<'a> Dump<'a> {
     }
 }
 
-impl<'a> fmt::Display for Dump<'a> {
+impl fmt::Display for Dump<'_> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         self.fmt(f, false)
     }
 }
 
-impl<'a> fmt::Debug for Dump<'a> {
+impl fmt::Debug for Dump<'_> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         self.fmt(f, true)
     }

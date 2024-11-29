@@ -8,6 +8,7 @@
 
 #![cfg_attr(docsrs, feature(doc_cfg))]
 #![allow(clippy::missing_safety_doc)]
+#![allow(clippy::manual_c_str_literals)]
 
 pub use gst_gl;
 pub use gstreamer_gl_wayland_sys as ffi;

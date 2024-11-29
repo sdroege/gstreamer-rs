@@ -937,8 +937,8 @@ impl glib::types::StaticType for Array {
 #[derive(Debug, Clone)]
 pub struct ArrayRef<'a>(&'a [glib::SendValue]);
 
-unsafe impl<'a> Send for ArrayRef<'a> {}
-unsafe impl<'a> Sync for ArrayRef<'a> {}
+unsafe impl Send for ArrayRef<'_> {}
+unsafe impl Sync for ArrayRef<'_> {}
 
 impl<'a> ArrayRef<'a> {
     pub fn new(values: &'a [glib::SendValue]) -> Self {
@@ -953,7 +953,7 @@ impl<'a> ArrayRef<'a> {
     }
 }
 
-impl<'a> ops::Deref for ArrayRef<'a> {
+impl ops::Deref for ArrayRef<'_> {
     type Target = [glib::SendValue];
 
     #[inline]
@@ -962,7 +962,7 @@ impl<'a> ops::Deref for ArrayRef<'a> {
     }
 }
 
-impl<'a> AsRef<[glib::SendValue]> for ArrayRef<'a> {
+impl AsRef<[glib::SendValue]> for ArrayRef<'_> {
     #[inline]
     fn as_ref(&self) -> &[glib::SendValue] {
         self.as_slice()
@@ -988,7 +988,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for ArrayRef<'a> {
     }
 }
 
-impl<'a> glib::value::ToValue for ArrayRef<'a> {
+impl glib::value::ToValue for ArrayRef<'_> {
     #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<Array>();
@@ -1014,7 +1014,7 @@ impl<'a> From<ArrayRef<'a>> for glib::Value {
     }
 }
 
-impl<'a> glib::types::StaticType for ArrayRef<'a> {
+impl glib::types::StaticType for ArrayRef<'_> {
     #[inline]
     fn static_type() -> glib::types::Type {
         unsafe { from_glib(ffi::gst_value_array_get_type()) }
@@ -1164,8 +1164,8 @@ impl glib::types::StaticType for List {
 #[derive(Debug, Clone)]
 pub struct ListRef<'a>(&'a [glib::SendValue]);
 
-unsafe impl<'a> Send for ListRef<'a> {}
-unsafe impl<'a> Sync for ListRef<'a> {}
+unsafe impl Send for ListRef<'_> {}
+unsafe impl Sync for ListRef<'_> {}
 
 impl<'a> ListRef<'a> {
     pub fn new(values: &'a [glib::SendValue]) -> Self {
@@ -1180,7 +1180,7 @@ impl<'a> ListRef<'a> {
     }
 }
 
-impl<'a> ops::Deref for ListRef<'a> {
+impl ops::Deref for ListRef<'_> {
     type Target = [glib::SendValue];
 
     #[inline]
@@ -1189,7 +1189,7 @@ impl<'a> ops::Deref for ListRef<'a> {
     }
 }
 
-impl<'a> AsRef<[glib::SendValue]> for ListRef<'a> {
+impl AsRef<[glib::SendValue]> for ListRef<'_> {
     #[inline]
     fn as_ref(&self) -> &[glib::SendValue] {
         self.as_slice()
@@ -1215,7 +1215,7 @@ unsafe impl<'a> glib::value::FromValue<'a> for ListRef<'a> {
     }
 }
 
-impl<'a> glib::value::ToValue for ListRef<'a> {
+impl glib::value::ToValue for ListRef<'_> {
     #[inline]
     fn to_value(&self) -> glib::Value {
         let mut value = glib::Value::for_value_type::<List>();
@@ -1241,7 +1241,7 @@ impl<'a> From<ListRef<'a>> for glib::Value {
     }
 }
 
-impl<'a> glib::types::StaticType for ListRef<'a> {
+impl glib::types::StaticType for ListRef<'_> {
     #[inline]
     fn static_type() -> glib::types::Type {
         unsafe { from_glib(ffi::gst_value_list_get_type()) }

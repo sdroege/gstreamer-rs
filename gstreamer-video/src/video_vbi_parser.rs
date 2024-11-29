@@ -157,7 +157,7 @@ pub struct AncillaryIter<'a> {
     parser: &'a mut VideoVBIParser,
 }
 
-impl<'a> Iterator for AncillaryIter<'a> {
+impl Iterator for AncillaryIter<'_> {
     type Item = Result<VideoAncillary, VideoVBIError>;
 
     fn next(&mut self) -> Option<Self::Item> {

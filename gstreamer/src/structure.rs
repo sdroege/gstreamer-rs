@@ -258,7 +258,7 @@ impl<'a> ToGlibPtrMut<'a, *mut ffi::GstStructure> for Structure {
     type Storage = PhantomData<&'a mut Self>;
 
     #[inline]
-    fn to_glib_none_mut(&'a mut self) -> StashMut<*mut ffi::GstStructure, Self> {
+    fn to_glib_none_mut(&'a mut self) -> StashMut<'a, *mut ffi::GstStructure, Self> {
         unsafe { StashMut(self.0.as_mut(), PhantomData) }
     }
 }
@@ -1096,7 +1096,7 @@ impl<'a> FieldIterator<'a> {
     }
 }
 
-impl<'a> Iterator for FieldIterator<'a> {
+impl Iterator for FieldIterator<'_> {
     type Item = &'static glib::GStr;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -1119,7 +1119,7 @@ impl<'a> Iterator for FieldIterator<'a> {
     }
 }
 
-impl<'a> DoubleEndedIterator for FieldIterator<'a> {
+impl DoubleEndedIterator for FieldIterator<'_> {
     fn next_back(&mut self) -> Option<Self::Item> {
         if self.idx == self.n_fields {
             return None;
@@ -1132,9 +1132,9 @@ impl<'a> DoubleEndedIterator for FieldIterator<'a> {
     }
 }
 
-impl<'a> ExactSizeIterator for FieldIterator<'a> {}
+impl ExactSizeIterator for FieldIterator<'_> {}
 
-impl<'a> std::iter::FusedIterator for FieldIterator<'a> {}
+impl std::iter::FusedIterator for FieldIterator<'_> {}
 
 #[derive(Debug)]
 pub struct Iter<'a> {
@@ -1183,7 +1183,7 @@ impl<'a> Iterator for Iter<'a> {
     }
 }
 
-impl<'a> DoubleEndedIterator for Iter<'a> {
+impl DoubleEndedIterator for Iter<'_> {
     fn next_back(&mut self) -> Option<Self::Item> {
         let f = self.iter.next_back()?;
         let v = self.iter.structure.value(f);
@@ -1197,9 +1197,9 @@ impl<'a> DoubleEndedIterator for Iter<'a> {
     }
 }
 
-impl<'a> ExactSizeIterator for Iter<'a> {}
+impl ExactSizeIterator for Iter<'_> {}
 
-impl<'a> std::iter::FusedIterator for Iter<'a> {}
+impl std::iter::FusedIterator for Iter<'_> {}
 
 impl<'a> IntoIterator for &'a StructureRef {
     type IntoIter = Iter<'a>;

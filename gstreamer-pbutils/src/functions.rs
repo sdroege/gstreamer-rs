@@ -8,11 +8,11 @@ use glib::translate::*;
 
 pub unsafe trait CodecTag<'a>: gst::Tag<'a, TagType = &'a str> {}
 
-unsafe impl<'a> CodecTag<'a> for gst::tags::ContainerFormat {}
-unsafe impl<'a> CodecTag<'a> for gst::tags::AudioCodec {}
-unsafe impl<'a> CodecTag<'a> for gst::tags::VideoCodec {}
-unsafe impl<'a> CodecTag<'a> for gst::tags::SubtitleCodec {}
-unsafe impl<'a> CodecTag<'a> for gst::tags::Codec {}
+unsafe impl CodecTag<'_> for gst::tags::ContainerFormat {}
+unsafe impl CodecTag<'_> for gst::tags::AudioCodec {}
+unsafe impl CodecTag<'_> for gst::tags::VideoCodec {}
+unsafe impl CodecTag<'_> for gst::tags::SubtitleCodec {}
+unsafe impl CodecTag<'_> for gst::tags::Codec {}
 
 pub fn pb_utils_add_codec_description_to_tag_list_for_tag<'a, T: CodecTag<'a>>(
     taglist: &mut gst::TagListRef,

@@ -1004,7 +1004,7 @@ impl fmt::Debug for CapsRef {
                     structure: &'a StructureRef,
                 }
 
-                impl<'a> fmt::Debug for WithFeatures<'a> {
+                impl fmt::Debug for WithFeatures<'_> {
                     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
                         let name = format!("{}({})", self.structure.name(), self.features);
                         let mut debug = f.debug_struct(&name);

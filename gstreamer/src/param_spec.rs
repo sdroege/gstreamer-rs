@@ -33,7 +33,7 @@ impl HasParamSpec for crate::Fraction {
     type ParamSpec = ParamSpecFraction;
 
     type SetValue = crate::Fraction;
-    type BuilderFn = for<'a> fn(&'a str) -> ParamSpecFractionBuilder;
+    type BuilderFn = for<'a> fn(&'a str) -> ParamSpecFractionBuilder<'a>;
 
     fn param_spec_builder() -> Self::BuilderFn {
         ParamSpecFraction::builder
@@ -229,7 +229,7 @@ impl HasParamSpec for crate::Array {
     type ParamSpec = ParamSpecArray;
 
     type SetValue = crate::Array;
-    type BuilderFn = for<'a> fn(&'a str) -> ParamSpecArrayBuilder;
+    type BuilderFn = for<'a> fn(&'a str) -> ParamSpecArrayBuilder<'a>;
 
     fn param_spec_builder() -> Self::BuilderFn {
         ParamSpecArray::builder

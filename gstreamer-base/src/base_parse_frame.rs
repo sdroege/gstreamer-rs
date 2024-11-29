@@ -11,8 +11,8 @@ pub struct BaseParseFrame<'a>(
     PhantomData<&'a BaseParse>,
 );
 
-unsafe impl<'a> Send for BaseParseFrame<'a> {}
-unsafe impl<'a> Sync for BaseParseFrame<'a> {}
+unsafe impl Send for BaseParseFrame<'_> {}
+unsafe impl Sync for BaseParseFrame<'_> {}
 
 #[derive(Debug)]
 pub enum Overhead {
@@ -53,7 +53,7 @@ impl<'a> ::glib::translate::ToGlibPtr<'a, *mut ffi::GstBaseParseFrame> for BaseP
     type Storage = PhantomData<&'a Self>;
 
     #[inline]
-    fn to_glib_none(&'a self) -> ::glib::translate::Stash<*mut ffi::GstBaseParseFrame, Self> {
+    fn to_glib_none(&'a self) -> ::glib::translate::Stash<'a, *mut ffi::GstBaseParseFrame, Self> {
         Stash(self.0.as_ptr(), PhantomData)
     }
 
@@ -62,7 +62,7 @@ impl<'a> ::glib::translate::ToGlibPtr<'a, *mut ffi::GstBaseParseFrame> for BaseP
     }
 }
 
-impl<'a> fmt::Debug for BaseParseFrame<'a> {
+impl fmt::Debug for BaseParseFrame<'_> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let mut b = f.debug_struct("BaseParseFrame");
 

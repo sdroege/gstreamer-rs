@@ -811,7 +811,7 @@ impl<'a> Iterator for GenericTagIter<'a> {
     }
 }
 
-impl<'a> DoubleEndedIterator for GenericTagIter<'a> {
+impl DoubleEndedIterator for GenericTagIter<'_> {
     fn next_back(&mut self) -> Option<Self::Item> {
         if self.idx == self.size {
             return None;
@@ -833,9 +833,9 @@ impl<'a> DoubleEndedIterator for GenericTagIter<'a> {
     }
 }
 
-impl<'a> ExactSizeIterator for GenericTagIter<'a> {}
+impl ExactSizeIterator for GenericTagIter<'_> {}
 
-impl<'a> std::iter::FusedIterator for GenericTagIter<'a> {}
+impl std::iter::FusedIterator for GenericTagIter<'_> {}
 
 #[derive(Debug)]
 pub struct GenericIter<'a> {
@@ -903,7 +903,7 @@ impl<'a> Iterator for GenericIter<'a> {
     }
 }
 
-impl<'a> DoubleEndedIterator for GenericIter<'a> {
+impl DoubleEndedIterator for GenericIter<'_> {
     fn next_back(&mut self) -> Option<Self::Item> {
         if self.idx == self.size {
             return None;
@@ -927,9 +927,9 @@ impl<'a> DoubleEndedIterator for GenericIter<'a> {
     }
 }
 
-impl<'a> ExactSizeIterator for GenericIter<'a> {}
+impl ExactSizeIterator for GenericIter<'_> {}
 
-impl<'a> std::iter::FusedIterator for GenericIter<'a> {}
+impl std::iter::FusedIterator for GenericIter<'_> {}
 
 #[derive(Debug)]
 pub struct Iter<'a> {
@@ -997,7 +997,7 @@ impl<'a> Iterator for Iter<'a> {
     }
 }
 
-impl<'a> DoubleEndedIterator for Iter<'a> {
+impl DoubleEndedIterator for Iter<'_> {
     fn next_back(&mut self) -> Option<Self::Item> {
         if self.idx == self.size {
             return None;
@@ -1021,9 +1021,9 @@ impl<'a> DoubleEndedIterator for Iter<'a> {
     }
 }
 
-impl<'a> ExactSizeIterator for Iter<'a> {}
+impl ExactSizeIterator for Iter<'_> {}
 
-impl<'a> std::iter::FusedIterator for Iter<'a> {}
+impl std::iter::FusedIterator for Iter<'_> {}
 
 #[doc(alias = "gst_tag_exists")]
 pub fn tag_exists(name: impl IntoGStr) -> bool {
@@ -1306,7 +1306,7 @@ mod tests {
             const TAG_NAME: &'static glib::GStr = glib::gstr!("my-custom-tag");
         }
 
-        impl<'a> CustomTag<'a> for MyCustomTag {
+        impl CustomTag<'_> for MyCustomTag {
             const FLAG: crate::TagFlag = crate::TagFlag::Meta;
             const NICK: &'static glib::GStr = glib::gstr!("my custom tag");
             const DESCRIPTION: &'static glib::GStr =

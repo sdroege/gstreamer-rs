@@ -17,7 +17,9 @@ impl<'a> glib::translate::ToGlibPtrMut<'a, *mut ffi::GstTensorDim> for TensorDim
     type Storage = PhantomData<&'a mut Self>;
 
     #[inline]
-    fn to_glib_none_mut(&'a mut self) -> glib::translate::StashMut<*mut ffi::GstTensorDim, Self> {
+    fn to_glib_none_mut(
+        &'a mut self,
+    ) -> glib::translate::StashMut<'a, *mut ffi::GstTensorDim, Self> {
         glib::translate::StashMut(self as *mut _ as *mut _, PhantomData)
     }
 }

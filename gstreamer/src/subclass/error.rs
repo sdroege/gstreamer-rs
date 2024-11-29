@@ -95,7 +95,7 @@ impl From<FlowError> for FlowReturn {
     }
 }
 
-impl<'a> From<&'a FlowError> for FlowReturn {
+impl From<&FlowError> for FlowReturn {
     fn from(err: &FlowError) -> FlowReturn {
         match *err {
             FlowError::Flushing => FlowReturn::Flushing,

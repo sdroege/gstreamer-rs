@@ -38,7 +38,7 @@ impl DiscovererVideoInfo {
 
 pub struct Debug<'a>(&'a DiscovererVideoInfo);
 
-impl<'a> fmt::Debug for Debug<'a> {
+impl fmt::Debug for Debug<'_> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let info = self.0.upcast_ref::<DiscovererStreamInfo>();
 

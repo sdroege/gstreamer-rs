@@ -30,7 +30,7 @@ const CAPS_VARIANT_NAMES: &[&str] = &[
 ];
 
 struct CapsItemSe<'a>(&'a StructureRef, Option<&'a CapsFeaturesRef>);
-impl<'a> Serialize for CapsItemSe<'a> {
+impl Serialize for CapsItemSe<'_> {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         let mut tup = serializer.serialize_tuple(2)?;
         tup.serialize_element(self.0)?;
@@ -40,7 +40,7 @@ impl<'a> Serialize for CapsItemSe<'a> {
 }
 
 struct CapsForIterSe<'a>(&'a CapsRef);
-impl<'a> Serialize for CapsForIterSe<'a> {
+impl Serialize for CapsForIterSe<'_> {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         let iter = self.0.iter_with_features();
         let size = iter.size_hint().0;
@@ -154,7 +154,7 @@ impl<'de> Deserialize<'de> for CapsSome {
 }
 
 struct CapsVariantKindsVisitor;
-impl<'de> Visitor<'de> for CapsVariantKindsVisitor {
+impl Visitor<'_> for CapsVariantKindsVisitor {
     type Value = CapsVariantKinds;
 
     fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {

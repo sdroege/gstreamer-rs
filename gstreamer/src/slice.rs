@@ -12,7 +12,7 @@ pub trait ByteSliceExt {
     fn dump_range(&self, range: impl RangeBounds<usize>) -> Dump;
 }
 
-impl<'a> ByteSliceExt for &'a [u8] {
+impl ByteSliceExt for &[u8] {
     fn dump(&self) -> Dump {
         self.dump_range(..)
     }
@@ -26,7 +26,7 @@ impl<'a> ByteSliceExt for &'a [u8] {
     }
 }
 
-impl<'a> ByteSliceExt for &'a mut [u8] {
+impl ByteSliceExt for &mut [u8] {
     fn dump(&self) -> Dump {
         self.dump_range(..)
     }
@@ -46,7 +46,7 @@ pub struct Dump<'a> {
     pub(crate) end: Bound<usize>,
 }
 
-impl<'a> Dump<'a> {
+impl Dump<'_> {
     fn fmt(&self, f: &mut fmt::Formatter, debug: bool) -> fmt::Result {
         use std::fmt::Write;
 
@@ -148,13 +148,13 @@ impl<'a> Dump<'a> {
     }
 }
 
-impl<'a> fmt::Display for Dump<'a> {
+impl fmt::Display for Dump<'_> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         self.fmt(f, false)
     }
 }
 
-impl<'a> fmt::Debug for Dump<'a> {
+impl fmt::Debug for Dump<'_> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         self.fmt(f, true)
     }
