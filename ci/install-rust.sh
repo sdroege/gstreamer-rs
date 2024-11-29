@@ -27,33 +27,19 @@ if [ "$RUST_IMAGE_FULL" = "1" ]; then
   rustup component add rustfmt
 
   cargo install --locked cargo-deny
-    if [ "$RUST_VERSION" = "1.71.1" ]; then
-        cargo install --locked cargo-outdated
-    else
-        # Don't use --locked because time-0.3.30 does not build with 1.80 or newer
-        cargo install cargo-outdated
-    fi
+  # Don't use --locked because time-0.3.30 does not build with 1.80 or newer
+  cargo install cargo-outdated
   cargo install --locked typos-cli --version "1.19.0"
 
   # Coverage tools
   rustup component add llvm-tools-preview
-  if [ "$RUST_VERSION" = "1.71.1" ]; then
-      cargo install --locked grcov
-  else
-      # Don't use --locked because time-0.3.30 does not build with 1.80 or newer
-      cargo install grcov
-  fi
+  cargo install --locked grcov
 fi
 
-# Multiple dependencies of cargo-nextest require 1.74/1.75 nowadays
-if [ "$RUST_VERSION" = "1.71.1" ]; then
-  cargo install --locked cargo-nextest@0.9.67
-else
-  cargo install --locked cargo-nextest
-fi
+cargo install --locked cargo-nextest
 
-if [ "$RUST_VERSION" = "1.71.1" ]; then
-    cargo install --locked cargo-c --version 0.9.26+cargo-0.74
+if [ "$RUST_VERSION" = "1.80.1" ]; then
+    cargo install --locked cargo-c --version 0.10.5+cargo-0.83
 else
     cargo install --locked cargo-c --version 0.10.7+cargo-0.84
 fi

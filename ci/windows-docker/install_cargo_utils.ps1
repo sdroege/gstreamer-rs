@@ -4,8 +4,8 @@ rustup --version
 rustc --version
 cargo --version
 
-if ("$env:RUST_VERSION" -eq "1.71.1") {
-    cargo install --locked cargo-c --version 0.9.26+cargo-0.74
+if ("$env:RUST_VERSION" -eq "1.80.1") {
+    cargo install --locked cargo-c --version 0.10.5+cargo-0.93
 } else {
     cargo install --locked cargo-c --version 0.10.7+cargo-0.84
 }
@@ -15,12 +15,7 @@ if (!$?) {
   Exit 1
 }
 
-# Multiple dependencies of cargo-nextest require 1.74/1.75 nowadays
-if ("$env:RUST_VERSION" -eq "1.71.1") {
-    cargo install --locked cargo-nextest@0.9.67
-} else {
-    cargo install --locked cargo-nextest
-}
+cargo install --locked cargo-nextest
 
 if (!$?) {
   Write-Host "Failed to install cargo-nextest"
