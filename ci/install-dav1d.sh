@@ -1,6 +1,6 @@
 set -e
 
-RELEASE=1.4.3
+RELEASE=1.5.0
 
 git clone https://code.videolan.org/videolan/dav1d.git --branch $RELEASE
 cd dav1d
