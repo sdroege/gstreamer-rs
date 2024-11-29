@@ -339,7 +339,7 @@ impl std::fmt::Debug for Other {
     }
 }
 
-impl<'a> PlayMessage<'a> {
+impl PlayMessage<'_> {
     #[doc(alias = "gst_play_message_parse_uri_loaded")]
     #[doc(alias = "gst_play_message_parse_position_updated")]
     #[doc(alias = "gst_play_message_parse_duration_updated")]

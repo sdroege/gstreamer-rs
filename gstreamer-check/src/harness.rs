@@ -813,7 +813,7 @@ impl Harness {
 #[derive(Debug)]
 pub struct Ref<'a>(&'a Harness);
 
-impl<'a> ops::Deref for Ref<'a> {
+impl ops::Deref for Ref<'_> {
     type Target = Harness;
 
     #[inline]
@@ -825,7 +825,7 @@ impl<'a> ops::Deref for Ref<'a> {
 #[derive(Debug)]
 pub struct RefMut<'a>(&'a mut Harness);
 
-impl<'a> ops::Deref for RefMut<'a> {
+impl ops::Deref for RefMut<'_> {
     type Target = Harness;
 
     #[inline]
@@ -834,7 +834,7 @@ impl<'a> ops::Deref for RefMut<'a> {
     }
 }
 
-impl<'a> ops::DerefMut for RefMut<'a> {
+impl ops::DerefMut for RefMut<'_> {
     #[inline]
     fn deref_mut(&mut self) -> &mut Harness {
         self.0

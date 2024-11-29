@@ -111,6 +111,7 @@ pub struct PadTemplateBuilder<'a> {
     documentation_caps: Option<&'a Caps>,
 }
 
+#[allow(clippy::needless_lifetimes)]
 impl<'a> PadTemplateBuilder<'a> {
     pub fn gtype(self, gtype: glib::Type) -> Self {
         PadTemplateBuilder {

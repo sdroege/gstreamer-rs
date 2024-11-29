@@ -28,7 +28,7 @@ impl<'a> Iter<'a> {
     }
 }
 
-impl<'a> Iterator for Iter<'a> {
+impl Iterator for Iter<'_> {
     type Item = Stream;
 
     fn next(&mut self) -> Option<Self::Item> {
@@ -72,7 +72,7 @@ impl<'a> Iterator for Iter<'a> {
     }
 }
 
-impl<'a> DoubleEndedIterator for Iter<'a> {
+impl DoubleEndedIterator for Iter<'_> {
     fn next_back(&mut self) -> Option<Self::Item> {
         if self.idx == self.size {
             return None;
@@ -94,9 +94,9 @@ impl<'a> DoubleEndedIterator for Iter<'a> {
     }
 }
 
-impl<'a> ExactSizeIterator for Iter<'a> {}
+impl ExactSizeIterator for Iter<'_> {}
 
-impl<'a> std::iter::FusedIterator for Iter<'a> {}
+impl std::iter::FusedIterator for Iter<'_> {}
 
 #[derive(Debug, Clone)]
 #[must_use = "The builder must be built to be used"]
@@ -271,11 +271,11 @@ impl<'a> IntoIterator for &'a StreamCollection {
 
 pub struct Debug<'a>(&'a StreamCollection);
 
-impl<'a> fmt::Debug for Debug<'a> {
+impl fmt::Debug for Debug<'_> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         struct Streams<'a>(&'a StreamCollection);
 
-        impl<'a> fmt::Debug for Streams<'a> {
+        impl fmt::Debug for Streams<'_> {
             fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
                 let mut f = f.debug_list();
 

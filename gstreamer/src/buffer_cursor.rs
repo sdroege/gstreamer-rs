@@ -343,19 +343,19 @@ impl<T> Drop for BufferRefCursor<T> {
     }
 }
 
-impl<'a> io::Read for BufferRefCursor<&'a BufferRef> {
+impl io::Read for BufferRefCursor<&BufferRef> {
     define_read_impl!(|s| s.buffer);
 }
 
-impl<'a> io::Write for BufferRefCursor<&'a mut BufferRef> {
+impl io::Write for BufferRefCursor<&mut BufferRef> {
     define_write_impl!(|s| s.buffer);
 }
 
-impl<'a> io::Seek for BufferRefCursor<&'a BufferRef> {
+impl io::Seek for BufferRefCursor<&BufferRef> {
     define_seek_impl!(|s| s.buffer);
 }
 
-impl<'a> io::Seek for BufferRefCursor<&'a mut BufferRef> {
+impl io::Seek for BufferRefCursor<&mut BufferRef> {
     define_seek_impl!(|s| s.buffer);
 }
 

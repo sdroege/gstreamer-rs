@@ -91,7 +91,7 @@ unsafe fn from(t: ffi::GstAnalyticsMtd) -> ffi::GstAnalyticsClsMtd {
     std::mem::transmute(t)
 }
 
-impl<'a> AnalyticsMtdRef<'a, AnalyticsClassificationMtd> {
+impl AnalyticsMtdRef<'_, AnalyticsClassificationMtd> {
     #[doc(alias = "gst_analytics_cls_mtd_get_length")]
     pub fn len(&self) -> usize {
         unsafe {
@@ -139,7 +139,7 @@ pub struct AnalyticsClassificationIterator<'a> {
     length: usize,
 }
 
-impl<'a> Iterator for AnalyticsClassificationIterator<'a> {
+impl Iterator for AnalyticsClassificationIterator<'_> {
     type Item = (glib::Quark, f32);
 
     fn next(&mut self) -> Option<Self::Item> {

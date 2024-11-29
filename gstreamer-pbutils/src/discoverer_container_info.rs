@@ -5,7 +5,7 @@ use crate::{prelude::*, DiscovererContainerInfo};
 
 pub struct Debug<'a>(&'a DiscovererContainerInfo);
 
-impl<'a> fmt::Debug for Debug<'a> {
+impl fmt::Debug for Debug<'_> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let streams = self.0.streams();
 

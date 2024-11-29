@@ -20,8 +20,8 @@ pub trait AnalyticsRelationMetaTrackingExt: sealed::Sealed {
     ) -> Result<AnalyticsMtdRef<AnalyticsTrackingMtd>, glib::BoolError>;
 }
 
-impl<'a> AnalyticsRelationMetaTrackingExt
-    for gst::MetaRefMut<'a, AnalyticsRelationMeta, gst::meta::Standalone>
+impl AnalyticsRelationMetaTrackingExt
+    for gst::MetaRefMut<'_, AnalyticsRelationMeta, gst::meta::Standalone>
 {
     #[doc(alias = "gst_analytics_relation_meta_add_tracking_mtd")]
     fn add_tracking_mtd(
@@ -59,7 +59,7 @@ unsafe fn from(t: ffi::GstAnalyticsMtd) -> ffi::GstAnalyticsTrackingMtd {
     std::mem::transmute(t)
 }
 
-impl<'a> AnalyticsMtdRef<'a, AnalyticsTrackingMtd> {
+impl AnalyticsMtdRef<'_, AnalyticsTrackingMtd> {
     #[doc(alias = "gst_analytics_tracking_mtd_get_info")]
     pub fn info(&self) -> (u64, gst::ClockTime, gst::ClockTime, bool) {
         let mut tracking_id: u64 = 0;
@@ -87,7 +87,7 @@ impl<'a> AnalyticsMtdRef<'a, AnalyticsTrackingMtd> {
     }
 }
 
-impl<'a> AnalyticsMtdRefMut<'a, AnalyticsTrackingMtd> {
+impl AnalyticsMtdRefMut<'_, AnalyticsTrackingMtd> {
     #[doc(alias = "gst_analytics_tracking_mtd_update_last_seen")]
     pub fn update_last_seen(&mut self, last_seen: gst::ClockTime) -> Result<(), glib::BoolError> {
         let ret: bool = unsafe {

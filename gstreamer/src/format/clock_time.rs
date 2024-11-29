@@ -475,7 +475,7 @@ unsafe impl glib::value::ValueTypeChecker for ClockTimeValueTypeOrNoneChecker {
     }
 }
 
-unsafe impl<'a> glib::value::FromValue<'a> for ClockTime {
+unsafe impl glib::value::FromValue<'_> for ClockTime {
     type Checker = ClockTimeValueTypeOrNoneChecker;
 
     #[inline]

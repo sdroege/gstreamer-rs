@@ -1238,7 +1238,7 @@ impl PartialEq for BufferRef {
 
 impl Eq for BufferRef {}
 
-impl<'a, T> BufferMap<'a, T> {
+impl<T> BufferMap<'_, T> {
     #[doc(alias = "get_size")]
     #[inline]
     pub fn size(&self) -> usize {
@@ -1260,7 +1260,7 @@ impl<'a, T> BufferMap<'a, T> {
     }
 }
 
-impl<'a> BufferMap<'a, Writable> {
+impl BufferMap<'_, Writable> {
     #[inline]
     pub fn as_mut_slice(&mut self) -> &mut [u8] {
         if self.map_info.size == 0 {
@@ -1270,21 +1270,21 @@ impl<'a> BufferMap<'a, Writable> {
     }
 }
 
-impl<'a, T> AsRef<[u8]> for BufferMap<'a, T> {
+impl<T> AsRef<[u8]> for BufferMap<'_, T> {
     #[inline]
     fn as_ref(&self) -> &[u8] {
         self.as_slice()
     }
 }
 
-impl<'a> AsMut<[u8]> for BufferMap<'a, Writable> {
+impl AsMut<[u8]> for BufferMap<'_, Writable> {
     #[inline]
     fn as_mut(&mut self) -> &mut [u8] {
         self.as_mut_slice()
     }
 }
 
-impl<'a, T> ops::Deref for BufferMap<'a, T> {
+impl<T> ops::Deref for BufferMap<'_, T> {
     type Target = [u8];
 
     #[inline]
@@ -1293,14 +1293,14 @@ impl<'a, T> ops::Deref for BufferMap<'a, T> {
     }
 }
 
-impl<'a> ops::DerefMut for BufferMap<'a, Writable> {
+impl ops::DerefMut for BufferMap<'_, Writable> {
     #[inline]
     fn deref_mut(&mut self) -> &mut [u8] {
         self.as_mut_slice()
     }
 }
 
-impl<'a, T> fmt::Debug for BufferMap<'a, T> {
+impl<T> fmt::Debug for BufferMap<'_, T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_tuple("BufferMap").field(&self.buffer()).finish()
     }
@@ -1312,9 +1312,9 @@ impl<'a, T> PartialEq for BufferMap<'a, T> {
     }
 }
 
-impl<'a, T> Eq for BufferMap<'a, T> {}
+impl<T> Eq for BufferMap<'_, T> {}
 
-impl<'a, T> Drop for BufferMap<'a, T> {
+impl<T> Drop for BufferMap<'_, T> {
     #[inline]
     fn drop(&mut self) {
         unsafe {
@@ -1323,8 +1323,8 @@ impl<'a, T> Drop for BufferMap<'a, T> {
     }
 }
 
-unsafe impl<'a, T> Send for BufferMap<'a, T> {}
-unsafe impl<'a, T> Sync for BufferMap<'a, T> {}
+unsafe impl<T> Send for BufferMap<'_, T> {}
+unsafe impl<T> Sync for BufferMap<'_, T> {}
 
 impl<T> MappedBuffer<T> {
     #[inline]
@@ -1455,7 +1455,7 @@ struct BufferChunked16Iter<'a> {
     len: usize,
 }
 
-impl<'a> Iterator for BufferChunked16Iter<'a> {
+impl Iterator for BufferChunked16Iter<'_> {
     // FIXME: Return a `&'self [u8]` once there's some GAT iterator trait
     type Item = ([u8; 16], usize);
 
@@ -1493,7 +1493,7 @@ impl<'a> Iterator for BufferChunked16Iter<'a> {
     }
 }
 
-impl<'a> Dump<'a> {
+impl Dump<'_> {
     fn fmt(&self, f: &mut fmt::Formatter, debug: bool) -> fmt::Result {
         let n_memory = self.buffer.n_memory();
         if n_memory == 0 {
@@ -1617,13 +1617,13 @@ impl<'a> Dump<'a> {
     }
 }
 
-impl<'a> fmt::Display for Dump<'a> {
+impl fmt::Display for Dump<'_> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         self.fmt(f, false)
     }
 }
 
-impl<'a> fmt::Debug for Dump<'a> {
+impl fmt::Debug for Dump<'_> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         self.fmt(f, true)
     }

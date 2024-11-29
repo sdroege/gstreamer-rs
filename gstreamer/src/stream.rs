@@ -12,7 +12,7 @@ impl Stream {
 
 pub struct Debug<'a>(&'a Stream);
 
-impl<'a> fmt::Debug for Debug<'a> {
+impl fmt::Debug for Debug<'_> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("Stream")
             .field("stream_id", &self.0.stream_id())

@@ -737,7 +737,7 @@ impl glib::value::ValueType for MessageType {
     type Type = Self;
 }
 
-unsafe impl<'a> FromValue<'a> for MessageType {
+unsafe impl FromValue<'_> for MessageType {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     #[inline]

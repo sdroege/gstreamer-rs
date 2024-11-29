@@ -422,7 +422,7 @@ impl UniqueAdapter {
 #[derive(Debug)]
 pub struct UniqueAdapterMap<'a>(&'a UniqueAdapter, &'a [u8]);
 
-impl<'a> Drop for UniqueAdapterMap<'a> {
+impl Drop for UniqueAdapterMap<'_> {
     #[inline]
     fn drop(&mut self) {
         unsafe {
@@ -431,7 +431,7 @@ impl<'a> Drop for UniqueAdapterMap<'a> {
     }
 }
 
-impl<'a> ops::Deref for UniqueAdapterMap<'a> {
+impl ops::Deref for UniqueAdapterMap<'_> {
     type Target = [u8];
 
     #[inline]
@@ -440,7 +440,7 @@ impl<'a> ops::Deref for UniqueAdapterMap<'a> {
     }
 }
 
-impl<'a> AsRef<[u8]> for UniqueAdapterMap<'a> {
+impl AsRef<[u8]> for UniqueAdapterMap<'_> {
     #[inline]
     fn as_ref(&self) -> &[u8] {
         self.1

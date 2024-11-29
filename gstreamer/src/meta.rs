@@ -102,7 +102,7 @@ impl<'a, T: fmt::Debug + 'a, U> fmt::Debug for MetaRefMut<'a, T, U> {
     }
 }
 
-impl<'a, T> ops::Deref for MetaRef<'a, T> {
+impl<T> ops::Deref for MetaRef<'_, T> {
     type Target = T;
 
     #[inline]
@@ -118,7 +118,7 @@ impl<'a, T> AsRef<MetaRef<'a, T>> for MetaRef<'a, T> {
     }
 }
 
-impl<'a, T> AsRef<T> for MetaRef<'a, T> {
+impl<T> AsRef<T> for MetaRef<'_, T> {
     #[inline]
     fn as_ref(&self) -> &T {
         self.meta
@@ -134,7 +134,7 @@ impl<'a, T: 'a> Clone for MetaRef<'a, T> {
     }
 }
 
-impl<'a, T, U> ops::Deref for MetaRefMut<'a, T, U> {
+impl<T, U> ops::Deref for MetaRefMut<'_, T, U> {
     type Target = T;
 
     #[inline]
@@ -143,7 +143,7 @@ impl<'a, T, U> ops::Deref for MetaRefMut<'a, T, U> {
     }
 }
 
-impl<'a, T, U> ops::DerefMut for MetaRefMut<'a, T, U> {
+impl<T, U> ops::DerefMut for MetaRefMut<'_, T, U> {
     #[inline]
     fn deref_mut(&mut self) -> &mut T {
         self.meta
@@ -157,7 +157,7 @@ impl<'a, T, U> AsRef<MetaRef<'a, T>> for MetaRefMut<'a, T, U> {
     }
 }
 
-impl<'a, T, U> AsMut<T> for MetaRefMut<'a, T, U> {
+impl<T, U> AsMut<T> for MetaRefMut<'_, T, U> {
     #[inline]
     fn as_mut(&mut self) -> &mut T {
         self.meta
@@ -531,7 +531,7 @@ impl<'a, T, U> MetaRefMut<'a, T, U> {
     }
 }
 
-impl<'a, T> MetaRefMut<'a, T, Standalone> {
+impl<T> MetaRefMut<'_, T, Standalone> {
     #[doc(alias = "gst_buffer_remove_meta")]
     pub fn remove(self) -> Result<(), glib::BoolError> {
         if self.flags().contains(crate::MetaFlags::LOCKED) {
@@ -1088,7 +1088,7 @@ impl MetaTransformCopy {
     }
 }
 
-unsafe impl<'a> MetaTransform<'a> for MetaTransformCopy {
+unsafe impl MetaTransform<'_> for MetaTransformCopy {
     type GLibType = ffi::GstMetaTransformCopy;
 
     fn quark() -> glib::Quark {

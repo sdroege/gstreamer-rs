@@ -90,7 +90,7 @@ mod custom_meta {
 
             *TYPE.get_or_init(|| unsafe {
                 let t = glib::Type::from_glib(gst::ffi::gst_meta_api_type_register(
-                    b"MyCustomMetaAPI\0".as_ptr() as *const _,
+                    c"MyCustomMetaAPI".as_ptr() as *const _,
                     // We provide no tags here as our meta is just a label and does
                     // not refer to any specific aspect of the buffer.
                     [ptr::null::<std::os::raw::c_char>()].as_ptr() as *mut *const _,
@@ -163,7 +163,7 @@ mod custom_meta {
                     MetaInfo(
                         ptr::NonNull::new(gst::ffi::gst_meta_register(
                             custom_meta_api_get_type().into_glib(),
-                            b"MyCustomMeta\0".as_ptr() as *const _,
+                            c"MyCustomMeta".as_ptr() as *const _,
                             mem::size_of::<CustomMeta>(),
                             Some(custom_meta_init),
                             Some(custom_meta_free),

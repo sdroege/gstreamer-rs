@@ -52,7 +52,7 @@ impl<'a> TagValuesSer<'a> {
     }
 }
 
-impl<'a> Serialize for TagValuesSer<'a> {
+impl Serialize for TagValuesSer<'_> {
     #[allow(clippy::redundant_closure_call)]
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         use std::ops::DerefMut;
@@ -102,7 +102,7 @@ impl<'a> TagsSer<'a> {
     }
 }
 
-impl<'a> Serialize for TagsSer<'a> {
+impl Serialize for TagsSer<'_> {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         let mut tup = serializer.serialize_tuple(2)?;
         tup.serialize_element(self.0)?;
@@ -112,7 +112,7 @@ impl<'a> Serialize for TagsSer<'a> {
 }
 
 struct TagListSer<'a>(&'a TagListRef);
-impl<'a> Serialize for TagListSer<'a> {
+impl Serialize for TagListSer<'_> {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         let tag_count = self.0.n_tags();
         match tag_count.cmp(&0) {
@@ -162,7 +162,7 @@ macro_rules! de_opt_tag(
 struct TagValues<'a>(&'a str, &'a mut TagListRef);
 
 struct TagValuesVisitor<'a>(&'a str, &'a mut TagListRef);
-impl<'de, 'a> Visitor<'de> for TagValuesVisitor<'a> {
+impl<'de> Visitor<'de> for TagValuesVisitor<'_> {
     type Value = ();
 
     fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
@@ -218,7 +218,7 @@ impl<'de, 'a> Visitor<'de> for TagValuesVisitor<'a> {
     }
 }
 
-impl<'de, 'a> DeserializeSeed<'de> for TagValues<'a> {
+impl<'de> DeserializeSeed<'de> for TagValues<'_> {
     type Value = ();
 
     fn deserialize<D: Deserializer<'de>>(self, deserializer: D) -> Result<(), D::Error> {
@@ -230,7 +230,7 @@ impl<'de, 'a> DeserializeSeed<'de> for TagValues<'a> {
 struct TagValuesTuple<'a>(&'a mut TagListRef);
 
 struct TagValuesTupleVisitor<'a>(&'a mut TagListRef);
-impl<'de, 'a> Visitor<'de> for TagValuesTupleVisitor<'a> {
+impl<'de> Visitor<'de> for TagValuesTupleVisitor<'_> {
     type Value = ();
 
     fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
@@ -248,7 +248,7 @@ impl<'de, 'a> Visitor<'de> for TagValuesTupleVisitor<'a> {
     }
 }
 
-impl<'de, 'a> DeserializeSeed<'de> for TagValuesTuple<'a> {
+impl<'de> DeserializeSeed<'de> for TagValuesTuple<'_> {
     type Value = ();
 
     fn deserialize<D: Deserializer<'de>>(self, deserializer: D) -> Result<(), D::Error> {

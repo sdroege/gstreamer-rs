@@ -43,7 +43,7 @@ static IDENTITY: [f32; 16] = [
     0.0, 0.0, 0.0, 1.0,
 ];
 
-const VS_SRC: &[u8] = b"
+const VS_SRC: &[u8] = c"
 uniform mat4 u_transformation;
 attribute vec4 a_position;
 attribute vec2 a_texcoord;
@@ -52,10 +52,10 @@ varying vec2 v_texcoord;
 void main() {
     gl_Position = u_transformation * a_position;
     v_texcoord = a_texcoord;
-}
-\0";
+}"
+.to_bytes();
 
-const FS_SRC: &[u8] = b"
+const FS_SRC: &[u8] = c"
 #ifdef GL_ES
 precision mediump float;
 #endif
@@ -64,8 +64,8 @@ uniform sampler2D tex;
 
 void main() {
     gl_FragColor = texture2D(tex, v_texcoord);
-}
-\0";
+}"
+.to_bytes();
 
 #[allow(clippy::unreadable_literal)]
 #[allow(clippy::unused_unit)]
@@ -149,12 +149,12 @@ impl Gl {
 
             let location = self
                 .gl
-                .GetUniformLocation(self.program, b"tex\0".as_ptr() as *const _);
+                .GetUniformLocation(self.program, c"tex".as_ptr() as *const _);
             self.gl.Uniform1i(location, 0);
 
             let location = self
                 .gl
-                .GetUniformLocation(self.program, b"u_transformation\0".as_ptr() as *const _);
+                .GetUniformLocation(self.program, c"u_transformation".as_ptr() as *const _);
             self.gl
                 .UniformMatrix4fv(location, 1, gl::FALSE, IDENTITY.as_ptr() as *const _);
 
@@ -222,8 +222,8 @@ fn load(gl_display: &impl glutin::display::GlDisplay) -> Gl {
             assert_eq!(gl.GetError(), 0);
         }
 
-        let attr_position = gl.GetAttribLocation(program, b"a_position\0".as_ptr() as *const _);
-        let attr_texture = gl.GetAttribLocation(program, b"a_texcoord\0".as_ptr() as *const _);
+        let attr_position = gl.GetAttribLocation(program, c"a_position".as_ptr() as *const _);
+        let attr_texture = gl.GetAttribLocation(program, c"a_texcoord".as_ptr() as *const _);
 
         let vao = if gl.BindVertexArray.is_loaded() {
             let mut vao = mem::MaybeUninit::uninit();

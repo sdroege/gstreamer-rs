@@ -67,7 +67,7 @@ impl<'a> glib::translate::ToGlibPtrMut<'a, *mut ffi::GstVideoRectangle> for Vide
     #[inline]
     fn to_glib_none_mut(
         &'a mut self,
-    ) -> glib::translate::StashMut<*mut ffi::GstVideoRectangle, Self> {
+    ) -> glib::translate::StashMut<'a, *mut ffi::GstVideoRectangle, Self> {
         glib::translate::StashMut(self as *mut _ as *mut _, PhantomData)
     }
 }

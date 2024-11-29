@@ -51,7 +51,7 @@ unsafe extern "C" fn notify_timeout_trampoline<P, F: Fn(&P) + Send + Sync + 'sta
 
 pub struct DebugInfo<'a>(&'a DiscovererInfo);
 
-impl<'a> fmt::Debug for DebugInfo<'a> {
+impl fmt::Debug for DebugInfo<'_> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let stream_info = self.0.stream_info();
         let stream_list = self.0.stream_list();

@@ -237,7 +237,7 @@ impl Drop for RecMutex {
     }
 }
 
-impl<'a> Drop for TaskLockGuard<'a> {
+impl Drop for TaskLockGuard<'_> {
     #[inline]
     fn drop(&mut self) {
         unsafe {

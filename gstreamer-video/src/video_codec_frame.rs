@@ -28,7 +28,7 @@ impl<'a> ::glib::translate::ToGlibPtr<'a, *mut ffi::GstVideoCodecFrame> for Vide
     }
 }
 
-impl<'a> fmt::Debug for VideoCodecFrame<'a> {
+impl fmt::Debug for VideoCodecFrame<'_> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let mut b = f.debug_struct("VideoCodecFrame");
 
@@ -235,7 +235,7 @@ impl<'a> VideoCodecFrame<'a> {
     }
 }
 
-impl<'a> IntoGlibPtr<*mut ffi::GstVideoCodecFrame> for VideoCodecFrame<'a> {
+impl IntoGlibPtr<*mut ffi::GstVideoCodecFrame> for VideoCodecFrame<'_> {
     #[inline]
     unsafe fn into_glib_ptr(self) -> *mut ffi::GstVideoCodecFrame {
         let stream_lock = self.element.stream_lock();
@@ -246,7 +246,7 @@ impl<'a> IntoGlibPtr<*mut ffi::GstVideoCodecFrame> for VideoCodecFrame<'a> {
     }
 }
 
-impl<'a> Drop for VideoCodecFrame<'a> {
+impl Drop for VideoCodecFrame<'_> {
     #[inline]
     fn drop(&mut self) {
         unsafe {

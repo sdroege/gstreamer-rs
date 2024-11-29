@@ -91,7 +91,7 @@ impl<'a> ToGlibPtr<'a, *const ffi::GstVideoAlignment> for VideoAlignment {
     type Storage = PhantomData<&'a Self>;
 
     #[inline]
-    fn to_glib_none(&'a self) -> Stash<*const ffi::GstVideoAlignment, Self> {
+    fn to_glib_none(&'a self) -> Stash<'a, *const ffi::GstVideoAlignment, Self> {
         Stash(&self.0, PhantomData)
     }
 }

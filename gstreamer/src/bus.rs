@@ -326,7 +326,7 @@ pub struct Iter<'a> {
     timeout: Option<crate::ClockTime>,
 }
 
-impl<'a> Iterator for Iter<'a> {
+impl Iterator for Iter<'_> {
     type Item = Message;
 
     fn next(&mut self) -> Option<Message> {

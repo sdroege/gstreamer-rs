@@ -13,10 +13,10 @@ pub struct RTPBuffer<'a, T> {
     phantom: PhantomData<&'a T>,
 }
 
-unsafe impl<'a, T> Send for RTPBuffer<'a, T> {}
-unsafe impl<'a, T> Sync for RTPBuffer<'a, T> {}
+unsafe impl<T> Send for RTPBuffer<'_, T> {}
+unsafe impl<T> Sync for RTPBuffer<'_, T> {}
 
-impl<'a, T> fmt::Debug for RTPBuffer<'a, T> {
+impl<T> fmt::Debug for RTPBuffer<'_, T> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         f.debug_struct("RTPBuffer")
             .field("rtp_buffer", &self.rtp_buffer)
@@ -28,7 +28,7 @@ impl<'a> RTPBuffer<'a, Readable> {
     #[inline]
     pub fn from_buffer_readable(
         buffer: &'a gst::BufferRef,
-    ) -> Result<RTPBuffer<Readable>, glib::BoolError> {
+    ) -> Result<RTPBuffer<'a, Readable>, glib::BoolError> {
         skip_assert_initialized!();
         unsafe {
             let mut rtp_buffer = mem::MaybeUninit::zeroed();
@@ -64,7 +64,7 @@ impl<'a> RTPBuffer<'a, Writable> {
     #[inline]
     pub fn from_buffer_writable(
         buffer: &'a mut gst::BufferRef,
-    ) -> Result<RTPBuffer<Writable>, glib::BoolError> {
+    ) -> Result<RTPBuffer<'a, Writable>, glib::BoolError> {
         skip_assert_initialized!();
         unsafe {
             let mut rtp_buffer = mem::MaybeUninit::zeroed();
@@ -202,7 +202,7 @@ impl<'a> RTPBuffer<'a, Writable> {
     }
 }
 
-impl<'a, T> RTPBuffer<'a, T> {
+impl<T> RTPBuffer<'_, T> {
     #[doc(alias = "get_seq")]
     #[doc(alias = "gst_rtp_buffer_get_seq")]
     pub fn seq(&self) -> u16 {
@@ -429,7 +429,7 @@ impl<'a, T> RTPBuffer<'a, T> {
     }
 }
 
-impl<'a, T> Drop for RTPBuffer<'a, T> {
+impl<T> Drop for RTPBuffer<'_, T> {
     #[inline]
     fn drop(&mut self) {
         unsafe {

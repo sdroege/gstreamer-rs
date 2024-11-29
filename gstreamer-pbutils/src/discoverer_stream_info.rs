@@ -51,7 +51,7 @@ impl<O: IsA<DiscovererStreamInfo>> DiscovererStreamInfoExtManual for O {}
 
 pub struct Debug<'a>(&'a DiscovererStreamInfo);
 
-impl<'a> fmt::Debug for Debug<'a> {
+impl fmt::Debug for Debug<'_> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let mut d = f.debug_struct("DiscovererStreamInfo");
         d.field("caps", &self.0.caps())

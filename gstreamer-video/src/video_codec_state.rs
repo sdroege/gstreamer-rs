@@ -61,7 +61,7 @@ impl<'a, T: VideoCodecStateContext<'a>> fmt::Debug for VideoCodecState<'a, T> {
     }
 }
 
-impl<'a> VideoCodecState<'a, Readable> {
+impl VideoCodecState<'_, Readable> {
     // Take ownership of @state
     #[inline]
     pub(crate) unsafe fn new(state: *mut ffi::GstVideoCodecState) -> Self {
@@ -238,7 +238,7 @@ impl<'a> VideoCodecState<'a, InNegotiation<'a>> {
     }
 }
 
-impl<'a> Clone for VideoCodecState<'a, Readable> {
+impl Clone for VideoCodecState<'_, Readable> {
     #[inline]
     fn clone(&self) -> Self {
         unsafe {
@@ -248,5 +248,5 @@ impl<'a> Clone for VideoCodecState<'a, Readable> {
     }
 }
 
-unsafe impl<'a> Send for VideoCodecState<'a, Readable> {}
-unsafe impl<'a> Sync for VideoCodecState<'a, Readable> {}
+unsafe impl Send for VideoCodecState<'_, Readable> {}
+unsafe impl Sync for VideoCodecState<'_, Readable> {}

@@ -225,12 +225,12 @@ mod sealed {
 pub trait AnalyticsMetaRefExt<'a>: sealed::Sealed {
     #[doc(alias = "gst_analytics_relation_meta_get_mtd")]
     fn mtd<T: AnalyticsMtd>(&self, an_meta_id: u32) -> Option<AnalyticsMtdRef<'a, T>>;
-    fn iter<T: AnalyticsMtd>(&'a self) -> AnalyticsMtdIter<T>;
+    fn iter<T: AnalyticsMtd>(&'a self) -> AnalyticsMtdIter<'a, T>;
     fn iter_direct_related<T: AnalyticsMtd>(
         &'a self,
         an_meta_id: u32,
         rel_type: RelTypes,
-    ) -> AnalyticsMtdIter<T>;
+    ) -> AnalyticsMtdIter<'a, T>;
 }
 
 impl<'a> AnalyticsMetaRefExt<'a> for gst::MetaRef<'a, AnalyticsRelationMeta> {
@@ -260,7 +260,7 @@ impl<'a> AnalyticsMetaRefExt<'a> for gst::MetaRef<'a, AnalyticsRelationMeta> {
         &'a self,
         an_meta_id: u32,
         rel_type: RelTypes,
-    ) -> AnalyticsMtdIter<T> {
+    ) -> AnalyticsMtdIter<'a, T> {
         AnalyticsMtdIter::new_direct_related(self, an_meta_id, rel_type.into_glib())
     }
 }
@@ -339,12 +339,12 @@ pub trait AnalyticsMetaRefMutExt<'a>: sealed::Sealed {
     fn mtd_mut<T: AnalyticsMtd>(&'a mut self, an_meta_id: u32)
         -> Option<AnalyticsMtdRefMut<'a, T>>;
 
-    fn iter_mut<T: AnalyticsMtd>(&'a mut self) -> AnalyticsMtdIterMut<T>;
+    fn iter_mut<T: AnalyticsMtd>(&'a mut self) -> AnalyticsMtdIterMut<'a, T>;
     fn iter_direct_related_mut<T: AnalyticsMtd>(
         &'a mut self,
         an_meta_id: u32,
         rel_type: RelTypes,
-    ) -> AnalyticsMtdIterMut<T>;
+    ) -> AnalyticsMtdIterMut<'a, T>;
 }
 
 impl<'a> AnalyticsMetaRefMutExt<'a>
@@ -372,14 +372,14 @@ impl<'a> AnalyticsMetaRefMutExt<'a>
         }
     }
 
-    fn iter_mut<T: AnalyticsMtd>(&'a mut self) -> AnalyticsMtdIterMut<T> {
+    fn iter_mut<T: AnalyticsMtd>(&'a mut self) -> AnalyticsMtdIterMut<'a, T> {
         AnalyticsMtdIterMut::new(self)
     }
     fn iter_direct_related_mut<T: AnalyticsMtd>(
         &'a mut self,
         an_meta_id: u32,
         rel_type: RelTypes,
-    ) -> AnalyticsMtdIterMut<T> {
+    ) -> AnalyticsMtdIterMut<'a, T> {
         AnalyticsMtdIterMut::new_direct_related(self, an_meta_id, rel_type.into_glib())
     }
 }
