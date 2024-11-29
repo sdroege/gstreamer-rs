@@ -4,7 +4,7 @@ set -e
 
 DEFAULT_BRANCH="$GST_UPSTREAM_BRANCH"
 
-pip3 install meson==1.5.2 --break-system-packages
+pip3 install meson==1.6.0 --break-system-packages
 
 # gstreamer-rs already has a 'gstreamer' directory so don't clone there
 pushd .
