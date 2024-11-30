@@ -21,7 +21,7 @@ for crate in gstreamer* gstreamer-gl/{egl,wayland,x11}; do
         echo "Building and testing $crate with $FEATURES"
 
         cargo build $CARGO_FLAGS --locked --color=always --manifest-path "$crate/Cargo.toml" $FEATURES
-        RUST_BACKTRACE=1 G_DEBUG=fatal_warnings cargo nextest run --profile=ci $CARGO_FLAGS  --color=always --manifest-path "$crate/Cargo.toml" $FEATURES
+        RUST_BACKTRACE=1 G_DEBUG=fatal_warnings cargo nextest run --profile=ci --no-tests=pass $CARGO_FLAGS --color=always --manifest-path "$crate/Cargo.toml" $FEATURES
 
         new_report_dir="$parent/junit_reports/$crate"
         mkdir -p "$new_report_dir"

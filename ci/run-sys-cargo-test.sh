@@ -44,7 +44,7 @@ for crate in gstreamer/sys \
              gstreamer-video/sys \
              gstreamer-webrtc/sys; do
     echo "Testing $crate with --all-features)"
-    RUST_BACKTRACE=1 cargo nextest run  --profile ci $CARGO_FLAGS --locked --color=always --manifest-path $crate/Cargo.toml --all-features
+    RUST_BACKTRACE=1 cargo nextest run --profile ci --no-tests=pass $CARGO_FLAGS --locked --color=always --manifest-path $crate/Cargo.toml --all-features
 
     new_report_dir="$parent/junit_reports/$crate"
     mkdir -p "$new_report_dir"
