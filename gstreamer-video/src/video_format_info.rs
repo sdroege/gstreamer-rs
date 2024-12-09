@@ -370,6 +370,19 @@ impl VideoFormatInfo {
 
         unsafe { &*(&self.0.tile_info[plane as usize] as *const _ as *const VideoTileInfo) }
     }
+
+    #[cfg(feature = "v1_18")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[doc(alias = "gst_video_format_info_component")]
+    pub fn component(&self, plane: u32) -> [i32; ffi::GST_VIDEO_MAX_COMPONENTS as usize] {
+        assert!(plane < self.n_planes());
+
+        let mut comp = [-1i32; ffi::GST_VIDEO_MAX_COMPONENTS as usize];
+        unsafe {
+            ffi::gst_video_format_info_component(self.to_glib_none().0, plane, comp.as_mut_ptr());
+        }
+        comp
+    }
 }
 
 unsafe impl Sync for VideoFormatInfo {}

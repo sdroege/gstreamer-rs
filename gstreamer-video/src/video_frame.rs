@@ -19,6 +19,35 @@ impl<T> IsVideoFrame for VideoFrame<T> {
     }
 }
 
+fn plane_buffer_info<T: IsVideoFrame>(
+    frame: &T,
+    plane: u32,
+) -> Result<(usize, usize), glib::BoolError> {
+    skip_assert_initialized!();
+
+    if plane >= frame.n_planes() {
+        return Err(glib::bool_error!(
+            "Plane index higher than number of planes"
+        ));
+    }
+
+    let format_info = frame.format_info();
+
+    // Just get the palette
+    if format_info.has_palette() && plane == 1 {
+        return Ok((1, 256 * 4));
+    }
+
+    let w = frame.plane_stride()[plane as usize] as u32;
+    let h = frame.plane_height(plane);
+
+    if w == 0 || h == 0 {
+        return Ok((0, 0));
+    }
+
+    Ok((plane as usize, (w * h) as usize))
+}
+
 pub struct VideoFrame<T> {
     frame: ffi::GstVideoFrame,
     buffer: gst::Buffer,
@@ -152,6 +181,28 @@ pub trait VideoFrameExt: sealed::Sealed + IsVideoFrame {
     }
 
     #[inline]
+    fn plane_height(&self, plane: u32) -> u32 {
+        cfg_if::cfg_if! {
+            if #[cfg(feature = "v1_18")] {
+                let comp = self.format_info().component(plane)[0];
+                if comp == -1 {
+                    0
+                } else {
+                    self.comp_height(comp as u32)
+                }
+            } else {
+                // FIXME: This assumes that the horizontal subsampling of all
+                // components in the plane is the same, which is probably safe
+
+                // Legacy implementation that does not support video formats
+                // where plane index and component index are not the same.
+                // See #536
+                self.format_info().scale_height(plane as u8, self.height())
+            }
+        }
+    }
+
+    #[inline]
     fn comp_depth(&self, component: u32) -> u32 {
         self.info().comp_depth(component as u8)
     }
@@ -251,38 +302,20 @@ impl<T> VideoFrame<T> {
     }
 
     pub fn plane_data(&self, plane: u32) -> Result<&[u8], glib::BoolError> {
-        if plane >= self.n_planes() {
-            return Err(glib::bool_error!(
-                "Plane index higher than number of planes"
-            ));
-        }
+        match plane_buffer_info(self, plane) {
+            Ok((plane, size)) => {
+                if size == 0 {
+                    return Ok(&[]);
+                }
 
-        let format_info = self.format_info();
-
-        // Just get the palette
-        if format_info.has_palette() && plane == 1 {
-            unsafe {
-                return Ok(slice::from_raw_parts(
-                    self.frame.data[1] as *const u8,
-                    256 * 4,
-                ));
+                unsafe {
+                    Ok(slice::from_raw_parts(
+                        self.frame.data[plane] as *const u8,
+                        size,
+                    ))
+                }
             }
-        }
-
-        let w = self.plane_stride()[plane as usize] as u32;
-        // FIXME: This assumes that the horizontal subsampling of all
-        // components in the plane is the same, which is probably safe
-        let h = format_info.scale_height(plane as u8, self.height());
-
-        if w == 0 || h == 0 {
-            return Ok(&[]);
-        }
-
-        unsafe {
-            Ok(slice::from_raw_parts(
-                self.frame.data[plane as usize] as *const u8,
-                (w * h) as usize,
-            ))
+            Err(err) => Err(err),
         }
     }
 
@@ -481,38 +514,20 @@ impl VideoFrame<Writable> {
     }
 
     pub fn plane_data_mut(&mut self, plane: u32) -> Result<&mut [u8], glib::BoolError> {
-        if plane >= self.n_planes() {
-            return Err(glib::bool_error!(
-                "Plane index higher than number of planes"
-            ));
-        }
+        match plane_buffer_info(self, plane) {
+            Ok((plane, size)) => {
+                if size == 0 {
+                    return Ok(&mut []);
+                }
 
-        let format_info = self.format_info();
-
-        // Just get the palette
-        if format_info.has_palette() && plane == 1 {
-            unsafe {
-                return Ok(slice::from_raw_parts_mut(
-                    self.frame.data[1] as *mut u8,
-                    256 * 4,
-                ));
+                unsafe {
+                    Ok(slice::from_raw_parts_mut(
+                        self.frame.data[plane] as *mut u8,
+                        size,
+                    ))
+                }
             }
-        }
-
-        let w = self.plane_stride()[plane as usize] as u32;
-        // FIXME: This assumes that the horizontal subsampling of all
-        // components in the plane is the same, which is probably safe
-        let h = format_info.scale_height(plane as u8, self.height());
-
-        if w == 0 || h == 0 {
-            return Ok(&mut []);
-        }
-
-        unsafe {
-            Ok(slice::from_raw_parts_mut(
-                self.frame.data[plane as usize] as *mut u8,
-                (w * h) as usize,
-            ))
+            Err(err) => Err(err),
         }
     }
 
@@ -620,38 +635,20 @@ impl<T> VideoFrameRef<T> {
     }
 
     pub fn plane_data(&self, plane: u32) -> Result<&[u8], glib::BoolError> {
-        if plane >= self.n_planes() {
-            return Err(glib::bool_error!(
-                "Plane index higher than number of planes"
-            ));
-        }
+        match plane_buffer_info(self, plane) {
+            Ok((plane, size)) => {
+                if size == 0 {
+                    return Ok(&[]);
+                }
 
-        let format_info = self.format_info();
-
-        // Just get the palette
-        if format_info.has_palette() && plane == 1 {
-            unsafe {
-                return Ok(slice::from_raw_parts(
-                    self.frame.data[1] as *const u8,
-                    256 * 4,
-                ));
+                unsafe {
+                    Ok(slice::from_raw_parts(
+                        self.frame.data[plane] as *const u8,
+                        size,
+                    ))
+                }
             }
-        }
-
-        let w = self.plane_stride()[plane as usize] as u32;
-        // FIXME: This assumes that the horizontal subsampling of all
-        // components in the plane is the same, which is probably safe
-        let h = format_info.scale_height(plane as u8, self.height());
-
-        if w == 0 || h == 0 {
-            return Ok(&[]);
-        }
-
-        unsafe {
-            Ok(slice::from_raw_parts(
-                self.frame.data[plane as usize] as *const u8,
-                (w * h) as usize,
-            ))
+            Err(err) => Err(err),
         }
     }
 
@@ -849,38 +846,20 @@ impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
     }
 
     pub fn plane_data_mut(&mut self, plane: u32) -> Result<&mut [u8], glib::BoolError> {
-        if plane >= self.n_planes() {
-            return Err(glib::bool_error!(
-                "Plane index higher than number of planes"
-            ));
-        }
+        match plane_buffer_info(self, plane) {
+            Ok((plane, size)) => {
+                if size == 0 {
+                    return Ok(&mut []);
+                }
 
-        let format_info = self.format_info();
-
-        // Just get the palette
-        if format_info.has_palette() && plane == 1 {
-            unsafe {
-                return Ok(slice::from_raw_parts_mut(
-                    self.frame.data[1] as *mut u8,
-                    256 * 4,
-                ));
+                unsafe {
+                    Ok(slice::from_raw_parts_mut(
+                        self.frame.data[plane] as *mut u8,
+                        size,
+                    ))
+                }
             }
-        }
-
-        let w = self.plane_stride()[plane as usize] as u32;
-        // FIXME: This assumes that the horizontal subsampling of all
-        // components in the plane is the same, which is probably safe
-        let h = format_info.scale_height(plane as u8, self.height());
-
-        if w == 0 || h == 0 {
-            return Ok(&mut []);
-        }
-
-        unsafe {
-            Ok(slice::from_raw_parts_mut(
-                self.frame.data[plane as usize] as *mut u8,
-                (w * h) as usize,
-            ))
+            Err(err) => Err(err),
         }
     }
 
@@ -1061,5 +1040,44 @@ mod tests {
             assert!(frame.plane_data_mut(1).is_err());
             assert!(frame.info() == &info);
         }
+    }
+
+    #[cfg(feature = "v1_20")]
+    #[test]
+    fn test_plane_data() {
+        gst::init().unwrap();
+
+        let info = crate::VideoInfo::builder(crate::VideoFormat::Av12, 320, 240)
+            .build()
+            .unwrap();
+        let buffer = gst::Buffer::with_size(info.size()).unwrap();
+        let mut frame = VideoFrame::from_buffer_writable(buffer, &info).unwrap();
+
+        // Alpha plane
+        {
+            let mut frame = frame.as_mut_video_frame_ref();
+            let data = frame.plane_data_mut(2).unwrap();
+            assert_eq!(data.len(), 320 * 240);
+            data[0] = 42;
+        }
+
+        // UV plane
+        {
+            let mut frame = frame.as_mut_video_frame_ref();
+            let data = frame.plane_data_mut(1).unwrap();
+            assert_eq!(data.len(), 320 * 120);
+            data[0] = 42;
+        }
+
+        let frame = frame.into_buffer();
+        let frame = VideoFrame::from_buffer_readable(frame, &info).unwrap();
+
+        let alpha_data = frame.plane_data(2).unwrap();
+        assert_eq!(alpha_data.len(), 320 * 240);
+        assert_eq!(alpha_data[0], 42);
+
+        let uv_data = frame.plane_data(1).unwrap();
+        assert_eq!(uv_data.len(), 320 * 120);
+        assert_eq!(uv_data[0], 42);
     }
 }
