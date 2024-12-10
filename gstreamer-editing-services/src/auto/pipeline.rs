@@ -235,7 +235,7 @@ pub trait GESPipelineExt: IsA<Pipeline> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::audio-filter\0".as_ptr() as *const _,
+                c"notify::audio-filter".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_audio_filter_trampoline::<Self, F> as *const (),
                 )),
@@ -258,7 +258,7 @@ pub trait GESPipelineExt: IsA<Pipeline> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::audio-sink\0".as_ptr() as *const _,
+                c"notify::audio-sink".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_audio_sink_trampoline::<Self, F> as *const (),
                 )),
@@ -281,7 +281,7 @@ pub trait GESPipelineExt: IsA<Pipeline> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::mode\0".as_ptr() as *const _,
+                c"notify::mode".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_mode_trampoline::<Self, F> as *const (),
                 )),
@@ -304,7 +304,7 @@ pub trait GESPipelineExt: IsA<Pipeline> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::timeline\0".as_ptr() as *const _,
+                c"notify::timeline".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_timeline_trampoline::<Self, F> as *const (),
                 )),
@@ -330,7 +330,7 @@ pub trait GESPipelineExt: IsA<Pipeline> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::video-filter\0".as_ptr() as *const _,
+                c"notify::video-filter".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_video_filter_trampoline::<Self, F> as *const (),
                 )),
@@ -353,7 +353,7 @@ pub trait GESPipelineExt: IsA<Pipeline> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::video-sink\0".as_ptr() as *const _,
+                c"notify::video-sink".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_video_sink_trampoline::<Self, F> as *const (),
                 )),

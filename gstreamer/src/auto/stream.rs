@@ -121,7 +121,7 @@ impl Stream {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::caps\0".as_ptr() as *const _,
+                c"notify::caps".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_caps_trampoline::<F> as *const (),
                 )),
@@ -149,7 +149,7 @@ impl Stream {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::stream-flags\0".as_ptr() as *const _,
+                c"notify::stream-flags".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_stream_flags_trampoline::<F> as *const (),
                 )),
@@ -177,7 +177,7 @@ impl Stream {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::stream-type\0".as_ptr() as *const _,
+                c"notify::stream-type".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_stream_type_trampoline::<F> as *const (),
                 )),
@@ -203,7 +203,7 @@ impl Stream {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::tags\0".as_ptr() as *const _,
+                c"notify::tags".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_tags_trampoline::<F> as *const (),
                 )),

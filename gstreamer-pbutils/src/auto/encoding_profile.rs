@@ -251,7 +251,7 @@ pub trait EncodingProfileExt: IsA<EncodingProfile> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::element-properties\0".as_ptr() as *const _,
+                c"notify::element-properties".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_element_properties_trampoline::<Self, F> as *const (),
                 )),

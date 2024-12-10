@@ -158,7 +158,7 @@ impl GLViewConvert {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::downmix-mode\0".as_ptr() as *const _,
+                c"notify::downmix-mode".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_downmix_mode_trampoline::<F> as *const (),
                 )),
@@ -186,7 +186,7 @@ impl GLViewConvert {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::input-flags-override\0".as_ptr() as *const _,
+                c"notify::input-flags-override".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_input_flags_override_trampoline::<F> as *const (),
                 )),
@@ -214,7 +214,7 @@ impl GLViewConvert {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::input-mode-override\0".as_ptr() as *const _,
+                c"notify::input-mode-override".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_input_mode_override_trampoline::<F> as *const (),
                 )),
@@ -242,7 +242,7 @@ impl GLViewConvert {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::output-flags-override\0".as_ptr() as *const _,
+                c"notify::output-flags-override".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_output_flags_override_trampoline::<F> as *const (),
                 )),
@@ -270,7 +270,7 @@ impl GLViewConvert {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::output-mode-override\0".as_ptr() as *const _,
+                c"notify::output-mode-override".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_output_mode_override_trampoline::<F> as *const (),
                 )),

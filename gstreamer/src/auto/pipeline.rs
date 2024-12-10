@@ -154,7 +154,7 @@ pub trait PipelineExt: IsA<Pipeline> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::auto-flush-bus\0".as_ptr() as *const _,
+                c"notify::auto-flush-bus".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_auto_flush_bus_trampoline::<Self, F> as *const (),
                 )),
@@ -180,7 +180,7 @@ pub trait PipelineExt: IsA<Pipeline> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::delay\0".as_ptr() as *const _,
+                c"notify::delay".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_delay_trampoline::<Self, F> as *const (),
                 )),
@@ -209,7 +209,7 @@ pub trait PipelineExt: IsA<Pipeline> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::latency\0".as_ptr() as *const _,
+                c"notify::latency".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_latency_trampoline::<Self, F> as *const (),
                 )),

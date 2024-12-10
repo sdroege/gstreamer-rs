@@ -433,7 +433,7 @@ pub trait ElementExt: IsA<Element> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"no-more-pads\0".as_ptr() as *const _,
+                c"no-more-pads".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     no_more_pads_trampoline::<Self, F> as *const (),
                 )),
@@ -465,7 +465,7 @@ pub trait ElementExt: IsA<Element> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"pad-added\0".as_ptr() as *const _,
+                c"pad-added".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     pad_added_trampoline::<Self, F> as *const (),
                 )),
@@ -497,7 +497,7 @@ pub trait ElementExt: IsA<Element> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"pad-removed\0".as_ptr() as *const _,
+                c"pad-removed".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     pad_removed_trampoline::<Self, F> as *const (),
                 )),

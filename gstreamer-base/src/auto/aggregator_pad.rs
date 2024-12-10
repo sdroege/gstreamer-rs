@@ -123,7 +123,7 @@ pub trait AggregatorPadExt: IsA<AggregatorPad> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"buffer-consumed\0".as_ptr() as *const _,
+                c"buffer-consumed".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     buffer_consumed_trampoline::<Self, F> as *const (),
                 )),
@@ -154,7 +154,7 @@ pub trait AggregatorPadExt: IsA<AggregatorPad> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::emit-signals\0".as_ptr() as *const _,
+                c"notify::emit-signals".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_emit_signals_trampoline::<Self, F> as *const (),
                 )),

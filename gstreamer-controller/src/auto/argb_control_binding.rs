@@ -111,7 +111,7 @@ pub trait ARGBControlBindingExt: IsA<ARGBControlBinding> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::control-source-a\0".as_ptr() as *const _,
+                c"notify::control-source-a".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_control_source_a_trampoline::<Self, F> as *const (),
                 )),
@@ -140,7 +140,7 @@ pub trait ARGBControlBindingExt: IsA<ARGBControlBinding> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::control-source-b\0".as_ptr() as *const _,
+                c"notify::control-source-b".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_control_source_b_trampoline::<Self, F> as *const (),
                 )),
@@ -169,7 +169,7 @@ pub trait ARGBControlBindingExt: IsA<ARGBControlBinding> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::control-source-g\0".as_ptr() as *const _,
+                c"notify::control-source-g".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_control_source_g_trampoline::<Self, F> as *const (),
                 )),
@@ -198,7 +198,7 @@ pub trait ARGBControlBindingExt: IsA<ARGBControlBinding> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::control-source-r\0".as_ptr() as *const _,
+                c"notify::control-source-r".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_control_source_r_trampoline::<Self, F> as *const (),
                 )),

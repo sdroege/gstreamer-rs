@@ -283,7 +283,7 @@ pub trait LayerExt: IsA<Layer> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"clip-added\0".as_ptr() as *const _,
+                c"clip-added".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     clip_added_trampoline::<Self, F> as *const (),
                 )),
@@ -309,7 +309,7 @@ pub trait LayerExt: IsA<Layer> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"clip-removed\0".as_ptr() as *const _,
+                c"clip-removed".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     clip_removed_trampoline::<Self, F> as *const (),
                 )),
@@ -335,7 +335,7 @@ pub trait LayerExt: IsA<Layer> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::auto-transition\0".as_ptr() as *const _,
+                c"notify::auto-transition".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_auto_transition_trampoline::<Self, F> as *const (),
                 )),
@@ -359,7 +359,7 @@ pub trait LayerExt: IsA<Layer> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::priority\0".as_ptr() as *const _,
+                c"notify::priority".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_priority_trampoline::<Self, F> as *const (),
                 )),

@@ -7414,6 +7414,19 @@ extern "C" {
     pub fn gst_toc_entry_set_tags(entry: *mut GstTocEntry, tags: *mut GstTagList);
 
     //=========================================================================
+    // GstTracerClass
+    //=========================================================================
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_tracer_class_set_use_structure_params(
+        tracer_class: *mut GstTracerClass,
+        use_structure_params: gboolean,
+    );
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_tracer_class_uses_structure_params(tracer_class: *mut GstTracerClass) -> gboolean;
+
+    //=========================================================================
     // GstTypeFind
     //=========================================================================
     pub fn gst_type_find_get_type() -> GType;
@@ -9768,6 +9781,9 @@ extern "C" {
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_util_filename_compare(a: *const c_char, b: *const c_char) -> c_int;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_util_floor_log2(x: u32) -> c_uint;
     pub fn gst_util_fraction_add(
         a_n: c_int,
         a_d: c_int,

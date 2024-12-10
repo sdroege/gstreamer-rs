@@ -511,7 +511,7 @@ pub trait PadExt: IsA<Pad> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"linked\0".as_ptr() as *const _,
+                c"linked".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     linked_trampoline::<Self, F> as *const (),
                 )),
@@ -543,7 +543,7 @@ pub trait PadExt: IsA<Pad> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"unlinked\0".as_ptr() as *const _,
+                c"unlinked".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     unlinked_trampoline::<Self, F> as *const (),
                 )),
@@ -569,7 +569,7 @@ pub trait PadExt: IsA<Pad> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::caps\0".as_ptr() as *const _,
+                c"notify::caps".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_caps_trampoline::<Self, F> as *const (),
                 )),
@@ -595,7 +595,7 @@ pub trait PadExt: IsA<Pad> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::offset\0".as_ptr() as *const _,
+                c"notify::offset".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_offset_trampoline::<Self, F> as *const (),
                 )),

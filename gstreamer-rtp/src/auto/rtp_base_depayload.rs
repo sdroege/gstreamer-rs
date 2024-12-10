@@ -202,7 +202,7 @@ pub trait RTPBaseDepayloadExt: IsA<RTPBaseDepayload> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"add-extension\0".as_ptr() as *const _,
+                c"add-extension".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     add_extension_trampoline::<Self, F> as *const (),
                 )),
@@ -238,7 +238,7 @@ pub trait RTPBaseDepayloadExt: IsA<RTPBaseDepayload> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"clear-extensions\0".as_ptr() as *const _,
+                c"clear-extensions".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     clear_extensions_trampoline::<Self, F> as *const (),
                 )),
@@ -286,7 +286,7 @@ pub trait RTPBaseDepayloadExt: IsA<RTPBaseDepayload> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"request-extension\0".as_ptr() as *const _,
+                c"request-extension".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     request_extension_trampoline::<Self, F> as *const (),
                 )),
@@ -317,7 +317,7 @@ pub trait RTPBaseDepayloadExt: IsA<RTPBaseDepayload> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::auto-header-extension\0".as_ptr() as *const _,
+                c"notify::auto-header-extension".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_auto_header_extension_trampoline::<Self, F> as *const (),
                 )),
@@ -348,7 +348,7 @@ pub trait RTPBaseDepayloadExt: IsA<RTPBaseDepayload> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::max-reorder\0".as_ptr() as *const _,
+                c"notify::max-reorder".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_max_reorder_trampoline::<Self, F> as *const (),
                 )),
@@ -379,7 +379,7 @@ pub trait RTPBaseDepayloadExt: IsA<RTPBaseDepayload> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::source-info\0".as_ptr() as *const _,
+                c"notify::source-info".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_source_info_trampoline::<Self, F> as *const (),
                 )),
@@ -405,7 +405,7 @@ pub trait RTPBaseDepayloadExt: IsA<RTPBaseDepayload> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::stats\0".as_ptr() as *const _,
+                c"notify::stats".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_stats_trampoline::<Self, F> as *const (),
                 )),

@@ -72,7 +72,7 @@ pub trait SystemClockExt: IsA<SystemClock> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::clock-type\0".as_ptr() as *const _,
+                c"notify::clock-type".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_clock_type_trampoline::<Self, F> as *const (),
                 )),

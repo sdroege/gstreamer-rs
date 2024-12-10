@@ -122,7 +122,7 @@ pub trait RunnerExt: IsA<Runner> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"report-added\0".as_ptr() as *const _,
+                c"report-added".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     report_added_trampoline::<Self, F> as *const (),
                 )),
@@ -147,7 +147,7 @@ pub trait RunnerExt: IsA<Runner> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"stopping\0".as_ptr() as *const _,
+                c"stopping".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     stopping_trampoline::<Self, F> as *const (),
                 )),

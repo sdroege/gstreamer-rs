@@ -125,7 +125,7 @@ pub trait ScenarioExt: IsA<Scenario> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"action-done\0".as_ptr() as *const _,
+                c"action-done".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     action_done_trampoline::<Self, F> as *const (),
                 )),
@@ -150,7 +150,7 @@ pub trait ScenarioExt: IsA<Scenario> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"done\0".as_ptr() as *const _,
+                c"done".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     done_trampoline::<Self, F> as *const (),
                 )),
@@ -177,7 +177,7 @@ pub trait ScenarioExt: IsA<Scenario> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"stopping\0".as_ptr() as *const _,
+                c"stopping".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     stopping_trampoline::<Self, F> as *const (),
                 )),
@@ -206,7 +206,7 @@ pub trait ScenarioExt: IsA<Scenario> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::execute-on-idle\0".as_ptr() as *const _,
+                c"notify::execute-on-idle".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_execute_on_idle_trampoline::<Self, F> as *const (),
                 )),
@@ -235,7 +235,7 @@ pub trait ScenarioExt: IsA<Scenario> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::handles-states\0".as_ptr() as *const _,
+                c"notify::handles-states".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_handles_states_trampoline::<Self, F> as *const (),
                 )),

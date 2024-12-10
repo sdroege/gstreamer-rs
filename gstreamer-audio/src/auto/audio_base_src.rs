@@ -118,7 +118,7 @@ pub trait AudioBaseSrcExt: IsA<AudioBaseSrc> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::actual-buffer-time\0".as_ptr() as *const _,
+                c"notify::actual-buffer-time".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_actual_buffer_time_trampoline::<Self, F> as *const (),
                 )),
@@ -147,7 +147,7 @@ pub trait AudioBaseSrcExt: IsA<AudioBaseSrc> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::actual-latency-time\0".as_ptr() as *const _,
+                c"notify::actual-latency-time".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_actual_latency_time_trampoline::<Self, F> as *const (),
                 )),
@@ -176,7 +176,7 @@ pub trait AudioBaseSrcExt: IsA<AudioBaseSrc> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::buffer-time\0".as_ptr() as *const _,
+                c"notify::buffer-time".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_buffer_time_trampoline::<Self, F> as *const (),
                 )),
@@ -205,7 +205,7 @@ pub trait AudioBaseSrcExt: IsA<AudioBaseSrc> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::latency-time\0".as_ptr() as *const _,
+                c"notify::latency-time".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_latency_time_trampoline::<Self, F> as *const (),
                 )),
@@ -234,7 +234,7 @@ pub trait AudioBaseSrcExt: IsA<AudioBaseSrc> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::provide-clock\0".as_ptr() as *const _,
+                c"notify::provide-clock".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_provide_clock_trampoline::<Self, F> as *const (),
                 )),
@@ -263,7 +263,7 @@ pub trait AudioBaseSrcExt: IsA<AudioBaseSrc> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::slave-method\0".as_ptr() as *const _,
+                c"notify::slave-method".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_slave_method_trampoline::<Self, F> as *const (),
                 )),

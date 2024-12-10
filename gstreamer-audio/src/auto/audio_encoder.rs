@@ -323,7 +323,7 @@ pub trait AudioEncoderExt: IsA<AudioEncoder> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::hard-resync\0".as_ptr() as *const _,
+                c"notify::hard-resync".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_hard_resync_trampoline::<Self, F> as *const (),
                 )),
@@ -352,7 +352,7 @@ pub trait AudioEncoderExt: IsA<AudioEncoder> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::mark-granule\0".as_ptr() as *const _,
+                c"notify::mark-granule".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_mark_granule_trampoline::<Self, F> as *const (),
                 )),
@@ -381,7 +381,7 @@ pub trait AudioEncoderExt: IsA<AudioEncoder> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::perfect-timestamp\0".as_ptr() as *const _,
+                c"notify::perfect-timestamp".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_perfect_timestamp_trampoline::<Self, F> as *const (),
                 )),
@@ -410,7 +410,7 @@ pub trait AudioEncoderExt: IsA<AudioEncoder> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::tolerance\0".as_ptr() as *const _,
+                c"notify::tolerance".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_tolerance_trampoline::<Self, F> as *const (),
                 )),

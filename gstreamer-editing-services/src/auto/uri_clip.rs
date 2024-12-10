@@ -80,7 +80,7 @@ pub trait UriClipExt: IsA<UriClip> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::is-image\0".as_ptr() as *const _,
+                c"notify::is-image".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_is_image_trampoline::<Self, F> as *const (),
                 )),
@@ -103,7 +103,7 @@ pub trait UriClipExt: IsA<UriClip> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::mute\0".as_ptr() as *const _,
+                c"notify::mute".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_mute_trampoline::<Self, F> as *const (),
                 )),

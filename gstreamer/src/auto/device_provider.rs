@@ -171,7 +171,7 @@ pub trait DeviceProviderExt: IsA<DeviceProvider> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"provider-hidden\0".as_ptr() as *const _,
+                c"provider-hidden".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     provider_hidden_trampoline::<Self, F> as *const (),
                 )),
@@ -203,7 +203,7 @@ pub trait DeviceProviderExt: IsA<DeviceProvider> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"provider-unhidden\0".as_ptr() as *const _,
+                c"provider-unhidden".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     provider_unhidden_trampoline::<Self, F> as *const (),
                 )),

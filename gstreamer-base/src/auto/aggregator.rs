@@ -253,7 +253,7 @@ pub trait AggregatorExt: IsA<Aggregator> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::emit-signals\0".as_ptr() as *const _,
+                c"notify::emit-signals".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_emit_signals_trampoline::<Self, F> as *const (),
                 )),
@@ -282,7 +282,7 @@ pub trait AggregatorExt: IsA<Aggregator> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::latency\0".as_ptr() as *const _,
+                c"notify::latency".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_latency_trampoline::<Self, F> as *const (),
                 )),
@@ -311,7 +311,7 @@ pub trait AggregatorExt: IsA<Aggregator> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::start-time\0".as_ptr() as *const _,
+                c"notify::start-time".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_start_time_trampoline::<Self, F> as *const (),
                 )),
@@ -342,7 +342,7 @@ pub trait AggregatorExt: IsA<Aggregator> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::start-time-selection\0".as_ptr() as *const _,
+                c"notify::start-time-selection".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_start_time_selection_trampoline::<Self, F> as *const (),
                 )),

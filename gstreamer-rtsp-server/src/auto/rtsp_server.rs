@@ -366,7 +366,7 @@ pub trait RTSPServerExt: IsA<RTSPServer> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"client-connected\0".as_ptr() as *const _,
+                c"client-connected".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     client_connected_trampoline::<Self, F> as *const (),
                 )),
@@ -395,7 +395,7 @@ pub trait RTSPServerExt: IsA<RTSPServer> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::address\0".as_ptr() as *const _,
+                c"notify::address".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_address_trampoline::<Self, F> as *const (),
                 )),
@@ -424,7 +424,7 @@ pub trait RTSPServerExt: IsA<RTSPServer> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::backlog\0".as_ptr() as *const _,
+                c"notify::backlog".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_backlog_trampoline::<Self, F> as *const (),
                 )),
@@ -453,7 +453,7 @@ pub trait RTSPServerExt: IsA<RTSPServer> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::bound-port\0".as_ptr() as *const _,
+                c"notify::bound-port".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_bound_port_trampoline::<Self, F> as *const (),
                 )),
@@ -482,7 +482,7 @@ pub trait RTSPServerExt: IsA<RTSPServer> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::content-length-limit\0".as_ptr() as *const _,
+                c"notify::content-length-limit".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_content_length_limit_trampoline::<Self, F> as *const (),
                 )),
@@ -511,7 +511,7 @@ pub trait RTSPServerExt: IsA<RTSPServer> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::mount-points\0".as_ptr() as *const _,
+                c"notify::mount-points".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_mount_points_trampoline::<Self, F> as *const (),
                 )),
@@ -540,7 +540,7 @@ pub trait RTSPServerExt: IsA<RTSPServer> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::service\0".as_ptr() as *const _,
+                c"notify::service".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_service_trampoline::<Self, F> as *const (),
                 )),
@@ -569,7 +569,7 @@ pub trait RTSPServerExt: IsA<RTSPServer> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::session-pool\0".as_ptr() as *const _,
+                c"notify::session-pool".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_session_pool_trampoline::<Self, F> as *const (),
                 )),

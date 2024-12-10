@@ -74,7 +74,7 @@ impl WebRTCDTLSTransport {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::certificate\0".as_ptr() as *const _,
+                c"notify::certificate".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_certificate_trampoline::<F> as *const (),
                 )),
@@ -102,7 +102,7 @@ impl WebRTCDTLSTransport {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::client\0".as_ptr() as *const _,
+                c"notify::client".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_client_trampoline::<F> as *const (),
                 )),
@@ -130,7 +130,7 @@ impl WebRTCDTLSTransport {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::remote-certificate\0".as_ptr() as *const _,
+                c"notify::remote-certificate".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_remote_certificate_trampoline::<F> as *const (),
                 )),
@@ -158,7 +158,7 @@ impl WebRTCDTLSTransport {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::state\0".as_ptr() as *const _,
+                c"notify::state".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_state_trampoline::<F> as *const (),
                 )),
@@ -186,7 +186,7 @@ impl WebRTCDTLSTransport {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::transport\0".as_ptr() as *const _,
+                c"notify::transport".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_transport_trampoline::<F> as *const (),
                 )),

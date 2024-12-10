@@ -245,7 +245,7 @@ impl AppSink {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::buffer-list\0".as_ptr() as *const _,
+                c"notify::buffer-list".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_buffer_list_trampoline::<F> as *const (),
                 )),
@@ -271,7 +271,7 @@ impl AppSink {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::caps\0".as_ptr() as *const _,
+                c"notify::caps".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_caps_trampoline::<F> as *const (),
                 )),
@@ -297,7 +297,7 @@ impl AppSink {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::drop\0".as_ptr() as *const _,
+                c"notify::drop".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_drop_trampoline::<F> as *const (),
                 )),
@@ -323,7 +323,7 @@ impl AppSink {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::eos\0".as_ptr() as *const _,
+                c"notify::eos".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_eos_trampoline::<F> as *const (),
                 )),
@@ -351,7 +351,7 @@ impl AppSink {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::max-buffers\0".as_ptr() as *const _,
+                c"notify::max-buffers".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_max_buffers_trampoline::<F> as *const (),
                 )),
@@ -381,7 +381,7 @@ impl AppSink {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::max-bytes\0".as_ptr() as *const _,
+                c"notify::max-bytes".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_max_bytes_trampoline::<F> as *const (),
                 )),
@@ -409,7 +409,7 @@ impl AppSink {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::max-time\0".as_ptr() as *const _,
+                c"notify::max-time".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_max_time_trampoline::<F> as *const (),
                 )),
@@ -437,7 +437,7 @@ impl AppSink {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::wait-on-eos\0".as_ptr() as *const _,
+                c"notify::wait-on-eos".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_wait_on_eos_trampoline::<F> as *const (),
                 )),

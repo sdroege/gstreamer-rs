@@ -184,7 +184,7 @@ pub trait TextOverlayClipExt: IsA<TextOverlayClip> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::color\0".as_ptr() as *const _,
+                c"notify::color".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_color_trampoline::<Self, F> as *const (),
                 )),
@@ -210,7 +210,7 @@ pub trait TextOverlayClipExt: IsA<TextOverlayClip> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::font-desc\0".as_ptr() as *const _,
+                c"notify::font-desc".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_font_desc_trampoline::<Self, F> as *const (),
                 )),
@@ -236,7 +236,7 @@ pub trait TextOverlayClipExt: IsA<TextOverlayClip> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::halignment\0".as_ptr() as *const _,
+                c"notify::halignment".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_halignment_trampoline::<Self, F> as *const (),
                 )),
@@ -262,7 +262,7 @@ pub trait TextOverlayClipExt: IsA<TextOverlayClip> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::text\0".as_ptr() as *const _,
+                c"notify::text".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_text_trampoline::<Self, F> as *const (),
                 )),
@@ -288,7 +288,7 @@ pub trait TextOverlayClipExt: IsA<TextOverlayClip> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::valignment\0".as_ptr() as *const _,
+                c"notify::valignment".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_valignment_trampoline::<Self, F> as *const (),
                 )),
@@ -314,7 +314,7 @@ pub trait TextOverlayClipExt: IsA<TextOverlayClip> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::xpos\0".as_ptr() as *const _,
+                c"notify::xpos".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_xpos_trampoline::<Self, F> as *const (),
                 )),
@@ -340,7 +340,7 @@ pub trait TextOverlayClipExt: IsA<TextOverlayClip> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::ypos\0".as_ptr() as *const _,
+                c"notify::ypos".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_ypos_trampoline::<Self, F> as *const (),
                 )),

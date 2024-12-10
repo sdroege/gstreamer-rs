@@ -88,7 +88,7 @@ pub trait RTSPMediaFactoryURIExt: IsA<RTSPMediaFactoryURI> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::uri\0".as_ptr() as *const _,
+                c"notify::uri".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_uri_trampoline::<Self, F> as *const (),
                 )),
@@ -117,7 +117,7 @@ pub trait RTSPMediaFactoryURIExt: IsA<RTSPMediaFactoryURI> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::use-gstpay\0".as_ptr() as *const _,
+                c"notify::use-gstpay".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_use_gstpay_trampoline::<Self, F> as *const (),
                 )),

@@ -109,7 +109,7 @@ impl MarkerList {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"marker-added\0".as_ptr() as *const _,
+                c"marker-added".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     marker_added_trampoline::<F> as *const (),
                 )),
@@ -146,7 +146,7 @@ impl MarkerList {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"marker-moved\0".as_ptr() as *const _,
+                c"marker-moved".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     marker_moved_trampoline::<F> as *const (),
                 )),
@@ -171,7 +171,7 @@ impl MarkerList {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"marker-removed\0".as_ptr() as *const _,
+                c"marker-removed".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     marker_removed_trampoline::<F> as *const (),
                 )),
@@ -196,7 +196,7 @@ impl MarkerList {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::flags\0".as_ptr() as *const _,
+                c"notify::flags".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_flags_trampoline::<F> as *const (),
                 )),

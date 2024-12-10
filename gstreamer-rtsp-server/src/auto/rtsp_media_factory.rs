@@ -636,7 +636,7 @@ pub trait RTSPMediaFactoryExt: IsA<RTSPMediaFactory> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"media-configure\0".as_ptr() as *const _,
+                c"media-configure".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     media_configure_trampoline::<Self, F> as *const (),
                 )),
@@ -668,7 +668,7 @@ pub trait RTSPMediaFactoryExt: IsA<RTSPMediaFactory> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"media-constructed\0".as_ptr() as *const _,
+                c"media-constructed".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     media_constructed_trampoline::<Self, F> as *const (),
                 )),
@@ -697,7 +697,7 @@ pub trait RTSPMediaFactoryExt: IsA<RTSPMediaFactory> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::bind-mcast-address\0".as_ptr() as *const _,
+                c"notify::bind-mcast-address".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_bind_mcast_address_trampoline::<Self, F> as *const (),
                 )),
@@ -726,7 +726,7 @@ pub trait RTSPMediaFactoryExt: IsA<RTSPMediaFactory> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::buffer-size\0".as_ptr() as *const _,
+                c"notify::buffer-size".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_buffer_size_trampoline::<Self, F> as *const (),
                 )),
@@ -752,7 +752,7 @@ pub trait RTSPMediaFactoryExt: IsA<RTSPMediaFactory> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::clock\0".as_ptr() as *const _,
+                c"notify::clock".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_clock_trampoline::<Self, F> as *const (),
                 )),
@@ -781,7 +781,7 @@ pub trait RTSPMediaFactoryExt: IsA<RTSPMediaFactory> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::dscp-qos\0".as_ptr() as *const _,
+                c"notify::dscp-qos".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_dscp_qos_trampoline::<Self, F> as *const (),
                 )),
@@ -812,7 +812,7 @@ pub trait RTSPMediaFactoryExt: IsA<RTSPMediaFactory> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::enable-rtcp\0".as_ptr() as *const _,
+                c"notify::enable-rtcp".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_enable_rtcp_trampoline::<Self, F> as *const (),
                 )),
@@ -843,7 +843,7 @@ pub trait RTSPMediaFactoryExt: IsA<RTSPMediaFactory> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::ensure-keyunit-on-start\0".as_ptr() as *const _,
+                c"notify::ensure-keyunit-on-start".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_ensure_keyunit_on_start_trampoline::<Self, F> as *const (),
                 )),
@@ -874,7 +874,7 @@ pub trait RTSPMediaFactoryExt: IsA<RTSPMediaFactory> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::ensure-keyunit-on-start-timeout\0".as_ptr() as *const _,
+                c"notify::ensure-keyunit-on-start-timeout".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_ensure_keyunit_on_start_timeout_trampoline::<Self, F> as *const (),
                 )),
@@ -903,7 +903,7 @@ pub trait RTSPMediaFactoryExt: IsA<RTSPMediaFactory> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::eos-shutdown\0".as_ptr() as *const _,
+                c"notify::eos-shutdown".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_eos_shutdown_trampoline::<Self, F> as *const (),
                 )),
@@ -932,7 +932,7 @@ pub trait RTSPMediaFactoryExt: IsA<RTSPMediaFactory> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::latency\0".as_ptr() as *const _,
+                c"notify::latency".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_latency_trampoline::<Self, F> as *const (),
                 )),
@@ -958,7 +958,7 @@ pub trait RTSPMediaFactoryExt: IsA<RTSPMediaFactory> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::launch\0".as_ptr() as *const _,
+                c"notify::launch".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_launch_trampoline::<Self, F> as *const (),
                 )),
@@ -987,7 +987,7 @@ pub trait RTSPMediaFactoryExt: IsA<RTSPMediaFactory> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::max-mcast-ttl\0".as_ptr() as *const _,
+                c"notify::max-mcast-ttl".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_max_mcast_ttl_trampoline::<Self, F> as *const (),
                 )),
@@ -1016,7 +1016,7 @@ pub trait RTSPMediaFactoryExt: IsA<RTSPMediaFactory> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::profiles\0".as_ptr() as *const _,
+                c"notify::profiles".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_profiles_trampoline::<Self, F> as *const (),
                 )),
@@ -1045,7 +1045,7 @@ pub trait RTSPMediaFactoryExt: IsA<RTSPMediaFactory> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::protocols\0".as_ptr() as *const _,
+                c"notify::protocols".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_protocols_trampoline::<Self, F> as *const (),
                 )),
@@ -1071,7 +1071,7 @@ pub trait RTSPMediaFactoryExt: IsA<RTSPMediaFactory> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::shared\0".as_ptr() as *const _,
+                c"notify::shared".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_shared_trampoline::<Self, F> as *const (),
                 )),
@@ -1100,7 +1100,7 @@ pub trait RTSPMediaFactoryExt: IsA<RTSPMediaFactory> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::stop-on-disconnect\0".as_ptr() as *const _,
+                c"notify::stop-on-disconnect".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_stop_on_disconnect_trampoline::<Self, F> as *const (),
                 )),
@@ -1129,7 +1129,7 @@ pub trait RTSPMediaFactoryExt: IsA<RTSPMediaFactory> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::suspend-mode\0".as_ptr() as *const _,
+                c"notify::suspend-mode".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_suspend_mode_trampoline::<Self, F> as *const (),
                 )),
@@ -1158,7 +1158,7 @@ pub trait RTSPMediaFactoryExt: IsA<RTSPMediaFactory> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::transport-mode\0".as_ptr() as *const _,
+                c"notify::transport-mode".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_transport_mode_trampoline::<Self, F> as *const (),
                 )),

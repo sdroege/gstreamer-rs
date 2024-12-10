@@ -94,7 +94,7 @@ impl PlayerVideoOverlayVideoRenderer {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::video-sink\0".as_ptr() as *const _,
+                c"notify::video-sink".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_video_sink_trampoline::<F> as *const (),
                 )),
@@ -122,7 +122,7 @@ impl PlayerVideoOverlayVideoRenderer {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::window-handle\0".as_ptr() as *const _,
+                c"notify::window-handle".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_window_handle_trampoline::<F> as *const (),
                 )),

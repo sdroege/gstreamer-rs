@@ -53,7 +53,7 @@ pub trait TracerExt: IsA<Tracer> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::params\0".as_ptr() as *const _,
+                c"notify::params".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_params_trampoline::<Self, F> as *const (),
                 )),

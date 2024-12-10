@@ -210,6 +210,17 @@ pub const GST_GL_DISPLAY_TYPE_ANDROID: GstGLDisplayType = 2048;
 pub const GST_GL_DISPLAY_TYPE_EGL_SURFACELESS: GstGLDisplayType = 4096;
 pub const GST_GL_DISPLAY_TYPE_ANY: GstGLDisplayType = 4294967295;
 
+pub type GstGLDrmFormatFlags = c_uint;
+#[cfg(feature = "v1_26")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+pub const GST_GL_DRM_FORMAT_INCLUDE_EXTERNAL: GstGLDrmFormatFlags = 1;
+#[cfg(feature = "v1_26")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+pub const GST_GL_DRM_FORMAT_LINEAR_ONLY: GstGLDrmFormatFlags = 2;
+#[cfg(feature = "v1_26")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+pub const GST_GL_DRM_FORMAT_INCLUDE_EMULATED: GstGLDrmFormatFlags = 4;
+
 pub type GstGLPlatform = c_uint;
 pub const GST_GL_PLATFORM_NONE: GstGLPlatform = 0;
 pub const GST_GL_PLATFORM_EGL: GstGLPlatform = 1;
@@ -1806,6 +1817,13 @@ extern "C" {
     pub fn gst_gl_display_type_get_type() -> GType;
 
     //=========================================================================
+    // GstGLDrmFormatFlags
+    //=========================================================================
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_gl_drm_format_flags_get_type() -> GType;
+
+    //=========================================================================
     // GstGLPlatform
     //=========================================================================
     pub fn gst_gl_platform_get_type() -> GType;
@@ -2998,6 +3016,22 @@ extern "C" {
     ) -> gboolean;
     pub fn gst_context_set_gl_display(context: *mut gst::GstContext, display: *mut GstGLDisplay);
     pub fn gst_gl_check_extension(name: *const c_char, ext: *const c_char) -> gboolean;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_gl_dma_buf_transform_drm_formats_to_gst_formats(
+        context: *mut GstGLContext,
+        src: *const gobject::GValue,
+        flags: GstGLDrmFormatFlags,
+        dst: *mut gobject::GValue,
+    ) -> gboolean;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_gl_dma_buf_transform_gst_formats_to_drm_formats(
+        context: *mut GstGLContext,
+        src: *const gobject::GValue,
+        flags: GstGLDrmFormatFlags,
+        dst: *mut gobject::GValue,
+    ) -> gboolean;
     pub fn gst_gl_element_propagate_display_context(
         element: *mut gst::GstElement,
         display: *mut GstGLDisplay,

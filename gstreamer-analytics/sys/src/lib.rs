@@ -74,7 +74,9 @@ pub const GST_ANALYTICS_REL_TYPE_NONE: GstAnalyticsRelTypes = 0;
 pub const GST_ANALYTICS_REL_TYPE_IS_PART_OF: GstAnalyticsRelTypes = 2;
 pub const GST_ANALYTICS_REL_TYPE_CONTAIN: GstAnalyticsRelTypes = 4;
 pub const GST_ANALYTICS_REL_TYPE_RELATE_TO: GstAnalyticsRelTypes = 8;
-pub const GST_ANALYTICS_REL_TYPE_LAST: GstAnalyticsRelTypes = 16;
+#[cfg(feature = "v1_26")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+pub const GST_ANALYTICS_REL_TYPE_N_TO_N: GstAnalyticsRelTypes = 16;
 pub const GST_ANALYTICS_REL_TYPE_ANY: GstAnalyticsRelTypes = 2147483647;
 
 // Records

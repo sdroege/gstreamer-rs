@@ -17,6 +17,20 @@ pub fn gl_check_extension(name: &str, ext: &str) -> bool {
     }
 }
 
+//#[cfg(feature = "v1_26")]
+//#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+//#[doc(alias = "gst_gl_dma_buf_transform_drm_formats_to_gst_formats")]
+//pub fn gl_dma_buf_transform_drm_formats_to_gst_formats(context: &impl IsA<GLContext>, src: &glib::Value, flags: /*Ignored*/GLDrmFormatFlags, dst: /*Unimplemented*/glib::Value) -> bool {
+//    unsafe { TODO: call ffi:gst_gl_dma_buf_transform_drm_formats_to_gst_formats() }
+//}
+
+//#[cfg(feature = "v1_26")]
+//#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+//#[doc(alias = "gst_gl_dma_buf_transform_gst_formats_to_drm_formats")]
+//pub fn gl_dma_buf_transform_gst_formats_to_drm_formats(context: &impl IsA<GLContext>, src: &glib::Value, flags: /*Ignored*/GLDrmFormatFlags, dst: /*Unimplemented*/glib::Value) -> bool {
+//    unsafe { TODO: call ffi:gst_gl_dma_buf_transform_gst_formats_to_drm_formats() }
+//}
+
 #[doc(alias = "gst_gl_element_propagate_display_context")]
 pub fn gl_element_propagate_display_context(
     element: &impl IsA<gst::Element>,

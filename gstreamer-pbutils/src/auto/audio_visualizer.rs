@@ -66,7 +66,7 @@ pub trait AudioVisualizerExt: IsA<AudioVisualizer> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::shade-amount\0".as_ptr() as *const _,
+                c"notify::shade-amount".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_shade_amount_trampoline::<Self, F> as *const (),
                 )),
@@ -92,7 +92,7 @@ pub trait AudioVisualizerExt: IsA<AudioVisualizer> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::shader\0".as_ptr() as *const _,
+                c"notify::shader".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_shader_trampoline::<Self, F> as *const (),
                 )),

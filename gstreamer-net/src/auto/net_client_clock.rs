@@ -123,7 +123,7 @@ impl NetClientClock {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::address\0".as_ptr() as *const _,
+                c"notify::address".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_address_trampoline::<F> as *const (),
                 )),
@@ -151,7 +151,7 @@ impl NetClientClock {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::bus\0".as_ptr() as *const _,
+                c"notify::bus".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_bus_trampoline::<F> as *const (),
                 )),
@@ -179,7 +179,7 @@ impl NetClientClock {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::internal-clock\0".as_ptr() as *const _,
+                c"notify::internal-clock".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_internal_clock_trampoline::<F> as *const (),
                 )),
@@ -207,7 +207,7 @@ impl NetClientClock {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::minimum-update-interval\0".as_ptr() as *const _,
+                c"notify::minimum-update-interval".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_minimum_update_interval_trampoline::<F> as *const (),
                 )),
@@ -235,7 +235,7 @@ impl NetClientClock {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::port\0".as_ptr() as *const _,
+                c"notify::port".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_port_trampoline::<F> as *const (),
                 )),
@@ -263,7 +263,7 @@ impl NetClientClock {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::qos-dscp\0".as_ptr() as *const _,
+                c"notify::qos-dscp".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_qos_dscp_trampoline::<F> as *const (),
                 )),
@@ -291,7 +291,7 @@ impl NetClientClock {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::round-trip-limit\0".as_ptr() as *const _,
+                c"notify::round-trip-limit".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_round_trip_limit_trampoline::<F> as *const (),
                 )),

@@ -132,7 +132,7 @@ pub trait GESContainerExt: IsA<Container> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"child-added\0".as_ptr() as *const _,
+                c"child-added".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     child_added_trampoline::<Self, F> as *const (),
                 )),
@@ -164,7 +164,7 @@ pub trait GESContainerExt: IsA<Container> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"child-removed\0".as_ptr() as *const _,
+                c"child-removed".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     child_removed_trampoline::<Self, F> as *const (),
                 )),
@@ -187,7 +187,7 @@ pub trait GESContainerExt: IsA<Container> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::height\0".as_ptr() as *const _,
+                c"notify::height".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_height_trampoline::<Self, F> as *const (),
                 )),

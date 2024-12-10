@@ -58,7 +58,7 @@ pub trait AudioAggregatorConvertPadExt: IsA<AudioAggregatorConvertPad> + 'static
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::converter-config\0".as_ptr() as *const _,
+                c"notify::converter-config".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_converter_config_trampoline::<Self, F> as *const (),
                 )),
