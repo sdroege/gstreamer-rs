@@ -11,6 +11,13 @@ use crate::{
 
 #[allow(unused_variables)]
 pub trait TracerImpl: TracerImplExt + GstObjectImpl + Send + Sync {
+    // rustdoc-stripper-ignore-next
+    /// Whether to use `gst::Structure` style "params" and automatically pass
+    /// them to the corresponding properties during instantiation.
+    ///
+    /// Setting this to `true` requires GStreamer 1.26
+    const USE_STRUCTURE_PARAMS: bool = false;
+
     fn bin_add_post(&self, ts: u64, bin: &Bin, element: &Element, success: bool) {}
     fn bin_add_pre(&self, ts: u64, bin: &Bin, element: &Element) {}
     fn bin_remove_post(&self, ts: u64, bin: &Bin, success: bool) {}
@@ -83,7 +90,28 @@ pub trait TracerImpl: TracerImplExt + GstObjectImpl + Send + Sync {
     fn plugin_feature_loaded(&self, ts: u64, feature: &crate::PluginFeature) {}
 }
 
-unsafe impl<T: TracerImpl> IsSubclassable<T> for Tracer {}
+unsafe impl<T: TracerImpl> IsSubclassable<T> for Tracer {
+    fn class_init(class: &mut glib::Class<Self>) {
+        Self::parent_class_init::<T>(class);
+
+        #[cfg(feature = "v1_26")]
+        {
+            let class = class.as_mut();
+            unsafe {
+                ffi::gst_tracer_class_set_use_structure_params(
+                    class,
+                    T::USE_STRUCTURE_PARAMS.into_glib(),
+                );
+            }
+        }
+        #[cfg(not(feature = "v1_26"))]
+        {
+            if T::USE_STRUCTURE_PARAMS {
+                panic!("Can only use `USE_STRUCTURE_PARAMS` with GStreamer 1.26 and newer");
+            }
+        }
+    }
+}
 
 pub trait TracerImplExt: ObjectSubclass {
     // rustdoc-stripper-ignore-next
