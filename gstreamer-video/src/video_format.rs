@@ -262,8 +262,8 @@ impl crate::VideoFormat {
         bpp: u32,
         endianness: crate::VideoEndianness,
         red_mask: u32,
-        blue_mask: u32,
         green_mask: u32,
+        blue_mask: u32,
         alpha_mask: u32,
     ) -> Self {
         assert_initialized_main_thread!();
@@ -274,8 +274,8 @@ impl crate::VideoFormat {
                 bpp as i32,
                 endianness.into_glib(),
                 red_mask,
-                blue_mask,
                 green_mask,
+                blue_mask,
                 alpha_mask,
             ))
         }
