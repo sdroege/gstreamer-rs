@@ -127,6 +127,10 @@ status = "generate"
     ignore = true
 
     [[object.function]]
+    pattern = "util_(floor|ceil)_log2"
+    ignore = true
+
+    [[object.function]]
     name = "deinit"
     ignore = true
 
