@@ -14,10 +14,6 @@ pub use crate::auto::functions::{
 };
 use crate::ffi;
 
-#[cfg(feature = "v1_24")]
-#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
-pub use crate::auto::functions::util_ceil_log2 as ceil_log2;
-
 #[doc(alias = "gst_calculate_linear_regression")]
 pub fn calculate_linear_regression(
     xy: &[(u64, u64)],
