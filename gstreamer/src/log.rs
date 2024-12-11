@@ -68,7 +68,7 @@ impl DebugMessage {
     }
 }
 
-#[derive(PartialEq, Eq, Clone, Copy)]
+#[derive(PartialEq, Eq, Clone, Copy, Hash)]
 #[doc(alias = "GstDebugCategory")]
 #[repr(transparent)]
 pub struct DebugCategory(Option<ptr::NonNull<ffi::GstDebugCategory>>);
@@ -529,6 +529,11 @@ impl DebugCategory {
                 message.0.as_ptr(),
             ))
         }
+    }
+
+    #[inline]
+    pub fn as_ptr(&self) -> *mut ffi::GstDebugCategory {
+        self.0.map(|p| p.as_ptr()).unwrap_or(ptr::null_mut())
     }
 }
 
