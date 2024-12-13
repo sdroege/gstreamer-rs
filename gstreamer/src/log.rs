@@ -66,6 +66,11 @@ impl DebugMessage {
             }
         }
     }
+
+    #[inline]
+    pub fn as_ptr(&self) -> *mut ffi::GstDebugMessage {
+        self.0.as_ptr()
+    }
 }
 
 #[derive(PartialEq, Eq, Clone, Copy, Hash)]
