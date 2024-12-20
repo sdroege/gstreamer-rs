@@ -18,8 +18,10 @@ bitflags! {
         const CONTAIN = ffi::GST_ANALYTICS_REL_TYPE_CONTAIN as _;
         #[doc(alias = "GST_ANALYTICS_REL_TYPE_RELATE_TO")]
         const RELATE_TO = ffi::GST_ANALYTICS_REL_TYPE_RELATE_TO as _;
-        #[doc(alias = "GST_ANALYTICS_REL_TYPE_LAST")]
-        const LAST = ffi::GST_ANALYTICS_REL_TYPE_LAST as _;
+        #[cfg(feature = "v1_26")]
+        #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+        #[doc(alias = "GST_ANALYTICS_REL_TYPE_N_TO_N")]
+        const N_TO_N = ffi::GST_ANALYTICS_REL_TYPE_N_TO_N as _;
         #[doc(alias = "GST_ANALYTICS_REL_TYPE_ANY")]
         const ANY = ffi::GST_ANALYTICS_REL_TYPE_ANY as _;
     }

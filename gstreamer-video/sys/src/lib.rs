@@ -420,6 +420,9 @@ pub const GST_VIDEO_FORMAT_Y416_LE: GstVideoFormat = 136;
 #[cfg(feature = "v1_26")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
 pub const GST_VIDEO_FORMAT_Y416_BE: GstVideoFormat = 137;
+#[cfg(feature = "v1_26")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+pub const GST_VIDEO_FORMAT_GRAY10_LE16: GstVideoFormat = 138;
 
 pub type GstVideoGLTextureOrientation = c_int;
 pub const GST_VIDEO_GL_TEXTURE_ORIENTATION_X_NORMAL_Y_NORMAL: GstVideoGLTextureOrientation = 0;
@@ -607,7 +610,7 @@ pub const GST_VIDEO_DECODER_SINK_NAME: &[u8] = b"sink\0";
 pub const GST_VIDEO_DECODER_SRC_NAME: &[u8] = b"src\0";
 pub const GST_VIDEO_ENCODER_SINK_NAME: &[u8] = b"sink\0";
 pub const GST_VIDEO_ENCODER_SRC_NAME: &[u8] = b"src\0";
-pub const GST_VIDEO_FORMAT_LAST: c_int = 138;
+pub const GST_VIDEO_FORMAT_LAST: c_int = 139;
 pub const GST_VIDEO_FPS_RANGE: &[u8] = b"(fraction) [ 0, max ]\0";
 pub const GST_VIDEO_MAX_COMPONENTS: c_int = 4;
 pub const GST_VIDEO_MAX_PLANES: c_int = 4;
@@ -4592,7 +4595,7 @@ extern "C" {
         id: c_int,
     ) -> *mut GstVideoRegionOfInterestMeta;
     pub fn gst_buffer_pool_config_get_video_alignment(
-        config: *mut gst::GstStructure,
+        config: *const gst::GstStructure,
         align: *mut GstVideoAlignment,
     ) -> gboolean;
     pub fn gst_buffer_pool_config_set_video_alignment(
@@ -4678,6 +4681,15 @@ extern "C" {
         destroy_notify: glib::GDestroyNotify,
     );
     pub fn gst_video_crop_meta_api_get_type() -> GType;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_video_dma_drm_format_from_gst_format(
+        format: GstVideoFormat,
+        modifier: *mut u64,
+    ) -> u32;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_video_dma_drm_format_to_gst_format(fourcc: u32, modifier: u64) -> GstVideoFormat;
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_video_dma_drm_fourcc_from_format(format: GstVideoFormat) -> u32;

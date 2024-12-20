@@ -272,6 +272,48 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
             alignment: align_of::<GstSegmentationType>(),
         },
     ),
+    (
+        "GstTensor",
+        Layout {
+            size: size_of::<GstTensor>(),
+            alignment: align_of::<GstTensor>(),
+        },
+    ),
+    (
+        "GstTensorDataType",
+        Layout {
+            size: size_of::<GstTensorDataType>(),
+            alignment: align_of::<GstTensorDataType>(),
+        },
+    ),
+    (
+        "GstTensorDim",
+        Layout {
+            size: size_of::<GstTensorDim>(),
+            alignment: align_of::<GstTensorDim>(),
+        },
+    ),
+    (
+        "GstTensorDimOrder",
+        Layout {
+            size: size_of::<GstTensorDimOrder>(),
+            alignment: align_of::<GstTensorDimOrder>(),
+        },
+    ),
+    (
+        "GstTensorLayout",
+        Layout {
+            size: size_of::<GstTensorLayout>(),
+            alignment: align_of::<GstTensorLayout>(),
+        },
+    ),
+    (
+        "GstTensorMeta",
+        Layout {
+            size: size_of::<GstTensorMeta>(),
+            alignment: align_of::<GstTensorMeta>(),
+        },
+    ),
 ];
 
 const RUST_CONSTANTS: &[(&str, &str)] = &[
@@ -279,10 +321,28 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(guint) GST_ANALYTICS_REL_TYPE_ANY", "2147483647"),
     ("(guint) GST_ANALYTICS_REL_TYPE_CONTAIN", "4"),
     ("(guint) GST_ANALYTICS_REL_TYPE_IS_PART_OF", "2"),
-    ("(guint) GST_ANALYTICS_REL_TYPE_LAST", "16"),
     ("(guint) GST_ANALYTICS_REL_TYPE_NONE", "0"),
+    ("(guint) GST_ANALYTICS_REL_TYPE_N_TO_N", "16"),
     ("(guint) GST_ANALYTICS_REL_TYPE_RELATE_TO", "8"),
     ("GST_INF_RELATION_SPAN", "-1"),
     ("(gint) GST_SEGMENTATION_TYPE_INSTANCE", "1"),
     ("(gint) GST_SEGMENTATION_TYPE_SEMANTIC", "0"),
+    ("(gint) GST_TENSOR_DATA_TYPE_BFLOAT16", "13"),
+    ("(gint) GST_TENSOR_DATA_TYPE_FLOAT16", "10"),
+    ("(gint) GST_TENSOR_DATA_TYPE_FLOAT32", "11"),
+    ("(gint) GST_TENSOR_DATA_TYPE_FLOAT64", "12"),
+    ("(gint) GST_TENSOR_DATA_TYPE_INT16", "2"),
+    ("(gint) GST_TENSOR_DATA_TYPE_INT32", "3"),
+    ("(gint) GST_TENSOR_DATA_TYPE_INT4", "0"),
+    ("(gint) GST_TENSOR_DATA_TYPE_INT64", "4"),
+    ("(gint) GST_TENSOR_DATA_TYPE_INT8", "1"),
+    ("(gint) GST_TENSOR_DATA_TYPE_UINT16", "7"),
+    ("(gint) GST_TENSOR_DATA_TYPE_UINT32", "8"),
+    ("(gint) GST_TENSOR_DATA_TYPE_UINT4", "5"),
+    ("(gint) GST_TENSOR_DATA_TYPE_UINT64", "9"),
+    ("(gint) GST_TENSOR_DATA_TYPE_UINT8", "6"),
+    ("(gint) GST_TENSOR_DIM_ORDER_COL_MAJOR", "1"),
+    ("(gint) GST_TENSOR_DIM_ORDER_INDEXED", "2"),
+    ("(gint) GST_TENSOR_DIM_ORDER_ROW_MAJOR", "0"),
+    ("(gint) GST_TENSOR_LAYOUT_STRIDED", "0"),
 ];

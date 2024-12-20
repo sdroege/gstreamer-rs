@@ -321,9 +321,18 @@ extern "C" {
     //=========================================================================
     pub fn gst_play_message_get_type() -> GType;
     pub fn gst_play_message_get_name(message_type: GstPlayMessage) -> *const c_char;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_play_message_parse_buffering(msg: *mut gst::GstMessage, percent: *mut c_uint);
     pub fn gst_play_message_parse_buffering_percent(
         msg: *mut gst::GstMessage,
         percent: *mut c_uint,
+    );
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_play_message_parse_duration_changed(
+        msg: *mut gst::GstMessage,
+        duration: *mut gst::GstClockTime,
     );
     pub fn gst_play_message_parse_duration_updated(
         msg: *mut gst::GstMessage,
@@ -343,11 +352,20 @@ extern "C" {
         msg: *mut gst::GstMessage,
         position: *mut gst::GstClockTime,
     );
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_play_message_parse_seek_done(
+        msg: *mut gst::GstMessage,
+        position: *mut gst::GstClockTime,
+    );
     pub fn gst_play_message_parse_state_changed(
         msg: *mut gst::GstMessage,
         state: *mut GstPlayState,
     );
     pub fn gst_play_message_parse_type(msg: *mut gst::GstMessage, type_: *mut GstPlayMessage);
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_play_message_parse_uri_loaded(msg: *mut gst::GstMessage, uri: *mut *mut c_char);
     pub fn gst_play_message_parse_video_dimensions_changed(
         msg: *mut gst::GstMessage,
         width: *mut c_uint,

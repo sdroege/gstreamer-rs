@@ -427,6 +427,13 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "GstGLDrmFormatFlags",
+        Layout {
+            size: size_of::<GstGLDrmFormatFlags>(),
+            alignment: align_of::<GstGLDrmFormatFlags>(),
+        },
+    ),
+    (
         "GstGLFilter",
         Layout {
             size: size_of::<GstGLFilter>(),
@@ -837,6 +844,9 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(guint) GST_GL_DISPLAY_TYPE_WIN32", "8"),
     ("(guint) GST_GL_DISPLAY_TYPE_WINRT", "1024"),
     ("(guint) GST_GL_DISPLAY_TYPE_X11", "1"),
+    ("(guint) GST_GL_DRM_FORMAT_INCLUDE_EMULATED", "4"),
+    ("(guint) GST_GL_DRM_FORMAT_INCLUDE_EXTERNAL", "1"),
+    ("(guint) GST_GL_DRM_FORMAT_LINEAR_ONLY", "2"),
     ("(gint) GST_GL_LUMINANCE", "6409"),
     ("(gint) GST_GL_LUMINANCE_ALPHA", "6410"),
     ("GST_GL_MEMORY_ALLOCATOR_NAME", "GLMemory"),

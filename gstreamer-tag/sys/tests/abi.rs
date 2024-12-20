@@ -290,6 +290,7 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
         "capturing-gain-adjustment",
     ),
     ("GST_TAG_CAPTURING_ISO_SPEED", "capturing-iso-speed"),
+    ("GST_TAG_CAPTURING_LIGHT_SOURCE", "capturing-light-source"),
     ("GST_TAG_CAPTURING_METERING_MODE", "capturing-metering-mode"),
     ("GST_TAG_CAPTURING_SATURATION", "capturing-saturation"),
     (

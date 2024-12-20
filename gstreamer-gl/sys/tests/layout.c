@@ -40,6 +40,7 @@ int main() {
     printf("%s;%zu;%zu\n", "GstGLDisplay", sizeof(GstGLDisplay), alignof(GstGLDisplay));
     printf("%s;%zu;%zu\n", "GstGLDisplayClass", sizeof(GstGLDisplayClass), alignof(GstGLDisplayClass));
     printf("%s;%zu;%zu\n", "GstGLDisplayType", sizeof(GstGLDisplayType), alignof(GstGLDisplayType));
+    printf("%s;%zu;%zu\n", "GstGLDrmFormatFlags", sizeof(GstGLDrmFormatFlags), alignof(GstGLDrmFormatFlags));
     printf("%s;%zu;%zu\n", "GstGLFilter", sizeof(GstGLFilter), alignof(GstGLFilter));
     printf("%s;%zu;%zu\n", "GstGLFilterClass", sizeof(GstGLFilterClass), alignof(GstGLFilterClass));
     printf("%s;%zu;%zu\n", "GstGLFormat", sizeof(GstGLFormat), alignof(GstGLFormat));

@@ -72,6 +72,7 @@ pub const GST_TAG_CAPTURING_FOCAL_LENGTH_35_MM: &[u8] = b"capturing-focal-length
 pub const GST_TAG_CAPTURING_FOCAL_RATIO: &[u8] = b"capturing-focal-ratio\0";
 pub const GST_TAG_CAPTURING_GAIN_ADJUSTMENT: &[u8] = b"capturing-gain-adjustment\0";
 pub const GST_TAG_CAPTURING_ISO_SPEED: &[u8] = b"capturing-iso-speed\0";
+pub const GST_TAG_CAPTURING_LIGHT_SOURCE: &[u8] = b"capturing-light-source\0";
 pub const GST_TAG_CAPTURING_METERING_MODE: &[u8] = b"capturing-metering-mode\0";
 pub const GST_TAG_CAPTURING_SATURATION: &[u8] = b"capturing-saturation\0";
 pub const GST_TAG_CAPTURING_SCENE_CAPTURE_TYPE: &[u8] = b"capturing-scene-capture-type\0";
