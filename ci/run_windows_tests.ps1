@@ -53,6 +53,12 @@ else
 Write-Host "Build Jobs: $ncpus"
 $cargo_opts = @("--color=always", "--jobs=$ncpus")
 
+if ("$env:RUST_VERSION" -eq "1.71.1") {
+    $cargo_nextest_opts=@("--profile=ci", "--no-fail-fast")
+} else {
+    $cargo_nextest_opts=@("--profile=ci", "--no-fail-fast", "--no-tests=pass")
+}
+
 function Move-Junit {
     param (
         $Features
@@ -125,7 +131,7 @@ foreach($features in $features_matrix) {
 
         $env:G_DEBUG="fatal_warnings"
         $env:RUST_BACKTRACE="1"
-        cargo nextest run --profile=ci --no-fail-fast --no-tests=pass $cargo_opts --manifest-path $crate/Cargo.toml $env:LocalFeatures
+        cargo nextest run $cargo_nextest_opts $cargo_opts --manifest-path $crate/Cargo.toml $env:LocalFeatures
         if (!$?) {
             Write-Host "Tests failed to for crate: $crate"
             Exit 1

@@ -118,18 +118,21 @@ trigger:
   extends: .debian:12
   variables:
     RUST_IMAGE_FULL: "1"
+    RUST_VERSION: '$GST_RS_STABLE'
     FDO_DISTRIBUTION_TAG: '$GST_RS_STABLE-$GST_RS_IMG_TAG'
     FDO_DISTRIBUTION_EXEC: 'bash ci/install-rust.sh $GST_RS_STABLE $RUST_IMAGE_FULL'
 
 .debian:12-msrv:
   extends: .debian:12
   variables:
+    RUST_VERSION: '$GST_RS_MSRV'
     FDO_DISTRIBUTION_TAG: '$GST_RS_MSRV-$GST_RS_IMG_TAG'
     FDO_DISTRIBUTION_EXEC: 'bash ci/install-rust.sh $GST_RS_MSRV $RUST_IMAGE_FULL'
 
 .debian:12-nightly:
   extends: .debian:12
   variables:
+    RUST_VERSION: 'nightly'
     FDO_DISTRIBUTION_TAG: 'nightly-$GST_RS_IMG_TAG'
     FDO_DISTRIBUTION_EXEC: 'bash ci/install-rust.sh nightly $RUST_IMAGE_FULL'
 
@@ -615,6 +618,8 @@ test windows msrv:
     - job: 'windows rust docker msrv'
       artifacts: false
   extends: '.msvc2019 build'
+  variables:
+    RUST_VERSION: !reference [variables, "GST_RS_MSRV"]
 
 test windows stable:
   needs:
@@ -624,3 +629,5 @@ test windows stable:
       artifacts: false
   image: "$WINDOWS_RUST_STABLE_IMAGE"
   extends: '.msvc2019 build'
+  variables:
+    RUST_VERSION: !reference [variables, "GST_RS_STABLE"]

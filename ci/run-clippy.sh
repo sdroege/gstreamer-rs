@@ -6,6 +6,9 @@ rustc --version
 cargo --version
 cargo clippy --version
 
+cpus=$(nproc || sysctl -n hw.ncpu)
+CARGO_FLAGS="--color=always -j${FDO_CI_CONCURRENT:-$cpus}"
+
 # Keep features in sync with run-cargo-test.sh
 get_features() {
     crate=$1
@@ -25,7 +28,7 @@ for crate in gstreamer* gstreamer-gl/{egl,wayland,x11}; do
 
         echo "Running clippy on $crate with $FEATURES"
 
-        cargo clippy --locked --color=always --manifest-path "$crate/Cargo.toml" $FEATURES --all-targets -- $CLIPPY_LINTS
+        cargo clippy $CARGO_FLAGS --locked --manifest-path "$crate/Cargo.toml" $FEATURES --all-targets -- $CLIPPY_LINTS
     fi
 done
 
@@ -34,5 +37,5 @@ done
 EXAMPLES_FEATURES="--features=rtsp-server,rtsp-server-record,pango-cairo,overlay-composition,gl,gst-gl-x11,gst-gl-egl,allocators,gst-play,gst-player,ges,image,cairo-rs,gst-video/v1_18"
 
 # And also run over all the examples/tutorials
-cargo clippy --locked --color=always --manifest-path examples/Cargo.toml --all-targets "$EXAMPLES_FEATURES" -- $CLIPPY_LINTS
-cargo clippy --locked --color=always --manifest-path tutorials/Cargo.toml --all-targets --all-features -- $CLIPPY_LINTS
+cargo clippy $CARGO_FLAGS --locked --manifest-path examples/Cargo.toml --all-targets "$EXAMPLES_FEATURES" -- $CLIPPY_LINTS
+cargo clippy $CARGO_FLAGS --locked --manifest-path tutorials/Cargo.toml --all-targets --all-features -- $CLIPPY_LINTS
