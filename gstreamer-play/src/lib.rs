@@ -22,6 +22,7 @@ macro_rules! assert_initialized_main_thread {
 }
 
 #[allow(clippy::needless_borrow)]
+#[allow(unused)]
 mod auto;
 pub(crate) use crate::auto::PlayMessage as PlayMessageType;
 pub use crate::auto::*;

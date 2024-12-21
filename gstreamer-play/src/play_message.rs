@@ -60,6 +60,7 @@ impl PlayMessage {
                 let position = PlayMessageType::parse_position_updated(msg);
                 Ok(Self::PositionUpdated { position })
             }
+            #[allow(deprecated)]
             PlayMessageType::DurationChanged => {
                 let duration = PlayMessageType::parse_duration_updated(msg);
                 Ok(Self::DurationChanged { duration })
@@ -68,6 +69,7 @@ impl PlayMessage {
                 let state = PlayMessageType::parse_state_changed(msg);
                 Ok(Self::StateChanged { state })
             }
+            #[allow(deprecated)]
             PlayMessageType::Buffering => {
                 let percent = PlayMessageType::parse_buffering_percent(msg);
                 Ok(Self::Buffering { percent })
