@@ -1,3 +1,5 @@
+$env:ErrorActionPreference='Stop'
+
 # Copied from mesa, big kudos
 #
 # https://gitlab.freedesktop.org/mesa/mesa/-/blob/master/.gitlab-ci/windows/mesa_container.ps1

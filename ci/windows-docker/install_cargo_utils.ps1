@@ -1,3 +1,5 @@
+$env:ErrorActionPreference='Stop'
+
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;
 
 rustup --version

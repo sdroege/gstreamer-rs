@@ -1,3 +1,5 @@
+$env:ErrorActionPreference='Stop'
+
 # List of all the crates we want to build
 # We need to do this manually to avoid trying
 # to build egl,wayland,x11 etc, which can't
