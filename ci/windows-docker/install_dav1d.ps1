@@ -1,3 +1,5 @@
+$env:ErrorActionPreference='Stop'
+
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;
 
 # Download gstreamer and all its subprojects
