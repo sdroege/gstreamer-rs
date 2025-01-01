@@ -24,7 +24,7 @@ serde = { version = "1.0", optional = true }
 smallvec = "1.0"
 
 [dev-dependencies]
-itertools = "0.13"
+itertools = "0.14"
 serde_json = "1.0"
 gir-format-check = "0.1"
 

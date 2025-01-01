@@ -26,7 +26,7 @@ serde = { version = "1.0", optional = true, features = ["derive"] }
 thiserror = "2"
 
 [dev-dependencies]
-itertools = "0.13"
+itertools = "0.14"
 gst-check.workspace = true
 serde_json = "1.0"
 gir-format-check = "0.1"
