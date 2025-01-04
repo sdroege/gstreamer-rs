@@ -22,6 +22,19 @@ pub trait AnalyticsRelationMetaODExt: sealed::Sealed {
         h: i32,
         loc_conf_lvl: f32,
     ) -> Result<AnalyticsMtdRef<AnalyticsODMtd>, glib::BoolError>;
+
+    #[cfg(feature = "v1_26")]
+    #[allow(clippy::too_many_arguments)]
+    fn add_oriented_od_mtd(
+        &mut self,
+        type_: glib::Quark,
+        x: i32,
+        y: i32,
+        w: i32,
+        h: i32,
+        r: f32,
+        loc_conf_lvl: f32,
+    ) -> Result<AnalyticsMtdRef<AnalyticsODMtd>, glib::BoolError>;
 }
 
 impl AnalyticsRelationMetaODExt
@@ -58,6 +71,42 @@ impl AnalyticsRelationMetaODExt
             }
         }
     }
+
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "gst_analytics_relation_meta_add_oriented_od_mtd")]
+    fn add_oriented_od_mtd(
+        &mut self,
+        type_: glib::Quark,
+        x: i32,
+        y: i32,
+        w: i32,
+        h: i32,
+        r: f32,
+        loc_conf_lvl: f32,
+    ) -> Result<AnalyticsMtdRef<AnalyticsODMtd>, glib::BoolError> {
+        unsafe {
+            let mut mtd = std::mem::MaybeUninit::uninit();
+            let ret = from_glib(ffi::gst_analytics_relation_meta_add_oriented_od_mtd(
+                self.as_mut_ptr(),
+                type_.into_glib(),
+                x,
+                y,
+                w,
+                h,
+                r,
+                loc_conf_lvl,
+                mtd.as_mut_ptr(),
+            ));
+            let id = mtd.assume_init().id;
+
+            if ret {
+                Ok(AnalyticsMtdRef::from_meta(self.as_ref(), id))
+            } else {
+                Err(glib::bool_error!("Couldn't add more data"))
+            }
+        }
+    }
 }
 
 #[derive(Clone, Copy, Default, Debug)]
@@ -66,6 +115,18 @@ pub struct AnalyticsODLocation {
     pub y: i32,
     pub w: i32,
     pub h: i32,
+    pub loc_conf_lvl: f32,
+}
+
+#[cfg(feature = "v1_26")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+#[derive(Clone, Copy, Default, Debug)]
+pub struct AnalyticsODOrientedLocation {
+    pub x: i32,
+    pub y: i32,
+    pub w: i32,
+    pub h: i32,
+    pub r: f32,
     pub loc_conf_lvl: f32,
 }
 
@@ -106,6 +167,32 @@ impl AnalyticsMtdRef<'_, AnalyticsODMtd> {
                 &mut loc.y,
                 &mut loc.w,
                 &mut loc.h,
+                &mut loc.loc_conf_lvl,
+            )
+        };
+
+        if success != 0 {
+            Ok(loc)
+        } else {
+            Err(glib::bool_error!("Could retrieve location"))
+        }
+    }
+
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "gst_analytics_od_mtd_get_oriented_location")]
+    pub fn oriented_location(&self) -> Result<AnalyticsODOrientedLocation, glib::BoolError> {
+        let mut loc = AnalyticsODOrientedLocation::default();
+
+        let success = unsafe {
+            let mtd = from(ffi::GstAnalyticsMtd::unsafe_from(self));
+            ffi::gst_analytics_od_mtd_get_oriented_location(
+                &mtd,
+                &mut loc.x,
+                &mut loc.y,
+                &mut loc.w,
+                &mut loc.h,
+                &mut loc.r,
                 &mut loc.loc_conf_lvl,
             )
         };
@@ -171,5 +258,54 @@ mod tests {
         assert_eq!(loc.w, 10);
         assert_eq!(loc.h, 20);
         assert_eq!(loc.loc_conf_lvl, 0.8);
+    }
+
+    #[cfg(feature = "v1_26")]
+    #[test]
+    fn oriented_object_detection() {
+        gst::init().unwrap();
+
+        let mut buf = gst::Buffer::new();
+        let mut meta = AnalyticsRelationMeta::add(buf.make_mut());
+
+        assert!(meta.is_empty());
+
+        let od = meta
+            .add_oriented_od_mtd(
+                glib::Quark::from_str("blb"),
+                30,
+                40,
+                10,
+                20,
+                std::f32::consts::FRAC_PI_4,
+                1.0,
+            )
+            .unwrap();
+
+        assert_eq!(od.obj_type().unwrap(), glib::Quark::from_str("blb"));
+
+        let loc = od.oriented_location().unwrap();
+
+        assert_eq!(loc.x, 30);
+        assert_eq!(loc.y, 40);
+        assert_eq!(loc.w, 10);
+        assert_eq!(loc.h, 20);
+        assert_eq!(loc.r, std::f32::consts::FRAC_PI_4);
+        assert_eq!(loc.loc_conf_lvl, 1.0);
+        let meta = buf.meta::<AnalyticsRelationMeta>().unwrap();
+
+        assert!(meta.mtd::<AnalyticsODMtd>(1).is_none());
+
+        let meta2 = buf.meta::<AnalyticsRelationMeta>().unwrap();
+        let od2 = meta2.mtd::<AnalyticsODMtd>(0).unwrap();
+
+        assert_eq!(od2.obj_type().unwrap(), glib::Quark::from_str("blb"));
+        let loc = od2.location().unwrap();
+
+        assert_eq!(loc.x, 24);
+        assert_eq!(loc.y, 39);
+        assert_eq!(loc.w, 22);
+        assert_eq!(loc.h, 22);
+        assert_eq!(loc.loc_conf_lvl, 1.0);
     }
 }
