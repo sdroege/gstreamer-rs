@@ -461,6 +461,9 @@ extern "C" {
     pub fn gst_play_seek(play: *mut GstPlay, position: gst::GstClockTime);
     pub fn gst_play_set_audio_track(play: *mut GstPlay, stream_index: c_int) -> gboolean;
     pub fn gst_play_set_audio_track_enabled(play: *mut GstPlay, enabled: gboolean);
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_play_set_audio_track_id(play: *mut GstPlay, stream_id: *const c_char) -> gboolean;
     pub fn gst_play_set_audio_video_offset(play: *mut GstPlay, offset: i64);
     pub fn gst_play_set_color_balance(
         play: *mut GstPlay,
@@ -480,11 +483,26 @@ extern "C" {
     pub fn gst_play_set_rate(play: *mut GstPlay, rate: c_double);
     pub fn gst_play_set_subtitle_track(play: *mut GstPlay, stream_index: c_int) -> gboolean;
     pub fn gst_play_set_subtitle_track_enabled(play: *mut GstPlay, enabled: gboolean);
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_play_set_subtitle_track_id(play: *mut GstPlay, stream_id: *const c_char)
+        -> gboolean;
     pub fn gst_play_set_subtitle_uri(play: *mut GstPlay, uri: *const c_char);
     pub fn gst_play_set_subtitle_video_offset(play: *mut GstPlay, offset: i64);
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_play_set_track_ids(
+        play: *mut GstPlay,
+        audio_stream_id: *const c_char,
+        video_stream_id: *const c_char,
+        subtitle_stream_id: *const c_char,
+    ) -> gboolean;
     pub fn gst_play_set_uri(play: *mut GstPlay, uri: *const c_char);
     pub fn gst_play_set_video_track(play: *mut GstPlay, stream_index: c_int) -> gboolean;
     pub fn gst_play_set_video_track_enabled(play: *mut GstPlay, enabled: gboolean);
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_play_set_video_track_id(play: *mut GstPlay, stream_id: *const c_char) -> gboolean;
     pub fn gst_play_set_visualization(play: *mut GstPlay, name: *const c_char) -> gboolean;
     pub fn gst_play_set_visualization_enabled(play: *mut GstPlay, enabled: gboolean);
     pub fn gst_play_set_volume(play: *mut GstPlay, val: c_double);
@@ -551,6 +569,9 @@ extern "C" {
     pub fn gst_play_stream_info_get_caps(info: *const GstPlayStreamInfo) -> *mut gst::GstCaps;
     pub fn gst_play_stream_info_get_codec(info: *const GstPlayStreamInfo) -> *const c_char;
     pub fn gst_play_stream_info_get_index(info: *const GstPlayStreamInfo) -> c_int;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_play_stream_info_get_stream_id(info: *const GstPlayStreamInfo) -> *const c_char;
     pub fn gst_play_stream_info_get_stream_type(info: *const GstPlayStreamInfo) -> *const c_char;
     pub fn gst_play_stream_info_get_tags(info: *const GstPlayStreamInfo) -> *mut gst::GstTagList;
 

@@ -87,6 +87,12 @@ pub const GST_AUDIO_CHANNEL_POSITION_WIDE_LEFT: GstAudioChannelPosition = 24;
 pub const GST_AUDIO_CHANNEL_POSITION_WIDE_RIGHT: GstAudioChannelPosition = 25;
 pub const GST_AUDIO_CHANNEL_POSITION_SURROUND_LEFT: GstAudioChannelPosition = 26;
 pub const GST_AUDIO_CHANNEL_POSITION_SURROUND_RIGHT: GstAudioChannelPosition = 27;
+#[cfg(feature = "v1_26")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+pub const GST_AUDIO_CHANNEL_POSITION_TOP_SURROUND_LEFT: GstAudioChannelPosition = 28;
+#[cfg(feature = "v1_26")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+pub const GST_AUDIO_CHANNEL_POSITION_TOP_SURROUND_RIGHT: GstAudioChannelPosition = 29;
 
 pub type GstAudioDitherMethod = c_int;
 pub const GST_AUDIO_DITHER_NONE: GstAudioDitherMethod = 0;
@@ -2473,6 +2479,15 @@ extern "C" {
         from: *const GstAudioChannelPosition,
         to: *const GstAudioChannelPosition,
     ) -> gboolean;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_audio_reorder_channels_with_reorder_map(
+        data: gpointer,
+        size: size_t,
+        bps: c_int,
+        channels: c_int,
+        reorder_map: *const c_int,
+    );
     pub fn gst_buffer_add_audio_clipping_meta(
         buffer: *mut gst::GstBuffer,
         format: gst::GstFormat,

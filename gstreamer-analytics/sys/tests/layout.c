@@ -20,7 +20,6 @@ int main() {
     printf("%s;%zu;%zu\n", "GstSegmentationType", sizeof(GstSegmentationType), alignof(GstSegmentationType));
     printf("%s;%zu;%zu\n", "GstTensor", sizeof(GstTensor), alignof(GstTensor));
     printf("%s;%zu;%zu\n", "GstTensorDataType", sizeof(GstTensorDataType), alignof(GstTensorDataType));
-    printf("%s;%zu;%zu\n", "GstTensorDim", sizeof(GstTensorDim), alignof(GstTensorDim));
     printf("%s;%zu;%zu\n", "GstTensorDimOrder", sizeof(GstTensorDimOrder), alignof(GstTensorDimOrder));
     printf("%s;%zu;%zu\n", "GstTensorLayout", sizeof(GstTensorLayout), alignof(GstTensorLayout));
     printf("%s;%zu;%zu\n", "GstTensorMeta", sizeof(GstTensorMeta), alignof(GstTensorMeta));

@@ -60,6 +60,30 @@ pub fn codec_utils_aac_get_sample_rate_from_index(sr_idx: u32) -> u32 {
 
 #[cfg(feature = "v1_26")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+#[doc(alias = "gst_codec_utils_av1_create_av1c_from_caps")]
+pub fn codec_utils_av1_create_av1c_from_caps(caps: &gst::Caps) -> gst::Buffer {
+    assert_initialized_main_thread!();
+    unsafe {
+        from_glib_full(ffi::gst_codec_utils_av1_create_av1c_from_caps(
+            caps.to_glib_none().0,
+        ))
+    }
+}
+
+#[cfg(feature = "v1_26")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+#[doc(alias = "gst_codec_utils_av1_create_caps_from_av1c")]
+pub fn codec_utils_av1_create_caps_from_av1c(av1c: &gst::Buffer) -> gst::Caps {
+    assert_initialized_main_thread!();
+    unsafe {
+        from_glib_full(ffi::gst_codec_utils_av1_create_caps_from_av1c(
+            av1c.to_glib_none().0,
+        ))
+    }
+}
+
+#[cfg(feature = "v1_26")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
 #[doc(alias = "gst_codec_utils_av1_get_level")]
 pub fn codec_utils_av1_get_level(seq_level_idx: u8) -> Result<glib::GString, glib::BoolError> {
     assert_initialized_main_thread!();

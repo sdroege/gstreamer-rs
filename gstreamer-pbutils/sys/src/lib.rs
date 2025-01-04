@@ -841,6 +841,16 @@ extern "C" {
     pub fn gst_codec_utils_aac_get_sample_rate_from_index(sr_idx: c_uint) -> c_uint;
     #[cfg(feature = "v1_26")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_codec_utils_av1_create_av1c_from_caps(
+        caps: *mut gst::GstCaps,
+    ) -> *mut gst::GstBuffer;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_codec_utils_av1_create_caps_from_av1c(
+        av1c: *mut gst::GstBuffer,
+    ) -> *mut gst::GstCaps;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
     pub fn gst_codec_utils_av1_get_level(seq_level_idx: u8) -> *const c_char;
     #[cfg(feature = "v1_26")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]

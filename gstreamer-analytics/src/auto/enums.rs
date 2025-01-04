@@ -110,8 +110,6 @@ pub enum TensorDimOrder {
     RowMajor,
     #[doc(alias = "GST_TENSOR_DIM_ORDER_COL_MAJOR")]
     ColMajor,
-    #[doc(alias = "GST_TENSOR_DIM_ORDER_INDEXED")]
-    Indexed,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -127,7 +125,6 @@ impl IntoGlib for TensorDimOrder {
         match self {
             Self::RowMajor => ffi::GST_TENSOR_DIM_ORDER_ROW_MAJOR,
             Self::ColMajor => ffi::GST_TENSOR_DIM_ORDER_COL_MAJOR,
-            Self::Indexed => ffi::GST_TENSOR_DIM_ORDER_INDEXED,
             Self::__Unknown(value) => value,
         }
     }
@@ -144,7 +141,6 @@ impl FromGlib<ffi::GstTensorDimOrder> for TensorDimOrder {
         match value {
             ffi::GST_TENSOR_DIM_ORDER_ROW_MAJOR => Self::RowMajor,
             ffi::GST_TENSOR_DIM_ORDER_COL_MAJOR => Self::ColMajor,
-            ffi::GST_TENSOR_DIM_ORDER_INDEXED => Self::Indexed,
             value => Self::__Unknown(value),
         }
     }
