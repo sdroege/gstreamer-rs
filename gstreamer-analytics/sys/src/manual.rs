@@ -1,18 +1,17 @@
 use gstreamer_sys as gst_sys;
 use libc::size_t;
 
-use crate::{GstTensorDataType, GstTensorDim, GstTensorDimOrder, GstTensorLayout};
+use crate::{GstTensorDataType, GstTensorDimOrder, GstTensorLayout};
 
 #[repr(C)]
 pub struct GstTensor {
     pub id: glib_sys::GQuark,
     pub layout: GstTensorLayout,
     pub data_type: GstTensorDataType,
-    pub batch_size: size_t,
     pub data: *mut gst_sys::GstBuffer,
     pub dims_order: GstTensorDimOrder,
     pub num_dims: size_t,
-    pub dims: [GstTensorDim; 0],
+    pub dims: [size_t; 0],
 }
 
 impl ::std::fmt::Debug for GstTensor {
@@ -21,7 +20,6 @@ impl ::std::fmt::Debug for GstTensor {
             .field("id", &self.id)
             .field("layout", &self.layout)
             .field("data_type", &self.data_type)
-            .field("batch_size", &self.batch_size)
             .field("data", &self.data)
             .field("dims_order", &self.dims_order)
             .field("num_dims", &self.num_dims)

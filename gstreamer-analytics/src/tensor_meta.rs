@@ -74,8 +74,7 @@ mod tests {
         let tensor = Tensor::new_simple(
             glib::Quark::from_str("me"),
             TensorDataType::Int16,
-            2,
-            gst::Buffer::with_size(2 * 2 * 3 * 4 * 5).unwrap(),
+            gst::Buffer::with_size(2 * 3 * 4 * 5).unwrap(),
             TensorDimOrder::RowMajor,
             &[3, 4, 5],
         );
@@ -92,7 +91,7 @@ mod tests {
         assert_eq!(tptr, tensors[0].as_ptr());
         assert_eq!(tensors[0].dims_order(), TensorDimOrder::RowMajor);
         assert_eq!(tensors[0].dims().len(), 3);
-        assert_eq!(tensors[0].dims()[0].size, 3);
+        assert_eq!(tensors[0].dims()[0], 3);
 
         assert_eq!(tmeta.as_slice().len(), 1);
 
