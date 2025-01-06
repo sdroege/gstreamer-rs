@@ -1,5 +1,8 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+#[cfg(not(feature = "v1_26"))]
+use {crate::value::GstValueExt, std::str::FromStr};
+
 use glib::{prelude::*, subclass::prelude::*, translate::*};
 
 use super::prelude::*;
@@ -14,8 +17,6 @@ pub trait TracerImpl: TracerImplExt + GstObjectImpl + Send + Sync {
     // rustdoc-stripper-ignore-next
     /// Whether to use `gst::Structure` style "params" and automatically pass
     /// them to the corresponding properties during instantiation.
-    ///
-    /// Setting this to `true` requires GStreamer 1.26
     const USE_STRUCTURE_PARAMS: bool = false;
 
     fn bin_add_post(&self, ts: u64, bin: &Bin, element: &Element, success: bool) {}
@@ -90,6 +91,27 @@ pub trait TracerImpl: TracerImplExt + GstObjectImpl + Send + Sync {
     fn plugin_feature_loaded(&self, ts: u64, feature: &crate::PluginFeature) {}
 }
 
+#[cfg(not(feature = "v1_26"))]
+fn format_available_properties(class: &glib::object::ObjectClass) -> String {
+    class
+        .list_properties()
+        .iter()
+        .filter(|p| {
+            p.flags().contains(glib::ParamFlags::WRITABLE)
+                && p.name() != "parent"
+                && p.name() != "params"
+        })
+        .map(|p| format!("  {}: {}", p.name(), p.blurb().map_or("", |b| b)))
+        .collect::<Vec<_>>()
+        .join("\n")
+}
+
+#[cfg(not(feature = "v1_26"))]
+fn emit_property_warning(obj: &glib::Object, msg: &str) {
+    let props = format_available_properties(obj.class());
+    glib::g_warning!("gsttracer", "{}\nAvailable properties:\n{}", msg, props);
+}
+
 unsafe impl<T: TracerImpl> IsSubclassable<T> for Tracer {
     fn class_init(class: &mut glib::Class<Self>) {
         Self::parent_class_init::<T>(class);
@@ -105,9 +127,105 @@ unsafe impl<T: TracerImpl> IsSubclassable<T> for Tracer {
             }
         }
         #[cfg(not(feature = "v1_26"))]
-        {
+        unsafe {
             if T::USE_STRUCTURE_PARAMS {
-                panic!("Can only use `USE_STRUCTURE_PARAMS` with GStreamer 1.26 and newer");
+                use std::sync::OnceLock;
+                static TRACER_CONSTRUCTED_FUNC: OnceLock<
+                    unsafe extern "C" fn(*mut glib::gobject_ffi::GObject),
+                > = OnceLock::new();
+
+                let class =
+                    &mut *(class.as_mut() as *mut _ as *mut glib::gobject_ffi::GObjectClass);
+                TRACER_CONSTRUCTED_FUNC.get_or_init(|| class.constructed.unwrap());
+                unsafe extern "C" fn constructed(objptr: *mut glib::gobject_ffi::GObject) {
+                    let obj = glib::Object::from_glib_borrow(objptr);
+                    let params = obj.property::<Option<String>>("params");
+
+                    let Some(params) = params else {
+                        TRACER_CONSTRUCTED_FUNC.get().unwrap()(objptr);
+
+                        return;
+                    };
+
+                    if params.is_empty() {
+                        TRACER_CONSTRUCTED_FUNC.get().unwrap()(objptr);
+
+                        return;
+                    }
+
+                    let s = match crate::Structure::from_str(&format!("tracer-settings,{}", params))
+                    {
+                        Ok(s) => s,
+                        Err(err) => {
+                            emit_property_warning(
+                                &obj,
+                                &format!(
+                                    "Can't setup tracer {err:?}: invalid parameters '{params}'"
+                                ),
+                            );
+                            return;
+                        }
+                    };
+
+                    let class = obj.class();
+
+                    for (field, field_value) in s.iter() {
+                        let pspec = match class.find_property(field.as_str()) {
+                            Some(p) => p,
+                            None => {
+                                emit_property_warning(
+                                    &obj,
+                                    &format!(
+                                        "Can't setup tracer: property '{}' not found",
+                                        field.as_str()
+                                    ),
+                                );
+                                return;
+                            }
+                        };
+
+                        let value = if field_value.type_() == pspec.value_type() {
+                            field_value.to_value()
+                        } else if field_value.type_() == glib::types::Type::STRING {
+                            let str_val = field_value.get::<String>().unwrap();
+                            #[cfg(feature = "v1_20")]
+                            {
+                                match glib::Value::deserialize_with_pspec(&str_val, &pspec) {
+                                    Ok(v) => v,
+                                    Err(_) => {
+                                        emit_property_warning(&obj, &format!("Can't instantiate tracer: invalid property '{}' value: '{}'", field.as_str(), str_val));
+                                        return;
+                                    }
+                                }
+                            }
+                            #[cfg(not(feature = "v1_20"))]
+                            {
+                                match glib::Value::deserialize(&str_val, pspec.value_type()) {
+                                    Ok(v) => v,
+                                    Err(_) => {
+                                        emit_property_warning(&obj, &format!("Can't instantiate tracer: invalid property '{}' value: '{}'", field.as_str(), str_val));
+                                        return;
+                                    }
+                                }
+                            }
+                        } else {
+                            emit_property_warning(&obj, &format!(
+                                "Can't setup tracer: property '{}' type mismatch, expected {}, got {}",
+                                field.as_str(),
+                                pspec.value_type().name(),
+                                field_value.type_().name()
+                            ));
+                            return;
+                        };
+
+                        crate::debug!(crate::CAT_RUST, "Setting property {field:?}");
+                        obj.set_property(field.as_str(), &value);
+                    }
+
+                    TRACER_CONSTRUCTED_FUNC.get().unwrap()(objptr);
+                }
+
+                class.constructed = Some(constructed);
             }
         }
     }
