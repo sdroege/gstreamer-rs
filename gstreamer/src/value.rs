@@ -398,8 +398,19 @@ impl IntRangeType for i32 {
     fn with_step(min: i32, max: i32, step: i32) -> IntRange<Self> {
         skip_assert_initialized!();
 
-        assert!(min <= max);
-        assert!(step > 0);
+        assert!(
+            min < max,
+            "maximum value must be greater than minimum value"
+        );
+        assert!(step > 0, "step size must be greater than zero");
+        assert!(
+            min % step == 0,
+            "minimum value must be evenly dividable by step size"
+        );
+        assert!(
+            max % step == 0,
+            "maximum value must be evenly dividable by step size"
+        );
 
         IntRange { min, max, step }
     }
@@ -416,8 +427,19 @@ impl IntRangeType for i64 {
     fn with_step(min: i64, max: i64, step: i64) -> IntRange<Self> {
         skip_assert_initialized!();
 
-        assert!(min <= max);
-        assert!(step > 0);
+        assert!(
+            min < max,
+            "maximum value must be greater than minimum value"
+        );
+        assert!(step > 0, "step size must be greater than zero");
+        assert!(
+            min % step == 0,
+            "minimum value must be evenly dividable by step size"
+        );
+        assert!(
+            max % step == 0,
+            "maximum value must be evenly dividable by step size"
+        );
 
         IntRange { min, max, step }
     }
@@ -1680,7 +1702,77 @@ mod tests {
 
         // Type inference should figure out the type
         let _r1 = crate::IntRange::new(1i32, 2i32);
-        let _r2 = crate::IntRange::with_step(2i64, 3i64, 4i64);
+        let _r2 = crate::IntRange::with_step(2i64, 10i64, 2i64);
+        let _r3 = crate::IntRange::with_step(0i64, 6i64, 3i64);
+    }
+
+    #[test]
+    #[should_panic(expected = "step size must be greater than zero")]
+    fn test_int_range_constructor_step0() {
+        crate::init().unwrap();
+        let _r = crate::IntRange::with_step(0i32, 2i32, 0i32);
+    }
+
+    #[test]
+    #[should_panic(expected = "maximum value must be greater than minimum value")]
+    fn test_int_range_constructor_max_min() {
+        crate::init().unwrap();
+        let _r = crate::IntRange::with_step(4i32, 2i32, 2i32);
+    }
+
+    #[test]
+    #[should_panic(expected = "maximum value must be greater than minimum value")]
+    fn test_int_range_constructor_max_eq_min() {
+        crate::init().unwrap();
+        let _r = crate::IntRange::with_step(4i32, 4i32, 2i32);
+    }
+
+    #[test]
+    #[should_panic(expected = "minimum value must be evenly dividable by step size")]
+    fn test_int_range_constructor_bad_step() {
+        crate::init().unwrap();
+        let _r = crate::IntRange::with_step(1i32, 10i32, 2i32);
+    }
+
+    #[test]
+    #[should_panic(expected = "maximum value must be evenly dividable by step size")]
+    fn test_int_range_constructor_bad_step_max() {
+        crate::init().unwrap();
+        let _r = crate::IntRange::with_step(0i32, 10i32, 3i32);
+    }
+
+    #[test]
+    #[should_panic(expected = "step size must be greater than zero")]
+    fn test_int_range_constructor_step0_i64() {
+        crate::init().unwrap();
+        let _r = crate::IntRange::with_step(0i64, 2i64, 0i64);
+    }
+
+    #[test]
+    #[should_panic(expected = "maximum value must be greater than minimum value")]
+    fn test_int_range_constructor_max_min_i64() {
+        crate::init().unwrap();
+        let _r = crate::IntRange::with_step(4i64, 2i64, 2i64);
+    }
+
+    #[test]
+    #[should_panic(expected = "maximum value must be greater than minimum value")]
+    fn test_int_range_constructor_max_eq_min_i64() {
+        crate::init().unwrap();
+        let _r = crate::IntRange::with_step(4i64, 4i64, 2i64);
+    }
+
+    #[test]
+    #[should_panic(expected = "minimum value must be evenly dividable by step size")]
+    fn test_int_range_constructor_bad_step_i64() {
+        crate::init().unwrap();
+        let _r = crate::IntRange::with_step(1i64, 10i64, 2i64);
+    }
+    #[test]
+    #[should_panic(expected = "maximum value must be evenly dividable by step size")]
+    fn test_int_range_constructor_bad_step_max_i64() {
+        crate::init().unwrap();
+        let _r = crate::IntRange::with_step(0i64, 10i64, 3i64);
     }
 
     #[test]
