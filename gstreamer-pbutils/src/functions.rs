@@ -440,3 +440,33 @@ pub fn pb_utils_get_file_extension_from_caps(caps: &gst::CapsRef) -> Option<glib
         ))
     }
 }
+
+#[cfg(feature = "v1_26")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+#[doc(alias = "gst_codec_utils_av1_create_caps_from_av1c")]
+pub fn codec_utils_av1_create_caps_from_av1c(
+    av1c: &gst::BufferRef,
+) -> Result<gst::Caps, glib::BoolError> {
+    assert_initialized_main_thread!();
+    unsafe {
+        Option::<_>::from_glib_full(ffi::gst_codec_utils_av1_create_caps_from_av1c(
+            mut_override(av1c.as_ptr()),
+        ))
+        .ok_or_else(|| glib::bool_error!("Failed to create caps from AV1C header"))
+    }
+}
+
+#[cfg(feature = "v1_26")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+#[doc(alias = "gst_codec_utils_av1_create_av1c_from_caps")]
+pub fn codec_utils_av1_create_av1c_from_caps(
+    caps: &gst::CapsRef,
+) -> Result<gst::Buffer, glib::BoolError> {
+    assert_initialized_main_thread!();
+    unsafe {
+        Option::<_>::from_glib_full(ffi::gst_codec_utils_av1_create_av1c_from_caps(
+            mut_override(caps.as_ptr()),
+        ))
+        .ok_or_else(|| glib::bool_error!("Failed to create AV1C header from caps"))
+    }
+}

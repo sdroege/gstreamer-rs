@@ -231,6 +231,17 @@ status = "generate"
     name = "plugins_base_version"
     assertion = "skip"
 
+    # Needs special handle for buffer ref
+    [[object.function]]
+    name = "codec_utils_av1_create_caps_from_av1c"
+    manual = true
+
+    # Needs special handle for caps ref
+    [[object.function]]
+    name = "codec_utils_av1_create_av1c_from_caps"
+    manual = true
+
+
 [[object]]
 name = "GstPbutils.Discoverer"
 status = "generate"
