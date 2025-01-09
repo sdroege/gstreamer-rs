@@ -72,10 +72,10 @@ pub enum AudioChannelPosition {
     SurroundLeft,
     #[doc(alias = "GST_AUDIO_CHANNEL_POSITION_SURROUND_RIGHT")]
     SurroundRight = ffi::GST_AUDIO_CHANNEL_POSITION_SURROUND_RIGHT,
-    #[doc(hidden)]
-    UnknownChannel28 = 28,
-    #[doc(hidden)]
-    UnknownChannel29 = 29,
+    #[doc(alias = "GST_AUDIO_CHANNEL_POSITION_TOP_SURROUND_LEFT")]
+    TopSurroundLeft = 28,
+    #[doc(alias = "GST_AUDIO_CHANNEL_POSITION_TOP_SURROUND_RIGHT")]
+    TopSurroundRight = 29,
     #[doc(hidden)]
     UnknownChannel30 = 30,
     #[doc(hidden)]
