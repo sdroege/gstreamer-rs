@@ -36,7 +36,11 @@ if [ "$RUST_IMAGE_FULL" = "1" ]; then
   cargo install --locked grcov
 fi
 
-cargo install --locked cargo-nextest
+if [ "$RUST_VERSION" = "1.80.1" ]; then
+    cargo install --locked cargo-nextest@0.9.85
+else
+    cargo install --locked cargo-nextest
+fi
 
 if [ "$RUST_VERSION" = "1.80.1" ]; then
     cargo install --locked cargo-c --version 0.10.5+cargo-0.83

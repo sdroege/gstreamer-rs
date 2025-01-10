@@ -17,7 +17,11 @@ if (!$?) {
   Exit 1
 }
 
-cargo install --locked cargo-nextest
+if ("$env:RUST_VERSION" -eq "1.80.1") {
+    cargo install --locked cargo-nextest@0.9.85
+} else {
+    cargo install --locked cargo-nextest
+}
 
 if (!$?) {
   Write-Host "Failed to install cargo-nextest"
