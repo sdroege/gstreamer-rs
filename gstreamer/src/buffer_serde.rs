@@ -14,7 +14,7 @@ use crate::{Buffer, BufferFlags, BufferRef, ClockTime};
 
 impl Serialize for BufferRef {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
-        let mut buffer = serializer.serialize_struct("Buffer", 6)?;
+        let mut buffer = serializer.serialize_struct("Buffer", 7)?;
         buffer.serialize_field("pts", &self.pts())?;
         buffer.serialize_field("dts", &self.dts())?;
         buffer.serialize_field("duration", &self.duration())?;
