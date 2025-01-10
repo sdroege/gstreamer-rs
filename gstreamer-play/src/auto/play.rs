@@ -212,12 +212,15 @@ impl Play {
     #[cfg(feature = "v1_26")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
     #[doc(alias = "gst_play_set_audio_track_id")]
-    pub fn set_audio_track_id(&self, stream_id: Option<&str>) -> bool {
+    pub fn set_audio_track_id(
+        &self,
+        stream_id: Option<&str>,
+    ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_play_set_audio_track_id(
-                self.to_glib_none().0,
-                stream_id.to_glib_none().0,
-            ))
+            glib::result_from_gboolean!(
+                ffi::gst_play_set_audio_track_id(self.to_glib_none().0, stream_id.to_glib_none().0),
+                "Failed to set audio track"
+            )
         }
     }
 
@@ -288,12 +291,18 @@ impl Play {
     #[cfg(feature = "v1_26")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
     #[doc(alias = "gst_play_set_subtitle_track_id")]
-    pub fn set_subtitle_track_id(&self, stream_id: Option<&str>) -> bool {
+    pub fn set_subtitle_track_id(
+        &self,
+        stream_id: Option<&str>,
+    ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_play_set_subtitle_track_id(
-                self.to_glib_none().0,
-                stream_id.to_glib_none().0,
-            ))
+            glib::result_from_gboolean!(
+                ffi::gst_play_set_subtitle_track_id(
+                    self.to_glib_none().0,
+                    stream_id.to_glib_none().0
+                ),
+                "Failed to set subtitle track"
+            )
         }
     }
 
@@ -320,14 +329,17 @@ impl Play {
         audio_stream_id: Option<&str>,
         video_stream_id: Option<&str>,
         subtitle_stream_id: Option<&str>,
-    ) -> bool {
+    ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_play_set_track_ids(
-                self.to_glib_none().0,
-                audio_stream_id.to_glib_none().0,
-                video_stream_id.to_glib_none().0,
-                subtitle_stream_id.to_glib_none().0,
-            ))
+            glib::result_from_gboolean!(
+                ffi::gst_play_set_track_ids(
+                    self.to_glib_none().0,
+                    audio_stream_id.to_glib_none().0,
+                    video_stream_id.to_glib_none().0,
+                    subtitle_stream_id.to_glib_none().0
+                ),
+                "Failed to set tracks"
+            )
         }
     }
 
@@ -361,12 +373,15 @@ impl Play {
     #[cfg(feature = "v1_26")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
     #[doc(alias = "gst_play_set_video_track_id")]
-    pub fn set_video_track_id(&self, stream_id: Option<&str>) -> bool {
+    pub fn set_video_track_id(
+        &self,
+        stream_id: Option<&str>,
+    ) -> Result<(), glib::error::BoolError> {
         unsafe {
-            from_glib(ffi::gst_play_set_video_track_id(
-                self.to_glib_none().0,
-                stream_id.to_glib_none().0,
-            ))
+            glib::result_from_gboolean!(
+                ffi::gst_play_set_video_track_id(self.to_glib_none().0, stream_id.to_glib_none().0),
+                "Failed to set video track"
+            )
         }
     }
 
