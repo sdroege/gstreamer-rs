@@ -345,8 +345,15 @@ pub fn buffer_reorder_channels(
 ) -> Result<(), glib::BoolError> {
     skip_assert_initialized!();
 
+    assert!(channels > 0 && channels <= 64);
+
     if from.len() != to.len() || from.len() > 64 {
         return Err(glib::bool_error!("Invalid number of channels"));
+    }
+
+    let formatinfo = crate::AudioFormatInfo::from_format(format);
+    if buffer.size() % ((formatinfo.width() * channels) as usize) != 0 {
+        return Err(glib::bool_error!("Incomplete number of samples in buffer"));
     }
 
     let valid: bool = unsafe {
@@ -378,6 +385,12 @@ pub fn reorder_channels(
 
     if from.len() != to.len() || from.len() > 64 {
         return Err(glib::bool_error!("Invalid number of channels"));
+    }
+    assert!(channels > 0 && channels <= 64);
+
+    let formatinfo = crate::AudioFormatInfo::from_format(format);
+    if data.len() % ((formatinfo.width() * channels) as usize) != 0 {
+        return Err(glib::bool_error!("Incomplete number of samples in buffer"));
     }
 
     let valid: bool = unsafe {
@@ -431,4 +444,47 @@ pub fn channel_reorder_map(
     } else {
         Err(glib::bool_error!("Failed to reorder channels"))
     }
+}
+
+#[cfg(feature = "v1_26")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+#[doc(alias = "gst_audio_reorder_channels_with_reorder_map")]
+pub fn reorder_channels_with_reorder_map(
+    data: &mut [u8],
+    bps: usize,
+    channels: u32,
+    reorder_map: &[usize],
+) -> Result<(), glib::BoolError> {
+    skip_assert_initialized!();
+
+    assert!(bps > 0 && bps <= 64);
+    assert!(channels > 0 && channels <= 64);
+    if data.len() % (bps * channels as usize) != 0 {
+        return Err(glib::bool_error!("Incomplete number of samples in buffer"));
+    }
+    if reorder_map.len() < channels as usize {
+        return Err(glib::bool_error!("Too small reorder map"));
+    }
+
+    let mut reorder_map_raw = mem::MaybeUninit::<[i32; 64]>::uninit();
+    for (i, c) in reorder_map[..channels as usize].iter().enumerate() {
+        if *c >= channels as usize {
+            return Err(glib::bool_error!("Invalid channel id in reorder map"));
+        }
+        unsafe {
+            *(reorder_map_raw.as_mut_ptr() as *mut i32).add(i) = *c as i32;
+        }
+    }
+
+    unsafe {
+        ffi::gst_audio_reorder_channels_with_reorder_map(
+            data.as_mut_ptr() as *mut _,
+            data.len(),
+            bps as i32,
+            channels as i32,
+            reorder_map_raw.as_ptr() as *const i32,
+        );
+    };
+
+    Ok(())
 }
