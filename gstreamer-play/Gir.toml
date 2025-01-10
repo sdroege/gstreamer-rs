@@ -128,6 +128,27 @@ final_type = true
     # &StructureRef
     manual = true
 
+    [[object.function]]
+    name = "set_audio_track_id"
+        [object.function.return]
+        bool_return_is_error = "Failed to set audio track"
+
+    [[object.function]]
+    name = "set_video_track_id"
+        [object.function.return]
+        bool_return_is_error = "Failed to set video track"
+
+    [[object.function]]
+    name = "set_subtitle_track_id"
+        [object.function.return]
+        bool_return_is_error = "Failed to set subtitle track"
+
+    [[object.function]]
+    name = "set_track_ids"
+        [object.function.return]
+        bool_return_is_error = "Failed to set tracks"
+
+
 [[object]]
 name = "GstPlay.PlayAudioInfo"
 status = "generate"
