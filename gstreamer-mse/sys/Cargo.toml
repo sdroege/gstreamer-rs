@@ -1,0 +1,41 @@
+[package]
+name = "gstreamer-mse-sys"
+version = "0.0.1"
+edition = "2021"
+build = "build.rs"
+authors = ["Sebastian Dröge <sebastian@centricular.com>", "Simon Wülker <simon.wuelker@arcor.de>"]
+description = "FFI bindings to libgstmse-1.0"
+documentation = "https://gstreamer.pages.freedesktop.org/gstreamer-rs/stable/latest/docs/gstreamer_mse_sys/"
+keywords = ["ffi", "gstreamer", "gnome", "multimedia"]
+readme = "README.md"
+
+[package.metadata.system-deps.gstreamer_mse_1_0]
+name = "gstreamer-mse-1.0"
+version = "1.26"
+
+[package.metadata.docs.rs]
+rustc-args = ["--cfg", "docsrs"]
+rustdoc-args = ["--cfg", "docsrs", "--generate-link-to-definition"]
+all-features = true
+
+[lib]
+name = "gstreamer_mse_sys"
+
+[dependencies]
+libc = "0.2"
+
+[dependencies.glib-sys]
+workspace = true
+
+[dependencies.gstreamer-sys]
+workspace = true
+
+[build-dependencies]
+system-deps = "7"
+
+[dev-dependencies]
+shell-words = "1.0.0"
+tempfile = "3"
+
+[features]
+v1_24 = []

@@ -876,6 +876,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "gst-mse-sys"
+version = "0.0.1"
+dependencies = [
+ "glib-sys",
+ "gstreamer-sys",
+ "libc",
+ "shell-words",
+ "system-deps",
+ "tempfile",
+]
+
+[[package]]
 name = "gstreamer"
 version = "0.24.0"
 dependencies = [

@@ -11,6 +11,7 @@ default-members = [
   "gstreamer-controller/sys",
   "gstreamer-editing-services/sys",
   "gstreamer-mpegts/sys",
+  "gstreamer-mse/sys",
   "gstreamer-net/sys",
   "gstreamer-pbutils/sys",
   "gstreamer-play/sys",
@@ -61,6 +62,7 @@ members = [
   "gstreamer-gl/wayland/sys",
   "gstreamer-gl/x11/sys",
   "gstreamer-mpegts/sys",
+  "gstreamer-mse/sys",
   "gstreamer-net/sys",
   "gstreamer-pbutils/sys",
   "gstreamer-play/sys",
@@ -136,6 +138,7 @@ gstreamer-gl-wayland-sys = { path = "./gstreamer-gl/wayland/sys"}
 gstreamer-gl-x11-sys = { path = "./gstreamer-gl/x11/sys"}
 gstreamer-gl-sys = { path = "./gstreamer-gl/sys"}
 gstreamer-mpegts-sys = { path = "./gstreamer-mpegts/sys"}
+gstreamer-mse-sys = { path = "./gstreamer-mse/sys"}
 gstreamer-net-sys = { path = "./gstreamer-net/sys"}
 gstreamer-pbutils-sys = { path = "./gstreamer-pbutils/sys"}
 gstreamer-play-sys = { path = "./gstreamer-play/sys" }
