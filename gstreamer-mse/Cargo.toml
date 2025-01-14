@@ -1,0 +1,25 @@
+[package]
+name = "gstreamer-mse"
+authors = ["Sebastian Dröge <sebastian@centricular.com>", "Simon Wülker <simon.wuelker@arcor.de>"]
+description = "Rust bindings for GStreamer MSE library"
+license = "MIT OR Apache-2.0"
+readme = "README.md"
+documentation = "https://gstreamer.pages.freedesktop.org/gstreamer-rs/stable/latest/docs/gstreamer_mse/"
+keywords = ["gstreamer", "multimedia", "audio", "video", "gnome"]
+version.workspace = true
+categories.workspace = true
+repository.workspace = true
+homepage.workspace = true
+edition.workspace = true
+rust-version.workspace = true 
+
+[dependencies]
+gstreamer-mse-sys.workspace = true
+gst = { workspace = true, features = ["v1_26"] }
+glib.workspace = true
+
+[package.metadata.docs.rs]
+all-features = true
+rustc-args = ["--cfg", "docsrs"]
+rustdoc-args = ["--cfg", "docsrs", "--generate-link-to-definition"]
+

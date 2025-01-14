@@ -1,0 +1,59 @@
+[options]
+girs_directories = ["../gir-files", "../gst-gir-files"]
+library = "GstMse"
+version = "1.0"
+min_cfg_version = "1.26"
+work_mode = "normal"
+target_path = "."
+concurrency = "send+sync"
+generate_safety_asserts = true
+single_version_file = true
+generate_display_trait = false
+deprecate_by_min_version = true
+trust_return_value_nullability = true
+
+generate = [
+    "GstMse.MediaSourceEOSError",
+    "GstMse.MediaSourceError",
+    "GstMse.MediaSourceReadyState",
+    "GstMse.MseSrc",
+    "GstMse.MseSrcPad",
+    "GstMse.MseSrcReadyState",
+    "GstMse.SourceBuffer",
+    "GstMse.SourceBufferAppendMode",
+    "GstMse.SourceBufferList",
+]
+
+manual = [
+    "GstMse.MediaSourceRange",
+    "GstMse.SourceBufferInterval",
+    "Gst.Element",
+    "Gst.Pad",
+]
+
+[[object]]
+name = "Gst.Buffer"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.ClockTime"
+status = "manual"
+conversion_type = "Option"
+
+[[object]]
+name = "GLib.Error"
+status = "manual"
+
+[[object]]
+name = "Gst.Object"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "GstMse.MediaSource"
+status = "generate"
+    [[object.property]]
+    name = "position"
+    # pass GstClockTime instead of u64 for setter
+    generate = ["notify"]

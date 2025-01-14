@@ -876,18 +876,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "gst-mse-sys"
-version = "0.0.1"
-dependencies = [
- "glib-sys",
- "gstreamer-sys",
- "libc",
- "shell-words",
- "system-deps",
- "tempfile",
-]
-
-[[package]]
 name = "gstreamer"
 version = "0.24.0"
 dependencies = [
@@ -1247,6 +1235,27 @@ version = "0.24.0"
 dependencies = [
  "glib-sys",
  "gstreamer-base-sys",
+ "gstreamer-sys",
+ "libc",
+ "shell-words",
+ "system-deps",
+ "tempfile",
+]
+
+[[package]]
+name = "gstreamer-mse"
+version = "0.24.0"
+dependencies = [
+ "glib",
+ "gstreamer",
+ "gstreamer-mse-sys",
+]
+
+[[package]]
+name = "gstreamer-mse-sys"
+version = "0.24.0"
+dependencies = [
+ "glib-sys",
  "gstreamer-sys",
  "libc",
  "shell-words",

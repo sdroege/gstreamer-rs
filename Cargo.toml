@@ -32,6 +32,7 @@ default-members = [
   "gstreamer-controller",
   "gstreamer-editing-services",
   "gstreamer-mpegts",
+  "gstreamer-mse",
   "gstreamer-net",
   "gstreamer-pbutils",
   "gstreamer-play",
@@ -88,6 +89,7 @@ members = [
   "gstreamer-gl/wayland",
   "gstreamer-gl/x11",
   "gstreamer-mpegts",
+  "gstreamer-mse",
   "gstreamer-net",
   "gstreamer-pbutils",
   "gstreamer-play",
@@ -163,6 +165,7 @@ gst-gl = { package = "gstreamer-gl", path = "./gstreamer-gl" }
 gst-gl-egl = { package = "gstreamer-gl-egl", path = "./gstreamer-gl/egl" }
 gst-gl-x11 = { package = "gstreamer-gl-x11", path = "./gstreamer-gl/x11" }
 gst-net = { package = "gstreamer-net", path = "./gstreamer-net" }
+gst-mse = { package = "gstreamer-mse", path = "./gstreamer-mse" }
 gst-pbutils = { package = "gstreamer-pbutils", path = "./gstreamer-pbutils" }
 gst-play = { package = "gstreamer-play", path = "./gstreamer-play" }
 gst-player = { package = "gstreamer-player", path = "./gstreamer-player" }
