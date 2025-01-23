@@ -2,7 +2,7 @@
 
 [GStreamer](https://gstreamer.freedesktop.org/) (OpenGL library, EGL support)
 bindings for Rust.  Documentation can be found
-[here](https://gstreamer.pages.freedesktop.org/gstreamer-rs/stable/latest/docs/gstreamer_gl_egl/).
+[here](https://gstreamer.freedesktop.org/documentation/rust/stable/latest/docs/gstreamer_gl_egl/).
 
 These bindings are providing a safe API that can be used to interface with
 GStreamer, e.g. for writing GStreamer-based applications and GStreamer plugins.
@@ -159,7 +159,7 @@ would be [`pkg-config-lite`](https://sourceforge.net/projects/pkgconfiglite/).
 ## Getting Started
 
 The API reference can be found
-[here](https://gstreamer.pages.freedesktop.org/gstreamer-rs/stable/latest/docs/gstreamer/), however it is
+[here](https://gstreamer.freedesktop.org/documentation/rust/stable/latest/docs/gstreamer/), however it is
 only the Rust API reference and does not explain any of the concepts.
 
 For getting started with GStreamer development, the best would be to follow

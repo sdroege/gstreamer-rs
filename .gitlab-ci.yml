@@ -527,7 +527,7 @@ pages:
     - curl --proto '=https' --tlsv1.2 -sSf -o gir-rustdoc.py
         https://gitlab.gnome.org/World/Rust/gir-rustdoc/-/raw/main/gir-rustdoc.py
     - chmod +x gir-rustdoc.py
-    - ./gir-rustdoc.py html-index
+    - ./gir-rustdoc.py --pages-url="https://gstreamer.freedesktop.org/documentation/rust/" html-index
     # development docs
     - mkdir public/git
     - mv docs public/git/docs
