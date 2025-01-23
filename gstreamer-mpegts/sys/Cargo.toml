@@ -1,7 +1,7 @@
 [package]
 authors = ["Russel Winder <russel@winder.org.uk>", "Sebastian Dröge <sebastian@centricular.com>"]
 build = "build.rs"
-documentation = "https://gstreamer.pages.freedesktop.org/gstreamer-rs/stable/latest/docs/gstreamer_mpegts_sys/"
+documentation = "https://gstreamer.freedesktop.org/documentation/rust/stable/latest/docs/gstreamer_mpegts_sys/"
 description = "FFI bindings to libgstmpegts-1.0"
 keywords = ["ffi", "gstreamer", "gnome", "multimedia"]
 license = "MIT"
