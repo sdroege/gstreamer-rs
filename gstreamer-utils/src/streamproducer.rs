@@ -489,7 +489,7 @@ impl<'a> From<&'a gst_app::AppSink> for StreamProducer {
             consumers: HashMap::new(),
             // it would make sense to automatically forward more events such as Tag but that would break
             // with older GStreamer, see https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/4297
-            events_to_forward: vec![gst::EventType::Eos],
+            events_to_forward: vec![gst::EventType::Eos, gst::EventType::Gap],
             forward_preroll: true,
             just_forwarded_preroll: false,
         }));
