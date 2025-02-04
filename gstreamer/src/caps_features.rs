@@ -882,6 +882,34 @@ impl ToOwned for CapsFeaturesRef {
     }
 }
 
+impl std::hash::Hash for CapsFeaturesRef {
+    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
+        use std::hash::{DefaultHasher, Hasher};
+
+        // re-implement gst_hash_caps_features so the hashing is not depending on the features order.
+        if self.is_any() {
+            "ANY".hash(state);
+        } else if self.is_empty() {
+            "EMPTY".hash(state);
+        } else {
+            let mut features_hash = 0;
+            for f in self.iter() {
+                let mut field_hasher = DefaultHasher::new();
+                f.hash(&mut field_hasher);
+
+                features_hash ^= field_hasher.finish();
+            }
+            features_hash.hash(state);
+        }
+    }
+}
+
+impl std::hash::Hash for CapsFeatures {
+    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
+        self.as_ref().hash(state);
+    }
+}
+
 unsafe impl Sync for CapsFeaturesRef {}
 unsafe impl Send for CapsFeaturesRef {}
 
@@ -1008,5 +1036,39 @@ mod tests {
         assert!(cf.contains_by_id(dma_buf));
         assert!(cf.contains_by_id(overlay_comp));
         assert!(!cf.contains("memory:GLMemory"));
+    }
+
+    #[test]
+    fn test_hash() {
+        crate::init().unwrap();
+
+        use std::hash::BuildHasher;
+        let bh = std::hash::RandomState::new();
+
+        let any = CapsFeatures::new_any();
+        let empty = CapsFeatures::new_empty();
+        assert_eq!(bh.hash_one(&any), bh.hash_one(&any));
+        assert_eq!(bh.hash_one(&empty), bh.hash_one(&empty));
+        assert_ne!(bh.hash_one(&any), bh.hash_one(&empty));
+
+        // Different names
+        let cf1 = CapsFeatures::from(gstr!("memory:DMABuf"));
+        let cf2 = CapsFeatures::from(gstr!("memory:GLMemory"));
+        assert_eq!(bh.hash_one(&cf1), bh.hash_one(&cf1));
+        assert_eq!(bh.hash_one(&cf2), bh.hash_one(&cf2));
+        assert_ne!(bh.hash_one(&cf1), bh.hash_one(&cf2));
+
+        // Same features, different order
+        let cf1 = CapsFeatures::from([
+            gstr!("memory:DMABuf"),
+            gstr!("meta:GstVideoOverlayComposition"),
+        ]);
+        let cf2 = CapsFeatures::from([
+            gstr!("meta:GstVideoOverlayComposition"),
+            gstr!("memory:DMABuf"),
+        ]);
+        assert_eq!(bh.hash_one(&cf1), bh.hash_one(&cf1));
+        assert_eq!(bh.hash_one(&cf2), bh.hash_one(&cf2));
+        assert_eq!(bh.hash_one(&cf1), bh.hash_one(&cf2));
     }
 }
