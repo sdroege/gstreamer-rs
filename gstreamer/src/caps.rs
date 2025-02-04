@@ -1259,6 +1259,30 @@ impl PartialEq for CapsRef {
 
 impl Eq for CapsRef {}
 
+#[cfg(feature = "v1_28")]
+impl std::hash::Hash for CapsRef {
+    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
+        if self.is_any() {
+            "ANY".hash(state);
+        } else if self.is_empty() {
+            "EMPTY".hash(state);
+        } else {
+            // do no sort as structure order matters
+            for (s, feature) in self.iter_with_features() {
+                s.hash(state);
+                feature.hash(state);
+            }
+        }
+    }
+}
+
+#[cfg(feature = "v1_28")]
+impl std::hash::Hash for Caps {
+    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
+        self.as_ref().hash(state);
+    }
+}
+
 pub enum NoFeature {}
 pub enum HasFeatures {}
 
@@ -1760,5 +1784,64 @@ mod tests {
             .build();
 
         assert_eq!(format!("{caps:?}"), "Caps(video/x-raw(memory:SystemMemory) { array: Array([(gchararray) \"a\", (gchararray) \"b\", (gchararray) \"c\"]), list: List([(gchararray) \"d\", (gchararray) \"e\", (gchararray) \"f\"]) })");
+    }
+
+    #[cfg(feature = "v1_28")]
+    #[test]
+    fn test_hash() {
+        crate::init().unwrap();
+
+        use std::hash::BuildHasher;
+        let bh = std::hash::RandomState::new();
+
+        let caps = Caps::builder("video/x-raw").build();
+        assert_eq!(bh.hash_one(&caps), bh.hash_one(&caps));
+
+        let caps_any = Caps::new_any();
+        let caps_empty = Caps::new_empty();
+        assert_eq!(bh.hash_one(&caps_any), bh.hash_one(&caps_any));
+        assert_eq!(bh.hash_one(&caps_empty), bh.hash_one(&caps_empty));
+        assert_ne!(bh.hash_one(&caps_any), bh.hash_one(&caps_empty));
+
+        // Same caps but fields in a different order
+        let caps_a = Caps::builder("video/x-raw")
+            .field("width", 1920u32)
+            .field("height", 1080u32)
+            .build();
+        let caps_b = Caps::builder("video/x-raw")
+            .field("height", 1080u32)
+            .field("width", 1920u32)
+            .build();
+        assert_eq!(bh.hash_one(&caps_a), bh.hash_one(&caps_a));
+        assert_eq!(bh.hash_one(&caps_b), bh.hash_one(&caps_b));
+        assert_eq!(bh.hash_one(&caps_a), bh.hash_one(&caps_b));
+
+        // Same fields but different feature
+        let caps_a = Caps::builder("video/x-raw")
+            .features(["memory:DMABuf"])
+            .field("width", 1920u32)
+            .field("height", 1080u32)
+            .build();
+        let caps_b = Caps::builder("video/x-raw")
+            .features(["memory:GLMemory"])
+            .field("height", 1080u32)
+            .field("width", 1920u32)
+            .build();
+        assert_eq!(bh.hash_one(&caps_a), bh.hash_one(&caps_a));
+        assert_eq!(bh.hash_one(&caps_b), bh.hash_one(&caps_b));
+        assert_ne!(bh.hash_one(&caps_a), bh.hash_one(&caps_b));
+
+        // Caps have the same structures but in different order, so they are actually different
+        let caps_a = Caps::builder_full()
+            .structure(Structure::builder("audio/x-raw").build())
+            .structure(Structure::builder("video/x-raw").build())
+            .build();
+        let caps_b = Caps::builder_full()
+            .structure(Structure::builder("video/x-raw").build())
+            .structure(Structure::builder("audio/x-raw").build())
+            .build();
+        assert_eq!(bh.hash_one(&caps_a), bh.hash_one(&caps_a));
+        assert_eq!(bh.hash_one(&caps_b), bh.hash_one(&caps_b));
+        assert_ne!(bh.hash_one(&caps_a), bh.hash_one(&caps_b));
     }
 }
