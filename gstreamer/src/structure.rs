@@ -1984,6 +1984,37 @@ impl std::iter::Extend<(glib::Quark, SendValue)> for StructureRef {
     }
 }
 
+// Need gst_value_hash from 1.28
+#[cfg(feature = "v1_28")]
+impl std::hash::Hash for StructureRef {
+    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
+        use crate::value::GstValueExt;
+        use std::hash::{DefaultHasher, Hasher};
+
+        let name = self.name();
+        name.hash(state);
+
+        // re-implement gst_hash_structure() so the hashing is not depending on the fields order.
+        let mut fields_hash = 0;
+        for (field, value) in self.iter() {
+            let mut field_hasher = DefaultHasher::new();
+            field.hash(&mut field_hasher);
+            let value_hash = value.hash().unwrap();
+            value_hash.hash(&mut field_hasher);
+
+            fields_hash ^= field_hasher.finish();
+        }
+        fields_hash.hash(state);
+    }
+}
+
+#[cfg(feature = "v1_28")]
+impl std::hash::Hash for Structure {
+    fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
+        self.as_ref().hash(state);
+    }
+}
+
 #[derive(Debug)]
 #[must_use = "The builder must be built to be used"]
 pub struct Builder {
@@ -2525,5 +2556,48 @@ mod tests {
         });
 
         assert_eq!(s.field_ids().collect::<Vec<_>>(), vec![&f1, &f2]);
+    }
+
+    #[cfg(feature = "v1_28")]
+    #[test]
+    fn test_hash() {
+        crate::init().unwrap();
+
+        use std::hash::BuildHasher;
+        let bh = std::hash::RandomState::new();
+
+        // Different names
+        let s1 = Structure::builder("test1").build();
+        let s2 = Structure::builder("test2").build();
+        assert_eq!(bh.hash_one(&s1), bh.hash_one(&s1));
+        assert_eq!(bh.hash_one(&s2), bh.hash_one(&s2));
+        assert_ne!(bh.hash_one(&s1), bh.hash_one(&s2));
+
+        // Same name different fields
+        let s1 = Structure::builder("test").field("a", 1u32).build();
+        let s2 = Structure::builder("test").field("b", 1u32).build();
+        assert_eq!(bh.hash_one(&s1), bh.hash_one(&s1));
+        assert_eq!(bh.hash_one(&s2), bh.hash_one(&s2));
+        assert_ne!(bh.hash_one(&s1), bh.hash_one(&s2));
+
+        // Same name different field values
+        let s1 = Structure::builder("test").field("a", 1u32).build();
+        let s2 = Structure::builder("test").field("a", 2u32).build();
+        assert_eq!(bh.hash_one(&s1), bh.hash_one(&s1));
+        assert_eq!(bh.hash_one(&s2), bh.hash_one(&s2));
+        assert_ne!(bh.hash_one(&s1), bh.hash_one(&s2));
+
+        // Same structure but fields in a different order
+        let s1 = Structure::builder("test")
+            .field("a", 1u32)
+            .field("b", 2u32)
+            .build();
+        let s2 = Structure::builder("test")
+            .field("b", 2u32)
+            .field("a", 1u32)
+            .build();
+        assert_eq!(bh.hash_one(&s1), bh.hash_one(&s1));
+        assert_eq!(bh.hash_one(&s2), bh.hash_one(&s2));
+        assert_eq!(bh.hash_one(&s1), bh.hash_one(&s2));
     }
 }
