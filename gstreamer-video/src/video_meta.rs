@@ -75,10 +75,17 @@ impl VideoMeta {
         }
 
         let n_planes = offset.len() as u32;
-        let info = crate::VideoInfo::builder(format, width, height)
+        let info_builder = crate::VideoInfo::builder(format, width, height)
             .offset(offset)
-            .stride(stride)
-            .build()?;
+            .stride(stride);
+
+        #[cfg(feature = "v1_16")]
+        let info_builder = info_builder.interlace_mode_if(
+            crate::VideoInterlaceMode::Alternate,
+            video_frame_flags.contains(crate::VideoFrameFlags::ONEFIELD),
+        );
+
+        let info = info_builder.build()?;
 
         if !info.is_valid() {
             return Err(glib::bool_error!("Invalid video info"));
@@ -1283,6 +1290,23 @@ mod tests {
             assert_eq!(meta.offset(), &[0]);
             assert_eq!(meta.stride(), &[320 * 4]);
         }
+    }
+
+    #[test]
+    #[cfg(feature = "v1_16")]
+    fn test_add_full_alternate_interlacing() {
+        gst::init().unwrap();
+        let mut buffer = gst::Buffer::with_size(320 * 120 * 4).unwrap();
+        VideoMeta::add_full(
+            buffer.get_mut().unwrap(),
+            crate::VideoFrameFlags::TOP_FIELD,
+            crate::VideoFormat::Argb,
+            320,
+            240,
+            &[0],
+            &[320 * 4],
+        )
+        .unwrap();
     }
 
     #[test]
