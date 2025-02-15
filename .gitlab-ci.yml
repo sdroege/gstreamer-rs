@@ -142,7 +142,7 @@ trigger:
   stage: container-base
   variables:
     FDO_DISTRIBUTION_PACKAGES: >-
-      build-essential curl python3-setuptools libglib2.0-dev libxml2-dev
+      build-essential cmake curl python3-setuptools libglib2.0-dev libxml2-dev
       libdrm-dev libegl1-mesa-dev libgl1-mesa-dev libgbm-dev libgles2-mesa-dev
       libgl1-mesa-dri libegl-dev libgl1-mesa-glx libwayland-egl1-mesa xz-utils
       libssl-dev git wget ca-certificates ninja-build python3-pip flex bison
@@ -161,6 +161,7 @@ trigger:
     FDO_DISTRIBUTION_EXEC: >-
       bash ci/install-gst.sh &&
       bash ci/install-dav1d.sh &&
+      bash ci/install-vvdec.sh &&
       pip3 install --break-system-packages git+http://gitlab.freedesktop.org/freedesktop/ci-templates
 
 .build-final-image:

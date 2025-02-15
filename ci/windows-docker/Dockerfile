@@ -16,8 +16,9 @@ RUN choco install -y pkgconfiglite nasm llvm openssl
 RUN setx PATH '%PATH%;C:\Program Files\NASM;C:\gst-install\bin'
 ENV PKG_CONFIG_PATH="C:\gst-install\lib\pkgconfig"
 
-COPY install_gst.ps1 install_dav1d.ps1 install_rust.ps1 install_cargo_utils.ps1 C:\
+COPY install_gst.ps1 install_dav1d.ps1 install_vvdec.ps1 install_rust.ps1 install_cargo_utils.ps1 C:\
 RUN C:\install_gst.ps1
 RUN C:\install_dav1d.ps1
+RUN C:\install_vvdec.ps1
 RUN C:\install_rust.ps1
 RUN C:\install_cargo_utils.ps1
