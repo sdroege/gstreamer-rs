@@ -470,3 +470,29 @@ pub fn codec_utils_av1_create_av1c_from_caps(
         .ok_or_else(|| glib::bool_error!("Failed to create AV1C header from caps"))
     }
 }
+
+#[cfg(feature = "v1_26")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+#[doc(alias = "gst_codec_utils_h266_caps_set_level_tier_and_profile")]
+pub fn codec_utils_h266_caps_set_level_tier_and_profile(
+    caps: &mut gst::CapsRef,
+    decoder_configuration: &[u8],
+) -> Result<(), glib::BoolError> {
+    assert_initialized_main_thread!();
+    let len = decoder_configuration.len() as _;
+    unsafe {
+        let res: bool = from_glib(ffi::gst_codec_utils_h266_caps_set_level_tier_and_profile(
+            mut_override(caps.as_ptr()),
+            decoder_configuration.to_glib_none().0,
+            len,
+        ));
+
+        if res {
+            Ok(())
+        } else {
+            Err(glib::bool_error!(
+                "Failed to set H266 level/tier/profile to caps"
+            ))
+        }
+    }
+}
