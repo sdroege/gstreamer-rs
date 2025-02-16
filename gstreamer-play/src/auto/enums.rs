@@ -311,24 +311,6 @@ impl PlayMessage {
 
     #[cfg(feature = "v1_26")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
-    #[doc(alias = "gst_play_message_get_stream_id")]
-    #[doc(alias = "get_stream_id")]
-    pub fn stream_id(msg: &gst::Message) -> Option<glib::GString> {
-        assert_initialized_main_thread!();
-        unsafe { from_glib_none(ffi::gst_play_message_get_stream_id(msg.to_glib_none().0)) }
-    }
-
-    #[cfg(feature = "v1_26")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
-    #[doc(alias = "gst_play_message_get_uri")]
-    #[doc(alias = "get_uri")]
-    pub fn uri(msg: &gst::Message) -> glib::GString {
-        assert_initialized_main_thread!();
-        unsafe { from_glib_none(ffi::gst_play_message_get_uri(msg.to_glib_none().0)) }
-    }
-
-    #[cfg(feature = "v1_26")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
     #[doc(alias = "gst_play_message_parse_buffering")]
     pub fn parse_buffering(msg: &gst::Message) -> u32 {
         assert_initialized_main_thread!();
@@ -392,32 +374,6 @@ impl PlayMessage {
             let mut details = std::ptr::null_mut();
             ffi::gst_play_message_parse_error(msg.to_glib_none().0, &mut error, &mut details);
             (from_glib_full(error), from_glib_full(details))
-        }
-    }
-
-    #[cfg(feature = "v1_26")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
-    #[doc(alias = "gst_play_message_parse_error_missing_plugin")]
-    pub fn parse_error_missing_plugin(
-        msg: &gst::Message,
-    ) -> Option<(glib::GString, Option<glib::GString>)> {
-        assert_initialized_main_thread!();
-        unsafe {
-            let mut descriptions = std::ptr::null_mut();
-            let mut installer_details = std::ptr::null_mut();
-            let ret = from_glib(ffi::gst_play_message_parse_error_missing_plugin(
-                msg.to_glib_none().0,
-                &mut descriptions,
-                &mut installer_details,
-            ));
-            if ret {
-                Some((
-                    from_glib_full(descriptions),
-                    from_glib_full(installer_details),
-                ))
-            } else {
-                None
-            }
         }
     }
 
@@ -531,32 +487,6 @@ impl PlayMessage {
             let mut details = std::ptr::null_mut();
             ffi::gst_play_message_parse_warning(msg.to_glib_none().0, &mut error, &mut details);
             (from_glib_full(error), from_glib_full(details))
-        }
-    }
-
-    #[cfg(feature = "v1_26")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
-    #[doc(alias = "gst_play_message_parse_warning_missing_plugin")]
-    pub fn parse_warning_missing_plugin(
-        msg: &gst::Message,
-    ) -> Option<(glib::GString, Option<glib::GString>)> {
-        assert_initialized_main_thread!();
-        unsafe {
-            let mut descriptions = std::ptr::null_mut();
-            let mut installer_details = std::ptr::null_mut();
-            let ret = from_glib(ffi::gst_play_message_parse_warning_missing_plugin(
-                msg.to_glib_none().0,
-                &mut descriptions,
-                &mut installer_details,
-            ));
-            if ret {
-                Some((
-                    from_glib_full(descriptions),
-                    from_glib_full(installer_details),
-                ))
-            } else {
-                None
-            }
         }
     }
 }

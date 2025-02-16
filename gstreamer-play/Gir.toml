@@ -160,6 +160,22 @@ status = "generate"
 final_type = true
 visibility = "crate"
 
+    [[object.function]]
+    name = "parse_error_missing_plugin"
+    manual = true
+
+    [[object.function]]
+    name = "parse_warning_missing_plugin"
+    manual = true
+
+    [[object.function]]
+    name = "get_uri"
+    manual = true
+
+    [[object.function]]
+    name = "get_stream_id"
+    manual = true
+
 [[object]]
 name = "GstPlay.PlaySignalAdapter"
 status = "generate"
