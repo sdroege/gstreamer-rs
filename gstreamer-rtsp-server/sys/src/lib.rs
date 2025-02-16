@@ -725,7 +725,14 @@ pub struct GstRTSPOnvifMediaFactoryClass {
     pub parent: GstRTSPMediaFactoryClass,
     pub has_backchannel_support:
         Option<unsafe extern "C" fn(*mut GstRTSPOnvifMediaFactory) -> gboolean>,
-    pub _gst_reserved: [gpointer; 20],
+    pub create_backchannel_stream: Option<
+        unsafe extern "C" fn(
+            *mut GstRTSPOnvifMediaFactory,
+            *mut GstRTSPOnvifMedia,
+            *mut GstRTSPContext,
+        ) -> gboolean,
+    >,
+    pub _gst_reserved: [gpointer; 19],
 }
 
 impl ::std::fmt::Debug for GstRTSPOnvifMediaFactoryClass {
@@ -733,6 +740,7 @@ impl ::std::fmt::Debug for GstRTSPOnvifMediaFactoryClass {
         f.debug_struct(&format!("GstRTSPOnvifMediaFactoryClass @ {self:p}"))
             .field("parent", &self.parent)
             .field("has_backchannel_support", &self.has_backchannel_support)
+            .field("create_backchannel_stream", &self.create_backchannel_stream)
             .finish()
     }
 }

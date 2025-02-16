@@ -9,6 +9,7 @@
 use crate::Track;
 use crate::{ffi, Asset, Clip, Extractable, MetaContainer, Timeline, TrackType};
 use glib::{
+    object::ObjectType as _,
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
     translate::*,

@@ -392,6 +392,13 @@ extern "C" {
         an_meta_first_id: c_uint,
         an_meta_second_id: c_uint,
     ) -> GstAnalyticsRelTypes;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_analytics_relation_meta_get_segmentation_mtd(
+        meta: *mut GstAnalyticsRelationMeta,
+        an_meta_id: c_uint,
+        rlt: *mut GstAnalyticsSegmentationMtd,
+    ) -> gboolean;
     pub fn gst_analytics_relation_meta_get_tracking_mtd(
         meta: *mut GstAnalyticsRelationMeta,
         an_meta_id: c_uint,

@@ -172,6 +172,74 @@ pub fn codec_utils_h265_get_tier(
     }
 }
 
+#[cfg(feature = "v1_26")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+#[doc(alias = "gst_codec_utils_h266_caps_set_level_tier_and_profile")]
+pub fn codec_utils_h266_caps_set_level_tier_and_profile(
+    caps: &gst::Caps,
+    decoder_configuration: &[u8],
+) -> bool {
+    assert_initialized_main_thread!();
+    let len = decoder_configuration.len() as _;
+    unsafe {
+        from_glib(ffi::gst_codec_utils_h266_caps_set_level_tier_and_profile(
+            caps.to_glib_none().0,
+            decoder_configuration.to_glib_none().0,
+            len,
+        ))
+    }
+}
+
+#[cfg(feature = "v1_26")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+#[doc(alias = "gst_codec_utils_h266_get_level")]
+pub fn codec_utils_h266_get_level(ptl_record: &[u8]) -> Option<glib::GString> {
+    assert_initialized_main_thread!();
+    let len = ptl_record.len() as _;
+    unsafe {
+        from_glib_none(ffi::gst_codec_utils_h266_get_level(
+            ptl_record.to_glib_none().0,
+            len,
+        ))
+    }
+}
+
+#[cfg(feature = "v1_26")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+#[doc(alias = "gst_codec_utils_h266_get_level_idc")]
+pub fn codec_utils_h266_get_level_idc(level: &str) -> u8 {
+    assert_initialized_main_thread!();
+    unsafe { ffi::gst_codec_utils_h266_get_level_idc(level.to_glib_none().0) }
+}
+
+#[cfg(feature = "v1_26")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+#[doc(alias = "gst_codec_utils_h266_get_profile")]
+pub fn codec_utils_h266_get_profile(ptl_record: &[u8]) -> Option<glib::GString> {
+    assert_initialized_main_thread!();
+    let len = ptl_record.len() as _;
+    unsafe {
+        from_glib_none(ffi::gst_codec_utils_h266_get_profile(
+            ptl_record.to_glib_none().0,
+            len,
+        ))
+    }
+}
+
+#[cfg(feature = "v1_26")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+#[doc(alias = "gst_codec_utils_h266_get_tier")]
+pub fn codec_utils_h266_get_tier(ptl_record: &[u8]) -> Option<glib::GString> {
+    assert_initialized_main_thread!();
+    let len = ptl_record.len() as _;
+    unsafe {
+        from_glib_none(ffi::gst_codec_utils_h266_get_tier(
+            ptl_record.to_glib_none().0,
+            len,
+        ))
+    }
+}
+
 #[doc(alias = "gst_codec_utils_mpeg4video_get_level")]
 pub fn codec_utils_mpeg4video_get_level(
     vis_obj_seq: &[u8],

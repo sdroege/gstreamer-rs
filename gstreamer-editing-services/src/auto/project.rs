@@ -8,6 +8,7 @@
 use crate::Formatter;
 use crate::{ffi, Asset, MetaContainer, Timeline};
 use glib::{
+    object::ObjectType as _,
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
     translate::*,

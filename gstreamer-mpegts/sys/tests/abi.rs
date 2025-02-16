@@ -1234,6 +1234,7 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ),
     ("(gint) GST_MPEGTS_STREAM_TYPE_VIDEO_MPEG4", "16"),
     ("(gint) GST_MPEGTS_STREAM_TYPE_VIDEO_RVC", "30"),
+    ("(gint) GST_MPEGTS_STREAM_TYPE_VIDEO_VVC", "51"),
     ("(gint) GST_MPEGTS_TRANSMISSION_MODE_16K", "5"),
     ("(gint) GST_MPEGTS_TRANSMISSION_MODE_1K", "4"),
     ("(gint) GST_MPEGTS_TRANSMISSION_MODE_2K", "0"),

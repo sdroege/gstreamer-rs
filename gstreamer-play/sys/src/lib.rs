@@ -323,6 +323,12 @@ extern "C" {
     pub fn gst_play_message_get_name(message_type: GstPlayMessage) -> *const c_char;
     #[cfg(feature = "v1_26")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_play_message_get_stream_id(msg: *mut gst::GstMessage) -> *const c_char;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_play_message_get_uri(msg: *mut gst::GstMessage) -> *const c_char;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
     pub fn gst_play_message_parse_buffering(msg: *mut gst::GstMessage, percent: *mut c_uint);
     pub fn gst_play_message_parse_buffering_percent(
         msg: *mut gst::GstMessage,
@@ -343,6 +349,13 @@ extern "C" {
         error: *mut *mut glib::GError,
         details: *mut *mut gst::GstStructure,
     );
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_play_message_parse_error_missing_plugin(
+        msg: *mut gst::GstMessage,
+        descriptions: *mut *mut *mut c_char,
+        installer_details: *mut *mut *mut c_char,
+    ) -> gboolean;
     pub fn gst_play_message_parse_media_info_updated(
         msg: *mut gst::GstMessage,
         info: *mut *mut GstPlayMediaInfo,
@@ -377,6 +390,13 @@ extern "C" {
         error: *mut *mut glib::GError,
         details: *mut *mut gst::GstStructure,
     );
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_play_message_parse_warning_missing_plugin(
+        msg: *mut gst::GstMessage,
+        descriptions: *mut *mut *mut c_char,
+        installer_details: *mut *mut *mut c_char,
+    ) -> gboolean;
 
     //=========================================================================
     // GstPlayState

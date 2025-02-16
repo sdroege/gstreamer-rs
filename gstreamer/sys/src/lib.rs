@@ -9801,6 +9801,16 @@ extern "C" {
         res_n: *mut c_int,
         res_d: *mut c_int,
     ) -> gboolean;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_util_fraction_multiply_int64(
+        a_n: i64,
+        a_d: i64,
+        b_n: i64,
+        b_d: i64,
+        res_n: *mut i64,
+        res_d: *mut i64,
+    ) -> gboolean;
     pub fn gst_util_fraction_to_double(src_n: c_int, src_d: c_int, dest: *mut c_double);
     pub fn gst_util_gdouble_to_guint64(value: c_double) -> u64;
     pub fn gst_util_get_object_array(

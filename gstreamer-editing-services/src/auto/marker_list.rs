@@ -8,6 +8,7 @@
 use crate::MarkerFlags;
 use crate::{ffi, Marker};
 use glib::{
+    object::ObjectType as _,
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
     translate::*,

@@ -896,6 +896,25 @@ extern "C" {
         profile_tier_level: *const u8,
         len: c_uint,
     ) -> *const c_char;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_codec_utils_h266_caps_set_level_tier_and_profile(
+        caps: *mut gst::GstCaps,
+        decoder_configuration: *const u8,
+        len: c_uint,
+    ) -> gboolean;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_codec_utils_h266_get_level(ptl_record: *const u8, len: c_uint) -> *const c_char;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_codec_utils_h266_get_level_idc(level: *const c_char) -> u8;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_codec_utils_h266_get_profile(ptl_record: *const u8, len: c_uint) -> *const c_char;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_codec_utils_h266_get_tier(ptl_record: *const u8, len: c_uint) -> *const c_char;
     pub fn gst_codec_utils_mpeg4video_caps_set_level_and_profile(
         caps: *mut gst::GstCaps,
         vis_obj_seq: *const u8,
