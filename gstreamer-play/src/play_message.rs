@@ -117,6 +117,21 @@ impl PositionUpdated {
     pub fn position(&self) -> Option<gst::ClockTime> {
         self.message().structure().unwrap().get("position").unwrap()
     }
+
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "gst_play_message_get_uri")]
+    pub fn uri(&self) -> glib::GString {
+        use crate::ffi;
+        use glib::translate::*;
+
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib_none(ffi::gst_play_message_get_uri(mut_override(
+                self.message().as_ptr(),
+            )))
+        }
+    }
 }
 impl std::fmt::Debug for PositionUpdated {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -131,6 +146,21 @@ declare_concrete_message!(DurationChanged);
 impl DurationChanged {
     pub fn duration(&self) -> Option<gst::ClockTime> {
         self.message().structure().unwrap().get("duration").unwrap()
+    }
+
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "gst_play_message_get_uri")]
+    pub fn uri(&self) -> glib::GString {
+        use crate::ffi;
+        use glib::translate::*;
+
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib_none(ffi::gst_play_message_get_uri(mut_override(
+                self.message().as_ptr(),
+            )))
+        }
     }
 }
 impl std::fmt::Debug for DurationChanged {
@@ -151,6 +181,21 @@ impl StateChanged {
             .get("play-state")
             .unwrap()
     }
+
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "gst_play_message_get_uri")]
+    pub fn uri(&self) -> glib::GString {
+        use crate::ffi;
+        use glib::translate::*;
+
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib_none(ffi::gst_play_message_get_uri(mut_override(
+                self.message().as_ptr(),
+            )))
+        }
+    }
 }
 impl std::fmt::Debug for StateChanged {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -170,6 +215,21 @@ impl Buffering {
             // Typo in the library
             .get("bufferring-percent")
             .unwrap()
+    }
+
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "gst_play_message_get_uri")]
+    pub fn uri(&self) -> glib::GString {
+        use crate::ffi;
+        use glib::translate::*;
+
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib_none(ffi::gst_play_message_get_uri(mut_override(
+                self.message().as_ptr(),
+            )))
+        }
     }
 }
 impl std::fmt::Debug for Buffering {
@@ -203,6 +263,78 @@ impl Error {
             .get_optional("error-details")
             .unwrap()
     }
+
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "gst_play_message_get_uri")]
+    pub fn uri(&self) -> glib::GString {
+        use crate::ffi;
+        use glib::translate::*;
+
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib_none(ffi::gst_play_message_get_uri(mut_override(
+                self.message().as_ptr(),
+            )))
+        }
+    }
+
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "gst_play_message_get_stream_id")]
+    pub fn stream_id(&self) -> Option<glib::GString> {
+        use crate::ffi;
+        use glib::translate::*;
+
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib_none(ffi::gst_play_message_get_stream_id(mut_override(
+                self.message().as_ptr(),
+            )))
+        }
+    }
+
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "gst_play_message_parse_error_missing_plugin")]
+    pub fn missing_plugin(&self) -> Option<Vec<(glib::GString, glib::GString)>> {
+        use crate::ffi;
+        use glib::translate::*;
+
+        assert_initialized_main_thread!();
+        unsafe {
+            let mut descriptions = std::ptr::null_mut();
+            let mut installer_details = std::ptr::null_mut();
+            let ret = from_glib(ffi::gst_play_message_parse_error_missing_plugin(
+                mut_override(self.message().as_ptr()),
+                &mut descriptions,
+                &mut installer_details,
+            ));
+            if ret {
+                let mut ret = Vec::new();
+                for idx in 0.. {
+                    let description = *descriptions.add(idx);
+                    let installer_detail = *installer_details.add(idx);
+
+                    if description.is_null() {
+                        assert!(installer_detail.is_null());
+                        break;
+                    }
+
+                    ret.push((
+                        glib::GString::from_glib_full(description),
+                        glib::GString::from_glib_full(installer_detail),
+                    ));
+                }
+                glib::ffi::g_free(descriptions as glib::ffi::gpointer);
+                glib::ffi::g_free(installer_details as glib::ffi::gpointer);
+
+                Some(ret)
+            } else {
+                None
+            }
+        }
+    }
 }
 impl std::fmt::Debug for Error {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -226,6 +358,78 @@ impl Warning {
             .unwrap()
             .get_optional("warning-details")
             .unwrap()
+    }
+
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "gst_play_message_get_uri")]
+    pub fn uri(&self) -> glib::GString {
+        use crate::ffi;
+        use glib::translate::*;
+
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib_none(ffi::gst_play_message_get_uri(mut_override(
+                self.message().as_ptr(),
+            )))
+        }
+    }
+
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "gst_play_message_get_stream_id")]
+    pub fn stream_id(&self) -> Option<glib::GString> {
+        use crate::ffi;
+        use glib::translate::*;
+
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib_none(ffi::gst_play_message_get_stream_id(mut_override(
+                self.message().as_ptr(),
+            )))
+        }
+    }
+
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "gst_play_message_parse_warning_missing_plugin")]
+    pub fn missing_plugin(&self) -> Option<Vec<(glib::GString, glib::GString)>> {
+        use crate::ffi;
+        use glib::translate::*;
+
+        assert_initialized_main_thread!();
+        unsafe {
+            let mut descriptions = std::ptr::null_mut();
+            let mut installer_details = std::ptr::null_mut();
+            let ret = from_glib(ffi::gst_play_message_parse_warning_missing_plugin(
+                mut_override(self.message().as_ptr()),
+                &mut descriptions,
+                &mut installer_details,
+            ));
+            if ret {
+                let mut ret = Vec::new();
+                for idx in 0.. {
+                    let description = *descriptions.add(idx);
+                    let installer_detail = *installer_details.add(idx);
+
+                    if description.is_null() {
+                        assert!(installer_detail.is_null());
+                        break;
+                    }
+
+                    ret.push((
+                        glib::GString::from_glib_full(description),
+                        glib::GString::from_glib_full(installer_detail),
+                    ));
+                }
+                glib::ffi::g_free(descriptions as glib::ffi::gpointer);
+                glib::ffi::g_free(installer_details as glib::ffi::gpointer);
+
+                Some(ret)
+            } else {
+                None
+            }
+        }
     }
 }
 impl std::fmt::Debug for Warning {
@@ -255,6 +459,21 @@ impl VideoDimensionsChanged {
             .get("video-height")
             .unwrap()
     }
+
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "gst_play_message_get_uri")]
+    pub fn uri(&self) -> glib::GString {
+        use crate::ffi;
+        use glib::translate::*;
+
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib_none(ffi::gst_play_message_get_uri(mut_override(
+                self.message().as_ptr(),
+            )))
+        }
+    }
 }
 impl std::fmt::Debug for VideoDimensionsChanged {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -275,6 +494,21 @@ impl MediaInfoUpdated {
             .get("media-info")
             .unwrap()
     }
+
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "gst_play_message_get_uri")]
+    pub fn uri(&self) -> glib::GString {
+        use crate::ffi;
+        use glib::translate::*;
+
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib_none(ffi::gst_play_message_get_uri(mut_override(
+                self.message().as_ptr(),
+            )))
+        }
+    }
 }
 impl std::fmt::Debug for MediaInfoUpdated {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -289,6 +523,21 @@ declare_concrete_message!(VolumeChanged);
 impl VolumeChanged {
     pub fn volume(&self) -> f64 {
         self.message().structure().unwrap().get("volume").unwrap()
+    }
+
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "gst_play_message_get_uri")]
+    pub fn uri(&self) -> glib::GString {
+        use crate::ffi;
+        use glib::translate::*;
+
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib_none(ffi::gst_play_message_get_uri(mut_override(
+                self.message().as_ptr(),
+            )))
+        }
     }
 }
 impl std::fmt::Debug for VolumeChanged {
@@ -305,6 +554,21 @@ impl MuteChanged {
     pub fn is_muted(&self) -> bool {
         self.message().structure().unwrap().get("is-muted").unwrap()
     }
+
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "gst_play_message_get_uri")]
+    pub fn uri(&self) -> glib::GString {
+        use crate::ffi;
+        use glib::translate::*;
+
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib_none(ffi::gst_play_message_get_uri(mut_override(
+                self.message().as_ptr(),
+            )))
+        }
+    }
 }
 impl std::fmt::Debug for MuteChanged {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -320,6 +584,21 @@ impl SeekDone {
     pub fn position(&self) -> Option<gst::ClockTime> {
         self.message().structure().unwrap().get("position").unwrap()
     }
+
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "gst_play_message_get_uri")]
+    pub fn uri(&self) -> glib::GString {
+        use crate::ffi;
+        use glib::translate::*;
+
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib_none(ffi::gst_play_message_get_uri(mut_override(
+                self.message().as_ptr(),
+            )))
+        }
+    }
 }
 impl std::fmt::Debug for SeekDone {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
@@ -331,6 +610,24 @@ impl std::fmt::Debug for SeekDone {
 }
 
 declare_concrete_message!(Other);
+
+impl Other {
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "gst_play_message_get_uri")]
+    pub fn uri(&self) -> glib::GString {
+        use crate::ffi;
+        use glib::translate::*;
+
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib_none(ffi::gst_play_message_get_uri(mut_override(
+                self.message().as_ptr(),
+            )))
+        }
+    }
+}
+
 impl std::fmt::Debug for Other {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         f.debug_struct("Other")
