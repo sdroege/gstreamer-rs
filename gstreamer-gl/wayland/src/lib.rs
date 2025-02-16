@@ -21,6 +21,7 @@ macro_rules! assert_initialized_main_thread {
     };
 }
 
+#[allow(unused_imports)]
 mod auto;
 pub use auto::*;
 

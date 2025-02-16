@@ -21,6 +21,7 @@ macro_rules! skip_assert_initialized {
     () => {};
 }
 
+#[allow(unused_imports)]
 mod auto;
 
 mod sdp_attribute;

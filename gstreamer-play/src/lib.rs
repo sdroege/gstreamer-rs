@@ -23,6 +23,7 @@ macro_rules! assert_initialized_main_thread {
 
 #[allow(clippy::needless_borrow)]
 #[allow(unused)]
+#[allow(unused_imports)]
 mod auto;
 pub(crate) use crate::auto::PlayMessage as PlayMessageType;
 pub use crate::auto::*;

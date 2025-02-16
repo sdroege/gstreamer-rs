@@ -21,6 +21,7 @@ macro_rules! skip_assert_initialized {
     () => {};
 }
 
+#[allow(unused_imports)]
 mod auto;
 pub use crate::{auto::*, net_address_meta::*};
 mod net_address_meta;
