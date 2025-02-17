@@ -5,6 +5,25 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.23.5] - 2025-02-17
+### Fixed
+- Properly validate `gst::IntRange::with_step()` step size
+- Fix `gst::Buffer` serde serialization
+- Forward gap events by default in `gst_utils::StreamProducer`.
+- Correctly account for alternate interlace mode in `gst_video::VideoMeta::add_full()`.
+- Return `Result`s instead of `bool`s in new `gst_play` API.
+
+### Added
+- Support for `TracerImpl::USE_STRUCTURE_PARAMS` with GStreamer < 1.26.
+- Bindings for `gst_analytics::ODMtd`.
+- Bindings for `TopSurroundRight` and `TopSurroundLeft` audio channels.
+- Bindings for AV1 and H266 codec helpers API.
+- Bindings for `gst_audio::reorder_channels_with_reorder_map()`.
+
+### Changed
+- Updated GStreamer gir files for latest 1.26 APIs.
+- Documentation links URL was updated.
+
 ## [0.23.4] - 2024-12-21
 ### Fixed
 - `gst_video::VideoFrame::plane_data()` does not return a truncated buffer for
@@ -1818,7 +1837,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.23.4...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.23.5...HEAD
+[0.23.5]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.23.4...0.23.5
 [0.23.4]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.23.3...0.23.4
 [0.23.3]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.23.2...0.23.3
 [0.23.2]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.23.1...0.23.2
