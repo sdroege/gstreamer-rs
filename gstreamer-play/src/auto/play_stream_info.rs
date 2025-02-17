@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
+#![allow(deprecated)]
 
 use crate::ffi;
 use glib::{prelude::*, translate::*};
@@ -48,11 +49,25 @@ pub trait PlayStreamInfoExt: IsA<PlayStreamInfo> + sealed::Sealed + 'static {
         }
     }
 
+    #[cfg_attr(feature = "v1_26", deprecated = "Since 1.26")]
+    #[allow(deprecated)]
     #[doc(alias = "gst_play_stream_info_get_index")]
     #[doc(alias = "get_index")]
     fn index(&self) -> i32 {
         unsafe {
             ffi::gst_play_stream_info_get_index(const_override(self.as_ref().to_glib_none().0))
+        }
+    }
+
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "gst_play_stream_info_get_stream_id")]
+    #[doc(alias = "get_stream_id")]
+    fn stream_id(&self) -> glib::GString {
+        unsafe {
+            from_glib_none(ffi::gst_play_stream_info_get_stream_id(const_override(
+                self.as_ref().to_glib_none().0,
+            )))
         }
     }
 

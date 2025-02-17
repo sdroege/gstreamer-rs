@@ -5,6 +5,7 @@
 
 use crate::{ffi, ChildProxy, Element, ElementFlags, Object, Pad, PadDirection};
 use glib::{
+    object::ObjectType as _,
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
     translate::*,

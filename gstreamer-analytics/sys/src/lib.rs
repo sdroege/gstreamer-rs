@@ -59,10 +59,9 @@ pub const GST_TENSOR_DATA_TYPE_BFLOAT16: GstTensorDataType = 13;
 pub type GstTensorDimOrder = c_int;
 pub const GST_TENSOR_DIM_ORDER_ROW_MAJOR: GstTensorDimOrder = 0;
 pub const GST_TENSOR_DIM_ORDER_COL_MAJOR: GstTensorDimOrder = 1;
-pub const GST_TENSOR_DIM_ORDER_INDEXED: GstTensorDimOrder = 2;
 
 pub type GstTensorLayout = c_int;
-pub const GST_TENSOR_LAYOUT_STRIDED: GstTensorLayout = 0;
+pub const GST_TENSOR_LAYOUT_CONTIGUOUS: GstTensorLayout = 0;
 
 // Constants
 pub const GST_INF_RELATION_SPAN: c_int = -1;
@@ -214,22 +213,6 @@ impl ::std::fmt::Debug for GstAnalyticsTrackingMtd {
 
 #[derive(Copy, Clone)]
 #[repr(C)]
-pub struct GstTensorDim {
-    pub size: size_t,
-    pub order_index: size_t,
-}
-
-impl ::std::fmt::Debug for GstTensorDim {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstTensorDim @ {self:p}"))
-            .field("size", &self.size)
-            .field("order_index", &self.order_index)
-            .finish()
-    }
-}
-
-#[derive(Copy, Clone)]
-#[repr(C)]
 pub struct GstTensorMeta {
     pub meta: gst::GstMeta,
     pub num_tensors: size_t,
@@ -290,6 +273,17 @@ extern "C" {
         loc_conf_lvl: *mut c_float,
     ) -> gboolean;
     pub fn gst_analytics_od_mtd_get_obj_type(handle: *const GstAnalyticsODMtd) -> glib::GQuark;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_analytics_od_mtd_get_oriented_location(
+        instance: *const GstAnalyticsODMtd,
+        x: *mut c_int,
+        y: *mut c_int,
+        w: *mut c_int,
+        h: *mut c_int,
+        r: *mut c_float,
+        loc_conf_lvl: *mut c_float,
+    ) -> gboolean;
     pub fn gst_analytics_od_mtd_get_mtd_type() -> GstAnalyticsMtdType;
 
     //=========================================================================
@@ -323,6 +317,19 @@ extern "C" {
         confidence_level: c_float,
         class_quark: glib::GQuark,
         cls_mtd: *mut GstAnalyticsClsMtd,
+    ) -> gboolean;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_analytics_relation_meta_add_oriented_od_mtd(
+        instance: *mut GstAnalyticsRelationMeta,
+        type_: glib::GQuark,
+        x: c_int,
+        y: c_int,
+        w: c_int,
+        h: c_int,
+        r: c_float,
+        loc_conf_lvl: c_float,
+        od_mtd: *mut GstAnalyticsODMtd,
     ) -> gboolean;
     #[cfg(feature = "v1_26")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
@@ -385,6 +392,13 @@ extern "C" {
         an_meta_first_id: c_uint,
         an_meta_second_id: c_uint,
     ) -> GstAnalyticsRelTypes;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_analytics_relation_meta_get_segmentation_mtd(
+        meta: *mut GstAnalyticsRelationMeta,
+        an_meta_id: c_uint,
+        rlt: *mut GstAnalyticsSegmentationMtd,
+    ) -> gboolean;
     pub fn gst_analytics_relation_meta_get_tracking_mtd(
         meta: *mut GstAnalyticsRelationMeta,
         an_meta_id: c_uint,
@@ -469,7 +483,6 @@ extern "C" {
     pub fn gst_tensor_new_simple(
         id: glib::GQuark,
         data_type: GstTensorDataType,
-        batch_size: size_t,
         data: *mut gst::GstBuffer,
         dims_order: GstTensorDimOrder,
         num_dims: size_t,
@@ -483,7 +496,7 @@ extern "C" {
     pub fn gst_tensor_free(tensor: *mut GstTensor);
     #[cfg(feature = "v1_26")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
-    pub fn gst_tensor_get_dims(tensor: *mut GstTensor, num_dims: *mut size_t) -> *mut GstTensorDim;
+    pub fn gst_tensor_get_dims(tensor: *mut GstTensor, num_dims: *mut size_t) -> *mut size_t;
 
     //=========================================================================
     // GstTensorMeta

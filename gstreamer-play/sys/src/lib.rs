@@ -323,6 +323,12 @@ extern "C" {
     pub fn gst_play_message_get_name(message_type: GstPlayMessage) -> *const c_char;
     #[cfg(feature = "v1_26")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_play_message_get_stream_id(msg: *mut gst::GstMessage) -> *const c_char;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_play_message_get_uri(msg: *mut gst::GstMessage) -> *const c_char;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
     pub fn gst_play_message_parse_buffering(msg: *mut gst::GstMessage, percent: *mut c_uint);
     pub fn gst_play_message_parse_buffering_percent(
         msg: *mut gst::GstMessage,
@@ -343,6 +349,13 @@ extern "C" {
         error: *mut *mut glib::GError,
         details: *mut *mut gst::GstStructure,
     );
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_play_message_parse_error_missing_plugin(
+        msg: *mut gst::GstMessage,
+        descriptions: *mut *mut *mut c_char,
+        installer_details: *mut *mut *mut c_char,
+    ) -> gboolean;
     pub fn gst_play_message_parse_media_info_updated(
         msg: *mut gst::GstMessage,
         info: *mut *mut GstPlayMediaInfo,
@@ -377,6 +390,13 @@ extern "C" {
         error: *mut *mut glib::GError,
         details: *mut *mut gst::GstStructure,
     );
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_play_message_parse_warning_missing_plugin(
+        msg: *mut gst::GstMessage,
+        descriptions: *mut *mut *mut c_char,
+        installer_details: *mut *mut *mut c_char,
+    ) -> gboolean;
 
     //=========================================================================
     // GstPlayState
@@ -461,6 +481,9 @@ extern "C" {
     pub fn gst_play_seek(play: *mut GstPlay, position: gst::GstClockTime);
     pub fn gst_play_set_audio_track(play: *mut GstPlay, stream_index: c_int) -> gboolean;
     pub fn gst_play_set_audio_track_enabled(play: *mut GstPlay, enabled: gboolean);
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_play_set_audio_track_id(play: *mut GstPlay, stream_id: *const c_char) -> gboolean;
     pub fn gst_play_set_audio_video_offset(play: *mut GstPlay, offset: i64);
     pub fn gst_play_set_color_balance(
         play: *mut GstPlay,
@@ -480,11 +503,26 @@ extern "C" {
     pub fn gst_play_set_rate(play: *mut GstPlay, rate: c_double);
     pub fn gst_play_set_subtitle_track(play: *mut GstPlay, stream_index: c_int) -> gboolean;
     pub fn gst_play_set_subtitle_track_enabled(play: *mut GstPlay, enabled: gboolean);
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_play_set_subtitle_track_id(play: *mut GstPlay, stream_id: *const c_char)
+        -> gboolean;
     pub fn gst_play_set_subtitle_uri(play: *mut GstPlay, uri: *const c_char);
     pub fn gst_play_set_subtitle_video_offset(play: *mut GstPlay, offset: i64);
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_play_set_track_ids(
+        play: *mut GstPlay,
+        audio_stream_id: *const c_char,
+        video_stream_id: *const c_char,
+        subtitle_stream_id: *const c_char,
+    ) -> gboolean;
     pub fn gst_play_set_uri(play: *mut GstPlay, uri: *const c_char);
     pub fn gst_play_set_video_track(play: *mut GstPlay, stream_index: c_int) -> gboolean;
     pub fn gst_play_set_video_track_enabled(play: *mut GstPlay, enabled: gboolean);
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_play_set_video_track_id(play: *mut GstPlay, stream_id: *const c_char) -> gboolean;
     pub fn gst_play_set_visualization(play: *mut GstPlay, name: *const c_char) -> gboolean;
     pub fn gst_play_set_visualization_enabled(play: *mut GstPlay, enabled: gboolean);
     pub fn gst_play_set_volume(play: *mut GstPlay, val: c_double);
@@ -551,6 +589,9 @@ extern "C" {
     pub fn gst_play_stream_info_get_caps(info: *const GstPlayStreamInfo) -> *mut gst::GstCaps;
     pub fn gst_play_stream_info_get_codec(info: *const GstPlayStreamInfo) -> *const c_char;
     pub fn gst_play_stream_info_get_index(info: *const GstPlayStreamInfo) -> c_int;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_play_stream_info_get_stream_id(info: *const GstPlayStreamInfo) -> *const c_char;
     pub fn gst_play_stream_info_get_stream_type(info: *const GstPlayStreamInfo) -> *const c_char;
     pub fn gst_play_stream_info_get_tags(info: *const GstPlayStreamInfo) -> *mut gst::GstTagList;
 

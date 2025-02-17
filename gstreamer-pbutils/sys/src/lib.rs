@@ -841,6 +841,16 @@ extern "C" {
     pub fn gst_codec_utils_aac_get_sample_rate_from_index(sr_idx: c_uint) -> c_uint;
     #[cfg(feature = "v1_26")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_codec_utils_av1_create_av1c_from_caps(
+        caps: *mut gst::GstCaps,
+    ) -> *mut gst::GstBuffer;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_codec_utils_av1_create_caps_from_av1c(
+        av1c: *mut gst::GstBuffer,
+    ) -> *mut gst::GstCaps;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
     pub fn gst_codec_utils_av1_get_level(seq_level_idx: u8) -> *const c_char;
     #[cfg(feature = "v1_26")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
@@ -886,6 +896,25 @@ extern "C" {
         profile_tier_level: *const u8,
         len: c_uint,
     ) -> *const c_char;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_codec_utils_h266_caps_set_level_tier_and_profile(
+        caps: *mut gst::GstCaps,
+        decoder_configuration: *const u8,
+        len: c_uint,
+    ) -> gboolean;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_codec_utils_h266_get_level(ptl_record: *const u8, len: c_uint) -> *const c_char;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_codec_utils_h266_get_level_idc(level: *const c_char) -> u8;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_codec_utils_h266_get_profile(ptl_record: *const u8, len: c_uint) -> *const c_char;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_codec_utils_h266_get_tier(ptl_record: *const u8, len: c_uint) -> *const c_char;
     pub fn gst_codec_utils_mpeg4video_caps_set_level_and_profile(
         caps: *mut gst::GstCaps,
         vis_obj_seq: *const u8,

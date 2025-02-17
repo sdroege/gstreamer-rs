@@ -5,6 +5,7 @@
 
 use crate::{ffi, GLContext, GLDisplayType, GLWindow, GLAPI};
 use glib::{
+    object::ObjectType as _,
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
     translate::*,

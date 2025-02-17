@@ -7,6 +7,7 @@ use crate::{
     ffi, RTSPAddressPool, RTSPMedia, RTSPPublishClockMode, RTSPSuspendMode, RTSPTransportMode,
 };
 use glib::{
+    object::ObjectType as _,
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
     translate::*,

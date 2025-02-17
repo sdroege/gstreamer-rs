@@ -287,13 +287,6 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
-        "GstTensorDim",
-        Layout {
-            size: size_of::<GstTensorDim>(),
-            alignment: align_of::<GstTensorDim>(),
-        },
-    ),
-    (
         "GstTensorDimOrder",
         Layout {
             size: size_of::<GstTensorDimOrder>(),
@@ -342,7 +335,6 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_TENSOR_DATA_TYPE_UINT64", "9"),
     ("(gint) GST_TENSOR_DATA_TYPE_UINT8", "6"),
     ("(gint) GST_TENSOR_DIM_ORDER_COL_MAJOR", "1"),
-    ("(gint) GST_TENSOR_DIM_ORDER_INDEXED", "2"),
     ("(gint) GST_TENSOR_DIM_ORDER_ROW_MAJOR", "0"),
-    ("(gint) GST_TENSOR_LAYOUT_STRIDED", "0"),
+    ("(gint) GST_TENSOR_LAYOUT_CONTIGUOUS", "0"),
 ];

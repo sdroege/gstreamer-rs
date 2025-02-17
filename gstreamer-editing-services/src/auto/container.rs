@@ -6,6 +6,7 @@
 
 use crate::{ffi, Edge, EditMode, Extractable, Layer, MetaContainer, TimelineElement};
 use glib::{
+    object::ObjectType as _,
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
     translate::*,

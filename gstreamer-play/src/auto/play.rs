@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
+#![allow(deprecated)]
 
 use crate::{
     ffi, PlayAudioInfo, PlayColorBalanceType, PlayMediaInfo, PlaySubtitleInfo, PlayVideoInfo,
@@ -189,6 +190,8 @@ impl Play {
         }
     }
 
+    #[cfg_attr(feature = "v1_26", deprecated = "Since 1.26")]
+    #[allow(deprecated)]
     #[doc(alias = "gst_play_set_audio_track")]
     pub fn set_audio_track(&self, stream_index: i32) -> Result<(), glib::error::BoolError> {
         unsafe {
@@ -203,6 +206,18 @@ impl Play {
     pub fn set_audio_track_enabled(&self, enabled: bool) {
         unsafe {
             ffi::gst_play_set_audio_track_enabled(self.to_glib_none().0, enabled.into_glib());
+        }
+    }
+
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "gst_play_set_audio_track_id")]
+    pub fn set_audio_track_id(&self, stream_id: Option<&str>) -> bool {
+        unsafe {
+            from_glib(ffi::gst_play_set_audio_track_id(
+                self.to_glib_none().0,
+                stream_id.to_glib_none().0,
+            ))
         }
     }
 
@@ -251,6 +266,8 @@ impl Play {
         }
     }
 
+    #[cfg_attr(feature = "v1_26", deprecated = "Since 1.26")]
+    #[allow(deprecated)]
     #[doc(alias = "gst_play_set_subtitle_track")]
     pub fn set_subtitle_track(&self, stream_index: i32) -> Result<(), glib::error::BoolError> {
         unsafe {
@@ -265,6 +282,18 @@ impl Play {
     pub fn set_subtitle_track_enabled(&self, enabled: bool) {
         unsafe {
             ffi::gst_play_set_subtitle_track_enabled(self.to_glib_none().0, enabled.into_glib());
+        }
+    }
+
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "gst_play_set_subtitle_track_id")]
+    pub fn set_subtitle_track_id(&self, stream_id: Option<&str>) -> bool {
+        unsafe {
+            from_glib(ffi::gst_play_set_subtitle_track_id(
+                self.to_glib_none().0,
+                stream_id.to_glib_none().0,
+            ))
         }
     }
 
@@ -283,6 +312,25 @@ impl Play {
         }
     }
 
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "gst_play_set_track_ids")]
+    pub fn set_track_ids(
+        &self,
+        audio_stream_id: Option<&str>,
+        video_stream_id: Option<&str>,
+        subtitle_stream_id: Option<&str>,
+    ) -> bool {
+        unsafe {
+            from_glib(ffi::gst_play_set_track_ids(
+                self.to_glib_none().0,
+                audio_stream_id.to_glib_none().0,
+                video_stream_id.to_glib_none().0,
+                subtitle_stream_id.to_glib_none().0,
+            ))
+        }
+    }
+
     #[doc(alias = "gst_play_set_uri")]
     #[doc(alias = "uri")]
     pub fn set_uri(&self, uri: Option<&str>) {
@@ -291,6 +339,8 @@ impl Play {
         }
     }
 
+    #[cfg_attr(feature = "v1_26", deprecated = "Since 1.26")]
+    #[allow(deprecated)]
     #[doc(alias = "gst_play_set_video_track")]
     pub fn set_video_track(&self, stream_index: i32) -> Result<(), glib::error::BoolError> {
         unsafe {
@@ -305,6 +355,18 @@ impl Play {
     pub fn set_video_track_enabled(&self, enabled: bool) {
         unsafe {
             ffi::gst_play_set_video_track_enabled(self.to_glib_none().0, enabled.into_glib());
+        }
+    }
+
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "gst_play_set_video_track_id")]
+    pub fn set_video_track_id(&self, stream_id: Option<&str>) -> bool {
+        unsafe {
+            from_glib(ffi::gst_play_set_video_track_id(
+                self.to_glib_none().0,
+                stream_id.to_glib_none().0,
+            ))
         }
     }
 

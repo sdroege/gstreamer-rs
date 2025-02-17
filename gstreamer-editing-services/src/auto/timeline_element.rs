@@ -9,6 +9,7 @@ use crate::{ffi, Extractable, MetaContainer, Timeline, TrackType};
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 use crate::{Edge, EditMode, Layer};
 use glib::{
+    object::ObjectType as _,
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
     translate::*,
@@ -172,6 +173,7 @@ pub trait TimelineElementExt: IsA<TimelineElement> + sealed::Sealed + 'static {
 
     #[doc(alias = "ges_timeline_element_get_inpoint")]
     #[doc(alias = "get_inpoint")]
+    #[doc(alias = "in-point")]
     fn inpoint(&self) -> gst::ClockTime {
         unsafe {
             try_from_glib(ffi::ges_timeline_element_get_inpoint(
@@ -473,6 +475,7 @@ pub trait TimelineElementExt: IsA<TimelineElement> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "ges_timeline_element_set_inpoint")]
+    #[doc(alias = "in-point")]
     fn set_inpoint(&self, inpoint: gst::ClockTime) -> bool {
         unsafe {
             from_glib(ffi::ges_timeline_element_set_inpoint(
@@ -567,16 +570,6 @@ pub trait TimelineElementExt: IsA<TimelineElement> + sealed::Sealed + 'static {
                 "Failed to trim"
             )
         }
-    }
-
-    #[doc(alias = "in-point")]
-    fn in_point(&self) -> u64 {
-        ObjectExt::property(self.as_ref(), "in-point")
-    }
-
-    #[doc(alias = "in-point")]
-    fn set_in_point(&self, in_point: u64) {
-        ObjectExt::set_property(self.as_ref(), "in-point", in_point)
     }
 
     fn is_serialize(&self) -> bool {

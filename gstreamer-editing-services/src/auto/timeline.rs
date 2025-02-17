@@ -11,6 +11,7 @@ use crate::{
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 use crate::{Clip, FrameNumber};
 use glib::{
+    object::ObjectType as _,
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
     translate::*,
