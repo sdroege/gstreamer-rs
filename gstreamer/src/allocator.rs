@@ -5,6 +5,11 @@ use glib::{prelude::*, translate::*};
 use crate::{ffi, Allocator};
 
 impl Allocator {
+    pub fn memory_type(&self) -> &'static glib::GStr {
+        let obj: *const ffi::GstAllocator = self.to_glib_none().0;
+        unsafe { glib::GStr::from_ptr((*obj).mem_type) }
+    }
+
     #[doc(alias = "gst_allocator_register")]
     pub fn register(name: &str, allocator: impl IsA<Allocator>) {
         skip_assert_initialized!();
