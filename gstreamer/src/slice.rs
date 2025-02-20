@@ -12,28 +12,14 @@ pub trait ByteSliceExt {
     fn dump_range(&self, range: impl RangeBounds<usize>) -> Dump;
 }
 
-impl ByteSliceExt for &[u8] {
+impl<T: AsRef<[u8]>> ByteSliceExt for T {
     fn dump(&self) -> Dump {
         self.dump_range(..)
     }
 
     fn dump_range(&self, range: impl RangeBounds<usize>) -> Dump {
         Dump {
-            data: self,
-            start: range.start_bound().cloned(),
-            end: range.end_bound().cloned(),
-        }
-    }
-}
-
-impl ByteSliceExt for &mut [u8] {
-    fn dump(&self) -> Dump {
-        self.dump_range(..)
-    }
-
-    fn dump_range(&self, range: impl RangeBounds<usize>) -> Dump {
-        Dump {
-            data: self,
+            data: self.as_ref(),
             start: range.start_bound().cloned(),
             end: range.end_bound().cloned(),
         }
@@ -157,5 +143,30 @@ impl fmt::Display for Dump<'_> {
 impl fmt::Debug for Dump<'_> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         self.fmt(f, true)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::ByteSliceExt;
+
+    #[test]
+    fn dump_u8_slice() {
+        let mut b: [u8; 4] = [1u8, 2, 3, 4];
+        let _ = b.dump();
+        let b1 = b.as_slice();
+        let _ = b1.dump();
+        let b1 = b.as_mut_slice();
+        let _ = b1.dump();
+    }
+
+    #[test]
+    fn dump_u8_vec() {
+        let mut b = vec![1u8, 2, 3, 4];
+        let _ = b.dump();
+        let b1 = b.as_slice();
+        let _ = b1.dump();
+        let b1 = b.as_mut_slice();
+        let _ = b1.dump();
     }
 }
