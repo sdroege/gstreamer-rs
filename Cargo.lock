@@ -155,10 +155,10 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b6b1fc10dbac614ebc03540c9dbd60e83887fda27794998c6528f1782047d540"
 
 [[package]]
-name = "byteorder"
-version = "1.5.0"
+name = "byteorder-lite"
+version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1fd0f2584146f6f2ef48085050886acf353beff7305ebd1ae69500e27c67f64b"
+checksum = "8f1fe948ff07f4bd06c30984e69f5b4899c516a3ef74f34df92a2df2ab535495"
 
 [[package]]
 name = "bytes"
@@ -169,7 +169,7 @@ checksum = "f61dac84819c6588b558454b194026eb1f09c293b9036ae9b159e74e73ab6cf9"
 [[package]]
 name = "cairo-rs"
 version = "0.21.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#9ce31b97ee1e26e5e3bacffaad26963a437af03e"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#e6b43dc4d7cdb1ab62d6522c90807e6cd40973aa"
 dependencies = [
  "bitflags 2.9.0",
  "cairo-sys-rs",
@@ -180,7 +180,7 @@ dependencies = [
 [[package]]
 name = "cairo-sys-rs"
 version = "0.21.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#9ce31b97ee1e26e5e3bacffaad26963a437af03e"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#e6b43dc4d7cdb1ab62d6522c90807e6cd40973aa"
 dependencies = [
  "glib-sys",
  "libc",
@@ -290,12 +290,6 @@ dependencies = [
  "libc",
  "objc",
 ]
-
-[[package]]
-name = "color_quant"
-version = "1.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "3d7b894f5411737b7867f4827955924d7c254fc9f4d91a6aad6b097804b1018b"
 
 [[package]]
 name = "combine"
@@ -726,7 +720,7 @@ dependencies = [
 [[package]]
 name = "gio"
 version = "0.21.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#9ce31b97ee1e26e5e3bacffaad26963a437af03e"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#e6b43dc4d7cdb1ab62d6522c90807e6cd40973aa"
 dependencies = [
  "futures-channel",
  "futures-core",
@@ -742,7 +736,7 @@ dependencies = [
 [[package]]
 name = "gio-sys"
 version = "0.21.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#9ce31b97ee1e26e5e3bacffaad26963a437af03e"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#e6b43dc4d7cdb1ab62d6522c90807e6cd40973aa"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -771,7 +765,7 @@ dependencies = [
 [[package]]
 name = "glib"
 version = "0.21.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#9ce31b97ee1e26e5e3bacffaad26963a437af03e"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#e6b43dc4d7cdb1ab62d6522c90807e6cd40973aa"
 dependencies = [
  "bitflags 2.9.0",
  "futures-channel",
@@ -791,7 +785,7 @@ dependencies = [
 [[package]]
 name = "glib-macros"
 version = "0.21.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#9ce31b97ee1e26e5e3bacffaad26963a437af03e"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#e6b43dc4d7cdb1ab62d6522c90807e6cd40973aa"
 dependencies = [
  "heck",
  "proc-macro-crate",
@@ -803,7 +797,7 @@ dependencies = [
 [[package]]
 name = "glib-sys"
 version = "0.21.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#9ce31b97ee1e26e5e3bacffaad26963a437af03e"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#e6b43dc4d7cdb1ab62d6522c90807e6cd40973aa"
 dependencies = [
  "libc",
  "system-deps",
@@ -877,7 +871,7 @@ dependencies = [
 [[package]]
 name = "gobject-sys"
 version = "0.21.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#9ce31b97ee1e26e5e3bacffaad26963a437af03e"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#e6b43dc4d7cdb1ab62d6522c90807e6cd40973aa"
 dependencies = [
  "glib-sys",
  "libc",
@@ -1630,16 +1624,16 @@ dependencies = [
 
 [[package]]
 name = "image"
-version = "0.24.9"
+version = "0.25.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5690139d2f55868e080017335e4b94cb7414274c74f1669c84fb5feba2c9f69d"
+checksum = "cd6f44aed642f18953a158afeb30206f4d50da59fbc66ecb53c66488de73563b"
 dependencies = [
  "bytemuck",
- "byteorder",
- "color_quant",
- "jpeg-decoder",
+ "byteorder-lite",
  "num-traits",
  "png",
+ "zune-core",
+ "zune-jpeg",
 ]
 
 [[package]]
@@ -1697,12 +1691,6 @@ checksum = "48d1dbcbbeb6a7fec7e059840aa538bd62aaccf972c7346c4d9d2059312853d0"
 dependencies = [
  "libc",
 ]
-
-[[package]]
-name = "jpeg-decoder"
-version = "0.3.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f5d4a7da358eff58addd2877a45865158f0d78c911d43a5784ceb7bbf52833b0"
 
 [[package]]
 name = "js-sys"
@@ -1972,7 +1960,7 @@ dependencies = [
 [[package]]
 name = "pango"
 version = "0.21.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#9ce31b97ee1e26e5e3bacffaad26963a437af03e"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#e6b43dc4d7cdb1ab62d6522c90807e6cd40973aa"
 dependencies = [
  "gio",
  "glib",
@@ -1983,7 +1971,7 @@ dependencies = [
 [[package]]
 name = "pango-sys"
 version = "0.21.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#9ce31b97ee1e26e5e3bacffaad26963a437af03e"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#e6b43dc4d7cdb1ab62d6522c90807e6cd40973aa"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -1994,7 +1982,7 @@ dependencies = [
 [[package]]
 name = "pangocairo"
 version = "0.21.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#9ce31b97ee1e26e5e3bacffaad26963a437af03e"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#e6b43dc4d7cdb1ab62d6522c90807e6cd40973aa"
 dependencies = [
  "cairo-rs",
  "glib",
@@ -2006,7 +1994,7 @@ dependencies = [
 [[package]]
 name = "pangocairo-sys"
 version = "0.21.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#9ce31b97ee1e26e5e3bacffaad26963a437af03e"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#e6b43dc4d7cdb1ab62d6522c90807e6cd40973aa"
 dependencies = [
  "cairo-sys-rs",
  "glib-sys",
@@ -3220,4 +3208,19 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn",
+]
+
+[[package]]
+name = "zune-core"
+version = "0.4.12"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3f423a2c17029964870cfaabb1f13dfab7d092a62a29a89264f4d36990ca414a"
+
+[[package]]
+name = "zune-jpeg"
+version = "0.4.14"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "99a5bab8d7dedf81405c4bb1f2b83ea057643d9cb28778cea9eecddeedd2e028"
+dependencies = [
+ "zune-core",
 ]
