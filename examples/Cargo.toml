@@ -45,11 +45,12 @@ atomic_refcell = "0.1"
 data-encoding = "2.0"
 
 [target.'cfg(windows)'.dependencies]
-windows = { version = "0.59", features=["Win32_Graphics_Direct3D11",
+windows = { version = "0.60", features=["Win32_Graphics_Direct3D11",
     "Win32_Foundation", "Win32_Graphics_Direct3D", "Win32_Graphics_Dxgi",
     "Win32_Graphics_Dxgi_Common", "Win32_Graphics_Direct2D", "Win32_Graphics_Gdi",
     "Win32_Graphics_Direct2D_Common", "Win32_Graphics_DirectWrite",
     "Win32_Graphics_Imaging", "Win32_System_Com", "Foundation_Numerics"], optional = true }
+windows-numerics = "0.1"
 
 [target.'cfg(target_os = "macos")'.dependencies]
 cocoa = "0.26"

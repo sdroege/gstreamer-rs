@@ -12,18 +12,16 @@ use byte_slice_cast::*;
 use anyhow::Error;
 use derive_more::derive::{Display, Error};
 use gst::prelude::*;
-use windows::{
-    Foundation::Numerics::*,
-    Win32::{
-        Graphics::{
-            Direct2D::{Common::*, *},
-            DirectWrite::*,
-            Dxgi::Common::*,
-            Imaging::*,
-        },
-        System::Com::*,
+use windows::Win32::{
+    Graphics::{
+        Direct2D::{Common::*, *},
+        DirectWrite::*,
+        Dxgi::Common::*,
+        Imaging::*,
     },
+    System::Com::*,
 };
+use windows_numerics::*;
 
 #[derive(Debug, Display, Error)]
 #[display("Received error from {}: {} (debug: {:?})", src, error, debug)]
