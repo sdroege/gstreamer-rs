@@ -120,7 +120,7 @@ impl PlayConfig {
 
 impl IntoGlibPtr<*mut gst::ffi::GstStructure> for PlayConfig {
     #[inline]
-    unsafe fn into_glib_ptr(self) -> *mut gst::ffi::GstStructure {
+    fn into_glib_ptr(self) -> *mut gst::ffi::GstStructure {
         let mut s = mem::ManuallyDrop::new(self);
         s.0.to_glib_none_mut().0
     }

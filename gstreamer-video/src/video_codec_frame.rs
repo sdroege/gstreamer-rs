@@ -237,9 +237,11 @@ impl<'a> VideoCodecFrame<'a> {
 
 impl IntoGlibPtr<*mut ffi::GstVideoCodecFrame> for VideoCodecFrame<'_> {
     #[inline]
-    unsafe fn into_glib_ptr(self) -> *mut ffi::GstVideoCodecFrame {
+    fn into_glib_ptr(self) -> *mut ffi::GstVideoCodecFrame {
         let stream_lock = self.element.stream_lock();
-        glib::ffi::g_rec_mutex_unlock(stream_lock);
+        unsafe {
+            glib::ffi::g_rec_mutex_unlock(stream_lock);
+        }
 
         let s = mem::ManuallyDrop::new(self);
         s.to_glib_none().0

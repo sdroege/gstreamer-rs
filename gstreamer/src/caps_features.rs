@@ -92,7 +92,7 @@ impl CapsFeatures {
 
 impl IntoGlibPtr<*mut ffi::GstCapsFeatures> for CapsFeatures {
     #[inline]
-    unsafe fn into_glib_ptr(self) -> *mut ffi::GstCapsFeatures {
+    fn into_glib_ptr(self) -> *mut ffi::GstCapsFeatures {
         let s = mem::ManuallyDrop::new(self);
         s.0.as_ptr()
     }

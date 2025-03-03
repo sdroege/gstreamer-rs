@@ -164,7 +164,7 @@ impl Structure {
 
 impl IntoGlibPtr<*mut ffi::GstStructure> for Structure {
     #[inline]
-    unsafe fn into_glib_ptr(self) -> *mut ffi::GstStructure {
+    fn into_glib_ptr(self) -> *mut ffi::GstStructure {
         let s = mem::ManuallyDrop::new(self);
         s.0.as_ptr()
     }

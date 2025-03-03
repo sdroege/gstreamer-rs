@@ -221,7 +221,7 @@ where
 
 impl<T: 'static> IntoGlibPtr<*mut ffi::GstIterator> for Iterator<T> {
     #[inline]
-    unsafe fn into_glib_ptr(self) -> *mut ffi::GstIterator {
+    fn into_glib_ptr(self) -> *mut ffi::GstIterator {
         let s = mem::ManuallyDrop::new(self);
         let it = s.to_glib_none().0;
         it as *mut _

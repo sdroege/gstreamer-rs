@@ -126,7 +126,7 @@ macro_rules! mini_object_wrapper (
 
         impl $crate::glib::translate::IntoGlibPtr<*mut $ffi_name> for $name {
             #[inline]
-            unsafe fn into_glib_ptr(self) -> *mut $ffi_name {
+            fn into_glib_ptr(self) -> *mut $ffi_name {
                 let s = std::mem::ManuallyDrop::new(self);
                 s.as_mut_ptr()
             }

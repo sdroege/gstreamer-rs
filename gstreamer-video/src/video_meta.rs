@@ -1125,11 +1125,9 @@ impl AncillaryMeta {
 
     #[inline]
     pub fn set_data(&mut self, data: glib::Slice<u16>) {
-        unsafe {
-            assert!(data.len() < 256);
-            self.0.data_count = data.len() as u16;
-            self.0.data = data.into_glib_ptr();
-        }
+        assert!(data.len() < 256);
+        self.0.data_count = data.len() as u16;
+        self.0.data = data.into_glib_ptr();
     }
 
     #[inline]
