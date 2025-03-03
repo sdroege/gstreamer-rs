@@ -10,7 +10,8 @@ use glupload::*;
 pub mod examples_common;
 
 fn example_main() -> Result<()> {
-    App::new(None).and_then(main_loop)
+    let app = App::new(None)?;
+    app.run()
 }
 
 fn main() -> Result<()> {

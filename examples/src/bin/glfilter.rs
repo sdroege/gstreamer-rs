@@ -166,7 +166,9 @@ mod mirror {
 fn example_main() -> Result<()> {
     gst::init().unwrap();
     let glfilter = mirror::GLMirrorFilter::new(Some("Mirror filter"));
-    App::new(Some(glfilter.as_ref())).and_then(main_loop)
+
+    let app = App::new(Some(glfilter.as_ref()))?;
+    app.run()
 }
 
 fn main() -> Result<()> {
