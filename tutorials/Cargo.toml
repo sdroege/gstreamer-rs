@@ -15,7 +15,7 @@ gst-app.workspace = true
 gst-pbutils.workspace = true
 byte-slice-cast = "1"
 anyhow = "1"
-termion = { version = "3", optional = true }
+termion = { version = "4", optional = true }
 async-channel = "2.0.0"
 futures = "0.3"
 
