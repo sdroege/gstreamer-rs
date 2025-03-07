@@ -98,6 +98,13 @@ pub trait TracerImpl: GstObjectImpl + ObjectSubclass<Type: IsA<Tracer>> {
     #[cfg(feature = "v1_26")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
     fn memory_free_post(&self, ts: u64, mem: std::ptr::NonNull<ffi::GstMemory>) {}
+
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    fn pool_buffer_queued(&self, ts: u64, pool: &crate::BufferPool, buffer: &Buffer) {}
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    fn pool_buffer_dequeued(&self, ts: u64, pool: &crate::BufferPool, buffer: &Buffer) {}
 }
 
 #[cfg(not(feature = "v1_26"))]
@@ -502,5 +509,21 @@ define_tracer_hooks! {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
     MemoryFreePost("memory-free-post") = |this, ts, memory: *mut ffi::GstMemory| {
         this.memory_free_post(ts, std::ptr::NonNull::new_unchecked(memory))
+    };
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    PoolBufferQueued("pool-buffer-queued") = |this, ts, pool: *mut ffi::GstBufferPool, buffer: *mut ffi::GstBuffer| {
+        let pool = crate::BufferPool::from_glib_borrow(pool);
+        let b = Buffer::from_glib_borrow(buffer);
+
+        this.pool_buffer_queued(ts, &pool, &b)
+    };
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    PoolBufferDequeued("pool-buffer-dequeued") = |this, ts, pool: *mut ffi::GstBufferPool, buffer: *mut ffi::GstBuffer| {
+        let pool = crate::BufferPool::from_glib_borrow(pool);
+        let b = Buffer::from_glib_borrow(buffer);
+
+        this.pool_buffer_dequeued(ts, &pool, &b)
     };
 }
