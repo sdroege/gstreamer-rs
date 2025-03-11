@@ -25,6 +25,7 @@ gir-format-check = "0.1"
 [features]
 default = []
 v1_26 = ["gst/v1_26", "gstreamer-analytics-sys/v1_26"]
+v1_28 = ["gst/v1_28", "gstreamer-analytics-sys/v1_28", "v1_26"]
 
 [package.metadata.docs.rs]
 all-features = true

@@ -27,6 +27,7 @@ gir-format-check = "0.1"
 v1_22 = ["gst/v1_22", "gst-video/v1_22", "gstreamer-play-sys/v1_22"]
 v1_24 = ["gst/v1_24", "gst-video/v1_24", "gstreamer-play-sys/v1_24", "v1_22"]
 v1_26 = ["gst/v1_26", "gst-video/v1_26", "gstreamer-play-sys/v1_26", "v1_24"]
+v1_28 = ["gst/v1_28", "gst-video/v1_28", "gstreamer-play-sys/v1_28", "v1_26"]
 
 [package.metadata.docs.rs]
 all-features = true

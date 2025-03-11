@@ -35,6 +35,7 @@ v1_20 = ["gst/v1_20", "gst-audio/v1_20", "gst-video/v1_20", "gstreamer-pbutils-s
 v1_22 = ["gst/v1_22", "gst-audio/v1_22", "gst-video/v1_22", "gstreamer-pbutils-sys/v1_22", "v1_20"]
 v1_24 = ["gst/v1_24", "gst-audio/v1_24", "gst-video/v1_24", "gstreamer-pbutils-sys/v1_24", "v1_22"]
 v1_26 = ["gst/v1_26", "gst-audio/v1_26", "gst-video/v1_26", "gstreamer-pbutils-sys/v1_26", "v1_24"]
+v1_28 = ["gst/v1_28", "gst-audio/v1_28", "gst-video/v1_28", "gstreamer-pbutils-sys/v1_28", "v1_26"]
 serde = ["dep:serde", "gst/serde"]
 
 [package.metadata.docs.rs]
