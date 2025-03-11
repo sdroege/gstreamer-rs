@@ -29,6 +29,7 @@ default = []
 v1_22 = []
 v1_24 = ["v1_22"]
 v1_26 = ["v1_24"]
+v1_28 = ["v1_26"]
 
 [package.metadata.docs.rs]
 all-features = true

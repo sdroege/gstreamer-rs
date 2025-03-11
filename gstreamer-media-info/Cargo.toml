@@ -1,0 +1,38 @@
+[package]
+name = "gstreamer-media-info"
+authors = ["Thibault Saunier <tsaunier@igalia.com>"]
+categories = ["multimedia"]
+description = "Exposes an API to inspect media streams"
+license = "MIT/Apache-2.0"
+readme = "README.md"
+documentation = "https://gstreamer.pages.freedesktop.org/gstreamer-rs/stable/latest/docs/gstreamer_media_info/"
+keywords = ["gstreamer", "multimedia", "audio", "video", "gnome"]
+version.workspace = true
+repository.workspace = true
+homepage.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+gst = { workspace = true }
+tokio = { version = "1.0", features = ["rt", "rt-multi-thread"] }
+futures = "0.3"
+anyhow = "1.0"
+url = "2.3"
+once_cell = "1"
+
+[dev-dependencies]
+futures = { version = "0.3", features = ["executor"] }
+
+[features]
+default = []
+v1_22 = []
+v1_24 = ["v1_22"]
+v1_26 = ["v1_24"]
+v1_28 = ["v1_26"]
+[package.metadata.docs.rs]
+all-features = true
+rustc-args = ["--cfg", "docsrs"]
+rustdoc-args = ["--cfg", "docsrs", "--generate-link-to-definition"]

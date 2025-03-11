@@ -26,6 +26,7 @@ v1_20 = ["v1_18"]
 v1_22 = ["v1_20"]
 v1_24 = ["v1_22"]
 v1_26 = ["v1_24"]
+v1_28 = ["v1_26"]
 
 [lib]
 name = "gstreamer_base_sys"
@@ -89,4 +90,7 @@ version = "1.22"
 version = "1.24"
 
 [package.metadata.system-deps.gstreamer_base_1_0.v1_26]
-version = "1.25"
+version = "1.26"
+
+[package.metadata.system-deps.gstreamer_base_1_0.v1_28]
+version = "1.27"

@@ -49,6 +49,7 @@ v1_20 = ["gstreamer-sys/v1_20", "v1_18"]
 v1_22 = ["gstreamer-sys/v1_22", "v1_20"]
 v1_24 = ["gstreamer-sys/v1_24", "v1_22"]
 v1_26 = ["gstreamer-sys/v1_26", "v1_24"]
+v1_28 = ["gstreamer-sys/v1_28", "v1_26"]
 serde = ["num-rational/serde", "dep:serde", "serde_bytes"]
 log = ["dep:log"]
 
