@@ -1166,7 +1166,7 @@ unsafe extern "C" fn base_transform_propose_allocation<T: BaseTransformImpl>(
         match imp.propose_allocation(decide_query, query) {
             Ok(()) => true,
             Err(err) => {
-                err.log_with_imp(imp);
+                err.log_with_imp_and_level(imp, gst::DebugLevel::Info);
                 false
             }
         }

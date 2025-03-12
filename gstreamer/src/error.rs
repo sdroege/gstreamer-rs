@@ -111,10 +111,15 @@ impl LoggableError {
 
     #[inline(never)]
     fn log_with_object_internal(&self, obj: &glib::Object) {
+        self.log_with_object_internal_and_level(obj, crate::DebugLevel::Error);
+    }
+
+    #[inline(never)]
+    fn log_with_object_internal_and_level(&self, obj: &glib::Object, level: crate::DebugLevel) {
         self.bool_error.filename.run_with_gstr(|filename| {
             self.category.log(
                 Some(obj),
-                crate::DebugLevel::Error,
+                level,
                 filename,
                 self.bool_error.function,
                 self.bool_error.line,
@@ -126,7 +131,23 @@ impl LoggableError {
     pub fn log_with_imp(&self, imp: &impl glib::subclass::types::ObjectSubclass) {
         use glib::subclass::prelude::*;
 
-        self.log_with_object_internal(unsafe { imp.obj().unsafe_cast_ref::<glib::Object>() });
+        self.log_with_object_internal_and_level(
+            unsafe { imp.obj().unsafe_cast_ref::<glib::Object>() },
+            crate::DebugLevel::Error,
+        );
+    }
+
+    pub fn log_with_imp_and_level(
+        &self,
+        imp: &impl glib::subclass::types::ObjectSubclass,
+        level: crate::DebugLevel,
+    ) {
+        use glib::subclass::prelude::*;
+
+        self.log_with_object_internal_and_level(
+            unsafe { imp.obj().unsafe_cast_ref::<glib::Object>() },
+            level,
+        );
     }
 
     pub fn category(&self) -> crate::DebugCategory {

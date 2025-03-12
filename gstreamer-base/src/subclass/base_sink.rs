@@ -572,7 +572,7 @@ unsafe extern "C" fn base_sink_propose_allocation<T: BaseSinkImpl>(
         match imp.propose_allocation(query) {
             Ok(()) => true,
             Err(err) => {
-                err.log_with_imp(imp);
+                err.log_with_imp_and_level(imp, gst::DebugLevel::Info);
                 false
             }
         }
