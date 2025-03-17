@@ -307,7 +307,7 @@ pub struct VideoInfoBuilder<'a> {
     size: Option<usize>,
     views: Option<u32>,
     chroma_site: Option<crate::VideoChromaSite>,
-    colorimetry: Option<&'a crate::VideoColorimetry>,
+    colorimetry: Option<crate::VideoColorimetry>,
     par: Option<gst::Fraction>,
     fps: Option<gst::Fraction>,
     offset: Option<&'a [usize]>,
@@ -559,16 +559,16 @@ impl<'a> VideoInfoBuilder<'a> {
         }
     }
 
-    pub fn colorimetry(self, colorimetry: &'a crate::VideoColorimetry) -> VideoInfoBuilder<'a> {
+    pub fn colorimetry(self, colorimetry: &crate::VideoColorimetry) -> VideoInfoBuilder<'a> {
         Self {
-            colorimetry: Some(colorimetry),
+            colorimetry: Some(*colorimetry),
             ..self
         }
     }
 
     pub fn colorimetry_if(
         self,
-        colorimetry: &'a crate::VideoColorimetry,
+        colorimetry: &crate::VideoColorimetry,
         predicate: bool,
     ) -> VideoInfoBuilder<'a> {
         if predicate {
@@ -580,7 +580,7 @@ impl<'a> VideoInfoBuilder<'a> {
 
     pub fn colorimetry_if_some(
         self,
-        colorimetry: Option<&'a crate::VideoColorimetry>,
+        colorimetry: Option<&crate::VideoColorimetry>,
     ) -> VideoInfoBuilder<'a> {
         if let Some(colorimetry) = colorimetry {
             self.colorimetry(colorimetry)
@@ -787,6 +787,29 @@ impl VideoInfo {
             multiview_mode: None,
             multiview_flags: None,
             field_order: None,
+        }
+    }
+
+    pub fn builder_from_info(info: &VideoInfo) -> VideoInfoBuilder<'_> {
+        assert_initialized_main_thread!();
+
+        VideoInfoBuilder {
+            format: info.format(),
+            width: info.width(),
+            height: info.height(),
+            interlace_mode: Some(info.interlace_mode()),
+            flags: Some(info.flags()),
+            size: Some(info.size()),
+            views: Some(info.views()),
+            chroma_site: Some(info.chroma_site()),
+            colorimetry: Some(info.colorimetry()),
+            par: Some(info.par()),
+            fps: Some(info.fps()),
+            offset: Some(info.offset()),
+            stride: Some(info.stride()),
+            multiview_mode: Some(info.multiview_mode()),
+            multiview_flags: Some(info.multiview_flags()),
+            field_order: Some(info.field_order()),
         }
     }
 
