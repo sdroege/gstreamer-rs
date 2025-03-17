@@ -422,18 +422,15 @@ impl<'a> VideoInfoBuilder<'a> {
             }
 
             if let Some(multiview_mode) = self.multiview_mode {
-                let ptr = &mut info.ABI._gst_reserved as *mut _ as *mut i32;
-                ptr::write(ptr.offset(0), multiview_mode.into_glib());
+                info.ABI.abi.multiview_mode = multiview_mode.into_glib();
             }
 
             if let Some(multiview_flags) = self.multiview_flags {
-                let ptr = &mut info.ABI._gst_reserved as *mut _ as *mut u32;
-                ptr::write(ptr.offset(1), multiview_flags.into_glib());
+                info.ABI.abi.multiview_flags = multiview_flags.into_glib();
             }
 
             if let Some(field_order) = self.field_order {
-                let ptr = &mut info.ABI._gst_reserved as *mut _ as *mut i32;
-                ptr::write(ptr.offset(2), field_order.into_glib());
+                info.ABI.abi.field_order = field_order.into_glib();
             }
 
             Ok(VideoInfo(info))
