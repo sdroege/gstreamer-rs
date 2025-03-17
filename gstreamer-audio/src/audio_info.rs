@@ -185,6 +185,19 @@ impl AudioInfo {
         }
     }
 
+    pub fn builder_from_info(info: &AudioInfo) -> AudioInfoBuilder<'_> {
+        assert_initialized_main_thread!();
+
+        AudioInfoBuilder {
+            format: info.format(),
+            rate: info.rate(),
+            channels: info.channels(),
+            positions: info.positions(),
+            flags: Some(info.flags()),
+            layout: Some(info.layout()),
+        }
+    }
+
     #[inline]
     pub fn is_valid(&self) -> bool {
         !self.0.finfo.is_null() && self.0.channels > 0 && self.0.rate > 0 && self.0.bpf > 0
