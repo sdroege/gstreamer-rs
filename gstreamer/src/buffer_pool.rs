@@ -250,7 +250,7 @@ impl BufferPoolConfigRef {
     // TODO: options iterator
 }
 
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 #[doc(alias = "GstBufferPoolAcquireParams")]
 pub struct BufferPoolAcquireParams(ffi::GstBufferPoolAcquireParams);
 
