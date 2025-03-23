@@ -4,10 +4,7 @@ use std::{
     borrow::Borrow, cmp, ffi::CStr, fmt, mem, num::NonZeroU32, ops::Deref, ops::DerefMut, ptr,
 };
 
-use glib::{
-    translate::{FromGlibPtrContainer, *},
-    value::ToSendValue,
-};
+use glib::{translate::*, value::ToSendValue};
 
 use crate::{
     ffi,
@@ -1842,12 +1839,12 @@ declare_concrete_event!(SelectStreams, T);
 impl SelectStreams<Event> {
     #[doc(alias = "gst_event_new_select_streams")]
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(streams: &[&str]) -> Event {
+    pub fn new<'a>(streams: impl IntoIterator<Item = &'a str>) -> Event {
         skip_assert_initialized!();
         Self::builder(streams).build()
     }
 
-    pub fn builder<'a>(streams: &'a [&'a str]) -> SelectStreamsBuilder<'a> {
+    pub fn builder<'a>(streams: impl IntoIterator<Item = &'a str>) -> SelectStreamsBuilder<'a> {
         assert_initialized_main_thread!();
         SelectStreamsBuilder::new(streams)
     }
@@ -1856,24 +1853,32 @@ impl SelectStreams<Event> {
 impl SelectStreams {
     #[doc(alias = "get_streams")]
     #[doc(alias = "gst_event_parse_select_streams")]
-    pub fn streams(&self) -> Vec<String> {
+    pub fn streams(&self) -> glib::collections::List<glib::GStringPtr> {
         unsafe {
             let mut streams = ptr::null_mut();
 
             ffi::gst_event_parse_select_streams(self.as_mut_ptr(), &mut streams);
 
-            FromGlibPtrContainer::from_glib_full(streams)
+            glib::collections::List::from_glib_full(streams)
         }
     }
 }
 
 impl std::fmt::Debug for SelectStreams {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        struct StreamsDebug<'a>(&'a SelectStreams);
+
+        impl std::fmt::Debug for StreamsDebug<'_> {
+            fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+                f.debug_list().entries(self.0.streams()).finish()
+            }
+        }
+
         f.debug_struct("SelectStreams")
             .field("seqnum", &self.event().seqnum())
             .field("running-time-offset", &self.event().running_time_offset())
             .field("structure", &self.event().structure())
-            .field("streams", &self.streams())
+            .field("streams", &StreamsDebug(self))
             .finish()
     }
 }
@@ -3077,20 +3082,27 @@ impl<'a> TocSelectBuilder<'a> {
 #[must_use = "The builder must be built to be used"]
 pub struct SelectStreamsBuilder<'a> {
     builder: EventBuilder<'a>,
-    streams: &'a [&'a str],
+    streams: glib::collections::List<glib::GStringPtr>,
 }
 
 impl<'a> SelectStreamsBuilder<'a> {
-    fn new(streams: &'a [&'a str]) -> Self {
+    fn new(streams: impl IntoIterator<Item = &'a str>) -> Self {
         skip_assert_initialized!();
         Self {
             builder: EventBuilder::new(),
-            streams,
+            streams: streams
+                .into_iter()
+                .map(|s| unsafe {
+                    // See https://github.com/gtk-rs/gtk-rs-core/pull/1688
+                    let ptr = glib::ffi::g_strndup(s.as_ptr() as *const _, s.len());
+                    mem::transmute::<*const _, glib::GStringPtr>(ptr)
+                })
+                .collect(),
         }
     }
 
     event_builder_generic_impl!(|s: &Self| {
-        ffi::gst_event_new_select_streams(s.streams.to_glib_none().0)
+        ffi::gst_event_new_select_streams(mut_override(s.streams.as_ptr()))
     });
 }
 
@@ -3310,11 +3322,11 @@ mod tests {
         crate::init().unwrap();
 
         let s = ["foo", "bar"].to_vec();
-        let event = crate::event::SelectStreams::new(&s);
+        let event = crate::event::SelectStreams::new(s.iter().copied());
         let streams = match event.view() {
             EventView::SelectStreams(streams) => streams.streams(),
             _ => unreachable!(),
         };
-        assert_eq!(streams, s);
+        assert_eq!(streams.iter().collect::<Vec<_>>(), s);
     }
 }
