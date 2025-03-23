@@ -6,7 +6,7 @@ use glib::translate::*;
 
 use crate::{ffi, MemoryFlags};
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 #[doc(alias = "GstAllocationParams")]
 #[repr(transparent)]
 pub struct AllocationParams(ffi::GstAllocationParams);
