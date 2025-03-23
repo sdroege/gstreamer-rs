@@ -128,20 +128,8 @@ impl BufferPoolConfigRef {
     #[doc(alias = "get_options")]
     #[doc(alias = "gst_buffer_pool_config_n_options")]
     #[doc(alias = "gst_buffer_pool_config_get_option")]
-    pub fn options(&self) -> Vec<String> {
-        unsafe {
-            let n = ffi::gst_buffer_pool_config_n_options(self.0.as_mut_ptr()) as usize;
-            let mut options = Vec::with_capacity(n);
-
-            for i in 0..n {
-                options.push(from_glib_none(ffi::gst_buffer_pool_config_get_option(
-                    self.0.as_mut_ptr(),
-                    i as u32,
-                )));
-            }
-
-            options
-        }
+    pub fn options(&self) -> OptionsIter<'_> {
+        OptionsIter::new(self)
     }
 
     #[doc(alias = "gst_buffer_pool_config_set_params")]
@@ -247,8 +235,22 @@ impl BufferPoolConfigRef {
             )
         }
     }
-    // TODO: options iterator
 }
+
+crate::utils::define_fixed_size_iter!(
+    OptionsIter,
+    &'a BufferPoolConfigRef,
+    &'a glib::GStr,
+    |collection: &BufferPoolConfigRef| unsafe {
+        ffi::gst_buffer_pool_config_n_options(collection.as_mut_ptr()) as usize
+    },
+    |collection: &BufferPoolConfigRef, idx: usize| unsafe {
+        glib::GStr::from_ptr(ffi::gst_buffer_pool_config_get_option(
+            collection.as_mut_ptr(),
+            idx as u32,
+        ))
+    }
+);
 
 #[derive(Debug, Copy, Clone)]
 #[doc(alias = "GstBufferPoolAcquireParams")]

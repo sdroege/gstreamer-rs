@@ -78,3 +78,106 @@ where
         }
     }
 }
+
+macro_rules! define_fixed_size_iter(
+    ($name:ident, $typ:ty, $ityp:ty, $get_len:expr, $get_item:expr) => {
+        #[derive(Debug)]
+        pub struct $name<'a> {
+            pub(crate) collection: $typ,
+            idx: usize,
+            size: usize,
+        }
+
+        impl<'a> $name<'a> {
+            #[inline]
+            fn new(collection: $typ) -> $name<'a> {
+                skip_assert_initialized!();
+                let size = $get_len(collection) as usize;
+                $name {
+                    collection,
+                    idx: 0,
+                    size,
+                }
+            }
+        }
+
+        impl<'a> Iterator for $name<'a> {
+            type Item = $ityp;
+
+            #[inline]
+            fn next(&mut self) -> Option<Self::Item> {
+                if self.idx >= self.size {
+                    return None;
+                }
+
+                let item = $get_item(self.collection, self.idx);
+                self.idx += 1;
+
+                Some(item)
+            }
+
+            #[inline]
+            fn size_hint(&self) -> (usize, Option<usize>) {
+                let remaining = self.size - self.idx;
+
+                (remaining, Some(remaining))
+            }
+
+            #[inline]
+            fn count(self) -> usize {
+                self.size - self.idx
+            }
+
+            #[inline]
+            fn nth(&mut self, n: usize) -> Option<Self::Item> {
+                let (end, overflow) = self.idx.overflowing_add(n);
+                if end >= self.size || overflow {
+                    self.idx = self.size;
+                    None
+                } else {
+                    self.idx = end + 1;
+                    Some($get_item(self.collection, end))
+                }
+            }
+
+            #[inline]
+            fn last(self) -> Option<Self::Item> {
+                if self.idx == self.size {
+                    None
+                } else {
+                    Some($get_item(self.collection, self.size - 1))
+                }
+            }
+        }
+
+        impl DoubleEndedIterator for $name<'_> {
+            #[inline]
+            fn next_back(&mut self) -> Option<Self::Item> {
+                if self.idx == self.size {
+                    return None;
+                }
+
+                self.size -= 1;
+                Some($get_item(self.collection, self.size))
+            }
+
+            #[inline]
+            fn nth_back(&mut self, n: usize) -> Option<Self::Item> {
+                let (end, overflow) = self.size.overflowing_sub(n);
+                if end <= self.idx || overflow {
+                    self.idx = self.size;
+                    None
+                } else {
+                    self.size = end - 1;
+                    Some($get_item(self.collection, self.size))
+                }
+            }
+        }
+
+        impl ExactSizeIterator for $name<'_> {}
+
+        impl std::iter::FusedIterator for $name<'_> {}
+    }
+);
+
+pub(crate) use define_fixed_size_iter;
