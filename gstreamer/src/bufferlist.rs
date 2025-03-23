@@ -245,103 +245,22 @@ impl fmt::Debug for BufferListRef {
 
 macro_rules! define_iter(
     ($name:ident, $styp:ty, $get_item:expr) => {
-    #[derive(Debug)]
-    pub struct $name<'a> {
-        list: &'a BufferListRef,
-        idx: usize,
-        size: usize,
-    }
-
-    impl<'a> $name<'a> {
-        fn new(list: &'a BufferListRef) -> $name<'a> {
-            skip_assert_initialized!();
-            $name {
-                list,
-                idx: 0,
-                size: list.len(),
-            }
-        }
-    }
-
-    #[allow(clippy::redundant_closure_call)]
-    impl<'a> Iterator for $name<'a> {
-        type Item = $styp;
-
-        fn next(&mut self) -> Option<Self::Item> {
-            if self.idx >= self.size {
-                return None;
-            }
-
-            let item = $get_item(self.list, self.idx).unwrap();
-            self.idx += 1;
-
-            Some(item)
-        }
-
-        fn size_hint(&self) -> (usize, Option<usize>) {
-            let remaining = self.size - self.idx;
-
-            (remaining, Some(remaining))
-        }
-
-        fn count(self) -> usize {
-            self.size - self.idx
-        }
-
-        fn nth(&mut self, n: usize) -> Option<Self::Item> {
-            let (end, overflow) = self.idx.overflowing_add(n);
-            if end >= self.size || overflow {
-                self.idx = self.size;
-                None
-            } else {
-                self.idx = end + 1;
-                Some($get_item(self.list, end).unwrap())
-            }
-        }
-
-        fn last(self) -> Option<Self::Item> {
-            if self.idx == self.size {
-                None
-            } else {
-                Some($get_item(self.list, self.size - 1).unwrap())
-            }
-        }
-    }
-
-    #[allow(clippy::redundant_closure_call)]
-    impl<'a> DoubleEndedIterator for $name<'a> {
-        fn next_back(&mut self) -> Option<Self::Item> {
-            if self.idx == self.size {
-                return None;
-            }
-
-            self.size -= 1;
-            Some($get_item(self.list, self.size).unwrap())
-        }
-
-        fn nth_back(&mut self, n: usize) -> Option<Self::Item> {
-            let (end, overflow) = self.size.overflowing_sub(n);
-            if end <= self.idx || overflow {
-                self.idx = self.size;
-                None
-            } else {
-                self.size = end - 1;
-                Some($get_item(self.list, self.size).unwrap())
-            }
-        }
-    }
-
-    impl<'a> ExactSizeIterator for $name<'a> {}
-    impl<'a> std::iter::FusedIterator for $name<'a> {}
+        crate::utils::define_fixed_size_iter!(
+            $name, &'a BufferListRef, $styp,
+            |collection: &BufferListRef| collection.len(),
+            $get_item
+        );
     }
 );
 
-define_iter!(Iter, &'a BufferRef, |list: &'a BufferListRef, idx| {
-    list.get(idx)
+define_iter!(Iter, &'a BufferRef, |list: &BufferListRef, idx| unsafe {
+    let ptr = ffi::gst_buffer_list_get(list.as_mut_ptr(), idx as u32);
+    BufferRef::from_ptr(ptr)
 });
 
-define_iter!(IterOwned, Buffer, |list: &BufferListRef, idx| {
-    list.get_owned(idx)
+define_iter!(IterOwned, Buffer, |list: &BufferListRef, idx| unsafe {
+    let ptr = ffi::gst_buffer_list_get(list.as_mut_ptr(), idx as u32);
+    from_glib_none(ptr)
 });
 
 impl<'a> IntoIterator for &'a BufferListRef {

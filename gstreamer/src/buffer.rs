@@ -950,121 +950,11 @@ define_meta_iter!(
 
 macro_rules! define_iter(
     ($name:ident, $typ:ty, $mtyp:ty, $get_item:expr) => {
-    pub struct $name<'a> {
-        buffer: $typ,
-        idx: usize,
-        n_memory: usize,
-    }
-
-    impl<'a> fmt::Debug for $name<'a> {
-        fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-            f.debug_struct(stringify!($name))
-                .field("buffer", &self.buffer)
-                .field("idx", &self.idx)
-                .field("n_memory", &self.n_memory)
-                .finish()
-        }
-    }
-
-    impl<'a> $name<'a> {
-        fn new(buffer: $typ) -> $name<'a> {
-            skip_assert_initialized!();
-
-            let n_memory = buffer.n_memory();
-
-            $name {
-                buffer,
-                idx: 0,
-                n_memory,
-            }
-        }
-    }
-
-    #[allow(clippy::redundant_closure_call)]
-    impl<'a> Iterator for $name<'a> {
-        type Item = $mtyp;
-
-        fn next(&mut self) -> Option<Self::Item> {
-            if self.idx >= self.n_memory {
-                return None;
-            }
-
-            #[allow(unused_unsafe)]
-            unsafe {
-                let item = $get_item(self.buffer, self.idx).unwrap();
-                self.idx += 1;
-                Some(item)
-            }
-        }
-
-        fn size_hint(&self) -> (usize, Option<usize>) {
-            let remaining = self.n_memory - self.idx;
-
-            (remaining, Some(remaining))
-        }
-
-        fn count(self) -> usize {
-            self.n_memory - self.idx
-        }
-
-        fn nth(&mut self, n: usize) -> Option<Self::Item> {
-            let (end, overflow) = self.idx.overflowing_add(n);
-            if end >= self.n_memory || overflow {
-                self.idx = self.n_memory;
-                None
-            } else {
-                #[allow(unused_unsafe)]
-                unsafe {
-                    self.idx = end + 1;
-                    Some($get_item(self.buffer, end).unwrap())
-                }
-            }
-        }
-
-        fn last(self) -> Option<Self::Item> {
-            if self.idx == self.n_memory {
-                None
-            } else {
-                #[allow(unused_unsafe)]
-                unsafe {
-                    Some($get_item(self.buffer, self.n_memory - 1).unwrap())
-                }
-            }
-        }
-    }
-
-    #[allow(clippy::redundant_closure_call)]
-    impl<'a> DoubleEndedIterator for $name<'a> {
-        fn next_back(&mut self) -> Option<Self::Item> {
-            if self.idx == self.n_memory {
-                return None;
-            }
-
-            #[allow(unused_unsafe)]
-            unsafe {
-                self.n_memory -= 1;
-                Some($get_item(self.buffer, self.n_memory).unwrap())
-            }
-        }
-
-        fn nth_back(&mut self, n: usize) -> Option<Self::Item> {
-            let (end, overflow) = self.n_memory.overflowing_sub(n);
-            if end <= self.idx || overflow {
-                self.idx = self.n_memory;
-                None
-            } else {
-                #[allow(unused_unsafe)]
-                unsafe {
-                    self.n_memory = end - 1;
-                    Some($get_item(self.buffer, self.n_memory).unwrap())
-                }
-            }
-        }
-    }
-
-    impl<'a> ExactSizeIterator for $name<'a> {}
-
-    impl<'a> std::iter::FusedIterator for $name<'a> {}
+        crate::utils::define_fixed_size_iter!(
+            $name, $typ, $mtyp,
+            |buffer: &BufferRef| buffer.n_memory() as usize,
+            $get_item
+        );
     }
 );
 
@@ -1072,13 +962,9 @@ define_iter!(
     Iter,
     &'a BufferRef,
     &'a MemoryRef,
-    |buffer: &BufferRef, idx| {
+    |buffer: &BufferRef, idx| unsafe {
         let ptr = ffi::gst_buffer_peek_memory(buffer.as_mut_ptr(), idx as u32);
-        if ptr.is_null() {
-            None
-        } else {
-            Some(MemoryRef::from_ptr(ptr as *const ffi::GstMemory))
-        }
+        MemoryRef::from_ptr(ptr as *const ffi::GstMemory)
     }
 );
 
@@ -1086,13 +972,9 @@ define_iter!(
     IterMut,
     &'a mut BufferRef,
     &'a mut MemoryRef,
-    |buffer: &mut BufferRef, idx| {
+    |buffer: &mut BufferRef, idx| unsafe {
         let ptr = ffi::gst_buffer_peek_memory(buffer.as_mut_ptr(), idx as u32);
-        if ptr.is_null() {
-            None
-        } else {
-            Some(MemoryRef::from_mut_ptr(ptr))
-        }
+        MemoryRef::from_mut_ptr(ptr)
     }
 );
 
@@ -1157,7 +1039,10 @@ define_iter!(
     IterOwned,
     &'a BufferRef,
     Memory,
-    |buffer: &BufferRef, idx| { buffer.memory(idx) }
+    |buffer: &BufferRef, idx| unsafe {
+        let ptr = ffi::gst_buffer_get_memory(buffer.as_mut_ptr(), idx as u32);
+        from_glib_full(ptr)
+    }
 );
 
 impl fmt::Debug for Buffer {

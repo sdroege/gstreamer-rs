@@ -1755,126 +1755,30 @@ impl glib::value::ToValueOptional for StructureRef {
     }
 }
 
-#[derive(Debug)]
-pub struct FieldIterator<'a> {
-    structure: &'a StructureRef,
-    idx: usize,
-    n_fields: usize,
-}
-
-impl<'a> FieldIterator<'a> {
-    fn new(structure: &'a StructureRef) -> FieldIterator<'a> {
-        skip_assert_initialized!();
-        let n_fields = structure.n_fields();
-
-        FieldIterator {
-            structure,
-            idx: 0,
-            n_fields,
-        }
+crate::utils::define_fixed_size_iter!(
+    FieldIterator,
+    &'a StructureRef,
+    &'a glib::GStr,
+    |collection: &StructureRef| collection.n_fields(),
+    |collection: &StructureRef, idx: usize| unsafe {
+        let field_name = ffi::gst_structure_nth_field_name(&collection.0, idx as u32);
+        glib::GStr::from_ptr(field_name)
     }
-}
-
-impl<'a> Iterator for FieldIterator<'a> {
-    type Item = &'a glib::GStr;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        if self.idx >= self.n_fields {
-            return None;
-        }
-
-        let field_name = self.structure.nth_field_name(self.idx).unwrap();
-        self.idx += 1;
-
-        Some(field_name)
-    }
-
-    fn size_hint(&self) -> (usize, Option<usize>) {
-        let remaining = self.n_fields - self.idx;
-
-        (remaining, Some(remaining))
-    }
-}
-
-impl DoubleEndedIterator for FieldIterator<'_> {
-    fn next_back(&mut self) -> Option<Self::Item> {
-        if self.idx == self.n_fields {
-            return None;
-        }
-
-        self.n_fields -= 1;
-        // Safety: nth_field_name() ensures static lifetime for the returned string,
-        // whatever the GStreamer version being used.
-        Some(self.structure.nth_field_name(self.n_fields).unwrap())
-    }
-}
-
-impl ExactSizeIterator for FieldIterator<'_> {}
-
-impl std::iter::FusedIterator for FieldIterator<'_> {}
+);
 
 #[cfg(feature = "v1_26")]
-#[derive(Debug)]
-pub struct FieldIdIterator<'a> {
-    structure: &'a StructureRef,
-    idx: usize,
-    n_fields: usize,
-}
+crate::utils::define_fixed_size_iter!(
+    FieldIdIterator,
+    &'a StructureRef,
+    &'a crate::IdStr,
+    |collection: &StructureRef| collection.n_fields(),
+    |collection: &StructureRef, idx: usize| unsafe {
+        let field_name = ffi::gst_structure_id_str_nth_field_name(&collection.0, idx as u32);
+        debug_assert!(!field_name.is_null());
 
-#[cfg(feature = "v1_26")]
-impl<'a> FieldIdIterator<'a> {
-    fn new(structure: &'a StructureRef) -> FieldIdIterator<'a> {
-        skip_assert_initialized!();
-        let n_fields = structure.n_fields();
-
-        FieldIdIterator {
-            structure,
-            idx: 0,
-            n_fields,
-        }
+        &*(field_name as *const crate::IdStr)
     }
-}
-
-#[cfg(feature = "v1_26")]
-impl<'a> Iterator for FieldIdIterator<'a> {
-    type Item = &'a IdStr;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        if self.idx >= self.n_fields {
-            return None;
-        }
-
-        let field_name = self.structure.nth_field_by_id(self.idx).unwrap();
-        self.idx += 1;
-
-        Some(field_name)
-    }
-
-    fn size_hint(&self) -> (usize, Option<usize>) {
-        let remaining = self.n_fields - self.idx;
-
-        (remaining, Some(remaining))
-    }
-}
-
-#[cfg(feature = "v1_26")]
-impl DoubleEndedIterator for FieldIdIterator<'_> {
-    fn next_back(&mut self) -> Option<Self::Item> {
-        if self.idx == self.n_fields {
-            return None;
-        }
-
-        self.n_fields -= 1;
-        // Safety: nth_field_name() ensures static lifetime for the returned string,
-        // whatever the GStreamer version being used.
-        Some(self.structure.nth_field_by_id(self.n_fields).unwrap())
-    }
-}
-
-#[cfg(feature = "v1_26")]
-impl ExactSizeIterator for FieldIdIterator<'_> {}
-#[cfg(feature = "v1_26")]
-impl std::iter::FusedIterator for FieldIdIterator<'_> {}
+);
 
 #[derive(Debug)]
 pub struct Iter<'a> {
@@ -1895,7 +1799,7 @@ impl<'a> Iterator for Iter<'a> {
 
     fn next(&mut self) -> Option<Self::Item> {
         let f = self.iter.next()?;
-        let v = self.iter.structure.value(f);
+        let v = self.iter.collection.value(f);
         Some((f, v.unwrap()))
     }
 
@@ -1909,12 +1813,12 @@ impl<'a> Iterator for Iter<'a> {
 
     fn nth(&mut self, n: usize) -> Option<Self::Item> {
         let f = self.iter.nth(n)?;
-        let v = self.iter.structure.value(f);
+        let v = self.iter.collection.value(f);
         Some((f, v.unwrap()))
     }
 
     fn last(self) -> Option<Self::Item> {
-        let structure = self.iter.structure;
+        let structure = self.iter.collection;
         let f = self.iter.last()?;
         let v = structure.value(f);
         Some((f, v.unwrap()))
@@ -1924,13 +1828,13 @@ impl<'a> Iterator for Iter<'a> {
 impl DoubleEndedIterator for Iter<'_> {
     fn next_back(&mut self) -> Option<Self::Item> {
         let f = self.iter.next_back()?;
-        let v = self.iter.structure.value(f);
+        let v = self.iter.collection.value(f);
         Some((f, v.unwrap()))
     }
 
     fn nth_back(&mut self, n: usize) -> Option<Self::Item> {
         let f = self.iter.nth_back(n)?;
-        let v = self.iter.structure.value(f);
+        let v = self.iter.collection.value(f);
         Some((f, v.unwrap()))
     }
 }
@@ -1961,7 +1865,7 @@ impl<'a> Iterator for IdIter<'a> {
 
     fn next(&mut self) -> Option<Self::Item> {
         let f = self.iter.next()?;
-        let v = self.iter.structure.value_by_id(f);
+        let v = self.iter.collection.value_by_id(f);
         Some((f, v.unwrap()))
     }
 
@@ -1975,12 +1879,12 @@ impl<'a> Iterator for IdIter<'a> {
 
     fn nth(&mut self, n: usize) -> Option<Self::Item> {
         let f = self.iter.nth(n)?;
-        let v = self.iter.structure.value_by_id(f);
+        let v = self.iter.collection.value_by_id(f);
         Some((f, v.unwrap()))
     }
 
     fn last(self) -> Option<Self::Item> {
-        let structure = self.iter.structure;
+        let structure = self.iter.collection;
         let f = self.iter.last()?;
         let v = structure.value_by_id(f);
         Some((f, v.unwrap()))
@@ -1991,13 +1895,13 @@ impl<'a> Iterator for IdIter<'a> {
 impl DoubleEndedIterator for IdIter<'_> {
     fn next_back(&mut self) -> Option<Self::Item> {
         let f = self.iter.next_back()?;
-        let v = self.iter.structure.value_by_id(f);
+        let v = self.iter.collection.value_by_id(f);
         Some((f, v.unwrap()))
     }
 
     fn nth_back(&mut self, n: usize) -> Option<Self::Item> {
         let f = self.iter.nth_back(n)?;
-        let v = self.iter.structure.value_by_id(f);
+        let v = self.iter.collection.value_by_id(f);
         Some((f, v.unwrap()))
     }
 }

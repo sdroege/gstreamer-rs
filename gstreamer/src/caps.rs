@@ -1076,107 +1076,11 @@ pub enum CapsFilterMapAction {
 
 macro_rules! define_iter(
     ($name:ident, $typ:ty, $styp:ty, $get_item:expr) => {
-    #[derive(Debug)]
-    pub struct $name<'a> {
-        caps: $typ,
-        idx: usize,
-        n_structures: usize,
-    }
-
-    impl<'a> $name<'a> {
-        fn new(caps: $typ) -> $name<'a> {
-            skip_assert_initialized!();
-            let n_structures = caps.size();
-
-            $name {
-                caps,
-                idx: 0,
-                n_structures: n_structures as usize,
-            }
-        }
-    }
-
-    #[allow(clippy::redundant_closure_call)]
-    impl<'a> Iterator for $name<'a> {
-        type Item = $styp;
-
-        fn next(&mut self) -> Option<Self::Item> {
-            if self.idx >= self.n_structures {
-                return None;
-            }
-
-            unsafe {
-                let item = $get_item(self.caps, self.idx).unwrap();
-                self.idx += 1;
-                Some(item)
-            }
-        }
-
-        fn size_hint(&self) -> (usize, Option<usize>) {
-            let remaining = self.n_structures - self.idx;
-
-            (remaining, Some(remaining))
-        }
-
-        fn count(self) -> usize {
-            self.n_structures - self.idx
-        }
-
-        fn nth(&mut self, n: usize) -> Option<Self::Item> {
-            let (end, overflow) = self.idx.overflowing_add(n);
-            if end >= self.n_structures || overflow {
-                self.idx = self.n_structures;
-                None
-            } else {
-                unsafe {
-                    self.idx = end + 1;
-                    Some($get_item(self.caps, end).unwrap())
-                }
-            }
-        }
-
-        fn last(self) -> Option<Self::Item> {
-            if self.idx == self.n_structures {
-                None
-            } else {
-                unsafe {
-                    Some($get_item(self.caps, self.n_structures - 1).unwrap())
-                }
-            }
-        }
-    }
-
-    #[allow(clippy::redundant_closure_call)]
-    impl<'a> DoubleEndedIterator for $name<'a> {
-        fn next_back(&mut self) -> Option<Self::Item> {
-            if self.idx == self.n_structures {
-                return None;
-            }
-
-            self.n_structures -= 1;
-
-            unsafe {
-                Some($get_item(self.caps, self.n_structures).unwrap())
-            }
-        }
-
-        fn nth_back(&mut self, n: usize) -> Option<Self::Item> {
-            let (end, overflow) = self.n_structures.overflowing_sub(n);
-            if end <= self.idx || overflow {
-                self.idx = self.n_structures;
-                None
-            } else {
-                self.n_structures = end - 1;
-                unsafe {
-                    Some($get_item(self.caps, self.n_structures).unwrap())
-                }
-            }
-        }
-    }
-
-    impl<'a> ExactSizeIterator for $name<'a> {}
-
-    impl<'a> std::iter::FusedIterator for $name<'a> {}
+        crate::utils::define_fixed_size_iter!(
+            $name, $typ, $styp,
+            |collection: &CapsRef| collection.size(),
+            $get_item
+        );
     }
 );
 
@@ -1184,62 +1088,44 @@ define_iter!(
     Iter,
     &'a CapsRef,
     &'a StructureRef,
-    |caps: &CapsRef, idx| {
+    |caps: &CapsRef, idx| unsafe {
         let ptr = ffi::gst_caps_get_structure(caps.as_ptr(), idx as u32);
-        if ptr.is_null() {
-            None
-        } else {
-            Some(StructureRef::from_glib_borrow(
-                ptr as *const ffi::GstStructure,
-            ))
-        }
+        StructureRef::from_glib_borrow(ptr as *const ffi::GstStructure)
     }
 );
 define_iter!(
     IterMut,
     &'a mut CapsRef,
     &'a mut StructureRef,
-    |caps: &CapsRef, idx| {
+    |caps: &mut CapsRef, idx| unsafe {
         let ptr = ffi::gst_caps_get_structure(caps.as_ptr(), idx as u32);
-        if ptr.is_null() {
-            None
-        } else {
-            Some(StructureRef::from_glib_borrow_mut(ptr))
-        }
+        StructureRef::from_glib_borrow_mut(ptr)
     }
 );
 define_iter!(
     IterFeatures,
     &'a CapsRef,
     (&'a StructureRef, &'a CapsFeaturesRef),
-    |caps: &CapsRef, idx| {
+    |caps: &CapsRef, idx| unsafe {
         let ptr1 = ffi::gst_caps_get_structure(caps.as_ptr(), idx as u32);
         let ptr2 = ffi::gst_caps_get_features(caps.as_ptr(), idx as u32);
-        if ptr1.is_null() || ptr2.is_null() {
-            None
-        } else {
-            Some((
-                StructureRef::from_glib_borrow(ptr1),
-                CapsFeaturesRef::from_glib_borrow(ptr2),
-            ))
-        }
+        (
+            StructureRef::from_glib_borrow(ptr1),
+            CapsFeaturesRef::from_glib_borrow(ptr2),
+        )
     }
 );
 define_iter!(
     IterFeaturesMut,
     &'a mut CapsRef,
     (&'a mut StructureRef, &'a mut CapsFeaturesRef),
-    |caps: &CapsRef, idx| {
+    |caps: &mut CapsRef, idx| unsafe {
         let ptr1 = ffi::gst_caps_get_structure(caps.as_ptr(), idx as u32);
         let ptr2 = ffi::gst_caps_get_features(caps.as_ptr(), idx as u32);
-        if ptr1.is_null() || ptr2.is_null() {
-            None
-        } else {
-            Some((
-                StructureRef::from_glib_borrow_mut(ptr1),
-                CapsFeaturesRef::from_glib_borrow_mut(ptr2),
-            ))
-        }
+        (
+            StructureRef::from_glib_borrow_mut(ptr1),
+            CapsFeaturesRef::from_glib_borrow_mut(ptr2),
+        )
     }
 );
 

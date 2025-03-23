@@ -654,140 +654,16 @@ impl glib::value::ToValueOptional for CapsFeaturesRef {
     }
 }
 
-#[derive(Debug)]
-pub struct Iter<'a> {
-    caps_features: &'a CapsFeaturesRef,
-    idx: usize,
-    n_features: usize,
-}
-
-impl<'a> Iter<'a> {
-    fn new(caps_features: &'a CapsFeaturesRef) -> Iter<'a> {
-        skip_assert_initialized!();
-        let n_features = caps_features.size();
-
-        Iter {
-            caps_features,
-            idx: 0,
-            n_features,
-        }
+crate::utils::define_fixed_size_iter!(
+    Iter,
+    &'a CapsFeaturesRef,
+    &'a glib::GStr,
+    |collection: &CapsFeaturesRef| collection.size(),
+    |collection: &CapsFeaturesRef, idx: usize| unsafe {
+        let feature = ffi::gst_caps_features_get_nth(collection.as_ptr(), idx as u32);
+        glib::GStr::from_ptr(feature)
     }
-}
-
-impl<'a> Iterator for Iter<'a> {
-    type Item = &'a glib::GStr;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        if self.idx >= self.n_features {
-            return None;
-        }
-
-        unsafe {
-            let feature =
-                ffi::gst_caps_features_get_nth(self.caps_features.as_ptr(), self.idx as u32);
-            debug_assert!(!feature.is_null());
-
-            self.idx += 1;
-
-            // Safety: we can return a GStr based on the feature here because the lifetime
-            // of the returned Item is constrained by the underlying CapsFeatureRef.
-            Some(glib::GStr::from_ptr(feature))
-        }
-    }
-
-    fn size_hint(&self) -> (usize, Option<usize>) {
-        let remaining = self.n_features - self.idx;
-
-        (remaining, Some(remaining))
-    }
-
-    fn count(self) -> usize {
-        self.n_features - self.idx
-    }
-
-    // checker-ignore-item
-    fn nth(&mut self, n: usize) -> Option<Self::Item> {
-        let (end, overflow) = self.idx.overflowing_add(n);
-        if end >= self.n_features || overflow {
-            self.idx = self.n_features;
-            None
-        } else {
-            unsafe {
-                self.idx = end + 1;
-                let feature =
-                    ffi::gst_caps_features_get_nth(self.caps_features.as_ptr(), end as u32);
-                debug_assert!(!feature.is_null());
-
-                // Safety: we can return a GStr based on the feature here because the lifetime
-                // of the returned Item is constrained by the underlying CapsFeatureRef.
-                Some(glib::GStr::from_ptr(feature))
-            }
-        }
-    }
-
-    fn last(self) -> Option<Self::Item> {
-        if self.idx == self.n_features {
-            None
-        } else {
-            unsafe {
-                let feature = ffi::gst_caps_features_get_nth(
-                    self.caps_features.as_ptr(),
-                    self.n_features as u32 - 1,
-                );
-                debug_assert!(!feature.is_null());
-
-                // Safety: we can return a GStr based on the feature here because the lifetime
-                // of the returned Item is constrained by the underlying CapsFeatureRef.
-                Some(glib::GStr::from_ptr(feature))
-            }
-        }
-    }
-}
-
-impl DoubleEndedIterator for Iter<'_> {
-    fn next_back(&mut self) -> Option<Self::Item> {
-        if self.idx == self.n_features {
-            return None;
-        }
-
-        self.n_features -= 1;
-
-        unsafe {
-            let feature =
-                ffi::gst_caps_features_get_nth(self.caps_features.as_ptr(), self.n_features as u32);
-            debug_assert!(!feature.is_null());
-
-            // Safety: we can return a GStr based on the feature here because the lifetime
-            // of the returned Item is constrained by the underlying CapsFeatureRef.
-            Some(glib::GStr::from_ptr(feature))
-        }
-    }
-
-    fn nth_back(&mut self, n: usize) -> Option<Self::Item> {
-        let (end, overflow) = self.n_features.overflowing_sub(n);
-        if end <= self.idx || overflow {
-            self.idx = self.n_features;
-            None
-        } else {
-            unsafe {
-                self.n_features = end - 1;
-                let feature = ffi::gst_caps_features_get_nth(
-                    self.caps_features.as_ptr(),
-                    self.n_features as u32,
-                );
-                debug_assert!(!feature.is_null());
-
-                // Safety: we can return a GStr based on the feature here because the lifetime
-                // of the returned Item is constrained by the underlying CapsFeatureRef.
-                Some(glib::GStr::from_ptr(feature))
-            }
-        }
-    }
-}
-
-impl ExactSizeIterator for Iter<'_> {}
-
-impl std::iter::FusedIterator for Iter<'_> {}
+);
 
 impl<'a> IntoIterator for &'a CapsFeaturesRef {
     type IntoIter = Iter<'a>;

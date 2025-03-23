@@ -10,93 +10,18 @@ use glib::{
 
 use crate::{ffi, Stream, StreamCollection};
 
-#[derive(Debug)]
-pub struct Iter<'a> {
-    collection: &'a StreamCollection,
-    idx: usize,
-    size: usize,
-}
-
-impl<'a> Iter<'a> {
-    fn new(collection: &'a StreamCollection) -> Iter<'a> {
-        skip_assert_initialized!();
-        Iter {
-            collection,
-            idx: 0,
-            size: collection.len(),
-        }
+crate::utils::define_fixed_size_iter!(
+    Iter,
+    &'a StreamCollection,
+    Stream,
+    |collection: &StreamCollection| collection.len(),
+    |collection: &StreamCollection, idx: usize| unsafe {
+        from_glib_none(ffi::gst_stream_collection_get_stream(
+            collection.to_glib_none().0,
+            idx as u32,
+        ))
     }
-}
-
-impl Iterator for Iter<'_> {
-    type Item = Stream;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        if self.idx >= self.size {
-            return None;
-        }
-
-        let item = self.collection.stream(self.idx as u32).unwrap();
-        self.idx += 1;
-
-        Some(item)
-    }
-
-    fn size_hint(&self) -> (usize, Option<usize>) {
-        let remaining = self.size - self.idx;
-
-        (remaining, Some(remaining))
-    }
-
-    fn count(self) -> usize {
-        self.size - self.idx
-    }
-
-    fn nth(&mut self, n: usize) -> Option<Self::Item> {
-        let (end, overflow) = self.idx.overflowing_add(n);
-        if end >= self.size || overflow {
-            self.idx = self.size;
-            None
-        } else {
-            self.idx = end + 1;
-            Some(self.collection.stream(end as u32).unwrap())
-        }
-    }
-
-    fn last(self) -> Option<Self::Item> {
-        if self.idx == self.size {
-            None
-        } else {
-            Some(self.collection.stream(self.size as u32 - 1).unwrap())
-        }
-    }
-}
-
-impl DoubleEndedIterator for Iter<'_> {
-    fn next_back(&mut self) -> Option<Self::Item> {
-        if self.idx == self.size {
-            return None;
-        }
-
-        self.size -= 1;
-        Some(self.collection.stream(self.size as u32).unwrap())
-    }
-
-    fn nth_back(&mut self, n: usize) -> Option<Self::Item> {
-        let (end, overflow) = self.size.overflowing_sub(n);
-        if end <= self.idx || overflow {
-            self.idx = self.size;
-            None
-        } else {
-            self.size = end - 1;
-            Some(self.collection.stream(self.size as u32).unwrap())
-        }
-    }
-}
-
-impl ExactSizeIterator for Iter<'_> {}
-
-impl std::iter::FusedIterator for Iter<'_> {}
+);
 
 #[derive(Debug, Clone)]
 #[must_use = "The builder must be built to be used"]
