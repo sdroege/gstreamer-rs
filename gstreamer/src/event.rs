@@ -3090,14 +3090,7 @@ impl<'a> SelectStreamsBuilder<'a> {
         skip_assert_initialized!();
         Self {
             builder: EventBuilder::new(),
-            streams: streams
-                .into_iter()
-                .map(|s| unsafe {
-                    // See https://github.com/gtk-rs/gtk-rs-core/pull/1688
-                    let ptr = glib::ffi::g_strndup(s.as_ptr() as *const _, s.len());
-                    mem::transmute::<*const _, glib::GStringPtr>(ptr)
-                })
-                .collect(),
+            streams: streams.into_iter().map(glib::GStringPtr::from).collect(),
         }
     }
 

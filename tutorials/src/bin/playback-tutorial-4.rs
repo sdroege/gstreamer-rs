@@ -121,10 +121,7 @@ fn tutorial_main() -> Result<(), Error> {
         let mut graph = vec![b' '; GRAPH_LENGTH];
         let mut buffering = gst::query::Buffering::new(gst::Format::Percent);
         if pipeline.query(&mut buffering) {
-            let ranges = buffering.ranges();
-            for range in &ranges {
-                let start = range.0;
-                let stop = range.1;
+            for (start, stop) in buffering.ranges() {
                 let start = if let GFV::Percent(start) = start {
                     start.unwrap()
                 } else {

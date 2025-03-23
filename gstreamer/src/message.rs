@@ -6,6 +6,7 @@ use glib::{
     translate::*,
     value::{SendValue, ValueType},
 };
+use smallvec::SmallVec;
 
 use crate::{
     ffi,
@@ -824,12 +825,12 @@ declare_concrete_message!(Tag, T);
 impl Tag {
     #[doc(alias = "gst_message_new_tag")]
     #[allow(clippy::new_ret_no_self)]
-    pub fn new(tags: &TagList) -> Message {
+    pub fn new(tags: TagList) -> Message {
         skip_assert_initialized!();
         Self::builder(tags).build()
     }
 
-    pub fn builder(tags: &TagList) -> TagBuilder {
+    pub fn builder<'a>(tags: TagList) -> TagBuilder<'a> {
         assert_initialized_main_thread!();
         TagBuilder::new(tags)
     }
@@ -2474,29 +2475,26 @@ impl StreamsSelected {
     #[doc(alias = "get_streams")]
     #[doc(alias = "gst_message_streams_selected_get_size")]
     #[doc(alias = "gst_message_streams_selected_get_stream")]
-    pub fn streams(&self) -> Vec<crate::Stream> {
-        unsafe {
-            let n = ffi::gst_message_streams_selected_get_size(self.as_mut_ptr());
-
-            (0..n)
-                .map(|i| {
-                    from_glib_full(ffi::gst_message_streams_selected_get_stream(
-                        self.as_mut_ptr(),
-                        i,
-                    ))
-                })
-                .collect()
-        }
+    pub fn streams(&self) -> StreamsSelectedIter<'_> {
+        StreamsSelectedIter::new(self)
     }
 }
 
 impl std::fmt::Debug for StreamsSelected {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        struct StreamsDebug<'a>(&'a StreamsSelected);
+
+        impl std::fmt::Debug for StreamsDebug<'_> {
+            fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+                f.debug_list().entries(self.0.streams()).finish()
+            }
+        }
+
         f.debug_struct("StreamsSelected")
             .field("structure", &self.message().structure())
             .field("source", &self.src().map(|obj| (obj, obj.name())))
             .field("stream-collection", &self.stream_collection())
-            .field("streams", &self.streams())
+            .field("streams", &StreamsDebug(self))
             .finish()
     }
 }
@@ -2506,6 +2504,21 @@ impl std::fmt::Debug for StreamsSelected<Message> {
         StreamsSelected::<MessageRef>::fmt(self, f)
     }
 }
+
+crate::utils::define_fixed_size_iter!(
+    StreamsSelectedIter,
+    &'a StreamsSelected,
+    crate::Stream,
+    |collection: &StreamsSelected| unsafe {
+        ffi::gst_message_streams_selected_get_size(collection.as_mut_ptr()) as usize
+    },
+    |collection: &StreamsSelected, idx: usize| unsafe {
+        from_glib_full(ffi::gst_message_streams_selected_get_stream(
+            collection.as_mut_ptr(),
+            idx as u32,
+        ))
+    }
+);
 
 declare_concrete_message!(Redirect, T);
 impl Redirect {
@@ -2524,47 +2537,25 @@ impl Redirect {
     #[doc(alias = "get_entries")]
     #[doc(alias = "gst_message_get_num_redirect_entries")]
     #[doc(alias = "gst_message_parse_redirect_entry")]
-    pub fn entries(&self) -> Vec<(&str, Option<TagList>, Option<&StructureRef>)> {
-        unsafe {
-            let n = ffi::gst_message_get_num_redirect_entries(self.as_mut_ptr());
-
-            (0..n)
-                .map(|i| {
-                    let mut location = ptr::null();
-                    let mut tags = ptr::null_mut();
-                    let mut structure = ptr::null();
-
-                    ffi::gst_message_parse_redirect_entry(
-                        self.as_mut_ptr(),
-                        i,
-                        &mut location,
-                        &mut tags,
-                        &mut structure,
-                    );
-
-                    let structure = if structure.is_null() {
-                        None
-                    } else {
-                        Some(StructureRef::from_glib_borrow(structure))
-                    };
-
-                    (
-                        CStr::from_ptr(location).to_str().unwrap(),
-                        from_glib_none(tags),
-                        structure,
-                    )
-                })
-                .collect()
-        }
+    pub fn entries(&self) -> RedirectEntriesIter<'_> {
+        RedirectEntriesIter::new(self)
     }
 }
 
 impl std::fmt::Debug for Redirect {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        struct EntriesDebug<'a>(&'a Redirect);
+
+        impl std::fmt::Debug for EntriesDebug<'_> {
+            fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+                f.debug_list().entries(self.0.entries()).finish()
+            }
+        }
+
         f.debug_struct("Redirect")
             .field("structure", &self.message().structure())
             .field("source", &self.src().map(|obj| (obj, obj.name())))
-            .field("entries", &self.entries())
+            .field("entries", &EntriesDebug(self))
             .finish()
     }
 }
@@ -2574,6 +2565,40 @@ impl std::fmt::Debug for Redirect<Message> {
         Redirect::<MessageRef>::fmt(self, f)
     }
 }
+
+crate::utils::define_fixed_size_iter!(
+    RedirectEntriesIter,
+    &'a Redirect,
+    (&'a str, Option<TagList>, Option<&'a StructureRef>),
+    |collection: &Redirect| unsafe {
+        ffi::gst_message_get_num_redirect_entries(collection.as_mut_ptr()) as usize
+    },
+    |collection: &Redirect, idx: usize| unsafe {
+        let mut location = ptr::null();
+        let mut tags = ptr::null_mut();
+        let mut structure = ptr::null();
+
+        ffi::gst_message_parse_redirect_entry(
+            collection.as_mut_ptr(),
+            idx,
+            &mut location,
+            &mut tags,
+            &mut structure,
+        );
+
+        let structure = if structure.is_null() {
+            None
+        } else {
+            Some(StructureRef::from_glib_borrow(structure))
+        };
+
+        (
+            CStr::from_ptr(location).to_str().unwrap(),
+            from_glib_none(tags),
+            structure,
+        )
+    }
+);
 
 #[cfg(feature = "v1_16")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
@@ -3153,21 +3178,21 @@ impl<'a> InfoBuilder<'a> {
 #[must_use = "The builder must be built to be used"]
 pub struct TagBuilder<'a> {
     builder: MessageBuilder<'a>,
-    tags: &'a TagList,
+    tags: Option<TagList>,
 }
 
 impl<'a> TagBuilder<'a> {
-    fn new(tags: &'a TagList) -> Self {
+    fn new(tags: TagList) -> Self {
         skip_assert_initialized!();
         Self {
             builder: MessageBuilder::new(),
-            tags,
+            tags: Some(tags),
         }
     }
 
-    message_builder_generic_impl!(|s: &Self, src| ffi::gst_message_new_tag(
+    message_builder_generic_impl!(|s: &mut Self, src| ffi::gst_message_new_tag(
         src,
-        s.tags.to_glib_full()
+        s.tags.take().into_glib_ptr()
     ));
 }
 
@@ -4143,7 +4168,7 @@ impl<'a> StreamCollectionBuilder<'a> {
 pub struct StreamsSelectedBuilder<'a> {
     builder: MessageBuilder<'a>,
     collection: &'a crate::StreamCollection,
-    streams: Option<Vec<crate::Stream>>,
+    streams: SmallVec<[crate::Stream; 8]>,
 }
 
 impl<'a> StreamsSelectedBuilder<'a> {
@@ -4152,7 +4177,7 @@ impl<'a> StreamsSelectedBuilder<'a> {
         Self {
             builder: MessageBuilder::new(),
             collection,
-            streams: None,
+            streams: SmallVec::default(),
         }
     }
 
@@ -4161,12 +4186,10 @@ impl<'a> StreamsSelectedBuilder<'a> {
         streams: impl IntoIterator<Item = impl std::borrow::Borrow<crate::Stream>>,
     ) -> Self {
         Self {
-            streams: Some(
-                streams
-                    .into_iter()
-                    .map(|s| s.borrow().clone())
-                    .collect::<Vec<_>>(),
-            ),
+            streams: streams
+                .into_iter()
+                .map(|s| s.borrow().clone())
+                .collect::<SmallVec<_>>(),
             ..self
         }
     }
@@ -4208,10 +4231,8 @@ impl<'a> StreamsSelectedBuilder<'a> {
 
     message_builder_generic_impl!(|s: &mut Self, src| {
         let msg = ffi::gst_message_new_streams_selected(src, s.collection.to_glib_none().0);
-        if let Some(ref streams) = s.streams {
-            for stream in streams {
-                ffi::gst_message_streams_selected_add(msg, stream.to_glib_none().0);
-            }
+        for stream in &s.streams {
+            ffi::gst_message_streams_selected_add(msg, stream.to_glib_none().0);
         }
         msg
     });
@@ -4221,10 +4242,10 @@ impl<'a> StreamsSelectedBuilder<'a> {
 pub struct RedirectBuilder<'a> {
     builder: MessageBuilder<'a>,
     location: &'a str,
-    tag_list: Option<&'a TagList>,
+    tag_list: Option<TagList>,
     entry_struct: Option<Structure>,
     #[allow(clippy::type_complexity)]
-    entries: Option<&'a [(&'a str, Option<&'a TagList>, Option<&'a Structure>)]>,
+    entries: SmallVec<[(&'a str, Option<TagList>, Option<Structure>); 4]>,
 }
 
 impl<'a> RedirectBuilder<'a> {
@@ -4235,18 +4256,18 @@ impl<'a> RedirectBuilder<'a> {
             location,
             tag_list: None,
             entry_struct: None,
-            entries: None,
+            entries: SmallVec::default(),
         }
     }
 
-    pub fn tag_list(self, tag_list: &'a TagList) -> Self {
+    pub fn tag_list(self, tag_list: TagList) -> Self {
         Self {
             tag_list: Some(tag_list),
             ..self
         }
     }
 
-    pub fn tag_list_if(self, tag_list: &'a TagList, predicate: bool) -> Self {
+    pub fn tag_list_if(self, tag_list: TagList, predicate: bool) -> Self {
         if predicate {
             self.tag_list(tag_list)
         } else {
@@ -4254,7 +4275,7 @@ impl<'a> RedirectBuilder<'a> {
         }
     }
 
-    pub fn tag_list_if_some(self, tag_list: Option<&'a TagList>) -> Self {
+    pub fn tag_list_if_some(self, tag_list: Option<TagList>) -> Self {
         if let Some(tag_list) = tag_list {
             self.tag_list(tag_list)
         } else {
@@ -4287,11 +4308,11 @@ impl<'a> RedirectBuilder<'a> {
 
     pub fn entries(
         self,
-        entries: &'a [(&'a str, Option<&'a TagList>, Option<&'a Structure>)],
+        entries: impl IntoIterator<Item = (&'a str, Option<TagList>, Option<Structure>)>,
     ) -> Self {
         skip_assert_initialized!();
         Self {
-            entries: Some(entries),
+            entries: entries.into_iter().collect(),
             ..self
         }
     }
@@ -4299,7 +4320,7 @@ impl<'a> RedirectBuilder<'a> {
     #[allow(clippy::type_complexity)]
     pub fn entries_if(
         self,
-        entries: &'a [(&'a str, Option<&'a TagList>, Option<&'a Structure>)],
+        entries: impl IntoIterator<Item = (&'a str, Option<TagList>, Option<Structure>)>,
         predicate: bool,
     ) -> Self {
         if predicate {
@@ -4312,7 +4333,7 @@ impl<'a> RedirectBuilder<'a> {
     #[allow(clippy::type_complexity)]
     pub fn entries_if_some(
         self,
-        entries: Option<&'a [(&'a str, Option<&'a TagList>, Option<&'a Structure>)]>,
+        entries: Option<impl IntoIterator<Item = (&'a str, Option<TagList>, Option<Structure>)>>,
     ) -> Self {
         if let Some(entries) = entries {
             self.entries(entries)
@@ -4323,33 +4344,21 @@ impl<'a> RedirectBuilder<'a> {
 
     message_builder_generic_impl!(|s: &mut Self, src| {
         let entry_struct = s.entry_struct.take();
-        let entry_struct_ptr = if let Some(entry_struct) = entry_struct {
-            entry_struct.into_glib_ptr()
-        } else {
-            ptr::null_mut()
-        };
+        let tag_list = s.tag_list.take();
 
         let msg = ffi::gst_message_new_redirect(
             src,
             s.location.to_glib_none().0,
-            s.tag_list.to_glib_full(),
-            entry_struct_ptr,
+            tag_list.into_glib_ptr(),
+            entry_struct.into_glib_ptr(),
         );
-        if let Some(entries) = s.entries {
-            for &(location, tag_list, entry_struct) in entries {
-                let entry_struct = entry_struct.cloned();
-                let entry_struct_ptr = if let Some(entry_struct) = entry_struct {
-                    entry_struct.into_glib_ptr()
-                } else {
-                    ptr::null_mut()
-                };
-                ffi::gst_message_add_redirect_entry(
-                    msg,
-                    location.to_glib_none().0,
-                    tag_list.to_glib_full(),
-                    entry_struct_ptr,
-                );
-            }
+        for (location, tag_list, entry_struct) in mem::take(&mut s.entries) {
+            ffi::gst_message_add_redirect_entry(
+                msg,
+                location.to_glib_none().0,
+                tag_list.into_glib_ptr(),
+                entry_struct.into_glib_ptr(),
+            );
         }
         msg
     });

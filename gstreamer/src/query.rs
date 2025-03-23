@@ -9,6 +9,7 @@ use std::{
 };
 
 use glib::{object::IsA, translate::*};
+use smallvec::SmallVec;
 
 use crate::{
     ffi,
@@ -791,28 +792,18 @@ impl Formats {
     #[doc(alias = "get_result")]
     #[doc(alias = "gst_query_parse_n_formats")]
     #[doc(alias = "gst_query_parse_nth_format")]
-    pub fn result(&self) -> Vec<crate::Format> {
-        unsafe {
-            let mut n = mem::MaybeUninit::uninit();
-            ffi::gst_query_parse_n_formats(self.as_mut_ptr(), n.as_mut_ptr());
-            let n = n.assume_init();
-            let mut res = Vec::with_capacity(n as usize);
-
-            for i in 0..n {
-                let mut fmt = mem::MaybeUninit::uninit();
-                ffi::gst_query_parse_nth_format(self.as_mut_ptr(), i, fmt.as_mut_ptr());
-                res.push(from_glib(fmt.assume_init()));
-            }
-
-            res
-        }
+    pub fn result(&self) -> FormatsIter<'_> {
+        FormatsIter::new(self)
     }
 
     #[doc(alias = "gst_query_set_formats")]
     #[doc(alias = "gst_query_set_formatsv")]
-    pub fn set(&mut self, formats: &[crate::Format]) {
+    pub fn set(&mut self, formats: impl IntoIterator<Item = crate::Format>) {
         unsafe {
-            let v: Vec<_> = formats.iter().map(|f| f.into_glib()).collect();
+            let v = formats
+                .into_iter()
+                .map(|f| f.into_glib())
+                .collect::<SmallVec<[_; 8]>>();
             ffi::gst_query_set_formatsv(self.as_mut_ptr(), v.len() as i32, v.as_ptr() as *mut _);
         }
     }
@@ -820,9 +811,17 @@ impl Formats {
 
 impl std::fmt::Debug for Formats {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        struct FormatsDebug<'a>(&'a Formats);
+
+        impl std::fmt::Debug for FormatsDebug<'_> {
+            fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+                f.debug_list().entries(self.0.result()).finish()
+            }
+        }
+
         f.debug_struct("Formats")
             .field("structure", &self.query().structure())
-            .field("result", &self.result())
+            .field("result", &FormatsDebug(self))
             .finish()
     }
 }
@@ -832,6 +831,22 @@ impl std::fmt::Debug for Formats<Query> {
         Formats::<QueryRef>::fmt(self, f)
     }
 }
+
+crate::utils::define_fixed_size_iter!(
+    FormatsIter,
+    &'a Formats,
+    crate::Format,
+    |collection: &Formats| unsafe {
+        let mut n = mem::MaybeUninit::uninit();
+        ffi::gst_query_parse_n_formats(collection.as_mut_ptr(), n.as_mut_ptr());
+        n.assume_init() as usize
+    },
+    |collection: &Formats, idx: usize| unsafe {
+        let mut fmt = mem::MaybeUninit::uninit();
+        ffi::gst_query_parse_nth_format(collection.as_mut_ptr(), idx as u32, fmt.as_mut_ptr());
+        from_glib(fmt.assume_init())
+    }
+);
 
 declare_concrete_query!(Buffering, T);
 impl Buffering<Query> {
@@ -935,39 +950,8 @@ impl Buffering {
     #[doc(alias = "get_ranges")]
     #[doc(alias = "gst_query_get_n_buffering_ranges")]
     #[doc(alias = "gst_query_parse_nth_buffering_range")]
-    pub fn ranges(&self) -> Vec<(GenericFormattedValue, GenericFormattedValue)> {
-        unsafe {
-            let mut fmt = mem::MaybeUninit::uninit();
-            ffi::gst_query_parse_buffering_range(
-                self.as_mut_ptr(),
-                fmt.as_mut_ptr(),
-                ptr::null_mut(),
-                ptr::null_mut(),
-                ptr::null_mut(),
-            );
-            let fmt = from_glib(fmt.assume_init());
-
-            let n = ffi::gst_query_get_n_buffering_ranges(self.as_mut_ptr());
-            let mut res = Vec::with_capacity(n as usize);
-            for i in 0..n {
-                let mut start = mem::MaybeUninit::uninit();
-                let mut stop = mem::MaybeUninit::uninit();
-                let s: bool = from_glib(ffi::gst_query_parse_nth_buffering_range(
-                    self.as_mut_ptr(),
-                    i,
-                    start.as_mut_ptr(),
-                    stop.as_mut_ptr(),
-                ));
-                if s {
-                    res.push((
-                        GenericFormattedValue::new(fmt, start.assume_init()),
-                        GenericFormattedValue::new(fmt, stop.assume_init()),
-                    ));
-                }
-            }
-
-            res
-        }
+    pub fn ranges(&self) -> RangesIter<'_> {
+        RangesIter::new(self)
     }
 
     #[doc(alias = "gst_query_set_buffering_percent")]
@@ -1021,12 +1005,12 @@ impl Buffering {
     #[doc(alias = "gst_query_add_buffering_range")]
     pub fn add_buffering_ranges<V: FormattedValue, U: CompatibleFormattedValue<V> + Copy>(
         &mut self,
-        ranges: &[(V, U)],
+        ranges: impl IntoIterator<Item = (V, U)>,
     ) {
         unsafe {
             let fmt = self.format();
 
-            for &(start, stop) in ranges {
+            for (start, stop) in ranges.into_iter() {
                 assert_eq!(start.format(), fmt);
                 let stop = stop.try_into_checked(start).unwrap();
                 ffi::gst_query_add_buffering_range(
@@ -1041,11 +1025,19 @@ impl Buffering {
 
 impl std::fmt::Debug for Buffering {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        struct RangesDebug<'a>(&'a Buffering);
+
+        impl std::fmt::Debug for RangesDebug<'_> {
+            fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+                f.debug_list().entries(self.0.ranges()).finish()
+            }
+        }
+
         f.debug_struct("Buffering")
             .field("structure", &self.query().structure())
             .field("format", &self.format())
             .field("percent", &self.percent())
-            .field("range", &self.range())
+            .field("range", &RangesDebug(self))
             .finish()
     }
 }
@@ -1055,6 +1047,40 @@ impl std::fmt::Debug for Buffering<Query> {
         Buffering::<QueryRef>::fmt(self, f)
     }
 }
+
+crate::utils::define_fixed_size_iter!(
+    RangesIter,
+    &'a Buffering,
+    (GenericFormattedValue, GenericFormattedValue),
+    |collection: &Buffering| unsafe {
+        ffi::gst_query_get_n_buffering_ranges(collection.as_mut_ptr()) as usize
+    },
+    |collection: &Buffering, idx: usize| unsafe {
+        let mut fmt = mem::MaybeUninit::uninit();
+        ffi::gst_query_parse_buffering_range(
+            collection.as_mut_ptr(),
+            fmt.as_mut_ptr(),
+            ptr::null_mut(),
+            ptr::null_mut(),
+            ptr::null_mut(),
+        );
+        let fmt = from_glib(fmt.assume_init());
+
+        let mut start = mem::MaybeUninit::uninit();
+        let mut stop = mem::MaybeUninit::uninit();
+        ffi::gst_query_parse_nth_buffering_range(
+            collection.as_mut_ptr(),
+            idx as u32,
+            start.as_mut_ptr(),
+            stop.as_mut_ptr(),
+        );
+
+        (
+            GenericFormattedValue::new(fmt, start.assume_init()),
+            GenericFormattedValue::new(fmt, stop.assume_init()),
+        )
+    }
+);
 
 declare_concrete_query!(Custom, T);
 impl Custom<Query> {
@@ -1222,83 +1248,22 @@ impl Allocation {
     #[doc(alias = "gst_allocation_params")]
     #[doc(alias = "gst_query_get_n_allocation_params")]
     #[doc(alias = "gst_query_parse_nth_allocation_param")]
-    pub fn allocation_params(&self) -> Vec<(Option<crate::Allocator>, crate::AllocationParams)> {
-        unsafe {
-            let n = ffi::gst_query_get_n_allocation_params(self.as_mut_ptr());
-            let mut params = Vec::with_capacity(n as usize);
-            for i in 0..n {
-                let mut allocator = ptr::null_mut();
-                let mut p = mem::MaybeUninit::uninit();
-                ffi::gst_query_parse_nth_allocation_param(
-                    self.as_mut_ptr(),
-                    i,
-                    &mut allocator,
-                    p.as_mut_ptr(),
-                );
-                params.push((from_glib_full(allocator), from_glib(p.assume_init())));
-            }
-
-            params
-        }
+    pub fn allocation_params(&self) -> AllocationParamsIter<'_> {
+        AllocationParamsIter::new(self)
     }
 
     #[doc(alias = "get_allocation_pools")]
     #[doc(alias = "gst_query_get_n_allocation_pools")]
     #[doc(alias = "gst_query_parse_nth_allocation_pool")]
-    pub fn allocation_pools(&self) -> Vec<(Option<crate::BufferPool>, u32, u32, u32)> {
-        unsafe {
-            let n = ffi::gst_query_get_n_allocation_pools(self.as_mut_ptr());
-            let mut pools = Vec::with_capacity(n as usize);
-            for i in 0..n {
-                let mut pool = ptr::null_mut();
-                let mut size = mem::MaybeUninit::uninit();
-                let mut min_buffers = mem::MaybeUninit::uninit();
-                let mut max_buffers = mem::MaybeUninit::uninit();
-
-                ffi::gst_query_parse_nth_allocation_pool(
-                    self.0.as_mut_ptr(),
-                    i,
-                    &mut pool,
-                    size.as_mut_ptr(),
-                    min_buffers.as_mut_ptr(),
-                    max_buffers.as_mut_ptr(),
-                );
-                pools.push((
-                    from_glib_full(pool),
-                    size.assume_init(),
-                    min_buffers.assume_init(),
-                    max_buffers.assume_init(),
-                ));
-            }
-
-            pools
-        }
+    pub fn allocation_pools(&self) -> AllocationPoolsIter<'_> {
+        AllocationPoolsIter::new(self)
     }
 
     #[doc(alias = "get_allocation_metas")]
     #[doc(alias = "gst_query_get_n_allocation_metas")]
     #[doc(alias = "gst_query_parse_nth_allocation_meta")]
-    pub fn allocation_metas(&self) -> Vec<(glib::Type, Option<&crate::StructureRef>)> {
-        unsafe {
-            let n = ffi::gst_query_get_n_allocation_metas(self.0.as_mut_ptr());
-            let mut metas = Vec::with_capacity(n as usize);
-            for i in 0..n {
-                let mut structure = ptr::null();
-
-                let api =
-                    ffi::gst_query_parse_nth_allocation_meta(self.as_mut_ptr(), i, &mut structure);
-                metas.push((
-                    from_glib(api),
-                    if structure.is_null() {
-                        None
-                    } else {
-                        Some(crate::StructureRef::from_glib_borrow(structure))
-                    },
-                ));
-            }
-
-            metas
-        }
+    pub fn allocation_metas(&self) -> AllocationMetasIter<'_> {
+        AllocationMetasIter::new(self)
     }
 
     #[doc(alias = "gst_query_find_allocation_meta")]
@@ -1443,13 +1408,38 @@ impl Allocation {
 impl std::fmt::Debug for Allocation {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         let (caps, need_pool) = self.get();
+
+        struct AllocationParamsDebug<'a>(&'a Allocation);
+
+        impl std::fmt::Debug for AllocationParamsDebug<'_> {
+            fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+                f.debug_list().entries(self.0.allocation_params()).finish()
+            }
+        }
+
+        struct AllocationPoolsDebug<'a>(&'a Allocation);
+
+        impl std::fmt::Debug for AllocationPoolsDebug<'_> {
+            fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+                f.debug_list().entries(self.0.allocation_pools()).finish()
+            }
+        }
+
+        struct AllocationMetasDebug<'a>(&'a Allocation);
+
+        impl std::fmt::Debug for AllocationMetasDebug<'_> {
+            fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+                f.debug_list().entries(self.0.allocation_metas()).finish()
+            }
+        }
+
         f.debug_struct("Allocation")
             .field("structure", &self.query().structure())
             .field("caps", &caps)
             .field("need-pool", &need_pool)
-            .field("allocation-params", &self.allocation_params())
-            .field("allocation-pools", &self.allocation_pools())
-            .field("allocation-metas", &self.allocation_metas())
+            .field("allocation-params", &AllocationParamsDebug(self))
+            .field("allocation-pools", &AllocationPoolsDebug(self))
+            .field("allocation-metas", &AllocationMetasDebug(self))
             .finish()
     }
 }
@@ -1459,6 +1449,84 @@ impl std::fmt::Debug for Allocation<Query> {
         Allocation::<QueryRef>::fmt(self, f)
     }
 }
+
+crate::utils::define_fixed_size_iter!(
+    AllocationParamsIter,
+    &'a Allocation,
+    (Option<crate::Allocator>, crate::AllocationParams),
+    |collection: &Allocation| unsafe {
+        ffi::gst_query_get_n_allocation_params(collection.as_mut_ptr()) as usize
+    },
+    |collection: &Allocation, idx: usize| unsafe {
+        let mut allocator = ptr::null_mut();
+        let mut p = mem::MaybeUninit::uninit();
+        ffi::gst_query_parse_nth_allocation_param(
+            collection.as_mut_ptr(),
+            idx as u32,
+            &mut allocator,
+            p.as_mut_ptr(),
+        );
+        (from_glib_full(allocator), from_glib(p.assume_init()))
+    }
+);
+
+crate::utils::define_fixed_size_iter!(
+    AllocationPoolsIter,
+    &'a Allocation,
+    (Option<crate::BufferPool>, u32, u32, u32),
+    |collection: &Allocation| unsafe {
+        ffi::gst_query_get_n_allocation_pools(collection.as_mut_ptr()) as usize
+    },
+    |collection: &Allocation, idx: usize| unsafe {
+        let mut pool = ptr::null_mut();
+        let mut size = mem::MaybeUninit::uninit();
+        let mut min_buffers = mem::MaybeUninit::uninit();
+        let mut max_buffers = mem::MaybeUninit::uninit();
+
+        ffi::gst_query_parse_nth_allocation_pool(
+            collection.as_mut_ptr(),
+            idx as u32,
+            &mut pool,
+            size.as_mut_ptr(),
+            min_buffers.as_mut_ptr(),
+            max_buffers.as_mut_ptr(),
+        );
+
+        (
+            from_glib_full(pool),
+            size.assume_init(),
+            min_buffers.assume_init(),
+            max_buffers.assume_init(),
+        )
+    }
+);
+
+crate::utils::define_fixed_size_iter!(
+    AllocationMetasIter,
+    &'a Allocation,
+    (glib::Type, Option<&'a crate::StructureRef>),
+    |collection: &Allocation| unsafe {
+        ffi::gst_query_get_n_allocation_metas(collection.as_mut_ptr()) as usize
+    },
+    |collection: &Allocation, idx: usize| unsafe {
+        let mut structure = ptr::null();
+
+        let api = ffi::gst_query_parse_nth_allocation_meta(
+            collection.as_mut_ptr(),
+            idx as u32,
+            &mut structure,
+        );
+
+        (
+            from_glib(api),
+            if structure.is_null() {
+                None
+            } else {
+                Some(crate::StructureRef::from_glib_borrow(structure))
+            },
+        )
+    }
+);
 
 declare_concrete_query!(Scheduling, T);
 impl Scheduling<Query> {
@@ -1504,19 +1572,8 @@ impl Scheduling {
 
     #[doc(alias = "get_scheduling_modes")]
     #[doc(alias = "gst_query_get_n_scheduling_modes")]
-    pub fn scheduling_modes(&self) -> Vec<crate::PadMode> {
-        unsafe {
-            let n = ffi::gst_query_get_n_scheduling_modes(self.as_mut_ptr());
-            let mut res = Vec::with_capacity(n as usize);
-            for i in 0..n {
-                res.push(from_glib(ffi::gst_query_parse_nth_scheduling_mode(
-                    self.as_mut_ptr(),
-                    i,
-                )));
-            }
-
-            res
-        }
+    pub fn scheduling_modes(&self) -> PadModesIter<'_> {
+        PadModesIter::new(self)
     }
 
     #[doc(alias = "get_result")]
@@ -1546,9 +1603,9 @@ impl Scheduling {
     }
 
     #[doc(alias = "gst_query_add_scheduling_mode")]
-    pub fn add_scheduling_modes(&mut self, modes: &[crate::PadMode]) {
+    pub fn add_scheduling_modes(&mut self, modes: impl IntoIterator<Item = crate::PadMode>) {
         unsafe {
-            for mode in modes {
+            for mode in modes.into_iter() {
                 ffi::gst_query_add_scheduling_mode(self.as_mut_ptr(), mode.into_glib());
             }
         }
@@ -1570,10 +1627,18 @@ impl Scheduling {
 
 impl std::fmt::Debug for Scheduling {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        struct PadModesDebug<'a>(&'a Scheduling);
+
+        impl std::fmt::Debug for PadModesDebug<'_> {
+            fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+                f.debug_list().entries(self.0.scheduling_modes()).finish()
+            }
+        }
+
         f.debug_struct("Scheduling")
             .field("structure", &self.query().structure())
             .field("result", &self.result())
-            .field("scheduling-modes", &self.scheduling_modes())
+            .field("scheduling-modes", &PadModesDebug(self))
             .finish()
     }
 }
@@ -1583,6 +1648,21 @@ impl std::fmt::Debug for Scheduling<Query> {
         Scheduling::<QueryRef>::fmt(self, f)
     }
 }
+
+crate::utils::define_fixed_size_iter!(
+    PadModesIter,
+    &'a Scheduling,
+    crate::PadMode,
+    |collection: &Scheduling| unsafe {
+        ffi::gst_query_get_n_scheduling_modes(collection.as_mut_ptr()) as usize
+    },
+    |collection: &Scheduling, idx: usize| unsafe {
+        from_glib(ffi::gst_query_parse_nth_scheduling_mode(
+            collection.as_mut_ptr(),
+            idx as u32,
+        ))
+    }
+);
 
 declare_concrete_query!(AcceptCaps, T);
 impl AcceptCaps<Query> {

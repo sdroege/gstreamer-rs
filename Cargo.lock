@@ -159,7 +159,7 @@ checksum = "f61dac84819c6588b558454b194026eb1f09c293b9036ae9b159e74e73ab6cf9"
 [[package]]
 name = "cairo-rs"
 version = "0.21.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#e6b43dc4d7cdb1ab62d6522c90807e6cd40973aa"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#36ef92912d7363e15ed3524d9195b4bafced27cc"
 dependencies = [
  "bitflags 2.9.0",
  "cairo-sys-rs",
@@ -170,7 +170,7 @@ dependencies = [
 [[package]]
 name = "cairo-sys-rs"
 version = "0.21.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#e6b43dc4d7cdb1ab62d6522c90807e6cd40973aa"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#36ef92912d7363e15ed3524d9195b4bafced27cc"
 dependencies = [
  "glib-sys",
  "libc",
@@ -468,7 +468,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "33d852cb9b869c2a9b3df2f71a3074817f01e1844f839a144f5fcef059a4eb5d"
 dependencies = [
  "libc",
- "windows-sys 0.59.0",
+ "windows-sys 0.52.0",
 ]
 
 [[package]]
@@ -716,7 +716,7 @@ dependencies = [
 [[package]]
 name = "gio"
 version = "0.21.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#e6b43dc4d7cdb1ab62d6522c90807e6cd40973aa"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#36ef92912d7363e15ed3524d9195b4bafced27cc"
 dependencies = [
  "futures-channel",
  "futures-core",
@@ -732,13 +732,13 @@ dependencies = [
 [[package]]
 name = "gio-sys"
 version = "0.21.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#e6b43dc4d7cdb1ab62d6522c90807e6cd40973aa"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#36ef92912d7363e15ed3524d9195b4bafced27cc"
 dependencies = [
  "glib-sys",
  "gobject-sys",
  "libc",
  "system-deps",
- "windows-sys 0.59.0",
+ "windows-sys 0.52.0",
 ]
 
 [[package]]
@@ -761,7 +761,7 @@ dependencies = [
 [[package]]
 name = "glib"
 version = "0.21.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#e6b43dc4d7cdb1ab62d6522c90807e6cd40973aa"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#36ef92912d7363e15ed3524d9195b4bafced27cc"
 dependencies = [
  "bitflags 2.9.0",
  "futures-channel",
@@ -781,7 +781,7 @@ dependencies = [
 [[package]]
 name = "glib-macros"
 version = "0.21.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#e6b43dc4d7cdb1ab62d6522c90807e6cd40973aa"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#36ef92912d7363e15ed3524d9195b4bafced27cc"
 dependencies = [
  "heck",
  "proc-macro-crate",
@@ -793,7 +793,7 @@ dependencies = [
 [[package]]
 name = "glib-sys"
 version = "0.21.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#e6b43dc4d7cdb1ab62d6522c90807e6cd40973aa"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#36ef92912d7363e15ed3524d9195b4bafced27cc"
 dependencies = [
  "libc",
  "system-deps",
@@ -868,7 +868,7 @@ dependencies = [
 [[package]]
 name = "gobject-sys"
 version = "0.21.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#e6b43dc4d7cdb1ab62d6522c90807e6cd40973aa"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#36ef92912d7363e15ed3524d9195b4bafced27cc"
 dependencies = [
  "glib-sys",
  "libc",
@@ -1716,7 +1716,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fc2f4eb4bc735547cfed7c0a4922cbd04a4655978c09b54f1f7b228750664c34"
 dependencies = [
  "cfg-if",
- "windows-targets 0.52.6",
+ "windows-targets 0.48.5",
 ]
 
 [[package]]
@@ -2116,7 +2116,7 @@ dependencies = [
 [[package]]
 name = "pango"
 version = "0.21.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#e6b43dc4d7cdb1ab62d6522c90807e6cd40973aa"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#36ef92912d7363e15ed3524d9195b4bafced27cc"
 dependencies = [
  "gio",
  "glib",
@@ -2127,7 +2127,7 @@ dependencies = [
 [[package]]
 name = "pango-sys"
 version = "0.21.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#e6b43dc4d7cdb1ab62d6522c90807e6cd40973aa"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#36ef92912d7363e15ed3524d9195b4bafced27cc"
 dependencies = [
  "glib-sys",
  "gobject-sys",
@@ -2138,7 +2138,7 @@ dependencies = [
 [[package]]
 name = "pangocairo"
 version = "0.21.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#e6b43dc4d7cdb1ab62d6522c90807e6cd40973aa"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#36ef92912d7363e15ed3524d9195b4bafced27cc"
 dependencies = [
  "cairo-rs",
  "glib",
@@ -2150,7 +2150,7 @@ dependencies = [
 [[package]]
 name = "pangocairo-sys"
 version = "0.21.0"
-source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#e6b43dc4d7cdb1ab62d6522c90807e6cd40973aa"
+source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=main#36ef92912d7363e15ed3524d9195b4bafced27cc"
 dependencies = [
  "cairo-sys-rs",
  "glib-sys",
@@ -2245,9 +2245,9 @@ dependencies = [
 
 [[package]]
 name = "proc-macro-crate"
-version = "3.2.0"
+version = "3.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8ecf48c7ca261d60b74ab1a7b20da18bede46776b2e55535cb958eb595c5fa7b"
+checksum = "edce586971a4dfaa28950c6f18ed55e0406c1ab88bbce2c6f6293a7aaba73d35"
 dependencies = [
  "toml_edit",
 ]
@@ -2331,7 +2331,7 @@ dependencies = [
  "errno",
  "libc",
  "linux-raw-sys",
- "windows-sys 0.59.0",
+ "windows-sys 0.52.0",
 ]
 
 [[package]]
@@ -2486,9 +2486,9 @@ checksum = "a2eb9349b6444b326872e140eb1cf5e7c522154d69e7a0ffb0fb81c06b37543f"
 
 [[package]]
 name = "syn"
-version = "2.0.99"
+version = "2.0.100"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e02e925281e18ffd9d640e234264753c43edc62d64b2d4cf898f1bc5e75f3fc2"
+checksum = "b09a44accad81e1ba1cd74a32461ba89dee89095ba17b32f5d03683b1b1fc2a0"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -2525,7 +2525,7 @@ dependencies = [
  "getrandom 0.3.1",
  "once_cell",
  "rustix",
- "windows-sys 0.59.0",
+ "windows-sys 0.52.0",
 ]
 
 [[package]]
@@ -2920,7 +2920,7 @@ version = "0.1.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cf221c93e13a30d793f7645a0e7762c55d169dbb0a49671918a2319d289b10bb"
 dependencies = [
- "windows-sys 0.59.0",
+ "windows-sys 0.52.0",
 ]
 
 [[package]]
