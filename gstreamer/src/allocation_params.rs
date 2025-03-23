@@ -49,6 +49,26 @@ impl AllocationParams {
         self.0.padding
     }
 
+    #[inline]
+    pub fn set_flags(&mut self, flags: MemoryFlags) {
+        self.0.flags = flags.into_glib();
+    }
+
+    #[inline]
+    pub fn set_align(&mut self, align: usize) {
+        self.0.align = align;
+    }
+
+    #[inline]
+    pub fn set_prefix(&mut self, prefix: usize) {
+        self.0.prefix = prefix;
+    }
+
+    #[inline]
+    pub fn set_padding(&mut self, padding: usize) {
+        self.0.padding = padding;
+    }
+
     pub fn new(flags: MemoryFlags, align: usize, prefix: usize, padding: usize) -> Self {
         assert_initialized_main_thread!();
         let params = unsafe {
