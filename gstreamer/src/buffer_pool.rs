@@ -301,6 +301,24 @@ impl BufferPoolAcquireParams {
     pub fn stop(&self) -> crate::GenericFormattedValue {
         unsafe { crate::GenericFormattedValue::new(from_glib(self.0.format), self.0.stop) }
     }
+
+    pub fn set_flags(&mut self, flags: crate::BufferPoolAcquireFlags) {
+        self.0.flags = flags.into_glib();
+    }
+
+    pub fn set_format(&mut self, format: crate::Format) {
+        self.0.format = format.into_glib();
+    }
+
+    pub fn set_start(&mut self, start: crate::GenericFormattedValue) {
+        assert_eq!(self.format(), start.format());
+        self.0.start = start.value();
+    }
+
+    pub fn set_stop(&mut self, stop: crate::GenericFormattedValue) {
+        assert_eq!(self.format(), stop.format());
+        self.0.stop = stop.value();
+    }
 }
 
 impl PartialEq for BufferPoolAcquireParams {
