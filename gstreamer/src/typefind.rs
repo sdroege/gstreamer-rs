@@ -115,7 +115,29 @@ unsafe extern "C" fn type_find_trampoline<F: Fn(&mut TypeFind) + Send + Sync + '
     user_data: glib::ffi::gpointer,
 ) {
     let func: &F = &*(user_data as *const F);
-    func(&mut *(find as *mut TypeFind));
+
+    let panic_result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        func(&mut *(find as *mut TypeFind));
+    }));
+
+    if let Err(err) = panic_result {
+        let cause = err
+            .downcast_ref::<&str>()
+            .copied()
+            .or_else(|| err.downcast_ref::<String>().map(|s| s.as_str()));
+        if let Some(cause) = cause {
+            crate::error!(
+                crate::CAT_RUST,
+                "Failed to call typefind function due to panic: {}",
+                cause
+            );
+        } else {
+            crate::error!(
+                crate::CAT_RUST,
+                "Failed to call typefind function due to panic"
+            );
+        }
+    }
 }
 
 unsafe extern "C" fn type_find_closure_drop<F: Fn(&mut TypeFind) + Send + Sync + 'static>(
@@ -130,9 +152,36 @@ unsafe extern "C" fn type_find_peek<T: TypeFindImpl + ?Sized>(
     size: u32,
 ) -> *const u8 {
     let find = &mut *(data as *mut &mut T);
-    match find.peek(offset, size) {
-        None => ptr::null(),
-        Some(data) => data.as_ptr(),
+
+    let panic_result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        match find.peek(offset, size) {
+            None => ptr::null(),
+            Some(data) => data.as_ptr(),
+        }
+    }));
+
+    match panic_result {
+        Ok(res) => res,
+        Err(err) => {
+            let cause = err
+                .downcast_ref::<&str>()
+                .copied()
+                .or_else(|| err.downcast_ref::<String>().map(|s| s.as_str()));
+            if let Some(cause) = cause {
+                crate::error!(
+                    crate::CAT_RUST,
+                    "Failed to call typefind peek function due to panic: {}",
+                    cause
+                );
+            } else {
+                crate::error!(
+                    crate::CAT_RUST,
+                    "Failed to call typefind peek function due to panic"
+                );
+            }
+
+            ptr::null()
+        }
     }
 }
 
@@ -142,14 +191,63 @@ unsafe extern "C" fn type_find_suggest<T: TypeFindImpl + ?Sized>(
     caps: *mut ffi::GstCaps,
 ) {
     let find = &mut *(data as *mut &mut T);
-    find.suggest(from_glib(probability as i32), &from_glib_borrow(caps));
+
+    let panic_result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        find.suggest(from_glib(probability as i32), &from_glib_borrow(caps));
+    }));
+
+    if let Err(err) = panic_result {
+        let cause = err
+            .downcast_ref::<&str>()
+            .copied()
+            .or_else(|| err.downcast_ref::<String>().map(|s| s.as_str()));
+        if let Some(cause) = cause {
+            crate::error!(
+                crate::CAT_RUST,
+                "Failed to call typefind suggest function due to panic: {}",
+                cause
+            );
+        } else {
+            crate::error!(
+                crate::CAT_RUST,
+                "Failed to call typefind suggest function due to panic"
+            );
+        }
+    }
 }
 
 unsafe extern "C" fn type_find_get_length<T: TypeFindImpl + ?Sized>(
     data: glib::ffi::gpointer,
 ) -> u64 {
     let find = &*(data as *mut &mut T);
-    find.length().unwrap_or(u64::MAX)
+
+    let panic_result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| {
+        find.length().unwrap_or(u64::MAX)
+    }));
+
+    match panic_result {
+        Ok(res) => res,
+        Err(err) => {
+            let cause = err
+                .downcast_ref::<&str>()
+                .copied()
+                .or_else(|| err.downcast_ref::<String>().map(|s| s.as_str()));
+            if let Some(cause) = cause {
+                crate::error!(
+                    crate::CAT_RUST,
+                    "Failed to call typefind length function due to panic: {}",
+                    cause
+                );
+            } else {
+                crate::error!(
+                    crate::CAT_RUST,
+                    "Failed to call typefind length function due to panic"
+                );
+            }
+
+            u64::MAX
+        }
+    }
 }
 
 #[derive(Debug)]
