@@ -21,7 +21,7 @@ pub static BUFFER_POOL_OPTION_VIDEO_GL_TEXTURE_UPLOAD_META: &glib::GStr = unsafe
 pub static BUFFER_POOL_OPTION_VIDEO_META: &glib::GStr =
     unsafe { glib::GStr::from_utf8_with_nul_unchecked(ffi::GST_BUFFER_POOL_OPTION_VIDEO_META) };
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 #[doc(alias = "GstVideoAlignment")]
 pub struct VideoAlignment(pub(crate) ffi::GstVideoAlignment);
 
