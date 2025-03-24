@@ -31,25 +31,54 @@ impl VideoAlignment {
     pub fn padding_top(&self) -> u32 {
         self.0.padding_top
     }
+
     #[doc(alias = "get_padding_bottom")]
     #[inline]
     pub fn padding_bottom(&self) -> u32 {
         self.0.padding_bottom
     }
+
     #[doc(alias = "get_padding_left")]
     #[inline]
     pub fn padding_left(&self) -> u32 {
         self.0.padding_left
     }
+
     #[doc(alias = "get_padding_right")]
     #[inline]
     pub fn padding_right(&self) -> u32 {
         self.0.padding_right
     }
+
     #[doc(alias = "get_stride_align")]
     #[inline]
-    pub fn stride_align(&self) -> &[u32; ffi::GST_VIDEO_MAX_PLANES as usize] {
+    pub fn stride_align(&self) -> &[u32; crate::VIDEO_MAX_PLANES] {
         &self.0.stride_align
+    }
+
+    #[inline]
+    pub fn set_padding_top(&mut self, padding_top: u32) {
+        self.0.padding_top = padding_top;
+    }
+
+    #[inline]
+    pub fn set_padding_bottom(&mut self, padding_bottom: u32) {
+        self.0.padding_bottom = padding_bottom;
+    }
+
+    #[inline]
+    pub fn set_padding_left(&mut self, padding_left: u32) {
+        self.0.padding_left = padding_left;
+    }
+
+    #[inline]
+    pub fn set_padding_right(&mut self, padding_right: u32) {
+        self.0.padding_right = padding_right;
+    }
+
+    #[inline]
+    pub fn stride_align_mut(&mut self) -> &mut [u32; crate::VIDEO_MAX_PLANES] {
+        &mut self.0.stride_align
     }
 
     pub fn new(
@@ -57,7 +86,7 @@ impl VideoAlignment {
         padding_bottom: u32,
         padding_left: u32,
         padding_right: u32,
-        stride_align: &[u32; ffi::GST_VIDEO_MAX_PLANES as usize],
+        stride_align: &[u32; crate::VIDEO_MAX_PLANES],
     ) -> Self {
         skip_assert_initialized!();
 
