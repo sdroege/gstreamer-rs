@@ -98,6 +98,17 @@ impl From<ffi::GstAllocationParams> for AllocationParams {
     }
 }
 
+impl PartialEq for AllocationParams {
+    fn eq(&self, other: &Self) -> bool {
+        self.flags() == other.flags()
+            && self.align() == other.align()
+            && self.prefix() == other.prefix()
+            && self.padding() == other.padding()
+    }
+}
+
+impl Eq for AllocationParams {}
+
 #[doc(hidden)]
 impl<'a> ToGlibPtr<'a, *const ffi::GstAllocationParams> for AllocationParams {
     type Storage = PhantomData<&'a Self>;
