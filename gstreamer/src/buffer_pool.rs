@@ -323,7 +323,8 @@ impl BufferPoolAcquireParams {
 
 impl PartialEq for BufferPoolAcquireParams {
     fn eq(&self, other: &Self) -> bool {
-        self.format() == other.format()
+        self.flags() == other.flags()
+            && self.format() == other.format()
             && self.start() == other.start()
             && self.stop() == other.stop()
     }
