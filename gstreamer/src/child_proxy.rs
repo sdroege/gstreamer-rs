@@ -4,7 +4,7 @@ use std::ptr;
 
 use glib::{prelude::*, translate::*};
 
-use crate::ChildProxy;
+use crate::{gobject::GObjectExtManualGst, ChildProxy};
 
 mod sealed {
     pub trait Sealed {}
@@ -52,6 +52,13 @@ pub trait ChildProxyExtManual: sealed::Sealed + IsA<ChildProxy> + 'static {
     fn set_child_property(&self, name: &str, value: impl Into<glib::Value>) {
         let (child, pspec) = self.lookup(name).unwrap();
         child.set_property(pspec.name(), value)
+    }
+
+    #[doc(alias = "gst_child_proxy_set")]
+    #[track_caller]
+    fn set_child_property_from_str(&self, name: &str, value: &str) {
+        let (child, pspec) = self.lookup(name).unwrap();
+        child.set_property_from_str(pspec.name(), value)
     }
 
     #[doc(alias = "gst_child_proxy_set_property")]
