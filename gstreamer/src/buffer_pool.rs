@@ -332,6 +332,18 @@ impl PartialEq for BufferPoolAcquireParams {
 
 impl Eq for BufferPoolAcquireParams {}
 
+impl Default for BufferPoolAcquireParams {
+    fn default() -> Self {
+        Self(ffi::GstBufferPoolAcquireParams {
+            format: ffi::GST_FORMAT_UNDEFINED,
+            start: -1,
+            stop: -1,
+            flags: ffi::GST_BUFFER_POOL_ACQUIRE_FLAG_NONE,
+            _gst_reserved: [ptr::null_mut(); 4],
+        })
+    }
+}
+
 #[doc(hidden)]
 impl<'a> ToGlibPtr<'a, *const ffi::GstBufferPoolAcquireParams> for BufferPoolAcquireParams {
     type Storage = PhantomData<&'a Self>;
