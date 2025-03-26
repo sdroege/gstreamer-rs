@@ -115,6 +115,16 @@ impl PartialEq for VideoAlignment {
 
 impl Eq for VideoAlignment {}
 
+impl Default for VideoAlignment {
+    fn default() -> Self {
+        unsafe {
+            let mut align = mem::MaybeUninit::uninit();
+            ffi::gst_video_alignment_reset(align.as_mut_ptr());
+            VideoAlignment(align.assume_init())
+        }
+    }
+}
+
 #[doc(hidden)]
 impl<'a> ToGlibPtr<'a, *const ffi::GstVideoAlignment> for VideoAlignment {
     type Storage = PhantomData<&'a Self>;
