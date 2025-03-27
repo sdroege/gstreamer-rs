@@ -427,6 +427,7 @@ outdated:
 
 coverage:
   allow_failure: true
+  when: 'manual'
   extends:
     - '.cargo test'
     - .img-stable
