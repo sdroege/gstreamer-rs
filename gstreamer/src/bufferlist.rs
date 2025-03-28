@@ -51,8 +51,7 @@ impl BufferListRef {
         unsafe { from_glib_full(ffi::gst_buffer_list_copy_deep(self.as_ptr())) }
     }
 
-    #[doc(alias = "gst_buffer_list_remove")]
-    pub fn remove(&mut self, range: impl RangeBounds<usize>) {
+    fn buffer_range_to_start_end_idx(&self, range: impl RangeBounds<usize>) -> (usize, usize) {
         let n = self.len();
         debug_assert!(n <= u32::MAX as usize);
 
@@ -69,6 +68,13 @@ impl BufferListRef {
             std::ops::Bound::Unbounded => n,
         };
         assert!(end_idx <= n);
+
+        (start_idx, end_idx)
+    }
+
+    #[doc(alias = "gst_buffer_list_remove")]
+    pub fn remove(&mut self, range: impl RangeBounds<usize>) {
+        let (start_idx, end_idx) = self.buffer_range_to_start_end_idx(range);
 
         unsafe {
             ffi::gst_buffer_list_remove(
@@ -209,6 +215,15 @@ impl BufferListRef {
             );
         }
     }
+
+    pub fn drain(&mut self, range: impl RangeBounds<usize>) -> Drain<'_> {
+        let (start_idx, end_idx) = self.buffer_range_to_start_end_idx(range);
+        Drain {
+            list: self,
+            start_idx,
+            end_idx,
+        }
+    }
 }
 
 impl Default for BufferList {
@@ -262,6 +277,171 @@ define_iter!(IterOwned, Buffer, |list: &BufferListRef, idx| unsafe {
     let ptr = ffi::gst_buffer_list_get(list.as_mut_ptr(), idx as u32);
     from_glib_none(ptr)
 });
+
+#[derive(Debug)]
+pub struct Drain<'a> {
+    list: &'a mut BufferListRef,
+    start_idx: usize,
+    end_idx: usize,
+}
+
+impl Iterator for Drain<'_> {
+    type Item = Buffer;
+
+    #[inline]
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.start_idx >= self.end_idx {
+            return None;
+        }
+
+        let buffer = unsafe {
+            let buffer = Buffer::from_glib_none(ffi::gst_buffer_list_get(
+                self.list.as_mut_ptr(),
+                self.start_idx as u32,
+            ));
+            ffi::gst_buffer_list_remove(self.list.as_mut_ptr(), self.start_idx as u32, 1);
+            buffer
+        };
+
+        self.end_idx -= 1;
+
+        Some(buffer)
+    }
+
+    #[inline]
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        let remaining = self.end_idx - self.start_idx;
+
+        (remaining, Some(remaining))
+    }
+
+    #[inline]
+    fn count(self) -> usize {
+        self.end_idx - self.start_idx
+    }
+
+    #[inline]
+    fn nth(&mut self, n: usize) -> Option<Self::Item> {
+        let (end, overflow) = self.start_idx.overflowing_add(n);
+        if end >= self.end_idx || overflow {
+            unsafe {
+                ffi::gst_buffer_list_remove(
+                    self.list.as_mut_ptr(),
+                    self.start_idx as u32,
+                    (self.end_idx - self.start_idx) as u32,
+                );
+            }
+            self.start_idx = self.end_idx;
+            None
+        } else {
+            let buffer = unsafe {
+                let buffer = Buffer::from_glib_none(ffi::gst_buffer_list_get(
+                    self.list.as_mut_ptr(),
+                    end as u32,
+                ));
+                ffi::gst_buffer_list_remove(
+                    self.list.as_mut_ptr(),
+                    self.start_idx as u32,
+                    n as u32,
+                );
+                buffer
+            };
+            self.end_idx -= n;
+            Some(buffer)
+        }
+    }
+
+    #[inline]
+    fn last(mut self) -> Option<Self::Item> {
+        if self.start_idx == self.end_idx {
+            None
+        } else {
+            let buffer = unsafe {
+                let buffer = Buffer::from_glib_none(ffi::gst_buffer_list_get(
+                    self.list.as_mut_ptr(),
+                    self.end_idx as u32 - 1,
+                ));
+                ffi::gst_buffer_list_remove(
+                    self.list.as_mut_ptr(),
+                    self.start_idx as u32,
+                    (self.end_idx - self.start_idx) as u32,
+                );
+                buffer
+            };
+            self.end_idx = self.start_idx;
+            Some(buffer)
+        }
+    }
+}
+
+impl DoubleEndedIterator for Drain<'_> {
+    #[inline]
+    fn next_back(&mut self) -> Option<Self::Item> {
+        if self.start_idx == self.end_idx {
+            return None;
+        }
+
+        self.end_idx -= 1;
+        let buffer = unsafe {
+            let buffer = Buffer::from_glib_none(ffi::gst_buffer_list_get(
+                self.list.as_mut_ptr(),
+                self.end_idx as u32,
+            ));
+            ffi::gst_buffer_list_remove(self.list.as_mut_ptr(), self.end_idx as u32, 1);
+            buffer
+        };
+
+        Some(buffer)
+    }
+
+    #[inline]
+    fn nth_back(&mut self, n: usize) -> Option<Self::Item> {
+        let (end, overflow) = self.end_idx.overflowing_sub(n);
+        if end <= self.start_idx || overflow {
+            unsafe {
+                ffi::gst_buffer_list_remove(
+                    self.list.as_mut_ptr(),
+                    self.start_idx as u32,
+                    (self.end_idx - self.start_idx) as u32,
+                );
+            }
+            self.start_idx = self.end_idx;
+            None
+        } else {
+            self.end_idx = end - 1;
+            let buffer = unsafe {
+                let buffer = Buffer::from_glib_none(ffi::gst_buffer_list_get(
+                    self.list.as_mut_ptr(),
+                    self.end_idx as u32,
+                ));
+                ffi::gst_buffer_list_remove(self.list.as_mut_ptr(), self.end_idx as u32, n as u32);
+                buffer
+            };
+
+            Some(buffer)
+        }
+    }
+}
+
+impl ExactSizeIterator for Drain<'_> {}
+
+impl std::iter::FusedIterator for Drain<'_> {}
+
+impl Drop for Drain<'_> {
+    fn drop(&mut self) {
+        if self.start_idx >= self.end_idx {
+            return;
+        }
+
+        unsafe {
+            ffi::gst_buffer_list_remove(
+                self.list.as_mut_ptr(),
+                self.start_idx as u32,
+                (self.end_idx - self.start_idx) as u32,
+            );
+        }
+    }
+}
 
 impl<'a> IntoIterator for &'a BufferListRef {
     type IntoIter = Iter<'a>;
@@ -465,6 +645,106 @@ mod tests {
         assert_eq!(buffers_left, &[5, 6]);
 
         buffer_list.make_mut().remove(..);
+
+        assert!(buffer_list.is_empty());
+    }
+
+    #[test]
+    fn test_drain() {
+        crate::init().unwrap();
+
+        let mut buffer_list = make_buffer_list(10);
+
+        let buffers_removed = buffer_list
+            .make_mut()
+            .drain(0..2)
+            .map(|buf| buf.pts().unwrap() / ClockTime::SECOND)
+            .collect::<Vec<_>>();
+
+        assert_eq!(buffers_removed, &[0, 1]);
+
+        let buffers_left = buffer_list
+            .iter()
+            .map(|buf| buf.pts().unwrap() / ClockTime::SECOND)
+            .collect::<Vec<_>>();
+
+        assert_eq!(buffers_left, &[2, 3, 4, 5, 6, 7, 8, 9]);
+
+        let buffers_removed = buffer_list
+            .make_mut()
+            .drain(0..=2)
+            .map(|buf| buf.pts().unwrap() / ClockTime::SECOND)
+            .collect::<Vec<_>>();
+
+        assert_eq!(buffers_removed, &[2, 3, 4]);
+
+        let buffers_left = buffer_list
+            .iter()
+            .map(|buf| buf.pts().unwrap() / ClockTime::SECOND)
+            .collect::<Vec<_>>();
+
+        assert_eq!(buffers_left, &[5, 6, 7, 8, 9]);
+
+        let buffers_removed = buffer_list
+            .make_mut()
+            .drain(2..)
+            .map(|buf| buf.pts().unwrap() / ClockTime::SECOND)
+            .collect::<Vec<_>>();
+
+        assert_eq!(buffers_removed, &[7, 8, 9]);
+
+        let buffers_left = buffer_list
+            .iter()
+            .map(|buf| buf.pts().unwrap() / ClockTime::SECOND)
+            .collect::<Vec<_>>();
+
+        assert_eq!(buffers_left, &[5, 6]);
+
+        let buffers_removed = buffer_list
+            .make_mut()
+            .drain(..)
+            .map(|buf| buf.pts().unwrap() / ClockTime::SECOND)
+            .collect::<Vec<_>>();
+
+        assert_eq!(buffers_removed, &[5, 6]);
+
+        assert!(buffer_list.is_empty());
+    }
+
+    #[test]
+    fn test_drain_drop() {
+        crate::init().unwrap();
+
+        let mut buffer_list = make_buffer_list(10);
+
+        buffer_list.make_mut().drain(0..2);
+
+        let buffers_left = buffer_list
+            .iter()
+            .map(|buf| buf.pts().unwrap() / ClockTime::SECOND)
+            .collect::<Vec<_>>();
+
+        assert_eq!(buffers_left, &[2, 3, 4, 5, 6, 7, 8, 9]);
+
+        buffer_list.make_mut().drain(0..=2);
+
+        let buffers_left = buffer_list
+            .iter()
+            .map(|buf| buf.pts().unwrap() / ClockTime::SECOND)
+            .collect::<Vec<_>>();
+
+        assert_eq!(buffers_left, &[5, 6, 7, 8, 9]);
+
+        buffer_list.make_mut().drain(2..);
+
+        let buffers_left = buffer_list
+            .iter()
+            .map(|buf| buf.pts().unwrap() / ClockTime::SECOND)
+            .collect::<Vec<_>>();
+
+        assert_eq!(buffers_left, &[5, 6]);
+
+        buffer_list.make_mut().drain(..);
 
         assert!(buffer_list.is_empty());
     }
