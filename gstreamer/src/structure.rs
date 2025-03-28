@@ -1780,6 +1780,7 @@ crate::utils::define_fixed_size_iter!(
     }
 );
 
+#[must_use = "iterators are lazy and do nothing unless consumed"]
 #[derive(Debug)]
 pub struct Iter<'a> {
     iter: FieldIterator<'a>,
@@ -1844,6 +1845,7 @@ impl ExactSizeIterator for Iter<'_> {}
 impl std::iter::FusedIterator for Iter<'_> {}
 
 #[cfg(feature = "v1_26")]
+#[must_use = "iterators are lazy and do nothing unless consumed"]
 #[derive(Debug)]
 pub struct IdIter<'a> {
     iter: FieldIdIterator<'a>,

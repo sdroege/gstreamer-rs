@@ -320,6 +320,7 @@ impl Bus {
     }
 }
 
+#[must_use = "iterators are lazy and do nothing unless consumed"]
 #[derive(Debug)]
 pub struct Iter<'a> {
     bus: &'a Bus,

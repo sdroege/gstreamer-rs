@@ -225,6 +225,7 @@ pub const AUDIO_FORMAT_F32: crate::AudioFormat = crate::AudioFormat::F32le;
 #[cfg(target_endian = "little")]
 pub const AUDIO_FORMAT_F64: crate::AudioFormat = crate::AudioFormat::F64le;
 
+#[must_use = "iterators are lazy and do nothing unless consumed"]
 pub struct AudioFormatIterator {
     idx: usize,
     len: usize,

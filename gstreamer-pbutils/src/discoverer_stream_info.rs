@@ -3,6 +3,7 @@ use std::fmt;
 
 use crate::{prelude::*, DiscovererStreamInfo};
 
+#[must_use = "iterators are lazy and do nothing unless consumed"]
 #[derive(Debug)]
 pub struct Iter {
     stream_info: Option<DiscovererStreamInfo>,

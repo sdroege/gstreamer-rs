@@ -694,6 +694,7 @@ impl<T: StaticType> glib::translate::FromGlibPtrFull<*mut ffi::GstIterator> for 
     }
 }
 
+#[must_use = "iterators are lazy and do nothing unless consumed"]
 pub struct StdIterator<T> {
     inner: Iterator<T>,
     error: Option<IteratorError>,

@@ -454,6 +454,7 @@ impl<'a> std::iter::FromIterator<&'a VideoOverlayRectangle> for VideoOverlayComp
     }
 }
 
+#[must_use = "iterators are lazy and do nothing unless consumed"]
 pub struct Iter<'a> {
     composition: &'a VideoOverlayCompositionRef,
     idx: usize,

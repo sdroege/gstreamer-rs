@@ -415,6 +415,7 @@ impl VideoRegionOfInterestMeta {
     }
 }
 
+#[must_use = "iterators are lazy and do nothing unless consumed"]
 pub struct ParamsIter<'a> {
     _meta: &'a VideoRegionOfInterestMeta,
     list: Option<ptr::NonNull<glib::ffi::GList>>,

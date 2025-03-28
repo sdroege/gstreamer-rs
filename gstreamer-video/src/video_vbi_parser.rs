@@ -152,6 +152,7 @@ impl<'a> TryFrom<&'a crate::VideoInfo> for VideoVBIParser {
     }
 }
 
+#[must_use = "iterators are lazy and do nothing unless consumed"]
 #[derive(Debug)]
 pub struct AncillaryIter<'a> {
     parser: &'a mut VideoVBIParser,

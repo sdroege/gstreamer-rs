@@ -873,6 +873,7 @@ impl BufferRef {
 
 macro_rules! define_meta_iter(
     ($name:ident, $typ:ty, $mtyp:ty, $prepare_buffer:expr, $from_ptr:expr) => {
+    #[must_use = "iterators are lazy and do nothing unless consumed"]
     pub struct $name<'a, T: MetaAPI + 'a> {
         buffer: $typ,
         state: glib::ffi::gpointer,
@@ -1331,6 +1332,7 @@ pub struct Dump<'a> {
     end: Bound<usize>,
 }
 
+#[must_use = "iterators are lazy and do nothing unless consumed"]
 struct BufferChunked16Iter<'a> {
     buffer: &'a BufferRef,
     mem_idx: usize,

@@ -336,6 +336,7 @@ impl Ord for crate::VideoFormat {
     }
 }
 
+#[must_use = "iterators are lazy and do nothing unless consumed"]
 pub struct VideoFormatIterator {
     idx: usize,
     len: usize,

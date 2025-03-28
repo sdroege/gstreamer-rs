@@ -133,6 +133,7 @@ impl AnalyticsMtdRef<'_, AnalyticsClassificationMtd> {
     }
 }
 
+#[must_use = "iterators are lazy and do nothing unless consumed"]
 pub struct AnalyticsClassificationIterator<'a> {
     mtd: &'a AnalyticsMtdRef<'a, AnalyticsClassificationMtd>,
     index: usize,

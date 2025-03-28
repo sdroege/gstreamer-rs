@@ -635,6 +635,7 @@ impl PartialEq for TagListRef {
 
 impl Eq for TagListRef {}
 
+#[must_use = "iterators are lazy and do nothing unless consumed"]
 #[derive(Debug)]
 pub struct TagIter<'a, T: Tag<'a>> {
     taglist: &'a TagListRef,
@@ -743,6 +744,7 @@ where
 {
 }
 
+#[must_use = "iterators are lazy and do nothing unless consumed"]
 #[derive(Debug)]
 pub struct GenericTagIter<'a> {
     taglist: &'a TagListRef,
@@ -837,6 +839,7 @@ impl ExactSizeIterator for GenericTagIter<'_> {}
 
 impl std::iter::FusedIterator for GenericTagIter<'_> {}
 
+#[must_use = "iterators are lazy and do nothing unless consumed"]
 #[derive(Debug)]
 pub struct GenericIter<'a> {
     taglist: &'a TagListRef,
@@ -931,6 +934,7 @@ impl ExactSizeIterator for GenericIter<'_> {}
 
 impl std::iter::FusedIterator for GenericIter<'_> {}
 
+#[must_use = "iterators are lazy and do nothing unless consumed"]
 #[derive(Debug)]
 pub struct Iter<'a> {
     taglist: &'a TagListRef,

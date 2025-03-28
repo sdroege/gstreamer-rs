@@ -81,6 +81,7 @@ where
 
 macro_rules! define_fixed_size_iter(
     ($name:ident, $typ:ty, $ityp:ty, $get_len:expr, $get_item:expr) => {
+        #[must_use = "iterators are lazy and do nothing unless consumed"]
         #[derive(Debug)]
         pub struct $name<'a> {
             pub(crate) collection: $typ,
