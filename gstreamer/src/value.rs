@@ -829,7 +829,7 @@ impl fmt::Debug for Array {
 }
 
 impl Array {
-    pub fn new(values: impl IntoIterator<Item = impl Into<glib::Value> + Send>) -> Self {
+    pub fn new<T: Into<glib::Value> + Send>(values: impl IntoIterator<Item = T>) -> Self {
         assert_initialized_main_thread!();
 
         unsafe {
@@ -1056,7 +1056,7 @@ impl fmt::Debug for List {
 }
 
 impl List {
-    pub fn new(values: impl IntoIterator<Item = impl Into<glib::Value> + Send>) -> Self {
+    pub fn new<T: Into<glib::Value> + Send>(values: impl IntoIterator<Item = T>) -> Self {
         assert_initialized_main_thread!();
 
         unsafe {
@@ -1575,10 +1575,13 @@ macro_rules! impl_builder_gvalue_extra_setters (
         ///
         /// Overrides any default or previously defined value for `name`.
         #[inline]
-        pub fn field_from_iter<V: $crate::glib::value::ValueType + Into<$crate::glib::Value> + FromIterator<$crate::glib::SendValue> + Send>(
+        pub fn field_from_iter<
+            V: $crate::glib::value::ValueType + Into<$crate::glib::Value> + FromIterator<$crate::glib::SendValue> + Send,
+            I: $crate::glib::value::ToSendValue,
+        >(
             self,
             name: impl $crate::glib::IntoGStr,
-            iter: impl IntoIterator<Item = impl $crate::glib::value::ToSendValue>,
+            iter: impl IntoIterator<Item = I>,
         ) -> Self {
             let iter = iter.into_iter().map(|item| item.to_send_value());
             self.field(name, V::from_iter(iter))
@@ -1589,10 +1592,13 @@ macro_rules! impl_builder_gvalue_extra_setters (
         ///
         /// Overrides any default or previously defined value for `name`.
         #[inline]
-        pub fn field_with_static_from_iter<V: $crate::glib::value::ValueType + Into<$crate::glib::Value> + FromIterator<$crate::glib::SendValue> + Send>(
+        pub fn field_with_static_from_iter<
+            V: $crate::glib::value::ValueType + Into<$crate::glib::Value> + FromIterator<$crate::glib::SendValue> + Send,
+            I: $crate::glib::value::ToSendValue,
+        >(
             self,
             name: impl AsRef<$crate::glib::GStr> + 'static,
-            iter: impl IntoIterator<Item = impl $crate::glib::value::ToSendValue>,
+            iter: impl IntoIterator<Item = I>,
         ) -> Self {
             let iter = iter.into_iter().map(|item| item.to_send_value());
             self.field_with_static(name, V::from_iter(iter))
@@ -1603,10 +1609,13 @@ macro_rules! impl_builder_gvalue_extra_setters (
         ///
         /// Overrides any default or previously defined value for `name`.
         #[inline]
-        pub fn field_with_id_from_iter<V: $crate::glib::value::ValueType + Into<$crate::glib::Value> + FromIterator<$crate::glib::SendValue> + Send>(
+        pub fn field_with_id_from_iter<
+            V: $crate::glib::value::ValueType + Into<$crate::glib::Value> + FromIterator<$crate::glib::SendValue> + Send,
+            I: $crate::glib::value::ToSendValue,
+        >(
             self,
             name: impl AsRef<$crate::IdStr>,
-            iter: impl IntoIterator<Item = impl $crate::glib::value::ToSendValue>,
+            iter: impl IntoIterator<Item = I>,
         ) -> Self {
             let iter = iter.into_iter().map(|item| item.to_send_value());
             self.field_with_id(name, V::from_iter(iter))
@@ -1618,10 +1627,13 @@ macro_rules! impl_builder_gvalue_extra_setters (
         ///
         /// This has no effect if `iter` is empty, i.e. previous value for `name` is unchanged.
         #[inline]
-        pub fn field_if_not_empty<V: $crate::glib::value::ValueType + Into<$crate::glib::Value> + FromIterator<$crate::glib::SendValue> + Send>(
+        pub fn field_if_not_empty<
+            V: $crate::glib::value::ValueType + Into<$crate::glib::Value> + FromIterator<$crate::glib::SendValue> + Send,
+            I: $crate::glib::value::ToSendValue,
+        >(
             self,
             name: impl $crate::glib::IntoGStr,
-            iter: impl IntoIterator<Item = impl $crate::glib::value::ToSendValue>,
+            iter: impl IntoIterator<Item = I>,
         ) -> Self {
             let mut iter = iter.into_iter().peekable();
             if iter.peek().is_some() {
@@ -1638,10 +1650,13 @@ macro_rules! impl_builder_gvalue_extra_setters (
         ///
         /// This has no effect if `iter` is empty, i.e. previous value for `name` is unchanged.
         #[inline]
-        pub fn field_with_static_if_not_empty<V: $crate::glib::value::ValueType + Into<$crate::glib::Value> + FromIterator<$crate::glib::SendValue> + Send>(
+        pub fn field_with_static_if_not_empty<
+            V: $crate::glib::value::ValueType + Into<$crate::glib::Value> + FromIterator<$crate::glib::SendValue> + Send,
+            I: $crate::glib::value::ToSendValue,
+        >(
             self,
             name: impl AsRef<$crate::glib::GStr> + 'static,
-            iter: impl IntoIterator<Item = impl $crate::glib::value::ToSendValue>,
+            iter: impl IntoIterator<Item = I>,
         ) -> Self {
             let mut iter = iter.into_iter().peekable();
             if iter.peek().is_some() {
@@ -1658,10 +1673,13 @@ macro_rules! impl_builder_gvalue_extra_setters (
         ///
         /// This has no effect if `iter` is empty, i.e. previous value for `name` is unchanged.
         #[inline]
-        pub fn field_with_id_if_not_empty<V: $crate::glib::value::ValueType + Into<$crate::glib::Value> + FromIterator<$crate::glib::SendValue> + Send>(
+        pub fn field_with_id_if_not_empty
+            <V: $crate::glib::value::ValueType + Into<$crate::glib::Value> + FromIterator<$crate::glib::SendValue> + Send,
+            I: $crate::glib::value::ToSendValue,
+        >(
             self,
             name: impl AsRef<IdStr>,
-            iter: impl IntoIterator<Item = impl $crate::glib::value::ToSendValue>,
+            iter: impl IntoIterator<Item = I>,
         ) -> Self {
             let mut iter = iter.into_iter().peekable();
             if iter.peek().is_some() {
@@ -1706,10 +1724,13 @@ macro_rules! impl_builder_gvalue_extra_setters (
         ///
         /// Overrides any default or previously defined value for `name`.
         #[inline]
-        pub fn other_field_from_iter<V: $crate::glib::value::ValueType + $crate::glib::value::ToSendValue + FromIterator<$crate::glib::SendValue>>(
+        pub fn other_field_from_iter<
+            V: $crate::glib::value::ValueType + $crate::glib::value::ToSendValue + FromIterator<$crate::glib::SendValue>,
+            I: $crate::glib::value::ToSendValue,
+        >(
             self,
             name: &'a str,
-            iter: impl IntoIterator<Item = impl $crate::glib::value::ToSendValue>,
+            iter: impl IntoIterator<Item = I>,
         ) -> Self {
             let iter = iter.into_iter().map(|item| item.to_send_value());
             self.other_field(name, V::from_iter(iter))
@@ -1721,10 +1742,13 @@ macro_rules! impl_builder_gvalue_extra_setters (
         ///
         /// This has no effect if `iter` is empty, i.e. previous value for `name` is unchanged.
         #[inline]
-        pub fn other_field_if_not_empty<V: $crate::glib::value::ValueType + $crate::glib::value::ToSendValue + FromIterator<$crate::glib::SendValue>>(
+        pub fn other_field_if_not_empty<
+            V: $crate::glib::value::ValueType + $crate::glib::value::ToSendValue + FromIterator<$crate::glib::SendValue>,
+            I: $crate::glib::value::ToSendValue,
+        >(
             self,
             name: &'a str,
-            iter: impl IntoIterator<Item = impl $crate::glib::value::ToSendValue>,
+            iter: impl IntoIterator<Item = I>,
         ) -> Self {
             let mut iter = iter.into_iter().peekable();
             if iter.peek().is_some() {
@@ -1769,10 +1793,13 @@ macro_rules! impl_builder_gvalue_extra_setters (
         ///
         /// Overrides any default or previously defined value for `name`.
         #[inline]
-        pub fn property_from_iter<V: $crate::glib::value::ValueType + Into<$crate::glib::Value> + FromIterator<$crate::glib::SendValue>>(
+        pub fn property_from_iter<
+            V: $crate::glib::value::ValueType + Into<$crate::glib::Value> + FromIterator<$crate::glib::SendValue>,
+            I: $crate::glib::value::ToSendValue,
+        >(
             self,
             name: &'a str,
-            iter: impl IntoIterator<Item = impl $crate::glib::value::ToSendValue>,
+            iter: impl IntoIterator<Item = I>,
         ) -> Self {
             let iter = iter.into_iter().map(|item| item.to_send_value());
             self.property(name, V::from_iter(iter))
@@ -1784,10 +1811,13 @@ macro_rules! impl_builder_gvalue_extra_setters (
         ///
         /// This has no effect if `iter` is empty, i.e. previous value for `name` is unchanged.
         #[inline]
-        pub fn property_if_not_empty<V: $crate::glib::value::ValueType + Into<$crate::glib::Value> + FromIterator<$crate::glib::SendValue>>(
+        pub fn property_if_not_empty<
+            V: $crate::glib::value::ValueType + Into<$crate::glib::Value> + FromIterator<$crate::glib::SendValue>,
+            I: $crate::glib::value::ToSendValue,
+        >(
             self,
             name: &'a str,
-            iter: impl IntoIterator<Item = impl $crate::glib::value::ToSendValue>,
+            iter: impl IntoIterator<Item = I>,
         ) -> Self {
             let mut iter = iter.into_iter().peekable();
             if iter.peek().is_some() {

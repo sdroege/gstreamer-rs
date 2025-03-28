@@ -18,8 +18,8 @@ use crate::{
 
 impl Element {
     #[doc(alias = "gst_element_link_many")]
-    pub fn link_many(
-        elements: impl IntoIterator<Item = impl AsRef<Element> + Clone>,
+    pub fn link_many<E: AsRef<Element> + Clone>(
+        elements: impl IntoIterator<Item = E>,
     ) -> Result<(), glib::BoolError> {
         skip_assert_initialized!();
         for (src, dest) in elements.into_iter().tuple_windows() {
@@ -40,7 +40,7 @@ impl Element {
     }
 
     #[doc(alias = "gst_element_unlink_many")]
-    pub fn unlink_many(elements: impl IntoIterator<Item = impl AsRef<Element> + Clone>) {
+    pub fn unlink_many<E: AsRef<Element> + Clone>(elements: impl IntoIterator<Item = E>) {
         skip_assert_initialized!();
         for (src, dest) in elements.into_iter().tuple_windows() {
             unsafe {

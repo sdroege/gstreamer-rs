@@ -4111,19 +4111,22 @@ impl<'a> PropertyNotifyBuilder<'a> {
         }
     }
 
-    pub fn value_from_iter<V: ValueType + ToSendValue + FromIterator<SendValue>>(
+    pub fn value_from_iter<V: ValueType + ToSendValue + FromIterator<SendValue>, I: ToSendValue>(
         self,
         name: &'a str,
-        iter: impl IntoIterator<Item = impl ToSendValue>,
+        iter: impl IntoIterator<Item = I>,
     ) -> Self {
         let iter = iter.into_iter().map(|item| item.to_send_value());
         self.other_field(name, V::from_iter(iter))
     }
 
-    pub fn value_field_if_not_empty<V: ValueType + ToSendValue + FromIterator<SendValue>>(
+    pub fn value_field_if_not_empty<
+        V: ValueType + ToSendValue + FromIterator<SendValue>,
+        I: ToSendValue,
+    >(
         self,
         name: &'a str,
-        iter: impl IntoIterator<Item = impl ToSendValue>,
+        iter: impl IntoIterator<Item = I>,
     ) -> Self {
         let mut iter = iter.into_iter().peekable();
         if iter.peek().is_some() {
@@ -4181,9 +4184,9 @@ impl<'a> StreamsSelectedBuilder<'a> {
         }
     }
 
-    pub fn streams(
+    pub fn streams<S: std::borrow::Borrow<crate::Stream>>(
         self,
-        streams: impl IntoIterator<Item = impl std::borrow::Borrow<crate::Stream>>,
+        streams: impl IntoIterator<Item = S>,
     ) -> Self {
         Self {
             streams: streams
@@ -4194,9 +4197,9 @@ impl<'a> StreamsSelectedBuilder<'a> {
         }
     }
 
-    pub fn streams_if(
+    pub fn streams_if<S: std::borrow::Borrow<crate::Stream>>(
         self,
-        streams: impl IntoIterator<Item = impl std::borrow::Borrow<crate::Stream>>,
+        streams: impl IntoIterator<Item = S>,
         predicate: bool,
     ) -> Self {
         if predicate {
@@ -4206,9 +4209,9 @@ impl<'a> StreamsSelectedBuilder<'a> {
         }
     }
 
-    pub fn streams_if_some(
+    pub fn streams_if_some<S: std::borrow::Borrow<crate::Stream>>(
         self,
-        streams: Option<impl IntoIterator<Item = impl std::borrow::Borrow<crate::Stream>>>,
+        streams: Option<impl IntoIterator<Item = S>>,
     ) -> Self {
         if let Some(streams) = streams {
             self.streams(streams)
@@ -4217,9 +4220,9 @@ impl<'a> StreamsSelectedBuilder<'a> {
         }
     }
 
-    pub fn streams_if_not_empty(
+    pub fn streams_if_not_empty<S: std::borrow::Borrow<crate::Stream>>(
         self,
-        streams: impl IntoIterator<Item = impl std::borrow::Borrow<crate::Stream>>,
+        streams: impl IntoIterator<Item = S>,
     ) -> Self {
         let mut streams = streams.into_iter().peekable();
         if streams.peek().is_some() {

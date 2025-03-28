@@ -473,10 +473,13 @@ impl CapsRef {
     ///
     /// Overrides any default or previously defined value for `name`.
     #[inline]
-    pub fn set_from_iter<V: ValueType + ToSendValue + FromIterator<SendValue> + Sync>(
+    pub fn set_from_iter<
+        V: ValueType + ToSendValue + FromIterator<SendValue> + Sync,
+        I: ToSendValue,
+    >(
         &mut self,
         name: impl IntoGStr,
-        iter: impl IntoIterator<Item = impl ToSendValue>,
+        iter: impl IntoIterator<Item = I>,
     ) {
         let iter = iter.into_iter().map(|item| item.to_send_value());
         self.set(name, V::from_iter(iter));
@@ -489,10 +492,11 @@ impl CapsRef {
     #[inline]
     pub fn set_with_static_from_iter<
         V: ValueType + ToSendValue + FromIterator<SendValue> + Sync,
+        I: ToSendValue,
     >(
         &mut self,
         name: impl AsRef<GStr> + 'static,
-        iter: impl IntoIterator<Item = impl ToSendValue>,
+        iter: impl IntoIterator<Item = I>,
     ) {
         let iter = iter.into_iter().map(|item| item.to_send_value());
         self.set_with_static(name, V::from_iter(iter));
@@ -503,10 +507,13 @@ impl CapsRef {
     ///
     /// Overrides any default or previously defined value for `name`.
     #[inline]
-    pub fn set_with_id_from_iter<V: ValueType + ToSendValue + FromIterator<SendValue> + Sync>(
+    pub fn set_with_id_from_iter<
+        V: ValueType + ToSendValue + FromIterator<SendValue> + Sync,
+        I: ToSendValue,
+    >(
         &mut self,
         name: impl AsRef<IdStr>,
-        iter: impl IntoIterator<Item = impl ToSendValue>,
+        iter: impl IntoIterator<Item = I>,
     ) {
         let iter = iter.into_iter().map(|item| item.to_send_value());
         self.set_with_id(name, V::from_iter(iter));
@@ -518,10 +525,13 @@ impl CapsRef {
     ///
     /// This has no effect if `iter` is empty, i.e. previous value for `name` is unchanged.
     #[inline]
-    pub fn set_if_not_empty<V: ValueType + ToSendValue + FromIterator<SendValue> + Sync>(
+    pub fn set_if_not_empty<
+        V: ValueType + ToSendValue + FromIterator<SendValue> + Sync,
+        I: ToSendValue,
+    >(
         &mut self,
         name: impl IntoGStr,
-        iter: impl IntoIterator<Item = impl ToSendValue>,
+        iter: impl IntoIterator<Item = I>,
     ) {
         let mut iter = iter.into_iter().peekable();
         if iter.peek().is_some() {
@@ -538,10 +548,11 @@ impl CapsRef {
     #[inline]
     pub fn set_with_static_if_not_empty<
         V: ValueType + ToSendValue + FromIterator<SendValue> + Sync,
+        I: ToSendValue,
     >(
         &mut self,
         name: impl AsRef<GStr> + 'static,
-        iter: impl IntoIterator<Item = impl ToSendValue>,
+        iter: impl IntoIterator<Item = I>,
     ) {
         let mut iter = iter.into_iter().peekable();
         if iter.peek().is_some() {
@@ -556,10 +567,13 @@ impl CapsRef {
     ///
     /// This has no effect if `iter` is empty, i.e. previous value for `name` is unchanged.
     #[inline]
-    pub fn set_with_id_if_not_empty<V: ValueType + ToSendValue + FromIterator<SendValue> + Sync>(
+    pub fn set_with_id_if_not_empty<
+        V: ValueType + ToSendValue + FromIterator<SendValue> + Sync,
+        I: ToSendValue,
+    >(
         &mut self,
         name: impl AsRef<IdStr>,
-        iter: impl IntoIterator<Item = impl ToSendValue>,
+        iter: impl IntoIterator<Item = I>,
     ) {
         let mut iter = iter.into_iter().peekable();
         if iter.peek().is_some() {
@@ -1293,9 +1307,9 @@ impl Builder<NoFeature> {
         }
     }
 
-    pub fn features(
+    pub fn features<S: IntoGStr>(
         self,
-        features: impl IntoIterator<Item = impl IntoGStr>,
+        features: impl IntoIterator<Item = S>,
     ) -> Builder<HasFeatures> {
         Builder {
             s: self.s,
@@ -1304,9 +1318,9 @@ impl Builder<NoFeature> {
         }
     }
 
-    pub fn features_from_statics(
+    pub fn features_from_statics<S: AsRef<GStr> + 'static>(
         self,
-        features: impl IntoIterator<Item = impl AsRef<GStr> + 'static>,
+        features: impl IntoIterator<Item = S>,
     ) -> Builder<HasFeatures> {
         Builder {
             s: self.s,
@@ -1315,9 +1329,9 @@ impl Builder<NoFeature> {
         }
     }
 
-    pub fn features_from_ids(
+    pub fn features_from_ids<S: AsRef<IdStr>>(
         self,
-        features: impl IntoIterator<Item = impl AsRef<IdStr>>,
+        features: impl IntoIterator<Item = S>,
     ) -> Builder<HasFeatures> {
         Builder {
             s: self.s,

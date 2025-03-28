@@ -73,27 +73,27 @@ impl VideoCapsBuilder<gst::caps::NoFeature> {
         }
     }
 
-    pub fn features(
+    pub fn features<S: IntoGStr>(
         self,
-        features: impl IntoIterator<Item = impl IntoGStr>,
+        features: impl IntoIterator<Item = S>,
     ) -> VideoCapsBuilder<gst::caps::HasFeatures> {
         VideoCapsBuilder {
             builder: self.builder.features(features),
         }
     }
 
-    pub fn features_from_statics(
+    pub fn features_from_statics<S: AsRef<glib::GStr> + 'static>(
         self,
-        features: impl IntoIterator<Item = impl AsRef<glib::GStr> + 'static>,
+        features: impl IntoIterator<Item = S>,
     ) -> VideoCapsBuilder<gst::caps::HasFeatures> {
         VideoCapsBuilder {
             builder: self.builder.features_from_statics(features),
         }
     }
 
-    pub fn features_from_ids(
+    pub fn features_from_ids<S: AsRef<IdStr>>(
         self,
-        features: impl IntoIterator<Item = impl AsRef<IdStr>>,
+        features: impl IntoIterator<Item = S>,
     ) -> VideoCapsBuilder<gst::caps::HasFeatures> {
         VideoCapsBuilder {
             builder: self.builder.features_from_ids(features),

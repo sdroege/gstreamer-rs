@@ -22,7 +22,7 @@ unsafe impl Sync for CapsFeatures {}
 
 impl CapsFeatures {
     #[doc(alias = "gst_caps_features_new")]
-    pub fn new(features: impl IntoIterator<Item = impl IntoGStr>) -> Self {
+    pub fn new<S: IntoGStr>(features: impl IntoIterator<Item = S>) -> Self {
         skip_assert_initialized!();
         let mut f = Self::new_empty();
 
@@ -34,8 +34,8 @@ impl CapsFeatures {
     }
 
     #[doc(alias = "gst_caps_features_new_static_str")]
-    pub fn new_from_static(
-        features: impl IntoIterator<Item = impl AsRef<glib::GStr> + 'static>,
+    pub fn new_from_static<S: AsRef<glib::GStr> + 'static>(
+        features: impl IntoIterator<Item = S>,
     ) -> Self {
         skip_assert_initialized!();
         let mut f = Self::new_empty();
@@ -48,7 +48,7 @@ impl CapsFeatures {
     }
 
     #[doc(alias = "gst_caps_features_new_id_str")]
-    pub fn new_from_id(features: impl IntoIterator<Item = impl AsRef<IdStr>>) -> Self {
+    pub fn new_from_id<S: AsRef<IdStr>>(features: impl IntoIterator<Item = S>) -> Self {
         skip_assert_initialized!();
         let mut f = Self::new_empty();
 

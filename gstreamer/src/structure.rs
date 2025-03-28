@@ -120,9 +120,9 @@ impl Structure {
     }
 
     #[allow(clippy::should_implement_trait)]
-    pub fn from_iter(
+    pub fn from_iter<S: IntoGStr>(
         name: impl IntoGStr,
-        iter: impl IntoIterator<Item = (impl IntoGStr, SendValue)>,
+        iter: impl IntoIterator<Item = (S, SendValue)>,
     ) -> Structure {
         skip_assert_initialized!();
         let mut structure = Structure::new_empty(name);
@@ -134,9 +134,9 @@ impl Structure {
     }
 
     #[allow(clippy::should_implement_trait)]
-    pub fn from_iter_with_static(
+    pub fn from_iter_with_static<S: AsRef<GStr> + 'static>(
         name: impl AsRef<GStr> + 'static,
-        iter: impl IntoIterator<Item = (impl AsRef<GStr> + 'static, SendValue)>,
+        iter: impl IntoIterator<Item = (S, SendValue)>,
     ) -> Structure {
         skip_assert_initialized!();
         let mut structure = Structure::new_empty_from_static(name);
@@ -148,9 +148,9 @@ impl Structure {
     }
 
     #[allow(clippy::should_implement_trait)]
-    pub fn from_iter_with_id(
+    pub fn from_iter_with_id<S: AsRef<IdStr>>(
         name: impl AsRef<IdStr>,
-        iter: impl IntoIterator<Item = (impl AsRef<IdStr>, SendValue)>,
+        iter: impl IntoIterator<Item = (S, SendValue)>,
     ) -> Structure {
         skip_assert_initialized!();
         let mut structure = Structure::new_empty_from_id(name);
@@ -789,10 +789,13 @@ impl StructureRef {
     ///
     /// Overrides any default or previously defined value for `name`.
     #[inline]
-    pub fn set_from_iter<V: ValueType + Into<Value> + FromIterator<SendValue> + Send>(
+    pub fn set_from_iter<
+        V: ValueType + Into<Value> + FromIterator<SendValue> + Send,
+        I: ToSendValue,
+    >(
         &mut self,
         name: impl IntoGStr,
-        iter: impl IntoIterator<Item = impl ToSendValue>,
+        iter: impl IntoIterator<Item = I>,
     ) {
         let iter = iter.into_iter().map(|item| item.to_send_value());
         self.set(name, V::from_iter(iter));
@@ -805,10 +808,11 @@ impl StructureRef {
     #[inline]
     pub fn set_with_static_from_iter<
         V: ValueType + Into<Value> + FromIterator<SendValue> + Send,
+        I: ToSendValue,
     >(
         &mut self,
         name: impl AsRef<GStr> + 'static,
-        iter: impl IntoIterator<Item = impl ToSendValue>,
+        iter: impl IntoIterator<Item = I>,
     ) {
         let iter = iter.into_iter().map(|item| item.to_send_value());
         self.set_with_static(name, V::from_iter(iter));
@@ -819,10 +823,13 @@ impl StructureRef {
     ///
     /// Overrides any default or previously defined value for `name`.
     #[inline]
-    pub fn set_with_id_from_iter<V: ValueType + Into<Value> + FromIterator<SendValue> + Send>(
+    pub fn set_with_id_from_iter<
+        V: ValueType + Into<Value> + FromIterator<SendValue> + Send,
+        I: ToSendValue,
+    >(
         &mut self,
         name: impl AsRef<IdStr>,
-        iter: impl IntoIterator<Item = impl ToSendValue>,
+        iter: impl IntoIterator<Item = I>,
     ) {
         let iter = iter.into_iter().map(|item| item.to_send_value());
         self.set_with_id(name, V::from_iter(iter));
@@ -834,10 +841,13 @@ impl StructureRef {
     ///
     /// This has no effect if `iter` is empty, i.e. previous value for `name` is unchanged.
     #[inline]
-    pub fn set_if_not_empty<V: ValueType + Into<Value> + FromIterator<SendValue> + Send>(
+    pub fn set_if_not_empty<
+        V: ValueType + Into<Value> + FromIterator<SendValue> + Send,
+        I: ToSendValue,
+    >(
         &mut self,
         name: impl IntoGStr,
-        iter: impl IntoIterator<Item = impl ToSendValue>,
+        iter: impl IntoIterator<Item = I>,
     ) {
         let mut iter = iter.into_iter().peekable();
         if iter.peek().is_some() {
@@ -854,10 +864,11 @@ impl StructureRef {
     #[inline]
     pub fn set_with_static_if_not_empty<
         V: ValueType + Into<Value> + FromIterator<SendValue> + Send,
+        I: ToSendValue,
     >(
         &mut self,
         name: impl AsRef<GStr> + 'static,
-        iter: impl IntoIterator<Item = impl ToSendValue>,
+        iter: impl IntoIterator<Item = I>,
     ) {
         let mut iter = iter.into_iter().peekable();
         if iter.peek().is_some() {
@@ -872,10 +883,13 @@ impl StructureRef {
     ///
     /// This has no effect if `iter` is empty, i.e. previous value for `name` is unchanged.
     #[inline]
-    pub fn set_with_id_if_not_empty<V: ValueType + Into<Value> + FromIterator<SendValue> + Send>(
+    pub fn set_with_id_if_not_empty<
+        V: ValueType + Into<Value> + FromIterator<SendValue> + Send,
+        I: ToSendValue,
+    >(
         &mut self,
         name: impl AsRef<IdStr>,
-        iter: impl IntoIterator<Item = impl ToSendValue>,
+        iter: impl IntoIterator<Item = I>,
     ) {
         let mut iter = iter.into_iter().peekable();
         if iter.peek().is_some() {
@@ -1242,7 +1256,7 @@ impl StructureRef {
     }
 
     #[doc(alias = "gst_structure_remove_fields")]
-    pub fn remove_fields(&mut self, fields: impl IntoIterator<Item = impl IntoGStr>) {
+    pub fn remove_fields<S: IntoGStr>(&mut self, fields: impl IntoIterator<Item = S>) {
         for f in fields.into_iter() {
             self.remove_field(f)
         }
@@ -1262,7 +1276,7 @@ impl StructureRef {
     }
 
     #[doc(alias = "gst_structure_id_str_remove_fields")]
-    pub fn remove_field_by_ids(&mut self, fields: impl IntoIterator<Item = impl AsRef<IdStr>>) {
+    pub fn remove_field_by_ids<S: AsRef<IdStr>>(&mut self, fields: impl IntoIterator<Item = S>) {
         for f in fields.into_iter() {
             self.remove_field_by_id(f)
         }
@@ -2314,9 +2328,9 @@ mod tests {
         static SLIST: &GStr = gstr!("slist");
         let ilist = idstr!("ilist");
         let s = Structure::builder("test")
-            .field_from_iter::<crate::Array>("array", [&1, &2, &3])
-            .field_with_static_from_iter::<crate::List>(SLIST, [&4, &5, &6])
-            .field_with_id_from_iter::<crate::List>(&ilist, [&7, &8, &9])
+            .field_from_iter::<crate::Array, i32>("array", [1, 2, 3])
+            .field_with_static_from_iter::<crate::List, i32>(SLIST, [4, 5, 6])
+            .field_with_id_from_iter::<crate::List, i32>(&ilist, [7, 8, 9])
             .build();
         assert!(s
             .get::<crate::Array>("array")
@@ -2339,9 +2353,9 @@ mod tests {
 
         let array = Vec::<i32>::new();
         let s = Structure::builder("test")
-            .field_from_iter::<crate::Array>("array", &array)
-            .field_with_static_from_iter::<crate::List>(SLIST, &array)
-            .field_with_id_from_iter::<crate::List>(&ilist, &array)
+            .field_from_iter::<crate::Array, _>("array", &array)
+            .field_with_static_from_iter::<crate::List, _>(SLIST, &array)
+            .field_with_id_from_iter::<crate::List, _>(&ilist, &array)
             .build();
         assert!(s.get::<crate::Array>("array").unwrap().as_ref().is_empty());
         assert!(s.get::<crate::List>(SLIST).unwrap().as_ref().is_empty());
@@ -2359,9 +2373,9 @@ mod tests {
         static SLIST: &GStr = gstr!("slist");
         let ilist = idstr!("ilist");
         let s = Structure::builder_from_id(idstr!("test"))
-            .field_if_not_empty::<crate::Array>("array", [&1, &2, &3])
-            .field_with_static_if_not_empty::<crate::List>(SLIST, [&4, &5, &6])
-            .field_with_id_if_not_empty::<crate::List>(&ilist, [&7, &8, &9])
+            .field_if_not_empty::<crate::Array, i32>("array", [1, 2, 3])
+            .field_with_static_if_not_empty::<crate::List, i32>(SLIST, [4, 5, 6])
+            .field_with_id_if_not_empty::<crate::List, i32>(&ilist, [7, 8, 9])
             .build();
         assert!(s
             .get::<crate::Array>("array")
@@ -2384,9 +2398,9 @@ mod tests {
 
         let array = Vec::<i32>::new();
         let s = Structure::builder("test")
-            .field_if_not_empty::<crate::Array>("array", &array)
-            .field_with_static_if_not_empty::<crate::List>(SLIST, &array)
-            .field_with_id_if_not_empty::<crate::List>(ilist, &array)
+            .field_if_not_empty::<crate::Array, _>("array", &array)
+            .field_with_static_if_not_empty::<crate::List, _>(SLIST, &array)
+            .field_with_id_if_not_empty::<crate::List, _>(ilist, &array)
             .build();
         assert!(!s.has_field("array"));
         assert!(!s.has_field("slist"));

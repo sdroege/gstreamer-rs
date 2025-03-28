@@ -47,9 +47,9 @@ impl Bin {
 
 pub trait GstBinExtManual: IsA<Bin> + 'static {
     #[doc(alias = "gst_bin_add_many")]
-    fn add_many(
+    fn add_many<E: AsRef<Element>>(
         &self,
-        elements: impl IntoIterator<Item = impl AsRef<Element>>,
+        elements: impl IntoIterator<Item = E>,
     ) -> Result<(), glib::BoolError> {
         for e in elements {
             unsafe {
@@ -64,9 +64,9 @@ pub trait GstBinExtManual: IsA<Bin> + 'static {
     }
 
     #[doc(alias = "gst_bin_remove_many")]
-    fn remove_many(
+    fn remove_many<E: AsRef<Element>>(
         &self,
-        elements: impl IntoIterator<Item = impl AsRef<Element>>,
+        elements: impl IntoIterator<Item = E>,
     ) -> Result<(), glib::BoolError> {
         for e in elements {
             unsafe {

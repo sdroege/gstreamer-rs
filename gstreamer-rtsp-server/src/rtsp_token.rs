@@ -24,7 +24,7 @@ impl RTSPToken {
     }
 
     #[allow(clippy::should_implement_trait)]
-    pub fn from_iter(iter: impl IntoIterator<Item = (impl IntoGStr, SendValue)>) -> RTSPToken {
+    pub fn from_iter<S: IntoGStr>(iter: impl IntoIterator<Item = (S, SendValue)>) -> RTSPToken {
         skip_assert_initialized!();
         let mut token = RTSPToken::new_empty();
 

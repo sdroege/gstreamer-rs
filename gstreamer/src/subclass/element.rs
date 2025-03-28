@@ -846,7 +846,7 @@ mod tests {
             .eq(["default0", "default1"]));
 
         let elem = crate::ElementFactory::make("testelement")
-            .property_from_iter::<crate::Array>("array", ["value0", "value1"])
+            .property_from_iter::<crate::Array, _>("array", ["value0", "value1"])
             .build()
             .unwrap();
         assert!(elem
@@ -857,7 +857,7 @@ mod tests {
 
         let array = Vec::<String>::new();
         let elem = crate::ElementFactory::make("testelement")
-            .property_if_not_empty::<crate::Array>("array", &array)
+            .property_if_not_empty::<crate::Array, _>("array", &array)
             .build()
             .unwrap();
         assert!(elem
@@ -867,7 +867,7 @@ mod tests {
             .eq(["default0", "default1"]));
 
         let elem = crate::ElementFactory::make("testelement")
-            .property_if_not_empty::<crate::Array>("array", ["value0", "value1"])
+            .property_if_not_empty::<crate::Array, _>("array", ["value0", "value1"])
             .build()
             .unwrap();
         assert!(elem
