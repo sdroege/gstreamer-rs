@@ -612,7 +612,7 @@ pub trait MetaContainerExt: IsA<MetaContainer> + 'static {
             let detailed_signal_name = detail.map(|name| format!("notify-meta::{name}\0"));
             let signal_name: &[u8] = detailed_signal_name
                 .as_ref()
-                .map_or(&b"notify-meta\0"[..], |n| n.as_bytes());
+                .map_or(c"notify-meta".to_bytes(), |n| n.as_bytes());
             connect_raw(
                 self.as_ptr() as *mut _,
                 signal_name.as_ptr() as *const _,
