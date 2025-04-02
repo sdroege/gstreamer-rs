@@ -1,6 +1,6 @@
 # escape=`
 
-FROM "registry.freedesktop.org/gstreamer/gstreamer/amd64/windows:2024-11-05.0-main"
+FROM "registry.freedesktop.org/gstreamer/gstreamer/amd64/windows:2025-02-23.0-main"
 
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
 
