@@ -26,3 +26,12 @@ mod auto;
 pub use auto::*;
 
 mod gl_display_egl;
+
+// Re-export all the traits in a prelude module, so that applications
+// can always "use gst_egl::prelude::*" without getting conflicts
+pub mod prelude {
+    #[doc(hidden)]
+    pub use gst_gl::prelude::*;
+
+    pub use crate::auto::traits::*;
+}
