@@ -107,7 +107,7 @@ mod tests {
                 "        offset: 0,",
                 "        offset_end: 4,",
                 "        flags: \"\",",
-                "        buffer: \"AQIDBA==\",",
+                "        buffer: b\"\\x01\\x02\\x03\\x04\",",
                 "    ),",
                 "    (",
                 "        pts: Some(5),",
@@ -116,7 +116,7 @@ mod tests {
                 "        offset: 4,",
                 "        offset_end: 6,",
                 "        flags: \"\",",
-                "        buffer: \"BQY=\",",
+                "        buffer: b\"\\x05\\x06\",",
                 "    ),",
                 "]"
             )
@@ -138,7 +138,7 @@ mod tests {
                     offset: 0,
                     offset_end: 4,
                     flags: "",
-                    buffer: "AQIDBA==",
+                    buffer: b"\x01\x02\x03\x04",
                 ),
                 (
                     pts: Some(5),
@@ -147,7 +147,7 @@ mod tests {
                     offset: 4,
                     offset_end: 6,
                     flags: "",
-                    buffer: "BQY=",
+                    buffer: b"\x05\x06",
                 ),
             ]
         "#;

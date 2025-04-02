@@ -239,7 +239,7 @@ mod tests {
         let res = ron::ser::to_string_pretty(&caps, pretty_config);
         assert_eq!(
             Ok(concat!(
-                "Some([",
+                "r#Some([",
                 "    ((\"foo/bar\", [",
                 "        (\"int\", \"i32\", 12),",
                 "        (\"bool\", \"bool\", true),",
@@ -270,7 +270,7 @@ mod tests {
         let res = ron::ser::to_string_pretty(&caps, pretty_config);
         assert_eq!(
             Ok(concat!(
-                "Some([",
+                "r#Some([",
                 "    ((\"foo/bar\", [",
                 "        (\"int\", \"i32\", 12),",
                 "        (\"bool\", \"bool\", true),",
@@ -280,7 +280,7 @@ mod tests {
                 "            (\"i32\", 1),",
                 "            (\"i32\", 2),",
                 "        ]),",
-                "    ]), Some(Some([",
+                "    ]), Some(r#Some([",
                 "        \"foo:bar\",",
                 "        \"foo:baz\",",
                 "    ]))),",
@@ -304,7 +304,7 @@ mod tests {
         let res = ron::ser::to_string_pretty(&caps, pretty_config.clone());
         assert_eq!(
             Ok(concat!(
-                "Some([",
+                "r#Some([",
                 "    ((\"foo/bar\", [",
                 "        (\"int\", \"i32\", 12),",
                 "        (\"bool\", \"bool\", true),",

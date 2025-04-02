@@ -102,7 +102,7 @@ mod tests {
                 "    offset: 3,",
                 "    offset_end: 4,",
                 "    flags: \"live+discont\",",
-                "    buffer: \"AQIDBA==\",",
+                "    buffer: b\"\\x01\\x02\\x03\\x04\",",
                 ")"
             )
             .to_owned()),
@@ -139,7 +139,7 @@ mod tests {
                 offset: 3,
                 offset_end: 4,
                 flags: "live+discont",
-                buffer: "AQIDBA==",
+                buffer: b"\x01\x02\x03\x04",
             )
         "#;
         let buffer: Buffer = ron::de::from_str(buffer_ron).unwrap();
