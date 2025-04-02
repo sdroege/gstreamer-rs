@@ -11,8 +11,8 @@ if (!$?) {
 
 Set-Location C:\gstreamer
 
-# Copy the cache we already have in the image to avoid massive redownloads
-Move-Item C:/subprojects/*  C:\gstreamer\subprojects
+# Make use of the subprojects cache
+python C:/gstreamer/ci/scripts/handle-subprojects-cache.py --cache-dir /subprojects C:/gstreamer/subprojects
 
 # Update the subprojects cache
 Write-Output "Running meson subproject reset"
