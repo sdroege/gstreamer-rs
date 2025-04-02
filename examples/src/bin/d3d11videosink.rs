@@ -23,6 +23,7 @@ use windows::{
         Dxgi::{Common::*, *},
     },
 };
+use windows_numerics::*;
 
 struct OverlayContext {
     d2d_factory: ID2D1Factory,
@@ -288,7 +289,7 @@ fn main() -> Result<()> {
 
                 // Then, renders text
                 render_target.DrawTextLayout(
-                    D2D_POINT_2F { x: 0f32, y: 0f32 },
+                    Vector2 { X: 0f32, Y: 0f32 },
                     context.text_layout.as_ref(),
                     &text_brush,
                     D2D1_DRAW_TEXT_OPTIONS_NONE,

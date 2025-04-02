@@ -182,12 +182,18 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
                             .unwrap();
 
                         let angle = (angle + global_angle) as f32;
-                        let matrix = Matrix3x2::rotation(angle, center_x, center_y);
+                        let matrix = Matrix3x2::rotation_around(
+                            angle,
+                            Vector2 {
+                                X: center_x,
+                                Y: center_y,
+                            },
+                        );
                         render_target.SetTransform(&matrix);
                         render_target.DrawTextLayout(
-                            D2D_POINT_2F {
-                                x: 0f32,
-                                y: top_margin,
+                            Vector2 {
+                                X: 0f32,
+                                Y: top_margin,
                             },
                             text_layout,
                             &text_brush,
