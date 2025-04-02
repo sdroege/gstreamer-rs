@@ -9783,7 +9783,7 @@ extern "C" {
     pub fn gst_util_filename_compare(a: *const c_char, b: *const c_char) -> c_int;
     #[cfg(feature = "v1_26")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
-    pub fn gst_util_floor_log2(x: u32) -> c_uint;
+    pub fn gst_util_floor_log2(v: u32) -> c_uint;
     pub fn gst_util_fraction_add(
         a_n: c_int,
         a_d: c_int,

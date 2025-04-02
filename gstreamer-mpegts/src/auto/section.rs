@@ -20,7 +20,7 @@ glib::wrapper! {
 impl Section {
     //#[doc(alias = "gst_mpegts_section_get_atsc_cvct")]
     //#[doc(alias = "get_atsc_cvct")]
-    //pub fn atsc_cvct(&mut self) -> /*Ignored*/AtscVCT {
+    //pub fn atsc_cvct(&mut self) -> /*Ignored*/Option<AtscVCT> {
     //    unsafe { TODO: call ffi:gst_mpegts_section_get_atsc_cvct() }
     //}
 
@@ -38,7 +38,7 @@ impl Section {
 
     //#[doc(alias = "gst_mpegts_section_get_atsc_mgt")]
     //#[doc(alias = "get_atsc_mgt")]
-    //pub fn atsc_mgt(&mut self) -> /*Ignored*/AtscMGT {
+    //pub fn atsc_mgt(&mut self) -> /*Ignored*/Option<AtscMGT> {
     //    unsafe { TODO: call ffi:gst_mpegts_section_get_atsc_mgt() }
     //}
 
@@ -56,13 +56,13 @@ impl Section {
 
     //#[doc(alias = "gst_mpegts_section_get_atsc_tvct")]
     //#[doc(alias = "get_atsc_tvct")]
-    //pub fn atsc_tvct(&mut self) -> /*Ignored*/AtscVCT {
+    //pub fn atsc_tvct(&mut self) -> /*Ignored*/Option<AtscVCT> {
     //    unsafe { TODO: call ffi:gst_mpegts_section_get_atsc_tvct() }
     //}
 
     //#[doc(alias = "gst_mpegts_section_get_bat")]
     //#[doc(alias = "get_bat")]
-    //pub fn bat(&mut self) -> /*Ignored*/BAT {
+    //pub fn bat(&mut self) -> /*Ignored*/Option<BAT> {
     //    unsafe { TODO: call ffi:gst_mpegts_section_get_bat() }
     //}
 
@@ -74,13 +74,13 @@ impl Section {
 
     //#[doc(alias = "gst_mpegts_section_get_eit")]
     //#[doc(alias = "get_eit")]
-    //pub fn eit(&mut self) -> /*Ignored*/EIT {
+    //pub fn eit(&mut self) -> /*Ignored*/Option<EIT> {
     //    unsafe { TODO: call ffi:gst_mpegts_section_get_eit() }
     //}
 
     //#[doc(alias = "gst_mpegts_section_get_nit")]
     //#[doc(alias = "get_nit")]
-    //pub fn nit(&mut self) -> /*Ignored*/NIT {
+    //pub fn nit(&mut self) -> /*Ignored*/Option<NIT> {
     //    unsafe { TODO: call ffi:gst_mpegts_section_get_nit() }
     //}
 
@@ -92,36 +92,36 @@ impl Section {
 
     //#[doc(alias = "gst_mpegts_section_get_pmt")]
     //#[doc(alias = "get_pmt")]
-    //pub fn pmt(&mut self) -> /*Ignored*/PMT {
+    //pub fn pmt(&mut self) -> /*Ignored*/Option<PMT> {
     //    unsafe { TODO: call ffi:gst_mpegts_section_get_pmt() }
     //}
 
     //#[doc(alias = "gst_mpegts_section_get_sdt")]
     //#[doc(alias = "get_sdt")]
-    //pub fn sdt(&mut self) -> /*Ignored*/SDT {
+    //pub fn sdt(&mut self) -> /*Ignored*/Option<SDT> {
     //    unsafe { TODO: call ffi:gst_mpegts_section_get_sdt() }
     //}
 
     //#[doc(alias = "gst_mpegts_section_get_sit")]
     //#[doc(alias = "get_sit")]
-    //pub fn sit(&mut self) -> /*Ignored*/SIT {
+    //pub fn sit(&mut self) -> /*Ignored*/Option<SIT> {
     //    unsafe { TODO: call ffi:gst_mpegts_section_get_sit() }
     //}
 
     //#[doc(alias = "gst_mpegts_section_get_tdt")]
     //#[doc(alias = "get_tdt")]
-    //pub fn tdt(&mut self) -> /*Ignored*/gst::DateTime {
+    //pub fn tdt(&mut self) -> /*Ignored*/Option<gst::DateTime> {
     //    unsafe { TODO: call ffi:gst_mpegts_section_get_tdt() }
     //}
 
     //#[doc(alias = "gst_mpegts_section_get_tot")]
     //#[doc(alias = "get_tot")]
-    //pub fn tot(&mut self) -> /*Ignored*/TOT {
+    //pub fn tot(&mut self) -> /*Ignored*/Option<TOT> {
     //    unsafe { TODO: call ffi:gst_mpegts_section_get_tot() }
     //}
 
     //#[doc(alias = "gst_mpegts_section_from_atsc_mgt")]
-    //pub fn from_atsc_mgt(mgt: /*Ignored*/AtscMGT) -> Section {
+    //pub fn from_atsc_mgt(mgt: /*Ignored*/AtscMGT) -> Option<Section> {
     //    unsafe { TODO: call ffi:gst_mpegts_section_from_atsc_mgt() }
     //}
 
@@ -136,7 +136,7 @@ impl Section {
     //}
 
     //#[doc(alias = "gst_mpegts_section_from_nit")]
-    //pub fn from_nit(nit: /*Ignored*/NIT) -> Section {
+    //pub fn from_nit(nit: /*Ignored*/NIT) -> Option<Section> {
     //    unsafe { TODO: call ffi:gst_mpegts_section_from_nit() }
     //}
 
@@ -146,12 +146,12 @@ impl Section {
     //}
 
     //#[doc(alias = "gst_mpegts_section_from_pmt")]
-    //pub fn from_pmt(pmt: /*Ignored*/PMT, pid: u16) -> Section {
+    //pub fn from_pmt(pmt: /*Ignored*/PMT, pid: u16) -> Option<Section> {
     //    unsafe { TODO: call ffi:gst_mpegts_section_from_pmt() }
     //}
 
     //#[doc(alias = "gst_mpegts_section_from_sdt")]
-    //pub fn from_sdt(sdt: /*Ignored*/SDT) -> Section {
+    //pub fn from_sdt(sdt: /*Ignored*/SDT) -> Option<Section> {
     //    unsafe { TODO: call ffi:gst_mpegts_section_from_sdt() }
     //}
 }

@@ -2837,8 +2837,6 @@ extern "C" {
         section: *mut GstMpegtsSection,
         element: *mut gst::GstElement,
     ) -> gboolean;
-    #[cfg(feature = "v1_18")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_mpegts_section_from_atsc_mgt(mgt: *mut GstMpegtsAtscMGT) -> *mut GstMpegtsSection;
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]

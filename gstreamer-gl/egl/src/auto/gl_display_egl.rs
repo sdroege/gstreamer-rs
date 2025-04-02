@@ -51,3 +51,19 @@ impl GLDisplayEGL {
 
 unsafe impl Send for GLDisplayEGL {}
 unsafe impl Sync for GLDisplayEGL {}
+
+pub trait GLDisplayEGLExt: IsA<GLDisplayEGL> + 'static {
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "gst_gl_display_egl_set_foreign")]
+    fn set_foreign(&self, foreign: bool) {
+        unsafe {
+            ffi::gst_gl_display_egl_set_foreign(
+                self.as_ref().to_glib_none().0,
+                foreign.into_glib(),
+            );
+        }
+    }
+}
+
+impl<O: IsA<GLDisplayEGL>> GLDisplayEGLExt for O {}
