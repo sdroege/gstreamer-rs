@@ -8,10 +8,7 @@ use std::ptr;
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 use std::slice;
 
-use glib::translate::{from_glib, IntoGlib};
-#[cfg(feature = "v1_16")]
-#[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
-use glib::translate::{from_glib_none, ToGlibPtr};
+use glib::translate::*;
 use gst::prelude::*;
 
 use crate::ffi;
@@ -181,8 +178,8 @@ impl AudioMeta {
 
     #[doc(alias = "get_info")]
     #[inline]
-    pub fn info(&self) -> crate::AudioInfo {
-        unsafe { from_glib_none(&self.0.info as *const _) }
+    pub fn info(&self) -> &crate::AudioInfo {
+        unsafe { &*(&self.0.info as *const ffi::GstAudioInfo as *const crate::AudioInfo) }
     }
 
     #[doc(alias = "get_samples")]
