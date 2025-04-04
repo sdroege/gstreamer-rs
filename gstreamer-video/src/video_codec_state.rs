@@ -95,9 +95,9 @@ impl<'a> VideoCodecState<'a, InNegotiation<'a>> {
 impl<'a, T: VideoCodecStateContext<'a>> VideoCodecState<'a, T> {
     #[doc(alias = "get_info")]
     #[inline]
-    pub fn info(&self) -> VideoInfo {
+    pub fn info(&self) -> &VideoInfo {
         unsafe {
-            VideoInfo::from_glib_none(&((*self.as_mut_ptr()).info) as *const ffi::GstVideoInfo)
+            &*(&(*self.as_mut_ptr()).info as *const ffi::GstVideoInfo as *const crate::VideoInfo)
         }
     }
 
