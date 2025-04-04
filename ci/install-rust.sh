@@ -27,8 +27,7 @@ if [ "$RUST_IMAGE_FULL" = "1" ]; then
   rustup component add rustfmt
 
   cargo install --locked cargo-deny
-  # Don't use --locked because time-0.3.30 does not build with 1.80 or newer
-  cargo install cargo-outdated
+  cargo install --locked cargo-outdated
   cargo install --locked typos-cli --version "1.19.0"
 
   # Coverage tools
