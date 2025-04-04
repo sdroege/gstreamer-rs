@@ -880,7 +880,7 @@ impl VideoInfo {
     #[inline]
     pub fn field_height(&self) -> u32 {
         if self.0.interlace_mode == ffi::GST_VIDEO_INTERLACE_MODE_ALTERNATE {
-            (self.0.height as u32 + 1) / 2
+            (self.0.height as u32).div_ceil(2)
         } else {
             self.0.height as u32
         }

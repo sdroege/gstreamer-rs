@@ -24,11 +24,10 @@ pub(super) fn line_buffer_len(format: VideoFormat, width: u32) -> usize {
     skip_assert_initialized!();
     // Taken from gst-plugins-base/gst-libs/gst/video/video-info.c:fill_planes
     match format {
-        VideoFormat::V210 => ((width as usize + 47) / 48) * 128,
+        VideoFormat::V210 => (width as usize).div_ceil(48) * 128,
         VideoFormat::Uyvy => {
             // round up width to the next multiple of 4
-            // FIXME: {integer}::next_multiple_of was stabilised in rustc 1.73.0
-            ((width as usize * 2) + 3) & !3
+            (width as usize * 2).next_multiple_of(4)
         }
         _ => unreachable!(),
     }

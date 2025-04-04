@@ -656,7 +656,7 @@ fn pad_clocktime(f: &mut fmt::Formatter<'_>, sign: Sign, buf: &str) -> fmt::Resu
 
         // Align center: Split equally between left and right side
         // If the required padding is odd, the right side gets one more char
-        Alignment::Center => (padding / 2, 0, (padding + 1) / 2),
+        Alignment::Center => (padding / 2, 0, padding.div_ceil(2)),
     };
 
     // And now for the actual writing
