@@ -44,7 +44,7 @@ fi
 if [ "$RUST_VERSION" = "1.80.1" ]; then
     cargo install --locked cargo-c --version 0.10.5+cargo-0.83
 else
-    cargo install --locked cargo-c --version 0.10.11+cargo-0.86
+    cargo install --locked cargo-c --version 0.10.12+cargo-0.87
 fi
 
 if [ "$RUST_VERSION" = "nightly" ]; then
