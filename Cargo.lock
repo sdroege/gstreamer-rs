@@ -985,6 +985,7 @@ dependencies = [
 name = "gstreamer-audio"
 version = "0.24.0"
 dependencies = [
+ "byte-slice-cast",
  "cfg-if",
  "gir-format-check",
  "glib",
