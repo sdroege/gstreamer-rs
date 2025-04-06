@@ -449,6 +449,8 @@ mod tests {
 
     #[test]
     fn pack_unpack() {
+        use byte_slice_cast::*;
+
         gst::init().unwrap();
 
         let info = AudioFormatInfo::from_format(crate::AudioFormat::S16le);
@@ -456,12 +458,20 @@ mod tests {
 
         assert!(unpack_info.width() > 0);
 
-        let input = [0, 0, 255, 255, 128, 128, 64, 64];
-        let mut unpacked = [0; 16];
-        let mut output = [0; 8];
+        let input = [0i16, i16::MAX, i16::MIN, 0i16];
+        let mut unpacked = [0i32; 4];
+        let mut output = [0i16; 4];
 
-        info.unpack(crate::AudioPackFlags::empty(), &mut unpacked, &input);
-        info.pack(crate::AudioPackFlags::empty(), &mut output, &unpacked);
+        info.unpack(
+            crate::AudioPackFlags::empty(),
+            unpacked.as_mut_byte_slice(),
+            input.as_byte_slice(),
+        );
+        info.pack(
+            crate::AudioPackFlags::empty(),
+            output.as_mut_byte_slice(),
+            unpacked.as_byte_slice(),
+        );
 
         assert_eq!(input, output);
     }
