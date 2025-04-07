@@ -30,3 +30,25 @@ if (!$?) {
 
 cargo-cbuild --version
 cargo nextest --version
+
+# Rust-based CLI unpacker
+cargo install --locked ouch
+if (!$?) {
+  Write-Host "Failed to install ouch"
+  Exit 1
+}
+
+# libclang for bindgen-cli (x64)
+$libclang_url = 'https://gstreamer.freedesktop.org/data/src/mirror/libclang-20.1.2.tar.xz'
+Invoke-WebRequest -Uri $libclang_url -Outfile "$env:TEMP\libclang-20.1.2.tar.xz"
+ouch decompress -d $env:TEMP "$env:TEMP\libclang-20.1.2.tar.xz"
+cp "$env:TEMP\libclang-20.1.2\x64\bin\libclang.dll" "$env:USERPROFILE\.cargo\bin"
+Remove-Item -Recurse "$env:TEMP\libclang-20.1.2"
+Remove-Item "$env:TEMP\libclang-20.1.2.tar.xz"
+
+cargo install --locked bindgen-cli
+if (!$?) {
+  Write-Host "Failed to install bindgen"
+  Exit 1
+}
+bindgen --version

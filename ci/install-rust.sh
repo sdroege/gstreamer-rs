@@ -53,3 +53,6 @@ if [ "$RUST_VERSION" = "nightly" ]; then
   # Documentation tools
   cargo install --locked rustdoc-stripper
 fi
+
+cargo install --locked bindgen-cli
+bindgen --version
