@@ -125,6 +125,8 @@ pub struct ConsumptionLink {
 impl ConsumptionLink {
     /// Create a new disconnected `ConsumptionLink`.
     pub fn disconnected(consumer: gst_app::AppSrc) -> ConsumptionLink {
+        StreamProducer::configure_consumer(&consumer);
+
         ConsumptionLink {
             consumer,
             producer: None,
@@ -148,6 +150,7 @@ impl ConsumptionLink {
         }
         new_producer.add_consumer_internal(
             &self.consumer,
+            false,
             self.dropped.clone(),
             self.pushed.clone(),
             self.discard.clone(),
@@ -247,6 +250,7 @@ impl StreamProducer {
 
         self.add_consumer_internal(
             consumer,
+            true,
             dropped.clone(),
             pushed.clone(),
             discard.clone(),
@@ -266,6 +270,7 @@ impl StreamProducer {
     fn add_consumer_internal(
         &self,
         consumer: &gst_app::AppSrc,
+        configure_consumer: bool,
         dropped: Arc<WrappedAtomicU64>,
         pushed: Arc<WrappedAtomicU64>,
         discard: Arc<atomic::AtomicBool>,
@@ -291,7 +296,9 @@ impl StreamProducer {
             consumer
         );
 
-        Self::configure_consumer(consumer);
+        if configure_consumer {
+            Self::configure_consumer(consumer);
+        }
 
         // Forward force-keyunit events upstream to the appsink
         let srcpad = consumer.static_pad("src").unwrap();
