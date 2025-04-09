@@ -552,6 +552,11 @@ windows rust docker msrv:
     - 'docker'
     - 'windows'
     - '2022'
+  before_script:
+    - New-Item -Force -Path ".cargo" -ItemType "directory"
+    - $git_config="[net]`ngit-fetch-with-cli = true`n"
+    - $git_config | out-file -encoding utf8 .cargo/config.toml
+    - Get-Content -Path .cargo/config.toml
   script:
     # Skip -sys tests as they don't work
     # https://github.com/gtk-rs/gtk3-rs/issues/54
