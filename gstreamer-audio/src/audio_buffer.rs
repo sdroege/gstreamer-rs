@@ -13,7 +13,6 @@ pub enum Writable {}
 pub struct AudioBuffer<T> {
     // Has to be boxed because it contains self-references
     audio_buffer: Box<ffi::GstAudioBuffer>,
-    buffer: gst::Buffer,
     phantom: PhantomData<T>,
 }
 
@@ -43,7 +42,8 @@ impl<T> AudioBuffer<T> {
     pub fn into_buffer(self) -> gst::Buffer {
         unsafe {
             let mut s = mem::ManuallyDrop::new(self);
-            let buffer = ptr::read(&s.buffer);
+            // Take ownership of the buffer stored here when mapping before unmapping
+            let buffer = from_glib_none(s.audio_buffer.buffer);
             ffi::gst_audio_buffer_unmap(&mut *s.audio_buffer);
             ptr::drop_in_place(&mut s.audio_buffer);
 
@@ -166,7 +166,11 @@ impl<T> Drop for AudioBuffer<T> {
     #[inline]
     fn drop(&mut self) {
         unsafe {
+            // Take ownership again of the buffer that was stored here when mapping
+            // and then drop it after unmapping.
+            let buffer = gst::Buffer::from_glib_full(self.audio_buffer.buffer);
             ffi::gst_audio_buffer_unmap(&mut *self.audio_buffer);
+            drop(buffer);
         }
     }
 }
@@ -182,6 +186,9 @@ impl AudioBuffer<Readable> {
         assert!(info.is_valid());
 
         unsafe {
+            // Store the buffer as part of the audio buffer, we will retrieve / unref it
+            // again at a later time.
+            let buffer = mem::ManuallyDrop::new(buffer);
             let mut audio_buffer = Box::new(mem::MaybeUninit::zeroed().assume_init());
             let res: bool = from_glib(ffi::gst_audio_buffer_map(
                 &mut *audio_buffer,
@@ -191,11 +198,10 @@ impl AudioBuffer<Readable> {
             ));
 
             if !res {
-                Err(buffer)
+                Err(mem::ManuallyDrop::into_inner(buffer))
             } else {
                 Ok(Self {
                     audio_buffer,
-                    buffer,
                     phantom: PhantomData,
                 })
             }
@@ -219,6 +225,9 @@ impl AudioBuffer<Writable> {
         assert!(info.is_valid());
 
         unsafe {
+            // Store the buffer as part of the audio buffer, we will retrieve / unref it
+            // again at a later time.
+            let buffer = mem::ManuallyDrop::new(buffer);
             let mut audio_buffer = Box::new(mem::MaybeUninit::zeroed().assume_init());
             let res: bool = from_glib(ffi::gst_audio_buffer_map(
                 &mut *audio_buffer,
@@ -228,11 +237,10 @@ impl AudioBuffer<Writable> {
             ));
 
             if !res {
-                Err(buffer)
+                Err(mem::ManuallyDrop::into_inner(buffer))
             } else {
                 Ok(Self {
                     audio_buffer,
-                    buffer,
                     phantom: PhantomData,
                 })
             }
