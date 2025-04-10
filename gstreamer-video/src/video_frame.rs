@@ -50,7 +50,6 @@ fn plane_buffer_info<T: IsVideoFrame>(
 
 pub struct VideoFrame<T> {
     frame: ffi::GstVideoFrame,
-    buffer: gst::Buffer,
     phantom: PhantomData<T>,
 }
 
@@ -245,7 +244,7 @@ impl<T> VideoFrame<T> {
     pub fn into_buffer(self) -> gst::Buffer {
         unsafe {
             let mut s = mem::ManuallyDrop::new(self);
-            let buffer = ptr::read(&s.buffer);
+            let buffer = from_glib_none(s.frame.buffer);
             ffi::gst_video_frame_unmap(&mut s.frame);
             buffer
         }
@@ -326,10 +325,8 @@ impl<T> VideoFrame<T> {
 
     #[inline]
     pub unsafe fn from_glib_full(frame: ffi::GstVideoFrame) -> Self {
-        let buffer = gst::Buffer::from_glib_none(frame.buffer);
         Self {
             frame,
-            buffer,
             phantom: PhantomData,
         }
     }
@@ -346,11 +343,8 @@ impl<T> VideoFrame<T> {
 
     #[inline]
     pub fn into_raw(self) -> ffi::GstVideoFrame {
-        unsafe {
-            let mut s = mem::ManuallyDrop::new(self);
-            ptr::drop_in_place(&mut s.buffer);
-            s.frame
-        }
+        let s = mem::ManuallyDrop::new(self);
+        s.frame
     }
 }
 
@@ -375,11 +369,15 @@ impl VideoFrame<Readable> {
 
         unsafe {
             let mut frame = mem::MaybeUninit::uninit();
+            // Takes another reference of the buffer but only
+            // when successful, so we can safely return the buffer
+            // on failure and on success drop the additional
+            // reference.
             let res: bool = from_glib(ffi::gst_video_frame_map(
                 frame.as_mut_ptr(),
                 info.to_glib_none().0 as *mut _,
                 buffer.to_glib_none().0,
-                ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF | gst::ffi::GST_MAP_READ,
+                gst::ffi::GST_MAP_READ,
             ));
 
             if !res {
@@ -388,7 +386,6 @@ impl VideoFrame<Readable> {
                 let frame = frame.assume_init();
                 Ok(Self {
                     frame,
-                    buffer,
                     phantom: PhantomData,
                 })
             }
@@ -407,12 +404,16 @@ impl VideoFrame<Readable> {
 
         unsafe {
             let mut frame = mem::MaybeUninit::uninit();
+            // Takes another reference of the buffer but only
+            // when successful, so we can safely return the buffer
+            // on failure and on success drop the additional
+            // reference.
             let res: bool = from_glib(ffi::gst_video_frame_map_id(
                 frame.as_mut_ptr(),
                 info.to_glib_none().0 as *mut _,
                 buffer.to_glib_none().0,
                 id,
-                ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF | gst::ffi::GST_MAP_READ,
+                gst::ffi::GST_MAP_READ,
             ));
 
             if !res {
@@ -421,7 +422,6 @@ impl VideoFrame<Readable> {
                 let frame = frame.assume_init();
                 Ok(Self {
                     frame,
-                    buffer,
                     phantom: PhantomData,
                 })
             }
@@ -446,13 +446,15 @@ impl VideoFrame<Writable> {
 
         unsafe {
             let mut frame = mem::MaybeUninit::uninit();
+            // Takes another reference of the buffer but only
+            // when successful, so we can safely return the buffer
+            // on failure and on success drop the additional
+            // reference.
             let res: bool = from_glib(ffi::gst_video_frame_map(
                 frame.as_mut_ptr(),
                 info.to_glib_none().0 as *mut _,
                 buffer.to_glib_none().0,
-                ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF
-                    | gst::ffi::GST_MAP_READ
-                    | gst::ffi::GST_MAP_WRITE,
+                gst::ffi::GST_MAP_READ | gst::ffi::GST_MAP_WRITE,
             ));
 
             if !res {
@@ -461,7 +463,6 @@ impl VideoFrame<Writable> {
                 let frame = frame.assume_init();
                 Ok(Self {
                     frame,
-                    buffer,
                     phantom: PhantomData,
                 })
             }
@@ -480,14 +481,16 @@ impl VideoFrame<Writable> {
 
         unsafe {
             let mut frame = mem::MaybeUninit::uninit();
+            // Takes another reference of the buffer but only
+            // when successful, so we can safely return the buffer
+            // on failure and on success drop the additional
+            // reference.
             let res: bool = from_glib(ffi::gst_video_frame_map_id(
                 frame.as_mut_ptr(),
                 info.to_glib_none().0 as *mut _,
                 buffer.to_glib_none().0,
                 id,
-                ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF
-                    | gst::ffi::GST_MAP_READ
-                    | gst::ffi::GST_MAP_WRITE,
+                gst::ffi::GST_MAP_READ | gst::ffi::GST_MAP_WRITE,
             ));
 
             if !res {
@@ -496,7 +499,6 @@ impl VideoFrame<Writable> {
                 let frame = frame.assume_init();
                 Ok(Self {
                     frame,
-                    buffer,
                     phantom: PhantomData,
                 })
             }
