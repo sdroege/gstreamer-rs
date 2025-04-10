@@ -151,7 +151,6 @@ impl<T> AudioBuffer<T> {
     pub fn as_audio_buffer_ref(&self) -> AudioBufferRef<&gst::BufferRef> {
         AudioBufferRef {
             audio_buffer: AudioBufferPtr::Borrowed(ptr::NonNull::from(&*self.audio_buffer)),
-            unmap: false,
             phantom: PhantomData,
         }
     }
@@ -279,7 +278,6 @@ impl AudioBuffer<Writable> {
     pub fn as_mut_audio_buffer_ref(&mut self) -> AudioBufferRef<&mut gst::BufferRef> {
         AudioBufferRef {
             audio_buffer: AudioBufferPtr::Borrowed(ptr::NonNull::from(&mut *self.audio_buffer)),
-            unmap: false,
             phantom: PhantomData,
         }
     }
@@ -292,6 +290,7 @@ impl AudioBuffer<Writable> {
 
 #[derive(Debug)]
 enum AudioBufferPtr {
+    // Has to be boxed because it contains self-references
     Owned(Box<ffi::GstAudioBuffer>),
     Borrowed(ptr::NonNull<ffi::GstAudioBuffer>),
 }
@@ -319,9 +318,7 @@ impl ops::DerefMut for AudioBufferPtr {
 }
 
 pub struct AudioBufferRef<T> {
-    // Has to be boxed because it contains self-references
     audio_buffer: AudioBufferPtr,
-    unmap: bool,
     phantom: PhantomData<T>,
 }
 
@@ -456,7 +453,6 @@ impl<'a> AudioBufferRef<&'a gst::BufferRef> {
             audio_buffer: AudioBufferPtr::Borrowed(ptr::NonNull::new_unchecked(
                 audio_buffer as *mut _,
             )),
-            unmap: false,
             phantom: PhantomData,
         })
     }
@@ -484,7 +480,6 @@ impl<'a> AudioBufferRef<&'a gst::BufferRef> {
             } else {
                 Ok(Self {
                     audio_buffer: AudioBufferPtr::Owned(audio_buffer),
-                    unmap: true,
                     phantom: PhantomData,
                 })
             }
@@ -504,7 +499,6 @@ impl<'a> AudioBufferRef<&'a mut gst::BufferRef> {
 
         Borrowed::new(Self {
             audio_buffer: AudioBufferPtr::Borrowed(ptr::NonNull::new_unchecked(audio_buffer)),
-            unmap: false,
             phantom: PhantomData,
         })
     }
@@ -532,7 +526,6 @@ impl<'a> AudioBufferRef<&'a mut gst::BufferRef> {
             } else {
                 Ok(Self {
                     audio_buffer: AudioBufferPtr::Owned(audio_buffer),
-                    unmap: true,
                     phantom: PhantomData,
                 })
             }
@@ -594,7 +587,7 @@ impl<T> Drop for AudioBufferRef<T> {
     #[inline]
     fn drop(&mut self) {
         unsafe {
-            if self.unmap {
+            if matches!(self.audio_buffer, AudioBufferPtr::Owned(..)) {
                 ffi::gst_audio_buffer_unmap(&mut *self.audio_buffer);
             }
         }
