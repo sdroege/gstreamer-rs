@@ -16,6 +16,8 @@ macro_rules! skip_assert_initialized {
 mod tags;
 pub use crate::tags::*;
 
+pub mod language_codes;
+
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst_tag::prelude::*" without getting conflicts
 pub mod prelude {
