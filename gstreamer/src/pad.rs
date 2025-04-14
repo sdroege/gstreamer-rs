@@ -2176,7 +2176,7 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
                                     Some("u") => {
                                         if name_part
                                             .get(conv_spec_start..)
-                                            .map_or(true, |s| s.parse::<u32>().is_err())
+                                            .is_none_or(|s| s.parse::<u32>().is_err())
                                         {
                                             crate::debug!(
                                             CAT_RUST,
@@ -2191,7 +2191,7 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
                                     Some("d") => {
                                         if name_part
                                             .get(conv_spec_start..)
-                                            .map_or(true, |s| s.parse::<i32>().is_err())
+                                            .is_none_or(|s| s.parse::<i32>().is_err())
                                         {
                                             crate::debug!(
                                             CAT_RUST,

@@ -46,7 +46,7 @@ impl Dump<'_> {
                 write!(f, "<start out of range>")?;
                 return Ok(());
             }
-            Bound::Excluded(idx) if idx.checked_add(1).map_or(true, |idx| idx >= len) => {
+            Bound::Excluded(idx) if idx.checked_add(1).is_none_or(|idx| idx >= len) => {
                 write!(f, "<start out of range>")?;
                 return Ok(());
             }
@@ -56,7 +56,7 @@ impl Dump<'_> {
         };
 
         let end_idx = match self.end {
-            Bound::Included(idx) if idx.checked_add(1).map_or(true, |idx| idx > len) => {
+            Bound::Included(idx) if idx.checked_add(1).is_none_or(|idx| idx > len) => {
                 write!(f, "<end out of range>")?;
                 return Ok(());
             }
