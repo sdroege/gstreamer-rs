@@ -156,7 +156,7 @@ pub trait ElementImplExt: ElementImpl {
                     from_glib_none(f(
                         self.obj().unsafe_cast_ref::<Element>().to_glib_none().0,
                         templ.to_glib_none().0,
-                        name.to_glib_full(),
+                        name.to_glib_none().0,
                         caps.to_glib_none().0,
                     ))
                 })
