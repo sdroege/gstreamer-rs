@@ -421,7 +421,7 @@ impl StreamProducer {
                 if consumer.discard.load(atomic::Ordering::SeqCst) {
                     consumer
                         .needs_keyframe
-                        .store(false, atomic::Ordering::SeqCst);
+                        .store(true, atomic::Ordering::SeqCst);
                     return None;
                 }
 
