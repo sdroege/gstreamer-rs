@@ -202,6 +202,11 @@ impl ConsumptionLink {
     pub fn appsrc(&self) -> &gst_app::AppSrc {
         &self.consumer
     }
+
+    /// Get the `StreamProducer` currently by this link, if any.
+    pub fn stream_producer(&self) -> Option<&StreamProducer> {
+        self.producer.as_ref()
+    }
 }
 
 impl Drop for ConsumptionLink {
