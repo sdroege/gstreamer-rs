@@ -33,7 +33,6 @@ if [ "$RUST_IMAGE_FULL" = "1" ]; then
         # Don't use --locked because time-0.3.30 does not build with 1.80 or newer
         cargo install cargo-outdated
     fi
-  cargo install --locked typos-cli --version "1.19.0"
 
   # Coverage tools
   rustup component add llvm-tools-preview
