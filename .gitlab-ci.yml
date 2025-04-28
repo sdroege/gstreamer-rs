@@ -360,18 +360,6 @@ check commits:
     - job: 'build-stable'
       artifacts: false
 
-typos:
-  extends: .img-stable
-  stage: "lint"
-  tags: [ 'placeholder-job' ]
-  variables:
-    GIT_SUBMODULE_STRATEGY: "none"
-  script:
-    - typos
-  needs:
-    - job: 'build-stable'
-      artifacts: false
-
 clippy:
   extends: .img-stable
   stage: 'extras'
