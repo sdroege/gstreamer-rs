@@ -37,12 +37,12 @@ impl SourceBuffer {
     }
 
     #[doc(alias = "gst_source_buffer_append_buffer")]
-    pub fn append_buffer(&self, buf: &gst::Buffer) -> Result<(), glib::Error> {
+    pub fn append_buffer(&self, buf: gst::Buffer) -> Result<(), glib::Error> {
         unsafe {
             let mut error = std::ptr::null_mut();
             let is_ok = ffi::gst_source_buffer_append_buffer(
                 self.to_glib_none().0,
-                buf.to_glib_none().0,
+                buf.into_glib_ptr(),
                 &mut error,
             );
             debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
