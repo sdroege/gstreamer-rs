@@ -16,6 +16,9 @@ get_features() {
         gstreamer-audio|gstreamer-editing-services|gstreamer-gl|gstreamer-pbutils|gstreamer-rtp|gstreamer-rtsp|gstreamer-video|gstreamer)
             echo "--features=serde,v1_26"
             ;;
+        gstreamer-mse)
+            echo ""
+            ;;
         *)
             echo "--features=v1_26"
             ;;
