@@ -84,5 +84,8 @@ extern "C" {
         type_: gst_gl::GstGLDisplayType,
         display: uintptr_t,
     ) -> gpointer;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_gl_display_egl_set_foreign(display_egl: *mut GstGLDisplayEGL, foreign: gboolean);
 
 }

@@ -5,3 +5,7 @@
 
 mod gl_display_egl;
 pub use self::gl_display_egl::GLDisplayEGL;
+
+pub(crate) mod traits {
+    pub use super::gl_display_egl::GLDisplayEGLExt;
+}

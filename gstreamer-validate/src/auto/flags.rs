@@ -18,6 +18,7 @@ bitflags! {
         const ASYNC = ffi::GST_VALIDATE_ACTION_TYPE_ASYNC as _;
         #[doc(alias = "GST_VALIDATE_ACTION_TYPE_NON_BLOCKING")]
         const NON_BLOCKING = ffi::GST_VALIDATE_ACTION_TYPE_NON_BLOCKING as _;
+        #[deprecated = "Since 1.20"]
         #[doc(alias = "GST_VALIDATE_ACTION_TYPE_INTERLACED")]
         const INTERLACED = ffi::GST_VALIDATE_ACTION_TYPE_INTERLACED as _;
         #[doc(alias = "GST_VALIDATE_ACTION_TYPE_CAN_EXECUTE_ON_ADDITION")]
