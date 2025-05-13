@@ -504,6 +504,12 @@ extern "C" {
     #[cfg(feature = "v1_26")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
     pub fn gst_tensor_meta_get(tmeta: *mut GstTensorMeta, index: size_t) -> *const GstTensor;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_tensor_meta_get_by_id(
+        tmeta: *mut GstTensorMeta,
+        id: glib::GQuark,
+    ) -> *const GstTensor;
     #[cfg(feature = "v1_26")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
     pub fn gst_tensor_meta_get_index_from_id(meta: *mut GstTensorMeta, id: glib::GQuark) -> c_int;
@@ -537,6 +543,30 @@ extern "C" {
     #[cfg(feature = "v1_26")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
     pub fn gst_buffer_get_tensor_meta(buffer: *mut gst::GstBuffer) -> *mut GstTensorMeta;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_analytics_image_util_iou_float(
+        bb1_x: c_float,
+        bb1_y: c_float,
+        bb1_w: c_float,
+        bb1_h: c_float,
+        bb2_x: c_float,
+        bb2_y: c_float,
+        bb2_w: c_float,
+        bb2_h: c_float,
+    ) -> c_float;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_analytics_image_util_iou_int(
+        bb1_x: c_int,
+        bb1_y: c_int,
+        bb1_w: c_int,
+        bb1_h: c_int,
+        bb2_x: c_int,
+        bb2_y: c_int,
+        bb2_w: c_int,
+        bb2_h: c_int,
+    ) -> c_float;
     pub fn gst_analytics_relation_get_length(instance: *const GstAnalyticsRelationMeta) -> size_t;
     pub fn gst_analytics_relation_meta_api_get_type() -> GType;
     #[cfg(feature = "v1_26")]

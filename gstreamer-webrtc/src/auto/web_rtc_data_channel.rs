@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
+#![allow(deprecated)]
 
 use crate::{ffi, WebRTCDataChannelState, WebRTCPriorityType};
 use glib::{
@@ -29,6 +30,8 @@ impl WebRTCDataChannel {
         }
     }
 
+    #[cfg_attr(feature = "v1_22", deprecated = "Since 1.22")]
+    #[allow(deprecated)]
     #[doc(alias = "gst_webrtc_data_channel_send_data")]
     pub fn send_data(&self, data: Option<&glib::Bytes>) {
         unsafe {
@@ -56,6 +59,8 @@ impl WebRTCDataChannel {
         }
     }
 
+    #[cfg_attr(feature = "v1_22", deprecated = "Since 1.22")]
+    #[allow(deprecated)]
     #[doc(alias = "gst_webrtc_data_channel_send_string")]
     pub fn send_string(&self, str: Option<&str>) {
         unsafe {
@@ -139,32 +144,6 @@ impl WebRTCDataChannel {
     #[doc(alias = "ready-state")]
     pub fn ready_state(&self) -> WebRTCDataChannelState {
         ObjectExt::property(self, "ready-state")
-    }
-
-    #[doc(alias = "close")]
-    pub fn connect_close<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
-        unsafe extern "C" fn close_trampoline<F: Fn(&WebRTCDataChannel) + Send + Sync + 'static>(
-            this: *mut ffi::GstWebRTCDataChannel,
-            f: glib::ffi::gpointer,
-        ) {
-            let f: &F = &*(f as *const F);
-            f(&from_glib_borrow(this))
-        }
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(
-                self.as_ptr() as *mut _,
-                c"close".as_ptr() as *const _,
-                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
-                    close_trampoline::<F> as *const (),
-                )),
-                Box_::into_raw(f),
-            )
-        }
-    }
-
-    pub fn emit_close(&self) {
-        self.emit_by_name::<()>("close", &[]);
     }
 
     #[doc(alias = "on-buffered-amount-low")]
@@ -335,81 +314,6 @@ impl WebRTCDataChannel {
                 Box_::into_raw(f),
             )
         }
-    }
-
-    #[doc(alias = "send-data")]
-    pub fn connect_send_data<F: Fn(&Self, Option<&glib::Bytes>) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
-        unsafe extern "C" fn send_data_trampoline<
-            F: Fn(&WebRTCDataChannel, Option<&glib::Bytes>) + Send + Sync + 'static,
-        >(
-            this: *mut ffi::GstWebRTCDataChannel,
-            data: *mut glib::ffi::GBytes,
-            f: glib::ffi::gpointer,
-        ) {
-            let f: &F = &*(f as *const F);
-            f(
-                &from_glib_borrow(this),
-                Option::<glib::Bytes>::from_glib_borrow(data)
-                    .as_ref()
-                    .as_ref(),
-            )
-        }
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(
-                self.as_ptr() as *mut _,
-                c"send-data".as_ptr() as *const _,
-                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
-                    send_data_trampoline::<F> as *const (),
-                )),
-                Box_::into_raw(f),
-            )
-        }
-    }
-
-    pub fn emit_send_data(&self, data: Option<&glib::Bytes>) {
-        self.emit_by_name::<()>("send-data", &[&data]);
-    }
-
-    #[doc(alias = "send-string")]
-    pub fn connect_send_string<F: Fn(&Self, Option<&str>) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
-        unsafe extern "C" fn send_string_trampoline<
-            F: Fn(&WebRTCDataChannel, Option<&str>) + Send + Sync + 'static,
-        >(
-            this: *mut ffi::GstWebRTCDataChannel,
-            data: *mut std::ffi::c_char,
-            f: glib::ffi::gpointer,
-        ) {
-            let f: &F = &*(f as *const F);
-            f(
-                &from_glib_borrow(this),
-                Option::<glib::GString>::from_glib_borrow(data)
-                    .as_ref()
-                    .as_ref()
-                    .map(|s| s.as_str()),
-            )
-        }
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(
-                self.as_ptr() as *mut _,
-                c"send-string".as_ptr() as *const _,
-                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
-                    send_string_trampoline::<F> as *const (),
-                )),
-                Box_::into_raw(f),
-            )
-        }
-    }
-
-    pub fn emit_send_string(&self, data: Option<&str>) {
-        self.emit_by_name::<()>("send-string", &[&data]);
     }
 
     #[doc(alias = "buffered-amount")]

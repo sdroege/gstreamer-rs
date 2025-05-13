@@ -98,6 +98,12 @@ pub type GstWebRTCICERole = c_int;
 pub const GST_WEBRTC_ICE_ROLE_CONTROLLED: GstWebRTCICERole = 0;
 pub const GST_WEBRTC_ICE_ROLE_CONTROLLING: GstWebRTCICERole = 1;
 
+pub type GstWebRTCICETcpCandidateType = c_int;
+pub const GST_WEBRTC_ICE_TCP_CANDIDATE_TYPE_ACTIVE: GstWebRTCICETcpCandidateType = 0;
+pub const GST_WEBRTC_ICE_TCP_CANDIDATE_TYPE_PASSIVE: GstWebRTCICETcpCandidateType = 1;
+pub const GST_WEBRTC_ICE_TCP_CANDIDATE_TYPE_SO: GstWebRTCICETcpCandidateType = 2;
+pub const GST_WEBRTC_ICE_TCP_CANDIDATE_TYPE_NONE: GstWebRTCICETcpCandidateType = 3;
+
 pub type GstWebRTCICETransportPolicy = c_int;
 pub const GST_WEBRTC_ICE_TRANSPORT_POLICY_ALL: GstWebRTCICETransportPolicy = 0;
 pub const GST_WEBRTC_ICE_TRANSPORT_POLICY_RELAY: GstWebRTCICETransportPolicy = 1;
@@ -164,6 +170,22 @@ pub const GST_WEBRTC_STATS_LOCAL_CANDIDATE: GstWebRTCStatsType = 12;
 pub const GST_WEBRTC_STATS_REMOTE_CANDIDATE: GstWebRTCStatsType = 13;
 pub const GST_WEBRTC_STATS_CERTIFICATE: GstWebRTCStatsType = 14;
 
+// Unions
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub union GstWebRTCICECandidateStats_ABI {
+    pub abi: GstWebRTCICECandidateStats_ABI_abi,
+    pub _gst_reserved: [gpointer; 20],
+}
+
+impl ::std::fmt::Debug for GstWebRTCICECandidateStats_ABI {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstWebRTCICECandidateStats_ABI @ {self:p}"))
+            .field("abi", unsafe { &self.abi })
+            .finish()
+    }
+}
+
 // Callbacks
 pub type GstWebRTCICEOnCandidateFunc =
     Option<unsafe extern "C" fn(*mut GstWebRTCICE, c_uint, *const c_char, gpointer)>;
@@ -198,7 +220,7 @@ pub struct GstWebRTCICECandidateStats {
     pub relay_proto: *const c_char,
     pub prio: c_uint,
     pub url: *mut c_char,
-    pub _gst_reserved: [gpointer; 20],
+    pub ABI: GstWebRTCICECandidateStats_ABI,
 }
 
 impl ::std::fmt::Debug for GstWebRTCICECandidateStats {
@@ -212,7 +234,29 @@ impl ::std::fmt::Debug for GstWebRTCICECandidateStats {
             .field("relay_proto", &self.relay_proto)
             .field("prio", &self.prio)
             .field("url", &self.url)
-            .field("_gst_reserved", &self._gst_reserved)
+            .field("ABI", &self.ABI)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstWebRTCICECandidateStats_ABI_abi {
+    pub foundation: *mut c_char,
+    pub related_address: *mut c_char,
+    pub related_port: c_uint,
+    pub username_fragment: *mut c_char,
+    pub tcp_type: GstWebRTCICETcpCandidateType,
+}
+
+impl ::std::fmt::Debug for GstWebRTCICECandidateStats_ABI_abi {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstWebRTCICECandidateStats_ABI_abi @ {self:p}"))
+            .field("foundation", &self.foundation)
+            .field("related_address", &self.related_address)
+            .field("related_port", &self.related_port)
+            .field("username_fragment", &self.username_fragment)
+            .field("tcp_type", &self.tcp_type)
             .finish()
     }
 }
@@ -636,6 +680,13 @@ extern "C" {
     // GstWebRTCICERole
     //=========================================================================
     pub fn gst_webrtc_ice_role_get_type() -> GType;
+
+    //=========================================================================
+    // GstWebRTCICETcpCandidateType
+    //=========================================================================
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_webrtc_ice_tcp_candidate_type_get_type() -> GType;
 
     //=========================================================================
     // GstWebRTCICETransportPolicy

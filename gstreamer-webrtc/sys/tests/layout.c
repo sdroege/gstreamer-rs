@@ -23,6 +23,7 @@ int main() {
     printf("%s;%zu;%zu\n", "GstWebRTCICERole", sizeof(GstWebRTCICERole), alignof(GstWebRTCICERole));
     printf("%s;%zu;%zu\n", "GstWebRTCICEStream", sizeof(GstWebRTCICEStream), alignof(GstWebRTCICEStream));
     printf("%s;%zu;%zu\n", "GstWebRTCICEStreamClass", sizeof(GstWebRTCICEStreamClass), alignof(GstWebRTCICEStreamClass));
+    printf("%s;%zu;%zu\n", "GstWebRTCICETcpCandidateType", sizeof(GstWebRTCICETcpCandidateType), alignof(GstWebRTCICETcpCandidateType));
     printf("%s;%zu;%zu\n", "GstWebRTCICETransport", sizeof(GstWebRTCICETransport), alignof(GstWebRTCICETransport));
     printf("%s;%zu;%zu\n", "GstWebRTCICETransportClass", sizeof(GstWebRTCICETransportClass), alignof(GstWebRTCICETransportClass));
     printf("%s;%zu;%zu\n", "GstWebRTCICETransportPolicy", sizeof(GstWebRTCICETransportPolicy), alignof(GstWebRTCICETransportPolicy));

@@ -15,6 +15,7 @@ int main() {
     printf("%s;%zu;%zu\n", "GstFdAllocatorClass", sizeof(GstFdAllocatorClass), alignof(GstFdAllocatorClass));
     printf("%s;%zu;%zu\n", "GstFdMemoryFlags", sizeof(GstFdMemoryFlags), alignof(GstFdMemoryFlags));
     printf("%s;%zu;%zu\n", "GstPhysMemoryAllocatorInterface", sizeof(GstPhysMemoryAllocatorInterface), alignof(GstPhysMemoryAllocatorInterface));
+    printf("%s;%zu;%zu\n", "GstShmAllocator", sizeof(GstShmAllocator), alignof(GstShmAllocator));
     printf("%s;%zu;%zu\n", "GstShmAllocatorClass", sizeof(GstShmAllocatorClass), alignof(GstShmAllocatorClass));
     return 0;
 }

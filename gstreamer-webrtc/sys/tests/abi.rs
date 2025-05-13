@@ -308,6 +308,13 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "GstWebRTCICETcpCandidateType",
+        Layout {
+            size: size_of::<GstWebRTCICETcpCandidateType>(),
+            alignment: align_of::<GstWebRTCICETcpCandidateType>(),
+        },
+    ),
+    (
         "GstWebRTCICETransport",
         Layout {
             size: size_of::<GstWebRTCICETransport>(),
@@ -441,6 +448,10 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_WEBRTC_ICE_GATHERING_STATE_NEW", "0"),
     ("(gint) GST_WEBRTC_ICE_ROLE_CONTROLLED", "0"),
     ("(gint) GST_WEBRTC_ICE_ROLE_CONTROLLING", "1"),
+    ("(gint) GST_WEBRTC_ICE_TCP_CANDIDATE_TYPE_ACTIVE", "0"),
+    ("(gint) GST_WEBRTC_ICE_TCP_CANDIDATE_TYPE_NONE", "3"),
+    ("(gint) GST_WEBRTC_ICE_TCP_CANDIDATE_TYPE_PASSIVE", "1"),
+    ("(gint) GST_WEBRTC_ICE_TCP_CANDIDATE_TYPE_SO", "2"),
     ("(gint) GST_WEBRTC_ICE_TRANSPORT_POLICY_ALL", "0"),
     ("(gint) GST_WEBRTC_ICE_TRANSPORT_POLICY_RELAY", "1"),
     ("(gint) GST_WEBRTC_KIND_AUDIO", "1"),

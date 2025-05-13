@@ -1171,6 +1171,128 @@ impl From<WebRTCICERole> for glib::Value {
     }
 }
 
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+#[doc(alias = "GstWebRTCICETcpCandidateType")]
+pub enum WebRTCICETcpCandidateType {
+    #[doc(alias = "GST_WEBRTC_ICE_TCP_CANDIDATE_TYPE_ACTIVE")]
+    Active,
+    #[doc(alias = "GST_WEBRTC_ICE_TCP_CANDIDATE_TYPE_PASSIVE")]
+    Passive,
+    #[doc(alias = "GST_WEBRTC_ICE_TCP_CANDIDATE_TYPE_SO")]
+    So,
+    #[doc(alias = "GST_WEBRTC_ICE_TCP_CANDIDATE_TYPE_NONE")]
+    None,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+#[doc(hidden)]
+impl IntoGlib for WebRTCICETcpCandidateType {
+    type GlibType = ffi::GstWebRTCICETcpCandidateType;
+
+    #[inline]
+    fn into_glib(self) -> ffi::GstWebRTCICETcpCandidateType {
+        match self {
+            Self::Active => ffi::GST_WEBRTC_ICE_TCP_CANDIDATE_TYPE_ACTIVE,
+            Self::Passive => ffi::GST_WEBRTC_ICE_TCP_CANDIDATE_TYPE_PASSIVE,
+            Self::So => ffi::GST_WEBRTC_ICE_TCP_CANDIDATE_TYPE_SO,
+            Self::None => ffi::GST_WEBRTC_ICE_TCP_CANDIDATE_TYPE_NONE,
+            Self::__Unknown(value) => value,
+        }
+    }
+}
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+#[doc(hidden)]
+impl FromGlib<ffi::GstWebRTCICETcpCandidateType> for WebRTCICETcpCandidateType {
+    #[inline]
+    unsafe fn from_glib(value: ffi::GstWebRTCICETcpCandidateType) -> Self {
+        skip_assert_initialized!();
+
+        match value {
+            ffi::GST_WEBRTC_ICE_TCP_CANDIDATE_TYPE_ACTIVE => Self::Active,
+            ffi::GST_WEBRTC_ICE_TCP_CANDIDATE_TYPE_PASSIVE => Self::Passive,
+            ffi::GST_WEBRTC_ICE_TCP_CANDIDATE_TYPE_SO => Self::So,
+            ffi::GST_WEBRTC_ICE_TCP_CANDIDATE_TYPE_NONE => Self::None,
+            value => Self::__Unknown(value),
+        }
+    }
+}
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+impl StaticType for WebRTCICETcpCandidateType {
+    #[inline]
+    #[doc(alias = "gst_webrtc_ice_tcp_candidate_type_get_type")]
+    fn static_type() -> glib::Type {
+        unsafe { from_glib(ffi::gst_webrtc_ice_tcp_candidate_type_get_type()) }
+    }
+}
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+impl glib::HasParamSpec for WebRTCICETcpCandidateType {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        Self::ParamSpec::builder_with_default
+    }
+}
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+impl glib::value::ValueType for WebRTCICETcpCandidateType {
+    type Type = Self;
+}
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+unsafe impl<'a> glib::value::FromValue<'a> for WebRTCICETcpCandidateType {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    #[inline]
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+impl ToValue for WebRTCICETcpCandidateType {
+    #[inline]
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    #[inline]
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+impl From<WebRTCICETcpCandidateType> for glib::Value {
+    #[inline]
+    fn from(v: WebRTCICETcpCandidateType) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[cfg(feature = "v1_16")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]

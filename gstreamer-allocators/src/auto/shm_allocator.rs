@@ -14,7 +14,9 @@ glib::wrapper! {
     }
 }
 
-impl ShmAllocator {}
+impl ShmAllocator {
+    pub const NONE: Option<&'static ShmAllocator> = None;
+}
 
 unsafe impl Send for ShmAllocator {}
 unsafe impl Sync for ShmAllocator {}

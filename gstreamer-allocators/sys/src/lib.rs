@@ -160,16 +160,16 @@ impl ::std::fmt::Debug for GstFdAllocator {
     }
 }
 
+#[derive(Copy, Clone)]
 #[repr(C)]
-#[allow(dead_code)]
 pub struct GstShmAllocator {
-    _data: [u8; 0],
-    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+    pub parent_instance: GstFdAllocator,
 }
 
 impl ::std::fmt::Debug for GstShmAllocator {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstShmAllocator @ {self:p}"))
+            .field("parent_instance", &self.parent_instance)
             .finish()
     }
 }
@@ -245,6 +245,16 @@ extern "C" {
     pub fn gst_fd_allocator_alloc(
         allocator: *mut gst::GstAllocator,
         fd: c_int,
+        size: size_t,
+        flags: GstFdMemoryFlags,
+    ) -> *mut gst::GstMemory;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_fd_allocator_alloc_full(
+        allocator: *mut gst::GstAllocator,
+        fd: c_int,
+        maxsize: size_t,
+        offset: size_t,
         size: size_t,
         flags: GstFdMemoryFlags,
     ) -> *mut gst::GstMemory;

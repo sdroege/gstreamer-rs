@@ -2,8 +2,12 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
+#![allow(deprecated)]
 
 use crate::ffi;
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+use crate::AppLeakyType;
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -37,11 +41,53 @@ impl AppSink {
         unsafe { from_glib_full(ffi::gst_app_sink_get_caps(self.to_glib_none().0)) }
     }
 
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "gst_app_sink_get_current_level_buffers")]
+    #[doc(alias = "get_current_level_buffers")]
+    #[doc(alias = "current-level-buffers")]
+    pub fn current_level_buffers(&self) -> u64 {
+        unsafe { ffi::gst_app_sink_get_current_level_buffers(self.to_glib_none().0) }
+    }
+
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "gst_app_sink_get_current_level_bytes")]
+    #[doc(alias = "get_current_level_bytes")]
+    #[doc(alias = "current-level-bytes")]
+    pub fn current_level_bytes(&self) -> u64 {
+        unsafe { ffi::gst_app_sink_get_current_level_bytes(self.to_glib_none().0) }
+    }
+
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "gst_app_sink_get_current_level_time")]
+    #[doc(alias = "get_current_level_time")]
+    #[doc(alias = "current-level-time")]
+    pub fn current_level_time(&self) -> Option<gst::ClockTime> {
+        unsafe {
+            from_glib(ffi::gst_app_sink_get_current_level_time(
+                self.to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg_attr(feature = "v1_28", deprecated = "Since 1.28")]
+    #[allow(deprecated)]
     #[doc(alias = "gst_app_sink_get_drop")]
     #[doc(alias = "get_drop")]
     #[doc(alias = "drop")]
     pub fn is_drop(&self) -> bool {
         unsafe { from_glib(ffi::gst_app_sink_get_drop(self.to_glib_none().0)) }
+    }
+
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "gst_app_sink_get_leaky_type")]
+    #[doc(alias = "get_leaky_type")]
+    #[doc(alias = "leaky-type")]
+    pub fn leaky_type(&self) -> AppLeakyType {
+        unsafe { from_glib(ffi::gst_app_sink_get_leaky_type(self.to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_app_sink_get_max_buffers")]
@@ -131,11 +177,23 @@ impl AppSink {
         }
     }
 
+    #[cfg_attr(feature = "v1_28", deprecated = "Since 1.28")]
+    #[allow(deprecated)]
     #[doc(alias = "gst_app_sink_set_drop")]
     #[doc(alias = "drop")]
     pub fn set_drop(&self, drop: bool) {
         unsafe {
             ffi::gst_app_sink_set_drop(self.to_glib_none().0, drop.into_glib());
+        }
+    }
+
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "gst_app_sink_set_leaky_type")]
+    #[doc(alias = "leaky-type")]
+    pub fn set_leaky_type(&self, leaky: AppLeakyType) {
+        unsafe {
+            ffi::gst_app_sink_set_leaky_type(self.to_glib_none().0, leaky.into_glib());
         }
     }
 
@@ -226,6 +284,37 @@ impl AppSink {
         ObjectExt::set_property(self, "buffer-list", buffer_list)
     }
 
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn dropped(&self) -> u64 {
+        ObjectExt::property(self, "dropped")
+    }
+
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "in")]
+    pub fn get_in(&self) -> u64 {
+        ObjectExt::property(self, "in")
+    }
+
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn out(&self) -> u64 {
+        ObjectExt::property(self, "out")
+    }
+
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn is_silent(&self) -> bool {
+        ObjectExt::property(self, "silent")
+    }
+
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn set_silent(&self, silent: bool) {
+        ObjectExt::set_property(self, "silent", silent)
+    }
+
     #[doc(alias = "buffer-list")]
     pub fn connect_buffer_list_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -280,6 +369,97 @@ impl AppSink {
         }
     }
 
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "current-level-buffers")]
+    pub fn connect_current_level_buffers_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_current_level_buffers_trampoline<
+            F: Fn(&AppSink) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstAppSink,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::current-level-buffers".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_current_level_buffers_trampoline::<F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "current-level-bytes")]
+    pub fn connect_current_level_bytes_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_current_level_bytes_trampoline<
+            F: Fn(&AppSink) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstAppSink,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::current-level-bytes".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_current_level_bytes_trampoline::<F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "current-level-time")]
+    pub fn connect_current_level_time_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_current_level_time_trampoline<
+            F: Fn(&AppSink) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstAppSink,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::current-level-time".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_current_level_time_trampoline::<F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg_attr(feature = "v1_28", deprecated = "Since 1.28")]
     #[doc(alias = "drop")]
     pub fn connect_drop_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -306,6 +486,34 @@ impl AppSink {
         }
     }
 
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "dropped")]
+    pub fn connect_dropped_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_dropped_trampoline<F: Fn(&AppSink) + Send + Sync + 'static>(
+            this: *mut ffi::GstAppSink,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::dropped".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_dropped_trampoline::<F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
     #[doc(alias = "eos")]
     pub fn connect_eos_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -326,6 +534,61 @@ impl AppSink {
                 c"notify::eos".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_eos_trampoline::<F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "in")]
+    pub fn connect_in_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_in_trampoline<F: Fn(&AppSink) + Send + Sync + 'static>(
+            this: *mut ffi::GstAppSink,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::in".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_in_trampoline::<F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "leaky-type")]
+    pub fn connect_leaky_type_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_leaky_type_trampoline<
+            F: Fn(&AppSink) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstAppSink,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::leaky-type".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_leaky_type_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -412,6 +675,62 @@ impl AppSink {
                 c"notify::max-time".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_max_time_trampoline::<F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "out")]
+    pub fn connect_out_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_out_trampoline<F: Fn(&AppSink) + Send + Sync + 'static>(
+            this: *mut ffi::GstAppSink,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::out".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_out_trampoline::<F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "silent")]
+    pub fn connect_silent_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_silent_trampoline<F: Fn(&AppSink) + Send + Sync + 'static>(
+            this: *mut ffi::GstAppSink,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::silent".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_silent_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

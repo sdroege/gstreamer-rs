@@ -252,6 +252,13 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "GstShmAllocator",
+        Layout {
+            size: size_of::<GstShmAllocator>(),
+            alignment: align_of::<GstShmAllocator>(),
+        },
+    ),
+    (
         "GstShmAllocatorClass",
         Layout {
             size: size_of::<GstShmAllocatorClass>(),

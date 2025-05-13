@@ -221,8 +221,20 @@ extern "C" {
     pub fn gst_app_sink_get_type() -> GType;
     pub fn gst_app_sink_get_buffer_list_support(appsink: *mut GstAppSink) -> gboolean;
     pub fn gst_app_sink_get_caps(appsink: *mut GstAppSink) -> *mut gst::GstCaps;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_app_sink_get_current_level_buffers(appsink: *mut GstAppSink) -> u64;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_app_sink_get_current_level_bytes(appsink: *mut GstAppSink) -> u64;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_app_sink_get_current_level_time(appsink: *mut GstAppSink) -> gst::GstClockTime;
     pub fn gst_app_sink_get_drop(appsink: *mut GstAppSink) -> gboolean;
     pub fn gst_app_sink_get_emit_signals(appsink: *mut GstAppSink) -> gboolean;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_app_sink_get_leaky_type(appsink: *mut GstAppSink) -> GstAppLeakyType;
     pub fn gst_app_sink_get_max_buffers(appsink: *mut GstAppSink) -> c_uint;
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
@@ -247,6 +259,9 @@ extern "C" {
     pub fn gst_app_sink_set_caps(appsink: *mut GstAppSink, caps: *const gst::GstCaps);
     pub fn gst_app_sink_set_drop(appsink: *mut GstAppSink, drop: gboolean);
     pub fn gst_app_sink_set_emit_signals(appsink: *mut GstAppSink, emit: gboolean);
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_app_sink_set_leaky_type(appsink: *mut GstAppSink, leaky: GstAppLeakyType);
     pub fn gst_app_sink_set_max_buffers(appsink: *mut GstAppSink, max: c_uint);
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]

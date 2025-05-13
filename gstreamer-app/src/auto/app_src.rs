@@ -233,6 +233,12 @@ impl AppSrc {
         ObjectExt::set_property(self, "block", block)
     }
 
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn dropped(&self) -> u64 {
+        ObjectExt::property(self, "dropped")
+    }
+
     pub fn format(&self) -> gst::Format {
         ObjectExt::property(self, "format")
     }
@@ -253,6 +259,13 @@ impl AppSrc {
     #[doc(alias = "handle-segment-change")]
     pub fn set_handle_segment_change(&self, handle_segment_change: bool) {
         ObjectExt::set_property(self, "handle-segment-change", handle_segment_change)
+    }
+
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "in")]
+    pub fn get_in(&self) -> u64 {
+        ObjectExt::property(self, "in")
     }
 
     #[doc(alias = "is-live")]
@@ -293,6 +306,24 @@ impl AppSrc {
     #[doc(alias = "min-percent")]
     pub fn set_min_percent(&self, min_percent: u32) {
         ObjectExt::set_property(self, "min-percent", min_percent)
+    }
+
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn out(&self) -> u64 {
+        ObjectExt::property(self, "out")
+    }
+
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn is_silent(&self) -> bool {
+        ObjectExt::property(self, "silent")
+    }
+
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn set_silent(&self, silent: bool) {
+        ObjectExt::set_property(self, "silent", silent)
     }
 
     #[doc(alias = "block")]
@@ -435,6 +466,34 @@ impl AppSrc {
         }
     }
 
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "dropped")]
+    pub fn connect_dropped_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_dropped_trampoline<F: Fn(&AppSrc) + Send + Sync + 'static>(
+            this: *mut ffi::GstAppSrc,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::dropped".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_dropped_trampoline::<F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
     #[doc(alias = "duration")]
     pub fn connect_duration_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -511,6 +570,31 @@ impl AppSrc {
                 c"notify::handle-segment-change".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_handle_segment_change_trampoline::<F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "in")]
+    pub fn connect_in_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_in_trampoline<F: Fn(&AppSrc) + Send + Sync + 'static>(
+            this: *mut ffi::GstAppSrc,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::in".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_in_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
@@ -735,6 +819,62 @@ impl AppSrc {
                 c"notify::min-percent".as_ptr() as *const _,
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_min_percent_trampoline::<F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "out")]
+    pub fn connect_out_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_out_trampoline<F: Fn(&AppSrc) + Send + Sync + 'static>(
+            this: *mut ffi::GstAppSrc,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::out".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_out_trampoline::<F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "silent")]
+    pub fn connect_silent_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_silent_trampoline<F: Fn(&AppSrc) + Send + Sync + 'static>(
+            this: *mut ffi::GstAppSrc,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(&from_glib_borrow(this))
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::silent".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_silent_trampoline::<F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

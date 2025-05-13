@@ -1194,6 +1194,8 @@ pub type GstValueDeserializeFunc =
 pub type GstValueDeserializeWithPSpecFunc = Option<
     unsafe extern "C" fn(*mut gobject::GValue, *const c_char, *mut gobject::GParamSpec) -> gboolean,
 >;
+pub type GstValueHashFunc =
+    Option<unsafe extern "C" fn(*const gobject::GValue, *mut c_uint) -> gboolean>;
 pub type GstValueSerializeFunc =
     Option<unsafe extern "C" fn(*const gobject::GValue) -> *mut c_char>;
 
@@ -3125,7 +3127,8 @@ pub struct GstValueTable {
     pub serialize: GstValueSerializeFunc,
     pub deserialize: GstValueDeserializeFunc,
     pub deserialize_with_pspec: GstValueDeserializeWithPSpecFunc,
-    pub _gst_reserved: [gpointer; 3],
+    pub hash: GstValueHashFunc,
+    pub _gst_reserved: [gpointer; 2],
 }
 
 impl ::std::fmt::Debug for GstValueTable {
@@ -3136,6 +3139,7 @@ impl ::std::fmt::Debug for GstValueTable {
             .field("serialize", &self.serialize)
             .field("deserialize", &self.deserialize)
             .field("deserialize_with_pspec", &self.deserialize_with_pspec)
+            .field("hash", &self.hash)
             .finish()
     }
 }
@@ -9911,6 +9915,9 @@ extern "C" {
     pub fn gst_value_get_int_range_min(value: *const gobject::GValue) -> c_int;
     pub fn gst_value_get_int_range_step(value: *const gobject::GValue) -> c_int;
     pub fn gst_value_get_structure(value: *const gobject::GValue) -> *const GstStructure;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_value_hash(value: *const gobject::GValue, res: *mut c_uint) -> gboolean;
     pub fn gst_value_init_and_copy(dest: *mut gobject::GValue, src: *const gobject::GValue);
     pub fn gst_value_intersect(
         dest: *mut gobject::GValue,
