@@ -71,4 +71,55 @@ impl WebRTCICECandidateStats {
             }
         }
     }
+
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn foundation(&self) -> Option<&str> {
+        unsafe {
+            let ptr = (*self.as_ptr()).ABI.abi.foundation;
+            if ptr.is_null() {
+                None
+            } else {
+                Some(CStr::from_ptr(ptr).to_str().unwrap())
+            }
+        }
+    }
+
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn related_address(&self) -> Option<&str> {
+        unsafe {
+            let ptr = (*self.as_ptr()).ABI.abi.related_address;
+            if ptr.is_null() {
+                None
+            } else {
+                Some(CStr::from_ptr(ptr).to_str().unwrap())
+            }
+        }
+    }
+
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn related_port(&self) -> u32 {
+        unsafe { (*self.as_ptr()).ABI.abi.related_port }
+    }
+
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn username_fragment(&self) -> Option<&str> {
+        unsafe {
+            let ptr = (*self.as_ptr()).ABI.abi.username_fragment;
+            if ptr.is_null() {
+                None
+            } else {
+                Some(CStr::from_ptr(ptr).to_str().unwrap())
+            }
+        }
+    }
+
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn tcp_type(&self) -> crate::WebRTCICETcpCandidateType {
+        unsafe { glib::translate::from_glib((*self.as_ptr()).ABI.abi.tcp_type) }
+    }
 }
