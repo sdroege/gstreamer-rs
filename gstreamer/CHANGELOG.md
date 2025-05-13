@@ -5,6 +5,36 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.23.6] - 2025-05-13
+### Fixed
+- Lower debug message level when allocation queries in subclasses fail.
+- Catch panics from typefinders implemented in Rust.
+- Use correctly aligned arrays in `gst_audio` tests.
+- Drop pad probes and callbacks from `appsink` when releasing a `gst_utils::StreamProducer`.
+- Leak in `gst::ElementImpl::parent_request_new_pad()`.
+- Request a new keyframe from `gst_utils::StreamProducer` when discarding a
+  buffer.
+
+### Added
+- Implement `gst::ByteSliceExt` over all `AsRef<[u8]>` instead of just `&[u8]` and
+  `&mut [u8]`.
+- `gst::Allocator::memory_type()` getter.
+- Setters for `gst::AllocationParams` and implement `Copy`, `PartialEq` and `Eq`.
+- New API for creating a `gst_audio::AudioInfo` and `gst_video::VideoInfo`
+  builder from an existing value.
+- Setters for `gst_video::VideoAlignment` and implement `Default`.
+- Implement `Default`, `Copy` and `Clone` for `gst::BufferPoolAcquireParams` and add
+  setters.
+- `gst::ChildProxy::set_child_property_from_str()` convenience API.
+- `gst::BufferList::drain()` for iterating over a buffer list while draining it.
+- `gst_utils::StreamProducer::wait_for_keyframe()` configuration.
+- `gst_utils::ConsumptionLink` getter for the stream producer.
+- Bindings for `gst_tag` language code API.
+
+### Changed
+- Update various dependencies.
+- Update to GStreamer 1.26.1 gir files.
+
 ## [0.23.5] - 2025-02-17
 ### Fixed
 - Properly validate `gst::IntRange::with_step()` step size
@@ -1837,7 +1867,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.23.5...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.23.6...HEAD
+[0.23.6]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.23.5...0.23.6
 [0.23.5]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.23.4...0.23.5
 [0.23.4]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.23.3...0.23.4
 [0.23.3]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.23.2...0.23.3
