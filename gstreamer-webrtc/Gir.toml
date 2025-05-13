@@ -61,6 +61,11 @@ final_type = true
     # takes ownership of SDP message
     manual = true
 
+    [[object.signal]]
+    pattern = "(close|send-string|send-data)"
+    # use actual functions
+    ignore = true
+
 [[object]]
 name = "GstWebRTC.WebRTCDTLSTransport"
 status = "generate"
