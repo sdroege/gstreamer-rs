@@ -238,6 +238,10 @@ manual_traits = ["AggregatorExtManual"]
 name = "GstBase.AggregatorPad"
 status = "generate"
 manual_traits = ["AggregatorPadExtManual"]
+    [[object.property]]
+    name = "current-level-time"
+    # ClockTime
+    manual = true
 
 [[object]]
 name = "GstBase.BaseParse"
