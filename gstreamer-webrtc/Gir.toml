@@ -30,6 +30,7 @@ generate = [
     "GstWebRTC.WebRTCICEGatheringState",
     "GstWebRTC.WebRTCICERole",
     "GstWebRTC.WebRTCICEStream",
+    "GstWebRTC.WebRTCICETcpCandidateType",
     "GstWebRTC.WebRTCICETransportPolicy",
     "GstWebRTC.WebRTCKind",
     "GstWebRTC.WebRTCPeerConnectionState",
