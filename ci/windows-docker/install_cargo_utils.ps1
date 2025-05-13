@@ -32,7 +32,7 @@ cargo-cbuild --version
 cargo nextest --version
 
 # Rust-based CLI unpacker
-cargo install --locked ouch
+cargo install --locked ouch@0.5.1
 if (!$?) {
   Write-Host "Failed to install ouch"
   Exit 1
