@@ -94,6 +94,9 @@ status = "generate"
     [[object.function]]
     name = "alloc"
     manual = true
+    [[object.function]]
+    name = "alloc_full"
+    manual = true
 
 [[object]]
 name = "GstAllocators.ShmAllocator"

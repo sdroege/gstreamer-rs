@@ -61,4 +61,28 @@ impl FdAllocator {
         ))
         .ok_or_else(|| glib::bool_error!("Failed to allocate memory"))
     }
+
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "gst_fd_allocator_alloc_full")]
+    pub unsafe fn alloc_full(
+        allocator: &impl IsA<gst::Allocator>,
+        fd: RawFd,
+        maxsize: usize,
+        offset: usize,
+        size: usize,
+        flags: FdMemoryFlags,
+    ) -> Option<gst::Memory> {
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib_full(ffi::gst_fd_allocator_alloc_full(
+                allocator.as_ref().to_glib_none().0,
+                fd,
+                maxsize,
+                offset,
+                size,
+                flags.into_glib(),
+            ))
+        }
+    }
 }
