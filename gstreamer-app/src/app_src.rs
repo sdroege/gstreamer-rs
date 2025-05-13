@@ -622,6 +622,15 @@ impl<'a> AppSrcBuilder<'a> {
         }
     }
 
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn silent(self, silent: bool) -> Self {
+        Self {
+            builder: self.builder.property("silent", silent),
+            ..self
+        }
+    }
+
     // rustdoc-stripper-ignore-next
     /// Sets property `name` to the given value `value`.
     ///

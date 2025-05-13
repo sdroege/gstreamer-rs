@@ -1234,6 +1234,8 @@ impl<'a> AppSinkBuilder<'a> {
         }
     }
 
+    #[cfg_attr(feature = "v1_28", deprecated = "Since 1.28")]
+    #[allow(deprecated)]
     pub fn drop(self, drop: bool) -> Self {
         Self {
             builder: self.builder.property("drop", drop),
@@ -1347,6 +1349,24 @@ impl<'a> AppSinkBuilder<'a> {
     pub fn max_bytes(self, max_bytes: u64) -> Self {
         Self {
             builder: self.builder.property("max-bytes", max_bytes),
+            ..self
+        }
+    }
+
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn leaky_type(self, leaky_type: crate::AppLeakyType) -> Self {
+        Self {
+            builder: self.builder.property("leaky-type", leaky_type),
+            ..self
+        }
+    }
+
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn silent(self, silent: bool) -> Self {
+        Self {
+            builder: self.builder.property("silent", silent),
             ..self
         }
     }
