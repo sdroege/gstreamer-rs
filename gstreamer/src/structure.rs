@@ -1175,9 +1175,9 @@ impl<'a> Iterator for Iter<'a> {
         Some((f, v.unwrap()))
     }
 
-    fn last(self) -> Option<Self::Item> {
+    fn last(mut self) -> Option<Self::Item> {
         let structure = self.iter.structure;
-        let f = self.iter.last()?;
+        let f = self.iter.next_back()?;
         let v = structure.value(f);
         Some((f, v.unwrap()))
     }
