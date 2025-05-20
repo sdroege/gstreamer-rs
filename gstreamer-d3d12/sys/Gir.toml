@@ -1,0 +1,15 @@
+[options]
+girs_directories = ["../../gir-files", "../../gst-gir-files"]
+library = "GstD3D12"
+version = "1.0"
+min_cfg_version = "1.26"
+work_mode = "sys"
+single_version_file = true
+
+external_libraries = [
+    "GLib",
+]
+
+[external_libraries]
+gstreamer="Gst"
+gstreamer_video="GstVideo"

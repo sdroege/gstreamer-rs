@@ -1,0 +1,216 @@
+[options]
+girs_directories = ["../gir-files", "../gst-gir-files"]
+library = "GstD3D12"
+version = "1.0"
+min_cfg_version = "1.26"
+work_mode = "normal"
+target_path = "."
+concurrency = "send+sync"
+generate_safety_asserts = true
+single_version_file = true
+generate_display_trait = false
+deprecate_by_min_version = true
+trust_return_value_nullability = true
+
+external_libraries = [
+    "GLib",
+    "Gst",
+    "GstBase",
+    "GstVideo",
+]
+
+generate = [
+    "GstD3D12.D3D12AllocationFlags",
+    "GstD3D12.D3D12BufferPool",
+    "GstD3D12.D3D12ConverterAlphaMode",
+    "GstD3D12.D3D12ConverterColorBalance",
+    "GstD3D12.D3D12ConverterMipGen",
+    "GstD3D12.D3D12ConverterSamplerFilter",
+    "GstD3D12.D3D12FenceDataPool",
+]
+
+manual = [
+    "GObject.Object",
+    "Gst.Allocator",
+    "Gst.BufferPool",
+    "Gst.Memory",
+    "Gst.MiniObject",
+    "Gst.Object",
+    "GstD3D12.D3D12Memory",
+    "GstVideo.VideoOrientationMethod",
+]
+
+[[object]]
+name = "GstD3D12.D3D12AllocationParams"
+status = "generate"
+    [[object.function]]
+    name = "new"
+    manual = true
+
+    [[object.function]]
+    name = "alignment"
+    manual = true
+
+    [[object.function]]
+    name = "set_heap_flags"
+    # Requires 'D3D12_HEAP_FLAGS'
+    manual = true
+
+    [[object.function]]
+    name = "set_resource_flags"
+    # Requires 'D3D12_RESOURCE_FLAGS'
+    manual = true
+
+    [[object.function]]
+    name = "unset_resource_flags"
+    # Requires 'D3D12_RESOURCE_FLAGS'
+    manual = true
+
+[[object]]
+name = "GstD3D12.D3D12Allocator"
+status = "generate"
+    [[object.function]]
+    name = "alloc"
+    manual = true
+
+    [[object.function]]
+    name = "alloc_wrapped"
+    manual = true
+
+[[object]]
+name = "GstD3D12.D3D12CmdAlloc"
+status = "generate"
+    [[object.function]]
+    name = "get_handle"
+    manual = true
+
+
+[[object]]
+name = "GstD3D12.D3D12CmdAllocPool"
+status = "generate"
+    [[object.function]]
+    name = "new"
+    manual = true
+
+[[object]]
+name = "GstD3D12.D3D12CmdQueue"
+status = "generate"
+    [[object.function]]
+    name = "new"
+    manual = true
+
+    [[object.function]]
+    name = "execute_command_lists"
+    manual = true
+
+    [[object.function]]
+    name = "execute_command_lists_full"
+    ignore = true
+
+    [[object.function]]
+    name = "execute_wait"
+    manual = true
+
+    [[object.function]]
+    name = "get_fence_handle"
+    manual = true
+
+    [[object.function]]
+    name = "get_handle"
+    manual = true
+
+    [[object.function]]
+    name = "set_notify"
+    manual = true
+
+
+[[object]]
+name = "GstD3D12.D3D12Converter"
+status = "generate"
+    [[object.function]]
+    name = "new"
+    manual = true
+
+    [[object.function]]
+    name = "convert_buffer"
+    manual = true
+
+    [[object.function]]
+    name = "update_blend_state"
+    manual = true
+
+
+[[object]]
+name = "GstD3D12.D3D12DescHeap"
+status = "generate"
+    [[object.function]]
+    name = "get_handle"
+    manual = true
+
+[[object]]
+name = "GstD3D12.D3D12DescHeapPool"
+status = "generate"
+    [[object.function]]
+    name = "new"
+    manual = true
+
+[[object]]
+name = "GstD3D12.D3D12Device"
+status = "generate"
+    [[object.function]]
+    name = "execute_command_lists"
+    manual = true
+
+    [[object.function]]
+    name = "get_adapter_handle"
+    manual = true
+
+    [[object.function]]
+    name = "get_device_handle"
+    manual = true
+
+    [[object.function]]
+    name = "get_factory_handle"
+    manual = true
+
+    [[object.function]]
+    name = "get_fence_handle"
+    manual = true
+
+    [[object.function]]
+    name = "get_format"
+    manual = true
+
+    [[object.function]]
+    name = "fence_wait"
+    manual = true
+
+    [[object.function]]
+    name = "get_cmd_queue"
+    manual = true
+
+    [[object.function]]
+    name = "get_completed_value"
+    manual = true
+
+    [[object.function]]
+    name = "set_fence_notify"
+    manual = true
+
+[[object]]
+name = "GstD3D12.D3D12FenceData"
+status = "generate"
+    [[object.function]]
+    name = "push"
+    manual = true
+
+[[object]]
+name = "GstD3D12.D3D12PoolAllocator"
+status = "generate"
+    [[object.function]]
+    name = "new"
+    manual = true
+
+    [[object.function]]
+    name = "acquire_memory"
+    manual = true

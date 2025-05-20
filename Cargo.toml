@@ -57,6 +57,7 @@ members = [
   "gstreamer-base/sys",
   "gstreamer-check/sys",
   "gstreamer-controller/sys",
+  "gstreamer-d3d12/sys",
   "gstreamer-editing-services/sys",
   "gstreamer-gl/sys",
   "gstreamer-gl/egl/sys",
@@ -83,6 +84,7 @@ members = [
   "gstreamer-base",
   "gstreamer-check",
   "gstreamer-controller",
+  "gstreamer-d3d12",
   "gstreamer-editing-services",
   "gstreamer-gl",
   "gstreamer-gl/egl",
@@ -134,6 +136,7 @@ gstreamer-audio-sys = { path = "./gstreamer-audio/sys"}
 gstreamer-base-sys = { path = "./gstreamer-base/sys"}
 gstreamer-check-sys = { path = "./gstreamer-check/sys" }
 gstreamer-controller-sys = { path = "./gstreamer-controller/sys" }
+gstreamer-d3d12-sys = { path = "./gstreamer-d3d12/sys" }
 gstreamer-editing-services-sys = { path = "./gstreamer-editing-services/sys"}
 gstreamer-gl-egl-sys = { path = "./gstreamer-gl/egl/sys"}
 gstreamer-gl-wayland-sys = { path = "./gstreamer-gl/wayland/sys"}
@@ -161,6 +164,7 @@ gst-app = { package = "gstreamer-app", path = "./gstreamer-app" }
 gst-audio = { package = "gstreamer-audio", path = "./gstreamer-audio" }
 gst-base = { package = "gstreamer-base", path = "./gstreamer-base" }
 gst-check = { package = "gstreamer-check", path = "./gstreamer-check" }
+gst-d3d12 = { package = "gstreamer-d3d12", path = "./gstreamer-d3d12" }
 gst-gl = { package = "gstreamer-gl", path = "./gstreamer-gl" }
 gst-gl-egl = { package = "gstreamer-gl-egl", path = "./gstreamer-gl/egl" }
 gst-gl-x11 = { package = "gstreamer-gl-x11", path = "./gstreamer-gl/x11" }

@@ -1,0 +1,64 @@
+[lib]
+name = "gstreamer_d3d12_sys"
+
+[dependencies]
+libc = "0.2"
+
+[dependencies.glib-sys]
+workspace = true
+
+[dependencies.gstreamer-sys]
+workspace = true
+
+[dependencies.gstreamer-video-sys]
+workspace = true
+
+[build-dependencies]
+system-deps = "7"
+
+[dev-dependencies]
+shell-words = "1.0.0"
+tempfile = "3"
+
+[features]
+v1_28 = ["gstreamer-sys/v1_28", "gstreamer-video-sys/v1_28"]
+
+[package]
+authors = ["Seungha Yang <seungha@centricular.com>"]
+build = "build.rs"
+description = "FFI bindings to libgstd3d12-1.0"
+documentation = "https://gstreamer.freedesktop.org/documentation/rust/stable/latest/docs/gstreamer_d3d12_sys/"
+keywords = ["ffi", "gstreamer", "gnome", "multimedia"]
+license = "MIT"
+name = "gstreamer-d3d12-sys"
+readme = "README.md"
+
+[package.version]
+workspace = true
+
+[package.categories]
+workspace = true
+
+[package.repository]
+workspace = true
+
+[package.homepage]
+workspace = true
+
+[package.edition]
+workspace = true
+
+[package.rust-version]
+workspace = true
+
+[package.metadata.docs.rs]
+rustc-args = ["--cfg", "docsrs"]
+rustdoc-args = ["--cfg", "docsrs", "--generate-link-to-definition"]
+all-features = true
+
+[package.metadata.system-deps.gstreamer_d3d12_1_0]
+name = "gstreamer-d3d12-1.0"
+version = "1.26"
+
+[package.metadata.system-deps.gstreamer_d3d12_1_0.v_1_28]
+version = "1.27"

@@ -1,0 +1,35 @@
+[package]
+name = "gstreamer-d3d12"
+authors = ["Sebastian Dröge <sebastian@centricular.com>", "Seungha Yang <seungha@centricular.com>"]
+description = "Rust bindings for GStreamer D3D12 library"
+license = "MIT OR Apache-2.0"
+readme = "README.md"
+documentation = "https://gstreamer.pages.freedesktop.org/gstreamer-rs/stable/latest/docs/gstreamer_d3d12/"
+keywords = ["gstreamer", "multimedia", "audio", "video", "gnome"]
+version.workspace = true
+categories.workspace = true
+repository.workspace = true
+homepage.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+gstreamer-d3d12-sys.workspace = true
+glib.workspace = true
+gst = { workspace = true, features = ["v1_26"] }
+gst-video = { workspace = true, features = ["v1_26"] }
+windows = { version = "0.61", features=["Win32_Graphics_Direct3D12",
+    "Win32_Graphics_Direct3D11", "Win32_Graphics_Dxgi",
+    "Win32_Graphics_Dxgi_Common", "Win32_Foundation"] }
+
+[dev-dependencies]
+gir-format-check = "0.1"
+
+[features]
+default = []
+v1_28 = ["gst/v1_28", "gst-video/v1_28", "gstreamer-d3d12-sys/v1_28"]
+
+[package.metadata.docs.rs]
+all-features = true
+rustc-args = ["--cfg", "docsrs"]
+rustdoc-args = ["--cfg", "docsrs", "--generate-link-to-definition"]
