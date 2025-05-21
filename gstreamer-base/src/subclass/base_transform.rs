@@ -454,14 +454,14 @@ pub trait BaseTransformImplExt: BaseTransformImpl {
                         (&mut outbuf) as *mut *mut gst::ffi::GstBuffer as *mut gst::ffi::GstBuffer,
                     ))
                     .map(|_| {
-                        if outbuf == buf as *mut _ {
+                        if ptr::eq(outbuf, buf as *mut _) {
                             PrepareOutputBufferSuccess::InputBuffer
                         } else {
                             PrepareOutputBufferSuccess::Buffer(from_glib_full(outbuf))
                         }
                     })
                     .inspect_err(|_err| {
-                        if outbuf != buf as *mut _ {
+                        if !ptr::eq(outbuf, buf as *mut _) {
                             drop(Option::<gst::Buffer>::from_glib_full(outbuf));
                         }
                     })

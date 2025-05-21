@@ -258,8 +258,7 @@ impl io::Read for Adapter {
             len = buf.len();
         }
 
-        self.copy(0, &mut buf[0..len])
-            .map_err(|err| io::Error::new(io::ErrorKind::Other, err))?;
+        self.copy(0, &mut buf[0..len]).map_err(io::Error::other)?;
 
         self.flush(len);
 
