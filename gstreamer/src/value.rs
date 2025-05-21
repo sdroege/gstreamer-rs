@@ -1305,6 +1305,10 @@ pub trait GstValueExt: Sized {
         s: &str,
         pspec: &glib::ParamSpec,
     ) -> Result<glib::Value, glib::BoolError>;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "gst_value_hash")]
+    fn hash(&self) -> Result<u32, glib::BoolError>;
 }
 
 impl GstValueExt for glib::Value {
@@ -1480,6 +1484,20 @@ impl GstValueExt for glib::Value {
                 Ok(value)
             } else {
                 Err(glib::bool_error!("Failed to deserialize value"))
+            }
+        }
+    }
+
+    #[cfg(feature = "v1_28")]
+    fn hash(&self) -> Result<u32, glib::BoolError> {
+        {
+            unsafe {
+                let mut hash = 0;
+                glib::result_from_gboolean!(
+                    gstreamer_sys::gst_value_hash(self.to_glib_none().0, &mut hash),
+                    "Failed to hash {self:?}"
+                )?;
+                Ok(hash)
             }
         }
     }
