@@ -104,7 +104,7 @@ trigger:
 .debian:12:
   needs: []
   variables:
-    FDO_DISTRIBUTION_VERSION: 'bookworm-slim'
+    FDO_DISTRIBUTION_VERSION: 'trixie-slim'
   before_script:
     - source ./ci/env.sh
     - mkdir .cargo && echo -e "[net]\ngit-fetch-with-cli = true" > .cargo/config.toml
@@ -144,7 +144,7 @@ trigger:
     FDO_DISTRIBUTION_PACKAGES: >-
       build-essential cmake curl python3-setuptools libglib2.0-dev libxml2-dev
       libdrm-dev libegl1-mesa-dev libgl1-mesa-dev libgbm-dev libgles2-mesa-dev
-      libgl1-mesa-dri libegl-dev libgl1-mesa-glx libwayland-egl1-mesa xz-utils
+      libgl1-mesa-dri libegl-dev libgl-dev libgles-dev libglx-dev
       libssl-dev git wget ca-certificates ninja-build python3-pip flex bison
       libglib2.0-dev libx11-dev libx11-xcb-dev libsoup2.4-dev libvorbis-dev
       libogg-dev libtheora-dev libmatroska-dev libvpx-dev libopus-dev
@@ -157,10 +157,9 @@ trigger:
       libpango1.0-dev libcairo2-dev libjson-glib-dev libgdk-pixbuf-2.0-dev
       libtiff-dev libpng-dev libjpeg-dev libepoxy-dev libsass-dev sassc
       libcsound64-dev llvm clang nasm libsodium-dev libwebp-dev
-      libflac-dev libmysofa-dev libgtk-4-dev libclang-dev
+      libflac-dev libmysofa-dev libgtk-4-dev libdav1d-dev libclang-dev
     FDO_DISTRIBUTION_EXEC: >-
       bash ci/install-gst.sh &&
-      bash ci/install-dav1d.sh &&
       bash ci/install-vvdec.sh &&
       pip3 install --break-system-packages git+http://gitlab.freedesktop.org/freedesktop/ci-templates
 
@@ -169,7 +168,7 @@ trigger:
   - .fdo.container-build@debian
   stage: container-final
   variables:
-    FDO_BASE_IMAGE: '$CI_REGISTRY_IMAGE/debian/bookworm-slim:base-$GST_RS_IMG_TAG'
+    FDO_BASE_IMAGE: '$CI_REGISTRY_IMAGE/debian/trixie-slim:base-$GST_RS_IMG_TAG'
 
 build-base:
   extends:
