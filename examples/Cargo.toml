@@ -24,6 +24,7 @@ gst-sdp = { workspace = true, optional = true }
 gst-rtsp = { workspace = true, optional = true }
 gst-rtsp-server = { workspace = true, optional = true }
 gst-allocators = { workspace = true, optional = true }
+gst-d3d12 = { workspace = true, optional = true }
 gio = { workspace = true, optional = true }
 anyhow = "1.0"
 byte-slice-cast = "1"
@@ -46,6 +47,7 @@ data-encoding = "2.0"
 
 [target.'cfg(windows)'.dependencies]
 windows = { version = "0.61", features=["Win32_Graphics_Direct3D11",
+    "Win32_Graphics_Direct3D12",
     "Win32_Foundation", "Win32_Graphics_Direct3D", "Win32_Graphics_Dxgi",
     "Win32_Graphics_Dxgi_Common", "Win32_Graphics_Direct2D",
     "Win32_Graphics_Direct2D_Common", "Win32_Graphics_DirectWrite",
@@ -77,6 +79,8 @@ gl = ["dep:gst-gl", "dep:gl_generator", "dep:glutin", "dep:glutin-winit", "dep:w
 gst-gl-x11 = ["dep:gst-gl-x11", "glutin-winit?/glx"] # glx turns on x11
 gst-gl-egl = ["dep:gst-gl-egl", "glutin-winit?/egl", "glutin-winit?/x11", "glutin-winit?/wayland"] # Use X11 or Wayland via EGL
 allocators = ["gst-allocators", "memmap2", "memfd", "uds"]
+windows = ["dep:windows"]
+d3d12 = ["dep:gst-d3d12", "windows"]
 
 [[bin]]
 name = "appsink"
@@ -220,3 +224,7 @@ name = "audio_multichannel_interleave"
 [[bin]]
 name = "zoom"
 required-features = ["gst-video/v1_18"]
+
+[[bin]]
+name = "d3d12convert"
+required-features = ["d3d12"]
