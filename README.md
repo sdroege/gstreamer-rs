@@ -168,7 +168,9 @@ Manual](https://gstreamer.freedesktop.org/documentation/application-development/
 While being C-centric, it explains all the fundamental concepts of GStreamer
 and the code examples should be relatively easily translatable to Rust. The
 API is basically the same, function/struct names are the same and everything
-is only more convenient (hopefully) and safer.
+is only more convenient (hopefully) and safer. The Rust APIs are annotated with
+`#[doc(alias = "c_function_name")]`, so you can search for a C function name
+in this documentation and find the corresponding Rust binding.
 
 In addition there are
 [tutorials](https://gstreamer.freedesktop.org/documentation/tutorials/) on the
