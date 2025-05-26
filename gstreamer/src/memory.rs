@@ -17,15 +17,13 @@ mini_object_wrapper!(Memory, MemoryRef, ffi::GstMemory, || {
 });
 
 pub struct MemoryMap<'a, T> {
-    memory: &'a MemoryRef,
     map_info: ffi::GstMapInfo,
-    phantom: PhantomData<T>,
+    phantom: PhantomData<(&'a MemoryRef, T)>,
 }
 
 pub struct MappedMemory<T> {
-    memory: Memory,
     map_info: ffi::GstMapInfo,
-    phantom: PhantomData<T>,
+    phantom: PhantomData<(Memory, T)>,
 }
 
 impl fmt::Debug for Memory {
@@ -80,20 +78,20 @@ impl Memory {
     #[inline]
     pub fn into_mapped_memory_readable(self) -> Result<MappedMemory<Readable>, Self> {
         unsafe {
+            let s = mem::ManuallyDrop::new(self);
             let mut map_info = mem::MaybeUninit::uninit();
             let res: bool = from_glib(ffi::gst_memory_map(
-                self.as_mut_ptr(),
+                s.as_mut_ptr(),
                 map_info.as_mut_ptr(),
                 ffi::GST_MAP_READ,
             ));
             if res {
                 Ok(MappedMemory {
-                    memory: self,
                     map_info: map_info.assume_init(),
                     phantom: PhantomData,
                 })
             } else {
-                Err(self)
+                Err(mem::ManuallyDrop::into_inner(s))
             }
         }
     }
@@ -101,20 +99,20 @@ impl Memory {
     #[inline]
     pub fn into_mapped_memory_writable(self) -> Result<MappedMemory<Writable>, Self> {
         unsafe {
+            let s = mem::ManuallyDrop::new(self);
             let mut map_info = mem::MaybeUninit::uninit();
             let res: bool = from_glib(ffi::gst_memory_map(
-                self.as_mut_ptr(),
+                s.as_mut_ptr(),
                 map_info.as_mut_ptr(),
                 ffi::GST_MAP_READWRITE,
             ));
             if res {
                 Ok(MappedMemory {
-                    memory: self,
                     map_info: map_info.assume_init(),
                     phantom: PhantomData,
                 })
             } else {
-                Err(self)
+                Err(mem::ManuallyDrop::into_inner(s))
             }
         }
     }
@@ -278,7 +276,6 @@ impl MemoryRef {
                 ffi::gst_memory_map(self.as_mut_ptr(), map_info.as_mut_ptr(), ffi::GST_MAP_READ);
             if res == glib::ffi::GTRUE {
                 Ok(MemoryMap {
-                    memory: self,
                     map_info: map_info.assume_init(),
                     phantom: PhantomData,
                 })
@@ -299,7 +296,6 @@ impl MemoryRef {
             );
             if res == glib::ffi::GTRUE {
                 Ok(MemoryMap {
-                    memory: self,
                     map_info: map_info.assume_init(),
                     phantom: PhantomData,
                 })
@@ -362,7 +358,7 @@ impl<T> MemoryMap<'_, T> {
     #[doc(alias = "get_memory")]
     #[inline]
     pub fn memory(&self) -> &MemoryRef {
-        self.memory
+        unsafe { MemoryRef::from_ptr(self.map_info.memory) }
     }
 
     #[inline]
@@ -432,7 +428,7 @@ impl<T> Drop for MemoryMap<'_, T> {
     #[inline]
     fn drop(&mut self) {
         unsafe {
-            ffi::gst_memory_unmap(self.memory.as_mut_ptr(), &mut self.map_info);
+            ffi::gst_memory_unmap(self.map_info.memory, &mut self.map_info);
         }
     }
 }
@@ -458,15 +454,15 @@ impl<T> MappedMemory<T> {
     #[doc(alias = "get_memory")]
     #[inline]
     pub fn memory(&self) -> &MemoryRef {
-        self.memory.as_ref()
+        unsafe { MemoryRef::from_ptr(self.map_info.memory) }
     }
 
     #[inline]
     pub fn into_memory(self) -> Memory {
         let mut s = mem::ManuallyDrop::new(self);
-        let memory = unsafe { ptr::read(&s.memory) };
+        let memory = unsafe { from_glib_full(s.map_info.memory) };
         unsafe {
-            ffi::gst_memory_unmap(memory.as_mut_ptr(), &mut s.map_info);
+            ffi::gst_memory_unmap(s.map_info.memory, &mut s.map_info);
         }
 
         memory
@@ -517,7 +513,8 @@ impl<T> Drop for MappedMemory<T> {
     #[inline]
     fn drop(&mut self) {
         unsafe {
-            ffi::gst_memory_unmap(self.memory.as_mut_ptr(), &mut self.map_info);
+            let _memory = Memory::from_glib_full(self.map_info.memory);
+            ffi::gst_memory_unmap(self.map_info.memory, &mut self.map_info);
         }
     }
 }
