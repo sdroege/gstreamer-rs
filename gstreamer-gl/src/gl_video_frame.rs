@@ -3,7 +3,7 @@
 use std::{fmt::Debug, marker::PhantomData, mem, ptr};
 
 use crate::{ffi, GLMemoryRef};
-use glib::translate::{from_glib, Borrowed, ToGlibPtr};
+use glib::translate::*;
 use gst_video::{video_frame::IsVideoFrame, VideoFrameExt};
 
 pub enum Readable {}
@@ -68,7 +68,6 @@ impl<O: IsGLVideoFrame> GLVideoFrameExt for O {}
 
 pub struct GLVideoFrame<T> {
     frame: gst_video::ffi::GstVideoFrame,
-    buffer: gst::Buffer,
     phantom: PhantomData<T>,
 }
 
@@ -100,7 +99,7 @@ impl<T> GLVideoFrame<T> {
     pub fn into_buffer(self) -> gst::Buffer {
         unsafe {
             let mut s = mem::ManuallyDrop::new(self);
-            let buffer = ptr::read(&s.buffer);
+            let buffer = from_glib_none(s.frame.buffer);
             gst_video::ffi::gst_video_frame_unmap(&mut s.frame);
             buffer
         }
@@ -108,21 +107,16 @@ impl<T> GLVideoFrame<T> {
 
     #[inline]
     pub unsafe fn from_glib_full(frame: gst_video::ffi::GstVideoFrame) -> Self {
-        let buffer = gst::Buffer::from_glib_none(frame.buffer);
         Self {
             frame,
-            buffer,
             phantom: PhantomData,
         }
     }
 
     #[inline]
     pub fn into_raw(self) -> gst_video::ffi::GstVideoFrame {
-        unsafe {
-            let mut s = mem::ManuallyDrop::new(self);
-            ptr::drop_in_place(&mut s.buffer);
-            s.frame
-        }
+        let s = mem::ManuallyDrop::new(self);
+        s.frame
     }
 
     #[inline]
@@ -171,9 +165,7 @@ impl GLVideoFrame<Readable> {
                 frame.as_mut_ptr(),
                 info.to_glib_none().0 as *mut _,
                 buffer.to_glib_none().0,
-                gst_video::ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF
-                    | gst::ffi::GST_MAP_READ
-                    | ffi::GST_MAP_GL as u32,
+                gst::ffi::GST_MAP_READ | ffi::GST_MAP_GL as u32,
             ));
 
             if !res {
@@ -188,7 +180,6 @@ impl GLVideoFrame<Readable> {
                 frame.info.offset.fill(0);
                 Ok(Self {
                     frame,
-                    buffer,
                     phantom: PhantomData,
                 })
             }
@@ -222,10 +213,7 @@ impl GLVideoFrame<Writable> {
                 frame.as_mut_ptr(),
                 info.to_glib_none().0 as *mut _,
                 buffer.to_glib_none().0,
-                gst_video::ffi::GST_VIDEO_FRAME_MAP_FLAG_NO_REF
-                    | gst::ffi::GST_MAP_READ
-                    | gst::ffi::GST_MAP_WRITE
-                    | ffi::GST_MAP_GL as u32,
+                gst::ffi::GST_MAP_READ | gst::ffi::GST_MAP_WRITE | ffi::GST_MAP_GL as u32,
             ));
 
             if !res {
@@ -240,7 +228,6 @@ impl GLVideoFrame<Writable> {
                 frame.info.offset.fill(0);
                 Ok(Self {
                     frame,
-                    buffer,
                     phantom: PhantomData,
                 })
             }
