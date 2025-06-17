@@ -569,7 +569,7 @@ mod tests {
         crate::init().unwrap();
 
         let clock = SystemClock::obtain();
-        let now = clock.time().unwrap();
+        let now = clock.time();
         let id = clock.new_single_shot_id(now + 20 * ClockTime::MSECOND);
         let (res, _) = id.wait();
 
@@ -583,7 +583,7 @@ mod tests {
         let (sender, receiver) = channel();
 
         let clock = SystemClock::obtain();
-        let now = clock.time().unwrap();
+        let now = clock.time();
         let id = clock.new_single_shot_id(now + 20 * ClockTime::MSECOND);
         let res = id.wait_async(move |_, _, _| {
             sender.send(()).unwrap();
@@ -599,7 +599,7 @@ mod tests {
         crate::init().unwrap();
 
         let clock = SystemClock::obtain();
-        let now = clock.time().unwrap();
+        let now = clock.time();
         let id = clock.new_periodic_id(now + 20 * ClockTime::MSECOND, 20 * ClockTime::MSECOND);
 
         let (res, _) = id.wait();
@@ -616,7 +616,7 @@ mod tests {
         let (sender, receiver) = channel();
 
         let clock = SystemClock::obtain();
-        let now = clock.time().unwrap();
+        let now = clock.time();
         let id = clock.new_periodic_id(now + 20 * ClockTime::MSECOND, 20 * ClockTime::MSECOND);
         let res = id.wait_async(move |_, _, _| {
             let _ = sender.send(());

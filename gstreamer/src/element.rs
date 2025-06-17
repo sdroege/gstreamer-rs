@@ -701,11 +701,7 @@ pub trait ElementExtManual: IsA<Element> + 'static {
     #[doc(alias = "get_current_clock_time")]
     #[doc(alias = "gst_element_get_current_clock_time")]
     fn current_clock_time(&self) -> Option<crate::ClockTime> {
-        if let Some(clock) = self.clock() {
-            clock.time()
-        } else {
-            crate::ClockTime::NONE
-        }
+        self.clock().as_ref().map(crate::Clock::time)
     }
 
     #[doc(alias = "gst_element_get_request_pad")]
