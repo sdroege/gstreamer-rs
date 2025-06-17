@@ -137,12 +137,13 @@ pub trait ClockExt: IsA<Clock> + 'static {
     }
 
     #[doc(alias = "gst_clock_adjust_unlocked")]
-    fn adjust_unlocked(&self, internal: ClockTime) -> Option<ClockTime> {
+    fn adjust_unlocked(&self, internal: ClockTime) -> ClockTime {
         unsafe {
-            from_glib(ffi::gst_clock_adjust_unlocked(
+            try_from_glib(ffi::gst_clock_adjust_unlocked(
                 self.as_ref().to_glib_none().0,
                 internal.into_glib(),
             ))
+            .expect("mandatory glib value is None")
         }
     }
 
@@ -177,8 +178,11 @@ pub trait ClockExt: IsA<Clock> + 'static {
 
     #[doc(alias = "gst_clock_get_time")]
     #[doc(alias = "get_time")]
-    fn time(&self) -> Option<ClockTime> {
-        unsafe { from_glib(ffi::gst_clock_get_time(self.as_ref().to_glib_none().0)) }
+    fn time(&self) -> ClockTime {
+        unsafe {
+            try_from_glib(ffi::gst_clock_get_time(self.as_ref().to_glib_none().0))
+                .expect("mandatory glib value is None")
+        }
     }
 
     #[doc(alias = "gst_clock_get_timeout")]
@@ -232,12 +236,13 @@ pub trait ClockExt: IsA<Clock> + 'static {
     }
 
     #[doc(alias = "gst_clock_unadjust_unlocked")]
-    fn unadjust_unlocked(&self, external: ClockTime) -> Option<ClockTime> {
+    fn unadjust_unlocked(&self, external: ClockTime) -> ClockTime {
         unsafe {
-            from_glib(ffi::gst_clock_unadjust_unlocked(
+            try_from_glib(ffi::gst_clock_unadjust_unlocked(
                 self.as_ref().to_glib_none().0,
                 external.into_glib(),
             ))
+            .expect("mandatory glib value is None")
         }
     }
 
