@@ -730,9 +730,16 @@ manual_traits = ["ClockExtManual"]
         [[object.function.parameter]]
         name = "internal"
         mandatory = true
+        [object.function.return]
+        mandatory = true
 
     [[object.function]]
     name = "get_internal_time"
+        [object.function.return]
+        mandatory = true
+
+    [[object.function]]
+    name = "get_time"
         [object.function.return]
         mandatory = true
 
@@ -758,6 +765,8 @@ manual_traits = ["ClockExtManual"]
     name = "unadjust_unlocked"
         [[object.function.parameter]]
         name = "external"
+        mandatory = true
+        [object.function.return]
         mandatory = true
 
     [[object.function]]
