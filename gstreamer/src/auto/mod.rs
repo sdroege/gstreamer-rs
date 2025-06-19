@@ -132,6 +132,7 @@ pub use self::enums::PluginError;
 pub use self::enums::ProgressType;
 pub use self::enums::PromiseResult;
 pub use self::enums::QOSType;
+pub use self::enums::QueryType;
 pub use self::enums::ResourceError;
 pub use self::enums::SeekType;
 pub use self::enums::State;
