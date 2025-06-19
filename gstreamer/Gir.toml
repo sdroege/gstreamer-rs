@@ -2087,6 +2087,12 @@ status = "manual"
 ref_mode = "ref"
 
 [[object]]
+name = "Gst.QueryType"
+status = "generate"
+    [[object.derive]]
+    name = "Debug, PartialEq, Eq, Hash"
+
+[[object]]
 name = "Gst.Registry"
 status = "generate"
 final_type = true
