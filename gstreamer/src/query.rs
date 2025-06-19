@@ -14,11 +14,32 @@ use crate::{
     ffi,
     format::{CompatibleFormattedValue, FormattedValue, GenericFormattedValue},
     structure::*,
+    QueryType,
 };
 
 mini_object_wrapper!(Query, QueryRef, ffi::GstQuery, || {
     ffi::gst_query_get_type()
 });
+
+impl QueryType {
+    #[doc(alias = "GST_QUERY_IS_UPSTREAM")]
+    #[inline]
+    pub fn is_upstream(self) -> bool {
+        (self.into_glib() as u32) & ffi::GST_QUERY_TYPE_UPSTREAM != 0
+    }
+
+    #[doc(alias = "GST_QUERY_IS_DOWNSTREAM")]
+    #[inline]
+    pub fn is_downstream(self) -> bool {
+        (self.into_glib() as u32) & ffi::GST_QUERY_TYPE_DOWNSTREAM != 0
+    }
+
+    #[doc(alias = "GST_QUERY_IS_SERIALIZED")]
+    #[inline]
+    pub fn is_serialized(self) -> bool {
+        (self.into_glib() as u32) & ffi::GST_QUERY_TYPE_SERIALIZED != 0
+    }
+}
 
 impl QueryRef {
     #[doc(alias = "get_structure")]
@@ -61,6 +82,13 @@ impl QueryRef {
     #[inline]
     pub fn is_serialized(&self) -> bool {
         unsafe { ((*self.as_ptr()).type_ as u32) & ffi::GST_QUERY_TYPE_SERIALIZED != 0 }
+    }
+
+    #[doc(alias = "get_type")]
+    #[doc(alias = "GST_QUERY_TYPE")]
+    #[inline]
+    pub fn type_(&self) -> QueryType {
+        unsafe { from_glib((*self.as_ptr()).type_) }
     }
 
     pub fn view(&self) -> QueryView {
@@ -2104,5 +2132,25 @@ mod tests {
 
         uri_q.set_uri::<str>(None);
         */
+    }
+
+    #[test]
+    fn query_type() {
+        crate::init().unwrap();
+
+        assert!(!QueryType::Allocation.is_upstream());
+        assert!(QueryType::Allocation.is_downstream());
+        assert!(QueryType::Allocation.is_serialized());
+
+        assert!(QueryType::Latency.is_upstream());
+        assert!(QueryType::Latency.is_downstream());
+        assert!(!QueryType::Latency.is_serialized());
+
+        assert!(QueryType::Scheduling.is_upstream());
+        assert!(!QueryType::Scheduling.is_downstream());
+        assert!(!QueryType::Scheduling.is_serialized());
+
+        let lat = Latency::new();
+        assert_eq!(lat.type_(), QueryType::Latency);
     }
 }
