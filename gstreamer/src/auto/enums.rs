@@ -2430,6 +2430,211 @@ impl From<QOSType> for glib::Value {
     }
 }
 
+#[derive(Debug, PartialEq, Eq, Hash, Clone, Copy)]
+#[non_exhaustive]
+#[doc(alias = "GstQueryType")]
+pub enum QueryType {
+    #[doc(alias = "GST_QUERY_UNKNOWN")]
+    Unknown,
+    #[doc(alias = "GST_QUERY_POSITION")]
+    Position,
+    #[doc(alias = "GST_QUERY_DURATION")]
+    Duration,
+    #[doc(alias = "GST_QUERY_LATENCY")]
+    Latency,
+    #[doc(alias = "GST_QUERY_JITTER")]
+    Jitter,
+    #[doc(alias = "GST_QUERY_RATE")]
+    Rate,
+    #[doc(alias = "GST_QUERY_SEEKING")]
+    Seeking,
+    #[doc(alias = "GST_QUERY_SEGMENT")]
+    Segment,
+    #[doc(alias = "GST_QUERY_CONVERT")]
+    Convert,
+    #[doc(alias = "GST_QUERY_FORMATS")]
+    Formats,
+    #[doc(alias = "GST_QUERY_BUFFERING")]
+    Buffering,
+    #[doc(alias = "GST_QUERY_CUSTOM")]
+    Custom,
+    #[doc(alias = "GST_QUERY_URI")]
+    Uri,
+    #[doc(alias = "GST_QUERY_ALLOCATION")]
+    Allocation,
+    #[doc(alias = "GST_QUERY_SCHEDULING")]
+    Scheduling,
+    #[doc(alias = "GST_QUERY_ACCEPT_CAPS")]
+    AcceptCaps,
+    #[doc(alias = "GST_QUERY_CAPS")]
+    Caps,
+    #[doc(alias = "GST_QUERY_DRAIN")]
+    Drain,
+    #[doc(alias = "GST_QUERY_CONTEXT")]
+    Context,
+    #[doc(alias = "GST_QUERY_BITRATE")]
+    Bitrate,
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
+    #[doc(alias = "GST_QUERY_SELECTABLE")]
+    Selectable,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+impl QueryType {
+    //#[doc(alias = "gst_query_type_get_flags")]
+    //#[doc(alias = "get_flags")]
+    //pub fn flags(self) -> /*Ignored*/QueryTypeFlags {
+    //    unsafe { TODO: call ffi:gst_query_type_get_flags() }
+    //}
+
+    pub fn name<'a>(self) -> &'a GStr {
+        unsafe {
+            GStr::from_ptr(
+                ffi::gst_query_type_get_name(self.into_glib())
+                    .as_ref()
+                    .expect("gst_query_type_get_name returned NULL"),
+            )
+        }
+    }
+
+    #[doc(alias = "gst_query_type_to_quark")]
+    pub fn to_quark(self) -> glib::Quark {
+        assert_initialized_main_thread!();
+        unsafe { from_glib(ffi::gst_query_type_to_quark(self.into_glib())) }
+    }
+}
+
+impl std::fmt::Display for QueryType {
+    #[inline]
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        f.write_str(&self.name())
+    }
+}
+
+#[doc(hidden)]
+impl IntoGlib for QueryType {
+    type GlibType = ffi::GstQueryType;
+
+    fn into_glib(self) -> ffi::GstQueryType {
+        match self {
+            Self::Unknown => ffi::GST_QUERY_UNKNOWN,
+            Self::Position => ffi::GST_QUERY_POSITION,
+            Self::Duration => ffi::GST_QUERY_DURATION,
+            Self::Latency => ffi::GST_QUERY_LATENCY,
+            Self::Jitter => ffi::GST_QUERY_JITTER,
+            Self::Rate => ffi::GST_QUERY_RATE,
+            Self::Seeking => ffi::GST_QUERY_SEEKING,
+            Self::Segment => ffi::GST_QUERY_SEGMENT,
+            Self::Convert => ffi::GST_QUERY_CONVERT,
+            Self::Formats => ffi::GST_QUERY_FORMATS,
+            Self::Buffering => ffi::GST_QUERY_BUFFERING,
+            Self::Custom => ffi::GST_QUERY_CUSTOM,
+            Self::Uri => ffi::GST_QUERY_URI,
+            Self::Allocation => ffi::GST_QUERY_ALLOCATION,
+            Self::Scheduling => ffi::GST_QUERY_SCHEDULING,
+            Self::AcceptCaps => ffi::GST_QUERY_ACCEPT_CAPS,
+            Self::Caps => ffi::GST_QUERY_CAPS,
+            Self::Drain => ffi::GST_QUERY_DRAIN,
+            Self::Context => ffi::GST_QUERY_CONTEXT,
+            Self::Bitrate => ffi::GST_QUERY_BITRATE,
+            #[cfg(feature = "v1_22")]
+            Self::Selectable => ffi::GST_QUERY_SELECTABLE,
+            Self::__Unknown(value) => value,
+        }
+    }
+}
+
+#[doc(hidden)]
+impl FromGlib<ffi::GstQueryType> for QueryType {
+    unsafe fn from_glib(value: ffi::GstQueryType) -> Self {
+        skip_assert_initialized!();
+
+        match value {
+            ffi::GST_QUERY_UNKNOWN => Self::Unknown,
+            ffi::GST_QUERY_POSITION => Self::Position,
+            ffi::GST_QUERY_DURATION => Self::Duration,
+            ffi::GST_QUERY_LATENCY => Self::Latency,
+            ffi::GST_QUERY_JITTER => Self::Jitter,
+            ffi::GST_QUERY_RATE => Self::Rate,
+            ffi::GST_QUERY_SEEKING => Self::Seeking,
+            ffi::GST_QUERY_SEGMENT => Self::Segment,
+            ffi::GST_QUERY_CONVERT => Self::Convert,
+            ffi::GST_QUERY_FORMATS => Self::Formats,
+            ffi::GST_QUERY_BUFFERING => Self::Buffering,
+            ffi::GST_QUERY_CUSTOM => Self::Custom,
+            ffi::GST_QUERY_URI => Self::Uri,
+            ffi::GST_QUERY_ALLOCATION => Self::Allocation,
+            ffi::GST_QUERY_SCHEDULING => Self::Scheduling,
+            ffi::GST_QUERY_ACCEPT_CAPS => Self::AcceptCaps,
+            ffi::GST_QUERY_CAPS => Self::Caps,
+            ffi::GST_QUERY_DRAIN => Self::Drain,
+            ffi::GST_QUERY_CONTEXT => Self::Context,
+            ffi::GST_QUERY_BITRATE => Self::Bitrate,
+            #[cfg(feature = "v1_22")]
+            ffi::GST_QUERY_SELECTABLE => Self::Selectable,
+            value => Self::__Unknown(value),
+        }
+    }
+}
+
+impl StaticType for QueryType {
+    #[inline]
+    #[doc(alias = "gst_query_type_get_type")]
+    fn static_type() -> glib::Type {
+        unsafe { from_glib(ffi::gst_query_type_get_type()) }
+    }
+}
+
+impl glib::HasParamSpec for QueryType {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        Self::ParamSpec::builder_with_default
+    }
+}
+
+impl glib::value::ValueType for QueryType {
+    type Type = Self;
+}
+
+unsafe impl<'a> glib::value::FromValue<'a> for QueryType {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    #[inline]
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+impl ToValue for QueryType {
+    #[inline]
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    #[inline]
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
+impl From<QueryType> for glib::Value {
+    #[inline]
+    fn from(v: QueryType) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstResourceError")]
