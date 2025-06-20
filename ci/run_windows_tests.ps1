@@ -13,6 +13,7 @@ $env:ErrorActionPreference='Stop'
     'gstreamer-base',
     'gstreamer-check',
     'gstreamer-controller',
+    'gstreamer-d3d12',
     'gstreamer-editing-services',
     'gstreamer-gl',
     # 'gstreamer-gl/egl',
@@ -105,7 +106,7 @@ foreach($features in $features_matrix) {
         if ($env:LocalFeatures -and ($env:LocalFeatures -ne '--no-default-features')) {
             if ($crate -eq 'examples') {
                 # FIXME: We can do --all-features for examples once we have gtk3 installed in the image
-                $env:LocalFeatures = "--features=rtsp-server,rtsp-server-record,pango-cairo,overlay-composition,gst-play,gst-player,ges,image,cairo-rs,gst-video/v1_18,windows,gl"
+                $env:LocalFeatures = "--features=rtsp-server,rtsp-server-record,pango-cairo,overlay-composition,gst-play,gst-player,ges,image,cairo-rs,gst-video/v1_18,windows,gl,d3d12"
             }
 
             if ($crate -eq 'tutorials') {
