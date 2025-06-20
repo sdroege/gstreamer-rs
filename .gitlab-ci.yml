@@ -496,7 +496,7 @@ docs:
       RUSTDOCFLAGS="$RUST_DOCS_FLAGS"
       RUSTFLAGS="--cfg docsrs"
       eval $(./gir-rustdoc.py pre-docs)
-      cargo +nightly doc --workspace --exclude examples --exclude tutorials --all-features --color=always --no-deps
+      cargo +nightly doc --workspace --exclude examples --exclude tutorials --exclude gstreamer-d3d12 --exclude gstreamer-d3d12-sys --all-features --color=always --no-deps
     - mv target/doc docs
   artifacts:
     paths:
