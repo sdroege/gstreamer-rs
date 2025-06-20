@@ -5,6 +5,18 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.23.7] - 2025-06-20
+### Fixed
+- Provide existing messages immediately from a `gst::Bus` stream when creating
+  it instead of only providing them on the next message.
+
+### Added
+- `gst::QueryType` enum and accessor for it from queries.
+
+### Changed
+- Don't unnecessarily store buffer twice in `gst_gl::GLVideoFrame`.
+- Don't store memory twice in `gst::memory::MemoryMap` and `MappedMemory`.
+
 ## [0.23.6] - 2025-05-13
 ### Fixed
 - Lower debug message level when allocation queries in subclasses fail.
@@ -1867,7 +1879,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.23.6...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.23.7...HEAD
+[0.23.7]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.23.6...0.23.7
 [0.23.6]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.23.5...0.23.6
 [0.23.5]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.23.4...0.23.5
 [0.23.4]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.23.3...0.23.4
