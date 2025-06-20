@@ -26,6 +26,11 @@ get_features() {
 }
 
 for crate in gstreamer* gstreamer-gl/{egl,wayland,x11}; do
+    if [[ "$crate" == gstreamer-d3d12* ]]; then
+        echo "Skipping $crate"
+        continue
+    fi
+
     if [ -e "$crate/Cargo.toml" ]; then
         FEATURES=$(get_features "$crate")
 

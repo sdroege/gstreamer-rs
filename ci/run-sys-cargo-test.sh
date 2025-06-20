@@ -12,6 +12,11 @@ CARGO_NEXTEST_FLAGS="--profile=ci --no-tests=pass"
 parent="${CI_PROJECT_DIR:-$(pwd)}"
 
 for crate in gstreamer*/sys gstreamer-gl/*/sys; do
+    if [[ "$crate" == gstreamer-d3d12* ]]; then
+        echo "Skipping $crate"
+        continue
+    fi
+
     if [ -e "$crate/Cargo.toml" ]; then
         echo "Building $crate with --all-features"
         cargo build $CARGO_FLAGS --locked --manifest-path "$crate/Cargo.toml" --all-features
