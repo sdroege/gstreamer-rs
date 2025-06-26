@@ -483,6 +483,8 @@ impl StructureRef {
     #[inline]
     pub unsafe fn from_glib_borrow_mut<'a>(ptr: *mut ffi::GstStructure) -> &'a mut StructureRef {
         debug_assert!(!ptr.is_null());
+        #[cfg(feature = "v1_28")]
+        debug_assert_ne!(ffi::gst_structure_is_writable(ptr), glib::ffi::GFALSE,);
 
         &mut *(ptr as *mut StructureRef)
     }
