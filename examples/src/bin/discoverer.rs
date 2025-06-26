@@ -39,7 +39,7 @@ fn print_stream_info(stream: &DiscovererStreamInfo) {
     println!("Stream: ");
 
     if let Some(stream_id) = stream.stream_id() {
-        println!("  Stream id: {}", stream_id);
+        println!("  Stream id: {stream_id}");
     }
 
     let caps_str = match stream.caps() {

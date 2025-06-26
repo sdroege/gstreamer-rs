@@ -74,7 +74,7 @@ impl TensorMeta {
                 // FIXME: This is not ideal but otherwise we can't return a reference safely
                 self.as_slice()
                     .iter()
-                    .find(|t| t.as_ptr() == res as *mut ffi::GstTensor)
+                    .find(|t| std::ptr::eq(t.as_ptr(), res))
             }
         }
     }

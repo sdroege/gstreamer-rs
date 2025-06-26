@@ -389,7 +389,7 @@ impl App {
         let gl_display = gl_config.display();
         let raw_gl_display = gl_display.raw_display();
 
-        println!("Using raw display connection {:?}", raw_gl_display);
+        println!("Using raw display connection {raw_gl_display:?}");
 
         let window_handle = window
             .as_ref()
@@ -430,7 +430,7 @@ impl App {
 
         let raw_gl_context = not_current_gl_context.raw_context();
 
-        println!("Using raw GL context {:?}", raw_gl_context);
+        println!("Using raw GL context {raw_gl_context:?}");
 
         #[cfg(not(any(target_os = "linux", windows)))]
         compile_error!("This example only has Linux and Windows support");

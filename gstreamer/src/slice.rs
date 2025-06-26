@@ -79,17 +79,17 @@ impl Dump<'_> {
         if debug {
             for line in data.chunks(16) {
                 match end_idx {
-                    0x00_00..=0xff_ff => write!(f, "{:04x}:  ", start_idx)?,
-                    0x01_00_00..=0xff_ff_ff => write!(f, "{:06x}:  ", start_idx)?,
-                    0x01_00_00_00..=0xff_ff_ff_ff => write!(f, "{:08x}:  ", start_idx)?,
-                    _ => write!(f, "{:016x}:  ", start_idx)?,
+                    0x00_00..=0xff_ff => write!(f, "{start_idx:04x}:  ")?,
+                    0x01_00_00..=0xff_ff_ff => write!(f, "{start_idx:06x}:  ")?,
+                    0x01_00_00_00..=0xff_ff_ff_ff => write!(f, "{start_idx:08x}:  ")?,
+                    _ => write!(f, "{start_idx:016x}:  ")?,
                 }
 
                 for (i, v) in line.iter().enumerate() {
                     if i > 0 {
-                        write!(f, " {:02x}", v)?;
+                        write!(f, " {v:02x}")?;
                     } else {
-                        write!(f, "{:02x}", v)?;
+                        write!(f, "{v:02x}")?;
                     }
                 }
 
@@ -117,9 +117,9 @@ impl Dump<'_> {
             for line in data.chunks(16) {
                 for (i, v) in line.iter().enumerate() {
                     if i > 0 {
-                        write!(f, " {:02x}", v)?;
+                        write!(f, " {v:02x}")?;
                     } else {
-                        write!(f, "{:02x}", v)?;
+                        write!(f, "{v:02x}")?;
                     }
                 }
 

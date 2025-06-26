@@ -169,8 +169,7 @@ unsafe impl<T: TracerImpl> IsSubclassable<T> for Tracer {
                         return;
                     }
 
-                    let s = match crate::Structure::from_str(&format!("tracer-settings,{}", params))
-                    {
+                    let s = match crate::Structure::from_str(&format!("tracer-settings,{params}")) {
                         Ok(s) => s,
                         Err(err) => {
                             emit_property_warning(

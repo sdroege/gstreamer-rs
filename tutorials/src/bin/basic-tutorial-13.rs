@@ -164,7 +164,7 @@ USAGE: Choose one of the following options, then press enter:
                     }
                 }
                 Command::ReverseRate => {
-                    if send_seek_event(&pipeline, rate * -1.) {
+                    if send_seek_event(&pipeline, -rate) {
                         rate *= -1.;
                     }
                 }

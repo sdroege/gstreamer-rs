@@ -28,6 +28,6 @@ impl TensorDataType {
 impl std::fmt::Display for TensorDataType {
     #[inline]
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        f.write_str(&self.name())
+        f.write_str(self.name())
     }
 }

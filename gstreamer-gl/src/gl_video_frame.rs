@@ -235,7 +235,7 @@ impl GLVideoFrame<Writable> {
     }
 
     #[inline]
-    pub fn memory_mut(&self, idx: u32) -> Result<&mut GLMemoryRef, glib::BoolError> {
+    pub fn memory_mut(&mut self, idx: u32) -> Result<&mut GLMemoryRef, glib::BoolError> {
         unsafe { Ok(GLMemoryRef::from_mut_ptr(self.memory(idx)?.as_ptr() as _)) }
     }
 
@@ -439,7 +439,7 @@ impl<'a> GLVideoFrameRef<&'a mut gst::BufferRef> {
     }
 
     #[inline]
-    pub fn memory_mut(&self, idx: u32) -> Result<&mut GLMemoryRef, glib::BoolError> {
+    pub fn memory_mut(&mut self, idx: u32) -> Result<&mut GLMemoryRef, glib::BoolError> {
         unsafe { Ok(GLMemoryRef::from_mut_ptr(self.memory(idx)?.as_ptr() as _)) }
     }
 }
