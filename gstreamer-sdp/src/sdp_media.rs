@@ -618,6 +618,22 @@ impl SDPMediaRef {
             _ => Err(glib::bool_error!("Failed to set media from caps")),
         }
     }
+
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "gst_sdp_media_add_media_from_structure")]
+    pub fn add_media_from_structure(
+        &mut self,
+        s: &gst::StructureRef,
+    ) -> Result<(), glib::BoolError> {
+        skip_assert_initialized!();
+        let result =
+            unsafe { ffi::gst_sdp_media_add_media_from_structure(s.as_ptr(), &mut self.0) };
+        match result {
+            ffi::GST_SDP_OK => Ok(()),
+            _ => Err(glib::bool_error!("Failed to add media from structure")),
+        }
+    }
 }
 
 impl Borrow<SDPMediaRef> for SDPMedia {
