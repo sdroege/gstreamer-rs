@@ -732,6 +732,18 @@ pub const GST_LOCK_FLAG_WRITE: GstLockFlags = 2;
 pub const GST_LOCK_FLAG_EXCLUSIVE: GstLockFlags = 4;
 pub const GST_LOCK_FLAG_LAST: GstLockFlags = 256;
 
+pub type GstLogContextFlags = c_uint;
+pub const GST_LOG_CONTEXT_FLAG_NONE: GstLogContextFlags = 0;
+pub const GST_LOG_CONTEXT_FLAG_THROTTLE: GstLogContextFlags = 1;
+
+pub type GstLogContextHashFlags = c_uint;
+pub const GST_LOG_CONTEXT_DEFAULT: GstLogContextHashFlags = 0;
+pub const GST_LOG_CONTEXT_IGNORE_OBJECT: GstLogContextHashFlags = 1;
+pub const GST_LOG_CONTEXT_IGNORE_FORMAT: GstLogContextHashFlags = 2;
+pub const GST_LOG_CONTEXT_IGNORE_FILE: GstLogContextHashFlags = 4;
+pub const GST_LOG_CONTEXT_USE_LINE_NUMBER: GstLogContextHashFlags = 8;
+pub const GST_LOG_CONTEXT_USE_STRING_ARGS: GstLogContextHashFlags = 16;
+
 pub type GstMapFlags = c_uint;
 pub const GST_MAP_READ: GstMapFlags = 1;
 pub const GST_MAP_WRITE: GstMapFlags = 2;
@@ -2035,6 +2047,24 @@ impl ::std::fmt::Debug for GstIterator {
     }
 }
 
+#[repr(C)]
+#[allow(dead_code)]
+pub struct _GstLogContext {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
+
+pub type GstLogContext = _GstLogContext;
+
+#[repr(C)]
+#[allow(dead_code)]
+pub struct _GstLogContextBuilder {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
+
+pub type GstLogContextBuilder = _GstLogContextBuilder;
+
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct GstMapInfo {
@@ -2633,6 +2663,7 @@ pub struct GstReferenceTimestampMeta {
     pub reference: *mut GstCaps,
     pub timestamp: GstClockTime,
     pub duration: GstClockTime,
+    pub info: *mut GstStructure,
 }
 
 impl ::std::fmt::Debug for GstReferenceTimestampMeta {
@@ -2642,6 +2673,7 @@ impl ::std::fmt::Debug for GstReferenceTimestampMeta {
             .field("reference", &self.reference)
             .field("timestamp", &self.timestamp)
             .field("duration", &self.duration)
+            .field("info", &self.info)
             .finish()
     }
 }
@@ -4387,6 +4419,20 @@ extern "C" {
     pub fn gst_lock_flags_get_type() -> GType;
 
     //=========================================================================
+    // GstLogContextFlags
+    //=========================================================================
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_log_context_flags_get_type() -> GType;
+
+    //=========================================================================
+    // GstLogContextHashFlags
+    //=========================================================================
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_log_context_hash_flags_get_type() -> GType;
+
+    //=========================================================================
     // GstMapFlags
     //=========================================================================
     pub fn gst_map_flags_get_type() -> GType;
@@ -5551,6 +5597,50 @@ extern "C" {
     pub fn gst_iterator_resync(it: *mut GstIterator);
 
     //=========================================================================
+    // GstLogContext
+    //=========================================================================
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_log_context_free(ctx: *mut GstLogContext);
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_log_context_get_category(context: *mut GstLogContext) -> *mut GstDebugCategory;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_log_context_reset(ctx: *mut GstLogContext);
+
+    //=========================================================================
+    // GstLogContextBuilder
+    //=========================================================================
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_log_context_builder_build(builder: *mut GstLogContextBuilder) -> *mut GstLogContext;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_log_context_builder_set_category(
+        builder: *mut GstLogContextBuilder,
+        category: *mut GstDebugCategory,
+    ) -> *mut GstLogContextBuilder;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_log_context_builder_set_hash_flags(
+        builder: *mut GstLogContextBuilder,
+        flags: GstLogContextHashFlags,
+    ) -> *mut GstLogContextBuilder;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_log_context_builder_set_interval(
+        builder: *mut GstLogContextBuilder,
+        interval: GstClockTime,
+    ) -> *mut GstLogContextBuilder;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_log_context_builder_new(
+        category: *mut GstDebugCategory,
+        flags: GstLogContextFlags,
+    ) -> *mut GstLogContextBuilder;
+
+    //=========================================================================
     // GstMemory
     //=========================================================================
     pub fn gst_memory_get_type() -> GType;
@@ -6084,6 +6174,12 @@ extern "C" {
         api: GType,
         aggregator: GstAllocationMetaParamsAggregator,
     );
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_meta_api_type_tags_contain_only(
+        api: GType,
+        valid_tags: *mut *const c_char,
+    ) -> gboolean;
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_meta_deserialize(
@@ -6832,6 +6928,13 @@ extern "C" {
         fieldname: *const c_char,
         value: *mut gboolean,
     ) -> gboolean;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_structure_get_caps(
+        structure: *const GstStructure,
+        fieldname: *const c_char,
+        caps: *mut *const GstCaps,
+    ) -> gboolean;
     pub fn gst_structure_get_clock_time(
         structure: *const GstStructure,
         fieldname: *const c_char,
@@ -7051,6 +7154,9 @@ extern "C" {
         subset: *const GstStructure,
         superset: *const GstStructure,
     ) -> gboolean;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_structure_is_writable(structure: *const GstStructure) -> gboolean;
     pub fn gst_structure_map_in_place(
         structure: *mut GstStructure,
         func: GstStructureMapFunc,
@@ -9603,9 +9709,35 @@ extern "C" {
         id: *const c_char,
         message_string: *const c_char,
     );
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_debug_log_id_literal_with_context(
+        ctx: *mut GstLogContext,
+        level: GstDebugLevel,
+        file: *const c_char,
+        function: *const c_char,
+        line: c_int,
+        id: *const c_char,
+        message: *const c_char,
+    );
     //#[cfg(feature = "v1_22")]
     //#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     //pub fn gst_debug_log_id_valist(category: *mut GstDebugCategory, level: GstDebugLevel, file: *const c_char, function: *const c_char, line: c_int, id: *const c_char, format: *const c_char, args: /*Unimplemented*/va_list);
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_debug_log_id_with_context(
+        ctx: *mut GstLogContext,
+        level: GstDebugLevel,
+        file: *const c_char,
+        function: *const c_char,
+        line: c_int,
+        id: *const c_char,
+        format: *const c_char,
+        ...
+    );
+    //#[cfg(feature = "v1_28")]
+    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    //pub fn gst_debug_log_id_with_context_valist(ctx: *mut GstLogContext, level: GstDebugLevel, file: *const c_char, function: *const c_char, line: c_int, id: *const c_char, format: *const c_char, args: /*Unimplemented*/va_list);
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_debug_log_literal(
@@ -9617,7 +9749,33 @@ extern "C" {
         object: *mut gobject::GObject,
         message_string: *const c_char,
     );
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_debug_log_literal_with_context(
+        ctx: *mut GstLogContext,
+        level: GstDebugLevel,
+        file: *const c_char,
+        function: *const c_char,
+        line: c_int,
+        object: *mut gobject::GObject,
+        message: *const c_char,
+    );
     //pub fn gst_debug_log_valist(category: *mut GstDebugCategory, level: GstDebugLevel, file: *const c_char, function: *const c_char, line: c_int, object: *mut gobject::GObject, format: *const c_char, args: /*Unimplemented*/va_list);
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_debug_log_with_context(
+        ctx: *mut GstLogContext,
+        level: GstDebugLevel,
+        file: *const c_char,
+        function: *const c_char,
+        line: c_int,
+        object: *mut gobject::GObject,
+        format: *const c_char,
+        ...
+    );
+    //#[cfg(feature = "v1_28")]
+    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    //pub fn gst_debug_log_with_context_valist(ctx: *mut GstLogContext, level: GstDebugLevel, file: *const c_char, function: *const c_char, line: c_int, object: *mut gobject::GObject, format: *const c_char, args: /*Unimplemented*/va_list);
     #[cfg(feature = "v1_26")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
     pub fn gst_debug_print_object(ptr: gconstpointer) -> *mut c_char;

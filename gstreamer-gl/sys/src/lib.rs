@@ -2905,6 +2905,9 @@ extern "C" {
     pub fn gst_gl_window_draw(window: *mut GstGLWindow);
     pub fn gst_gl_window_get_context(window: *mut GstGLWindow) -> *mut GstGLContext;
     pub fn gst_gl_window_get_display(window: *mut GstGLWindow) -> uintptr_t;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_gl_window_get_request_output_surface(window: *mut GstGLWindow) -> gboolean;
     pub fn gst_gl_window_get_surface_dimensions(
         window: *mut GstGLWindow,
         width: *mut c_uint,
@@ -2971,6 +2974,12 @@ extern "C" {
         width: c_int,
         height: c_int,
     ) -> gboolean;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_gl_window_set_request_output_surface(
+        window: *mut GstGLWindow,
+        output_surface: gboolean,
+    );
     pub fn gst_gl_window_set_resize_callback(
         window: *mut GstGLWindow,
         callback: GstGLWindowResizeCB,

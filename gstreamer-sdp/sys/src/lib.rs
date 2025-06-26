@@ -904,6 +904,12 @@ extern "C" {
     ) -> GstSDPResult;
     pub fn gst_sdp_media_set_proto(media: *mut GstSDPMedia, proto: *const c_char) -> GstSDPResult;
     pub fn gst_sdp_media_uninit(media: *mut GstSDPMedia) -> GstSDPResult;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_sdp_media_add_media_from_structure(
+        structure: *const gst::GstStructure,
+        media: *mut GstSDPMedia,
+    ) -> GstSDPResult;
     pub fn gst_sdp_media_init(media: *mut GstSDPMedia) -> GstSDPResult;
     pub fn gst_sdp_media_new(media: *mut *mut GstSDPMedia) -> GstSDPResult;
     pub fn gst_sdp_media_set_media_from_caps(

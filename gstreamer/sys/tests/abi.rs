@@ -700,6 +700,20 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "GstLogContextFlags",
+        Layout {
+            size: size_of::<GstLogContextFlags>(),
+            alignment: align_of::<GstLogContextFlags>(),
+        },
+    ),
+    (
+        "GstLogContextHashFlags",
+        Layout {
+            size: size_of::<GstLogContextHashFlags>(),
+            alignment: align_of::<GstLogContextHashFlags>(),
+        },
+    ),
+    (
         "GstMapFlags",
         Layout {
             size: size_of::<GstMapFlags>(),
@@ -1767,6 +1781,14 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(guint) GST_LOCK_FLAG_READ", "1"),
     ("GST_LOCK_FLAG_READWRITE", "3"),
     ("(guint) GST_LOCK_FLAG_WRITE", "2"),
+    ("(guint) GST_LOG_CONTEXT_DEFAULT", "0"),
+    ("(guint) GST_LOG_CONTEXT_FLAG_NONE", "0"),
+    ("(guint) GST_LOG_CONTEXT_FLAG_THROTTLE", "1"),
+    ("(guint) GST_LOG_CONTEXT_IGNORE_FILE", "4"),
+    ("(guint) GST_LOG_CONTEXT_IGNORE_FORMAT", "2"),
+    ("(guint) GST_LOG_CONTEXT_IGNORE_OBJECT", "1"),
+    ("(guint) GST_LOG_CONTEXT_USE_LINE_NUMBER", "8"),
+    ("(guint) GST_LOG_CONTEXT_USE_STRING_ARGS", "16"),
     ("(guint) GST_MAP_FLAG_LAST", "65536"),
     ("(guint) GST_MAP_READ", "1"),
     ("GST_MAP_READWRITE", "3"),

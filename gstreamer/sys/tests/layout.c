@@ -79,6 +79,8 @@ int main() {
     printf("%s;%zu;%zu\n", "GstIteratorResult", sizeof(GstIteratorResult), alignof(GstIteratorResult));
     printf("%s;%zu;%zu\n", "GstLibraryError", sizeof(GstLibraryError), alignof(GstLibraryError));
     printf("%s;%zu;%zu\n", "GstLockFlags", sizeof(GstLockFlags), alignof(GstLockFlags));
+    printf("%s;%zu;%zu\n", "GstLogContextFlags", sizeof(GstLogContextFlags), alignof(GstLogContextFlags));
+    printf("%s;%zu;%zu\n", "GstLogContextHashFlags", sizeof(GstLogContextHashFlags), alignof(GstLogContextHashFlags));
     printf("%s;%zu;%zu\n", "GstMapFlags", sizeof(GstMapFlags), alignof(GstMapFlags));
     printf("%s;%zu;%zu\n", "GstMapInfo", sizeof(GstMapInfo), alignof(GstMapInfo));
     printf("%s;%zu;%zu\n", "GstMemory", sizeof(GstMemory), alignof(GstMemory));

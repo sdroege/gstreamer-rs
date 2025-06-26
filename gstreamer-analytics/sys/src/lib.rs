@@ -55,6 +55,30 @@ pub const GST_TENSOR_DATA_TYPE_FLOAT16: GstTensorDataType = 10;
 pub const GST_TENSOR_DATA_TYPE_FLOAT32: GstTensorDataType = 11;
 pub const GST_TENSOR_DATA_TYPE_FLOAT64: GstTensorDataType = 12;
 pub const GST_TENSOR_DATA_TYPE_BFLOAT16: GstTensorDataType = 13;
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+pub const GST_TENSOR_DATA_TYPE_STRING: GstTensorDataType = 14;
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+pub const GST_TENSOR_DATA_TYPE_BOOL: GstTensorDataType = 15;
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+pub const GST_TENSOR_DATA_TYPE_COMPLEX64: GstTensorDataType = 16;
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+pub const GST_TENSOR_DATA_TYPE_COMPLEX128: GstTensorDataType = 17;
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+pub const GST_TENSOR_DATA_TYPE_FLOAT8E4M3FN: GstTensorDataType = 18;
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+pub const GST_TENSOR_DATA_TYPE_FLOAT8E4M3FNUZ: GstTensorDataType = 19;
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+pub const GST_TENSOR_DATA_TYPE_FLOAT8E5M2: GstTensorDataType = 20;
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+pub const GST_TENSOR_DATA_TYPE_FLOAT8E5M2FNUZ: GstTensorDataType = 21;
 
 pub type GstTensorDimOrder = c_int;
 pub const GST_TENSOR_DIM_ORDER_ROW_MAJOR: GstTensorDimOrder = 0;
@@ -488,6 +512,15 @@ extern "C" {
         num_dims: size_t,
         dims: *mut size_t,
     ) -> *mut GstTensor;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_tensor_check_type(
+        tensor: *const GstTensor,
+        order: GstTensorDimOrder,
+        num_dims: size_t,
+        data_type: GstTensorDataType,
+        data: *mut gst::GstBuffer,
+    ) -> gboolean;
     #[cfg(feature = "v1_26")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
     pub fn gst_tensor_copy(tensor: *const GstTensor) -> *mut GstTensor;
@@ -497,6 +530,9 @@ extern "C" {
     #[cfg(feature = "v1_26")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
     pub fn gst_tensor_get_dims(tensor: *mut GstTensor, num_dims: *mut size_t) -> *mut size_t;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_tensor_data_type_get_name(data_type: GstTensorDataType) -> *const c_char;
 
     //=========================================================================
     // GstTensorMeta
@@ -513,6 +549,16 @@ extern "C" {
     #[cfg(feature = "v1_26")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
     pub fn gst_tensor_meta_get_index_from_id(meta: *mut GstTensorMeta, id: glib::GQuark) -> c_int;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_tensor_meta_get_typed_tensor(
+        tmeta: *mut GstTensorMeta,
+        tensor_id: glib::GQuark,
+        order: GstTensorDimOrder,
+        num_dims: size_t,
+        data_type: GstTensorDataType,
+        data: *mut gst::GstBuffer,
+    ) -> *const GstTensor;
     #[cfg(feature = "v1_26")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
     pub fn gst_tensor_meta_set(

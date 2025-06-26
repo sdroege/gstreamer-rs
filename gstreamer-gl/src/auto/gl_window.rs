@@ -63,6 +63,18 @@ pub trait GLWindowExt: IsA<GLWindow> + 'static {
         }
     }
 
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "gst_gl_window_get_request_output_surface")]
+    #[doc(alias = "get_request_output_surface")]
+    fn is_request_output_surface(&self) -> bool {
+        unsafe {
+            from_glib(ffi::gst_gl_window_get_request_output_surface(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
     #[doc(alias = "gst_gl_window_get_surface_dimensions")]
     #[doc(alias = "get_surface_dimensions")]
     fn surface_dimensions(&self) -> (u32, u32) {
@@ -192,6 +204,18 @@ pub trait GLWindowExt: IsA<GLWindow> + 'static {
                 ),
                 "Failed to set the specified region"
             )
+        }
+    }
+
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "gst_gl_window_set_request_output_surface")]
+    fn set_request_output_surface(&self, output_surface: bool) {
+        unsafe {
+            ffi::gst_gl_window_set_request_output_surface(
+                self.as_ref().to_glib_none().0,
+                output_surface.into_glib(),
+            );
         }
     }
 

@@ -170,12 +170,13 @@ impl DiscovererInfo {
     }
 
     #[doc(alias = "gst_discoverer_info_from_variant")]
-    pub fn from_variant(variant: &glib::Variant) -> DiscovererInfo {
+    pub fn from_variant(variant: &glib::Variant) -> Result<DiscovererInfo, glib::BoolError> {
         assert_initialized_main_thread!();
         unsafe {
-            from_glib_full(ffi::gst_discoverer_info_from_variant(
+            Option::<_>::from_glib_full(ffi::gst_discoverer_info_from_variant(
                 variant.to_glib_none().0,
             ))
+            .ok_or_else(|| glib::bool_error!("Failed to create DiscovererInfo from Variant"))
         }
     }
 }

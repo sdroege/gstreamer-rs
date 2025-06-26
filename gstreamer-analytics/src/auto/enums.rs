@@ -42,6 +42,38 @@ pub enum TensorDataType {
     Float64,
     #[doc(alias = "GST_TENSOR_DATA_TYPE_BFLOAT16")]
     Bfloat16,
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "GST_TENSOR_DATA_TYPE_STRING")]
+    String,
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "GST_TENSOR_DATA_TYPE_BOOL")]
+    Bool,
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "GST_TENSOR_DATA_TYPE_COMPLEX64")]
+    Complex64,
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "GST_TENSOR_DATA_TYPE_COMPLEX128")]
+    Complex128,
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "GST_TENSOR_DATA_TYPE_FLOAT8E4M3FN")]
+    Float8e4m3fn,
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "GST_TENSOR_DATA_TYPE_FLOAT8E4M3FNUZ")]
+    Float8e4m3fnuz,
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "GST_TENSOR_DATA_TYPE_FLOAT8E5M2")]
+    Float8e5m2,
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "GST_TENSOR_DATA_TYPE_FLOAT8E5M2FNUZ")]
+    Float8e5m2fnuz,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -68,6 +100,22 @@ impl IntoGlib for TensorDataType {
             Self::Float32 => ffi::GST_TENSOR_DATA_TYPE_FLOAT32,
             Self::Float64 => ffi::GST_TENSOR_DATA_TYPE_FLOAT64,
             Self::Bfloat16 => ffi::GST_TENSOR_DATA_TYPE_BFLOAT16,
+            #[cfg(feature = "v1_28")]
+            Self::String => ffi::GST_TENSOR_DATA_TYPE_STRING,
+            #[cfg(feature = "v1_28")]
+            Self::Bool => ffi::GST_TENSOR_DATA_TYPE_BOOL,
+            #[cfg(feature = "v1_28")]
+            Self::Complex64 => ffi::GST_TENSOR_DATA_TYPE_COMPLEX64,
+            #[cfg(feature = "v1_28")]
+            Self::Complex128 => ffi::GST_TENSOR_DATA_TYPE_COMPLEX128,
+            #[cfg(feature = "v1_28")]
+            Self::Float8e4m3fn => ffi::GST_TENSOR_DATA_TYPE_FLOAT8E4M3FN,
+            #[cfg(feature = "v1_28")]
+            Self::Float8e4m3fnuz => ffi::GST_TENSOR_DATA_TYPE_FLOAT8E4M3FNUZ,
+            #[cfg(feature = "v1_28")]
+            Self::Float8e5m2 => ffi::GST_TENSOR_DATA_TYPE_FLOAT8E5M2,
+            #[cfg(feature = "v1_28")]
+            Self::Float8e5m2fnuz => ffi::GST_TENSOR_DATA_TYPE_FLOAT8E5M2FNUZ,
             Self::__Unknown(value) => value,
         }
     }
@@ -95,6 +143,22 @@ impl FromGlib<ffi::GstTensorDataType> for TensorDataType {
             ffi::GST_TENSOR_DATA_TYPE_FLOAT32 => Self::Float32,
             ffi::GST_TENSOR_DATA_TYPE_FLOAT64 => Self::Float64,
             ffi::GST_TENSOR_DATA_TYPE_BFLOAT16 => Self::Bfloat16,
+            #[cfg(feature = "v1_28")]
+            ffi::GST_TENSOR_DATA_TYPE_STRING => Self::String,
+            #[cfg(feature = "v1_28")]
+            ffi::GST_TENSOR_DATA_TYPE_BOOL => Self::Bool,
+            #[cfg(feature = "v1_28")]
+            ffi::GST_TENSOR_DATA_TYPE_COMPLEX64 => Self::Complex64,
+            #[cfg(feature = "v1_28")]
+            ffi::GST_TENSOR_DATA_TYPE_COMPLEX128 => Self::Complex128,
+            #[cfg(feature = "v1_28")]
+            ffi::GST_TENSOR_DATA_TYPE_FLOAT8E4M3FN => Self::Float8e4m3fn,
+            #[cfg(feature = "v1_28")]
+            ffi::GST_TENSOR_DATA_TYPE_FLOAT8E4M3FNUZ => Self::Float8e4m3fnuz,
+            #[cfg(feature = "v1_28")]
+            ffi::GST_TENSOR_DATA_TYPE_FLOAT8E5M2 => Self::Float8e5m2,
+            #[cfg(feature = "v1_28")]
+            ffi::GST_TENSOR_DATA_TYPE_FLOAT8E5M2FNUZ => Self::Float8e5m2fnuz,
             value => Self::__Unknown(value),
         }
     }

@@ -139,6 +139,20 @@ pub trait BaseParseExt: IsA<BaseParse> + 'static {
         }
     }
 
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "disable-clip")]
+    fn is_disable_clip(&self) -> bool {
+        ObjectExt::property(self.as_ref(), "disable-clip")
+    }
+
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "disable-clip")]
+    fn set_disable_clip(&self, disable_clip: bool) {
+        ObjectExt::set_property(self.as_ref(), "disable-clip", disable_clip)
+    }
+
     #[doc(alias = "disable-passthrough")]
     fn is_disable_passthrough(&self) -> bool {
         ObjectExt::property(self.as_ref(), "disable-passthrough")
@@ -147,6 +161,37 @@ pub trait BaseParseExt: IsA<BaseParse> + 'static {
     #[doc(alias = "disable-passthrough")]
     fn set_disable_passthrough(&self, disable_passthrough: bool) {
         ObjectExt::set_property(self.as_ref(), "disable-passthrough", disable_passthrough)
+    }
+
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "disable-clip")]
+    fn connect_disable_clip_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_disable_clip_trampoline<
+            P: IsA<BaseParse>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstBaseParse,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(BaseParse::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::disable-clip".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_disable_clip_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
     }
 
     #[doc(alias = "disable-passthrough")]
