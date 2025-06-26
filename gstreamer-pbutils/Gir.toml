@@ -19,7 +19,6 @@ external_libraries = [
 generate = [
     "GstPbutils.AudioVisualizer",
     "GstPbutils.AudioVisualizerShader",
-    "GstPbutils.DiscovererInfo",
     "GstPbutils.DiscovererResult",
     "GstPbutils.InstallPluginsContext",
     "GstPbutils.InstallPluginsReturn",
@@ -291,6 +290,14 @@ final_type = true
 name = "GstPbutils.DiscovererContainerInfo"
 status = "generate"
 final_type = true
+
+[[object]]
+name = "GstPbutils.DiscovererInfo"
+status = "generate"
+    [[object.function]]
+    name = "from_variant"
+        [object.function.return]
+        nullable_return_is_error = "Failed to create DiscovererInfo from Variant"
 
 [[object]]
 name = "GstPbutils.DiscovererSerializeFlags"
