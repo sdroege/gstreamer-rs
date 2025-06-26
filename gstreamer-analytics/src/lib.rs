@@ -43,6 +43,8 @@ pub use crate::tracking::*;
 mod classification;
 pub use crate::classification::*;
 
+mod enums;
+
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst_app::prelude::*" without getting conflicts
 pub mod prelude {
