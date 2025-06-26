@@ -837,6 +837,31 @@ impl ReferenceTimestampMeta {
     pub fn duration(&self) -> Option<ClockTime> {
         unsafe { from_glib(self.0.duration) }
     }
+
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[inline]
+    pub fn info(&self) -> Option<&crate::StructureRef> {
+        unsafe {
+            if self.0.info.is_null() {
+                None
+            } else {
+                Some(crate::StructureRef::from_glib_borrow(self.0.info))
+            }
+        }
+    }
+
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[inline]
+    pub fn set_info(&mut self, structure: crate::Structure) {
+        unsafe {
+            if !self.0.info.is_null() {
+                ffi::gst_structure_free(self.0.info);
+            }
+            self.0.info = structure.into_glib_ptr();
+        }
+    }
 }
 
 unsafe impl MetaAPI for ReferenceTimestampMeta {
