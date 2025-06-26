@@ -78,6 +78,27 @@ impl Tensor {
     pub fn dims_order(&self) -> TensorDimOrder {
         unsafe { from_glib(self.inner.dims_order) }
     }
+
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "gst_tensor_check_type")]
+    pub fn check_type(
+        &self,
+        order: crate::TensorDimOrder,
+        num_dims: usize,
+        data_type: crate::TensorDataType,
+        data: &gst::BufferRef,
+    ) -> bool {
+        unsafe {
+            from_glib(ffi::gst_tensor_check_type(
+                self.to_glib_none().0,
+                order.into_glib(),
+                num_dims,
+                data_type.into_glib(),
+                mut_override(data.as_ptr()),
+            ))
+        }
+    }
 }
 
 #[cfg(test)]

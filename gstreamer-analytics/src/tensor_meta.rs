@@ -47,6 +47,37 @@ impl TensorMeta {
     unsafe fn as_mut_ptr(&self) -> *mut ffi::GstTensorMeta {
         mut_override(&self.0)
     }
+
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "gst_tensor_meta_get_typed_tensor")]
+    pub fn typed_tensor(
+        &self,
+        id: glib::Quark,
+        order: crate::TensorDimOrder,
+        num_dims: usize,
+        data_type: crate::TensorDataType,
+        data: &gst::BufferRef,
+    ) -> Option<&crate::Tensor> {
+        unsafe {
+            let res = ffi::gst_tensor_meta_get_typed_tensor(
+                self.as_mut_ptr(),
+                id.into_glib(),
+                order.into_glib(),
+                num_dims,
+                data_type.into_glib(),
+                mut_override(data.as_ptr()),
+            );
+            if res.is_null() {
+                None
+            } else {
+                // FIXME: This is not ideal but otherwise we can't return a reference safely
+                self.as_slice()
+                    .iter()
+                    .find(|t| t.as_ptr() == res as *mut ffi::GstTensor)
+            }
+        }
+    }
 }
 
 unsafe impl MetaAPI for TensorMeta {
