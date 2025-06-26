@@ -216,6 +216,12 @@ impl<'a, T> MetaRef<'a, T> {
     }
 
     #[inline]
+    #[doc(alias = "gst_meta_api_type_tags_contain_only")]
+    pub fn tags_contain_only(&self, tags: &[&str]) -> bool {
+        meta_api_type_tags_contain_only(self.api(), tags)
+    }
+
+    #[inline]
     #[doc(alias = "gst_meta_api_type_get_tags")]
     pub fn tags<'b>(&self) -> &'b [glib::GStringPtr] {
         meta_api_type_get_tags(self.api())
@@ -448,6 +454,12 @@ impl<'a, T, U> MetaRefMut<'a, T, U> {
     #[inline]
     pub fn has_tag_by_quark(&self, tag: glib::Quark) -> bool {
         self.as_meta_ref().has_tag_by_quark(tag)
+    }
+
+    #[inline]
+    #[doc(alias = "gst_meta_api_type_tags_contain_only")]
+    pub fn tags_contain_only(&self, tags: &[&str]) -> bool {
+        self.as_meta_ref().tags_contain_only(tags)
     }
 
     #[inline]
@@ -1126,6 +1138,17 @@ pub fn meta_api_type_has_tag_by_quark(type_: glib::Type, tag: glib::Quark) -> bo
             tag.into_glib(),
         ))
     }
+}
+
+#[inline]
+#[doc(alias = "gst_meta_api_type_tags_contain_only")]
+pub fn meta_api_type_tags_contain_only(type_: glib::Type, tags: &[&str]) -> bool {
+    skip_assert_initialized!();
+    let meta_tags = meta_api_type_get_tags(type_);
+
+    meta_tags
+        .iter()
+        .all(|tag| tags.iter().any(|t| *t == tag.as_str()))
 }
 
 #[inline]
