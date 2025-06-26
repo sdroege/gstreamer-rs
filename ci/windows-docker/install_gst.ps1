@@ -39,7 +39,6 @@ $MESON_ARGS = @(`
   "-Dsharp=disabled", `
   "-Dpython=disabled", `
   "-Dlibav=disabled", `
-  "-Dvaapi=disabled", `
   "-Dgtk=enabled", `
   "-Dgst-plugins-base:pango=enabled", `
   "-Dgst-plugins-good:cairo=enabled", `

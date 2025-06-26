@@ -35,7 +35,6 @@ meson setup build \
     -Dintrospection=disabled \
     -Dlibav=disabled \
     -Dpython=disabled \
-    -Dvaapi=disabled \
     "${PLUGINS[@]}" "$@"
 meson compile -C build
 meson install -C build
