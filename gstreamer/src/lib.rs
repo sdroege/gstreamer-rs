@@ -50,16 +50,23 @@ mod serde_macros;
 
 #[macro_use]
 pub mod log;
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+pub mod log_context;
 #[cfg(feature = "log")]
 pub use crate::log::DebugCategoryLogger;
 pub use crate::log::{
-    DebugCategory, DebugLogFunction, DebugMessage, LoggedObject, CAT_BUFFER, CAT_BUFFER_LIST,
-    CAT_BUS, CAT_CALL_TRACE, CAT_CAPS, CAT_CLOCK, CAT_CONTEXT, CAT_DEFAULT, CAT_ELEMENT_PADS,
-    CAT_ERROR_SYSTEM, CAT_EVENT, CAT_GST_INIT, CAT_LOCKING, CAT_MEMORY, CAT_MESSAGE, CAT_META,
-    CAT_NEGOTIATION, CAT_PADS, CAT_PARAMS, CAT_PARENTAGE, CAT_PERFORMANCE, CAT_PIPELINE,
-    CAT_PLUGIN_INFO, CAT_PLUGIN_LOADING, CAT_PROBE, CAT_PROPERTIES, CAT_QOS, CAT_REFCOUNTING,
-    CAT_REGISTRY, CAT_RUST, CAT_SCHEDULING, CAT_SIGNAL, CAT_STATES,
+    DebugCategory, DebugLogFunction, DebugLogger, DebugMessage, LoggedObject, CAT_BUFFER,
+    CAT_BUFFER_LIST, CAT_BUS, CAT_CALL_TRACE, CAT_CAPS, CAT_CLOCK, CAT_CONTEXT, CAT_DEFAULT,
+    CAT_ELEMENT_PADS, CAT_ERROR_SYSTEM, CAT_EVENT, CAT_GST_INIT, CAT_LOCKING, CAT_MEMORY,
+    CAT_MESSAGE, CAT_META, CAT_NEGOTIATION, CAT_PADS, CAT_PARAMS, CAT_PARENTAGE, CAT_PERFORMANCE,
+    CAT_PIPELINE, CAT_PLUGIN_INFO, CAT_PLUGIN_LOADING, CAT_PROBE, CAT_PROPERTIES, CAT_QOS,
+    CAT_REFCOUNTING, CAT_REGISTRY, CAT_RUST, CAT_SCHEDULING, CAT_SIGNAL, CAT_STATES,
 };
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+pub use crate::log_context::{LogContext, LogContextBuilder};
 
 #[cfg(target_os = "macos")]
 mod macos;
@@ -352,6 +359,7 @@ pub mod prelude {
         element::{ElementClassExt, ElementExtManual},
         format::prelude::*,
         gobject::GObjectExtManualGst,
+        log::DebugLogger,
         memory::MemoryType,
         message::MessageErrorDomain,
         meta::{MetaAPI, MetaAPIExt, MetaTag},

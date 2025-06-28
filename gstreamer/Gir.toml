@@ -58,6 +58,8 @@ manual = [
     "Gst.DeviceProviderClass", # for docs only
     "Gst.ElementClass", # for docs only
     "Gst.IdStr",
+    "Gst.LogContext",
+    "Gst.LogContextBuilder",
     "Gst.Rank",
     "Gst.Segment",
     "Gst.StaticCaps",
@@ -189,6 +191,10 @@ status = "generate"
 
     [[object.function]]
     pattern = "debug_log.*"
+    ignore = true
+
+    [[object.function]]
+    pattern = "log_context.*"
     ignore = true
 
     [[object.function]]
@@ -1505,6 +1511,20 @@ status = "generate"
     ignore = true
 
 [[object]]
+name = "Gst.LogContextFlags"
+status = "generate"
+    [[object.member]]
+    name = "none"
+    ignore = true
+
+[[object]]
+name = "Gst.LogContextHashFlags"
+status = "generate"
+    [[object.member]]
+    name = "default"
+    ignore = true
+
+[[object]]
 name = "Gst.Memory"
 status = "manual"
 
@@ -2546,6 +2566,7 @@ name = "Gst.TypeFindProbability"
 status = "generate"
     [[object.derive]]
     name = "Debug"
+
 
 [[object]]
 name = "Gst.URIType"

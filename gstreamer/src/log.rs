@@ -158,14 +158,6 @@ impl DebugCategory {
         }
     }
 
-    #[inline]
-    pub fn above_threshold(self, level: crate::DebugLevel) -> bool {
-        match self.0 {
-            Some(cat) => unsafe { cat.as_ref().threshold >= level.into_glib() },
-            None => false,
-        }
-    }
-
     #[doc(alias = "get_color")]
     #[doc(alias = "gst_debug_category_get_color")]
     #[inline]
@@ -256,50 +248,6 @@ impl DebugCategory {
 
     // rustdoc-stripper-ignore-next
     /// Logs without checking the log level.
-    #[inline]
-    #[doc(alias = "gst_debug_log")]
-    pub fn log_unfiltered(
-        self,
-        obj: Option<&impl IsA<glib::Object>>,
-        level: crate::DebugLevel,
-        file: &glib::GStr,
-        function: &str,
-        line: u32,
-        args: fmt::Arguments,
-    ) {
-        self.log_unfiltered_internal(
-            obj.map(|obj| obj.as_ref()),
-            level,
-            file,
-            function,
-            line,
-            args,
-        )
-    }
-
-    // rustdoc-stripper-ignore-next
-    /// Logs without checking the log level.
-    #[inline]
-    #[doc(alias = "gst_debug_log_literal")]
-    pub fn log_literal_unfiltered(
-        self,
-        obj: Option<&impl IsA<glib::Object>>,
-        level: crate::DebugLevel,
-        file: &glib::GStr,
-        function: &str,
-        line: u32,
-        msg: &glib::GStr,
-    ) {
-        self.log_literal_unfiltered_internal(
-            obj.map(|obj| obj.as_ref()),
-            level,
-            file,
-            function,
-            line,
-            msg,
-        )
-    }
-
     #[inline(never)]
     fn log_unfiltered_internal(
         self,
@@ -413,42 +361,6 @@ impl DebugCategory {
     }
 
     #[cfg(feature = "v1_22")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
-    // rustdoc-stripper-ignore-next
-    /// Logs without checking the log level.
-    #[inline]
-    #[doc(alias = "gst_debug_log_id")]
-    pub fn log_id_unfiltered(
-        self,
-        id: impl AsRef<glib::GStr>,
-        level: crate::DebugLevel,
-        file: &glib::GStr,
-        function: &str,
-        line: u32,
-        args: fmt::Arguments,
-    ) {
-        self.log_id_unfiltered_internal(id.as_ref(), level, file, function, line, args)
-    }
-
-    #[cfg(feature = "v1_22")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
-    // rustdoc-stripper-ignore-next
-    /// Logs without checking the log level.
-    #[inline]
-    #[doc(alias = "gst_debug_log_id_literal")]
-    pub fn log_id_literal_unfiltered(
-        self,
-        id: impl AsRef<glib::GStr>,
-        level: crate::DebugLevel,
-        file: &glib::GStr,
-        function: &str,
-        line: u32,
-        msg: &glib::GStr,
-    ) {
-        self.log_id_literal_unfiltered_internal(id.as_ref(), level, file, function, line, msg)
-    }
-
-    #[cfg(feature = "v1_22")]
     #[inline(never)]
     fn log_id_unfiltered_internal(
         self,
@@ -542,6 +454,95 @@ impl DebugCategory {
     }
 }
 
+impl DebugLogger for DebugCategory {
+    #[inline]
+    fn above_threshold(&self, level: crate::DebugLevel) -> bool {
+        match self.0 {
+            Some(cat) => unsafe { cat.as_ref().threshold >= level.into_glib() },
+            None => false,
+        }
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Logs without checking the log level.
+    #[inline]
+    #[doc(alias = "gst_debug_log")]
+    fn log_unfiltered(
+        &self,
+        obj: Option<&impl IsA<glib::Object>>,
+        level: crate::DebugLevel,
+        file: &glib::GStr,
+        function: &str,
+        line: u32,
+        args: fmt::Arguments,
+    ) {
+        self.log_unfiltered_internal(
+            obj.map(|obj| obj.as_ref()),
+            level,
+            file,
+            function,
+            line,
+            args,
+        )
+    }
+
+    #[doc(alias = "gst_debug_log_literal")]
+    fn log_literal_unfiltered(
+        &self,
+        obj: Option<&impl IsA<glib::Object>>,
+        level: crate::DebugLevel,
+        file: &glib::GStr,
+        function: &str,
+        line: u32,
+        msg: &glib::GStr,
+    ) {
+        self.log_literal_unfiltered_internal(
+            obj.map(|obj| obj.as_ref()),
+            level,
+            file,
+            function,
+            line,
+            msg,
+        )
+    }
+
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
+    // rustdoc-stripper-ignore-next
+    /// Logs without checking the log level.
+    #[inline]
+    #[doc(alias = "gst_debug_log_id_literal")]
+    fn log_id_literal_unfiltered(
+        &self,
+        id: impl AsRef<glib::GStr>,
+        level: crate::DebugLevel,
+        file: &glib::GStr,
+        function: &str,
+        line: u32,
+        msg: &glib::GStr,
+    ) {
+        self.log_id_literal_unfiltered_internal(id.as_ref(), level, file, function, line, msg)
+    }
+
+    #[cfg(feature = "v1_22")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
+    // rustdoc-stripper-ignore-next
+    /// Logs without checking the log level.
+    #[inline]
+    #[doc(alias = "gst_debug_log_id")]
+    fn log_id_unfiltered(
+        &self,
+        id: impl AsRef<glib::GStr>,
+        level: crate::DebugLevel,
+        file: &glib::GStr,
+        function: &str,
+        line: u32,
+        args: fmt::Arguments,
+    ) {
+        self.log_id_unfiltered_internal(id.as_ref(), level, file, function, line, args)
+    }
+}
+
 unsafe impl Sync for DebugCategory {}
 unsafe impl Send for DebugCategory {}
 
@@ -621,144 +622,192 @@ declare_debug_category_from_name!(CAT_META, "GST_META");
 declare_debug_category_from_name!(CAT_LOCKING, "GST_LOCKING");
 declare_debug_category_from_name!(CAT_CONTEXT, "GST_CONTEXT");
 
+pub trait DebugLogger {
+    fn above_threshold(&self, level: DebugLevel) -> bool;
+
+    fn log_unfiltered(
+        &self,
+        obj: Option<&impl IsA<glib::Object>>,
+        level: DebugLevel,
+        file: &glib::GStr,
+        function: &str,
+        line: u32,
+        args: fmt::Arguments,
+    );
+
+    fn log_literal_unfiltered(
+        &self,
+        obj: Option<&impl IsA<glib::Object>>,
+        level: DebugLevel,
+        file: &glib::GStr,
+        function: &str,
+        line: u32,
+        msg: &glib::GStr,
+    );
+
+    #[cfg(feature = "v1_22")]
+    fn log_id_unfiltered(
+        &self,
+        id: impl AsRef<glib::GStr>,
+        level: DebugLevel,
+        file: &glib::GStr,
+        function: &str,
+        line: u32,
+        args: fmt::Arguments,
+    );
+
+    #[cfg(feature = "v1_22")]
+    fn log_id_literal_unfiltered(
+        &self,
+        id: impl AsRef<glib::GStr>,
+        level: DebugLevel,
+        file: &glib::GStr,
+        function: &str,
+        line: u32,
+        msg: &glib::GStr,
+    );
+}
+
 #[macro_export]
 macro_rules! error(
-    ($cat:expr, obj = $obj:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat, $crate::DebugLevel::Error, obj = $obj, $($args)*)
+    ($logger:expr, obj = $obj:expr, $($args:tt)*) => { {
+        $crate::log_with_level!($logger, $crate::DebugLevel::Error, obj = $obj, $($args)*)
     }};
-    ($cat:expr, imp = $imp:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat, $crate::DebugLevel::Error, imp = $imp, $($args)*)
+    ($logger:expr, imp = $imp:expr, $($args:tt)*) => { {
+        $crate::log_with_level!($logger, $crate::DebugLevel::Error, imp = $imp, $($args)*)
     }};
-    ($cat:expr, id = $id:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat, $crate::DebugLevel::Error, id = $id, $($args)*)
+    ($logger:expr, id = $id:expr, $($args:tt)*) => { {
+        $crate::log_with_level!($logger, $crate::DebugLevel::Error, id = $id, $($args)*)
     }};
-    ($cat:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat, $crate::DebugLevel::Error, $($args)*)
+    ($logger:expr, $($args:tt)*) => { {
+        $crate::log_with_level!($logger, $crate::DebugLevel::Error, $($args)*)
     }};
 );
 
 #[macro_export]
 macro_rules! warning(
-    ($cat:expr, obj = $obj:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat, $crate::DebugLevel::Warning, obj = $obj, $($args)*)
+    ($logger:expr, obj = $obj:expr, $($args:tt)*) => { {
+        $crate::log_with_level!($logger, $crate::DebugLevel::Warning, obj = $obj, $($args)*)
     }};
-    ($cat:expr, imp = $imp:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat, $crate::DebugLevel::Warning, imp = $imp, $($args)*)
+    ($logger:expr, imp = $imp:expr, $($args:tt)*) => { {
+        $crate::log_with_level!($logger, $crate::DebugLevel::Warning, imp = $imp, $($args)*)
     }};
-    ($cat:expr, id = $id:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat, $crate::DebugLevel::Warning, id = $id, $($args)*)
+    ($logger:expr, id = $id:expr, $($args:tt)*) => { {
+        $crate::log_with_level!($logger, $crate::DebugLevel::Warning, id = $id, $($args)*)
     }};
-    ($cat:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat, $crate::DebugLevel::Warning, $($args)*)
+    ($logger:expr, $($args:tt)*) => { {
+        $crate::log_with_level!($logger, $crate::DebugLevel::Warning, $($args)*)
     }};
 );
 
 #[macro_export]
 macro_rules! fixme(
-    ($cat:expr, obj = $obj:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat, $crate::DebugLevel::Fixme, obj = $obj, $($args)*)
+    ($logger:expr, obj = $obj:expr, $($args:tt)*) => { {
+        $crate::log_with_level!($logger, $crate::DebugLevel::Fixme, obj = $obj, $($args)*)
     }};
-    ($cat:expr, imp = $imp:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat, $crate::DebugLevel::Fixme, imp = $imp, $($args)*)
+    ($logger:expr, imp = $imp:expr, $($args:tt)*) => { {
+        $crate::log_with_level!($logger, $crate::DebugLevel::Fixme, imp = $imp, $($args)*)
     }};
-    ($cat:expr, id = $id:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat, $crate::DebugLevel::Fixme, id = $id, $($args)*)
+    ($logger:expr, id = $id:expr, $($args:tt)*) => { {
+        $crate::log_with_level!($logger, $crate::DebugLevel::Fixme, id = $id, $($args)*)
     }};
-    ($cat:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat, $crate::DebugLevel::Fixme, $($args)*)
+    ($logger:expr, $($args:tt)*) => { {
+        $crate::log_with_level!($logger, $crate::DebugLevel::Fixme, $($args)*)
     }};
 );
 
 #[macro_export]
 macro_rules! info(
-    ($cat:expr, obj = $obj:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat, $crate::DebugLevel::Info, obj = $obj, $($args)*)
+    ($logger:expr, obj = $obj:expr, $($args:tt)*) => { {
+        $crate::log_with_level!($logger, $crate::DebugLevel::Info, obj = $obj, $($args)*)
     }};
-    ($cat:expr, imp = $imp:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat, $crate::DebugLevel::Info, imp = $imp, $($args)*)
+    ($logger:expr, imp = $imp:expr, $($args:tt)*) => { {
+        $crate::log_with_level!($logger, $crate::DebugLevel::Info, imp = $imp, $($args)*)
     }};
-    ($cat:expr, id = $id:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat, $crate::DebugLevel::Info, id = $id, $($args)*)
+    ($logger:expr, id = $id:expr, $($args:tt)*) => { {
+        $crate::log_with_level!($logger, $crate::DebugLevel::Info, id = $id, $($args)*)
     }};
-    ($cat:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat, $crate::DebugLevel::Info, $($args)*)
+    ($logger:expr, $($args:tt)*) => { {
+        $crate::log_with_level!($logger, $crate::DebugLevel::Info, $($args)*)
     }};
 );
 
 #[macro_export]
 macro_rules! debug(
-    ($cat:expr, obj = $obj:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat, $crate::DebugLevel::Debug, obj = $obj, $($args)*)
+    ($logger:expr, obj = $obj:expr, $($args:tt)*) => { {
+        $crate::log_with_level!($logger, $crate::DebugLevel::Debug, obj = $obj, $($args)*)
     }};
-    ($cat:expr, imp = $imp:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat, $crate::DebugLevel::Debug, imp = $imp, $($args)*)
+    ($logger:expr, imp = $imp:expr, $($args:tt)*) => { {
+        $crate::log_with_level!($logger, $crate::DebugLevel::Debug, imp = $imp, $($args)*)
     }};
-    ($cat:expr, id = $id:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat, $crate::DebugLevel::Debug, id = $id, $($args)*)
+    ($logger:expr, id = $id:expr, $($args:tt)*) => { {
+        $crate::log_with_level!($logger, $crate::DebugLevel::Debug, id = $id, $($args)*)
     }};
-    ($cat:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat, $crate::DebugLevel::Debug, $($args)*)
+    ($logger:expr, $($args:tt)*) => { {
+        $crate::log_with_level!($logger, $crate::DebugLevel::Debug, $($args)*)
     }};
 );
 
 #[macro_export]
 macro_rules! log(
-    ($cat:expr, obj = $obj:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat, $crate::DebugLevel::Log, obj = $obj, $($args)*)
+    ($logger:expr, obj = $obj:expr, $($args:tt)*) => { {
+        $crate::log_with_level!($logger, $crate::DebugLevel::Log, obj = $obj, $($args)*)
     }};
-    ($cat:expr, imp = $imp:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat, $crate::DebugLevel::Log, imp = $imp, $($args)*)
+    ($logger:expr, imp = $imp:expr, $($args:tt)*) => { {
+        $crate::log_with_level!($logger, $crate::DebugLevel::Log, imp = $imp, $($args)*)
     }};
-    ($cat:expr, id = $id:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat, $crate::DebugLevel::Log, id = $id, $($args)*)
+    ($logger:expr, id = $id:expr, $($args:tt)*) => { {
+        $crate::log_with_level!($logger, $crate::DebugLevel::Log, id = $id, $($args)*)
     }};
-    ($cat:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat, $crate::DebugLevel::Log, $($args)*)
+    ($logger:expr, $($args:tt)*) => { {
+        $crate::log_with_level!($logger, $crate::DebugLevel::Log, $($args)*)
     }};
 );
 
 #[macro_export]
 macro_rules! trace(
-    ($cat:expr, obj = $obj:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat, $crate::DebugLevel::Trace, obj = $obj, $($args)*)
+    ($logger:expr, obj = $obj:expr, $($args:tt)*) => { {
+        $crate::log_with_level!($logger, $crate::DebugLevel::Trace, obj = $obj, $($args)*)
     }};
-    ($cat:expr, imp = $imp:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat, $crate::DebugLevel::Trace, imp = $imp, $($args)*)
+    ($logger:expr, imp = $imp:expr, $($args:tt)*) => { {
+        $crate::log_with_level!($logger, $crate::DebugLevel::Trace, imp = $imp, $($args)*)
     }};
-    ($cat:expr, id = $id:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat, $crate::DebugLevel::Trace, id = $id, $($args)*)
+    ($logger:expr, id = $id:expr, $($args:tt)*) => { {
+        $crate::log_with_level!($logger, $crate::DebugLevel::Trace, id = $id, $($args)*)
     }};
-    ($cat:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat, $crate::DebugLevel::Trace, $($args)*)
+    ($logger:expr, $($args:tt)*) => { {
+        $crate::log_with_level!($logger, $crate::DebugLevel::Trace, $($args)*)
     }};
 );
 
 #[macro_export]
 macro_rules! memdump(
-    ($cat:expr, obj = $obj:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat, $crate::DebugLevel::Memdump, obj = $obj, $($args)*)
+    ($logger:expr, obj = $obj:expr, $($args:tt)*) => { {
+        $crate::log_with_level!($logger, $crate::DebugLevel::Memdump, obj = $obj, $($args)*)
     }};
-    ($cat:expr, imp = $imp:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat, $crate::DebugLevel::Memdump, imp = $imp, $($args)*)
+    ($logger:expr, imp = $imp:expr, $($args:tt)*) => { {
+        $crate::log_with_level!($logger, $crate::DebugLevel::Memdump, imp = $imp, $($args)*)
     }};
-    ($cat:expr, id = $id:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat, $crate::DebugLevel::Memdump, id = $id, $($args)*)
+    ($logger:expr, id = $id:expr, $($args:tt)*) => { {
+        $crate::log_with_level!($logger, $crate::DebugLevel::Memdump, id = $id, $($args)*)
     }};
-    ($cat:expr, $($args:tt)*) => { {
-        $crate::log_with_level!($cat, $crate::DebugLevel::Memdump, $($args)*)
+    ($logger:expr, $($args:tt)*) => { {
+        $crate::log_with_level!($logger, $crate::DebugLevel::Memdump, $($args)*)
     }};
 );
 
 #[macro_export]
 macro_rules! log_with_level(
-    ($cat:expr, $level:expr, obj = $obj:expr, $msg:literal) => { {
-        let cat = $cat.clone();
+    ($logger:expr, $level:expr, obj = $obj:expr, $msg:literal) => { {
+        #[allow(unused_imports)]
+        use $crate::log::DebugLogger;
+        let logger = &$logger;
 
         // Check the log level before using `format_args!` otherwise
         // formatted arguments are evaluated even if we end up not logging.
         #[allow(unused_unsafe)]
         #[allow(clippy::redundant_closure_call)]
-        if cat.above_threshold($level) {
+        if logger.above_threshold($level) {
             use $crate::glib::prelude::Cast;
 
             // FIXME: Once there's a function_name! macro that returns a string literal we can
@@ -773,8 +822,7 @@ macro_rules! log_with_level(
             // be assigned to a variable
             (|args: std::fmt::Arguments| {
                 if args.as_str().is_some() {
-                    $crate::DebugCategory::log_literal_unfiltered(
-                        cat,
+                    logger.log_literal_unfiltered(
                         Some(obj),
                         $level,
                         unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
@@ -783,8 +831,7 @@ macro_rules! log_with_level(
                         $crate::glib::gstr!($msg),
                     )
                 } else {
-                    $crate::DebugCategory::log_unfiltered(
-                        cat,
+                    logger.log_unfiltered(
                         Some(obj),
                         $level,
                         unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
@@ -796,13 +843,15 @@ macro_rules! log_with_level(
             })(format_args!($msg))
         }
     }};
-    ($cat:expr, $level:expr, obj = $obj:expr, $($args:tt)*) => { {
-        let cat = $cat.clone();
+    ($logger:expr, $level:expr, obj = $obj:expr, $($args:tt)*) => { {
+        #[allow(unused_imports)]
+        use $crate::log::DebugLogger;
+        let logger = &$logger;
 
         // Check the log level before using `format_args!` otherwise
         // formatted arguments are evaluated even if we end up not logging.
         #[allow(unused_unsafe)]
-        if cat.above_threshold($level) {
+        if logger.above_threshold($level) {
             use $crate::glib::prelude::Cast;
 
             // FIXME: Once there's a function_name! macro that returns a string literal we can
@@ -810,25 +859,26 @@ macro_rules! log_with_level(
 
             let obj = &$obj;
             let obj = unsafe { obj.unsafe_cast_ref::<$crate::glib::Object>() };
-            $crate::DebugCategory::log_unfiltered(
-                cat,
-                Some(obj),
-                $level,
-                unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
-                $crate::glib::function_name!(),
-                line!(),
-                format_args!($($args)*),
-            )
+            logger.log_unfiltered(
+                    Some(obj),
+                    $level,
+                    unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
+                    $crate::glib::function_name!(),
+                    line!(),
+                    format_args!($($args)*),
+                )
         }
     }};
-    ($cat:expr, $level:expr, imp = $imp:expr, $msg:literal) => { {
-        let cat = $cat.clone();
+    ($logger:expr, $level:expr, imp = $imp:expr, $msg:literal) => { {
+        #[allow(unused_imports)]
+        use $crate::log::DebugLogger;
+        let logger = &$logger;
 
         // Check the log level before using `format_args!` otherwise
         // formatted arguments are evaluated even if we end up not logging.
         #[allow(unused_unsafe)]
         #[allow(clippy::redundant_closure_call)]
-        if cat.above_threshold($level) {
+        if logger.above_threshold($level) {
             use $crate::glib::prelude::Cast;
 
             // FIXME: Once there's a function_name! macro that returns a string literal we can
@@ -843,8 +893,7 @@ macro_rules! log_with_level(
             // be assigned to a variable
             (|args: std::fmt::Arguments| {
                 if args.as_str().is_some() {
-                    $crate::DebugCategory::log_literal_unfiltered(
-                        cat,
+                    logger.log_literal_unfiltered(
                         Some(obj),
                         $level,
                         unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
@@ -853,8 +902,7 @@ macro_rules! log_with_level(
                         $crate::glib::gstr!($msg),
                     )
                 } else {
-                    $crate::DebugCategory::log_unfiltered(
-                        cat,
+                    logger.log_unfiltered(
                         Some(obj),
                         $level,
                         unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
@@ -866,13 +914,15 @@ macro_rules! log_with_level(
             })(format_args!($msg))
         }
     }};
-    ($cat:expr, $level:expr, imp = $imp:expr, $($args:tt)*) => { {
-        let cat = $cat.clone();
+    ($logger:expr, $level:expr, imp = $imp:expr, $($args:tt)*) => { {
+        #[allow(unused_imports)]
+        use $crate::log::DebugLogger;
+        let logger = &$logger;
 
         // Check the log level before using `format_args!` otherwise
         // formatted arguments are evaluated even if we end up not logging.
         #[allow(unused_unsafe)]
-        if cat.above_threshold($level) {
+        if logger.above_threshold($level) {
             use $crate::glib::prelude::Cast;
 
             // FIXME: Once there's a function_name! macro that returns a string literal we can
@@ -880,25 +930,26 @@ macro_rules! log_with_level(
 
             let obj = $imp.obj();
             let obj = unsafe { obj.unsafe_cast_ref::<$crate::glib::Object>() };
-            $crate::DebugCategory::log_unfiltered(
-                cat,
-                Some(obj),
-                $level,
-                unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
-                $crate::glib::function_name!(),
-                line!(),
-                format_args!($($args)*),
-            )
+            logger.log_unfiltered(
+                    Some(obj),
+                    $level,
+                    unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
+                    $crate::glib::function_name!(),
+                    line!(),
+                    format_args!($($args)*),
+                )
         }
     }};
-    ($cat:expr, $level:expr, id = $id:literal, $msg:literal) => { {
-        let cat = $cat.clone();
+    ($logger:expr, $level:expr, id = $id:literal, $msg:literal) => { {
+        #[allow(unused_imports)]
+        use $crate::log::DebugLogger;
+        let logger = &$logger;
 
         // Check the log level before using `format_args!` otherwise
         // formatted arguments are evaluated even if we end up not logging.
         #[allow(unused_unsafe)]
         #[allow(clippy::redundant_closure_call)]
-        if cat.above_threshold($level) {
+        if logger.above_threshold($level) {
             // FIXME: Once there's a function_name! macro that returns a string literal we can
             // directly pass it as `&GStr` forward
 
@@ -909,8 +960,7 @@ macro_rules! log_with_level(
             // be assigned to a variable
             (|args: std::fmt::Arguments| {
                 if args.as_str().is_some() {
-                    $crate::DebugCategory::log_id_literal_unfiltered(
-                        cat,
+                    logger.log_id_literal_unfiltered(
                         $crate::glib::gstr!($id),
                         $level,
                         unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
@@ -919,8 +969,7 @@ macro_rules! log_with_level(
                         $crate::glib::gstr!($msg),
                     )
                 } else {
-                    $crate::DebugCategory::log_id_unfiltered(
-                        cat,
+                    logger.log_id_unfiltered(
                         $crate::glib::gstr!($id),
                         $level,
                         unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
@@ -932,35 +981,38 @@ macro_rules! log_with_level(
             })(format_args!($msg))
         }
     }};
-    ($cat:expr, $level:expr, id = $id:literal, $($args:tt)*) => { {
-        let cat = $cat.clone();
+    ($logger:expr, $level:expr, id = $id:literal, $($args:tt)*) => { {
+        #[allow(unused_imports)]
+        use $crate::log::DebugLogger;
+        let logger = &$logger;
 
         // Check the log level before using `format_args!` otherwise
         // formatted arguments are evaluated even if we end up not logging.
         #[allow(unused_unsafe)]
-        if cat.above_threshold($level) {
+        if logger.above_threshold($level) {
             // FIXME: Once there's a function_name! macro that returns a string literal we can
             // directly pass it as `&GStr` forward
 
-            $crate::DebugCategory::log_id_unfiltered(
-                cat,
-                $crate::glib::gstr!($id),
-                $level,
-                unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
-                $crate::glib::function_name!(),
-                line!(),
-                format_args!($($args)*),
-            )
+            logger.log_id_unfiltered(
+                    $crate::glib::gstr!($id),
+                    $level,
+                    unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
+                    $crate::glib::function_name!(),
+                    line!(),
+                    format_args!($($args)*),
+                )
         }
     }};
-    ($cat:expr, $level:expr, id = $id:expr, $msg:literal) => { {
-        let cat = $cat.clone();
+    ($logger:expr, $level:expr, id = $id:expr, $msg:literal) => { {
+        #[allow(unused_imports)]
+        use $crate::log::DebugLogger;
+        let logger = &$logger;
 
         // Check the log level before using `format_args!` otherwise
         // formatted arguments are evaluated even if we end up not logging.
         #[allow(unused_unsafe)]
         #[allow(clippy::redundant_closure_call)]
-        if cat.above_threshold($level) {
+        if logger.above_threshold($level) {
             // FIXME: Once there's a function_name! macro that returns a string literal we can
             // directly pass it as `&GStr` forward
 
@@ -971,8 +1023,7 @@ macro_rules! log_with_level(
             // be assigned to a variable
             (|args: std::fmt::Arguments| {
                 if args.as_str().is_some() {
-                    $crate::DebugCategory::log_id_literal_unfiltered(
-                        cat,
+                    logger.log_id_literal_unfiltered(
                         $id,
                         $level,
                         unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
@@ -981,8 +1032,7 @@ macro_rules! log_with_level(
                         $crate::glib::gstr!($msg),
                     )
                 } else {
-                    $crate::DebugCategory::log_id_unfiltered(
-                        cat,
+                    logger.log_id_unfiltered(
                         $id,
                         $level,
                         unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
@@ -994,18 +1044,19 @@ macro_rules! log_with_level(
             })(format_args!($msg))
         }
     }};
-    ($cat:expr, $level:expr, id = $id:expr, $($args:tt)*) => { {
-        let cat = $cat.clone();
+    ($logger:expr, $level:expr, id = $id:expr, $($args:tt)*) => { {
+        #[allow(unused_imports)]
+        use $crate::log::DebugLogger;
+        let logger = &$logger;
 
         // Check the log level before using `format_args!` otherwise
         // formatted arguments are evaluated even if we end up not logging.
         #[allow(unused_unsafe)]
-        if cat.above_threshold($level) {
+        if logger.above_threshold($level) {
             // FIXME: Once there's a function_name! macro that returns a string literal we can
             // directly pass it as `&GStr` forward
 
-            $crate::DebugCategory::log_id_unfiltered(
-                cat,
+            logger.log_id_unfiltered(
                 $id,
                 $level,
                 unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
@@ -1015,14 +1066,16 @@ macro_rules! log_with_level(
             )
         }
     }};
-    ($cat:expr, $level:expr, $msg:literal) => { {
-        let cat = $cat.clone();
+    ($logger:expr, $level:expr, $msg:literal) => { {
+        #[allow(unused_imports)]
+        use $crate::log::DebugLogger;
+        let logger = &$logger;
 
         // Check the log level before using `format_args!` otherwise
         // formatted arguments are evaluated even if we end up not logging.
         #[allow(unused_unsafe)]
         #[allow(clippy::redundant_closure_call)]
-        if cat.above_threshold($level) {
+        if logger.above_threshold($level) {
             // FIXME: Once there's a function_name! macro that returns a string literal we can
             // directly pass it as `&GStr` forward
 
@@ -1033,8 +1086,7 @@ macro_rules! log_with_level(
             // be assigned to a variable
             (|args: std::fmt::Arguments| {
                 if args.as_str().is_some() {
-                    $crate::DebugCategory::log_literal_unfiltered(
-                        cat,
+                    logger.log_literal_unfiltered(
                         None as Option<&$crate::glib::Object>,
                         $level,
                         unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
@@ -1043,8 +1095,7 @@ macro_rules! log_with_level(
                         $crate::glib::gstr!($msg),
                     )
                 } else {
-                    $crate::DebugCategory::log_unfiltered(
-                        cat,
+                    logger.log_unfiltered(
                         None as Option<&$crate::glib::Object>,
                         $level,
                         unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },
@@ -1056,18 +1107,19 @@ macro_rules! log_with_level(
             })(format_args!($msg))
         }
     }};
-    ($cat:expr, $level:expr, $($args:tt)*) => { {
-        let cat = $cat.clone();
+    ($logger:expr, $level:expr, $($args:tt)*) => { {
+        #[allow(unused_imports)]
+        use $crate::log::DebugLogger;
+        let logger = &$logger;
 
         // Check the log level before using `format_args!` otherwise
         // formatted arguments are evaluated even if we end up not logging.
         #[allow(unused_unsafe)]
-        if cat.above_threshold($level) {
+        if logger.above_threshold($level) {
             // FIXME: Once there's a function_name! macro that returns a string literal we can
             // directly pass it as `&GStr` forward
 
-            $crate::DebugCategory::log_unfiltered(
-                cat,
+            logger.log_unfiltered(
                 None as Option<&$crate::glib::Object>,
                 $level,
                 unsafe { $crate::glib::GStr::from_utf8_with_nul_unchecked(concat!(file!(), "\0").as_bytes()) },

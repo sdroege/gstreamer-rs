@@ -165,6 +165,12 @@ pub use self::flags::EventTypeFlags;
 #[cfg(feature = "v1_20")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub use self::flags::GapFlags;
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+pub use self::flags::LogContextFlags;
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+pub use self::flags::LogContextHashFlags;
 pub use self::flags::MemoryFlags;
 pub use self::flags::MetaFlags;
 pub use self::flags::ObjectFlags;
