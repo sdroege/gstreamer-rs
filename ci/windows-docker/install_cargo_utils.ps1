@@ -9,7 +9,7 @@ cargo --version
 if ("$env:RUST_VERSION" -eq "1.83.0") {
     cargo install --locked cargo-c --version 0.10.11+cargo-0.86.0
 } else {
-    cargo install --locked cargo-c --version 0.10.13+cargo-0.88
+    cargo install --locked cargo-c --version 0.10.14+cargo-0.89
 }
 
 if (!$?) {
