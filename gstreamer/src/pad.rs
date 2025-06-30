@@ -379,7 +379,7 @@ pub trait PadExtManual: IsA<Pad> + 'static {
         }
     }
 
-    fn stream_lock(&self) -> StreamLock {
+    fn stream_lock(&self) -> StreamLock<'_> {
         unsafe {
             let ptr: &mut ffi::GstPad = &mut *(self.as_ptr() as *mut _);
             glib::ffi::g_rec_mutex_lock(&mut ptr.stream_rec_lock);

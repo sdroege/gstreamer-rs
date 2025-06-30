@@ -17,13 +17,13 @@ pub trait AnalyticsRelationMetaClassificationExt: sealed::Sealed {
         &mut self,
         confidence_level: f32,
         class_quark: glib::Quark,
-    ) -> Result<AnalyticsMtdRef<AnalyticsClassificationMtd>, glib::BoolError>;
+    ) -> Result<AnalyticsMtdRef<'_, AnalyticsClassificationMtd>, glib::BoolError>;
 
     fn add_cls_mtd(
         &mut self,
         confidence_levels: &[f32],
         class_quarks: &[glib::Quark],
-    ) -> Result<AnalyticsMtdRef<AnalyticsClassificationMtd>, glib::BoolError>;
+    ) -> Result<AnalyticsMtdRef<'_, AnalyticsClassificationMtd>, glib::BoolError>;
 }
 
 impl<'a> AnalyticsRelationMetaClassificationExt
@@ -124,7 +124,7 @@ impl AnalyticsMtdRef<'_, AnalyticsClassificationMtd> {
         }
     }
 
-    pub fn iterate(&self) -> AnalyticsClassificationIterator {
+    pub fn iterate(&self) -> AnalyticsClassificationIterator<'_> {
         AnalyticsClassificationIterator {
             mtd: self,
             index: 0,

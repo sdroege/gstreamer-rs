@@ -1291,21 +1291,21 @@ impl StructureRef {
         }
     }
 
-    pub fn fields(&self) -> FieldIterator {
+    pub fn fields(&self) -> FieldIterator<'_> {
         FieldIterator::new(self)
     }
 
-    pub fn iter(&self) -> Iter {
+    pub fn iter(&self) -> Iter<'_> {
         Iter::new(self)
     }
 
     #[cfg(feature = "v1_26")]
-    pub fn field_ids(&self) -> FieldIdIterator {
+    pub fn field_ids(&self) -> FieldIdIterator<'_> {
         FieldIdIterator::new(self)
     }
 
     #[cfg(feature = "v1_26")]
-    pub fn id_iter(&self) -> IdIter {
+    pub fn id_iter(&self) -> IdIter<'_> {
         IdIter::new(self)
     }
 

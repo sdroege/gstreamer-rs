@@ -31,7 +31,7 @@ impl DiscovererVideoInfo {
         }
     }
 
-    pub fn debug(&self) -> Debug {
+    pub fn debug(&self) -> Debug<'_> {
         Debug(self)
     }
 }

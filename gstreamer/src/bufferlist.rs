@@ -133,11 +133,11 @@ impl BufferListRef {
         self.len() == 0
     }
 
-    pub fn iter(&self) -> Iter {
+    pub fn iter(&self) -> Iter<'_> {
         Iter::new(self)
     }
 
-    pub fn iter_owned(&self) -> IterOwned {
+    pub fn iter_owned(&self) -> IterOwned<'_> {
         IterOwned::new(self)
     }
 

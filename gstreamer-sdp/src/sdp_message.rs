@@ -901,35 +901,35 @@ impl SDPMessageRef {
         }
     }
 
-    pub fn attributes(&self) -> AttributesIter {
+    pub fn attributes(&self) -> AttributesIter<'_> {
         AttributesIter::new(self)
     }
 
-    pub fn bandwidths(&self) -> BandwidthsIter {
+    pub fn bandwidths(&self) -> BandwidthsIter<'_> {
         BandwidthsIter::new(self)
     }
 
-    pub fn emails(&self) -> EmailsIter {
+    pub fn emails(&self) -> EmailsIter<'_> {
         EmailsIter::new(self)
     }
 
-    pub fn medias(&self) -> MediasIter {
+    pub fn medias(&self) -> MediasIter<'_> {
         MediasIter::new(self)
     }
 
-    pub fn medias_mut(&mut self) -> MediasIterMut {
+    pub fn medias_mut(&mut self) -> MediasIterMut<'_> {
         MediasIterMut::new(self)
     }
 
-    pub fn phones(&self) -> PhonesIter {
+    pub fn phones(&self) -> PhonesIter<'_> {
         PhonesIter::new(self)
     }
 
-    pub fn times(&self) -> TimesIter {
+    pub fn times(&self) -> TimesIter<'_> {
         TimesIter::new(self)
     }
 
-    pub fn zones(&self) -> ZonesIter {
+    pub fn zones(&self) -> ZonesIter<'_> {
         ZonesIter::new(self)
     }
 }

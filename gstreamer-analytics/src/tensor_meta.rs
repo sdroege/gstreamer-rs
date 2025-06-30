@@ -15,7 +15,7 @@ unsafe impl Sync for TensorMeta {}
 
 impl TensorMeta {
     #[doc(alias = "gst_buffer_add_tensor_meta")]
-    pub fn add(buffer: &mut gst::BufferRef) -> gst::MetaRefMut<Self, gst::meta::Standalone> {
+    pub fn add(buffer: &mut gst::BufferRef) -> gst::MetaRefMut<'_, Self, gst::meta::Standalone> {
         skip_assert_initialized!();
 
         unsafe {

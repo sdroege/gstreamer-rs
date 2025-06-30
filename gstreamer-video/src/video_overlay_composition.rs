@@ -324,7 +324,7 @@ impl VideoOverlayCompositionRef {
         }
     }
 
-    pub fn iter(&self) -> Iter {
+    pub fn iter(&self) -> Iter<'_> {
         Iter {
             composition: self,
             idx: 0,

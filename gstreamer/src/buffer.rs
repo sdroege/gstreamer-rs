@@ -170,7 +170,7 @@ impl Default for Buffer {
 impl BufferRef {
     #[doc(alias = "gst_buffer_map")]
     #[inline]
-    pub fn map_readable(&self) -> Result<BufferMap<Readable>, glib::BoolError> {
+    pub fn map_readable(&self) -> Result<BufferMap<'_, Readable>, glib::BoolError> {
         unsafe {
             let mut map_info = mem::MaybeUninit::uninit();
             let res =
@@ -189,7 +189,7 @@ impl BufferRef {
 
     #[doc(alias = "gst_buffer_map")]
     #[inline]
-    pub fn map_writable(&mut self) -> Result<BufferMap<Writable>, glib::BoolError> {
+    pub fn map_writable(&mut self) -> Result<BufferMap<'_, Writable>, glib::BoolError> {
         unsafe {
             let mut map_info = mem::MaybeUninit::uninit();
             let res = ffi::gst_buffer_map(
@@ -251,7 +251,7 @@ impl BufferRef {
     pub fn map_range_readable(
         &self,
         range: impl RangeBounds<usize>,
-    ) -> Result<BufferMap<Readable>, glib::BoolError> {
+    ) -> Result<BufferMap<'_, Readable>, glib::BoolError> {
         let (idx, len) = self.memory_range_into_idx_len(range)?;
         unsafe {
             let mut map_info = mem::MaybeUninit::uninit();
@@ -279,7 +279,7 @@ impl BufferRef {
     pub fn map_range_writable(
         &mut self,
         range: impl RangeBounds<usize>,
-    ) -> Result<BufferMap<Writable>, glib::BoolError> {
+    ) -> Result<BufferMap<'_, Writable>, glib::BoolError> {
         let (idx, len) = self.memory_range_into_idx_len(range)?;
         unsafe {
             let mut map_info = mem::MaybeUninit::uninit();
@@ -553,7 +553,7 @@ impl BufferRef {
     #[doc(alias = "get_meta")]
     #[doc(alias = "gst_buffer_get_meta")]
     #[inline]
-    pub fn meta<T: MetaAPI>(&self) -> Option<MetaRef<T>> {
+    pub fn meta<T: MetaAPI>(&self) -> Option<MetaRef<'_, T>> {
         unsafe {
             let meta = ffi::gst_buffer_get_meta(self.as_mut_ptr(), T::meta_api().into_glib());
             if meta.is_null() {
@@ -566,7 +566,7 @@ impl BufferRef {
 
     #[doc(alias = "get_meta_mut")]
     #[inline]
-    pub fn meta_mut<T: MetaAPI>(&mut self) -> Option<MetaRefMut<T, crate::meta::Standalone>> {
+    pub fn meta_mut<T: MetaAPI>(&mut self) -> Option<MetaRefMut<'_, T, crate::meta::Standalone>> {
         unsafe {
             let meta = ffi::gst_buffer_get_meta(self.as_mut_ptr(), T::meta_api().into_glib());
             if meta.is_null() {
@@ -577,11 +577,11 @@ impl BufferRef {
         }
     }
 
-    pub fn iter_meta<T: MetaAPI>(&self) -> MetaIter<T> {
+    pub fn iter_meta<T: MetaAPI>(&self) -> MetaIter<'_, T> {
         MetaIter::new(self)
     }
 
-    pub fn iter_meta_mut<T: MetaAPI>(&mut self) -> MetaIterMut<T> {
+    pub fn iter_meta_mut<T: MetaAPI>(&mut self) -> MetaIterMut<'_, T> {
         MetaIterMut::new(self)
     }
 
@@ -826,11 +826,11 @@ impl BufferRef {
         }
     }
 
-    pub fn iter_memories(&self) -> Iter {
+    pub fn iter_memories(&self) -> Iter<'_> {
         Iter::new(self)
     }
 
-    pub fn iter_memories_mut(&mut self) -> Result<IterMut, glib::BoolError> {
+    pub fn iter_memories_mut(&mut self) -> Result<IterMut<'_>, glib::BoolError> {
         if !self.is_all_memory_writable() {
             Err(glib::bool_error!("Not all memory are writable"))
         } else {
@@ -838,7 +838,7 @@ impl BufferRef {
         }
     }
 
-    pub fn iter_memories_owned(&self) -> IterOwned {
+    pub fn iter_memories_owned(&self) -> IterOwned<'_> {
         IterOwned::new(self)
     }
 
@@ -853,7 +853,7 @@ impl BufferRef {
     }
 
     #[doc(alias = "gst_util_dump_buffer")]
-    pub fn dump(&self) -> Dump {
+    pub fn dump(&self) -> Dump<'_> {
         Dump {
             buffer: self,
             start: Bound::Unbounded,
@@ -862,7 +862,7 @@ impl BufferRef {
     }
 
     #[doc(alias = "gst_util_dump_buffer")]
-    pub fn dump_range(&self, range: impl RangeBounds<usize>) -> Dump {
+    pub fn dump_range(&self, range: impl RangeBounds<usize>) -> Dump<'_> {
         Dump {
             buffer: self,
             start: range.start_bound().cloned(),

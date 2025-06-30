@@ -193,7 +193,7 @@ impl EncodingAudioProfile {
     }
 
     #[doc(alias = "gst_encoding_audio_profile_new")]
-    pub fn builder(format: &gst::Caps) -> EncodingAudioProfileBuilder {
+    pub fn builder(format: &gst::Caps) -> EncodingAudioProfileBuilder<'_> {
         assert_initialized_main_thread!();
         EncodingAudioProfileBuilder::new(format)
     }
@@ -223,7 +223,7 @@ impl EncodingVideoProfile {
     }
 
     #[doc(alias = "gst_encoding_video_profile_new")]
-    pub fn builder(format: &gst::Caps) -> EncodingVideoProfileBuilder {
+    pub fn builder(format: &gst::Caps) -> EncodingVideoProfileBuilder<'_> {
         assert_initialized_main_thread!();
         EncodingVideoProfileBuilder::new(format)
     }
@@ -271,7 +271,7 @@ impl EncodingContainerProfile {
     }
 
     #[doc(alias = "gst_encoding_container_profile_new")]
-    pub fn builder(format: &gst::Caps) -> EncodingContainerProfileBuilder {
+    pub fn builder(format: &gst::Caps) -> EncodingContainerProfileBuilder<'_> {
         assert_initialized_main_thread!();
         EncodingContainerProfileBuilder::new(format)
     }

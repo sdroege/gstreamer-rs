@@ -98,7 +98,7 @@ pub trait GstObjectExtManual: IsA<Object> + 'static {
     }
 
     #[inline]
-    fn object_lock(&self) -> crate::utils::ObjectLockGuard<Self> {
+    fn object_lock(&self) -> crate::utils::ObjectLockGuard<'_, Self> {
         crate::utils::ObjectLockGuard::acquire(self)
     }
 }

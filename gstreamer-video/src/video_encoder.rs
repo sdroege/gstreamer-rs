@@ -29,7 +29,7 @@ pub trait VideoEncoderExtManual: IsA<VideoEncoder> + 'static {
 
     #[doc(alias = "get_frame")]
     #[doc(alias = "gst_video_encoder_get_frame")]
-    fn frame(&self, frame_number: i32) -> Option<VideoCodecFrame> {
+    fn frame(&self, frame_number: i32) -> Option<VideoCodecFrame<'_>> {
         let frame = unsafe {
             ffi::gst_video_encoder_get_frame(self.as_ref().to_glib_none().0, frame_number)
         };
@@ -43,7 +43,7 @@ pub trait VideoEncoderExtManual: IsA<VideoEncoder> + 'static {
 
     #[doc(alias = "get_frames")]
     #[doc(alias = "gst_video_encoder_get_frames")]
-    fn frames(&self) -> Vec<VideoCodecFrame> {
+    fn frames(&self) -> Vec<VideoCodecFrame<'_>> {
         unsafe {
             let frames = ffi::gst_video_encoder_get_frames(self.as_ref().to_glib_none().0);
             let mut iter: *const glib::ffi::GList = frames;
@@ -64,7 +64,7 @@ pub trait VideoEncoderExtManual: IsA<VideoEncoder> + 'static {
 
     #[doc(alias = "get_oldest_frame")]
     #[doc(alias = "gst_video_encoder_get_oldest_frame")]
-    fn oldest_frame(&self) -> Option<VideoCodecFrame> {
+    fn oldest_frame(&self) -> Option<VideoCodecFrame<'_>> {
         let frame =
             unsafe { ffi::gst_video_encoder_get_oldest_frame(self.as_ref().to_glib_none().0) };
 
@@ -154,7 +154,7 @@ pub trait VideoEncoderExtManual: IsA<VideoEncoder> + 'static {
         &self,
         caps: gst::Caps,
         reference: Option<&VideoCodecState<Readable>>,
-    ) -> Result<VideoCodecState<InNegotiation>, gst::FlowError> {
+    ) -> Result<VideoCodecState<'_, InNegotiation<'_>>, gst::FlowError> {
         let state = unsafe {
             let reference = match reference {
                 Some(reference) => reference.as_mut_ptr(),

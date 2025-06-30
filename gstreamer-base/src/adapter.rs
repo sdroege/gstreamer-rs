@@ -398,7 +398,7 @@ impl UniqueAdapter {
     }
 
     #[doc(alias = "gst_adapter_map")]
-    pub fn map(&mut self, nbytes: usize) -> Result<UniqueAdapterMap, glib::error::BoolError> {
+    pub fn map(&mut self, nbytes: usize) -> Result<UniqueAdapterMap<'_>, glib::error::BoolError> {
         assert!(nbytes <= self.available());
         assert!(nbytes != 0);
 

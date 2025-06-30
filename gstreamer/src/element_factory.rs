@@ -14,7 +14,7 @@ impl ElementFactory {
     #[doc(alias = "gst_element_factory_create")]
     #[doc(alias = "gst_element_factory_create_with_properties")]
     #[track_caller]
-    pub fn create(&self) -> ElementBuilder {
+    pub fn create(&self) -> ElementBuilder<'_> {
         assert_initialized_main_thread!();
         ElementBuilder {
             name_or_factory: NameOrFactory::Factory(self),
@@ -25,7 +25,7 @@ impl ElementFactory {
     #[doc(alias = "gst_element_factory_make")]
     #[doc(alias = "gst_element_factory_make_with_properties")]
     #[track_caller]
-    pub fn make(factoryname: &str) -> ElementBuilder {
+    pub fn make(factoryname: &str) -> ElementBuilder<'_> {
         assert_initialized_main_thread!();
         ElementBuilder {
             name_or_factory: NameOrFactory::Name(factoryname),

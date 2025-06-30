@@ -651,7 +651,7 @@ impl PlayMessage<'_> {
     #[doc(alias = "gst_play_message_parse_muted_changed")]
     #[doc(alias = "gst_play_message_parse_volume_changed")]
     #[doc(alias = "gst_play_message_parse_seek_done")]
-    pub fn parse(msg: &gst::Message) -> Result<PlayMessage, glib::error::BoolError> {
+    pub fn parse(msg: &gst::Message) -> Result<PlayMessage<'_>, glib::error::BoolError> {
         skip_assert_initialized!();
 
         if !Play::is_play_message(msg) {

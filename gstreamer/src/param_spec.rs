@@ -50,7 +50,7 @@ impl FromGlibPtrFull<*mut gobject_ffi::GParamSpec> for ParamSpecFraction {
 
 impl ParamSpecFraction {
     #[doc(alias = "gst_param_spec_fraction")]
-    pub fn builder(name: &str) -> ParamSpecFractionBuilder {
+    pub fn builder(name: &str) -> ParamSpecFractionBuilder<'_> {
         assert_initialized_main_thread!();
         ParamSpecFractionBuilder::new(name)
     }
@@ -246,7 +246,7 @@ impl FromGlibPtrFull<*mut gobject_ffi::GParamSpec> for ParamSpecArray {
 
 impl ParamSpecArray {
     #[doc(alias = "gst_param_spec_array")]
-    pub fn builder(name: &str) -> ParamSpecArrayBuilder {
+    pub fn builder(name: &str) -> ParamSpecArrayBuilder<'_> {
         assert_initialized_main_thread!();
         ParamSpecArrayBuilder::new(name)
     }

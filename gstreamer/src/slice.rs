@@ -7,17 +7,17 @@ use std::{
 
 pub trait ByteSliceExt {
     #[doc(alias = "gst_util_dump_mem")]
-    fn dump(&self) -> Dump;
+    fn dump(&self) -> Dump<'_>;
     #[doc(alias = "gst_util_dump_mem")]
-    fn dump_range(&self, range: impl RangeBounds<usize>) -> Dump;
+    fn dump_range(&self, range: impl RangeBounds<usize>) -> Dump<'_>;
 }
 
 impl<T: AsRef<[u8]>> ByteSliceExt for T {
-    fn dump(&self) -> Dump {
+    fn dump(&self) -> Dump<'_> {
         self.dump_range(..)
     }
 
-    fn dump_range(&self, range: impl RangeBounds<usize>) -> Dump {
+    fn dump_range(&self, range: impl RangeBounds<usize>) -> Dump<'_> {
         Dump {
             data: self.as_ref(),
             start: range.start_bound().cloned(),

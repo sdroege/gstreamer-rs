@@ -21,7 +21,7 @@ pub trait AnalyticsRelationMetaODExt: sealed::Sealed {
         w: i32,
         h: i32,
         loc_conf_lvl: f32,
-    ) -> Result<AnalyticsMtdRef<AnalyticsODMtd>, glib::BoolError>;
+    ) -> Result<AnalyticsMtdRef<'_, AnalyticsODMtd>, glib::BoolError>;
 
     #[cfg(feature = "v1_26")]
     #[allow(clippy::too_many_arguments)]
@@ -34,7 +34,7 @@ pub trait AnalyticsRelationMetaODExt: sealed::Sealed {
         h: i32,
         r: f32,
         loc_conf_lvl: f32,
-    ) -> Result<AnalyticsMtdRef<AnalyticsODMtd>, glib::BoolError>;
+    ) -> Result<AnalyticsMtdRef<'_, AnalyticsODMtd>, glib::BoolError>;
 }
 
 impl AnalyticsRelationMetaODExt
@@ -49,7 +49,7 @@ impl AnalyticsRelationMetaODExt
         w: i32,
         h: i32,
         loc_conf_lvl: f32,
-    ) -> Result<AnalyticsMtdRef<AnalyticsODMtd>, glib::BoolError> {
+    ) -> Result<AnalyticsMtdRef<'_, AnalyticsODMtd>, glib::BoolError> {
         unsafe {
             let mut mtd = std::mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_analytics_relation_meta_add_od_mtd(
@@ -84,7 +84,7 @@ impl AnalyticsRelationMetaODExt
         h: i32,
         r: f32,
         loc_conf_lvl: f32,
-    ) -> Result<AnalyticsMtdRef<AnalyticsODMtd>, glib::BoolError> {
+    ) -> Result<AnalyticsMtdRef<'_, AnalyticsODMtd>, glib::BoolError> {
         unsafe {
             let mut mtd = std::mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_analytics_relation_meta_add_oriented_od_mtd(

@@ -209,7 +209,7 @@ macro_rules! mini_object_wrapper (
             type Storage = std::marker::PhantomData<&'a mut Self>;
 
             #[inline]
-            fn to_glib_none_mut(&'_ mut self) -> $crate::glib::translate::StashMut<*mut $ffi_name, Self> {
+            fn to_glib_none_mut(&'_ mut self) -> $crate::glib::translate::StashMut<'_, *mut $ffi_name, Self> {
                 self.make_mut();
                 $crate::glib::translate::StashMut(self.as_mut_ptr(), std::marker::PhantomData)
             }

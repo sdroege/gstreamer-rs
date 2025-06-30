@@ -130,7 +130,7 @@ impl MessageRef {
         self.structure().is_some_and(|s| s.has_name(name))
     }
 
-    pub fn view(&self) -> MessageView {
+    pub fn view(&self) -> MessageView<'_> {
         unsafe {
             let type_ = (*self.as_ptr()).type_;
 
@@ -181,7 +181,7 @@ impl MessageRef {
         }
     }
 
-    pub fn view_mut(&mut self) -> MessageViewMut {
+    pub fn view_mut(&mut self) -> MessageViewMut<'_> {
         unsafe {
             let type_ = (*self.as_ptr()).type_;
 
@@ -515,7 +515,7 @@ impl Error {
         Self::builder(error, message).build()
     }
 
-    pub fn builder<T: MessageErrorDomain>(error: T, message: &str) -> ErrorBuilder {
+    pub fn builder<T: MessageErrorDomain>(error: T, message: &str) -> ErrorBuilder<'_> {
         assert_initialized_main_thread!();
         ErrorBuilder::new(glib::Error::new(error, message))
     }
@@ -620,7 +620,7 @@ impl Warning {
         Self::builder(error, message).build()
     }
 
-    pub fn builder<T: MessageErrorDomain>(error: T, message: &str) -> WarningBuilder {
+    pub fn builder<T: MessageErrorDomain>(error: T, message: &str) -> WarningBuilder<'_> {
         assert_initialized_main_thread!();
         WarningBuilder::new(glib::Error::new(error, message))
     }
@@ -725,7 +725,7 @@ impl Info {
         Self::builder(error, message).build()
     }
 
-    pub fn builder<T: MessageErrorDomain>(error: T, message: &str) -> InfoBuilder {
+    pub fn builder<T: MessageErrorDomain>(error: T, message: &str) -> InfoBuilder<'_> {
         assert_initialized_main_thread!();
         InfoBuilder::new(glib::Error::new(error, message))
     }
@@ -1160,7 +1160,7 @@ impl ClockProvide {
         Self::builder(clock, ready).build()
     }
 
-    pub fn builder(clock: &crate::Clock, ready: bool) -> ClockProvideBuilder {
+    pub fn builder(clock: &crate::Clock, ready: bool) -> ClockProvideBuilder<'_> {
         assert_initialized_main_thread!();
         ClockProvideBuilder::new(clock, ready)
     }
@@ -1220,7 +1220,7 @@ impl ClockLost {
         Self::builder(clock).build()
     }
 
-    pub fn builder(clock: &crate::Clock) -> ClockLostBuilder {
+    pub fn builder(clock: &crate::Clock) -> ClockLostBuilder<'_> {
         assert_initialized_main_thread!();
         ClockLostBuilder::new(clock)
     }
@@ -1263,7 +1263,7 @@ impl NewClock {
         Self::builder(clock).build()
     }
 
-    pub fn builder(clock: &crate::Clock) -> NewClockBuilder {
+    pub fn builder(clock: &crate::Clock) -> NewClockBuilder<'_> {
         assert_initialized_main_thread!();
         NewClockBuilder::new(clock)
     }
@@ -1310,7 +1310,7 @@ impl StructureChange {
         type_: crate::StructureChangeType,
         owner: &crate::Element,
         busy: bool,
-    ) -> StructureChangeBuilder {
+    ) -> StructureChangeBuilder<'_> {
         assert_initialized_main_thread!();
         StructureChangeBuilder::new(type_, owner, busy)
     }
@@ -1367,7 +1367,10 @@ impl StreamStatus {
         Self::builder(type_, owner).build()
     }
 
-    pub fn builder(type_: crate::StreamStatusType, owner: &crate::Element) -> StreamStatusBuilder {
+    pub fn builder(
+        type_: crate::StreamStatusType,
+        owner: &crate::Element,
+    ) -> StreamStatusBuilder<'_> {
         assert_initialized_main_thread!();
         StreamStatusBuilder::new(type_, owner)
     }
@@ -2034,7 +2037,7 @@ impl Toc {
         Self::builder(toc, updated).build()
     }
 
-    pub fn builder(toc: &crate::Toc, updated: bool) -> TocBuilder {
+    pub fn builder(toc: &crate::Toc, updated: bool) -> TocBuilder<'_> {
         assert_initialized_main_thread!();
         TocBuilder::new(toc, updated)
     }
@@ -2179,7 +2182,7 @@ impl NeedContext {
         Self::builder(context_type).build()
     }
 
-    pub fn builder(context_type: &str) -> NeedContextBuilder {
+    pub fn builder(context_type: &str) -> NeedContextBuilder<'_> {
         assert_initialized_main_thread!();
         NeedContextBuilder::new(context_type)
     }
@@ -2263,7 +2266,7 @@ impl DeviceAdded {
         Self::builder(device).build()
     }
 
-    pub fn builder(device: &crate::Device) -> DeviceAddedBuilder {
+    pub fn builder(device: &crate::Device) -> DeviceAddedBuilder<'_> {
         assert_initialized_main_thread!();
         DeviceAddedBuilder::new(device)
     }
@@ -2306,7 +2309,7 @@ impl DeviceRemoved {
         Self::builder(device).build()
     }
 
-    pub fn builder(device: &crate::Device) -> DeviceRemovedBuilder {
+    pub fn builder(device: &crate::Device) -> DeviceRemovedBuilder<'_> {
         assert_initialized_main_thread!();
         DeviceRemovedBuilder::new(device)
     }
@@ -2412,7 +2415,7 @@ impl StreamCollection {
         Self::builder(collection).build()
     }
 
-    pub fn builder(collection: &crate::StreamCollection) -> StreamCollectionBuilder {
+    pub fn builder(collection: &crate::StreamCollection) -> StreamCollectionBuilder<'_> {
         assert_initialized_main_thread!();
         StreamCollectionBuilder::new(collection)
     }
@@ -2455,7 +2458,7 @@ impl StreamsSelected {
         Self::builder(collection).build()
     }
 
-    pub fn builder(collection: &crate::StreamCollection) -> StreamsSelectedBuilder {
+    pub fn builder(collection: &crate::StreamCollection) -> StreamsSelectedBuilder<'_> {
         assert_initialized_main_thread!();
         StreamsSelectedBuilder::new(collection)
     }
@@ -2529,7 +2532,7 @@ impl Redirect {
         Self::builder(location).build()
     }
 
-    pub fn builder(location: &str) -> RedirectBuilder {
+    pub fn builder(location: &str) -> RedirectBuilder<'_> {
         assert_initialized_main_thread!();
         RedirectBuilder::new(location)
     }

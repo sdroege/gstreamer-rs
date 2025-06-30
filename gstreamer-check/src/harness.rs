@@ -754,7 +754,7 @@ impl Harness {
     }
 
     #[doc(alias = "get_sink_harness")]
-    pub fn sink_harness(&self) -> Option<Ref> {
+    pub fn sink_harness(&self) -> Option<Ref<'_>> {
         unsafe {
             if (*self.0.as_ptr()).sink_harness.is_null() {
                 None
@@ -768,7 +768,7 @@ impl Harness {
     }
 
     #[doc(alias = "get_src_harness")]
-    pub fn src_harness(&self) -> Option<Ref> {
+    pub fn src_harness(&self) -> Option<Ref<'_>> {
         unsafe {
             if (*self.0.as_ptr()).src_harness.is_null() {
                 None
@@ -782,7 +782,7 @@ impl Harness {
     }
 
     #[doc(alias = "get_mut_sink_harness")]
-    pub fn sink_harness_mut(&mut self) -> Option<RefMut> {
+    pub fn sink_harness_mut(&mut self) -> Option<RefMut<'_>> {
         unsafe {
             if (*self.0.as_ptr()).sink_harness.is_null() {
                 None
@@ -796,7 +796,7 @@ impl Harness {
     }
 
     #[doc(alias = "get_mut_src_harness")]
-    pub fn src_harness_mut(&mut self) -> Option<RefMut> {
+    pub fn src_harness_mut(&mut self) -> Option<RefMut<'_>> {
         unsafe {
             if (*self.0.as_ptr()).src_harness.is_null() {
                 None

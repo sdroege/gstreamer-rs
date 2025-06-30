@@ -176,19 +176,19 @@ impl SDPMediaRef {
         }
     }
 
-    pub fn attributes(&self) -> AttributesIter {
+    pub fn attributes(&self) -> AttributesIter<'_> {
         AttributesIter::new(self)
     }
 
-    pub fn formats(&self) -> FormatsIter {
+    pub fn formats(&self) -> FormatsIter<'_> {
         FormatsIter::new(self)
     }
 
-    pub fn bandwidths(&self) -> BandwidthsIter {
+    pub fn bandwidths(&self) -> BandwidthsIter<'_> {
         BandwidthsIter::new(self)
     }
 
-    pub fn connections(&self) -> ConnectionsIter {
+    pub fn connections(&self) -> ConnectionsIter<'_> {
         ConnectionsIter::new(self)
     }
 

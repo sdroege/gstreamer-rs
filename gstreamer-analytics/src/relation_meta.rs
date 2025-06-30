@@ -64,7 +64,7 @@ impl std::fmt::Debug for AnalyticsRelationMeta {
 
 impl AnalyticsRelationMeta {
     #[doc(alias = "gst_buffer_add_analytics_relation_meta")]
-    pub fn add(buffer: &mut gst::BufferRef) -> gst::MetaRefMut<Self, gst::meta::Standalone> {
+    pub fn add(buffer: &mut gst::BufferRef) -> gst::MetaRefMut<'_, Self, gst::meta::Standalone> {
         skip_assert_initialized!();
 
         unsafe {

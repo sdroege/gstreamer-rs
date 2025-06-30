@@ -823,19 +823,19 @@ impl CapsRef {
         self.size()
     }
 
-    pub fn iter(&self) -> Iter {
+    pub fn iter(&self) -> Iter<'_> {
         Iter::new(self)
     }
 
-    pub fn iter_mut(&mut self) -> IterMut {
+    pub fn iter_mut(&mut self) -> IterMut<'_> {
         IterMut::new(self)
     }
 
-    pub fn iter_with_features(&self) -> IterFeatures {
+    pub fn iter_with_features(&self) -> IterFeatures<'_> {
         IterFeatures::new(self)
     }
 
-    pub fn iter_with_features_mut(&mut self) -> IterFeaturesMut {
+    pub fn iter_with_features_mut(&mut self) -> IterFeaturesMut<'_> {
         IterFeaturesMut::new(self)
     }
 

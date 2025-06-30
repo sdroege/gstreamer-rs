@@ -538,11 +538,11 @@ impl TagListRef {
         GenericTagIter::new(self, tag_name)
     }
 
-    pub fn iter_generic(&self) -> GenericIter {
+    pub fn iter_generic(&self) -> GenericIter<'_> {
         GenericIter::new(self)
     }
 
-    pub fn iter(&self) -> Iter {
+    pub fn iter(&self) -> Iter<'_> {
         Iter::new(self)
     }
 

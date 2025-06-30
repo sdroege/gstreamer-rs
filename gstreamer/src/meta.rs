@@ -22,7 +22,7 @@ pub unsafe trait MetaAPI: Sync + Send + Sized {
 
 pub trait MetaAPIExt: MetaAPI {
     #[inline]
-    unsafe fn from_ptr(buffer: &BufferRef, ptr: *const Self::GstType) -> MetaRef<Self> {
+    unsafe fn from_ptr(buffer: &BufferRef, ptr: *const Self::GstType) -> MetaRef<'_, Self> {
         debug_assert!(!ptr.is_null());
 
         let meta_api = Self::meta_api();
@@ -43,7 +43,7 @@ pub trait MetaAPIExt: MetaAPI {
     unsafe fn from_mut_ptr<T>(
         buffer: &mut BufferRef,
         ptr: *mut Self::GstType,
-    ) -> MetaRefMut<Self, T> {
+    ) -> MetaRefMut<'_, Self, T> {
         debug_assert!(!ptr.is_null());
 
         let meta_api = Self::meta_api();
@@ -479,7 +479,7 @@ impl<'a, T, U> MetaRefMut<'a, T, U> {
     }
 
     #[inline]
-    pub fn as_meta_ref(&self) -> MetaRef<T> {
+    pub fn as_meta_ref(&self) -> MetaRef<'_, T> {
         MetaRef {
             meta: self.meta,
             buffer: self.buffer,
@@ -745,7 +745,7 @@ unsafe impl Sync for ProtectionMeta {}
 
 impl ProtectionMeta {
     #[doc(alias = "gst_buffer_add_protection_meta")]
-    pub fn add(buffer: &mut BufferRef, info: crate::Structure) -> MetaRefMut<Self, Standalone> {
+    pub fn add(buffer: &mut BufferRef, info: crate::Structure) -> MetaRefMut<'_, Self, Standalone> {
         skip_assert_initialized!();
         unsafe {
             let meta =

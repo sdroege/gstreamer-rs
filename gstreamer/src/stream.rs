@@ -5,7 +5,7 @@ use std::fmt;
 use crate::Stream;
 
 impl Stream {
-    pub fn debug(&self) -> Debug {
+    pub fn debug(&self) -> Debug<'_> {
         Debug(self)
     }
 }

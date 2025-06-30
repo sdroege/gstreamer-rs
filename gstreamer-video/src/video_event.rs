@@ -1021,12 +1021,12 @@ impl NavigationEvent {
             modifier_state: NavigationModifierType::empty(),
         }
     }
-    pub fn key_press_builder(key: &str) -> KeyEventBuilder {
+    pub fn key_press_builder(key: &str) -> KeyEventBuilder<'_> {
         assert_initialized_main_thread!();
         KeyEventBuilder::new(KeyEventType::Press { key })
     }
 
-    pub fn key_release_builder(key: &str) -> KeyEventBuilder {
+    pub fn key_release_builder(key: &str) -> KeyEventBuilder<'_> {
         assert_initialized_main_thread!();
         KeyEventBuilder::new(KeyEventType::Release { key })
     }

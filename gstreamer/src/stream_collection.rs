@@ -168,7 +168,7 @@ impl StreamCollection {
         }
     }
 
-    pub fn iter(&self) -> Iter {
+    pub fn iter(&self) -> Iter<'_> {
         Iter::new(self)
     }
 
@@ -180,7 +180,7 @@ impl StreamCollection {
         self.len() == 0
     }
 
-    pub fn debug(&self) -> Debug {
+    pub fn debug(&self) -> Debug<'_> {
         Debug(self)
     }
 }

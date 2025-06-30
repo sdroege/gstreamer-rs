@@ -142,7 +142,8 @@ mod tests {
         alpha: f64,
         zorder: u32,
         operator: i32,
-    ) -> Result<gst::MetaRefMut<FrameCompositionMeta, gst::meta::Standalone>, glib::BoolError> {
+    ) -> Result<gst::MetaRefMut<'_, FrameCompositionMeta, gst::meta::Standalone>, glib::BoolError>
+    {
         assert_initialized_main_thread!();
 
         unsafe {

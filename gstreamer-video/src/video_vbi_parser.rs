@@ -115,7 +115,7 @@ impl VideoVBIParser {
         Ok(())
     }
 
-    pub fn iter(&mut self) -> AncillaryIter {
+    pub fn iter(&mut self) -> AncillaryIter<'_> {
         AncillaryIter { parser: self }
     }
 

@@ -26,7 +26,7 @@ impl fmt::Debug for Debug<'_> {
 }
 
 impl DiscovererContainerInfo {
-    pub fn debug(&self) -> Debug {
+    pub fn debug(&self) -> Debug<'_> {
         Debug(self)
     }
 }

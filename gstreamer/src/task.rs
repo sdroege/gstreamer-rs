@@ -219,7 +219,7 @@ impl TaskLock {
 
     // checker-ignore-item
     #[inline]
-    pub fn lock(&self) -> TaskLockGuard {
+    pub fn lock(&self) -> TaskLockGuard<'_> {
         unsafe {
             let guard = TaskLockGuard(&self.0);
             glib::ffi::g_rec_mutex_lock(mut_override(&self.0 .0));

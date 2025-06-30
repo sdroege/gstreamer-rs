@@ -269,7 +269,7 @@ impl MemoryRef {
     }
 
     #[inline]
-    pub fn map_readable(&self) -> Result<MemoryMap<Readable>, glib::BoolError> {
+    pub fn map_readable(&self) -> Result<MemoryMap<'_, Readable>, glib::BoolError> {
         unsafe {
             let mut map_info = mem::MaybeUninit::uninit();
             let res =
@@ -286,7 +286,7 @@ impl MemoryRef {
     }
 
     #[inline]
-    pub fn map_writable(&mut self) -> Result<MemoryMap<Writable>, glib::BoolError> {
+    pub fn map_writable(&mut self) -> Result<MemoryMap<'_, Writable>, glib::BoolError> {
         unsafe {
             let mut map_info = mem::MaybeUninit::uninit();
             let res = ffi::gst_memory_map(
@@ -330,7 +330,7 @@ impl MemoryRef {
     }
 
     #[doc(alias = "gst_util_dump_mem")]
-    pub fn dump(&self) -> Dump {
+    pub fn dump(&self) -> Dump<'_> {
         Dump {
             memory: self,
             start: Bound::Unbounded,
@@ -339,7 +339,7 @@ impl MemoryRef {
     }
 
     #[doc(alias = "gst_util_dump_mem")]
-    pub fn dump_range(&self, range: impl RangeBounds<usize>) -> Dump {
+    pub fn dump_range(&self, range: impl RangeBounds<usize>) -> Dump<'_> {
         Dump {
             memory: self,
             start: range.start_bound().cloned(),

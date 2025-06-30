@@ -116,7 +116,7 @@ impl fmt::Debug for DebugInfo<'_> {
 }
 
 impl DiscovererInfo {
-    pub fn debug(&self) -> DebugInfo {
+    pub fn debug(&self) -> DebugInfo<'_> {
         DebugInfo(self)
     }
 }

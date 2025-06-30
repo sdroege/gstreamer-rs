@@ -21,7 +21,7 @@ impl VideoMeta {
         format: crate::VideoFormat,
         width: u32,
         height: u32,
-    ) -> Result<gst::MetaRefMut<Self, gst::meta::Standalone>, glib::BoolError> {
+    ) -> Result<gst::MetaRefMut<'_, Self, gst::meta::Standalone>, glib::BoolError> {
         skip_assert_initialized!();
 
         if format == crate::VideoFormat::Unknown || format == crate::VideoFormat::Encoded {
@@ -268,7 +268,7 @@ impl VideoCropMeta {
     pub fn add(
         buffer: &mut gst::BufferRef,
         rect: (u32, u32, u32, u32),
-    ) -> gst::MetaRefMut<Self, gst::meta::Standalone> {
+    ) -> gst::MetaRefMut<'_, Self, gst::meta::Standalone> {
         skip_assert_initialized!();
         unsafe {
             let meta = gst::ffi::gst_buffer_add_meta(
@@ -376,7 +376,7 @@ impl VideoRegionOfInterestMeta {
     }
 
     #[doc(alias = "get_params")]
-    pub fn params(&self) -> ParamsIter {
+    pub fn params(&self) -> ParamsIter<'_> {
         ParamsIter {
             _meta: self,
             list: ptr::NonNull::new(self.0.params),
@@ -703,7 +703,7 @@ impl VideoAFDMeta {
         field: u8,
         spec: crate::VideoAFDSpec,
         afd: crate::VideoAFDValue,
-    ) -> gst::MetaRefMut<Self, gst::meta::Standalone> {
+    ) -> gst::MetaRefMut<'_, Self, gst::meta::Standalone> {
         skip_assert_initialized!();
 
         unsafe {
@@ -784,7 +784,7 @@ impl VideoBarMeta {
         is_letterbox: bool,
         bar_data1: u32,
         bar_data2: u32,
-    ) -> gst::MetaRefMut<Self, gst::meta::Standalone> {
+    ) -> gst::MetaRefMut<'_, Self, gst::meta::Standalone> {
         skip_assert_initialized!();
 
         unsafe {
@@ -869,7 +869,7 @@ impl VideoCodecAlphaMeta {
     pub fn add(
         buffer: &mut gst::BufferRef,
         alpha_buffer: gst::Buffer,
-    ) -> gst::MetaRefMut<Self, gst::meta::Standalone> {
+    ) -> gst::MetaRefMut<'_, Self, gst::meta::Standalone> {
         skip_assert_initialized!();
         unsafe {
             let meta = ffi::gst_buffer_add_video_codec_alpha_meta(
@@ -1016,7 +1016,7 @@ unsafe impl Sync for AncillaryMeta {}
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
 impl AncillaryMeta {
     #[doc(alias = "gst_buffer_add_ancillary_meta")]
-    pub fn add(buffer: &mut gst::BufferRef) -> gst::MetaRefMut<Self, gst::meta::Standalone> {
+    pub fn add(buffer: &mut gst::BufferRef) -> gst::MetaRefMut<'_, Self, gst::meta::Standalone> {
         skip_assert_initialized!();
         unsafe {
             let meta = ffi::gst_buffer_add_ancillary_meta(buffer.as_mut_ptr());

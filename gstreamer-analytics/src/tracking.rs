@@ -17,7 +17,7 @@ pub trait AnalyticsRelationMetaTrackingExt: sealed::Sealed {
         &mut self,
         tracking_id: u64,
         tracking_first_seen: gst::ClockTime,
-    ) -> Result<AnalyticsMtdRef<AnalyticsTrackingMtd>, glib::BoolError>;
+    ) -> Result<AnalyticsMtdRef<'_, AnalyticsTrackingMtd>, glib::BoolError>;
 }
 
 impl AnalyticsRelationMetaTrackingExt
@@ -28,7 +28,7 @@ impl AnalyticsRelationMetaTrackingExt
         &mut self,
         tracking_id: u64,
         tracking_first_seen: gst::ClockTime,
-    ) -> Result<AnalyticsMtdRef<AnalyticsTrackingMtd>, glib::BoolError> {
+    ) -> Result<AnalyticsMtdRef<'_, AnalyticsTrackingMtd>, glib::BoolError> {
         unsafe {
             let mut mtd = std::mem::MaybeUninit::uninit();
             let ret = from_glib(ffi::gst_analytics_relation_meta_add_tracking_mtd(

@@ -251,12 +251,12 @@ impl Bus {
     }
 
     #[doc(alias = "gst_bus_pop")]
-    pub fn iter(&self) -> Iter {
+    pub fn iter(&self) -> Iter<'_> {
         self.iter_timed(Some(crate::ClockTime::ZERO))
     }
 
     #[doc(alias = "gst_bus_timed_pop")]
-    pub fn iter_timed(&self, timeout: impl Into<Option<crate::ClockTime>>) -> Iter {
+    pub fn iter_timed(&self, timeout: impl Into<Option<crate::ClockTime>>) -> Iter<'_> {
         Iter {
             bus: self,
             timeout: timeout.into(),

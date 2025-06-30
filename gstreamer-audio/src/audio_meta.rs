@@ -26,7 +26,7 @@ impl AudioClippingMeta {
         buffer: &mut gst::BufferRef,
         start: V,
         end: V,
-    ) -> gst::MetaRefMut<Self, gst::meta::Standalone> {
+    ) -> gst::MetaRefMut<'_, Self, gst::meta::Standalone> {
         skip_assert_initialized!();
         assert_eq!(start.format(), end.format());
         unsafe {
@@ -244,7 +244,7 @@ impl AudioLevelMeta {
         buffer: &mut gst::BufferRef,
         level: u8,
         voice_activity: bool,
-    ) -> gst::MetaRefMut<Self, gst::meta::Standalone> {
+    ) -> gst::MetaRefMut<'_, Self, gst::meta::Standalone> {
         skip_assert_initialized!();
         unsafe {
             let meta = ffi::gst_buffer_add_audio_level_meta(

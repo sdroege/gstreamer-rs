@@ -92,7 +92,7 @@ impl QueryRef {
         unsafe { from_glib((*self.as_ptr()).type_) }
     }
 
-    pub fn view(&self) -> QueryView {
+    pub fn view(&self) -> QueryView<'_> {
         unsafe {
             let type_ = (*self.as_ptr()).type_;
 
@@ -122,7 +122,7 @@ impl QueryRef {
         }
     }
 
-    pub fn view_mut(&mut self) -> QueryViewMut {
+    pub fn view_mut(&mut self) -> QueryViewMut<'_> {
         unsafe {
             let type_ = (*self.as_ptr()).type_;
 

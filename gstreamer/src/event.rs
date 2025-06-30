@@ -245,7 +245,7 @@ impl EventRef {
         self.structure().is_some_and(|s| s.has_name(name))
     }
 
-    pub fn view(&self) -> EventView {
+    pub fn view(&self) -> EventView<'_> {
         unsafe {
             let type_ = (*self.as_ptr()).type_;
 
@@ -288,7 +288,7 @@ impl EventRef {
         }
     }
 
-    pub fn view_mut(&mut self) -> EventViewMut {
+    pub fn view_mut(&mut self) -> EventViewMut<'_> {
         unsafe {
             let type_ = (*self.as_ptr()).type_;
 
@@ -632,7 +632,7 @@ impl StreamStart<Event> {
         Self::builder(stream_id).build()
     }
 
-    pub fn builder(stream_id: &str) -> StreamStartBuilder {
+    pub fn builder(stream_id: &str) -> StreamStartBuilder<'_> {
         assert_initialized_main_thread!();
         StreamStartBuilder::new(stream_id)
     }
@@ -726,7 +726,7 @@ impl Caps<Event> {
         Self::builder(caps).build()
     }
 
-    pub fn builder(caps: &crate::Caps) -> CapsBuilder {
+    pub fn builder(caps: &crate::Caps) -> CapsBuilder<'_> {
         assert_initialized_main_thread!();
         CapsBuilder::new(caps)
     }
@@ -779,7 +779,7 @@ impl Segment<Event> {
 
     pub fn builder<F: FormattedValueIntrinsic>(
         segment: &crate::FormattedSegment<F>,
-    ) -> SegmentBuilder {
+    ) -> SegmentBuilder<'_> {
         assert_initialized_main_thread!();
         SegmentBuilder::new(segment.as_ref())
     }
@@ -824,7 +824,7 @@ impl StreamCollection<Event> {
         Self::builder(stream_collection).build()
     }
 
-    pub fn builder(stream_collection: &crate::StreamCollection) -> StreamCollectionBuilder {
+    pub fn builder(stream_collection: &crate::StreamCollection) -> StreamCollectionBuilder<'_> {
         assert_initialized_main_thread!();
         StreamCollectionBuilder::new(stream_collection)
     }
@@ -1116,7 +1116,7 @@ impl Toc<Event> {
         Self::builder(toc, updated).build()
     }
 
-    pub fn builder(toc: &crate::Toc, updated: bool) -> TocBuilder {
+    pub fn builder(toc: &crate::Toc, updated: bool) -> TocBuilder<'_> {
         assert_initialized_main_thread!();
         TocBuilder::new(toc, updated)
     }
@@ -1799,7 +1799,7 @@ impl TocSelect<Event> {
         Self::builder(uid).build()
     }
 
-    pub fn builder(uid: &str) -> TocSelectBuilder {
+    pub fn builder(uid: &str) -> TocSelectBuilder<'_> {
         assert_initialized_main_thread!();
         TocSelectBuilder::new(uid)
     }

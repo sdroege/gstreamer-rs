@@ -39,7 +39,7 @@ impl fmt::Debug for DebugMessage {
 impl DebugMessage {
     #[doc(alias = "gst_debug_message_get")]
     #[inline]
-    pub fn get(&self) -> Option<Cow<glib::GStr>> {
+    pub fn get(&self) -> Option<Cow<'_, glib::GStr>> {
         unsafe {
             let message = ffi::gst_debug_message_get(self.0.as_ptr());
 
