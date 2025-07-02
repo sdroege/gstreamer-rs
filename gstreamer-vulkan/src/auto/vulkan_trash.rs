@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{VulkanDevice, VulkanFence};
+use crate::{ffi, VulkanDevice, VulkanFence};
 use glib::translate::*;
 use std::boxed::Box as Box_;
 
@@ -20,29 +20,22 @@ glib::wrapper! {
 
 impl VulkanTrash {
     #[doc(alias = "gst_vulkan_trash_new")]
-    pub fn new(
+    pub fn new<P: FnOnce(&VulkanDevice) + Send + Sync + 'static>(
         fence: &mut VulkanFence,
-        notify: Option<Box_<dyn FnOnce(&VulkanDevice) + 'static>>,
+        notify: P,
     ) -> VulkanTrash {
         assert_initialized_main_thread!();
-        let notify_data: Box_<Option<Box_<dyn FnOnce(&VulkanDevice) + 'static>>> =
-            Box_::new(notify);
-        unsafe extern "C" fn notify_func(
+        let notify_data: Box_<P> = Box_::new(notify);
+        unsafe extern "C" fn notify_func<P: FnOnce(&VulkanDevice) + Send + Sync + 'static>(
             device: *mut ffi::GstVulkanDevice,
             user_data: glib::ffi::gpointer,
         ) {
             let device = from_glib_borrow(device);
-            let callback =
-                Box_::from_raw(user_data as *mut Option<Box_<dyn FnOnce(&VulkanDevice) + 'static>>);
-            let callback = (*callback).expect("cannot get closure...");
-            callback(&device)
+            let callback = Box_::from_raw(user_data as *mut P);
+            (*callback)(&device)
         }
-        let notify = if notify_data.is_some() {
-            Some(notify_func as _)
-        } else {
-            None
-        };
-        let super_callback0: Box_<Option<Box_<dyn FnOnce(&VulkanDevice) + 'static>>> = notify_data;
+        let notify = Some(notify_func::<P> as _);
+        let super_callback0: Box_<P> = notify_data;
         unsafe {
             from_glib_full(ffi::gst_vulkan_trash_new(
                 fence.to_glib_none_mut().0,

@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{VulkanDescriptorSet, VulkanHandlePool};
+use crate::{ffi, VulkanDescriptorSet, VulkanHandlePool};
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
@@ -22,12 +22,7 @@ impl VulkanDescriptorCache {
 unsafe impl Send for VulkanDescriptorCache {}
 unsafe impl Sync for VulkanDescriptorCache {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::VulkanDescriptorCache>> Sealed for T {}
-}
-
-pub trait VulkanDescriptorCacheExt: IsA<VulkanDescriptorCache> + sealed::Sealed + 'static {
+pub trait VulkanDescriptorCacheExt: IsA<VulkanDescriptorCache> + 'static {
     #[doc(alias = "gst_vulkan_descriptor_cache_acquire")]
     fn acquire(&self) -> Result<VulkanDescriptorSet, glib::Error> {
         unsafe {

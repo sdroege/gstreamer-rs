@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{VulkanDevice, VulkanQueue, VulkanWindow};
+use crate::{ffi, VulkanDevice, VulkanQueue, VulkanWindow};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -38,12 +38,7 @@ impl VulkanSwapper {
 unsafe impl Send for VulkanSwapper {}
 unsafe impl Sync for VulkanSwapper {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::VulkanSwapper>> Sealed for T {}
-}
-
-pub trait VulkanSwapperExt: IsA<VulkanSwapper> + sealed::Sealed + 'static {
+pub trait VulkanSwapperExt: IsA<VulkanSwapper> + 'static {
     #[doc(alias = "gst_vulkan_swapper_choose_queue")]
     fn choose_queue(
         &self,
@@ -134,16 +129,6 @@ pub trait VulkanSwapperExt: IsA<VulkanSwapper> + sealed::Sealed + 'static {
         ObjectExt::set_property(self.as_ref(), "force-aspect-ratio", force_aspect_ratio)
     }
 
-    #[doc(alias = "pixel-aspect-ratio")]
-    fn pixel_aspect_ratio(&self) -> Option<gst::Fraction> {
-        ObjectExt::property(self.as_ref(), "pixel-aspect-ratio")
-    }
-
-    #[doc(alias = "pixel-aspect-ratio")]
-    fn set_pixel_aspect_ratio(&self, pixel_aspect_ratio: Option<&gst::Fraction>) {
-        ObjectExt::set_property(self.as_ref(), "pixel-aspect-ratio", pixel_aspect_ratio)
-    }
-
     #[doc(alias = "force-aspect-ratio")]
     fn connect_force_aspect_ratio_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,
@@ -164,38 +149,9 @@ pub trait VulkanSwapperExt: IsA<VulkanSwapper> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::force-aspect-ratio\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                c"notify::force-aspect-ratio".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_force_aspect_ratio_trampoline::<Self, F> as *const (),
-                )),
-                Box_::into_raw(f),
-            )
-        }
-    }
-
-    #[doc(alias = "pixel-aspect-ratio")]
-    fn connect_pixel_aspect_ratio_notify<F: Fn(&Self) + Send + Sync + 'static>(
-        &self,
-        f: F,
-    ) -> SignalHandlerId {
-        unsafe extern "C" fn notify_pixel_aspect_ratio_trampoline<
-            P: IsA<VulkanSwapper>,
-            F: Fn(&P) + Send + Sync + 'static,
-        >(
-            this: *mut ffi::GstVulkanSwapper,
-            _param_spec: glib::ffi::gpointer,
-            f: glib::ffi::gpointer,
-        ) {
-            let f: &F = &*(f as *const F);
-            f(VulkanSwapper::from_glib_borrow(this).unsafe_cast_ref())
-        }
-        unsafe {
-            let f: Box_<F> = Box_::new(f);
-            connect_raw(
-                self.as_ptr() as *mut _,
-                b"notify::pixel-aspect-ratio\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
-                    notify_pixel_aspect_ratio_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

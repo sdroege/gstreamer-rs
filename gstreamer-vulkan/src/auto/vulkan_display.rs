@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{VulkanDisplayType, VulkanInstance, VulkanWindow};
+use crate::{ffi, VulkanDisplayType, VulkanInstance, VulkanWindow};
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
@@ -78,12 +78,7 @@ impl VulkanDisplay {
 unsafe impl Send for VulkanDisplay {}
 unsafe impl Sync for VulkanDisplay {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::VulkanDisplay>> Sealed for T {}
-}
-
-pub trait VulkanDisplayExt: IsA<VulkanDisplay> + sealed::Sealed + 'static {
+pub trait VulkanDisplayExt: IsA<VulkanDisplay> + 'static {
     #[doc(alias = "gst_vulkan_display_create_window")]
     fn create_window(&self) -> Option<VulkanWindow> {
         unsafe {

@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::VulkanInstance;
+use crate::{ffi, VulkanInstance};
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
@@ -38,12 +38,44 @@ impl VulkanPhysicalDevice {
 unsafe impl Send for VulkanPhysicalDevice {}
 unsafe impl Sync for VulkanPhysicalDevice {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::VulkanPhysicalDevice>> Sealed for T {}
-}
+pub trait VulkanPhysicalDeviceExt: IsA<VulkanPhysicalDevice> + 'static {
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "gst_vulkan_physical_device_check_api_version")]
+    fn check_api_version(&self, major: u32, minor: u32, patch: u32) -> bool {
+        unsafe {
+            from_glib(ffi::gst_vulkan_physical_device_check_api_version(
+                self.as_ref().to_glib_none().0,
+                major,
+                minor,
+                patch,
+            ))
+        }
+    }
 
-pub trait VulkanPhysicalDeviceExt: IsA<VulkanPhysicalDevice> + sealed::Sealed + 'static {
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "gst_vulkan_physical_device_get_api_version")]
+    #[doc(alias = "get_api_version")]
+    fn api_version(&self) -> (u32, u32, u32) {
+        unsafe {
+            let mut major = std::mem::MaybeUninit::uninit();
+            let mut minor = std::mem::MaybeUninit::uninit();
+            let mut patch = std::mem::MaybeUninit::uninit();
+            ffi::gst_vulkan_physical_device_get_api_version(
+                self.as_ref().to_glib_none().0,
+                major.as_mut_ptr(),
+                minor.as_mut_ptr(),
+                patch.as_mut_ptr(),
+            );
+            (
+                major.assume_init(),
+                minor.assume_init(),
+                patch.assume_init(),
+            )
+        }
+    }
+
     #[doc(alias = "gst_vulkan_physical_device_get_extension_info")]
     #[doc(alias = "get_extension_info")]
     fn extension_info(&self, name: &str) -> Option<u32> {

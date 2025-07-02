@@ -28,6 +28,7 @@ pub use crate::auto::*;
 
 mod vulkan_device;
 mod vulkan_full_screen_quad;
+mod vulkan_swapper;
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst_vulkan::prelude::*" without getting conflicts
@@ -37,6 +38,7 @@ pub mod prelude {
 
     pub use super::vulkan_device::VulkanDeviceExtManual;
     pub use super::vulkan_full_screen_quad::VulkanFullScreenQuadExtManual;
+    pub use super::vulkan_swapper::VulkanSwapperExtManual;
     pub use crate::auto::traits::*;
 }
 

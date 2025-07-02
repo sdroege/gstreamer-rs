@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{VulkanFence, VulkanInstance, VulkanPhysicalDevice, VulkanQueue};
+use crate::{ffi, VulkanFence, VulkanInstance, VulkanPhysicalDevice, VulkanQueue};
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -70,12 +70,7 @@ impl VulkanDevice {
 unsafe impl Send for VulkanDevice {}
 unsafe impl Sync for VulkanDevice {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::VulkanDevice>> Sealed for T {}
-}
-
-pub trait VulkanDeviceExt: IsA<VulkanDevice> + sealed::Sealed + 'static {
+pub trait VulkanDeviceExt: IsA<VulkanDevice> + 'static {
     #[doc(alias = "gst_vulkan_device_create_fence")]
     fn create_fence(&self) -> Result<Option<VulkanFence>, glib::Error> {
         unsafe {
@@ -121,36 +116,25 @@ pub trait VulkanDeviceExt: IsA<VulkanDevice> + sealed::Sealed + 'static {
     }
 
     #[doc(alias = "gst_vulkan_device_foreach_queue")]
-    fn foreach_queue(&self, func: Option<&mut dyn (FnMut(&VulkanDevice, &VulkanQueue) -> bool)>) {
-        let func_data: Option<&mut dyn (FnMut(&VulkanDevice, &VulkanQueue) -> bool)> = func;
-        unsafe extern "C" fn func_func(
+    fn foreach_queue<P: FnMut(&VulkanDevice, &VulkanQueue) -> bool>(&self, func: P) {
+        let mut func_data: P = func;
+        unsafe extern "C" fn func_func<P: FnMut(&VulkanDevice, &VulkanQueue) -> bool>(
             device: *mut ffi::GstVulkanDevice,
             queue: *mut ffi::GstVulkanQueue,
             user_data: glib::ffi::gpointer,
         ) -> glib::ffi::gboolean {
             let device = from_glib_borrow(device);
             let queue = from_glib_borrow(queue);
-            let callback =
-                user_data as *mut Option<&mut dyn (FnMut(&VulkanDevice, &VulkanQueue) -> bool)>;
-            if let Some(ref mut callback) = *callback {
-                callback(&device, &queue)
-            } else {
-                panic!("cannot get closure...")
-            }
-            .into_glib()
+            let callback = user_data as *mut P;
+            (*callback)(&device, &queue).into_glib()
         }
-        let func = if func_data.is_some() {
-            Some(func_func as _)
-        } else {
-            None
-        };
-        let super_callback0: &Option<&mut dyn (FnMut(&VulkanDevice, &VulkanQueue) -> bool)> =
-            &func_data;
+        let func = Some(func_func::<P> as _);
+        let super_callback0: &mut P = &mut func_data;
         unsafe {
             ffi::gst_vulkan_device_foreach_queue(
                 self.as_ref().to_glib_none().0,
                 func,
-                super_callback0 as *const _ as *mut _,
+                super_callback0 as *mut _ as *mut _,
             );
         }
     }
@@ -167,6 +151,7 @@ pub trait VulkanDeviceExt: IsA<VulkanDevice> + sealed::Sealed + 'static {
 
     //#[doc(alias = "gst_vulkan_device_get_physical_device")]
     //#[doc(alias = "get_physical_device")]
+    //#[doc(alias = "physical-device")]
     //fn physical_device(&self) -> /*Ignored*/vulkan::PhysicalDevice {
     //    unsafe { TODO: call ffi:gst_vulkan_device_get_physical_device() }
     //}
@@ -233,7 +218,7 @@ pub trait VulkanDeviceExt: IsA<VulkanDevice> + sealed::Sealed + 'static {
     //#[cfg(feature = "v1_24")]
     //#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     //#[doc(alias = "gst_vulkan_device_select_queue")]
-    //fn select_queue(&self, expected_flags: /*Ignored*/&vulkan::QueueFlagBits) -> VulkanQueue {
+    //fn select_queue(&self, expected_flags: /*Ignored*/&vulkan::QueueFlagBits) -> Option<VulkanQueue> {
     //    unsafe { TODO: call ffi:gst_vulkan_device_select_queue() }
     //}
 
@@ -257,8 +242,8 @@ pub trait VulkanDeviceExt: IsA<VulkanDevice> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::instance\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                c"notify::instance".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_instance_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

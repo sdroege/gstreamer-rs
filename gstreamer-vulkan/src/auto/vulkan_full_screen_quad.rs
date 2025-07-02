@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{VulkanCommandBuffer, VulkanFence, VulkanHandle, VulkanQueue};
+use crate::{ffi, VulkanCommandBuffer, VulkanFence, VulkanHandle, VulkanQueue};
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
@@ -29,12 +29,7 @@ impl VulkanFullScreenQuad {
     }
 }
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::VulkanFullScreenQuad>> Sealed for T {}
-}
-
-pub trait VulkanFullScreenQuadExt: IsA<VulkanFullScreenQuad> + sealed::Sealed + 'static {
+pub trait VulkanFullScreenQuadExt: IsA<VulkanFullScreenQuad> + 'static {
     #[doc(alias = "gst_vulkan_full_screen_quad_draw")]
     fn draw(&self) -> Result<(), glib::Error> {
         unsafe {

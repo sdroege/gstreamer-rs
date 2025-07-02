@@ -1,4 +1,5 @@
 pub mod vulkan {
+    pub use ash::vk::BaseInStructure as VkBaseInStructure;
     pub use ash::vk::BlendFactor as VkBlendFactor;
     pub use ash::vk::BlendOp as VkBlendOp;
     pub use ash::vk::Buffer as VkBuffer;

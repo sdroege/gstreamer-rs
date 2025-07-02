@@ -21,14 +21,15 @@ mod manual;
 
 pub use manual::*;
 
-#[allow(unused_imports)]
-use libc::{
-    c_char, c_double, c_float, c_int, c_long, c_short, c_uchar, c_uint, c_ulong, c_ushort, c_void,
-    intptr_t, off_t, size_t, ssize_t, time_t, uintptr_t, FILE,
-};
 #[cfg(unix)]
 #[allow(unused_imports)]
 use libc::{dev_t, gid_t, pid_t, socklen_t, uid_t};
+#[allow(unused_imports)]
+use libc::{intptr_t, off_t, size_t, ssize_t, time_t, uintptr_t, FILE};
+#[allow(unused_imports)]
+use std::ffi::{
+    c_char, c_double, c_float, c_int, c_long, c_short, c_uchar, c_uint, c_ulong, c_ushort, c_void,
+};
 
 #[allow(unused_imports)]
 use glib::{gboolean, gconstpointer, gpointer, GType};
@@ -117,6 +118,81 @@ pub const GST_VULKAN_FORMAT_FLAG_ALPHA: GstVulkanFormatFlags = 4;
 pub const GST_VULKAN_FORMAT_FLAG_LE: GstVulkanFormatFlags = 8;
 pub const GST_VULKAN_FORMAT_FLAG_COMPLEX: GstVulkanFormatFlags = 16;
 
+// Unions
+#[repr(C)]
+#[allow(dead_code)]
+pub struct GstVulkanVideoCapabilities_decoder_codec {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
+
+impl ::std::fmt::Debug for GstVulkanVideoCapabilities_decoder_codec {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!(
+            "GstVulkanVideoCapabilities_decoder_codec @ {self:p}"
+        ))
+        .finish()
+    }
+}
+
+#[repr(C)]
+#[allow(dead_code)]
+pub struct GstVulkanVideoCapabilities_encoder_codec {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
+
+impl ::std::fmt::Debug for GstVulkanVideoCapabilities_encoder_codec {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!(
+            "GstVulkanVideoCapabilities_encoder_codec @ {self:p}"
+        ))
+        .finish()
+    }
+}
+
+#[repr(C)]
+#[allow(dead_code)]
+pub struct GstVulkanVideoCapabilities_u1 {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
+
+impl ::std::fmt::Debug for GstVulkanVideoCapabilities_u1 {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstVulkanVideoCapabilities_u1 @ {self:p}"))
+            .finish()
+    }
+}
+
+#[repr(C)]
+#[allow(dead_code)]
+pub struct GstVulkanVideoProfile_codec {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
+
+impl ::std::fmt::Debug for GstVulkanVideoProfile_codec {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstVulkanVideoProfile_codec @ {self:p}"))
+            .finish()
+    }
+}
+
+#[repr(C)]
+#[allow(dead_code)]
+pub struct GstVulkanVideoProfile_usage {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
+
+impl ::std::fmt::Debug for GstVulkanVideoProfile_usage {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstVulkanVideoProfile_usage @ {self:p}"))
+            .finish()
+    }
+}
+
 // Callbacks
 pub type GstVulkanDeviceForEachQueueFunc =
     Option<unsafe extern "C" fn(*mut GstVulkanDevice, *mut GstVulkanQueue, gpointer) -> gboolean>;
@@ -133,6 +209,7 @@ pub type GstVulkanTrashNotify = Option<unsafe extern "C" fn(*mut GstVulkanDevice
 
 // Records
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstVulkanBarrierBufferInfo {
     _truncated_record_marker: c_void,
     // /*Ignored*/field parent has incomplete type
@@ -146,6 +223,7 @@ impl ::std::fmt::Debug for GstVulkanBarrierBufferInfo {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstVulkanBarrierImageInfo {
     _truncated_record_marker: c_void,
     // /*Ignored*/field parent has incomplete type
@@ -159,6 +237,7 @@ impl ::std::fmt::Debug for GstVulkanBarrierImageInfo {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstVulkanBarrierMemoryInfo {
     pub type_: GstVulkanBarrierType,
     pub flags: GstVulkanBarrierFlags,
@@ -182,6 +261,7 @@ impl ::std::fmt::Debug for GstVulkanBarrierMemoryInfo {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstVulkanBufferMemory {
     pub parent: gst::GstMemory,
     pub device: *mut GstVulkanDevice,
@@ -229,6 +309,7 @@ impl ::std::fmt::Debug for GstVulkanBufferPoolClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstVulkanBufferPoolPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -237,6 +318,7 @@ pub struct _GstVulkanBufferPoolPrivate {
 pub type GstVulkanBufferPoolPrivate = _GstVulkanBufferPoolPrivate;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstVulkanCommandBuffer {
     pub parent: gst::GstMiniObject,
     _truncated_record_marker: c_void,
@@ -267,6 +349,7 @@ impl ::std::fmt::Debug for GstVulkanCommandPoolClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstVulkanCommandPoolPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -290,6 +373,7 @@ impl ::std::fmt::Debug for GstVulkanDescriptorCacheClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstVulkanDescriptorCachePrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -313,6 +397,7 @@ impl ::std::fmt::Debug for GstVulkanDescriptorPoolClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstVulkanDescriptorPoolPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -321,6 +406,7 @@ pub struct _GstVulkanDescriptorPoolPrivate {
 pub type GstVulkanDescriptorPoolPrivate = _GstVulkanDescriptorPoolPrivate;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstVulkanDescriptorSet {
     pub parent: gst::GstMiniObject,
     _truncated_record_marker: c_void,
@@ -351,6 +437,7 @@ impl ::std::fmt::Debug for GstVulkanDeviceClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstVulkanDevicePrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -378,6 +465,7 @@ impl ::std::fmt::Debug for GstVulkanDisplayClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstVulkanDisplayPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -404,6 +492,7 @@ impl ::std::fmt::Debug for GstVulkanEncodeQueryResult {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstVulkanFence {
     pub parent: gst::GstMiniObject,
     pub device: *mut GstVulkanDevice,
@@ -438,6 +527,7 @@ impl ::std::fmt::Debug for GstVulkanFenceCacheClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstVulkanFormatInfo {
     _truncated_record_marker: c_void,
     // /*Ignored*/field format has incomplete type
@@ -446,6 +536,22 @@ pub struct GstVulkanFormatInfo {
 impl ::std::fmt::Debug for GstVulkanFormatInfo {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstVulkanFormatInfo @ {self:p}"))
+            .finish()
+    }
+}
+
+#[repr(C)]
+#[allow(dead_code)]
+pub struct GstVulkanFormatMap {
+    pub format: gst_video::GstVideoFormat,
+    _truncated_record_marker: c_void,
+    // /*Ignored*/field vkfrmt has incomplete type
+}
+
+impl ::std::fmt::Debug for GstVulkanFormatMap {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstVulkanFormatMap @ {self:p}"))
+            .field("format", &self.format)
             .finish()
     }
 }
@@ -466,6 +572,7 @@ impl ::std::fmt::Debug for GstVulkanFullScreenQuadClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstVulkanFullScreenQuadPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -539,6 +646,7 @@ impl ::std::fmt::Debug for GstVulkanImageBufferPoolClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstVulkanImageBufferPoolPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -547,6 +655,7 @@ pub struct _GstVulkanImageBufferPoolPrivate {
 pub type GstVulkanImageBufferPoolPrivate = _GstVulkanImageBufferPoolPrivate;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstVulkanImageMemory {
     pub parent: gst::GstMemory,
     pub device: *mut GstVulkanDevice,
@@ -579,6 +688,7 @@ impl ::std::fmt::Debug for GstVulkanImageMemoryAllocatorClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstVulkanImageView {
     pub parent: gst::GstMiniObject,
     pub device: *mut GstVulkanDevice,
@@ -613,6 +723,7 @@ impl ::std::fmt::Debug for GstVulkanInstanceClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstVulkanInstancePrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -621,6 +732,7 @@ pub struct _GstVulkanInstancePrivate {
 pub type GstVulkanInstancePrivate = _GstVulkanInstancePrivate;
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstVulkanMemory {
     pub mem: gst::GstMemory,
     pub device: *mut GstVulkanDevice,
@@ -668,6 +780,7 @@ impl ::std::fmt::Debug for GstVulkanOperationClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstVulkanOperationPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -691,6 +804,7 @@ impl ::std::fmt::Debug for GstVulkanPhysicalDeviceClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstVulkanPhysicalDevicePrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -717,19 +831,20 @@ impl ::std::fmt::Debug for GstVulkanQueueClass {
 #[repr(C)]
 pub struct GstVulkanQueueFamilyOps {
     pub video: u32,
-    pub query: gboolean,
+    pub query_result_status: gboolean,
 }
 
 impl ::std::fmt::Debug for GstVulkanQueueFamilyOps {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstVulkanQueueFamilyOps @ {self:p}"))
             .field("video", &self.video)
-            .field("query", &self.query)
+            .field("query_result_status", &self.query_result_status)
             .finish()
     }
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstVulkanQueuePrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -753,6 +868,7 @@ impl ::std::fmt::Debug for GstVulkanSwapperClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstVulkanSwapperPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -818,6 +934,48 @@ impl ::std::fmt::Debug for GstVulkanTrashListClass {
     }
 }
 
+#[repr(C)]
+#[allow(dead_code)]
+pub struct GstVulkanVideoCapabilities {
+    _truncated_record_marker: c_void,
+    // /*Ignored*/field caps has incomplete type
+}
+
+impl ::std::fmt::Debug for GstVulkanVideoCapabilities {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstVulkanVideoCapabilities @ {self:p}"))
+            .finish()
+    }
+}
+
+#[repr(C)]
+#[allow(dead_code)]
+pub struct GstVulkanVideoCapabilities__decoder {
+    _truncated_record_marker: c_void,
+    // /*Ignored*/field caps has incomplete type
+}
+
+impl ::std::fmt::Debug for GstVulkanVideoCapabilities__decoder {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstVulkanVideoCapabilities__decoder @ {self:p}"))
+            .finish()
+    }
+}
+
+#[repr(C)]
+#[allow(dead_code)]
+pub struct GstVulkanVideoCapabilities__encoder {
+    _truncated_record_marker: c_void,
+    // /*Ignored*/field caps has incomplete type
+}
+
+impl ::std::fmt::Debug for GstVulkanVideoCapabilities__encoder {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstVulkanVideoCapabilities__encoder @ {self:p}"))
+            .finish()
+    }
+}
+
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct GstVulkanVideoFilterClass {
@@ -829,6 +987,20 @@ impl ::std::fmt::Debug for GstVulkanVideoFilterClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstVulkanVideoFilterClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
+            .finish()
+    }
+}
+
+#[repr(C)]
+#[allow(dead_code)]
+pub struct GstVulkanVideoProfile {
+    _truncated_record_marker: c_void,
+    // /*Ignored*/field profile has incomplete type
+}
+
+impl ::std::fmt::Debug for GstVulkanVideoProfile {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstVulkanVideoProfile @ {self:p}"))
             .finish()
     }
 }
@@ -868,6 +1040,7 @@ impl ::std::fmt::Debug for GstVulkanWindowClass {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct _GstVulkanWindowPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -909,6 +1082,7 @@ impl ::std::fmt::Debug for GstVulkanBufferPool {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstVulkanCommandPool {
     pub parent: gst::GstObject,
     pub queue: *mut GstVulkanQueue,
@@ -943,6 +1117,7 @@ impl ::std::fmt::Debug for GstVulkanDescriptorCache {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstVulkanDescriptorPool {
     pub parent: gst::GstObject,
     pub device: *mut GstVulkanDevice,
@@ -960,6 +1135,7 @@ impl ::std::fmt::Debug for GstVulkanDescriptorPool {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstVulkanDevice {
     pub parent: gst::GstObject,
     pub instance: *mut GstVulkanInstance,
@@ -1110,6 +1286,7 @@ impl ::std::fmt::Debug for GstVulkanImageMemoryAllocator {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstVulkanInstance {
     pub parent: gst::GstObject,
     _truncated_record_marker: c_void,
@@ -1157,6 +1334,7 @@ impl ::std::fmt::Debug for GstVulkanOperation {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstVulkanPhysicalDevice {
     pub parent: gst::GstObject,
     pub instance: *mut GstVulkanInstance,
@@ -1176,6 +1354,7 @@ impl ::std::fmt::Debug for GstVulkanPhysicalDevice {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstVulkanQueue {
     pub parent: gst::GstObject,
     pub device: *mut GstVulkanDevice,
@@ -1216,6 +1395,7 @@ impl ::std::fmt::Debug for GstVulkanSwapper {
 }
 
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstVulkanTrashFenceList {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -1287,7 +1467,6 @@ impl ::std::fmt::Debug for GstVulkanWindow {
     }
 }
 
-#[link(name = "gstvulkan-1.0")]
 extern "C" {
 
     //=========================================================================
@@ -1361,7 +1540,7 @@ extern "C" {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_vulkan_buffer_memory_alloc_with_buffer_info(
         device: *mut GstVulkanDevice,
-        buffer_info: *mut vulkan::VkBufferCreateInfo,
+        buffer_info: *const vulkan::VkBufferCreateInfo,
         mem_prop_flags: vulkan::VkMemoryPropertyFlags,
     ) -> *mut gst::GstMemory;
     pub fn gst_vulkan_buffer_memory_init_once();
@@ -1532,7 +1711,7 @@ extern "C" {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_vulkan_memory_find_memory_type_index_with_requirements(
         device: *mut GstVulkanDevice,
-        req: *mut vulkan::VkMemoryRequirements,
+        req: *const vulkan::VkMemoryRequirements,
         properties: vulkan::VkMemoryPropertyFlags,
         type_index: *mut u32,
     ) -> gboolean;
@@ -1560,6 +1739,34 @@ extern "C" {
     pub fn gst_vulkan_trash_ref(trash: *mut GstVulkanTrash) -> *mut GstVulkanTrash;
     pub fn gst_vulkan_trash_mini_object_unref(device: *mut GstVulkanDevice, user_data: gpointer);
     pub fn gst_vulkan_trash_object_unref(device: *mut GstVulkanDevice, user_data: gpointer);
+
+    //=========================================================================
+    // GstVulkanVideoProfile
+    //=========================================================================
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_vulkan_video_profile_is_equal(
+        a: *const GstVulkanVideoProfile,
+        b: *const GstVulkanVideoProfile,
+    ) -> gboolean;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_vulkan_video_profile_is_valid(
+        profile: *mut GstVulkanVideoProfile,
+        codec: c_uint,
+    ) -> gboolean;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_vulkan_video_profile_to_caps(
+        profile: *const GstVulkanVideoProfile,
+    ) -> *mut gst::GstCaps;
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    pub fn gst_vulkan_video_profile_from_caps(
+        profile: *mut GstVulkanVideoProfile,
+        caps: *mut gst::GstCaps,
+        video_operation: GstVulkanVideoOperation,
+    ) -> gboolean;
 
     //=========================================================================
     // GstVulkanBufferMemoryAllocator
@@ -1869,6 +2076,15 @@ extern "C" {
     pub fn gst_vulkan_image_buffer_pool_new(
         device: *mut GstVulkanDevice,
     ) -> *mut gst::GstBufferPool;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_vulkan_image_buffer_pool_config_get_allocation_params(
+        config: *mut gst::GstStructure,
+        usage: *mut vulkan::VkImageUsageFlags,
+        mem_props: *mut vulkan::VkMemoryPropertyFlags,
+        initial_layout: *mut vulkan::VkImageLayout,
+        initial_access: *mut u64,
+    );
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_vulkan_image_buffer_pool_config_set_allocation_params(
@@ -1910,6 +2126,14 @@ extern "C" {
         element: *mut gst::GstElement,
         instance: *mut *mut GstVulkanInstance,
     ) -> gboolean;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_vulkan_instance_check_api_version(
+        instance: *mut GstVulkanInstance,
+        major: c_uint,
+        minor: c_uint,
+        patch: c_uint,
+    ) -> gboolean;
     pub fn gst_vulkan_instance_check_version(
         instance: *mut GstVulkanInstance,
         major: c_uint,
@@ -1918,6 +2142,13 @@ extern "C" {
     ) -> gboolean;
     pub fn gst_vulkan_instance_create_device(
         instance: *mut GstVulkanInstance,
+        error: *mut *mut glib::GError,
+    ) -> *mut GstVulkanDevice;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_vulkan_instance_create_device_with_index(
+        instance: *mut GstVulkanInstance,
+        device_index: c_uint,
         error: *mut *mut glib::GError,
     ) -> *mut GstVulkanDevice;
     pub fn gst_vulkan_instance_disable_extension(
@@ -1936,6 +2167,14 @@ extern "C" {
         instance: *mut GstVulkanInstance,
         error: *mut *mut glib::GError,
     ) -> gboolean;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_vulkan_instance_get_api_version(
+        instance: *mut GstVulkanInstance,
+        major: *mut c_uint,
+        minor: *mut c_uint,
+        patch: *mut c_uint,
+    );
     pub fn gst_vulkan_instance_get_extension_info(
         instance: *mut GstVulkanInstance,
         name: *const c_char,
@@ -2005,6 +2244,7 @@ extern "C" {
     pub fn gst_vulkan_operation_add_frame_barrier(
         self_: *mut GstVulkanOperation,
         frame: *mut gst::GstBuffer,
+        src_stage: u64,
         dst_stage: u64,
         new_access: u64,
         new_layout: vulkan::VkImageLayout,
@@ -2016,9 +2256,13 @@ extern "C" {
         self_: *mut GstVulkanOperation,
         error: *mut *mut glib::GError,
     ) -> gboolean;
-    #[cfg(feature = "v1_24")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
-    pub fn gst_vulkan_operation_begin_query(self_: *mut GstVulkanOperation, id: u32) -> gboolean;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_vulkan_operation_begin_query(
+        self_: *mut GstVulkanOperation,
+        base: *mut vulkan::VkBaseInStructure,
+        id: u32,
+    ) -> gboolean;
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_vulkan_operation_discard_dependencies(self_: *mut GstVulkanOperation);
@@ -2094,6 +2338,22 @@ extern "C" {
     pub fn gst_vulkan_physical_device_type_to_string(
         type_: vulkan::VkPhysicalDeviceType,
     ) -> *const c_char;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_vulkan_physical_device_check_api_version(
+        device: *mut GstVulkanPhysicalDevice,
+        major: c_uint,
+        minor: c_uint,
+        patch: c_uint,
+    ) -> gboolean;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_vulkan_physical_device_get_api_version(
+        device: *mut GstVulkanPhysicalDevice,
+        major: *mut c_uint,
+        minor: *mut c_uint,
+        patch: *mut c_uint,
+    );
     pub fn gst_vulkan_physical_device_get_extension_info(
         device: *mut GstVulkanPhysicalDevice,
         name: *const c_char,
@@ -2303,6 +2563,14 @@ extern "C" {
         display_ptr: *mut *mut GstVulkanDisplay,
         instance_ptr: *mut *mut GstVulkanInstance,
     ) -> gboolean;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_vulkan_ensure_element_device(
+        element: *mut gst::GstElement,
+        instance: *mut GstVulkanInstance,
+        device_ptr: *mut *mut GstVulkanDevice,
+        device_id: c_uint,
+    ) -> gboolean;
     pub fn gst_vulkan_format_from_video_info(
         v_info: *mut gst_video::GstVideoInfo,
         plane: c_uint,
@@ -2310,7 +2578,7 @@ extern "C" {
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_vulkan_format_from_video_info_2(
-        physical_device: *mut GstVulkanPhysicalDevice,
+        device: *mut GstVulkanDevice,
         info: *mut gst_video::GstVideoInfo,
         tiling: vulkan::VkImageTiling,
         no_multiplane: gboolean,
@@ -2323,6 +2591,11 @@ extern "C" {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_vulkan_format_get_aspect(format: vulkan::VkFormat) -> c_uint;
     pub fn gst_vulkan_format_get_info(format: vulkan::VkFormat) -> *const GstVulkanFormatInfo;
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub fn gst_vulkan_format_get_map(
+        format: gst_video::GstVideoFormat,
+    ) -> *const GstVulkanFormatMap;
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_vulkan_format_to_video_format(
@@ -2335,7 +2608,7 @@ extern "C" {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_vulkan_get_or_create_image_view_with_info(
         image: *mut GstVulkanImageMemory,
-        create_info: *mut vulkan::VkImageViewCreateInfo,
+        create_info: *const vulkan::VkImageViewCreateInfo,
     ) -> *mut GstVulkanImageView;
     pub fn gst_vulkan_global_context_query(
         element: *mut gst::GstElement,

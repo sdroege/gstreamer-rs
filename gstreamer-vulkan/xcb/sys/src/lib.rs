@@ -15,14 +15,15 @@
 use glib_sys as glib;
 use gstreamer_vulkan_sys as gst_vulkan;
 
-#[allow(unused_imports)]
-use libc::{
-    c_char, c_double, c_float, c_int, c_long, c_short, c_uchar, c_uint, c_ulong, c_ushort, c_void,
-    intptr_t, off_t, size_t, ssize_t, time_t, uintptr_t, FILE,
-};
 #[cfg(unix)]
 #[allow(unused_imports)]
 use libc::{dev_t, gid_t, pid_t, socklen_t, uid_t};
+#[allow(unused_imports)]
+use libc::{intptr_t, off_t, size_t, ssize_t, time_t, uintptr_t, FILE};
+#[allow(unused_imports)]
+use std::ffi::{
+    c_char, c_double, c_float, c_int, c_long, c_short, c_uchar, c_uint, c_ulong, c_ushort, c_void,
+};
 
 #[allow(unused_imports)]
 use glib::{gboolean, gconstpointer, gpointer, GType};
@@ -45,6 +46,7 @@ impl ::std::fmt::Debug for GstVulkanDisplayXCBClass {
 
 // Classes
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstVulkanDisplayXCB {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
@@ -57,7 +59,6 @@ impl ::std::fmt::Debug for GstVulkanDisplayXCB {
     }
 }
 
-#[link(name = "gstvulkan-1.0")]
 extern "C" {
 
     //=========================================================================

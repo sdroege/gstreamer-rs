@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::VulkanDevice;
+use crate::{ffi, VulkanDevice};
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {

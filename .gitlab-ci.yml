@@ -142,7 +142,7 @@ trigger:
   stage: container-base
   variables:
     FDO_DISTRIBUTION_PACKAGES: >-
-      build-essential cmake curl glslc python3-setuptools libglib2.0-dev libxml2-dev
+      build-essential cmake curl python3-setuptools libglib2.0-dev libxml2-dev
       libdrm-dev libegl1-mesa-dev libgl1-mesa-dev libgbm-dev libgles2-mesa-dev
       libgl1-mesa-dri libegl-dev libgl-dev libgles-dev libglx-dev
       libssl-dev git wget ca-certificates ninja-build python3-pip flex bison

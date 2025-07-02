@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::VulkanDevice;
+use crate::{ffi, VulkanDevice};
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
@@ -28,6 +28,13 @@ impl VulkanImageBufferPool {
             .unsafe_cast()
         }
     }
+
+    //#[cfg(feature = "v1_26")]
+    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    //#[doc(alias = "gst_vulkan_image_buffer_pool_config_get_allocation_params")]
+    //pub fn config_get_allocation_params(config: &gst::Structure, usage: /*Ignored*/vulkan::ImageUsageFlags, mem_props: /*Ignored*/vulkan::MemoryPropertyFlags, initial_layout: /*Ignored*/vulkan::ImageLayout) -> u64 {
+    //    unsafe { TODO: call ffi:gst_vulkan_image_buffer_pool_config_get_allocation_params() }
+    //}
 
     //#[cfg(feature = "v1_24")]
     //#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]

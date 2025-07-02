@@ -3,6 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
+use crate::ffi;
 use glib::prelude::*;
 
 glib::wrapper! {
@@ -21,12 +22,7 @@ impl VulkanHandlePool {
 unsafe impl Send for VulkanHandlePool {}
 unsafe impl Sync for VulkanHandlePool {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::VulkanHandlePool>> Sealed for T {}
-}
-
-pub trait VulkanHandlePoolExt: IsA<VulkanHandlePool> + sealed::Sealed + 'static {
+pub trait VulkanHandlePoolExt: IsA<VulkanHandlePool> + 'static {
     //#[doc(alias = "gst_vulkan_handle_pool_acquire")]
     //fn acquire(&self) -> Result</*Unimplemented*/Option<Basic: Pointer>, glib::Error> {
     //    unsafe { TODO: call ffi:gst_vulkan_handle_pool_acquire() }

@@ -42,7 +42,7 @@ generate = [
     "GstVulkan.VulkanOperation",
     "GstVulkan.VulkanPhysicalDevice",
     "GstVulkan.VulkanQueue",
-    "GstVulkan.VulkanSwapper",
+    # "GstVulkan.VulkanSwapper",
     "GstVulkan.VulkanTrash",
     "GstVulkan.VulkanVideoFilter",
     "GstVulkan.VulkanWindow",
@@ -94,6 +94,20 @@ status = "manual"
 ref_mode = "ref"
 
 [[object]]
+name = "GstVulkan.VulkanDescriptorCache"
+status = "generate"
+    [[object.function]]
+    name = "new"
+    ignore = true
+
+[[object]]
+name = "GstVulkan.VulkanDescriptorPool"
+status = "generate"
+    [[object.function]]
+    name = "create"
+    ignore = true
+
+[[object]]
 name = "GstVulkan.VulkanFullScreenQuad"
 status = "generate"
 concurrency = "none"
@@ -104,15 +118,9 @@ status = "generate"
 ref_mode = "ref"
 
 [[object]]
-name = "GstVulkan.VulkanDescriptorPool"
+name = "GstVulkan.VulkanSwapper"
 status = "generate"
-    [[object.function]]
-    name = "create"
-    ignore = true
-
-[[object]]
-name = "GstVulkan.VulkanDescriptorCache"
-status = "generate"
-    [[object.function]]
-    name = "new"
-    ignore = true
+    [[object.property]]
+    name = "pixel-aspect-ratio"
+    # fraction
+    manual = true

@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::VulkanCommandPool;
+use crate::{ffi, VulkanCommandPool};
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
@@ -32,12 +32,7 @@ impl VulkanOperation {
 unsafe impl Send for VulkanOperation {}
 unsafe impl Sync for VulkanOperation {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::VulkanOperation>> Sealed for T {}
-}
-
-pub trait VulkanOperationExt: IsA<VulkanOperation> + sealed::Sealed + 'static {
+pub trait VulkanOperationExt: IsA<VulkanOperation> + 'static {
     #[doc(alias = "gst_vulkan_operation_add_dependency_frame")]
     fn add_dependency_frame(
         &self,
@@ -61,7 +56,7 @@ pub trait VulkanOperationExt: IsA<VulkanOperation> + sealed::Sealed + 'static {
     //}
 
     //#[doc(alias = "gst_vulkan_operation_add_frame_barrier")]
-    //fn add_frame_barrier(&self, frame: &gst::Buffer, dst_stage: u64, new_access: u64, new_layout: /*Ignored*/&vulkan::ImageLayout, new_queue: Option<&impl IsA<VulkanQueue>>) -> bool {
+    //fn add_frame_barrier(&self, frame: &gst::Buffer, src_stage: u64, dst_stage: u64, new_access: u64, new_layout: /*Ignored*/&vulkan::ImageLayout, new_queue: Option<&impl IsA<VulkanQueue>>) -> bool {
     //    unsafe { TODO: call ffi:gst_vulkan_operation_add_frame_barrier() }
     //}
 
@@ -79,15 +74,12 @@ pub trait VulkanOperationExt: IsA<VulkanOperation> + sealed::Sealed + 'static {
         }
     }
 
-    #[doc(alias = "gst_vulkan_operation_begin_query")]
-    fn begin_query(&self, id: u32) -> bool {
-        unsafe {
-            from_glib(ffi::gst_vulkan_operation_begin_query(
-                self.as_ref().to_glib_none().0,
-                id,
-            ))
-        }
-    }
+    //#[cfg(feature = "v1_26")]
+    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    //#[doc(alias = "gst_vulkan_operation_begin_query")]
+    //fn begin_query(&self, base: /*Ignored*/&mut vulkan::BaseInStructure, id: u32) -> bool {
+    //    unsafe { TODO: call ffi:gst_vulkan_operation_begin_query() }
+    //}
 
     #[doc(alias = "gst_vulkan_operation_discard_dependencies")]
     fn discard_dependencies(&self) {

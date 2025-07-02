@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::VulkanDevice;
+use crate::{ffi, VulkanDevice};
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
@@ -27,12 +27,7 @@ impl VulkanDescriptorPool {
 unsafe impl Send for VulkanDescriptorPool {}
 unsafe impl Sync for VulkanDescriptorPool {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::VulkanDescriptorPool>> Sealed for T {}
-}
-
-pub trait VulkanDescriptorPoolExt: IsA<VulkanDescriptorPool> + sealed::Sealed + 'static {
+pub trait VulkanDescriptorPoolExt: IsA<VulkanDescriptorPool> + 'static {
     #[doc(alias = "gst_vulkan_descriptor_pool_get_device")]
     #[doc(alias = "get_device")]
     fn device(&self) -> VulkanDevice {

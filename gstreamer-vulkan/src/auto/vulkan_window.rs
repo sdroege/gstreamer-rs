@@ -3,8 +3,9 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{VulkanDevice, VulkanDisplay};
+use crate::{ffi, VulkanDevice, VulkanDisplay};
 use glib::{
+    object::ObjectType as _,
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
     translate::*,
@@ -37,12 +38,7 @@ impl VulkanWindow {
 unsafe impl Send for VulkanWindow {}
 unsafe impl Sync for VulkanWindow {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::VulkanWindow>> Sealed for T {}
-}
-
-pub trait VulkanWindowExt: IsA<VulkanWindow> + sealed::Sealed + 'static {
+pub trait VulkanWindowExt: IsA<VulkanWindow> + 'static {
     #[doc(alias = "gst_vulkan_window_close")]
     fn close(&self) {
         unsafe {
@@ -180,8 +176,8 @@ pub trait VulkanWindowExt: IsA<VulkanWindow> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"close\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                c"close".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     close_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -205,8 +201,8 @@ pub trait VulkanWindowExt: IsA<VulkanWindow> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"draw\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                c"draw".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     draw_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -224,8 +220,8 @@ pub trait VulkanWindowExt: IsA<VulkanWindow> + sealed::Sealed + 'static {
             F: Fn(&P, &str, &str) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstVulkanWindow,
-            id: *mut libc::c_char,
-            key: *mut libc::c_char,
+            id: *mut std::ffi::c_char,
+            key: *mut std::ffi::c_char,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
@@ -239,8 +235,8 @@ pub trait VulkanWindowExt: IsA<VulkanWindow> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"key-event\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                c"key-event".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     key_event_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -258,10 +254,10 @@ pub trait VulkanWindowExt: IsA<VulkanWindow> + sealed::Sealed + 'static {
             F: Fn(&P, &str, i32, f64, f64) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstVulkanWindow,
-            id: *mut libc::c_char,
-            button: libc::c_int,
-            x: libc::c_double,
-            y: libc::c_double,
+            id: *mut std::ffi::c_char,
+            button: std::ffi::c_int,
+            x: std::ffi::c_double,
+            y: std::ffi::c_double,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
@@ -277,8 +273,8 @@ pub trait VulkanWindowExt: IsA<VulkanWindow> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"mouse-event\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                c"mouse-event".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     mouse_event_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -296,8 +292,8 @@ pub trait VulkanWindowExt: IsA<VulkanWindow> + sealed::Sealed + 'static {
             F: Fn(&P, u32, u32) + Send + Sync + 'static,
         >(
             this: *mut ffi::GstVulkanWindow,
-            object: libc::c_uint,
-            p0: libc::c_uint,
+            object: std::ffi::c_uint,
+            p0: std::ffi::c_uint,
             f: glib::ffi::gpointer,
         ) {
             let f: &F = &*(f as *const F);
@@ -311,8 +307,8 @@ pub trait VulkanWindowExt: IsA<VulkanWindow> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"resize\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                c"resize".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     resize_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -340,8 +336,8 @@ pub trait VulkanWindowExt: IsA<VulkanWindow> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::display\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                c"notify::display".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_display_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

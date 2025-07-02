@@ -9,10 +9,7 @@ mod sealed {
 }
 
 pub trait VulkanDeviceExtManual: sealed::Sealed + IsA<VulkanDevice> + 'static {
-    fn create_shader<const N: usize>(
-        &self,
-        code: [u8; N],
-    ) -> Result<crate::VulkanHandle, glib::Error> {
+    fn create_shader(&self, code: &[u8]) -> Result<crate::VulkanHandle, glib::Error> {
         unsafe {
             let mut error = std::ptr::null_mut();
             let shader = crate::ffi::gst_vulkan_create_shader(

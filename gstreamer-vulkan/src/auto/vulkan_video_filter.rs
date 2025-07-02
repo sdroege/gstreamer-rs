@@ -3,6 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
+use crate::ffi;
 #[cfg(feature = "v1_26")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
 use crate::{VulkanDevice, VulkanInstance, VulkanQueue};
@@ -27,12 +28,7 @@ impl VulkanVideoFilter {
 unsafe impl Send for VulkanVideoFilter {}
 unsafe impl Sync for VulkanVideoFilter {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::VulkanVideoFilter>> Sealed for T {}
-}
-
-pub trait VulkanVideoFilterExt: IsA<VulkanVideoFilter> + sealed::Sealed + 'static {
+pub trait VulkanVideoFilterExt: IsA<VulkanVideoFilter> + 'static {
     #[cfg(feature = "v1_26")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
     #[doc(alias = "gst_vulkan_video_filter_get_device")]

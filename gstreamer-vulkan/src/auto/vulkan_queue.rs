@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{VulkanCommandPool, VulkanDevice};
+use crate::{ffi, VulkanCommandPool, VulkanDevice};
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
@@ -48,12 +48,7 @@ impl VulkanQueue {
 unsafe impl Send for VulkanQueue {}
 unsafe impl Sync for VulkanQueue {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::VulkanQueue>> Sealed for T {}
-}
-
-pub trait VulkanQueueExt: IsA<VulkanQueue> + sealed::Sealed + 'static {
+pub trait VulkanQueueExt: IsA<VulkanQueue> + 'static {
     #[doc(alias = "gst_vulkan_queue_create_command_pool")]
     fn create_command_pool(&self) -> Result<VulkanCommandPool, glib::Error> {
         unsafe {

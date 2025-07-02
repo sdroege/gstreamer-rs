@@ -3,7 +3,10 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::VulkanDevice;
+use crate::{ffi, VulkanDevice};
+#[cfg(feature = "v1_26")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+use glib::object::ObjectType as _;
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -60,12 +63,21 @@ impl Default for VulkanInstance {
 unsafe impl Send for VulkanInstance {}
 unsafe impl Sync for VulkanInstance {}
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::VulkanInstance>> Sealed for T {}
-}
+pub trait VulkanInstanceExt: IsA<VulkanInstance> + 'static {
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "gst_vulkan_instance_check_api_version")]
+    fn check_api_version(&self, major: u32, minor: u32, patch: u32) -> bool {
+        unsafe {
+            from_glib(ffi::gst_vulkan_instance_check_api_version(
+                self.as_ref().to_glib_none().0,
+                major,
+                minor,
+                patch,
+            ))
+        }
+    }
 
-pub trait VulkanInstanceExt: IsA<VulkanInstance> + sealed::Sealed + 'static {
     #[doc(alias = "gst_vulkan_instance_check_version")]
     fn check_version(&self, major: u32, minor: u32, patch: u32) -> bool {
         unsafe {
@@ -84,6 +96,25 @@ pub trait VulkanInstanceExt: IsA<VulkanInstance> + sealed::Sealed + 'static {
             let mut error = std::ptr::null_mut();
             let ret =
                 ffi::gst_vulkan_instance_create_device(self.as_ref().to_glib_none().0, &mut error);
+            if error.is_null() {
+                Ok(from_glib_full(ret))
+            } else {
+                Err(from_glib_full(error))
+            }
+        }
+    }
+
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "gst_vulkan_instance_create_device_with_index")]
+    fn create_device_with_index(&self, device_index: u32) -> Result<VulkanDevice, glib::Error> {
+        unsafe {
+            let mut error = std::ptr::null_mut();
+            let ret = ffi::gst_vulkan_instance_create_device_with_index(
+                self.as_ref().to_glib_none().0,
+                device_index,
+                &mut error,
+            );
             if error.is_null() {
                 Ok(from_glib_full(ret))
             } else {
@@ -134,6 +165,29 @@ pub trait VulkanInstanceExt: IsA<VulkanInstance> + sealed::Sealed + 'static {
             } else {
                 Err(from_glib_full(error))
             }
+        }
+    }
+
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    #[doc(alias = "gst_vulkan_instance_get_api_version")]
+    #[doc(alias = "get_api_version")]
+    fn api_version(&self) -> (u32, u32, u32) {
+        unsafe {
+            let mut major = std::mem::MaybeUninit::uninit();
+            let mut minor = std::mem::MaybeUninit::uninit();
+            let mut patch = std::mem::MaybeUninit::uninit();
+            ffi::gst_vulkan_instance_get_api_version(
+                self.as_ref().to_glib_none().0,
+                major.as_mut_ptr(),
+                minor.as_mut_ptr(),
+                patch.as_mut_ptr(),
+            );
+            (
+                major.assume_init(),
+                minor.assume_init(),
+                patch.assume_init(),
+            )
         }
     }
 
@@ -262,27 +316,34 @@ pub trait VulkanInstanceExt: IsA<VulkanInstance> + sealed::Sealed + 'static {
         ObjectExt::set_property(self.as_ref(), "requested-api-minor", requested_api_minor)
     }
 
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
     #[doc(alias = "create-device")]
-    fn connect_create_device<F: Fn(&Self) -> VulkanDevice + Send + Sync + 'static>(
+    fn connect_create_device<F: Fn(&Self, u32) -> VulkanDevice + Send + Sync + 'static>(
         &self,
         f: F,
     ) -> SignalHandlerId {
         unsafe extern "C" fn create_device_trampoline<
             P: IsA<VulkanInstance>,
-            F: Fn(&P) -> VulkanDevice + Send + Sync + 'static,
+            F: Fn(&P, u32) -> VulkanDevice + Send + Sync + 'static,
         >(
             this: *mut ffi::GstVulkanInstance,
+            device_index: std::ffi::c_uint,
             f: glib::ffi::gpointer,
         ) -> *mut ffi::GstVulkanDevice {
             let f: &F = &*(f as *const F);
-            f(VulkanInstance::from_glib_borrow(this).unsafe_cast_ref()).to_glib_full()
+            f(
+                VulkanInstance::from_glib_borrow(this).unsafe_cast_ref(),
+                device_index,
+            )
+            .to_glib_full()
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"create-device\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                c"create-device".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     create_device_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -310,8 +371,8 @@ pub trait VulkanInstanceExt: IsA<VulkanInstance> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::requested-api-major\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                c"notify::requested-api-major".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_requested_api_major_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
@@ -339,8 +400,8 @@ pub trait VulkanInstanceExt: IsA<VulkanInstance> + sealed::Sealed + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                b"notify::requested-api-minor\0".as_ptr() as *const _,
-                Some(std::mem::transmute::<_, unsafe extern "C" fn()>(
+                c"notify::requested-api-minor".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_requested_api_minor_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),

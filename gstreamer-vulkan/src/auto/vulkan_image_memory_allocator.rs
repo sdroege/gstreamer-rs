@@ -3,6 +3,8 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
+use crate::ffi;
+
 glib::wrapper! {
     #[doc(alias = "GstVulkanImageMemoryAllocator")]
     pub struct VulkanImageMemoryAllocator(Object<ffi::GstVulkanImageMemoryAllocator, ffi::GstVulkanImageMemoryAllocatorClass>) @extends gst::Allocator, gst::Object;
