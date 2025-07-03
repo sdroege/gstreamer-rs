@@ -8,7 +8,7 @@ use std::{
     ptr, slice,
 };
 
-use glib::translate::*;
+use glib::{prelude::*, translate::*};
 
 use crate::{ffi, AllocationParams, Allocator, MemoryFlags};
 
@@ -126,7 +126,7 @@ impl MemoryRef {
             if self.0.allocator.is_null() {
                 None
             } else {
-                Some(&*(&self.0.allocator as *const *mut ffi::GstAllocator as *const Allocator))
+                Some(Allocator::from_glib_ptr_borrow(&self.0.allocator))
             }
         }
     }
@@ -970,7 +970,7 @@ impl MemoryRefTrace {
             if self.0.allocator.is_null() {
                 None
             } else {
-                Some(&*(&self.0.allocator as *const *mut ffi::GstAllocator as *const Allocator))
+                Some(Allocator::from_glib_ptr_borrow(&self.0.allocator))
             }
         }
     }

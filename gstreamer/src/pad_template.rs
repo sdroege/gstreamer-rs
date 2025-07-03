@@ -29,7 +29,7 @@ impl PadTemplate {
     pub fn caps(&self) -> &Caps {
         unsafe {
             let templ = &*(self.as_ptr() as *const ffi::GstPadTemplate);
-            &*(&templ.caps as *const *mut ffi::GstCaps as *const Caps)
+            Caps::from_glib_ptr_borrow(&templ.caps)
         }
     }
 
@@ -41,9 +41,9 @@ impl PadTemplate {
         unsafe {
             let templ = &*(self.as_ptr() as *const ffi::GstPadTemplate);
             if !templ.ABI.abi.documentation_caps.is_null() {
-                &*(&templ.ABI.abi.documentation_caps as *const *mut ffi::GstCaps as *const Caps)
+                Caps::from_glib_ptr_borrow(&templ.ABI.abi.documentation_caps)
             } else {
-                &*(&templ.caps as *const *mut ffi::GstCaps as *const Caps)
+                self.caps()
             }
         }
     }

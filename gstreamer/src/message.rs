@@ -28,7 +28,7 @@ impl MessageRef {
             if (*self.as_ptr()).src.is_null() {
                 None
             } else {
-                Some(&*(&(*self.as_ptr()).src as *const *mut ffi::GstObject as *const Object))
+                Some(Object::from_glib_ptr_borrow(&(*self.as_ptr()).src))
             }
         }
     }

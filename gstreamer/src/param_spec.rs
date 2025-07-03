@@ -277,10 +277,7 @@ impl ParamSpecArray {
             if (*ptr).element_spec.is_null() {
                 None
             } else {
-                Some(
-                    &*(&(*ptr).element_spec as *const *mut glib::gobject_ffi::GParamSpec
-                        as *const glib::ParamSpec),
-                )
+                Some(glib::ParamSpec::from_glib_ptr_borrow(&(*ptr).element_spec))
             }
         }
     }
