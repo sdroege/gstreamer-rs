@@ -74,20 +74,6 @@ pub trait VulkanQueueExt: IsA<VulkanQueue> + 'static {
             ))
         }
     }
-
-    #[doc(alias = "gst_vulkan_queue_submit_lock")]
-    fn submit_lock(&self) {
-        unsafe {
-            ffi::gst_vulkan_queue_submit_lock(self.as_ref().to_glib_none().0);
-        }
-    }
-
-    #[doc(alias = "gst_vulkan_queue_submit_unlock")]
-    fn submit_unlock(&self) {
-        unsafe {
-            ffi::gst_vulkan_queue_submit_unlock(self.as_ref().to_glib_none().0);
-        }
-    }
 }
 
 impl<O: IsA<VulkanQueue>> VulkanQueueExt for O {}

@@ -41,7 +41,6 @@ generate = [
     #"GstVulkan.VulkanMemory",
     "GstVulkan.VulkanOperation",
     "GstVulkan.VulkanPhysicalDevice",
-    "GstVulkan.VulkanQueue",
     # "GstVulkan.VulkanSwapper",
     "GstVulkan.VulkanTrash",
     "GstVulkan.VulkanVideoFilter",
@@ -116,6 +115,16 @@ concurrency = "none"
 name = "GstVulkan.VulkanHandle"
 status = "generate"
 ref_mode = "ref"
+
+[[object]]
+name = "GstVulkan.VulkanQueue"
+status = "generate"
+    [[object.function]]
+    name = "submit_lock"
+    manual = true
+    [[object.function]]
+    name = "submit_unlock"
+    manual = true
 
 [[object]]
 name = "GstVulkan.VulkanSwapper"

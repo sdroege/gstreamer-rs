@@ -28,6 +28,7 @@ pub use crate::auto::*;
 
 mod vulkan_device;
 mod vulkan_full_screen_quad;
+mod vulkan_queue;
 mod vulkan_swapper;
 
 // Re-export all the traits in a prelude module, so that applications
@@ -38,6 +39,7 @@ pub mod prelude {
 
     pub use super::vulkan_device::VulkanDeviceExtManual;
     pub use super::vulkan_full_screen_quad::VulkanFullScreenQuadExtManual;
+    pub use super::vulkan_queue::VulkanQueueExtManual;
     pub use super::vulkan_swapper::VulkanSwapperExtManual;
     pub use crate::auto::traits::*;
 }
