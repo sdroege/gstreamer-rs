@@ -23,7 +23,6 @@ generate = [
     "GstVulkan.VulkanBufferMemoryAllocator",
     "GstVulkan.VulkanBufferPool",
     "GstVulkan.VulkanCommandBuffer",
-    "GstVulkan.VulkanCommandPool",
     #"GstVulkan.VulkanDecoder",
     "GstVulkan.VulkanDescriptorSet",
     "GstVulkan.VulkanDevice",
@@ -91,6 +90,16 @@ ref_mode = "ref"
 name = "Gst.Structure"
 status = "manual"
 ref_mode = "ref"
+
+[[object]]
+name = "GstVulkan.VulkanCommandPool"
+status = "generate"
+    [[object.function]]
+    name = "lock"
+    manual = true
+    [[object.function]]
+    name = "unlock"
+    manual = true
 
 [[object]]
 name = "GstVulkan.VulkanDescriptorCache"

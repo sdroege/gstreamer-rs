@@ -46,20 +46,6 @@ pub trait VulkanCommandPoolExt: IsA<VulkanCommandPool> + 'static {
             ))
         }
     }
-
-    #[doc(alias = "gst_vulkan_command_pool_lock")]
-    fn lock(&self) {
-        unsafe {
-            ffi::gst_vulkan_command_pool_lock(self.as_ref().to_glib_none().0);
-        }
-    }
-
-    #[doc(alias = "gst_vulkan_command_pool_unlock")]
-    fn unlock(&self) {
-        unsafe {
-            ffi::gst_vulkan_command_pool_unlock(self.as_ref().to_glib_none().0);
-        }
-    }
 }
 
 impl<O: IsA<VulkanCommandPool>> VulkanCommandPoolExt for O {}

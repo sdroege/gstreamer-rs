@@ -26,6 +26,7 @@ macro_rules! skip_assert_initialized {
 mod auto;
 pub use crate::auto::*;
 
+mod vulkan_command_pool;
 mod vulkan_device;
 mod vulkan_full_screen_quad;
 mod vulkan_queue;
@@ -37,6 +38,7 @@ pub mod prelude {
     #[doc(hidden)]
     pub use gst_video::prelude::*;
 
+    pub use super::vulkan_command_pool::VulkanCommandPoolExtManual;
     pub use super::vulkan_device::VulkanDeviceExtManual;
     pub use super::vulkan_full_screen_quad::VulkanFullScreenQuadExtManual;
     pub use super::vulkan_queue::VulkanQueueExtManual;
