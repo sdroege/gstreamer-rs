@@ -60,20 +60,6 @@ pub trait VulkanOperationExt: IsA<VulkanOperation> + 'static {
     //    unsafe { TODO: call ffi:gst_vulkan_operation_add_frame_barrier() }
     //}
 
-    #[doc(alias = "gst_vulkan_operation_begin")]
-    fn begin(&self) -> Result<(), glib::Error> {
-        unsafe {
-            let mut error = std::ptr::null_mut();
-            let is_ok = ffi::gst_vulkan_operation_begin(self.as_ref().to_glib_none().0, &mut error);
-            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
-            if error.is_null() {
-                Ok(())
-            } else {
-                Err(from_glib_full(error))
-            }
-        }
-    }
-
     //#[cfg(feature = "v1_26")]
     //#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
     //#[doc(alias = "gst_vulkan_operation_begin_query")]
@@ -92,20 +78,6 @@ pub trait VulkanOperationExt: IsA<VulkanOperation> + 'static {
     //fn enable_query(&self, query_type: u32, n_queries: u32, pnext: /*Unimplemented*/Option<Basic: Pointer>) -> Result<(), glib::Error> {
     //    unsafe { TODO: call ffi:gst_vulkan_operation_enable_query() }
     //}
-
-    #[doc(alias = "gst_vulkan_operation_end")]
-    fn end(&self) -> Result<(), glib::Error> {
-        unsafe {
-            let mut error = std::ptr::null_mut();
-            let is_ok = ffi::gst_vulkan_operation_end(self.as_ref().to_glib_none().0, &mut error);
-            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
-            if error.is_null() {
-                Ok(())
-            } else {
-                Err(from_glib_full(error))
-            }
-        }
-    }
 
     #[doc(alias = "gst_vulkan_operation_end_query")]
     fn end_query(&self, id: u32) -> bool {

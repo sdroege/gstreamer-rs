@@ -38,7 +38,6 @@ generate = [
     "GstVulkan.VulkanImageView",
     "GstVulkan.VulkanInstance",
     #"GstVulkan.VulkanMemory",
-    "GstVulkan.VulkanOperation",
     "GstVulkan.VulkanPhysicalDevice",
     # "GstVulkan.VulkanSwapper",
     "GstVulkan.VulkanTrash",
@@ -124,6 +123,16 @@ concurrency = "none"
 name = "GstVulkan.VulkanHandle"
 status = "generate"
 ref_mode = "ref"
+
+[[object]]
+name = "GstVulkan.VulkanOperation"
+status = "generate"
+    [[object.function]]
+    name = "begin"
+    manual = true
+    [[object.function]]
+    name = "end"
+    manual = true
 
 [[object]]
 name = "GstVulkan.VulkanQueue"
