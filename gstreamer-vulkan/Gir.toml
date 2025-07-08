@@ -123,6 +123,12 @@ concurrency = "none"
 name = "GstVulkan.VulkanHandle"
 status = "generate"
 ref_mode = "ref"
+    [[object.function]]
+    name = "context_query"
+    ignore = true
+    [[object.function]]
+    name = "set_context"
+    ignore = true
 
 [[object]]
 name = "GstVulkan.VulkanOperation"

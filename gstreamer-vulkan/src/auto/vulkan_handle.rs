@@ -3,8 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{ffi, VulkanDevice, VulkanDisplay, VulkanInstance};
-use glib::{prelude::*, translate::*};
+use crate::ffi;
 
 glib::wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -56,31 +55,6 @@ impl VulkanHandle {
     //#[doc(alias = "gst_vulkan_handle_free_shader")]
     //pub fn free_shader(&self, user_data: /*Unimplemented*/Option<Basic: Pointer>) {
     //    unsafe { TODO: call ffi:gst_vulkan_handle_free_shader() }
-    //}
-
-    #[doc(alias = "gst_vulkan_handle_context_query")]
-    pub fn context_query(
-        element: &impl IsA<gst::Element>,
-        query: &gst::Query,
-        display: Option<&impl IsA<VulkanDisplay>>,
-        instance: Option<&impl IsA<VulkanInstance>>,
-        device: Option<&impl IsA<VulkanDevice>>,
-    ) -> bool {
-        assert_initialized_main_thread!();
-        unsafe {
-            from_glib(ffi::gst_vulkan_handle_context_query(
-                element.as_ref().to_glib_none().0,
-                query.to_glib_none().0,
-                display.map(|p| p.as_ref()).to_glib_none().0,
-                instance.map(|p| p.as_ref()).to_glib_none().0,
-                device.map(|p| p.as_ref()).to_glib_none().0,
-            ))
-        }
-    }
-
-    //#[doc(alias = "gst_vulkan_handle_set_context")]
-    //pub fn set_context(element: &impl IsA<gst::Element>, context: &gst::Context, display: impl IsA<VulkanDisplay>, instance: impl IsA<VulkanInstance>) -> bool {
-    //    unsafe { TODO: call ffi:gst_vulkan_handle_set_context() }
     //}
 }
 

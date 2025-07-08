@@ -33,6 +33,7 @@ mod vulkan_full_screen_quad;
 mod vulkan_operation;
 mod vulkan_queue;
 mod vulkan_swapper;
+mod vulkan_utils;
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst_vulkan::prelude::*" without getting conflicts
@@ -54,3 +55,5 @@ pub mod subclass;
 
 mod caps_features;
 pub use caps_features::*;
+
+pub use vulkan_utils::context_query;
