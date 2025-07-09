@@ -117,7 +117,7 @@ status = "generate"
 [[object]]
 name = "GstVulkan.VulkanFullScreenQuad"
 status = "generate"
-concurrency = "none"
+version = "1.26.4"
 
 [[object]]
 name = "GstVulkan.VulkanHandle"

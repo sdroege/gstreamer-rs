@@ -24,7 +24,11 @@ pub use self::vulkan_device::VulkanDevice;
 mod vulkan_display;
 pub use self::vulkan_display::VulkanDisplay;
 
+#[cfg(feature = "v1_26_4")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_26_4")))]
 mod vulkan_full_screen_quad;
+#[cfg(feature = "v1_26_4")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_26_4")))]
 pub use self::vulkan_full_screen_quad::VulkanFullScreenQuad;
 
 mod vulkan_handle_pool;
@@ -88,6 +92,8 @@ pub(crate) mod traits {
     pub use super::vulkan_descriptor_pool::VulkanDescriptorPoolExt;
     pub use super::vulkan_device::VulkanDeviceExt;
     pub use super::vulkan_display::VulkanDisplayExt;
+    #[cfg(feature = "v1_26_4")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26_4")))]
     pub use super::vulkan_full_screen_quad::VulkanFullScreenQuadExt;
     pub use super::vulkan_handle_pool::VulkanHandlePoolExt;
     pub use super::vulkan_instance::VulkanInstanceExt;

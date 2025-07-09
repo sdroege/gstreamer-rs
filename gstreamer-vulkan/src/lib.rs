@@ -28,6 +28,7 @@ pub use crate::auto::*;
 
 mod vulkan_command_pool;
 mod vulkan_device;
+#[cfg(feature = "v1_26_4")]
 mod vulkan_full_screen_quad;
 #[cfg(feature = "v1_24")]
 mod vulkan_operation;
@@ -43,6 +44,7 @@ pub mod prelude {
 
     pub use super::vulkan_command_pool::VulkanCommandPoolExtManual;
     pub use super::vulkan_device::VulkanDeviceExtManual;
+    #[cfg(feature = "v1_26_4")]
     pub use super::vulkan_full_screen_quad::VulkanFullScreenQuadExtManual;
     #[cfg(feature = "v1_24")]
     pub use super::vulkan_operation::VulkanOperationExtManual;

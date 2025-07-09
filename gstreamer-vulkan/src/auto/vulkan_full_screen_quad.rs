@@ -29,6 +29,9 @@ impl VulkanFullScreenQuad {
     }
 }
 
+unsafe impl Send for VulkanFullScreenQuad {}
+unsafe impl Sync for VulkanFullScreenQuad {}
+
 pub trait VulkanFullScreenQuadExt: IsA<VulkanFullScreenQuad> + 'static {
     #[doc(alias = "gst_vulkan_full_screen_quad_draw")]
     fn draw(&self) -> Result<(), glib::Error> {
@@ -45,8 +48,6 @@ pub trait VulkanFullScreenQuadExt: IsA<VulkanFullScreenQuad> + 'static {
         }
     }
 
-    #[cfg(feature = "v1_22")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     #[doc(alias = "gst_vulkan_full_screen_quad_enable_blend")]
     fn enable_blend(&self, enable_blend: bool) {
         unsafe {
@@ -57,8 +58,6 @@ pub trait VulkanFullScreenQuadExt: IsA<VulkanFullScreenQuad> + 'static {
         }
     }
 
-    #[cfg(feature = "v1_22")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     #[doc(alias = "gst_vulkan_full_screen_quad_enable_clear")]
     fn enable_clear(&self, enable_clear: bool) {
         unsafe {
@@ -102,8 +101,6 @@ pub trait VulkanFullScreenQuadExt: IsA<VulkanFullScreenQuad> + 'static {
         }
     }
 
-    #[cfg(feature = "v1_26")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
     #[doc(alias = "gst_vulkan_full_screen_quad_get_queue")]
     #[doc(alias = "get_queue")]
     fn queue(&self) -> Option<VulkanQueue> {
@@ -132,15 +129,11 @@ pub trait VulkanFullScreenQuadExt: IsA<VulkanFullScreenQuad> + 'static {
         }
     }
 
-    //#[cfg(feature = "v1_22")]
-    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     //#[doc(alias = "gst_vulkan_full_screen_quad_set_blend_factors")]
     //fn set_blend_factors(&self, src_blend_factor: /*Ignored*/&vulkan::BlendFactor, dst_blend_factor: /*Ignored*/&vulkan::BlendFactor, src_alpha_blend_factor: /*Ignored*/&vulkan::BlendFactor, dst_alpha_blend_factor: /*Ignored*/&vulkan::BlendFactor) {
     //    unsafe { TODO: call ffi:gst_vulkan_full_screen_quad_set_blend_factors() }
     //}
 
-    //#[cfg(feature = "v1_22")]
-    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     //#[doc(alias = "gst_vulkan_full_screen_quad_set_blend_operation")]
     //fn set_blend_operation(&self, colour_blend_op: /*Ignored*/&vulkan::BlendOp, alpha_blend_op: /*Ignored*/&vulkan::BlendOp) {
     //    unsafe { TODO: call ffi:gst_vulkan_full_screen_quad_set_blend_operation() }
