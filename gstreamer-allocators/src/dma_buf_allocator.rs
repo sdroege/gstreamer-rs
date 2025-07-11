@@ -42,9 +42,9 @@ impl DmaBufMemoryRef {
     }
 }
 
-impl DmaBufAllocator {
+pub trait DmaBufAllocatorExtManual: IsA<DmaBufAllocator> + 'static {
     #[doc(alias = "gst_dmabuf_allocator_alloc")]
-    pub unsafe fn alloc<A: IntoRawFd>(
+    unsafe fn alloc_dmabuf<A: IntoRawFd>(
         &self,
         fd: A,
         size: usize,
@@ -61,7 +61,7 @@ impl DmaBufAllocator {
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     #[doc(alias = "gst_dmabuf_allocator_alloc_with_flags")]
-    pub unsafe fn alloc_with_flags(
+    unsafe fn alloc_dmabuf_with_flags(
         &self,
         fd: RawFd,
         size: usize,
@@ -77,3 +77,5 @@ impl DmaBufAllocator {
         .ok_or_else(|| glib::bool_error!("Failed to allocate memory"))
     }
 }
+
+impl<O: IsA<DmaBufAllocator>> DmaBufAllocatorExtManual for O {}

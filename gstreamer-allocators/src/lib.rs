@@ -59,6 +59,11 @@ pub mod prelude {
     pub use gst::prelude::*;
 
     pub use crate::auto::traits::*;
+    #[cfg(any(target_os = "linux", docsrs))]
+    pub use crate::dma_buf_allocator::DmaBufAllocatorExtManual;
+    #[cfg(any(all(feature = "v1_24", target_os = "linux"), docsrs))]
+    pub use crate::drm_dumb_allocator::DRMDumbAllocatorExtManual;
+    pub use crate::fd_allocator::FdAllocatorExtManual;
 }
 
 pub mod subclass;

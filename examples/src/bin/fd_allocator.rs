@@ -22,6 +22,7 @@ use std::{
 use anyhow::Error;
 use futures::StreamExt;
 use gst::{element_error, prelude::*};
+use gst_allocators::prelude::*;
 use memmap2::MmapMut;
 use uds::UnixStreamExt;
 
@@ -83,7 +84,7 @@ fn create_receiver_pipeline(
                     // will be closed when the memory is released.
                     let memory = unsafe {
                         fd_allocator
-                            .alloc(*fd, video_info.size(), gst_allocators::FdMemoryFlags::NONE)
+                            .alloc_fd(*fd, video_info.size(), gst_allocators::FdMemoryFlags::NONE)
                             .unwrap()
                     };
                     let mut buffer = gst::Buffer::new();

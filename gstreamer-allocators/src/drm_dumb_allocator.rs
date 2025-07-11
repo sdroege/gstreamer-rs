@@ -58,9 +58,11 @@ impl DRMDumbAllocator {
             .ok_or_else(|| glib::bool_error!("Failed to create allocator"))
         }
     }
+}
 
+pub trait DRMDumbAllocatorExtManual: IsA<DRMDumbAllocator> + 'static {
     #[doc(alias = "gst_drm_dumb_allocator_alloc")]
-    pub unsafe fn alloc(
+    unsafe fn alloc_drm_dumb(
         &self,
         drm_fourcc: u32,
         width: u32,
@@ -69,7 +71,7 @@ impl DRMDumbAllocator {
         skip_assert_initialized!();
         let mut out_pitch = mem::MaybeUninit::uninit();
         Option::<_>::from_glib_full(ffi::gst_drm_dumb_allocator_alloc(
-            self.to_glib_none().0,
+            self.as_ref().to_glib_none().0,
             drm_fourcc,
             width,
             height,
@@ -79,3 +81,5 @@ impl DRMDumbAllocator {
         .map(|mem| (mem, unsafe { out_pitch.assume_init() }))
     }
 }
+
+impl<O: IsA<DRMDumbAllocator>> DRMDumbAllocatorExtManual for O {}

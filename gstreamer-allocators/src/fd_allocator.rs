@@ -44,9 +44,9 @@ impl FdMemoryRef {
     }
 }
 
-impl FdAllocator {
+pub trait FdAllocatorExtManual: IsA<FdAllocator> + 'static {
     #[doc(alias = "gst_fd_allocator_alloc")]
-    pub unsafe fn alloc(
+    unsafe fn alloc_fd(
         &self,
         fd: RawFd,
         size: usize,
@@ -65,7 +65,7 @@ impl FdAllocator {
     #[cfg(feature = "v1_28")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
     #[doc(alias = "gst_fd_allocator_alloc_full")]
-    pub unsafe fn alloc_full(
+    unsafe fn alloc_fd_full(
         allocator: &impl IsA<gst::Allocator>,
         fd: RawFd,
         maxsize: usize,
@@ -86,3 +86,5 @@ impl FdAllocator {
         }
     }
 }
+
+impl<O: IsA<FdAllocator>> FdAllocatorExtManual for O {}
