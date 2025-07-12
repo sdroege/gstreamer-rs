@@ -222,12 +222,16 @@ impl BufferPoolConfigRef {
     }
 
     #[doc(alias = "gst_buffer_pool_config_set_allocator")]
-    pub fn set_allocator(&self, allocator: Option<&Allocator>, params: Option<&AllocationParams>) {
+    pub fn set_allocator(
+        &self,
+        allocator: Option<&impl IsA<Allocator>>,
+        params: Option<&AllocationParams>,
+    ) {
         assert!(allocator.is_some() || params.is_some());
         unsafe {
             ffi::gst_buffer_pool_config_set_allocator(
                 self.0.as_mut_ptr(),
-                allocator.to_glib_none().0,
+                allocator.to_glib_none().0 as *mut ffi::GstAllocator,
                 match params {
                     Some(val) => val.as_ptr(),
                     None => ptr::null(),
