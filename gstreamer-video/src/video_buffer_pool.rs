@@ -137,8 +137,10 @@ impl<'a> ToGlibPtr<'a, *const ffi::GstVideoAlignment> for VideoAlignment {
 
 pub trait VideoBufferPoolConfig {
     #[doc(alias = "get_video_alignment")]
+    #[doc(alias = "gst_buffer_pool_config_get_video_alignment")]
     fn video_alignment(&self) -> Option<VideoAlignment>;
 
+    #[doc(alias = "gst_buffer_pool_config_set_video_alignment")]
     fn set_video_alignment(&mut self, align: &VideoAlignment);
 }
 
