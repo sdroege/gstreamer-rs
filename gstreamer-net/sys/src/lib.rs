@@ -286,6 +286,9 @@ extern "C" {
         remote_port: c_int,
         base_time: gst::GstClockTime,
     ) -> *mut gst::GstClock;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_net_client_clock_deinit();
 
     //=========================================================================
     // GstNetTimeProvider

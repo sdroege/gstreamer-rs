@@ -8,6 +8,9 @@
 #include <stdio.h>
 
 int main() {
+    printf("%s;%zu;%zu\n", "GstAnalyticsBatchBuffer", sizeof(GstAnalyticsBatchBuffer), alignof(GstAnalyticsBatchBuffer));
+    printf("%s;%zu;%zu\n", "GstAnalyticsBatchMeta", sizeof(GstAnalyticsBatchMeta), alignof(GstAnalyticsBatchMeta));
+    printf("%s;%zu;%zu\n", "GstAnalyticsBatchStream", sizeof(GstAnalyticsBatchStream), alignof(GstAnalyticsBatchStream));
     printf("%s;%zu;%zu\n", "GstAnalyticsClsMtd", sizeof(GstAnalyticsClsMtd), alignof(GstAnalyticsClsMtd));
     printf("%s;%zu;%zu\n", "GstAnalyticsMtd", sizeof(GstAnalyticsMtd), alignof(GstAnalyticsMtd));
     printf("%s;%zu;%zu\n", "GstAnalyticsMtdImpl", sizeof(GstAnalyticsMtdImpl), alignof(GstAnalyticsMtdImpl));

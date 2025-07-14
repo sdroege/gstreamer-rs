@@ -844,6 +844,7 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(guint) GST_GL_DISPLAY_TYPE_WIN32", "8"),
     ("(guint) GST_GL_DISPLAY_TYPE_WINRT", "1024"),
     ("(guint) GST_GL_DISPLAY_TYPE_X11", "1"),
+    ("(guint) GST_GL_DRM_FORMAT_DIRECT_IMPORT", "8"),
     ("(guint) GST_GL_DRM_FORMAT_INCLUDE_EMULATED", "4"),
     ("(guint) GST_GL_DRM_FORMAT_INCLUDE_EXTERNAL", "1"),
     ("(guint) GST_GL_DRM_FORMAT_LINEAR_ONLY", "2"),

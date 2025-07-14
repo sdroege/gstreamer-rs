@@ -876,10 +876,10 @@ pub trait RTSPStreamExt: IsA<RTSPStream> + 'static {
     #[doc(alias = "gst_rtsp_stream_transport_filter")]
     fn transport_filter(
         &self,
-        func: Option<&mut dyn (FnMut(&RTSPStream, &RTSPStreamTransport) -> RTSPFilterResult)>,
+        func: Option<&mut dyn FnMut(&RTSPStream, &RTSPStreamTransport) -> RTSPFilterResult>,
     ) -> Vec<RTSPStreamTransport> {
         let mut func_data: Option<
-            &mut dyn (FnMut(&RTSPStream, &RTSPStreamTransport) -> RTSPFilterResult),
+            &mut dyn FnMut(&RTSPStream, &RTSPStreamTransport) -> RTSPFilterResult,
         > = func;
         unsafe extern "C" fn func_func(
             stream: *mut ffi::GstRTSPStream,
@@ -890,7 +890,7 @@ pub trait RTSPStreamExt: IsA<RTSPStream> + 'static {
             let trans = from_glib_borrow(trans);
             let callback = user_data
                 as *mut Option<
-                    &mut dyn (FnMut(&RTSPStream, &RTSPStreamTransport) -> RTSPFilterResult),
+                    &mut dyn FnMut(&RTSPStream, &RTSPStreamTransport) -> RTSPFilterResult,
                 >;
             if let Some(ref mut callback) = *callback {
                 callback(&stream, &trans)
@@ -905,7 +905,7 @@ pub trait RTSPStreamExt: IsA<RTSPStream> + 'static {
             None
         };
         let super_callback0: &mut Option<
-            &mut dyn (FnMut(&RTSPStream, &RTSPStreamTransport) -> RTSPFilterResult),
+            &mut dyn FnMut(&RTSPStream, &RTSPStreamTransport) -> RTSPFilterResult,
         > = &mut func_data;
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_rtsp_stream_transport_filter(

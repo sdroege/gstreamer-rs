@@ -104,6 +104,16 @@ impl NetClientClock {
         ObjectExt::set_property(self, "round-trip-limit", round_trip_limit)
     }
 
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "gst_net_client_clock_deinit")]
+    pub fn deinit() {
+        assert_initialized_main_thread!();
+        unsafe {
+            ffi::gst_net_client_clock_deinit();
+        }
+    }
+
     #[doc(alias = "address")]
     pub fn connect_address_notify<F: Fn(&Self) + Send + Sync + 'static>(
         &self,

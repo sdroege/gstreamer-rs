@@ -220,6 +220,9 @@ pub const GST_GL_DRM_FORMAT_LINEAR_ONLY: GstGLDrmFormatFlags = 2;
 #[cfg(feature = "v1_26")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
 pub const GST_GL_DRM_FORMAT_INCLUDE_EMULATED: GstGLDrmFormatFlags = 4;
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+pub const GST_GL_DRM_FORMAT_DIRECT_IMPORT: GstGLDrmFormatFlags = 8;
 
 pub type GstGLPlatform = c_uint;
 pub const GST_GL_PLATFORM_NONE: GstGLPlatform = 0;

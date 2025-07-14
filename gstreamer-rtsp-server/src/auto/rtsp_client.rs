@@ -136,9 +136,9 @@ pub trait RTSPClientExt: IsA<RTSPClient> + 'static {
     #[doc(alias = "gst_rtsp_client_session_filter")]
     fn session_filter(
         &self,
-        func: Option<&mut dyn (FnMut(&RTSPClient, &RTSPSession) -> RTSPFilterResult)>,
+        func: Option<&mut dyn FnMut(&RTSPClient, &RTSPSession) -> RTSPFilterResult>,
     ) -> Vec<RTSPSession> {
-        let mut func_data: Option<&mut dyn (FnMut(&RTSPClient, &RTSPSession) -> RTSPFilterResult)> =
+        let mut func_data: Option<&mut dyn FnMut(&RTSPClient, &RTSPSession) -> RTSPFilterResult> =
             func;
         unsafe extern "C" fn func_func(
             client: *mut ffi::GstRTSPClient,
@@ -148,7 +148,7 @@ pub trait RTSPClientExt: IsA<RTSPClient> + 'static {
             let client = from_glib_borrow(client);
             let sess = from_glib_borrow(sess);
             let callback = user_data
-                as *mut Option<&mut dyn (FnMut(&RTSPClient, &RTSPSession) -> RTSPFilterResult)>;
+                as *mut Option<&mut dyn FnMut(&RTSPClient, &RTSPSession) -> RTSPFilterResult>;
             if let Some(ref mut callback) = *callback {
                 callback(&client, &sess)
             } else {
@@ -162,7 +162,7 @@ pub trait RTSPClientExt: IsA<RTSPClient> + 'static {
             None
         };
         let super_callback0: &mut Option<
-            &mut dyn (FnMut(&RTSPClient, &RTSPSession) -> RTSPFilterResult),
+            &mut dyn FnMut(&RTSPClient, &RTSPSession) -> RTSPFilterResult,
         > = &mut func_data;
         unsafe {
             FromGlibPtrContainer::from_glib_full(ffi::gst_rtsp_client_session_filter(

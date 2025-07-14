@@ -203,6 +203,27 @@ fn get_c_output(name: &str) -> Result<String, Box<dyn Error>> {
 
 const RUST_LAYOUTS: &[(&str, Layout)] = &[
     (
+        "GstAnalyticsBatchBuffer",
+        Layout {
+            size: size_of::<GstAnalyticsBatchBuffer>(),
+            alignment: align_of::<GstAnalyticsBatchBuffer>(),
+        },
+    ),
+    (
+        "GstAnalyticsBatchMeta",
+        Layout {
+            size: size_of::<GstAnalyticsBatchMeta>(),
+            alignment: align_of::<GstAnalyticsBatchMeta>(),
+        },
+    ),
+    (
+        "GstAnalyticsBatchStream",
+        Layout {
+            size: size_of::<GstAnalyticsBatchStream>(),
+            alignment: align_of::<GstAnalyticsBatchStream>(),
+        },
+    ),
+    (
         "GstAnalyticsClsMtd",
         Layout {
             size: size_of::<GstAnalyticsClsMtd>(),
@@ -317,6 +338,10 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(guint) GST_ANALYTICS_REL_TYPE_NONE", "0"),
     ("(guint) GST_ANALYTICS_REL_TYPE_N_TO_N", "16"),
     ("(guint) GST_ANALYTICS_REL_TYPE_RELATE_TO", "8"),
+    (
+        "GST_CAPS_FEATURE_META_GST_ANALYTICS_BATCH_META",
+        "meta:GstAnalyticsBatchMeta",
+    ),
     ("GST_INF_RELATION_SPAN", "-1"),
     ("(gint) GST_SEGMENTATION_TYPE_INSTANCE", "1"),
     ("(gint) GST_SEGMENTATION_TYPE_SEMANTIC", "0"),

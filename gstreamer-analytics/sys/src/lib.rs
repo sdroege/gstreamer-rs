@@ -88,6 +88,7 @@ pub type GstTensorLayout = c_int;
 pub const GST_TENSOR_LAYOUT_CONTIGUOUS: GstTensorLayout = 0;
 
 // Constants
+pub const GST_CAPS_FEATURE_META_GST_ANALYTICS_BATCH_META: &[u8] = b"meta:GstAnalyticsBatchMeta\0";
 pub const GST_INF_RELATION_SPAN: c_int = -1;
 pub const GST_ANALYTICS_MTD_TYPE_ANY: c_int = 0;
 
@@ -103,6 +104,68 @@ pub const GST_ANALYTICS_REL_TYPE_N_TO_N: GstAnalyticsRelTypes = 16;
 pub const GST_ANALYTICS_REL_TYPE_ANY: GstAnalyticsRelTypes = 2147483647;
 
 // Records
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstAnalyticsBatchBuffer {
+    pub sticky_events: *mut *mut gst::GstEvent,
+    pub n_sticky_events: size_t,
+    pub serialized_events: *mut *mut gst::GstEvent,
+    pub n_serialized_events: size_t,
+    pub buffer: *mut gst::GstBuffer,
+    pub buffer_list: *mut gst::GstBufferList,
+    pub padding: [gpointer; 4],
+}
+
+impl ::std::fmt::Debug for GstAnalyticsBatchBuffer {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstAnalyticsBatchBuffer @ {self:p}"))
+            .field("sticky_events", &self.sticky_events)
+            .field("n_sticky_events", &self.n_sticky_events)
+            .field("serialized_events", &self.serialized_events)
+            .field("n_serialized_events", &self.n_serialized_events)
+            .field("buffer", &self.buffer)
+            .field("buffer_list", &self.buffer_list)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstAnalyticsBatchMeta {
+    pub meta: gst::GstMeta,
+    pub streams: *mut GstAnalyticsBatchStream,
+    pub n_streams: size_t,
+}
+
+impl ::std::fmt::Debug for GstAnalyticsBatchMeta {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstAnalyticsBatchMeta @ {self:p}"))
+            .field("meta", &self.meta)
+            .field("streams", &self.streams)
+            .field("n_streams", &self.n_streams)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstAnalyticsBatchStream {
+    pub index: c_uint,
+    pub buffers: *mut GstAnalyticsBatchBuffer,
+    pub n_buffers: size_t,
+    pub padding: [gpointer; 4],
+}
+
+impl ::std::fmt::Debug for GstAnalyticsBatchStream {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstAnalyticsBatchStream @ {self:p}"))
+            .field("index", &self.index)
+            .field("buffers", &self.buffers)
+            .field("n_buffers", &self.n_buffers)
+            .finish()
+    }
+}
+
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct GstAnalyticsClsMtd {
@@ -254,6 +317,32 @@ impl ::std::fmt::Debug for GstTensorMeta {
 }
 
 extern "C" {
+
+    //=========================================================================
+    // GstAnalyticsBatchBuffer
+    //=========================================================================
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_analytics_batch_buffer_get_caps(
+        buffer: *mut GstAnalyticsBatchBuffer,
+    ) -> *mut gst::GstCaps;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_analytics_batch_buffer_get_segment(
+        buffer: *mut GstAnalyticsBatchBuffer,
+    ) -> *const gst::GstSegment;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_analytics_batch_buffer_get_stream_id(
+        buffer: *mut GstAnalyticsBatchBuffer,
+    ) -> *const c_char;
+
+    //=========================================================================
+    // GstAnalyticsBatchMeta
+    //=========================================================================
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_analytics_batch_meta_get_info() -> *const gst::GstMetaInfo;
 
     //=========================================================================
     // GstAnalyticsClsMtd
@@ -573,6 +662,14 @@ extern "C" {
     //=========================================================================
     // Other functions
     //=========================================================================
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_analytics_batch_meta_api_get_type() -> GType;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_buffer_add_analytics_batch_meta(
+        buffer: *mut gst::GstBuffer,
+    ) -> *mut GstAnalyticsBatchMeta;
     pub fn gst_buffer_add_analytics_relation_meta(
         buffer: *mut gst::GstBuffer,
     ) -> *mut GstAnalyticsRelationMeta;
@@ -583,6 +680,11 @@ extern "C" {
     #[cfg(feature = "v1_26")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
     pub fn gst_buffer_add_tensor_meta(buffer: *mut gst::GstBuffer) -> *mut GstTensorMeta;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_buffer_get_analytics_batch_meta(
+        buffer: *mut gst::GstBuffer,
+    ) -> *mut GstAnalyticsBatchMeta;
     pub fn gst_buffer_get_analytics_relation_meta(
         buffer: *mut gst::GstBuffer,
     ) -> *mut GstAnalyticsRelationMeta;
