@@ -43,6 +43,13 @@ pub use crate::tracking::*;
 mod classification;
 pub use crate::classification::*;
 
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+mod batchmeta;
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+pub use crate::batchmeta::*;
+
 mod enums;
 
 // Re-export all the traits in a prelude module, so that applications
