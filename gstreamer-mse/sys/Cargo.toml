@@ -5,6 +5,7 @@ authors = ["Sebastian Dröge <sebastian@centricular.com>", "Simon Wülker <simon
 description = "FFI bindings to libgstmse-1.0"
 documentation = "https://gstreamer.pages.freedesktop.org/gstreamer-rs/stable/latest/docs/gstreamer_mse_sys/"
 keywords = ["ffi", "gstreamer", "gnome", "multimedia"]
+license = "MIT"
 readme = "README.md"
 
 [package.version]
