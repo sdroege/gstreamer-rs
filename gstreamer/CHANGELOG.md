@@ -5,6 +5,40 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.24.0] - 2025-07-15
+### Changed
+- Compatible with gtk-rs-core 0.21 / gtk4-rs 0.10.
+- Update GStreamer gir files to latest (upcoming) 1.28 APIs.
+- Minimum support Rust version is updated from 1.71.1 to 1.83.
+- `gst::Structure` fields and fields of related API are using `gst::IdStr`
+  when built against GStreamer 1.26 and use a local implementation of that
+  as fallback on older versions to offer the same API.
+- Rework of `gst_validate` action and action type API.
+- Rework of `gst_play::PlayMessage` API to be easier to use correctly.
+- Remove `bool` result from `gst::BufferList::foreach()` as return values are
+  more flexibly handled via mutable variables captured by the closure.
+- `gst::Element::foreach_pad()` returns `ControlFlow` instead of `bool` from
+  callback now.
+- Return iterators instead of `Vec`s from more functions.
+- Make `gst::event::SelectStreams` builder API for convenient.
+- Add `#[must_use]` annotations to all iterator structs.
+- Return `gst_video::VideoInfo` and `gst_audio::AudioInfo` references from
+  more functions instead of copies.
+- Change some `gst::Clock` functions to not return `Option`s anymore.
+- Change `gst_sdp::SDPMedia::set_media_from_caps()` to a method.
+- Various `gst_allocators` allocator API was moved to extension traits and
+  renamed to not have the same name as a method of the parent class.
+
+### Added
+- Allow setting generic properties as part of the `gst_app::AppSink` and
+  `AppSrc`, `gst::Bin` and `gst::Pipeline` builders.
+- Bindings for the `gstreamer-mse` library.
+- Bindings for the `gstreamer-d3d12` library.
+
+### Removed
+- API deprecated in previous releases was removed.
+- `gst_webrtc::DataChannel` duplicated signal API was removed.
+
 ## [0.23.7] - 2025-06-20
 ### Fixed
 - Provide existing messages immediately from a `gst::Bus` stream when creating
@@ -1879,7 +1913,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.23.7...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.24.0...HEAD
+[0.24.0]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.23.7...0.24.0
 [0.23.7]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.23.6...0.23.7
 [0.23.6]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.23.5...0.23.6
 [0.23.5]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.23.4...0.23.5
