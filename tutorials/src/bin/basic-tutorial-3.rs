@@ -7,7 +7,7 @@ fn tutorial_main() {
     // Initialize GStreamer
     gst::init().unwrap();
 
-    let uri = "http://desmottes.be/~cassidy/files/brol/test.mkv";
+    let uri = "https://gstreamer.freedesktop.org/data/media/sintel_trailer-480p.webm";
 
     // Create the elements
     let source = gst::ElementFactory::make("uridecodebin")
