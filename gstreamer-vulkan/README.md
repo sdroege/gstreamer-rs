@@ -1,8 +1,8 @@
-# gstreamer-rs [![crates.io](https://img.shields.io/crates/v/gstreamer-gl.svg)](https://crates.io/crates/gstreamer-gl) [![pipeline status](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/badges/main/pipeline.svg)](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/commits/main)
+# gstreamer-rs [![crates.io](https://img.shields.io/crates/v/gstreamer-vulkan.svg)](https://crates.io/crates/gstreamer-vulkan) [![pipeline status](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/badges/main/pipeline.svg)](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/commits/main)
 
-[GStreamer](https://gstreamer.freedesktop.org/) (OpenGL library)
+[GStreamer](https://gstreamer.freedesktop.org/) (Vulkan library)
 bindings for Rust.  Documentation can be found
-[here](https://gstreamer.pages.freedesktop.org/gstreamer-rs/stable/latest/docs/gstreamer_gl/).
+[here](https://gstreamer.pages.freedesktop.org/gstreamer-rs/stable/latest/docs/gstreamer_vulkan/).
 
 These bindings are providing a safe API that can be used to interface with
 GStreamer, e.g. for writing GStreamer-based applications and GStreamer plugins.

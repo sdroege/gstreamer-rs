@@ -1,6 +1,6 @@
-# gstreamer-sys [![crates.io](https://img.shields.io/crates/v/gstreamer-gl-sys.svg)](https://crates.io/crates/gstreamer-gl-sys) [![pipeline status](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/badges/main/pipeline.svg)](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/commits/main)
+# gstreamer-sys [![crates.io](https://img.shields.io/crates/v/gstreamer-vulkan-sys.svg)](https://crates.io/crates/gstreamer-vulkan-sys) [![pipeline status](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/badges/main/pipeline.svg)](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/commits/main)
 
-[GStreamer](https://gstreamer.freedesktop.org/) (OpenGL library) FFI bindings for Rust.
+[GStreamer](https://gstreamer.freedesktop.org/) (Vulkan library) FFI bindings for Rust.
 
 These bindings are providing unsafe FFI API that can be used to interface with
 GStreamer. Generally they are meant to be used as the building block for

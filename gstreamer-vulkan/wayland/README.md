@@ -1,6 +1,6 @@
-# gstreamer-rs [![crates.io](https://img.shields.io/crates/v/gstreamer-gl-wayland.svg)](https://crates.io/crates/gstreamer-gl-wayland) [![pipeline status](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/badges/main/pipeline.svg)](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/commits/main)
+# gstreamer-rs [![crates.io](https://img.shields.io/crates/v/gstreamer-vulkan-wayland.svg)](https://crates.io/crates/gstreamer-vulkan-wayland) [![pipeline status](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/badges/main/pipeline.svg)](https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/commits/main)
 
-[GStreamer](https://gstreamer.freedesktop.org/) (OpenGL library, Wayland support)
+[GStreamer](https://gstreamer.freedesktop.org/) (Vulkan library, Wayland support)
 bindings for Rust.  Documentation can be found
 [here](https://gstreamer.pages.freedesktop.org/gstreamer-rs/stable/latest/docs/gstreamer_gl_wayland/).
 
