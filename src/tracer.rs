@@ -105,7 +105,7 @@ unsafe impl<T: TracingTracerImpl> IsSubclassable<T> for TracingTracer {
 impl ObjectImpl for TracingTracerPriv {
     fn constructed(&self) {
         if let Some(params) = self.obj().property::<Option<String>>("params") {
-            let tmp = format!("params,{}", params);
+            let tmp = format!("params,{params}");
             info!("{:?} params: {:?}", self.obj(), tmp);
             let structure = gstreamer::Structure::from_str(&tmp).unwrap_or_else(|e| {
                 error!("Invalid params string: {:?}: {e:?}", tmp);

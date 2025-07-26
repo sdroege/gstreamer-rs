@@ -280,7 +280,7 @@ fn span_quark() -> &'static gstreamer::glib::Quark {
         let mut hasher = std::collections::hash_map::DefaultHasher::new();
         std::hash::Hash::hash(&type_id, &mut hasher);
         let type_id_hash = std::hash::Hasher::finish(&hasher);
-        let key = format!("tracing-gstreamer:{}\0", type_id_hash);
+        let key = format!("tracing-gstreamer:{type_id_hash}\0");
         let gstr = gstreamer::glib::GStr::from_utf8_with_nul(key.as_bytes()).unwrap();
         gstreamer::glib::Quark::from_str(gstr)
     });
