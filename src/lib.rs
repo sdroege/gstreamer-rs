@@ -24,6 +24,7 @@ mod callsite;
 #[cfg(feature = "tracing-chrome")]
 mod chrometracer;
 
+#[cfg(feature = "tracing-subscriber")]
 mod fmttracer;
 mod log;
 mod tracer;
@@ -153,6 +154,7 @@ pub fn register(p: Option<&gstreamer::Plugin>) -> Result<(), gstreamer::glib::Bo
         <chrometracer::ChromeTracer as gstreamer::glib::types::StaticType>::static_type(),
     )?;
 
+    #[cfg(feature = "tracing-subscriber")]
     gstreamer::Tracer::register(
         p,
         "fmttracing",

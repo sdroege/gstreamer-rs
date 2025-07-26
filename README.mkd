@@ -174,7 +174,7 @@ then open it in [perfetto](https://ui.perfetto.dev/) to analyze them.
 # Builds the tracer plugin and make sure GStreamer finds it.
 # Enable the tracer with the fmt tracing output and activating GStreamer info logs
 # Logs will be output on stderr in the `tracing-subscriber::fmt` format
-cargo build && \
+cargo build --features "tracing-subscriber" && \
   GST_PLUGIN_PATH=$PWD/target/debug/:$GST_PLUGIN_PATH \
   RUST_LOG=debug GST_TRACERS="fmttracing(log-level=4)" \
   gst-launch-1.0 playbin3 uri="https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_trailer-480p.webm"
