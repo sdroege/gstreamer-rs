@@ -13,7 +13,7 @@ use gstreamer::{
     prelude::{IsA, ObjectExt},
 };
 use libc::{c_char, c_int, c_void};
-use once_cell::sync::OnceCell;
+use std::sync::LazyLock;
 use std::{convert::TryFrom, ffi::CStr};
 use tracing_core::{Callsite, Event, Level};
 
@@ -266,7 +266,6 @@ pub(crate) fn debug_remove_log_function() {
 
 #[inline]
 fn span_quark() -> &'static gstreamer::glib::Quark {
-    static ELEMENT_SPAN_QUARK: OnceCell<gstreamer::glib::Quark> = OnceCell::new();
     // Generate a unique TypeId specifically for Span quark’s name. This gives some probabilistic
     // security against users of this library overwriting our span with their own types, making
     // attach_span unsound.
@@ -276,7 +275,7 @@ fn span_quark() -> &'static gstreamer::glib::Quark {
     #[allow(dead_code)]
     struct QDataTracingSpan(tracing::Span);
 
-    ELEMENT_SPAN_QUARK.get_or_init(|| {
+    static ELEMENT_SPAN_QUARK: LazyLock<gstreamer::glib::Quark> = LazyLock::new(|| {
         let type_id = std::any::TypeId::of::<QDataTracingSpan>();
         let mut hasher = std::collections::hash_map::DefaultHasher::new();
         std::hash::Hash::hash(&type_id, &mut hasher);
@@ -284,7 +283,9 @@ fn span_quark() -> &'static gstreamer::glib::Quark {
         let key = format!("tracing-gstreamer:{}\0", type_id_hash);
         let gstr = gstreamer::glib::GStr::from_utf8_with_nul(key.as_bytes()).unwrap();
         gstreamer::glib::Quark::from_str(gstr)
-    })
+    });
+
+    &ELEMENT_SPAN_QUARK
 }
 
 /// Attach a span to a GStreamer object.

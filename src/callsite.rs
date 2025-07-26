@@ -1,4 +1,4 @@
-use once_cell::sync::OnceCell;
+use std::sync::LazyLock;
 use std::{
     alloc::GlobalAlloc,
     sync::{
@@ -165,10 +165,11 @@ impl Ord for Key<'_> {
 
 impl DynamicCallsites {
     pub(crate) fn get() -> &'static Self {
-        static MAP: OnceCell<DynamicCallsites> = OnceCell::new();
-        MAP.get_or_init(|| DynamicCallsites {
+        static MAP: LazyLock<DynamicCallsites> = LazyLock::new(|| DynamicCallsites {
             data: std::sync::Mutex::new(Map::new()),
-        })
+        });
+
+        &MAP
     }
 
     #[allow(clippy::too_many_arguments)] // This is internal to the crate, clippy.
