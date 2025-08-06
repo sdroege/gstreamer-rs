@@ -74,7 +74,6 @@ impl VideoMeta {
             return Err(glib::bool_error!("Unsupported video format {}", format));
         }
 
-        let n_planes = offset.len() as u32;
         let info_builder = crate::VideoInfo::builder(format, width, height)
             .offset(offset)
             .stride(stride);
@@ -86,6 +85,25 @@ impl VideoMeta {
         );
 
         let info = info_builder.build()?;
+
+        Self::add_from_info(buffer, video_frame_flags, &info)
+    }
+
+    pub fn add_from_info<'a>(
+        buffer: &'a mut gst::BufferRef,
+        video_frame_flags: crate::VideoFrameFlags,
+        info: &crate::VideoInfo,
+    ) -> Result<gst::MetaRefMut<'a, Self, gst::meta::Standalone>, glib::BoolError> {
+        skip_assert_initialized!();
+
+        if info.format() == crate::VideoFormat::Unknown
+            || info.format() == crate::VideoFormat::Encoded
+        {
+            return Err(glib::bool_error!(
+                "Unsupported video format {}",
+                info.format()
+            ));
+        }
 
         if !info.is_valid() {
             return Err(glib::bool_error!("Invalid video info"));
@@ -103,12 +121,12 @@ impl VideoMeta {
             let meta = ffi::gst_buffer_add_video_meta_full(
                 buffer.as_mut_ptr(),
                 video_frame_flags.into_glib(),
-                format.into_glib(),
-                width,
-                height,
-                n_planes,
-                offset.as_ptr() as *mut _,
-                stride.as_ptr() as *mut _,
+                info.format().into_glib(),
+                info.width(),
+                info.height(),
+                info.n_planes(),
+                info.offset().as_ptr() as *mut _,
+                info.stride().as_ptr() as *mut _,
             );
 
             if meta.is_null() {
