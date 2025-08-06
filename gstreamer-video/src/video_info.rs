@@ -404,21 +404,11 @@ impl<'a> VideoInfoBuilder<'a> {
             }
 
             if let Some(offset) = self.offset {
-                if offset.len() != ((*info.finfo).n_planes as usize) {
-                    return Err(glib::bool_error!("Failed to build VideoInfo"));
-                }
-
-                let n_planes = (*info.finfo).n_planes as usize;
-                info.offset[..n_planes].copy_from_slice(&offset[..n_planes]);
+                info.offset[..offset.len()].copy_from_slice(offset);
             }
 
             if let Some(stride) = self.stride {
-                if stride.len() != ((*info.finfo).n_planes as usize) {
-                    return Err(glib::bool_error!("Failed to build VideoInfo"));
-                }
-
-                let n_planes = (*info.finfo).n_planes as usize;
-                info.stride[..n_planes].copy_from_slice(&stride[..n_planes]);
+                info.stride[..stride.len()].copy_from_slice(stride);
             }
 
             if let Some(multiview_mode) = self.multiview_mode {
