@@ -139,6 +139,7 @@ unsafe extern "C" fn instance_init(
 
     // TODO: Could also implement alloc()
     (*allocator).object.flags |= ffi::GST_ALLOCATOR_FLAG_CUSTOM_ALLOC;
+    (*allocator).object.flags |= ffi::GST_OBJECT_FLAG_MAY_BE_LEAKED;
 }
 
 fn rust_allocator() -> &'static crate::Allocator {
