@@ -94,9 +94,9 @@ pub trait VideoFilterImplExt: VideoFilterImpl {
                     {
                         Err(gst::FlowError::NotSupported)
                     } else {
-                        unreachable!(concat!(
+                        unreachable!(
                             "parent `transform_frame` called while transform operates in-place"
-                        ));
+                        );
                     }
                 })
         }
@@ -120,9 +120,9 @@ pub trait VideoFilterImplExt: VideoFilterImpl {
                         "transform operates in-place"
                     ));
                 } else {
-                    unreachable!(concat!(
+                    unreachable!(
                         "parent `transform_frame` called while transform doesn't operate in-place"
-                    ));
+                    );
                 }
             });
 
