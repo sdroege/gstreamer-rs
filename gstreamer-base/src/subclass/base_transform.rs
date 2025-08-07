@@ -374,9 +374,7 @@ pub trait BaseTransformImplExt: sealed::Sealed + ObjectSubclass {
                         "transform doesn't operate in-place"
                     ))
                 } else {
-                    unreachable!(concat!(
-                        "parent `get_unit_size` called while transform operates in-place"
-                    ))
+                    unreachable!("parent `get_unit_size` called while transform operates in-place")
                 }
             });
 
@@ -501,9 +499,7 @@ pub trait BaseTransformImplExt: sealed::Sealed + ObjectSubclass {
                     if !self.obj().unsafe_cast_ref::<BaseTransform>().is_in_place() {
                         Err(gst::FlowError::NotSupported)
                     } else {
-                        unreachable!(concat!(
-                            "parent `transform` called while transform operates in-place"
-                        ));
+                        unreachable!("parent `transform` called while transform operates in-place");
                     }
                 })
         }
@@ -523,9 +519,9 @@ pub trait BaseTransformImplExt: sealed::Sealed + ObjectSubclass {
                         "transform operates in-place"
                     ));
                 } else {
-                    unreachable!(concat!(
+                    unreachable!(
                         "parent `transform` called while transform doesn't operate in-place"
-                    ));
+                    );
                 }
             });
 

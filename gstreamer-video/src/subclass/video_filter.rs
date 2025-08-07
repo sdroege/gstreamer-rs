@@ -99,9 +99,9 @@ pub trait VideoFilterImplExt: sealed::Sealed + ObjectSubclass {
                     {
                         Err(gst::FlowError::NotSupported)
                     } else {
-                        unreachable!(concat!(
+                        unreachable!(
                             "parent `transform_frame` called while transform operates in-place"
-                        ));
+                        );
                     }
                 })
         }
@@ -125,9 +125,9 @@ pub trait VideoFilterImplExt: sealed::Sealed + ObjectSubclass {
                         "transform operates in-place"
                     ));
                 } else {
-                    unreachable!(concat!(
+                    unreachable!(
                         "parent `transform_frame` called while transform doesn't operate in-place"
-                    ));
+                    );
                 }
             });
 
