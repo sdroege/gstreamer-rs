@@ -84,18 +84,17 @@ impl Tensor {
     #[doc(alias = "gst_tensor_check_type")]
     pub fn check_type(
         &self,
-        order: crate::TensorDimOrder,
-        num_dims: usize,
         data_type: crate::TensorDataType,
-        data: &gst::BufferRef,
+        order: crate::TensorDimOrder,
+        dims: &[usize],
     ) -> bool {
         unsafe {
             from_glib(ffi::gst_tensor_check_type(
                 self.to_glib_none().0,
-                order.into_glib(),
-                num_dims,
                 data_type.into_glib(),
-                mut_override(data.as_ptr()),
+                order.into_glib(),
+                dims.len(),
+                dims.as_ptr(),
             ))
         }
     }
