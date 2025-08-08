@@ -10,7 +10,9 @@ SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPref
 ARG DEFAULT_BRANCH="invalid"
 ARG RUST_VERSION="invalid"
 
-RUN choco install -y pkgconfiglite nasm llvm openssl
+RUN choco install -y pkgconfiglite nasm llvm
+# Until it is out of moderation
+RUN choco install -y openssl --version=3.5.2
 
 # https://stackoverflow.com/a/50716450
 RUN setx PATH '%PATH%;C:\Program Files\NASM;C:\gst-install\bin'
