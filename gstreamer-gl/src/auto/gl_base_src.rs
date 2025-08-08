@@ -4,6 +4,9 @@
 // DO NOT EDIT
 
 use crate::ffi;
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+use crate::GLContext;
 use glib::{
     prelude::*,
     signal::{connect_raw, SignalHandlerId},
@@ -28,6 +31,18 @@ unsafe impl Send for GLBaseSrc {}
 unsafe impl Sync for GLBaseSrc {}
 
 pub trait GLBaseSrcExt: IsA<GLBaseSrc> + 'static {
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "gst_gl_base_src_get_gl_context")]
+    #[doc(alias = "get_gl_context")]
+    fn gl_context(&self) -> Option<GLContext> {
+        unsafe {
+            from_glib_full(ffi::gst_gl_base_src_get_gl_context(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
     #[doc(alias = "timestamp-offset")]
     fn timestamp_offset(&self) -> i64 {
         ObjectExt::property(self.as_ref(), "timestamp-offset")

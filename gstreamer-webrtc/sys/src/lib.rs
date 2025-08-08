@@ -36,6 +36,11 @@ pub const GST_WEBRTC_BUNDLE_POLICY_BALANCED: GstWebRTCBundlePolicy = 1;
 pub const GST_WEBRTC_BUNDLE_POLICY_MAX_COMPAT: GstWebRTCBundlePolicy = 2;
 pub const GST_WEBRTC_BUNDLE_POLICY_MAX_BUNDLE: GstWebRTCBundlePolicy = 3;
 
+pub type GstWebRTCDTLSRole = c_int;
+pub const GST_WEBRTC_DTLS_ROLE_CLIENT: GstWebRTCDTLSRole = 0;
+pub const GST_WEBRTC_DTLS_ROLE_SERVER: GstWebRTCDTLSRole = 1;
+pub const GST_WEBRTC_DTLS_ROLE_UNKNOWN: GstWebRTCDTLSRole = 2;
+
 pub type GstWebRTCDTLSSetup = c_int;
 pub const GST_WEBRTC_DTLS_SETUP_NONE: GstWebRTCDTLSSetup = 0;
 pub const GST_WEBRTC_DTLS_SETUP_ACTPASS: GstWebRTCDTLSSetup = 1;
@@ -626,6 +631,13 @@ extern "C" {
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_webrtc_bundle_policy_get_type() -> GType;
+
+    //=========================================================================
+    // GstWebRTCDTLSRole
+    //=========================================================================
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_webrtc_dtls_role_get_type() -> GType;
 
     //=========================================================================
     // GstWebRTCDTLSSetup

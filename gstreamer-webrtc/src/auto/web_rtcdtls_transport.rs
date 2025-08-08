@@ -13,7 +13,7 @@ use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "GstWebRTCDTLSTransport")]
-    pub struct WebRTCDTLSTransport(Object<ffi::GstWebRTCDTLSTransport, ffi::GstWebRTCDTLSTransportClass>);
+    pub struct WebRTCDTLSTransport(Object<ffi::GstWebRTCDTLSTransport, ffi::GstWebRTCDTLSTransportClass>) @extends gst::Object;
 
     match fn {
         type_ => || ffi::gst_webrtc_dtls_transport_get_type(),

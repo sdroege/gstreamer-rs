@@ -14,7 +14,7 @@ use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "GstWebRTCICETransport")]
-    pub struct WebRTCICETransport(Object<ffi::GstWebRTCICETransport, ffi::GstWebRTCICETransportClass>);
+    pub struct WebRTCICETransport(Object<ffi::GstWebRTCICETransport, ffi::GstWebRTCICETransportClass>) @extends gst::Object;
 
     match fn {
         type_ => || ffi::gst_webrtc_ice_transport_get_type(),

@@ -4,6 +4,9 @@
 // DO NOT EDIT
 
 use crate::{ffi, RTSPStream};
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+use glib::signal::{connect_raw, SignalHandlerId};
 use glib::{prelude::*, translate::*};
 use std::boxed::Box as Box_;
 
@@ -64,6 +67,7 @@ pub trait RTSPStreamTransportExt: IsA<RTSPStreamTransport> + 'static {
     }
 
     #[doc(alias = "gst_rtsp_stream_transport_is_timed_out")]
+    #[doc(alias = "timed-out")]
     fn is_timed_out(&self) -> bool {
         unsafe {
             from_glib(ffi::gst_rtsp_stream_transport_is_timed_out(
@@ -322,6 +326,34 @@ pub trait RTSPStreamTransportExt: IsA<RTSPStreamTransport> + 'static {
                 self.as_ref().to_glib_none().0,
                 url.to_glib_none().0,
             );
+        }
+    }
+
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "timed-out")]
+    fn connect_timed_out_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_timed_out_trampoline<
+            P: IsA<RTSPStreamTransport>,
+            F: Fn(&P) + 'static,
+        >(
+            this: *mut ffi::GstRTSPStreamTransport,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(RTSPStreamTransport::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::timed-out".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_timed_out_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 }

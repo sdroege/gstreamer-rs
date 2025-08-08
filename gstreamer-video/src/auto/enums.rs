@@ -2595,6 +2595,14 @@ pub enum VideoFormat {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
     #[doc(alias = "GST_VIDEO_FORMAT_NV16_10LE40")]
     Nv1610le40,
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_BGR10x2_LE")]
+    Bgr10x2Le,
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_RGB10x2_LE")]
+    Rgb10x2Le,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -2837,6 +2845,10 @@ impl IntoGlib for VideoFormat {
             Self::Gray10Le16 => ffi::GST_VIDEO_FORMAT_GRAY10_LE16,
             #[cfg(feature = "v1_28")]
             Self::Nv1610le40 => ffi::GST_VIDEO_FORMAT_NV16_10LE40,
+            #[cfg(feature = "v1_28")]
+            Self::Bgr10x2Le => ffi::GST_VIDEO_FORMAT_BGR10x2_LE,
+            #[cfg(feature = "v1_28")]
+            Self::Rgb10x2Le => ffi::GST_VIDEO_FORMAT_RGB10x2_LE,
             Self::__Unknown(value) => value,
         }
     }
@@ -3047,6 +3059,10 @@ impl FromGlib<ffi::GstVideoFormat> for VideoFormat {
             ffi::GST_VIDEO_FORMAT_GRAY10_LE16 => Self::Gray10Le16,
             #[cfg(feature = "v1_28")]
             ffi::GST_VIDEO_FORMAT_NV16_10LE40 => Self::Nv1610le40,
+            #[cfg(feature = "v1_28")]
+            ffi::GST_VIDEO_FORMAT_BGR10x2_LE => Self::Bgr10x2Le,
+            #[cfg(feature = "v1_28")]
+            ffi::GST_VIDEO_FORMAT_RGB10x2_LE => Self::Rgb10x2Le,
             value => Self::__Unknown(value),
         }
     }

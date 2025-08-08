@@ -60,6 +60,9 @@ mod enums;
 #[cfg(feature = "v1_16")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 pub use self::enums::WebRTCBundlePolicy;
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+pub use self::enums::WebRTCDTLSRole;
 pub use self::enums::WebRTCDTLSSetup;
 pub use self::enums::WebRTCDTLSTransportState;
 #[cfg(feature = "v1_16")]

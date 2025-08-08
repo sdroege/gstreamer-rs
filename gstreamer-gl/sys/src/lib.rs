@@ -2200,6 +2200,9 @@ extern "C" {
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_gl_base_src_get_type() -> GType;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_gl_base_src_get_gl_context(base_src: *mut GstGLBaseSrc) -> *mut GstGLContext;
 
     //=========================================================================
     // GstGLBufferAllocator

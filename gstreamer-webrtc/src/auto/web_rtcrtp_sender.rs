@@ -20,7 +20,7 @@ use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "GstWebRTCRTPSender")]
-    pub struct WebRTCRTPSender(Object<ffi::GstWebRTCRTPSender, ffi::GstWebRTCRTPSenderClass>);
+    pub struct WebRTCRTPSender(Object<ffi::GstWebRTCRTPSender, ffi::GstWebRTCRTPSenderClass>) @extends gst::Object;
 
     match fn {
         type_ => || ffi::gst_webrtc_rtp_sender_get_type(),

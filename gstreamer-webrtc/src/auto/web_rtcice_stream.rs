@@ -8,7 +8,7 @@ use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
     #[doc(alias = "GstWebRTCICEStream")]
-    pub struct WebRTCICEStream(Object<ffi::GstWebRTCICEStream, ffi::GstWebRTCICEStreamClass>);
+    pub struct WebRTCICEStream(Object<ffi::GstWebRTCICEStream, ffi::GstWebRTCICEStreamClass>) @extends gst::Object;
 
     match fn {
         type_ => || ffi::gst_webrtc_ice_stream_get_type(),
