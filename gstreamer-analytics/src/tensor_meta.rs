@@ -54,19 +54,18 @@ impl TensorMeta {
     pub fn typed_tensor(
         &self,
         id: glib::Quark,
-        order: crate::TensorDimOrder,
-        num_dims: usize,
         data_type: crate::TensorDataType,
-        data: &gst::BufferRef,
+        order: crate::TensorDimOrder,
+        dims: &[usize],
     ) -> Option<&crate::Tensor> {
         unsafe {
             let res = ffi::gst_tensor_meta_get_typed_tensor(
                 self.as_mut_ptr(),
                 id.into_glib(),
-                order.into_glib(),
-                num_dims,
                 data_type.into_glib(),
-                mut_override(data.as_ptr()),
+                order.into_glib(),
+                dims.len(),
+                dims.as_ptr(),
             );
             if res.is_null() {
                 None
