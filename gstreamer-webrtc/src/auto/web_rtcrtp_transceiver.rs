@@ -20,7 +20,7 @@ use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "GstWebRTCRTPTransceiver")]
-    pub struct WebRTCRTPTransceiver(Object<ffi::GstWebRTCRTPTransceiver, ffi::GstWebRTCRTPTransceiverClass>);
+    pub struct WebRTCRTPTransceiver(Object<ffi::GstWebRTCRTPTransceiver, ffi::GstWebRTCRTPTransceiverClass>) @extends gst::Object;
 
     match fn {
         type_ => || ffi::gst_webrtc_rtp_transceiver_get_type(),

@@ -210,6 +210,13 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "GstWebRTCDTLSRole",
+        Layout {
+            size: size_of::<GstWebRTCDTLSRole>(),
+            alignment: align_of::<GstWebRTCDTLSRole>(),
+        },
+    ),
+    (
         "GstWebRTCDTLSSetup",
         Layout {
             size: size_of::<GstWebRTCDTLSSetup>(),
@@ -409,6 +416,9 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_WEBRTC_DATA_CHANNEL_STATE_CLOSING", "3"),
     ("(gint) GST_WEBRTC_DATA_CHANNEL_STATE_CONNECTING", "1"),
     ("(gint) GST_WEBRTC_DATA_CHANNEL_STATE_OPEN", "2"),
+    ("(gint) GST_WEBRTC_DTLS_ROLE_CLIENT", "0"),
+    ("(gint) GST_WEBRTC_DTLS_ROLE_SERVER", "1"),
+    ("(gint) GST_WEBRTC_DTLS_ROLE_UNKNOWN", "2"),
     ("(gint) GST_WEBRTC_DTLS_SETUP_ACTIVE", "2"),
     ("(gint) GST_WEBRTC_DTLS_SETUP_ACTPASS", "1"),
     ("(gint) GST_WEBRTC_DTLS_SETUP_NONE", "0"),

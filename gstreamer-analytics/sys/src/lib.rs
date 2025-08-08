@@ -605,10 +605,10 @@ extern "C" {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
     pub fn gst_tensor_check_type(
         tensor: *const GstTensor,
+        data_type: GstTensorDataType,
         order: GstTensorDimOrder,
         num_dims: size_t,
-        data_type: GstTensorDataType,
-        data: *mut gst::GstBuffer,
+        dims: *const size_t,
     ) -> gboolean;
     #[cfg(feature = "v1_26")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
@@ -643,10 +643,10 @@ extern "C" {
     pub fn gst_tensor_meta_get_typed_tensor(
         tmeta: *mut GstTensorMeta,
         tensor_id: glib::GQuark,
+        data_type: GstTensorDataType,
         order: GstTensorDimOrder,
         num_dims: size_t,
-        data_type: GstTensorDataType,
-        data: *mut gst::GstBuffer,
+        dims: *const size_t,
     ) -> *const GstTensor;
     #[cfg(feature = "v1_26")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]

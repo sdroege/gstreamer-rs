@@ -9,6 +9,7 @@
 
 int main() {
     printf("%s;%zu;%zu\n", "GstWebRTCBundlePolicy", sizeof(GstWebRTCBundlePolicy), alignof(GstWebRTCBundlePolicy));
+    printf("%s;%zu;%zu\n", "GstWebRTCDTLSRole", sizeof(GstWebRTCDTLSRole), alignof(GstWebRTCDTLSRole));
     printf("%s;%zu;%zu\n", "GstWebRTCDTLSSetup", sizeof(GstWebRTCDTLSSetup), alignof(GstWebRTCDTLSSetup));
     printf("%s;%zu;%zu\n", "GstWebRTCDTLSTransportState", sizeof(GstWebRTCDTLSTransportState), alignof(GstWebRTCDTLSTransportState));
     printf("%s;%zu;%zu\n", "GstWebRTCDataChannelState", sizeof(GstWebRTCDataChannelState), alignof(GstWebRTCDataChannelState));
