@@ -20,6 +20,7 @@ external_libraries = [
 generate = [
     "GstWebRTC.WebRTCBundlePolicy",
     "GstWebRTC.WebRTCDataChannelState",
+    "GstWebRTC.WebRTCDTLSRole",
     "GstWebRTC.WebRTCDTLSSetup",
     "GstWebRTC.WebRTCDTLSTransportState",
     "GstWebRTC.WebRTCError",
@@ -47,6 +48,7 @@ manual = [
     "GLib.Error",
     "GObject.Object",
     "Gst.Caps",
+    "Gst.Object",
     "Gst.Structure",
     "GstSdp.SDPMessage",
 ]
