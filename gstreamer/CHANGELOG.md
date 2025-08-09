@@ -5,6 +5,19 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.24.1] - 2025-08-09
+### Fixed
+- Removed incomplete offset/stride checks in `gst_video::VideoInfo` builder.
+- Various new 1.89 clippy warnings
+- Mark allocator used by `gst::Memory::from_slice()` and related API as
+  `MAY_BE_LEAKED` as it's a singleton and otherwise shows up in the leaks
+  tracer, for example.
+- Don't unnecessarily check if validate is initialized to build action types.
+
+### Added
+- Added `gst_video::VideoMeta::add_from_info()` that takes a `VideoInfo`
+  instead of individual parameters.
+
 ## [0.24.0] - 2025-07-15
 ### Changed
 - Compatible with gtk-rs-core 0.21 / gtk4-rs 0.10.
@@ -1913,7 +1926,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.24.0...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.24.1...HEAD
+[0.24.1]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.24.0...0.24.1
 [0.24.0]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.23.7...0.24.0
 [0.23.7]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.23.6...0.23.7
 [0.23.6]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.23.5...0.23.6
