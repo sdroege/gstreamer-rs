@@ -805,7 +805,10 @@ impl VideoInfo {
 
     #[inline]
     pub fn is_valid(&self) -> bool {
-        !self.0.finfo.is_null() && self.0.width > 0 && self.0.height > 0 && self.0.size > 0
+        !self.0.finfo.is_null()
+            && self.0.width > 0
+            && self.0.height > 0
+            && (self.0.size > 0 || unsafe { (*self.0.finfo).n_planes } == 0)
     }
 
     #[doc(alias = "gst_video_info_from_caps")]
