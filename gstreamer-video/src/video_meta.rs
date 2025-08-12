@@ -28,6 +28,11 @@ impl VideoMeta {
             return Err(glib::bool_error!("Unsupported video format {}", format));
         }
 
+        #[cfg(feature = "v1_24")]
+        if format == crate::VideoFormat::DmaDrm {
+            return Err(glib::bool_error!("Use `add_full()` for DMA_DRM formats"));
+        }
+
         let info = crate::VideoInfo::builder(format, width, height).build()?;
 
         if !info.is_valid() {
@@ -74,19 +79,26 @@ impl VideoMeta {
             return Err(glib::bool_error!("Unsupported video format {}", format));
         }
 
-        let info_builder = crate::VideoInfo::builder(format, width, height)
-            .offset(offset)
-            .stride(stride);
+        assert_eq!(offset.len(), stride.len());
 
-        #[cfg(feature = "v1_16")]
-        let info_builder = info_builder.interlace_mode_if(
-            crate::VideoInterlaceMode::Alternate,
-            video_frame_flags.contains(crate::VideoFrameFlags::ONEFIELD),
-        );
+        unsafe {
+            let meta = ffi::gst_buffer_add_video_meta_full(
+                buffer.as_mut_ptr(),
+                video_frame_flags.into_glib(),
+                format.into_glib(),
+                width,
+                height,
+                offset.len() as u32,
+                offset.as_ptr() as *mut _,
+                stride.as_ptr() as *mut _,
+            );
 
-        let info = info_builder.build()?;
+            if meta.is_null() {
+                return Err(glib::bool_error!("Failed to add video meta"));
+            }
 
-        Self::add_from_info(buffer, video_frame_flags, &info)
+            Ok(Self::from_mut_ptr(buffer, meta))
+        }
     }
 
     pub fn add_from_info<'a>(
@@ -105,6 +117,11 @@ impl VideoMeta {
             ));
         }
 
+        #[cfg(feature = "v1_24")]
+        if info.format() == crate::VideoFormat::DmaDrm {
+            return Err(glib::bool_error!("Use `add_full()` for DMA_DRM formats"));
+        }
+
         if !info.is_valid() {
             return Err(glib::bool_error!("Invalid video info"));
         }
@@ -117,24 +134,15 @@ impl VideoMeta {
             ));
         }
 
-        unsafe {
-            let meta = ffi::gst_buffer_add_video_meta_full(
-                buffer.as_mut_ptr(),
-                video_frame_flags.into_glib(),
-                info.format().into_glib(),
-                info.width(),
-                info.height(),
-                info.n_planes(),
-                info.offset().as_ptr() as *mut _,
-                info.stride().as_ptr() as *mut _,
-            );
-
-            if meta.is_null() {
-                return Err(glib::bool_error!("Failed to add video meta"));
-            }
-
-            Ok(Self::from_mut_ptr(buffer, meta))
-        }
+        Self::add_full(
+            buffer,
+            video_frame_flags,
+            info.format(),
+            info.width(),
+            info.height(),
+            info.offset(),
+            info.stride(),
+        )
     }
 
     #[doc(alias = "get_flags")]
