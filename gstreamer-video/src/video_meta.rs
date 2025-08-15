@@ -1201,20 +1201,24 @@ pub mod tags {
     gst::impl_meta_tag!(Colorspace, crate::ffi::GST_META_TAG_VIDEO_COLORSPACE_STR);
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct VideoMetaTransformScale<'a> {
-    in_info: &'a crate::VideoInfo,
-    out_info: &'a crate::VideoInfo,
-}
+#[repr(transparent)]
+#[doc(alias = "GstVideoMetaTransform")]
+pub struct VideoMetaTransformScale(ffi::GstVideoMetaTransform);
 
-impl<'a> VideoMetaTransformScale<'a> {
-    pub fn new(in_info: &'a crate::VideoInfo, out_info: &'a crate::VideoInfo) -> Self {
+unsafe impl Sync for VideoMetaTransformScale {}
+unsafe impl Send for VideoMetaTransformScale {}
+
+impl VideoMetaTransformScale {
+    pub fn new(in_info: &crate::VideoInfo, out_info: &crate::VideoInfo) -> Self {
         skip_assert_initialized!();
-        VideoMetaTransformScale { in_info, out_info }
+        Self(ffi::GstVideoMetaTransform {
+            in_info: mut_override(in_info.to_glib_none().0),
+            out_info: mut_override(out_info.to_glib_none().0),
+        })
     }
 }
 
-unsafe impl<'a> gst::meta::MetaTransform<'a> for VideoMetaTransformScale<'a> {
+unsafe impl<'a> gst::meta::MetaTransform<'a> for VideoMetaTransformScale {
     type GLibType = ffi::GstVideoMetaTransform;
 
     #[doc(alias = "gst_video_meta_transform_scale_get_quark")]
@@ -1226,10 +1230,7 @@ unsafe impl<'a> gst::meta::MetaTransform<'a> for VideoMetaTransformScale<'a> {
         &self,
         _meta: &gst::MetaRef<T>,
     ) -> Result<ffi::GstVideoMetaTransform, glib::BoolError> {
-        Ok(ffi::GstVideoMetaTransform {
-            in_info: mut_override(self.in_info.to_glib_none().0),
-            out_info: mut_override(self.out_info.to_glib_none().0),
-        })
+        Ok(self.0)
     }
 }
 
