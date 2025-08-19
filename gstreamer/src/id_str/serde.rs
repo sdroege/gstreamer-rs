@@ -22,7 +22,6 @@ impl<'de> Deserialize<'de> for IdStr {
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use crate::idstr;
 
     #[test]
