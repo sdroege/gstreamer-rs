@@ -44,7 +44,7 @@ mod serde;
 #[macro_export]
 macro_rules! idstr {
     ($s:literal) => {
-        IdStr::from_static($crate::glib::gstr!($s))
+        $crate::IdStr::from_static($crate::glib::gstr!($s))
     };
 }
 
