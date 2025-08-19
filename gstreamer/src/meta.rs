@@ -1109,19 +1109,31 @@ pub unsafe trait MetaTransform<'a> {
     fn to_raw<T: MetaAPI>(&self, meta: &MetaRef<T>) -> Result<Self::GLibType, glib::BoolError>;
 }
 
-#[derive(Debug, Clone, PartialEq, Eq)]
-pub struct MetaTransformCopy {
-    range: (Bound<usize>, Bound<usize>),
-    region: bool,
-}
+#[repr(transparent)]
+#[doc(alias = "GstMetaTransformCopy")]
+pub struct MetaTransformCopy(ffi::GstMetaTransformCopy);
 
 impl MetaTransformCopy {
     pub fn new(region: bool, range: impl RangeBounds<usize>) -> Self {
         skip_assert_initialized!();
-        MetaTransformCopy {
-            range: (range.start_bound().cloned(), range.end_bound().cloned()),
-            region,
-        }
+
+        let offset = match range.start_bound() {
+            Bound::Included(idx) => *idx,
+            Bound::Excluded(idx) => *idx + 1,
+            Bound::Unbounded => 0,
+        };
+
+        let size = match range.end_bound() {
+            Bound::Included(idx) => *idx + 1,
+            Bound::Excluded(idx) => *idx,
+            Bound::Unbounded => usize::MAX,
+        };
+
+        Self(ffi::GstMetaTransformCopy {
+            region: region.into_glib(),
+            offset,
+            size,
+        })
     }
 }
 
@@ -1134,15 +1146,9 @@ unsafe impl MetaTransform<'_> for MetaTransformCopy {
     }
     fn to_raw<T: MetaAPI>(
         &self,
-        meta: &MetaRef<T>,
+        _meta: &MetaRef<T>,
     ) -> Result<ffi::GstMetaTransformCopy, glib::BoolError> {
-        let (offset, size) = meta.buffer.byte_range_into_offset_len(self.range)?;
-
-        Ok(ffi::GstMetaTransformCopy {
-            region: self.region.into_glib(),
-            offset,
-            size,
-        })
+        Ok(self.0)
     }
 }
 
@@ -1304,8 +1310,11 @@ mod tests {
         {
             let meta = buffer.meta::<ReferenceTimestampMeta>().unwrap();
             let buffer_dest = buffer_dest.get_mut().unwrap();
-            meta.transform(buffer_dest, &MetaTransformCopy::new(false, ..))
-                .unwrap();
+            meta.transform(
+                buffer_dest,
+                &MetaTransformCopy::new(false, ..),
+            )
+            .unwrap();
         }
 
         let meta = buffer_dest.meta::<ReferenceTimestampMeta>().unwrap();
