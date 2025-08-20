@@ -235,7 +235,7 @@ impl<'a, T> MetaRef<'a, T> {
     pub fn transform<MT>(&self, buffer: &mut BufferRef, data: &'a MT) -> Result<(), glib::BoolError>
     where
         T: MetaAPI,
-        MT: MetaTransform<'a>,
+        MT: MetaTransform,
     {
         unsafe {
             let info = *(*self.upcast_ref().as_ptr()).info;
@@ -245,15 +245,13 @@ impl<'a, T> MetaRef<'a, T> {
                 ));
             };
 
-            let data = data.to_raw(self)?;
-
             glib::result_from_gboolean!(
                 transform_func(
                     buffer.as_mut_ptr(),
                     mut_override(self.upcast_ref().as_ptr()),
                     mut_override(self.buffer.as_ptr()),
                     MT::quark().into_glib(),
-                    mut_override(&data) as *mut _,
+                    mut_override(data.as_ptr() as *mut _),
                 ),
                 "Failed to transform meta"
             )
@@ -493,7 +491,7 @@ impl<'a, T, U> MetaRefMut<'a, T, U> {
     ) -> Result<(), glib::BoolError>
     where
         T: MetaAPI,
-        MT: MetaTransform<'a>,
+        MT: MetaTransform,
     {
         self.as_meta_ref().transform(buffer, data)
     }
@@ -1103,10 +1101,10 @@ pub mod tags {
     );
 }
 
-pub unsafe trait MetaTransform<'a> {
+pub unsafe trait MetaTransform {
     type GLibType;
     fn quark() -> glib::Quark;
-    fn to_raw<T: MetaAPI>(&self, meta: &MetaRef<T>) -> Result<Self::GLibType, glib::BoolError>;
+    fn as_ptr(&self) -> *const Self::GLibType;
 }
 
 #[repr(transparent)]
@@ -1137,18 +1135,15 @@ impl MetaTransformCopy {
     }
 }
 
-unsafe impl MetaTransform<'_> for MetaTransformCopy {
+unsafe impl MetaTransform for MetaTransformCopy {
     type GLibType = ffi::GstMetaTransformCopy;
 
     fn quark() -> glib::Quark {
         static QUARK: std::sync::OnceLock<glib::Quark> = std::sync::OnceLock::new();
         *QUARK.get_or_init(|| glib::Quark::from_static_str(glib::gstr!("gst-copy")))
     }
-    fn to_raw<T: MetaAPI>(
-        &self,
-        _meta: &MetaRef<T>,
-    ) -> Result<ffi::GstMetaTransformCopy, glib::BoolError> {
-        Ok(self.0)
+    fn as_ptr(&self) -> *const ffi::GstMetaTransformCopy {
+        &self.0
     }
 }
 
@@ -1310,11 +1305,8 @@ mod tests {
         {
             let meta = buffer.meta::<ReferenceTimestampMeta>().unwrap();
             let buffer_dest = buffer_dest.get_mut().unwrap();
-            meta.transform(
-                buffer_dest,
-                &MetaTransformCopy::new(false, ..),
-            )
-            .unwrap();
+            meta.transform(buffer_dest, &MetaTransformCopy::new(false, ..))
+                .unwrap();
         }
 
         let meta = buffer_dest.meta::<ReferenceTimestampMeta>().unwrap();

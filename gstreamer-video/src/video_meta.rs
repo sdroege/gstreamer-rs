@@ -1218,7 +1218,7 @@ impl VideoMetaTransformScale {
     }
 }
 
-unsafe impl<'a> gst::meta::MetaTransform<'a> for VideoMetaTransformScale {
+unsafe impl gst::meta::MetaTransform for VideoMetaTransformScale {
     type GLibType = ffi::GstVideoMetaTransform;
 
     #[doc(alias = "gst_video_meta_transform_scale_get_quark")]
@@ -1226,11 +1226,8 @@ unsafe impl<'a> gst::meta::MetaTransform<'a> for VideoMetaTransformScale {
         unsafe { from_glib(ffi::gst_video_meta_transform_scale_get_quark()) }
     }
 
-    fn to_raw<T: MetaAPI>(
-        &self,
-        _meta: &gst::MetaRef<T>,
-    ) -> Result<ffi::GstVideoMetaTransform, glib::BoolError> {
-        Ok(self.0)
+    fn as_ptr(&self) -> *const ffi::GstVideoMetaTransform {
+        &self.0
     }
 }
 
