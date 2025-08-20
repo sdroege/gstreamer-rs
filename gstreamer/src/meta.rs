@@ -1141,6 +1141,20 @@ impl MetaTransformCopy {
             size,
         })
     }
+
+    pub fn range(&self) -> Option<(Bound<usize>, Bound<usize>)> {
+        if self.0.region == glib::ffi::GFALSE {
+            None
+        } else {
+            let end = if self.0.size == usize::MAX {
+                Bound::Unbounded
+            } else {
+                Bound::Excluded(self.0.size)
+            };
+
+            Some((Bound::Included(self.0.offset), end))
+        }
+    }
 }
 
 unsafe impl MetaTransform for MetaTransformCopy {
