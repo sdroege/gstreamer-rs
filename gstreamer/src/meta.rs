@@ -1112,19 +1112,27 @@ pub unsafe trait MetaTransform {
 pub struct MetaTransformCopy(ffi::GstMetaTransformCopy);
 
 impl MetaTransformCopy {
-    pub fn new(region: bool, range: impl RangeBounds<usize>) -> Self {
+    pub fn new(range: impl RangeBounds<usize>) -> Self {
         skip_assert_initialized!();
 
-        let offset = match range.start_bound() {
-            Bound::Included(idx) => *idx,
-            Bound::Excluded(idx) => *idx + 1,
-            Bound::Unbounded => 0,
-        };
+        let region =
+            !(range.start_bound() == Bound::Unbounded && range.end_bound() == Bound::Unbounded);
 
-        let size = match range.end_bound() {
-            Bound::Included(idx) => *idx + 1,
-            Bound::Excluded(idx) => *idx,
-            Bound::Unbounded => usize::MAX,
+        let (offset, size) = if region {
+            (
+                match range.start_bound() {
+                    Bound::Included(idx) => *idx,
+                    Bound::Excluded(idx) => *idx + 1,
+                    Bound::Unbounded => 0,
+                },
+                match range.end_bound() {
+                    Bound::Included(idx) => *idx + 1,
+                    Bound::Excluded(idx) => *idx,
+                    Bound::Unbounded => usize::MAX,
+                },
+            )
+        } else {
+            (0, usize::MAX)
         };
 
         Self(ffi::GstMetaTransformCopy {
@@ -1305,7 +1313,7 @@ mod tests {
         {
             let meta = buffer.meta::<ReferenceTimestampMeta>().unwrap();
             let buffer_dest = buffer_dest.get_mut().unwrap();
-            meta.transform(buffer_dest, &MetaTransformCopy::new(false, ..))
+            meta.transform(buffer_dest, &MetaTransformCopy::new(..))
                 .unwrap();
         }
 
