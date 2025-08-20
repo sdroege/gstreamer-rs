@@ -1216,6 +1216,14 @@ impl VideoMetaTransformScale {
             out_info: mut_override(out_info.to_glib_none().0),
         })
     }
+
+    pub fn in_info(&self) -> &crate::VideoInfo {
+        unsafe { &*(self.0.in_info as *const crate::VideoInfo) }
+    }
+
+    pub fn out_info(&self) -> &crate::VideoInfo {
+        unsafe { &*(self.0.out_info as *const crate::VideoInfo) }
+    }
 }
 
 unsafe impl gst::meta::MetaTransform for VideoMetaTransformScale {
