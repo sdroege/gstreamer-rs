@@ -1115,8 +1115,8 @@ impl MetaTransformCopy {
     pub fn new(range: impl RangeBounds<usize>) -> Self {
         skip_assert_initialized!();
 
-        let region =
-            !(range.start_bound() == Bound::Unbounded && range.end_bound() == Bound::Unbounded);
+        let region = !(matches!(range.start_bound(), Bound::Unbounded | Bound::Included(0))
+            && range.end_bound() == Bound::Unbounded);
 
         let (offset, size) = if region {
             (
