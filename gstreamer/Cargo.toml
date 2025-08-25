@@ -29,7 +29,7 @@ muldiv = "1"
 opt-ops = { package = "option-operations", version = "0.5" }
 serde = { version = "1.0", optional = true, features = ["derive"] }
 serde_bytes = { version = "0.11", optional = true }
-paste = "1.0"
+pastey = "0.1"
 thiserror = "2"
 smallvec = { version = "1.0", features = ["write"] }
 itertools = "0.14"
