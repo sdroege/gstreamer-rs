@@ -9,7 +9,9 @@
 // Re-exported for the subclass gst_plugin_define! macro
 pub use glib;
 pub use gstreamer_sys as ffi;
-pub use paste;
+#[deprecated = "Use `gst::pastey` instead"]
+pub use pastey as paste;
+pub use pastey;
 
 #[doc(hidden)]
 pub static INITIALIZED: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicBool::new(false);

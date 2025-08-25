@@ -42,10 +42,12 @@ macro_rules! plugin_define(
                     // NB: if this looks a lot like `Option`, it is not a coincidence. Alas,
                     // Option::or is not `const` and neither is `unwrap_or` so we have to roll our
                     // own oli-obk-ified enum instead.
+                    #[allow(unused)]
                     enum OptionalPtr<T>{
                         Null,
                         Some(*const T),
                     }
+                    #[allow(unused)]
                     impl<T: Sized> OptionalPtr<T> {
                         const fn with(self, value: *const T) -> Self {
                             Self::Some(value)
@@ -84,7 +86,7 @@ macro_rules! plugin_define(
                 }
             }
 
-            $crate::paste::item! {
+            $crate::pastey::item! {
                 #[no_mangle]
                 #[allow(clippy::missing_safety_doc)]
                 pub unsafe extern "C" fn [<gst_plugin_ $name _register>] () {
@@ -129,3 +131,27 @@ macro_rules! plugin_define(
         pub use self::plugin_desc::plugin_register_static;
     };
 );
+
+#[cfg(test)]
+mod tests {
+    fn plugin_init(_plugin: &crate::Plugin) -> Result<(), glib::BoolError> {
+        Ok(())
+    }
+
+    crate::plugin_define!(
+        gst_rs_plugin_test,
+        env!("CARGO_PKG_DESCRIPTION"),
+        plugin_init,
+        env!("CARGO_PKG_VERSION"),
+        "MIT/X11",
+        env!("CARGO_PKG_NAME"),
+        env!("CARGO_PKG_NAME"),
+        env!("CARGO_PKG_REPOSITORY")
+    );
+
+    #[test]
+    fn plugin_register() {
+        crate::init().unwrap();
+        plugin_register_static().unwrap();
+    }
+}
