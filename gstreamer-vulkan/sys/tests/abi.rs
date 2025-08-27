@@ -532,13 +532,6 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
-        "GstVulkanVideoOperation",
-        Layout {
-            size: size_of::<GstVulkanVideoOperation>(),
-            alignment: align_of::<GstVulkanVideoOperation>(),
-        },
-    ),
-    (
         "GstVulkanWindow",
         Layout {
             size: size_of::<GstVulkanWindow>(),
@@ -624,9 +617,6 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
         "GST_VULKAN_SWAPPER_VIDEO_FORMATS",
         " { RGBA, BGRA, RGB, BGR } ",
     ),
-    ("(gint) GST_VULKAN_VIDEO_OPERATION_DECODE", "0"),
-    ("(gint) GST_VULKAN_VIDEO_OPERATION_ENCODE", "1"),
-    ("(gint) GST_VULKAN_VIDEO_OPERATION_UNKNOWN", "2"),
     ("(gint) GST_VULKAN_WINDOW_ERROR_FAILED", "0"),
     ("(gint) GST_VULKAN_WINDOW_ERROR_OLD_LIBS", "1"),
     ("(gint) GST_VULKAN_WINDOW_ERROR_RESOURCE_UNAVAILABLE", "2"),

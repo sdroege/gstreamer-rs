@@ -55,7 +55,6 @@ int main() {
     printf("%s;%zu;%zu\n", "GstVulkanTrashListClass", sizeof(GstVulkanTrashListClass), alignof(GstVulkanTrashListClass));
     printf("%s;%zu;%zu\n", "GstVulkanVideoFilter", sizeof(GstVulkanVideoFilter), alignof(GstVulkanVideoFilter));
     printf("%s;%zu;%zu\n", "GstVulkanVideoFilterClass", sizeof(GstVulkanVideoFilterClass), alignof(GstVulkanVideoFilterClass));
-    printf("%s;%zu;%zu\n", "GstVulkanVideoOperation", sizeof(GstVulkanVideoOperation), alignof(GstVulkanVideoOperation));
     printf("%s;%zu;%zu\n", "GstVulkanWindow", sizeof(GstVulkanWindow), alignof(GstVulkanWindow));
     printf("%s;%zu;%zu\n", "GstVulkanWindowClass", sizeof(GstVulkanWindowClass), alignof(GstVulkanWindowClass));
     printf("%s;%zu;%zu\n", "GstVulkanWindowError", sizeof(GstVulkanWindowError), alignof(GstVulkanWindowError));

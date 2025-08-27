@@ -77,11 +77,6 @@ pub const GST_VULKAN_HANDLE_TYPE_VIDEO_SESSION_PARAMETERS: GstVulkanHandleType =
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
 pub const GST_VULKAN_HANDLE_TYPE_SAMPLER_YCBCR_CONVERSION: GstVulkanHandleType = 10;
 
-pub type GstVulkanVideoOperation = c_int;
-pub const GST_VULKAN_VIDEO_OPERATION_DECODE: GstVulkanVideoOperation = 0;
-pub const GST_VULKAN_VIDEO_OPERATION_ENCODE: GstVulkanVideoOperation = 1;
-pub const GST_VULKAN_VIDEO_OPERATION_UNKNOWN: GstVulkanVideoOperation = 2;
-
 pub type GstVulkanWindowError = c_int;
 pub const GST_VULKAN_WINDOW_ERROR_FAILED: GstVulkanWindowError = 0;
 pub const GST_VULKAN_WINDOW_ERROR_OLD_LIBS: GstVulkanWindowError = 1;
@@ -117,81 +112,6 @@ pub const GST_VULKAN_FORMAT_FLAG_RGB: GstVulkanFormatFlags = 2;
 pub const GST_VULKAN_FORMAT_FLAG_ALPHA: GstVulkanFormatFlags = 4;
 pub const GST_VULKAN_FORMAT_FLAG_LE: GstVulkanFormatFlags = 8;
 pub const GST_VULKAN_FORMAT_FLAG_COMPLEX: GstVulkanFormatFlags = 16;
-
-// Unions
-#[repr(C)]
-#[allow(dead_code)]
-pub struct GstVulkanVideoCapabilities_decoder_codec {
-    _data: [u8; 0],
-    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
-}
-
-impl ::std::fmt::Debug for GstVulkanVideoCapabilities_decoder_codec {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!(
-            "GstVulkanVideoCapabilities_decoder_codec @ {self:p}"
-        ))
-        .finish()
-    }
-}
-
-#[repr(C)]
-#[allow(dead_code)]
-pub struct GstVulkanVideoCapabilities_encoder_codec {
-    _data: [u8; 0],
-    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
-}
-
-impl ::std::fmt::Debug for GstVulkanVideoCapabilities_encoder_codec {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!(
-            "GstVulkanVideoCapabilities_encoder_codec @ {self:p}"
-        ))
-        .finish()
-    }
-}
-
-#[repr(C)]
-#[allow(dead_code)]
-pub struct GstVulkanVideoCapabilities_u1 {
-    _data: [u8; 0],
-    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
-}
-
-impl ::std::fmt::Debug for GstVulkanVideoCapabilities_u1 {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVulkanVideoCapabilities_u1 @ {self:p}"))
-            .finish()
-    }
-}
-
-#[repr(C)]
-#[allow(dead_code)]
-pub struct GstVulkanVideoProfile_codec {
-    _data: [u8; 0],
-    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
-}
-
-impl ::std::fmt::Debug for GstVulkanVideoProfile_codec {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVulkanVideoProfile_codec @ {self:p}"))
-            .finish()
-    }
-}
-
-#[repr(C)]
-#[allow(dead_code)]
-pub struct GstVulkanVideoProfile_usage {
-    _data: [u8; 0],
-    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
-}
-
-impl ::std::fmt::Debug for GstVulkanVideoProfile_usage {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVulkanVideoProfile_usage @ {self:p}"))
-            .finish()
-    }
-}
 
 // Callbacks
 pub type GstVulkanDeviceForEachQueueFunc =
@@ -934,48 +854,6 @@ impl ::std::fmt::Debug for GstVulkanTrashListClass {
     }
 }
 
-#[repr(C)]
-#[allow(dead_code)]
-pub struct GstVulkanVideoCapabilities {
-    _truncated_record_marker: c_void,
-    // /*Ignored*/field caps has incomplete type
-}
-
-impl ::std::fmt::Debug for GstVulkanVideoCapabilities {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVulkanVideoCapabilities @ {self:p}"))
-            .finish()
-    }
-}
-
-#[repr(C)]
-#[allow(dead_code)]
-pub struct GstVulkanVideoCapabilities__decoder {
-    _truncated_record_marker: c_void,
-    // /*Ignored*/field caps has incomplete type
-}
-
-impl ::std::fmt::Debug for GstVulkanVideoCapabilities__decoder {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVulkanVideoCapabilities__decoder @ {self:p}"))
-            .finish()
-    }
-}
-
-#[repr(C)]
-#[allow(dead_code)]
-pub struct GstVulkanVideoCapabilities__encoder {
-    _truncated_record_marker: c_void,
-    // /*Ignored*/field caps has incomplete type
-}
-
-impl ::std::fmt::Debug for GstVulkanVideoCapabilities__encoder {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVulkanVideoCapabilities__encoder @ {self:p}"))
-            .finish()
-    }
-}
-
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct GstVulkanVideoFilterClass {
@@ -987,20 +865,6 @@ impl ::std::fmt::Debug for GstVulkanVideoFilterClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstVulkanVideoFilterClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
-            .finish()
-    }
-}
-
-#[repr(C)]
-#[allow(dead_code)]
-pub struct GstVulkanVideoProfile {
-    _truncated_record_marker: c_void,
-    // /*Ignored*/field profile has incomplete type
-}
-
-impl ::std::fmt::Debug for GstVulkanVideoProfile {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstVulkanVideoProfile @ {self:p}"))
             .finish()
     }
 }
@@ -1502,13 +1366,6 @@ extern "C" {
     pub fn gst_vulkan_handle_type_get_type() -> GType;
 
     //=========================================================================
-    // GstVulkanVideoOperation
-    //=========================================================================
-    #[cfg(feature = "v1_24")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
-    pub fn gst_vulkan_video_operation_get_type() -> GType;
-
-    //=========================================================================
     // GstVulkanWindowError
     //=========================================================================
     pub fn gst_vulkan_window_error_get_type() -> GType;
@@ -1739,34 +1596,6 @@ extern "C" {
     pub fn gst_vulkan_trash_ref(trash: *mut GstVulkanTrash) -> *mut GstVulkanTrash;
     pub fn gst_vulkan_trash_mini_object_unref(device: *mut GstVulkanDevice, user_data: gpointer);
     pub fn gst_vulkan_trash_object_unref(device: *mut GstVulkanDevice, user_data: gpointer);
-
-    //=========================================================================
-    // GstVulkanVideoProfile
-    //=========================================================================
-    #[cfg(feature = "v1_24")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
-    pub fn gst_vulkan_video_profile_is_equal(
-        a: *const GstVulkanVideoProfile,
-        b: *const GstVulkanVideoProfile,
-    ) -> gboolean;
-    #[cfg(feature = "v1_24")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
-    pub fn gst_vulkan_video_profile_is_valid(
-        profile: *mut GstVulkanVideoProfile,
-        codec: c_uint,
-    ) -> gboolean;
-    #[cfg(feature = "v1_24")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
-    pub fn gst_vulkan_video_profile_to_caps(
-        profile: *const GstVulkanVideoProfile,
-    ) -> *mut gst::GstCaps;
-    #[cfg(feature = "v1_24")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
-    pub fn gst_vulkan_video_profile_from_caps(
-        profile: *mut GstVulkanVideoProfile,
-        caps: *mut gst::GstCaps,
-        video_operation: GstVulkanVideoOperation,
-    ) -> gboolean;
 
     //=========================================================================
     // GstVulkanBufferMemoryAllocator
