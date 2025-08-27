@@ -647,6 +647,24 @@ impl MiniObject {
             Err(self)
         }
     }
+
+    #[inline]
+    pub fn downcast_ref<T: IsMiniObject + StaticType>(&self) -> Option<&T> {
+        if self.type_().is_a(T::static_type()) {
+            unsafe { Some(&*(self as *const Self as *const T)) }
+        } else {
+            None
+        }
+    }
+
+    #[inline]
+    pub fn downcast_mut<T: IsMiniObject + StaticType>(&mut self) -> Option<&mut T> {
+        if self.type_().is_a(T::static_type()) {
+            unsafe { Some(&mut *(self as *mut Self as *mut T)) }
+        } else {
+            None
+        }
+    }
 }
 
 impl fmt::Debug for MiniObject {
