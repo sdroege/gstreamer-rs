@@ -4733,12 +4733,14 @@ extern "C" {
         idx: c_uint,
         length: c_int,
     ) -> gboolean;
+    pub fn gst_buffer_is_writable(buf: *const GstBuffer) -> gboolean;
     pub fn gst_buffer_iterate_meta(buffer: *mut GstBuffer, state: *mut gpointer) -> *mut GstMeta;
     pub fn gst_buffer_iterate_meta_filtered(
         buffer: *mut GstBuffer,
         state: *mut gpointer,
         meta_api_type: GType,
     ) -> *mut GstMeta;
+    pub fn gst_buffer_make_writable(buf: *mut GstBuffer) -> *mut GstBuffer;
     pub fn gst_buffer_map(
         buffer: *mut GstBuffer,
         info: *mut GstMapInfo,
@@ -4800,6 +4802,13 @@ extern "C" {
     #[cfg(feature = "v1_18_3")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18_3")))]
     pub fn gst_buffer_replace(obuf: *mut *mut GstBuffer, nbuf: *mut GstBuffer) -> gboolean;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_buffer_steal(old_buffer: *mut *mut GstBuffer) -> *mut GstBuffer;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_buffer_take(old_buffer: *mut *mut GstBuffer, new_buffer: *mut GstBuffer)
+        -> gboolean;
 
     //=========================================================================
     // GstBufferList
@@ -4820,7 +4829,9 @@ extern "C" {
     pub fn gst_buffer_list_get(list: *mut GstBufferList, idx: c_uint) -> *mut GstBuffer;
     pub fn gst_buffer_list_get_writable(list: *mut GstBufferList, idx: c_uint) -> *mut GstBuffer;
     pub fn gst_buffer_list_insert(list: *mut GstBufferList, idx: c_int, buffer: *mut GstBuffer);
+    pub fn gst_buffer_list_is_writable(list: *const GstBufferList) -> gboolean;
     pub fn gst_buffer_list_length(list: *mut GstBufferList) -> c_uint;
+    pub fn gst_buffer_list_make_writable(list: *mut GstBufferList) -> *mut GstBufferList;
     #[cfg(feature = "v1_18_3")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18_3")))]
     pub fn gst_buffer_list_ref(list: *mut GstBufferList) -> *mut GstBufferList;
@@ -4834,6 +4845,9 @@ extern "C" {
         old_list: *mut *mut GstBufferList,
         new_list: *mut GstBufferList,
     ) -> gboolean;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_buffer_list_steal(old_list: *mut *mut GstBufferList) -> *mut GstBufferList;
     #[cfg(feature = "v1_18_3")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18_3")))]
     pub fn gst_buffer_list_take(
@@ -4939,6 +4953,8 @@ extern "C" {
         structure: *const GstStructure,
         features: *const GstCapsFeatures,
     ) -> gboolean;
+    pub fn gst_caps_is_writable(caps: *const GstCaps) -> gboolean;
+    pub fn gst_caps_make_writable(caps: *mut GstCaps) -> *mut GstCaps;
     pub fn gst_caps_map_in_place(
         caps: *mut GstCaps,
         func: GstCapsMapFunc,
@@ -4998,6 +5014,9 @@ extern "C" {
     #[cfg(feature = "v1_18_3")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18_3")))]
     pub fn gst_caps_replace(old_caps: *mut *mut GstCaps, new_caps: *mut GstCaps) -> gboolean;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_caps_steal(old_caps: *mut *mut GstCaps) -> *mut GstCaps;
     #[cfg(feature = "v1_18_3")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18_3")))]
     pub fn gst_caps_take(old_caps: *mut *mut GstCaps, new_caps: *mut GstCaps) -> gboolean;
@@ -5101,6 +5120,8 @@ extern "C" {
         context_type: *const c_char,
     ) -> gboolean;
     pub fn gst_context_is_persistent(context: *const GstContext) -> gboolean;
+    pub fn gst_context_is_writable(context: *const GstContext) -> gboolean;
+    pub fn gst_context_make_writable(context: *mut GstContext) -> *mut GstContext;
     #[cfg(feature = "v1_18_3")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18_3")))]
     pub fn gst_context_ref(context: *mut GstContext) -> *mut GstContext;
@@ -5363,6 +5384,8 @@ extern "C" {
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_event_has_name_id(event: *mut GstEvent, name: glib::GQuark) -> gboolean;
+    pub fn gst_event_is_writable(event: *const GstEvent) -> gboolean;
+    pub fn gst_event_make_writable(event: *mut GstEvent) -> *mut GstEvent;
     pub fn gst_event_parse_buffer_size(
         event: *mut GstEvent,
         format: *mut GstFormat,
@@ -5675,11 +5698,13 @@ extern "C" {
         offset: *mut size_t,
     ) -> gboolean;
     pub fn gst_memory_is_type(mem: *mut GstMemory, mem_type: *const c_char) -> gboolean;
+    pub fn gst_memory_is_writable(memory: *const GstMemory) -> gboolean;
     pub fn gst_memory_make_mapped(
         mem: *mut GstMemory,
         info: *mut GstMapInfo,
         flags: GstMapFlags,
     ) -> *mut GstMemory;
+    pub fn gst_memory_make_writable(memory: *mut GstMemory) -> *mut GstMemory;
     pub fn gst_memory_map(
         mem: *mut GstMemory,
         info: *mut GstMapInfo,
@@ -5694,6 +5719,19 @@ extern "C" {
     #[cfg(feature = "v1_18_3")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18_3")))]
     pub fn gst_memory_unref(memory: *mut GstMemory);
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_memory_replace(
+        old_memory: *mut *mut GstMemory,
+        new_memory: *mut GstMemory,
+    ) -> gboolean;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_memory_steal(old_memory: *mut *mut GstMemory) -> *mut GstMemory;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_memory_take(old_memory: *mut *mut GstMemory, new_memory: *mut GstMemory)
+        -> gboolean;
 
     //=========================================================================
     // GstMessage
@@ -5901,6 +5939,8 @@ extern "C" {
         -> *const gobject::GValue;
     pub fn gst_message_get_structure(message: *mut GstMessage) -> *const GstStructure;
     pub fn gst_message_has_name(message: *mut GstMessage, name: *const c_char) -> gboolean;
+    pub fn gst_message_is_writable(message: *const GstMessage) -> gboolean;
+    pub fn gst_message_make_writable(message: *mut GstMessage) -> *mut GstMessage;
     pub fn gst_message_parse_async_done(message: *mut GstMessage, running_time: *mut GstClockTime);
     pub fn gst_message_parse_buffering(message: *mut GstMessage, percent: *mut c_int);
     pub fn gst_message_parse_buffering_stats(
@@ -6134,6 +6174,9 @@ extern "C" {
         old_message: *mut *mut GstMessage,
         new_message: *mut GstMessage,
     ) -> gboolean;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_message_steal(old_message: *mut *mut GstMessage) -> *mut GstMessage;
     #[cfg(feature = "v1_18_3")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18_3")))]
     pub fn gst_message_take(
@@ -6443,6 +6486,8 @@ extern "C" {
         mode: GstPadMode,
         flags: GstSchedulingFlags,
     ) -> gboolean;
+    pub fn gst_query_is_writable(query: *const GstQuery) -> gboolean;
+    pub fn gst_query_make_writable(query: *mut GstQuery) -> *mut GstQuery;
     pub fn gst_query_parse_accept_caps(query: *mut GstQuery, caps: *mut *mut GstCaps);
     pub fn gst_query_parse_accept_caps_result(query: *mut GstQuery, result: *mut gboolean);
     pub fn gst_query_parse_allocation(
@@ -6652,6 +6697,9 @@ extern "C" {
     #[cfg(feature = "v1_18_3")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18_3")))]
     pub fn gst_query_replace(old_query: *mut *mut GstQuery, new_query: *mut GstQuery) -> gboolean;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_query_steal(old_query: *mut *mut GstQuery) -> *mut GstQuery;
     #[cfg(feature = "v1_18_3")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18_3")))]
     pub fn gst_query_take(old_query: *mut *mut GstQuery, new_query: *mut GstQuery) -> gboolean;
@@ -6679,6 +6727,12 @@ extern "C" {
     pub fn gst_sample_get_caps(sample: *mut GstSample) -> *mut GstCaps;
     pub fn gst_sample_get_info(sample: *mut GstSample) -> *const GstStructure;
     pub fn gst_sample_get_segment(sample: *mut GstSample) -> *mut GstSegment;
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+    pub fn gst_sample_is_writable(sample: *const GstSample) -> gboolean;
+    #[cfg(feature = "v1_16")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
+    pub fn gst_sample_make_writable(sample: *mut GstSample) -> *mut GstSample;
     #[cfg(feature = "v1_18_3")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18_3")))]
     pub fn gst_sample_ref(sample: *mut GstSample) -> *mut GstSample;
@@ -7432,6 +7486,8 @@ extern "C" {
     );
     pub fn gst_tag_list_is_empty(list: *const GstTagList) -> gboolean;
     pub fn gst_tag_list_is_equal(list1: *const GstTagList, list2: *const GstTagList) -> gboolean;
+    pub fn gst_tag_list_is_writable(taglist: *const GstTagList) -> gboolean;
+    pub fn gst_tag_list_make_writable(taglist: *mut GstTagList) -> *mut GstTagList;
     pub fn gst_tag_list_merge(
         list1: *const GstTagList,
         list2: *const GstTagList,
