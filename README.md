@@ -45,6 +45,21 @@ $ apt-get install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
       gstreamer1.0-libav libgstrtspserver-1.0-dev libges-1.0-dev
 ```
 
+On Fedora:
+
+```console
+dnf install gstreamer1-devel gstreamer1-plugins-base-devel \
+      gstreamer1-plugins-good gstreamer1-plugins-bad-free \
+      gstreamer1-plugin-libav gstreamer1-rtsp-server-devel \
+      gst-editing-services-devel
+```
+
+More Fedora packages are available in [RPMFusion](https://rpmfusion.org/):
+
+```console
+dnf install gstreamer1-plugins-bad-freeworld gstreamer1-plugins-ugly
+```
+
 The minimum required version of the above libraries is >= 1.14. If you
 build the gstreamer-player sub-crate, or any of the examples that
 depend on gstreamer-player, you must ensure that in addition to the above
@@ -53,6 +68,12 @@ files for the full details,
 
 ```console
 $ apt-get install libgstreamer-plugins-bad1.0-dev
+```
+
+On Fedora:
+
+```console
+dnf install gstreamer1-plugins-bad-free-devel
 ```
 
 Package names on other distributions should be similar.
