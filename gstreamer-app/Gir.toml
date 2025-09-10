@@ -16,11 +16,6 @@ external_libraries = [
     "Gst",
 ]
 
-generate = [
-    "GstApp.AppLeakyType",
-    "GstApp.AppStreamType",
-]
-
 manual = [
     "GObject.Object",
     "Gst.Element",
@@ -68,6 +63,11 @@ ref_mode = "ref"
 name = "Gst.Structure"
 status = "manual"
 ref_mode = "ref"
+
+[[object]]
+name = "GstApp.AppLeakyType"
+status = "generate"
+default_value = "none"
 
 [[object]]
 name = "GstApp.AppSink"
@@ -223,3 +223,8 @@ final_type = true
     name = "get_latency"
     # ClockTime
     manual = true
+
+[[object]]
+name = "GstApp.AppStreamType"
+status = "generate"
+default_value = "stream"
