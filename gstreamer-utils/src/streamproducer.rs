@@ -784,13 +784,16 @@ impl StreamConsumer {
                     gst::debug!(
                         CAT,
                         obj = appsrc,
-                        "consumer {} ({:?}) is not consuming fast enough, old samples are getting dropped",
+                        "consumer {} ({appsrc:?}) is not consuming fast enough, old samples are getting dropped",
                         appsrc.name(),
-                        appsrc,
                     );
 
                     needs_keyframe_clone.store(wait_for_keyframe_clone.load(atomic::Ordering::SeqCst), atomic::Ordering::SeqCst);
                     dropped_clone.fetch_add(1, atomic::Ordering::SeqCst);
+
+                    let _  = appsrc.post_message(gst::message::Element::builder(
+                        gst::Structure::new_empty("dropped-buffer")).src(appsrc).build()
+                    );
                 })
                 .build(),
         );
