@@ -29,6 +29,41 @@ impl fmt::Display for TryFromFloatSecsError {
 
 impl std::error::Error for TryFromFloatSecsError {}
 
+// rustdoc-stripper-ignore-next
+/// A Time quantity
+///
+/// Some functions enforce format specific quantities. This type can be used when
+/// a Duration or an Instant is expected. It comes with functions to perform computations without the
+/// need to retrieve the inner integer.
+///
+/// # Examples
+///
+/// ```rust
+/// # use gstreamer::{prelude::*, ClockTime};
+/// // Regular constructors (can be used in `const` contexts)
+/// const FORTY_TWO_NS: ClockTime = ClockTime::from_nseconds(42);
+/// const TWO_US: ClockTime = ClockTime::from_useconds(2);
+/// let three_ms: ClockTime = ClockTime::from_mseconds(3);
+/// let four_s: ClockTime = ClockTime::from_seconds(4);
+///
+/// // Convenience constructors (not `const`)
+/// let forty_two_ns = 42.nseconds();
+/// let two_us = 2.useconds();
+/// let three_ms = 3.mseconds();
+/// let four_s = 4.seconds();
+///
+/// // All four arithmetic operations
+/// let deadline = (2.mseconds() + 512.useconds()) * 2 / 3;
+///
+/// // Comparisons
+/// if deadline > ClockTime::MSECOND {
+///     println!("Greater");
+/// }
+/// ```
+///
+/// See [the documentation of the `format` module] for more examples.
+///
+/// [the documentation of the `format` module]: ./index.html
 #[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Default)]
 pub struct ClockTime(u64);
 
