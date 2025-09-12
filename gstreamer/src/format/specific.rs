@@ -21,6 +21,33 @@ pub trait SpecificFormattedValueFullRange: FormattedValueFullRange {}
 /// - `Bytes` is the intrinsic type for `Option<Bytes>`.
 pub trait SpecificFormattedValueIntrinsic: TryFromGlib<i64> + FormattedValueIntrinsic {}
 
+// rustdoc-stripper-ignore-next
+/// A Buffer quantity
+///
+/// Some functions enforce format specific quantities. This type can be used when
+/// Buffer counts are expected. It comes with functions to perform computations without the
+/// need to retrieve the inner integer.
+///
+/// # Examples
+///
+/// ```rust
+/// # use gstreamer::{prelude::*, format::Buffers};
+/// // Regular constructors (can be used in `const` contexts)
+/// const FORTY_TWO_BUFFERS: Buffers = Buffers::from_u64(42);
+/// let two_buffers = Buffers::from_u64(2);
+///
+/// // All four arithmetic operations
+/// let limit = (FORTY_TWO_BUFFERS + two_buffers) * 2 / 3;
+///
+/// // Comparisons
+/// if limit > Buffers::ZERO {
+///     println!("Greater");
+/// }
+/// ```
+///
+/// See [the documentation of the `format` module] for more examples.
+///
+/// [the documentation of the `format` module]: ./index.html
 #[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Debug, Default)]
 pub struct Buffers(u64);
 impl Buffers {
@@ -93,6 +120,41 @@ impl BuffersFormatConstructor for u64 {
     }
 }
 
+// rustdoc-stripper-ignore-next
+/// A Byte quantity
+///
+/// Some functions enforce format specific quantities. This type can be used when
+/// Bytes are expected. It comes with functions to perform computations without the
+/// need to retrieve the inner integer.
+///
+/// # Examples
+///
+/// ```rust
+/// # use gstreamer::{prelude::*, format::Bytes};
+/// // Regular constructors (can be used in `const` contexts)
+/// const FORTY_TWO_BYTES: Bytes = Bytes::from_bytes(42);
+/// const TWO_K: Bytes = Bytes::from_kibibytes(2);
+/// let three_m = Bytes::from_mebibytes(3);
+/// let four_g = Bytes::from_gibibytes(4);
+///
+/// // Convenience constructors (not `const`)
+/// let forty_two_bytes = 42.bytes();
+/// let two_k = 2.kibibytes();
+/// let three_m = 3.mebibytes();
+/// let four_g = 4.gibibytes();
+///
+/// // All four arithmetic operations
+/// let limit = (2.kibibytes() + 512.bytes()) * 2 / 3;
+///
+/// // Comparisons
+/// if limit > Bytes::KiB {
+///     println!("Greater");
+/// }
+/// ```
+///
+/// See [the documentation of the `format` module] for more examples.
+///
+/// [the documentation of the `format` module]: ./index.html
 #[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Debug, Default)]
 pub struct Bytes(u64);
 impl Bytes {
@@ -113,6 +175,58 @@ impl Bytes {
 }
 
 impl Bytes {
+    // rustdoc-stripper-ignore-next
+    /// Builds a new `Bytes` formatted value with the provided bytes count.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the provided count equals `u64::MAX`,
+    /// which is reserved for `None` in C.
+    #[track_caller]
+    #[inline]
+    pub const fn from_bytes(bytes: u64) -> Self {
+        Bytes::from_u64(bytes)
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Builds a new `Bytes` formatted value with the provided kibibytes (1024) count.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the resulting count equals `u64::MAX`,
+    /// which is reserved for `None` in C.
+    #[track_caller]
+    #[inline]
+    pub const fn from_kibibytes(kibibytes: u64) -> Self {
+        Bytes::from_u64(kibibytes * 1024)
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Builds a new `Bytes` formatted value with the provided mebibytes (1024 * 1024) count.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the resulting count equals `u64::MAX`,
+    /// which is reserved for `None` in C.
+    #[track_caller]
+    #[inline]
+    pub const fn from_mebibytes(mebibytes: u64) -> Self {
+        Bytes::from_u64(mebibytes * 1024 * 1024)
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Builds a new `Bytes` formatted value with the provided gibibytes (1024 * 1024 * 1024) count.
+    ///
+    /// # Panics
+    ///
+    /// Panics if the resulting count equals `u64::MAX`,
+    /// which is reserved for `None` in C.
+    #[track_caller]
+    #[inline]
+    pub const fn from_gibibytes(gibibytes: u64) -> Self {
+        Bytes::from_u64(gibibytes * 1024 * 1024 * 1024)
+    }
+
     // rustdoc-stripper-ignore-next
     /// Builds a new `Bytes` formatted value with the provided bytes count.
     ///
@@ -211,6 +325,33 @@ impl BytesFormatConstructor for u64 {
     }
 }
 
+// rustdoc-stripper-ignore-next
+/// A unit-less quantity
+///
+/// Some functions enforce format specific quantities. This type can be used when
+/// a `Default` format is expected. It comes with functions to perform computations without the
+/// need to retrieve the inner integer.
+///
+/// # Examples
+///
+/// ```rust
+/// # use gstreamer::{prelude::*, format::Default};
+/// // Regular constructors (can be used in `const` contexts)
+/// const FORTY_TWO: Default = Default::from_u64(42);
+/// let two = Default::from_u64(2);
+///
+/// // All four arithmetic operations
+/// let limit = (FORTY_TWO + two) * 2 / 3;
+///
+/// // Comparisons
+/// if limit > Default::ZERO {
+///     println!("Greater");
+/// }
+/// ```
+///
+/// See [the documentation of the `format` module] for more examples.
+///
+/// [the documentation of the `format` module]: ./index.html
 #[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Debug, Default)]
 pub struct Default(u64);
 impl Default {
@@ -284,6 +425,34 @@ impl DefaultFormatConstructor for u64 {
 
 pub type Time = super::ClockTime;
 
+// rustdoc-stripper-ignore-next
+/// A Percent quantity
+///
+/// Some functions enforce format specific quantities. This type can be used when
+/// a Percent is expected. It comes with functions to perform computations without the
+/// need to retrieve the inner integer.
+///
+/// # Examples
+///
+/// ```rust
+/// # use gstreamer::{prelude::*, format::Percent};
+/// // Regular constructors (can be used in `const` contexts)
+/// const FORTY_TWO_PERCENT: Percent = Percent::from_percent(42);
+/// const TWO_PPM: Percent = Percent::from_ppm(2);
+/// let half = Percent::from_ratio(0.5);
+///
+/// // All four arithmetic operations
+/// let limit = (FORTY_TWO_PERCENT + TWO_PPM) * 2 / 3;
+///
+/// // Comparisons
+/// if limit > half {
+///     println!("Greater");
+/// }
+/// ```
+///
+/// See [the documentation of the `format` module] for more examples.
+///
+/// [the documentation of the `format` module]: ./index.html
 #[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Debug, Default)]
 pub struct Percent(u32);
 impl Percent {
