@@ -215,6 +215,12 @@ final_type = true
     ignore = true
 
     [[object.function]]
+    name = "get_current_level_time"
+        [object.function.return]
+        # 0 initially, None doesn't make sense
+        mandatory = true
+
+    [[object.function]]
     name = "set_latency"
     # ClockTime
     manual = true
@@ -223,6 +229,19 @@ final_type = true
     name = "get_latency"
     # ClockTime
     manual = true
+
+    [[object.function]]
+    name = "get_max_time"
+        [object.function.return]
+        # 0 means unlimited, other values are used to define the queue limit
+        mandatory = true
+
+    [[object.function]]
+    name = "set_max_time"
+        [[object.function.parameter]]
+        name = "max"
+        # 0 means unlimited, other values are used to define the queue limit
+        mandatory = true
 
 [[object]]
 name = "GstApp.AppStreamType"

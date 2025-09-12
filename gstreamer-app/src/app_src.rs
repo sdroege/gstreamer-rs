@@ -587,7 +587,7 @@ impl<'a> AppSrcBuilder<'a> {
 
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-    pub fn max_time(self, max_time: Option<gst::ClockTime>) -> Self {
+    pub fn max_time(self, max_time: gst::ClockTime) -> Self {
         Self {
             builder: self.builder.property("max-time", max_time),
             ..self
