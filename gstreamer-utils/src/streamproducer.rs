@@ -8,6 +8,10 @@ use gst::{glib, prelude::*};
 use std::sync::LazyLock;
 use thiserror::Error;
 
+pub const DEFAULT_CONSUMER_MAX_BUFFERS: u64 = 0;
+pub const DEFAULT_CONSUMER_MAX_BYTES: gst::format::Bytes = gst::format::Bytes::ZERO;
+pub const DEFAULT_CONSUMER_MAX_TIME: gst::ClockTime = gst::ClockTime::from_mseconds(500);
+
 // Small wrapper around AtomicU64 and a Mutex, to allow it to run regular AtomicU64
 // operations where supported, and fallback to a mutex where it is not. The wrapper methods
 // are the ones that are needed, and not all are exposed.
@@ -111,6 +115,7 @@ impl Drop for StreamProducerInner {
 #[must_use]
 pub struct ConsumptionLink {
     consumer: gst_app::AppSrc,
+    settings: ConsumerSettings,
     producer: Option<StreamProducer>,
     /// number of buffers dropped because `consumer` internal queue was full
     dropped: Arc<WrappedAtomicU64>,
@@ -124,11 +129,33 @@ pub struct ConsumptionLink {
 
 impl ConsumptionLink {
     /// Create a new disconnected `ConsumptionLink`.
+    ///
+    /// The consumer will use the default configuration (see [StreamProducer::configure_consumer]).
+    /// If you need different settings, call [ConsumptionLink::disconnected_with] instead.
     pub fn disconnected(consumer: gst_app::AppSrc) -> ConsumptionLink {
         StreamProducer::configure_consumer(&consumer);
 
         ConsumptionLink {
             consumer,
+            settings: ConsumerSettings::default(),
+            producer: None,
+            dropped: Arc::new(WrappedAtomicU64::new(0)),
+            pushed: Arc::new(WrappedAtomicU64::new(0)),
+            discard: Arc::new(atomic::AtomicBool::new(false)),
+            wait_for_keyframe: Arc::new(atomic::AtomicBool::new(true)),
+        }
+    }
+
+    /// Create a new disconnected `ConsumptionLink`.
+    pub fn disconnected_with(
+        consumer: gst_app::AppSrc,
+        settings: ConsumerSettings,
+    ) -> ConsumptionLink {
+        StreamProducer::configure_consumer(&consumer);
+
+        ConsumptionLink {
+            consumer,
+            settings,
             producer: None,
             dropped: Arc::new(WrappedAtomicU64::new(0)),
             pushed: Arc::new(WrappedAtomicU64::new(0)),
@@ -150,7 +177,7 @@ impl ConsumptionLink {
         }
         new_producer.add_consumer_internal(
             &self.consumer,
-            false,
+            self.settings,
             self.dropped.clone(),
             self.pushed.clone(),
             self.discard.clone(),
@@ -207,11 +234,42 @@ impl ConsumptionLink {
     pub fn stream_producer(&self) -> Option<&StreamProducer> {
         self.producer.as_ref()
     }
+
+    /// Get the settings for this Consumer.
+    pub fn settings(&self) -> ConsumerSettings {
+        self.settings
+    }
 }
 
 impl Drop for ConsumptionLink {
     fn drop(&mut self) {
         self.disconnect();
+    }
+}
+
+/// User defined consumer settings
+///
+/// Defaults to:
+///
+/// * `max-buffers` <- `0` (unlimited)
+/// * `max-bytes` <- `0` (unlimited)
+/// * `max-time` <- `500ms`
+///
+/// Use `ConsumerSettings::builder()` if you need different values.
+#[derive(Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+pub struct ConsumerSettings {
+    pub max_buffer: u64,
+    pub max_bytes: gst::format::Bytes,
+    pub max_time: gst::ClockTime,
+}
+
+impl Default for ConsumerSettings {
+    fn default() -> Self {
+        ConsumerSettings {
+            max_buffer: DEFAULT_CONSUMER_MAX_BUFFERS,
+            max_bytes: DEFAULT_CONSUMER_MAX_BYTES,
+            max_time: DEFAULT_CONSUMER_MAX_TIME,
+        }
     }
 }
 
@@ -224,24 +282,53 @@ pub enum AddConsumerError {
 }
 
 impl StreamProducer {
-    /// Configure a consumer `appsrc` for later use in a `StreamProducer`
+    /// Configures a consumer `appsrc` for later use in a `StreamProducer`.
     ///
-    /// This is automatically called when calling `add_consumer()`.
+    /// This function configures the `appsrc` in a suitable state to act as a consumer
+    /// and also sets the internal queue properties as follows:
+    ///
+    /// * `max-buffers` <- `0` (unlimited)
+    /// * `max-bytes` <- `0` (unlimited)
+    /// * `max-time` <- `500ms`
+    ///
+    /// If you need different settings, call [`StreamProducer::configure_consumer_with`] instead.
+    ///
+    /// This is automatically invoked when calling [`StreamProducer::add_consumer`].
     pub fn configure_consumer(consumer: &gst_app::AppSrc) {
+        Self::configure_consumer_with(consumer, ConsumerSettings::default());
+    }
+
+    /// Configures a consumer `appsrc` for later use in a `StreamProducer`.
+    ///
+    /// This function configures the `appsrc` in a suitable state to act as a consumer
+    /// and applies the provided settings.
+    ///
+    /// If unsure, call [`StreamProducer::configure_consumer`] instead.
+    pub fn configure_consumer_with(consumer: &gst_app::AppSrc, settings: ConsumerSettings) {
         // Latency on the appsrc is set by the publisher before the first buffer
         // and whenever it changes
         consumer.set_latency(gst::ClockTime::ZERO, gst::ClockTime::NONE);
         consumer.set_format(gst::Format::Time);
         consumer.set_is_live(true);
         consumer.set_handle_segment_change(true);
-        consumer.set_max_buffers(0);
-        consumer.set_max_bytes(0);
-        consumer.set_max_time(500 * gst::ClockTime::MSECOND);
         consumer.set_leaky_type(gst_app::AppLeakyType::Downstream);
         consumer.set_automatic_eos(false);
+
+        consumer.set_max_buffers(settings.max_buffer);
+        consumer.set_max_bytes(settings.max_bytes.into());
+        consumer.set_max_time(settings.max_time);
     }
 
-    /// Add an appsrc to dispatch data to.
+    /// Adds an `appsrc` to dispatch data to.
+    ///
+    /// This function configures the `appsrc` in a suitable state to act as a consumer
+    /// and also sets the internal queue properties as follows:
+    ///
+    /// * `max-buffers` <- `0` (unlimited)
+    /// * `max-bytes` <- `0` (unlimited)
+    /// * `max-time` <- `500ms`
+    ///
+    /// If you need different values, call [`StreamProducer::add_consumer_with`] instead.
     ///
     /// Dropping the returned `ConsumptionLink` will automatically disconnect the consumer from the producer.
     pub fn add_consumer(
@@ -255,7 +342,7 @@ impl StreamProducer {
 
         self.add_consumer_internal(
             consumer,
-            true,
+            ConsumerSettings::default(),
             dropped.clone(),
             pushed.clone(),
             discard.clone(),
@@ -264,6 +351,45 @@ impl StreamProducer {
 
         Ok(ConsumptionLink {
             consumer: consumer.clone(),
+            settings: ConsumerSettings::default(),
+            producer: Some(self.clone()),
+            dropped,
+            pushed,
+            discard,
+            wait_for_keyframe,
+        })
+    }
+
+    /// Adds a configured `appsrc` to dispatch data to.
+    ///
+    /// This function configures the `appsrc` in a suitable state to act as a consumer
+    /// and applies the provided settings.
+    ///
+    /// If unsure, call [`StreamProducer::add_consumer`] instead.
+    ///
+    /// Dropping the returned `ConsumptionLink` will automatically disconnect the consumer from the producer.
+    pub fn add_consumer_with(
+        &self,
+        consumer: &gst_app::AppSrc,
+        settings: ConsumerSettings,
+    ) -> Result<ConsumptionLink, AddConsumerError> {
+        let dropped = Arc::new(WrappedAtomicU64::new(0));
+        let pushed = Arc::new(WrappedAtomicU64::new(0));
+        let discard = Arc::new(atomic::AtomicBool::new(false));
+        let wait_for_keyframe = Arc::new(atomic::AtomicBool::new(true));
+
+        self.add_consumer_internal(
+            consumer,
+            settings,
+            dropped.clone(),
+            pushed.clone(),
+            discard.clone(),
+            wait_for_keyframe.clone(),
+        )?;
+
+        Ok(ConsumptionLink {
+            consumer: consumer.clone(),
+            settings,
             producer: Some(self.clone()),
             dropped,
             pushed,
@@ -275,7 +401,7 @@ impl StreamProducer {
     fn add_consumer_internal(
         &self,
         consumer: &gst_app::AppSrc,
-        configure_consumer: bool,
+        settings: ConsumerSettings,
         dropped: Arc<WrappedAtomicU64>,
         pushed: Arc<WrappedAtomicU64>,
         discard: Arc<atomic::AtomicBool>,
@@ -301,9 +427,7 @@ impl StreamProducer {
             consumer
         );
 
-        if configure_consumer {
-            Self::configure_consumer(consumer);
-        }
+        Self::configure_consumer_with(consumer, settings);
 
         // Forward force-keyunit events upstream to the appsink
         let srcpad = consumer.static_pad("src").unwrap();
@@ -854,7 +978,7 @@ mod tests {
     };
     use gst::prelude::*;
 
-    use crate::{ConsumptionLink, StreamProducer};
+    use crate::{streamproducer::ConsumerSettings, ConsumptionLink, StreamProducer};
 
     fn create_producer() -> (
         gst::Pipeline,
@@ -1021,5 +1145,103 @@ mod tests {
         assert_eq!(link1.dropped(), 0);
         assert_eq!(link2.pushed(), 10);
         assert_eq!(link2.dropped(), 0);
+    }
+
+    fn check_consumer_commons(consumer: &gst_app::AppSrc) {
+        assert_eq!(
+            consumer.latency(),
+            (Some(gst::ClockTime::ZERO), gst::ClockTime::NONE)
+        );
+        assert_eq!(consumer.format(), gst::Format::Time);
+        assert!(consumer.is_live());
+        assert!(consumer.is_handle_segment_change());
+        assert_eq!(consumer.leaky_type(), gst_app::AppLeakyType::Downstream);
+        assert!(!consumer.property::<bool>("automatic-eos"));
+    }
+
+    #[test]
+    fn configure_consumer_defaults() {
+        gst::init().unwrap();
+
+        let consumer = gst_app::AppSrc::builder().build();
+        StreamProducer::configure_consumer(&consumer);
+        check_consumer_commons(&consumer);
+
+        assert_eq!(consumer.max_buffers(), 0);
+        assert_eq!(consumer.max_bytes(), 0);
+        assert_eq!(consumer.max_time(), 500.mseconds());
+    }
+
+    #[test]
+    fn configure_consumer_with_defaults() {
+        gst::init().unwrap();
+
+        let consumer = gst_app::AppSrc::builder().build();
+        StreamProducer::configure_consumer_with(&consumer, ConsumerSettings::default());
+        check_consumer_commons(&consumer);
+
+        assert_eq!(consumer.max_buffers(), 0);
+        assert_eq!(consumer.max_bytes(), 0);
+        assert_eq!(consumer.max_time(), 500.mseconds());
+    }
+
+    #[test]
+    fn configure_consumer_with_specifics() {
+        gst::init().unwrap();
+
+        let consumer = gst_app::AppSrc::builder().build();
+
+        StreamProducer::configure_consumer_with(
+            &consumer,
+            ConsumerSettings {
+                max_buffer: 50,
+                ..Default::default()
+            },
+        );
+        check_consumer_commons(&consumer);
+
+        assert_eq!(consumer.max_buffers(), 50);
+        assert_eq!(consumer.max_bytes(), 0);
+        assert_eq!(consumer.max_time(), 500.mseconds());
+
+        StreamProducer::configure_consumer_with(
+            &consumer,
+            ConsumerSettings {
+                max_buffer: 10,
+                max_bytes: 2.mebibytes(),
+                ..Default::default()
+            },
+        );
+        check_consumer_commons(&consumer);
+
+        assert_eq!(consumer.max_buffers(), 10);
+        assert_eq!(consumer.max_bytes(), 2 * 1024 * 1024);
+        assert_eq!(consumer.max_time(), 500.mseconds());
+
+        StreamProducer::configure_consumer_with(
+            &consumer,
+            ConsumerSettings {
+                max_time: gst::ClockTime::ZERO,
+                ..Default::default()
+            },
+        );
+        check_consumer_commons(&consumer);
+
+        assert_eq!(consumer.max_buffers(), 0);
+        assert_eq!(consumer.max_bytes(), 0);
+        assert!(consumer.max_time().is_zero());
+
+        StreamProducer::configure_consumer_with(
+            &consumer,
+            ConsumerSettings {
+                max_time: 750.mseconds(),
+                ..Default::default()
+            },
+        );
+        check_consumer_commons(&consumer);
+
+        assert_eq!(consumer.max_buffers(), 0);
+        assert_eq!(consumer.max_bytes(), 0);
+        assert_eq!(consumer.max_time(), 750.mseconds());
     }
 }
