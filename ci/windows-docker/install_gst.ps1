@@ -24,12 +24,31 @@ if (!$?) {
 
 $MESON_ARGS = @(`
   "--prefix=C:\gst-install", `
+  "-Dnls=disabled", `
+  "-Dcairo:tests=disabled", `
+  "-Dfribidi:tests=false", `
+  "-Dfribidi:bin=false", `
   "-Dglib:installed_tests=false", `
+  "-Dglib:tests=false", `
+  "-Dffmpeg:tests=disabled", `
+  "-Dharfbuzz:tests=disabled", `
+  "-Dharfbuzz:utilities=disabled", `
+  "-Djson-glib:tests=false", `
   "-Dlibnice:tests=disabled", `
   "-Dlibnice:examples=disabled", `
-  "-Dffmpeg:tests=disabled", `
+  "-Dlibsrtp2:tests=disabled", `
   "-Dopenh264:tests=disabled", `
+  "-Dopus:tests=disabled", `
+  "-Dorc:benchmarks=disabled", `
+  "-Dorc:tests=disabled", `
+  "-Dorc:examples=disabled", `
+  "-Dpango:build-testsuite=false", `
+  "-Dpango:build-examples=false", `
+  "-Dpixman:tests=disabled", `
+  "-Dpixman:demos=disabled", `
   "-Dpygobject:tests=false", `
+  "-Dvpx:examples=disabled", `
+  "-Dvpx:tools=disabled", `
   "-Dgpl=enabled", `
   "-Dugly=enabled", `
   "-Dbad=enabled", `
@@ -42,7 +61,8 @@ $MESON_ARGS = @(`
   "-Dgtk=enabled", `
   "-Dgst-plugins-base:pango=enabled", `
   "-Dgst-plugins-good:cairo=enabled", `
-  "-Dgst-plugins-good:lame=disabled"
+  "-Dgst-plugins-good:lame=disabled", `
+  "-Dgst-plugins-ugly:x264=enabled"
 )
 
 Write-Output "Building gstreamer"
