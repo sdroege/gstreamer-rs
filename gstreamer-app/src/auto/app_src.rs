@@ -56,11 +56,12 @@ impl AppSrc {
     #[doc(alias = "gst_app_src_get_current_level_time")]
     #[doc(alias = "get_current_level_time")]
     #[doc(alias = "current-level-time")]
-    pub fn current_level_time(&self) -> Option<gst::ClockTime> {
+    pub fn current_level_time(&self) -> gst::ClockTime {
         unsafe {
-            from_glib(ffi::gst_app_src_get_current_level_time(
+            try_from_glib(ffi::gst_app_src_get_current_level_time(
                 self.to_glib_none().0,
             ))
+            .expect("mandatory glib value is None")
         }
     }
 
@@ -100,8 +101,11 @@ impl AppSrc {
     #[doc(alias = "gst_app_src_get_max_time")]
     #[doc(alias = "get_max_time")]
     #[doc(alias = "max-time")]
-    pub fn max_time(&self) -> Option<gst::ClockTime> {
-        unsafe { from_glib(ffi::gst_app_src_get_max_time(self.to_glib_none().0)) }
+    pub fn max_time(&self) -> gst::ClockTime {
+        unsafe {
+            try_from_glib(ffi::gst_app_src_get_max_time(self.to_glib_none().0))
+                .expect("mandatory glib value is None")
+        }
     }
 
     #[doc(alias = "gst_app_src_get_size")]
@@ -203,9 +207,9 @@ impl AppSrc {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_app_src_set_max_time")]
     #[doc(alias = "max-time")]
-    pub fn set_max_time(&self, max: impl Into<Option<gst::ClockTime>>) {
+    pub fn set_max_time(&self, max: gst::ClockTime) {
         unsafe {
-            ffi::gst_app_src_set_max_time(self.to_glib_none().0, max.into().into_glib());
+            ffi::gst_app_src_set_max_time(self.to_glib_none().0, max.into_glib());
         }
     }
 
