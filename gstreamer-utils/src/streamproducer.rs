@@ -8,6 +8,8 @@ use gst::{glib, prelude::*};
 use std::sync::LazyLock;
 use thiserror::Error;
 
+pub const DEFAULT_PRODUCER_SYNC: bool = true;
+
 pub const DEFAULT_CONSUMER_MAX_BUFFERS: u64 = 0;
 pub const DEFAULT_CONSUMER_MAX_BYTES: gst::format::Bytes = gst::format::Bytes::ZERO;
 pub const DEFAULT_CONSUMER_MAX_TIME: gst::ClockTime = gst::ClockTime::from_mseconds(500);
@@ -106,6 +108,26 @@ impl Drop for StreamProducerInner {
 
         self.appsink
             .set_callbacks(gst_app::AppSinkCallbacks::builder().build());
+    }
+}
+
+/// User defined producer settings
+///
+/// Defaults to:
+///
+/// * `sync` <- `true` (sync on the clock)
+///
+/// Use `ConsumerSettings::builder()` if you need different values.
+#[derive(Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+pub struct ProducerSettings {
+    pub sync: bool,
+}
+
+impl Default for ProducerSettings {
+    fn default() -> Self {
+        ProducerSettings {
+            sync: DEFAULT_PRODUCER_SYNC,
+        }
     }
 }
 
@@ -679,8 +701,26 @@ impl StreamProducer {
     }
 }
 
-impl<'a> From<&'a gst_app::AppSink> for StreamProducer {
-    fn from(appsink: &'a gst_app::AppSink) -> Self {
+impl StreamProducer {
+    /// Adds an `appsink` to dispatch data from.
+    ///
+    /// This function configures the `appsink` in a suitable state to act as a producer
+    /// and also sets the properties as follows:
+    ///
+    /// * `sync` <- `true` (sync on the clock)
+    ///
+    /// If you need a different value, use [`StreamProducer::with`] instead.
+    pub fn from(appsink: &gst_app::AppSink) -> Self {
+        Self::with(appsink, ProducerSettings::default())
+    }
+
+    /// Adds an `appsink` to dispatch data from.
+    ///
+    /// This function configures the `appsink` in a suitable state to act as a producer
+    /// and applies the provided settings.
+    ///
+    /// If unsure, use [`StreamProducer::from`] instead.
+    pub fn with(appsink: &gst_app::AppSink, settings: ProducerSettings) -> Self {
         let consumers = Arc::new(Mutex::new(StreamConsumers {
             current_latency: None,
             latency_updated: false,
@@ -691,6 +731,8 @@ impl<'a> From<&'a gst_app::AppSink> for StreamProducer {
             forward_preroll: true,
             just_forwarded_preroll: false,
         }));
+
+        appsink.set_sync(settings.sync);
 
         appsink.set_callbacks(
             gst_app::AppSinkCallbacks::builder()
@@ -808,31 +850,72 @@ impl<'a> From<&'a gst_app::AppSink> for StreamProducer {
         );
 
         let sinkpad = appsink.static_pad("sink").unwrap();
-        let appsink_probe_id = sinkpad
-            .add_probe(
-                gst::PadProbeType::EVENT_UPSTREAM,
-                glib::clone!(
-                    #[strong]
-                    consumers,
-                    move |_pad, info| {
-                        let Some(event) = info.event() else {
-                            return gst::PadProbeReturn::Ok;
-                        };
+        let appsink_probe_id = if settings.sync {
+            // If appsink syncs on the clock,
+            // we need to propagate the latency consolidated by the producer's pipeline,
+            // which uses the max latency among all the branches. This value can be
+            // captured by observing the Latency event posted by the pipeline
+            // upon latency recalculation.
+            sinkpad
+                .add_probe(
+                    gst::PadProbeType::EVENT_UPSTREAM,
+                    glib::clone!(
+                        #[strong]
+                        consumers,
+                        move |_pad, info| {
+                            let Some(event) = info.event() else {
+                                unreachable!();
+                            };
+                            let gst::EventView::Latency(event) = event.view() else {
+                                return gst::PadProbeReturn::Ok;
+                            };
 
-                        let gst::EventView::Latency(event) = event.view() else {
-                            return gst::PadProbeReturn::Ok;
-                        };
+                            let mut consumers = consumers.lock().unwrap();
+                            consumers.current_latency = Some(event.latency());
+                            consumers.latency_updated = true;
 
-                        let latency = event.latency();
-                        let mut consumers = consumers.lock().unwrap();
-                        consumers.current_latency = Some(latency);
-                        consumers.latency_updated = true;
+                            gst::PadProbeReturn::Ok
+                        }
+                    ),
+                )
+                .unwrap()
+        } else {
+            // If appsink doesn't sync on the clock,
+            // only the latency from current branch needs to be considered.
+            // In this case, the Latency event doesn't take into account current branch.
+            // We can still capture current branch's latency by observing the result
+            // of the Latency query set by upstream elements.
+            //
+            // For reference:
+            //
+            // * BaseSink reports being non-live if the sink doesn't sync on the clock:
+            //   https://gitlab.freedesktop.org/gstreamer/gstreamer/-/blob/9669136207c6a2d35c45c9460f9a838cb5a97379/subprojects/gstreamer/libs/gst/base/gstbasesink.c#L1297
+            // * Bin-level consolidation skips non-live branches:
+            //   https://gitlab.freedesktop.org/gstreamer/gstreamer/-/blob/9669136207c6a2d35c45c9460f9a838cb5a97379/subprojects/gstreamer/gst/gstbin.c#L4166
+            sinkpad
+                .add_probe(
+                    gst::PadProbeType::QUERY_UPSTREAM | gst::PadProbeType::PULL,
+                    glib::clone!(
+                        #[strong]
+                        consumers,
+                        move |_pad, info| {
+                            let Some(query) = info.query() else {
+                                unreachable!();
+                            };
+                            let gst::QueryView::Latency(query) = query.view() else {
+                                return gst::PadProbeReturn::Ok;
+                            };
 
-                        gst::PadProbeReturn::Ok
-                    }
-                ),
-            )
-            .unwrap();
+                            let mut consumers = consumers.lock().unwrap();
+                            consumers.current_latency = Some(query.result().1);
+                            consumers.latency_updated = true;
+
+                            gst::PadProbeReturn::Ok
+                        }
+                    ),
+                )
+                .unwrap()
+        };
 
         StreamProducer(Arc::new(StreamProducerInner {
             appsink: appsink.clone(),
