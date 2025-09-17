@@ -20,6 +20,10 @@ pub enum AggregatorStartTimeSelection {
     First,
     #[doc(alias = "GST_AGGREGATOR_START_TIME_SELECTION_SET")]
     Set,
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "GST_AGGREGATOR_START_TIME_SELECTION_NOW")]
+    Now,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -36,6 +40,8 @@ impl IntoGlib for AggregatorStartTimeSelection {
             Self::Zero => ffi::GST_AGGREGATOR_START_TIME_SELECTION_ZERO,
             Self::First => ffi::GST_AGGREGATOR_START_TIME_SELECTION_FIRST,
             Self::Set => ffi::GST_AGGREGATOR_START_TIME_SELECTION_SET,
+            #[cfg(feature = "v1_28")]
+            Self::Now => ffi::GST_AGGREGATOR_START_TIME_SELECTION_NOW,
             Self::__Unknown(value) => value,
         }
     }
@@ -53,6 +59,8 @@ impl FromGlib<ffi::GstAggregatorStartTimeSelection> for AggregatorStartTimeSelec
             ffi::GST_AGGREGATOR_START_TIME_SELECTION_ZERO => Self::Zero,
             ffi::GST_AGGREGATOR_START_TIME_SELECTION_FIRST => Self::First,
             ffi::GST_AGGREGATOR_START_TIME_SELECTION_SET => Self::Set,
+            #[cfg(feature = "v1_28")]
+            ffi::GST_AGGREGATOR_START_TIME_SELECTION_NOW => Self::Now,
             value => Self::__Unknown(value),
         }
     }

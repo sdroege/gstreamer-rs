@@ -34,6 +34,9 @@ pub type GstAggregatorStartTimeSelection = c_int;
 pub const GST_AGGREGATOR_START_TIME_SELECTION_ZERO: GstAggregatorStartTimeSelection = 0;
 pub const GST_AGGREGATOR_START_TIME_SELECTION_FIRST: GstAggregatorStartTimeSelection = 1;
 pub const GST_AGGREGATOR_START_TIME_SELECTION_SET: GstAggregatorStartTimeSelection = 2;
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+pub const GST_AGGREGATOR_START_TIME_SELECTION_NOW: GstAggregatorStartTimeSelection = 3;
 
 // Constants
 pub const GST_BASE_PARSE_FLAG_DRAINING: c_int = 2;

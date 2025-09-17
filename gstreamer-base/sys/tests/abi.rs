@@ -416,6 +416,7 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
 
 const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_AGGREGATOR_START_TIME_SELECTION_FIRST", "1"),
+    ("(gint) GST_AGGREGATOR_START_TIME_SELECTION_NOW", "3"),
     ("(gint) GST_AGGREGATOR_START_TIME_SELECTION_SET", "2"),
     ("(gint) GST_AGGREGATOR_START_TIME_SELECTION_ZERO", "0"),
     ("GST_BASE_PARSE_FLAG_DRAINING", "2"),
