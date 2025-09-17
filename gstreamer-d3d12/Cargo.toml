@@ -18,7 +18,7 @@ gstreamer-d3d12-sys.workspace = true
 glib.workspace = true
 gst = { workspace = true, features = ["v1_26"] }
 gst-video = { workspace = true, features = ["v1_26"] }
-windows = { version = "0.61", features=["Win32_Graphics_Direct3D12",
+windows = { version = ">= 0.61, <= 0.62", features=["Win32_Graphics_Direct3D12",
     "Win32_Graphics_Direct3D11", "Win32_Graphics_Dxgi",
     "Win32_Graphics_Dxgi_Common", "Win32_Foundation"] }
 
