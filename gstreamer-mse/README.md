@@ -11,19 +11,13 @@ based on the [GObject-Introspection](https://wiki.gnome.org/Projects/GObjectIntr
 API metadata provided by the GStreamer project.
 
 ## Table of Contents
-- [gstreamer-rs  ](#gstreamer-rs--)
-  - [Table of Contents](#table-of-contents)
-  - [Installation](#installation)
-    - [Linux/BSDs](#linuxbsds)
-    - [macOS](#macos)
-      - [GStreamer Binaries](#gstreamer-binaries)
-      - [Homebrew](#homebrew)
-    - [Windows](#windows)
-      - [GStreamer Binaries](#gstreamer-binaries-1)
-      - [MSYS2 / pacman](#msys2--pacman)
-  - [Getting Started](#getting-started)
-  - [LICENSE](#license)
-  - [Contribution](#contribution)
+1. [Installation](#installation)
+   1. [Linux/BSDs](#installation-linux)
+   1. [macOS](#installation-macos)
+   1. [Windows](#installation-windows)
+1. [Getting Started](#getting-started)
+1. [License](#license)
+1. [Contribution](#contribution)
 
 <a name="installation"/>
 
@@ -51,6 +45,21 @@ $ apt-get install libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev \
       gstreamer1.0-libav libgstrtspserver-1.0-dev libges-1.0-dev
 ```
 
+On Fedora:
+
+```console
+dnf install gstreamer1-devel gstreamer1-plugins-base-devel \
+      gstreamer1-plugins-good gstreamer1-plugins-bad-free \
+      gstreamer1-plugin-libav gstreamer1-rtsp-server-devel \
+      gst-editing-services-devel
+```
+
+More Fedora packages are available in [RPMFusion](https://rpmfusion.org/):
+
+```console
+dnf install gstreamer1-plugins-bad-freeworld gstreamer1-plugins-ugly
+```
+
 The minimum required version of the above libraries is >= 1.14. If you
 build the gstreamer-player sub-crate, or any of the examples that
 depend on gstreamer-player, you must ensure that in addition to the above
@@ -59,6 +68,12 @@ files for the full details,
 
 ```console
 $ apt-get install libgstreamer-plugins-bad1.0-dev
+```
+
+On Fedora:
+
+```console
+dnf install gstreamer1-plugins-bad-free-devel
 ```
 
 Package names on other distributions should be similar.
@@ -164,7 +179,7 @@ would be [`pkg-config-lite`](https://sourceforge.net/projects/pkgconfiglite/).
 ## Getting Started
 
 The API reference can be found
-[here](https://gstreamer.pages.freedesktop.org/gstreamer-rs/stable/latest/docs/gstreamer/), however it is
+[here](https://gstreamer.freedesktop.org/documentation/rust/stable/latest/docs/gstreamer/), however it is
 only the Rust API reference and does not explain any of the concepts.
 
 For getting started with GStreamer development, the best would be to follow
@@ -174,7 +189,9 @@ Manual](https://gstreamer.freedesktop.org/documentation/application-development/
 While being C-centric, it explains all the fundamental concepts of GStreamer
 and the code examples should be relatively easily translatable to Rust. The
 API is basically the same, function/struct names are the same and everything
-is only more convenient (hopefully) and safer.
+is only more convenient (hopefully) and safer. The Rust APIs are annotated with
+`#[doc(alias = "c_function_name")]`, so you can search for a C function name
+in this documentation and find the corresponding Rust binding.
 
 In addition there are
 [tutorials](https://gstreamer.freedesktop.org/documentation/tutorials/) on the
