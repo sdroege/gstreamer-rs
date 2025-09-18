@@ -5,6 +5,25 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.24.2] - 2025-09-18
+### Fixed
+- Allow using `DMA_DRM` and `ENCODED` formats with `gst_video::VideoMeta` and
+  `VideoInfo` APIs by improving / relaxing parameter validation.
+- Refer to `gst::IdStr` by full path in `gst::id_str!()` macro.
+
+### Added
+- `gst::MiniObject::downcast_ref()` and `downcast_mut()` that operate on the
+  non-ref type.
+- More documentation and convenience constructors for `gst::format` types.
+- `Default` impl for `gst_app` enums.
+- `gst_utils::StreamProducer` posts an element message whenever buffers are
+  dropped.
+- `gst_utils::StreamProducer` has new API to configure the `appsrc` limits and
+  to configure `sync=false` on the `appsink`.
+
+### Changed
+- Update to latest GStreamer 1.28 APIs.
+
 ## [0.24.1] - 2025-08-09
 ### Fixed
 - Removed incomplete offset/stride checks in `gst_video::VideoInfo` builder.
@@ -1926,7 +1945,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.24.1...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.24.2...HEAD
+[0.24.2]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.24.1...0.24.2
 [0.24.1]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.24.0...0.24.1
 [0.24.0]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.23.7...0.24.0
 [0.23.7]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.23.6...0.23.7
