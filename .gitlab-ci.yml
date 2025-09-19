@@ -145,7 +145,7 @@ trigger:
       build-essential cmake curl python3-setuptools libglib2.0-dev libxml2-dev
       libdrm-dev libegl1-mesa-dev libgl1-mesa-dev libgbm-dev libgles2-mesa-dev
       libgl1-mesa-dri libegl-dev libgl-dev libgles-dev libglx-dev
-      libssl-dev git wget ca-certificates ninja-build python3-pip flex bison
+      libssl-dev git wget ca-certificates meson ninja-build python3-pip flex bison
       libglib2.0-dev libx11-dev libx11-xcb-dev libsoup2.4-dev libvorbis-dev
       libogg-dev libtheora-dev libmatroska-dev libvpx-dev libopus-dev
       libgraphene-1.0-dev libjpeg-dev libwayland-dev wayland-protocols
