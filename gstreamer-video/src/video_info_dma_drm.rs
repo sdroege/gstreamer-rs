@@ -91,6 +91,12 @@ pub fn dma_drm_format_to_gst_format(
     }
 }
 
+#[doc(alias = "gst_video_is_dma_drm_caps")]
+pub fn is_dma_drm_caps(caps: &gst::CapsRef) -> bool {
+    skip_assert_initialized!();
+    unsafe { from_glib(ffi::gst_video_is_dma_drm_caps(caps.as_ptr())) }
+}
+
 #[doc(alias = "GstVideoInfoDmaDrm")]
 #[derive(Clone)]
 #[repr(transparent)]
