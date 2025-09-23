@@ -22,6 +22,9 @@ gstreamer-tag-sys.workspace = true
 glib.workspace = true
 gst.workspace = true
 
+[dev-dependencies]
+gir-format-check = "0.1"
+
 [features]
 default = []
 v1_16 = ["gst/v1_16", "gstreamer-tag-sys/v1_16"]
