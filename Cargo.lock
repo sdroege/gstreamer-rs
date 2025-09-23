@@ -1529,6 +1529,7 @@ dependencies = [
 name = "gstreamer-tag"
 version = "0.24.2"
 dependencies = [
+ "gir-format-check",
  "glib",
  "gstreamer",
  "gstreamer-tag-sys",
