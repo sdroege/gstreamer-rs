@@ -31,6 +31,7 @@ gst-vulkan-xcb = { workspace = true, optional = true }
 gio = { workspace = true, optional = true }
 anyhow = "1.0"
 byte-slice-cast = "1"
+clap = { version = "4.0", features = ["derive"] }
 cairo-rs = { workspace = true, features=["use_glib"], optional = true }
 derive_more = { version = "2", features = ["display", "error"] }
 futures = "0.3"
@@ -194,6 +195,10 @@ required-features = ["windows"]
 [[bin]]
 name = "ges"
 required-features = ["ges"]
+
+[[bin]]
+name = "ges_audio_channel_split"
+required-features = ["ges", "ges/v1_20"]
 
 [[bin]]
 name = "glwindow"
