@@ -148,6 +148,12 @@ pub enum AudioChannelPosition {
     UnknownChannel64 = 64,
 }
 
+impl std::fmt::Display for AudioChannelPosition {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        <AudioChannelPosition as std::fmt::Debug>::fmt(self, f)
+    }
+}
+
 unsafe impl TransparentType for AudioChannelPosition {
     type GlibType = ffi::GstAudioChannelPosition;
 }
