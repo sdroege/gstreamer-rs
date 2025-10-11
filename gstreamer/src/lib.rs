@@ -263,6 +263,9 @@ pub use crate::segment::*;
 #[cfg(feature = "serde")]
 mod segment_serde;
 
+mod timed_value;
+pub use crate::timed_value::TimedValue;
+
 pub mod toc;
 pub use crate::toc::{Toc, TocEntry, TocEntryRef, TocRef};
 #[cfg(feature = "serde")]
