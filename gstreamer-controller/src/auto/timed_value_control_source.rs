@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
+#![allow(deprecated)]
 
 use crate::{ffi, ControlPoint};
 use glib::{
@@ -32,12 +33,6 @@ pub trait TimedValueControlSourceExt: IsA<TimedValueControlSource> + 'static {
     //#[doc(alias = "gst_timed_value_control_source_find_control_point_iter")]
     //fn find_control_point_iter(&self, timestamp: impl Into<Option<gst::ClockTime>>) -> /*Ignored*/Option<glib::SequenceIter> {
     //    unsafe { TODO: call ffi:gst_timed_value_control_source_find_control_point_iter() }
-    //}
-
-    //#[doc(alias = "gst_timed_value_control_source_get_all")]
-    //#[doc(alias = "get_all")]
-    //fn all(&self) -> /*Ignored*/Vec<gst::TimedValue> {
-    //    unsafe { TODO: call ffi:gst_timed_value_control_source_get_all() }
     //}
 
     #[doc(alias = "gst_timed_value_control_source_get_count")]

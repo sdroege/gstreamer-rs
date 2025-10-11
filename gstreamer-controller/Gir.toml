@@ -46,6 +46,16 @@ name = "GstController.TimedValueControlSource"
 status = "generate"
 
     [[object.function]]
+    name = "get_all"
+    # Deprecated and unsafe (transfer-container), use list_control_points instead
+    manual = true
+
+    [[object.function]]
+    name = "list_control_points"
+    # Manual implementation to return glib::collections::List instead of Vec
+    manual = true
+
+    [[object.function]]
     name = "set"
         [[object.function.parameter]]
         name = "timestamp"

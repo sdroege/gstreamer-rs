@@ -507,6 +507,12 @@ extern "C" {
     pub fn gst_timed_value_control_source_get_count(
         self_: *mut GstTimedValueControlSource,
     ) -> c_int;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_timed_value_control_source_list_control_points(
+        self_: *mut GstTimedValueControlSource,
+        n_control_points: *mut size_t,
+    ) -> *mut gst::GstTimedValue;
     pub fn gst_timed_value_control_source_set(
         self_: *mut GstTimedValueControlSource,
         timestamp: gst::GstClockTime,
