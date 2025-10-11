@@ -24,12 +24,15 @@ macro_rules! skip_assert_initialized {
 #[allow(unused_imports)]
 mod auto;
 mod control_point;
+mod timed_value_control_source;
 pub use crate::auto::*;
 use crate::control_point::*;
+pub use crate::timed_value_control_source::*;
 
 pub mod prelude {
     #[doc(hidden)]
     pub use gst::prelude::*;
 
     pub use crate::auto::traits::*;
+    pub use crate::timed_value_control_source::TimedValueControlSourceExtManual;
 }
