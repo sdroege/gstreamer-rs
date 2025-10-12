@@ -48,7 +48,7 @@ uds = { version = "0.4", optional = true }
 winit = { version = "0.30", optional = true, default-features = false } #, features = ["rwh_05"] }
 atomic_refcell = "0.1"
 data-encoding = "2.0"
-naga = { version = "25.0.1", optional = true, features = ["wgsl-in", "spv-out"] }
+naga = { version = "27", optional = true, features = ["wgsl-in", "spv-out"] }
 
 [target.'cfg(windows)'.dependencies]
 windows = { version = ">= 0.61, <= 0.62", features=["Win32_Graphics_Direct3D11",
