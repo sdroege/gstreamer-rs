@@ -1,11 +1,6 @@
 use super::VulkanOperation;
 use glib::{prelude::*, translate::*};
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::VulkanOperation>> Sealed for T {}
-}
-
 #[derive(Debug)]
 #[must_use = "Need to call `end`, otherwise drop will panic."]
 pub struct VulkanOperationGuard<'a> {
@@ -44,7 +39,7 @@ impl PartialEq for VulkanOperationGuard<'_> {
 }
 impl Eq for VulkanOperationGuard<'_> {}
 
-pub trait VulkanOperationExtManual: sealed::Sealed + IsA<VulkanOperation> + 'static {
+pub trait VulkanOperationExtManual: IsA<VulkanOperation> + 'static {
     // rustdoc-stripper-ignore-next
     /// Returns a guard struct for the begun operation.
     /// The `end` method on the guard **must** be called; Dropping it without results in a panic

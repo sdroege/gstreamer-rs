@@ -2,11 +2,6 @@ use crate::VulkanCommandPool;
 
 use glib::{prelude::*, translate::*};
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::VulkanCommandPool>> Sealed for T {}
-}
-
 // rustdoc-stripper-ignore-next
 /// Represents a locked VulkanCommandPool. The command pool is unlocked when this struct is dropped.
 #[derive(Debug)]
@@ -28,7 +23,7 @@ impl PartialEq for VulkanCommandPoolGuard<'_> {
 }
 impl Eq for VulkanCommandPoolGuard<'_> {}
 
-pub trait VulkanCommandPoolExtManual: sealed::Sealed + IsA<VulkanCommandPool> + 'static {
+pub trait VulkanCommandPoolExtManual: IsA<VulkanCommandPool> + 'static {
     // rustdoc-stripper-ignore-next
     /// Locks the command pool. A struct similar to `MutexGuard` is retured that unlocks the command pool once dropped.
     #[doc(alias = "gst_vulkan_command_pool_lock")]

@@ -2,11 +2,6 @@ use crate::VulkanQueue;
 
 use glib::{prelude::*, translate::*};
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::VulkanQueue>> Sealed for T {}
-}
-
 // rustdoc-stripper-ignore-next
 /// Represents a locked vulkan queue that can be submitted too. The queue is unlock when this struct is dropped.
 #[derive(Debug)]
@@ -28,7 +23,7 @@ impl PartialEq for VulkanQueueSubmitGuard<'_> {
 }
 impl Eq for VulkanQueueSubmitGuard<'_> {}
 
-pub trait VulkanQueueExtManual: sealed::Sealed + IsA<VulkanQueue> + 'static {
+pub trait VulkanQueueExtManual: IsA<VulkanQueue> + 'static {
     // rustdoc-stripper-ignore-next
     /// Locks the vulkan queue for submission. A struct similar to `MutexGuard` is retured that unlocks the queue once dropped.
     #[doc(alias = "gst_vulkan_queue_submit_lock")]

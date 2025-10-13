@@ -3,12 +3,7 @@ use crate::VulkanDevice;
 use glib::prelude::*;
 use glib::translate::*;
 
-mod sealed {
-    pub trait Sealed {}
-    impl<T: super::IsA<super::VulkanDevice>> Sealed for T {}
-}
-
-pub trait VulkanDeviceExtManual: sealed::Sealed + IsA<VulkanDevice> + 'static {
+pub trait VulkanDeviceExtManual: IsA<VulkanDevice> + 'static {
     fn create_shader(&self, code: &[u8]) -> Result<crate::VulkanHandle, glib::Error> {
         unsafe {
             let mut error = std::ptr::null_mut();
