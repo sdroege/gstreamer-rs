@@ -331,6 +331,14 @@ name = "GES.TimelineElement"
 status = "generate"
 manual_traits = ["TimelineElementExtManual"]
     [[object.function]]
+    name = "set_child_property"
+    manual = true
+
+    [[object.function]]
+    name = "set_child_property_by_pspec"
+    manual = true
+
+    [[object.function]]
     name = "get_duration"
         [object.function.return]
         mandatory = true
@@ -405,11 +413,6 @@ manual_traits = ["TimelineElementExtManual"]
     name = "remove_child_property"
         [object.function.return]
         bool_return_is_error = "Failed to remove child property"
-
-    [[object.function]]
-    name = "set_child_property"
-        [object.function.return]
-        bool_return_is_error = "Failed to set child property"
 
     [[object.function]]
     name = "set_parent"
