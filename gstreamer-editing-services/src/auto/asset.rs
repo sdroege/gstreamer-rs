@@ -9,7 +9,7 @@ use glib::{
     signal::{connect_raw, SignalHandlerId},
     translate::*,
 };
-use std::{boxed::Box as Box_, pin::Pin};
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "GESAsset")]
@@ -22,108 +22,6 @@ glib::wrapper! {
 
 impl Asset {
     pub const NONE: Option<&'static Asset> = None;
-
-    #[doc(alias = "ges_asset_needs_reload")]
-    pub fn needs_reload(extractable_type: glib::types::Type, id: Option<&str>) -> bool {
-        assert_initialized_main_thread!();
-        unsafe {
-            from_glib(ffi::ges_asset_needs_reload(
-                extractable_type.into_glib(),
-                id.to_glib_none().0,
-            ))
-        }
-    }
-
-    #[doc(alias = "ges_asset_request")]
-    pub fn request(
-        extractable_type: glib::types::Type,
-        id: Option<&str>,
-    ) -> Result<Option<Asset>, glib::Error> {
-        assert_initialized_main_thread!();
-        unsafe {
-            let mut error = std::ptr::null_mut();
-            let ret = ffi::ges_asset_request(
-                extractable_type.into_glib(),
-                id.to_glib_none().0,
-                &mut error,
-            );
-            if error.is_null() {
-                Ok(from_glib_full(ret))
-            } else {
-                Err(from_glib_full(error))
-            }
-        }
-    }
-
-    #[doc(alias = "ges_asset_request_async")]
-    pub fn request_async<P: FnOnce(Result<Asset, glib::Error>) + 'static>(
-        extractable_type: glib::types::Type,
-        id: Option<&str>,
-        cancellable: Option<&impl IsA<gio::Cancellable>>,
-        callback: P,
-    ) {
-        assert_initialized_main_thread!();
-
-        let main_context = glib::MainContext::ref_thread_default();
-        let is_main_context_owner = main_context.is_owner();
-        let has_acquired_main_context = (!is_main_context_owner)
-            .then(|| main_context.acquire().ok())
-            .flatten();
-        assert!(
-            is_main_context_owner || has_acquired_main_context.is_some(),
-            "Async operations only allowed if the thread is owning the MainContext"
-        );
-
-        let user_data: Box_<glib::thread_guard::ThreadGuard<P>> =
-            Box_::new(glib::thread_guard::ThreadGuard::new(callback));
-        unsafe extern "C" fn request_async_trampoline<
-            P: FnOnce(Result<Asset, glib::Error>) + 'static,
-        >(
-            _source_object: *mut glib::gobject_ffi::GObject,
-            res: *mut gio::ffi::GAsyncResult,
-            user_data: glib::ffi::gpointer,
-        ) {
-            let mut error = std::ptr::null_mut();
-            let ret = ffi::ges_asset_request_finish(res, &mut error);
-            let result = if error.is_null() {
-                Ok(from_glib_full(ret))
-            } else {
-                Err(from_glib_full(error))
-            };
-            let callback: Box_<glib::thread_guard::ThreadGuard<P>> =
-                Box_::from_raw(user_data as *mut _);
-            let callback: P = callback.into_inner();
-            callback(result);
-        }
-        let callback = request_async_trampoline::<P>;
-        unsafe {
-            ffi::ges_asset_request_async(
-                extractable_type.into_glib(),
-                id.to_glib_none().0,
-                cancellable.map(|p| p.as_ref()).to_glib_none().0,
-                Some(callback),
-                Box_::into_raw(user_data) as *mut _,
-            );
-        }
-    }
-
-    pub fn request_future(
-        extractable_type: glib::types::Type,
-        id: Option<&str>,
-    ) -> Pin<Box_<dyn std::future::Future<Output = Result<Asset, glib::Error>> + 'static>> {
-        skip_assert_initialized!();
-        let id = id.map(ToOwned::to_owned);
-        Box_::pin(gio::GioFuture::new(&(), move |_obj, cancellable, send| {
-            Self::request_async(
-                extractable_type,
-                id.as_ref().map(::std::borrow::Borrow::borrow),
-                Some(cancellable),
-                move |res| {
-                    send.resolve(res);
-                },
-            );
-        }))
-    }
 }
 
 unsafe impl Send for Asset {}

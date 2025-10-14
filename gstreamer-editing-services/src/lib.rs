@@ -51,6 +51,7 @@ macro_rules! skip_assert_initialized {
     () => {};
 }
 
+mod asset;
 #[allow(clippy::needless_borrow)]
 #[allow(deprecated)]
 #[allow(unused_imports)]

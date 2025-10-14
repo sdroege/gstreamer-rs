@@ -106,6 +106,22 @@ name = "GES.Asset"
 status = "generate"
 concurrency = "send+sync"
     [[object.function]]
+    name = "needs_reload"
+    manual = true
+
+    [[object.function]]
+    name = "request"
+    manual = true
+
+    [[object.function]]
+    name = "request_async"
+    manual = true
+
+    [[object.function]]
+    name = "request_future"
+    manual = true
+
+    [[object.function]]
     name = "set_proxy"
         [object.function.return]
         bool_return_is_error = "Failed to set proxy"
