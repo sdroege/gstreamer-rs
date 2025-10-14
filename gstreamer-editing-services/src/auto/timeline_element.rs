@@ -399,35 +399,6 @@ pub trait TimelineElementExt: IsA<TimelineElement> + 'static {
     //    unsafe { TODO: call ffi:ges_timeline_element_set_child_properties() }
     //}
 
-    #[doc(alias = "ges_timeline_element_set_child_property")]
-    fn set_child_property(
-        &self,
-        property_name: &str,
-        value: &glib::Value,
-    ) -> Result<(), glib::error::BoolError> {
-        unsafe {
-            glib::result_from_gboolean!(
-                ffi::ges_timeline_element_set_child_property(
-                    self.as_ref().to_glib_none().0,
-                    property_name.to_glib_none().0,
-                    value.to_glib_none().0
-                ),
-                "Failed to set child property"
-            )
-        }
-    }
-
-    #[doc(alias = "ges_timeline_element_set_child_property_by_pspec")]
-    fn set_child_property_by_pspec(&self, pspec: impl AsRef<glib::ParamSpec>, value: &glib::Value) {
-        unsafe {
-            ffi::ges_timeline_element_set_child_property_by_pspec(
-                self.as_ref().to_glib_none().0,
-                pspec.as_ref().to_glib_none().0,
-                value.to_glib_none().0,
-            );
-        }
-    }
-
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_timeline_element_set_child_property_full")]

@@ -61,6 +61,7 @@ pub use crate::auto::*;
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
 mod composition_meta;
 pub mod subclass;
+mod timeline_element;
 mod uri_clip_asset;
 
 #[cfg(feature = "serde")]
@@ -85,4 +86,5 @@ pub mod prelude {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub use crate::composition_meta::FrameCompositionMeta;
     pub use crate::formatter::FormatterExtManual;
+    pub use crate::timeline_element::TimelineElementExtManual;
 }
