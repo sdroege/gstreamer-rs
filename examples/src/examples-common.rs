@@ -17,71 +17,90 @@ where
     T: Send + 'static,
 {
     use std::{
-        ffi::c_void,
+        cell::RefCell,
         sync::mpsc::{channel, Sender},
         thread,
     };
 
-    use cocoa::{
-        appkit::{NSApplication, NSWindow},
-        base::id,
-        delegate,
+    use dispatch::Queue;
+    use objc2::rc::Retained;
+    use objc2::runtime::ProtocolObject;
+    use objc2::{define_class, msg_send, DefinedClass, MainThreadOnly};
+    use objc2_app_kit::{
+        NSApplication, NSApplicationActivationPolicy, NSApplicationDelegate, NSEvent,
+        NSEventModifierFlags, NSEventSubtype, NSEventType,
     };
-    use objc::{
-        msg_send,
-        runtime::{Object, Sel},
-        sel, sel_impl,
-    };
+    use objc2_foundation::{MainThreadMarker, NSNotification, NSObject, NSObjectProtocol, NSPoint};
 
-    unsafe {
-        let app = cocoa::appkit::NSApp();
-        let (send, recv) = channel::<()>();
+    define_class!(
+        #[unsafe(super(NSObject))]
+        #[thread_kind = MainThreadOnly]
+        #[name = "AppDelegate"]
+        #[ivars = RefCell<Option<Sender<()>>>]
+        struct AppDelegate;
 
-        extern "C" fn on_finish_launching(this: &Object, _cmd: Sel, _notification: id) {
-            let send = unsafe {
-                let send_pointer = *this.get_ivar::<*const c_void>("send");
-                let boxed = Box::from_raw(send_pointer as *mut Sender<()>);
-                *boxed
-            };
-            send.send(()).unwrap();
+        unsafe impl NSObjectProtocol for AppDelegate {}
+
+        unsafe impl NSApplicationDelegate for AppDelegate {
+            #[unsafe(method(applicationDidFinishLaunching:))]
+            unsafe fn application_did_finish_launching(&self, _notification: &NSNotification) {
+                if let Some(sender) = self.ivars().borrow_mut().take() {
+                    let _ = sender.send(());
+                }
+            }
         }
+    );
 
-        let delegate = delegate!("AppDelegate", {
-            app: id = app,
-            send: *const c_void = Box::into_raw(Box::new(send)) as *const c_void,
-            (applicationDidFinishLaunching:) => on_finish_launching as extern fn(&Object, Sel, id)
-        });
-        app.setDelegate_(delegate);
+    impl AppDelegate {
+        fn new(sender: Sender<()>, mtm: MainThreadMarker) -> Retained<Self> {
+            let this = mtm.alloc();
+            let this = this.set_ivars(RefCell::new(Some(sender)));
+            unsafe { msg_send![super(this), init] }
+        }
+    }
 
-        let t = thread::spawn(move || {
-            // Wait for the NSApp to launch to avoid possibly calling stop_() too early
-            recv.recv().unwrap();
+    let mtm = MainThreadMarker::new().expect("Must be called on main thread");
+    let app = NSApplication::sharedApplication(mtm);
+    app.setActivationPolicy(NSApplicationActivationPolicy::Regular);
 
-            let res = main();
+    let (send, recv) = channel::<()>();
+    let delegate = AppDelegate::new(send, mtm);
+    let delegate = ProtocolObject::from_ref(&*delegate);
+    app.setDelegate(Some(delegate));
 
-            let app = cocoa::appkit::NSApp();
-            app.stop_(cocoa::base::nil);
+    let t = thread::spawn(move || {
+        // Wait for the NSApp to launch to avoid possibly calling stop_() too early
+        recv.recv().unwrap();
+
+        let res = main();
+
+        // Dispatch the stop call to the main queue to be thread-safe
+        Queue::main().exec_async(|| {
+            // This block runs on the main thread, so MainThreadMarker::new() will succeed
+            let mtm = MainThreadMarker::new().expect("Block should run on main thread");
+            let app = NSApplication::sharedApplication(mtm);
+            app.stop(None);
 
             // Stopping the event loop requires an actual event
-            let event = cocoa::appkit::NSEvent::otherEventWithType_location_modifierFlags_timestamp_windowNumber_context_subtype_data1_data2_(
-                cocoa::base::nil,
-                cocoa::appkit::NSEventType::NSApplicationDefined,
-                cocoa::foundation::NSPoint { x: 0.0, y: 0.0 },
-                cocoa::appkit::NSEventModifierFlags::empty(),
+            let location = NSPoint::new(0.0, 0.0);
+            let event = NSEvent::otherEventWithType_location_modifierFlags_timestamp_windowNumber_context_subtype_data1_data2(
+                NSEventType::ApplicationDefined,
+                location,
+                NSEventModifierFlags::empty(),
                 0.0,
                 0,
-                cocoa::base::nil,
-                cocoa::appkit::NSEventSubtype::NSApplicationActivatedEventType,
+                None,
+                NSEventSubtype::ApplicationActivated.0,
                 0,
                 0,
-            );
-            app.postEvent_atStart_(event, cocoa::base::YES);
-
-            res
+            ).unwrap();
+            app.postEvent_atStart(&event, true);
         });
 
-        app.run();
+        res
+    });
 
-        t.join().unwrap()
-    }
+    app.run();
+
+    t.join().unwrap()
 }
