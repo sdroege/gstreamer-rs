@@ -72,7 +72,7 @@ pub use crate::log_context::{LogContext, LogContextBuilder};
 
 #[cfg(target_os = "macos")]
 mod macos;
-#[cfg(target_os = "macos")]
+#[cfg(all(target_os = "macos", feature = "v1_22"))]
 pub use crate::macos::*;
 
 #[macro_use]

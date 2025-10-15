@@ -1,5 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+#[cfg(feature = "v1_22")]
 type GstMainFuncSimple = Option<unsafe extern "C" fn(glib::ffi::gpointer)>;
 
 extern "C" {
