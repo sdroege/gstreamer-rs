@@ -12,7 +12,7 @@ ARG RUST_VERSION="invalid"
 
 RUN choco install -y pkgconfiglite nasm llvm
 # Until it is out of moderation
-RUN choco install -y openssl --version=3.5.3
+RUN choco install -y openssl --version=3.6.0
 
 # https://stackoverflow.com/a/50716450
 RUN setx PATH '%PATH%;C:\Program Files\NASM;C:\gst-install\bin'
