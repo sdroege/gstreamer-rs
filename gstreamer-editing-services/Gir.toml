@@ -107,19 +107,19 @@ status = "generate"
 concurrency = "send+sync"
     [[object.function]]
     name = "needs_reload"
-    manual = true
+    rename = "needs_reload_with_type"
 
     [[object.function]]
     name = "request"
-    manual = true
+    rename = "request_with_type"
 
     [[object.function]]
     name = "request_async"
-    manual = true
+    rename = "request_async_with_type"
 
     [[object.function]]
     name = "request_future"
-    manual = true
+    rename = "request_future_with_type"
 
     [[object.function]]
     name = "set_proxy"
