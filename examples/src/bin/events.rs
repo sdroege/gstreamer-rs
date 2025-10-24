@@ -7,15 +7,15 @@
 // GStreamer's bus is an abstraction layer above an arbitrary main loop.
 // This makes sure that GStreamer can be used in conjunction with any existing
 // other framework (GUI frameworks, mostly) that operate their own main loops.
-// Main idea behind the bus is the simplification between the application and
+// The main idea behind the bus is the simplification between the application and
 // GStreamer, because GStreamer is heavily threaded underneath.
 
 // Any thread can post messages to the bus, which is essentially a thread-safe
-// queue of messages to process. When a new message was sent to the bus, it
+// queue of messages to process. When a new message is sent to the bus, it
 // will wake up the main loop implementation underneath it (which will then
 // process the pending messages from the main loop thread).
 
-// An application itself can post messages to the bus aswell.
+// An application itself can post messages to the bus as well.
 // This makes it possible, e.g., to schedule an arbitrary piece of code
 // to run in the main loop thread - avoiding potential threading issues.
 
@@ -75,7 +75,7 @@ fn example_main() {
     // Need to move a new reference into the closure.
     // !!ATTENTION!!:
     // It might seem appealing to use pipeline.clone() here, because that greatly
-    // simplifies the code within the callback. What this actually does, however, is creating
+    // simplifies the code within the callback. However, this will create
     // a memory leak. The clone of a pipeline is a new strong reference on the pipeline.
     // Storing this strong reference of the pipeline within the callback (we are moving it in!),
     // which is in turn stored in another strong reference on the pipeline is creating a
@@ -98,7 +98,7 @@ fn example_main() {
 
         // We create an EndOfStream event here, that tells all elements to drain
         // their internal buffers to their following elements, essentially draining the
-        // whole pipeline (front to back). It ensuring that no data is left unhandled and potentially
+        // whole pipeline (front to back). It ensures that no data is left unhandled and potentially
         // headers were rewritten (e.g. when using something like an MP4 or Matroska muxer).
         // The EOS event is handled directly from this very thread until the first
         // queue element is reached during pipeline-traversal, where it is then queued
@@ -118,9 +118,9 @@ fn example_main() {
     //bus.connect_message(None, move |_, msg| {
     let main_loop_clone = main_loop.clone();
     // This sets the bus's signal handler (don't be mislead by the "add", there can only be one).
-    // Every message from the bus is passed through this function. Its returnvalue determines
+    // Every message from the bus is passed through this function. Its return value determines
     // whether the handler wants to be called again. If glib::ControlFlow::Break is returned, the
-    // handler is removed and will never be called again. The mainloop still runs though.
+    // handler is removed and will never be called again. The main loop still runs though.
     let _bus_watch = bus
         .add_watch(move |_, msg| {
             use gst::MessageView;
@@ -145,13 +145,13 @@ fn example_main() {
                 _ => (),
             };
 
-            // Tell the mainloop to continue executing this callback.
+            // Tell the main loop to continue executing this callback.
             glib::ControlFlow::Continue
         })
         .expect("Failed to add bus watch");
 
-    // Operate GStreamer's bus, facilliating GLib's mainloop here.
-    // This function call will block until you tell the mainloop to quit
+    // Operate GStreamer's bus, facilitating GLib's main loop here.
+    // This function call will block until you tell the main loop to quit
     // (see above for how to do this).
     main_loop.run();
 
