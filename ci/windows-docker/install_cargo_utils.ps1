@@ -6,10 +6,10 @@ rustup --version
 rustc --version
 cargo --version
 
-if ("$env:RUST_VERSION" -eq "1.83.0") {
-    cargo install --locked cargo-c --version 0.10.11+cargo-0.86.0
+if ("$env:RUST_VERSION" -eq "1.86.0") {
+    cargo install --locked cargo-c --version 0.10.14+cargo-0.89.0
 } else {
-    cargo install --locked cargo-c --version 0.10.16+cargo-0.91
+    cargo install --locked cargo-c --version 0.10.16+cargo-0.91.0
 }
 
 if (!$?) {
@@ -17,8 +17,8 @@ if (!$?) {
   Exit 1
 }
 
-if ("$env:RUST_VERSION" -eq "1.83.0") {
-    cargo install --locked cargo-nextest@0.9.94
+if ("$env:RUST_VERSION" -eq "1.86.0") {
+    cargo install --locked cargo-nextest@0.9.106
 } else {
     cargo install --locked cargo-nextest
 }
