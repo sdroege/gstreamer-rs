@@ -324,6 +324,7 @@ impl AppSrc {
     pub fn set_callbacks(&self, callbacks: AppSrcCallbacks) {
         unsafe {
             let src = self.to_glib_none().0;
+            #[allow(clippy::manual_dangling_ptr)]
             #[cfg(not(feature = "v1_18"))]
             {
                 static SET_ONCE_QUARK: std::sync::OnceLock<glib::Quark> =

@@ -21,6 +21,7 @@ pub trait PluginApiExt {
 impl PluginApiExt for glib::Type {
     fn set_skip_documentation(self) {
         let quark = glib::Quark::from_str("GST_ELEMENTCLASS_SKIP_DOCUMENTATION");
+        #[allow(clippy::manual_dangling_ptr)]
         unsafe {
             crate::glib::gobject_ffi::g_type_set_qdata(
                 self.into_glib(),
