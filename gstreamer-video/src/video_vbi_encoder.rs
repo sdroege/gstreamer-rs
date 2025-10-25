@@ -183,15 +183,13 @@ impl VideoVBIEncoder {
 
                 if self.pixel_width < VBI_HD_MIN_PIXEL_WIDTH {
                     // SD: Packs 12x 10bits data in 4x 32bits word
-                    anc_len =
-                        4 * 4 * ((word_count / 12) + if word_count % 12 == 0 { 0 } else { 1 });
+                    anc_len = 4 * 4 * word_count.div_ceil(12);
                 } else {
                     // HD: Packs 3x 10bits data in 1x 32bits word interleaving UV and Y components
                     //     (where Y starts at buffer offset 0 and UV starts at buffer offset pixel_width)
                     //     so we get 6 (uv,y) pairs every 4x 32bits word in the resulting line
-                    // FIXME: {integer}::div_ceil was stabilised in rustc 1.73.0
                     let pair_count = usize::min(word_count, self.pixel_width as usize);
-                    anc_len = 4 * 4 * ((pair_count / 6) + if pair_count % 6 == 0 { 0 } else { 1 });
+                    anc_len = 4 * 4 * pair_count.div_ceil(6);
                 }
             }
             VideoFormat::Uyvy => {
@@ -199,15 +197,14 @@ impl VideoVBIEncoder {
 
                 if self.pixel_width < VBI_HD_MIN_PIXEL_WIDTH {
                     // SD: Stores 4x bytes in 4x bytes let's keep 32 bits alignment
-                    anc_len = 4 * ((anc_len / 4) + if anc_len % 4 == 0 { 0 } else { 1 });
+                    anc_len = 4 * anc_len.div_ceil(4);
                 } else {
                     // HD: Stores 4x bytes in 4x bytes interleaving UV and Y components
                     //     (where Y starts at buffer offset 0 and UV starts at buffer offset pixel_width)
                     //     so we get 2 (uv,y) pairs every 4x bytes in the resulting line
                     // let's keep 32 bits alignment
-                    // FIXME: {integer}::div_ceil was stabilised in rustc 1.73.0
                     let pair_count = usize::min(anc_len, self.pixel_width as usize);
-                    anc_len = 4 * ((pair_count / 2) + if pair_count % 2 == 0 { 0 } else { 1 });
+                    anc_len = 4 * pair_count.div_ceil(2);
                 }
             }
             _ => unreachable!(),
