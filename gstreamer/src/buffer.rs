@@ -98,6 +98,64 @@ impl Buffer {
         buffer
     }
 
+    // rustdoc-stripper-ignore-next
+    /// Attempts to extract the underlying wrapped value of type `T` from this `Buffer`.
+    ///
+    /// This will only succeed if:
+    /// - The buffer contains exactly one memory
+    /// - That memory was created with `Memory::from_slice()` wrapping type `T`
+    /// - The memory can be converted (see `Memory::try_into_inner()` requirements)
+    ///
+    /// On success, the `Buffer` is consumed and the original wrapped value is returned.
+    /// On failure, the original `Buffer` and an error are returned in the `Err` variant.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use gstreamer::Buffer;
+    ///
+    /// gstreamer::init().unwrap();
+    ///
+    /// let vec = vec![1u8, 2, 3, 4, 5];
+    /// let expected = vec.clone();
+    /// let buf = Buffer::from_slice(vec);
+    ///
+    /// let converted: Vec<u8> = buf.try_into_inner().unwrap();
+    /// assert_eq!(converted, expected);
+    /// ```
+    #[inline]
+    pub fn try_into_inner<T: 'static>(self) -> Result<T, (Self, crate::MemoryIntoInnerError)> {
+        if self.n_memory() != 1 {
+            return Err((self, crate::MemoryIntoInnerError::MultipleMemoryBlocks));
+        }
+
+        // Check if the buffer is writable first to ensure we have unique access to the memory
+        if !self.is_writable() {
+            return Err((self, crate::MemoryIntoInnerError::NotWritable));
+        }
+
+        unsafe {
+            // Peek the memory as we own a reference on it via the buffer
+            // and we know there is exactly one memory block
+            let mem_ptr = ffi::gst_buffer_peek_memory(self.as_mut_ptr(), 0);
+
+            // This should never be null after validation
+            assert!(
+                !mem_ptr.is_null(),
+                "peek_memory returned null after validation - this is a bug"
+            );
+
+            match crate::memory_wrapped::try_into_from_memory_ptr(mem_ptr) {
+                Ok(value) => {
+                    ffi::gst_buffer_remove_memory(self.as_mut_ptr(), 0);
+
+                    Ok(value)
+                }
+                Err(err) => Err((self, err)),
+            }
+        }
+    }
+
     #[doc(alias = "gst_buffer_map")]
     #[inline]
     pub fn into_mapped_buffer_readable(self) -> Result<MappedBuffer<Readable>, Self> {
@@ -1965,5 +2023,59 @@ mod tests {
             assert_eq!(s, "<start out of range>");
             s.clear();
         }
+    }
+
+    #[test]
+    fn test_buffer_wrap_vec_u8() {
+        crate::init().unwrap();
+
+        let data = vec![1u8, 2, 3, 4, 5];
+        let expected = data.clone();
+
+        let buf = Buffer::from_slice(data);
+        assert_eq!(buf.size(), 5);
+        assert_eq!(buf.n_memory(), 1);
+
+        let converted: Vec<u8> = buf.try_into_inner().unwrap();
+        assert_eq!(converted, expected);
+    }
+
+    #[test]
+    fn test_buffer_into_wrong_type() {
+        crate::init().unwrap();
+
+        let buf = Buffer::from_slice(vec![1u8, 2, 3, 4, 5]);
+        assert_eq!(buf.size(), 5);
+        assert_eq!(buf.n_memory(), 1);
+
+        let res = buf.try_into_inner::<Vec<u32>>();
+        assert!(res.is_err());
+        let (_buf, err) = res.err().unwrap();
+        assert!(matches!(
+            err,
+            crate::MemoryIntoInnerError::TypeMismatch { .. }
+        ));
+    }
+
+    #[test]
+    fn test_buffer_modify_and_extract() {
+        crate::init().unwrap();
+
+        let data = vec![0u8; 10];
+        let mut buf = Buffer::from_mut_slice(data);
+
+        // Modify the buffer
+        {
+            let bufref = buf.make_mut();
+            let mut mapped = bufref.map_writable().unwrap();
+            let slice = mapped.as_mut_slice();
+            for (i, byte) in slice.iter_mut().enumerate() {
+                *byte = (i * 2) as u8;
+            }
+        }
+
+        // Extract and verify modifications
+        let extracted: Vec<u8> = buf.try_into_inner().unwrap();
+        assert_eq!(extracted, vec![0, 2, 4, 6, 8, 10, 12, 14, 16, 18]);
     }
 }
