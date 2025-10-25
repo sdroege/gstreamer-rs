@@ -129,11 +129,11 @@ impl ClockTime {
     #[inline]
     pub const fn from_seconds(seconds: u64) -> Self {
         skip_assert_initialized!();
-        // `Option::expect` is not `const` as of rustc 1.63.0.
-        ClockTime(match seconds.checked_mul(Self::SECOND.0) {
-            Some(res) => res,
-            None => panic!("Out of `ClockTime` range"),
-        })
+        ClockTime(
+            seconds
+                .checked_mul(Self::SECOND.0)
+                .expect("Out of `ClockTime` range"),
+        )
     }
 
     // rustdoc-stripper-ignore-next
@@ -202,11 +202,11 @@ impl ClockTime {
     #[inline]
     pub const fn from_mseconds(mseconds: u64) -> Self {
         skip_assert_initialized!();
-        // `Option::expect` is not `const` as of rustc 1.63.0.
-        ClockTime(match mseconds.checked_mul(Self::MSECOND.0) {
-            Some(res) => res,
-            None => panic!("Out of `ClockTime` range"),
-        })
+        ClockTime(
+            mseconds
+                .checked_mul(Self::MSECOND.0)
+                .expect("Out of `ClockTime` range"),
+        )
     }
 
     // rustdoc-stripper-ignore-next
@@ -219,11 +219,11 @@ impl ClockTime {
     #[inline]
     pub const fn from_useconds(useconds: u64) -> Self {
         skip_assert_initialized!();
-        // `Option::expect` is not `const` as of rustc 1.63.0.
-        ClockTime(match useconds.checked_mul(Self::USECOND.0) {
-            Some(res) => res,
-            None => panic!("Out of `ClockTime` range"),
-        })
+        ClockTime(
+            useconds
+                .checked_mul(Self::USECOND.0)
+                .expect("Out of `ClockTime` range"),
+        )
     }
 
     // rustdoc-stripper-ignore-next
