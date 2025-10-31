@@ -23,6 +23,7 @@ macro_rules! skip_assert_initialized {
 }
 
 #[allow(unused_imports)]
+#[allow(clippy::derivable_impls)]
 mod auto;
 pub use crate::auto::*;
 
