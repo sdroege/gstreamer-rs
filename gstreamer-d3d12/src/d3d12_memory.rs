@@ -212,7 +212,7 @@ impl D3D12MemoryRef {
     }
 
     #[inline]
-    pub fn map_readable_d3d12(&self) -> Result<D3D12MemoryMap<Readable>, glib::BoolError> {
+    pub fn map_readable_d3d12(&self) -> Result<D3D12MemoryMap<'_, Readable>, glib::BoolError> {
         unsafe {
             let mut map_info = mem::MaybeUninit::uninit();
             let res = gst_ffi::gst_memory_map(
@@ -233,7 +233,7 @@ impl D3D12MemoryRef {
     }
 
     #[inline]
-    pub fn map_writable_d3d12(&mut self) -> Result<D3D12MemoryMap<Writable>, glib::BoolError> {
+    pub fn map_writable_d3d12(&mut self) -> Result<D3D12MemoryMap<'_, Writable>, glib::BoolError> {
         unsafe {
             let mut map_info = mem::MaybeUninit::uninit();
             let res = gst_ffi::gst_memory_map(
