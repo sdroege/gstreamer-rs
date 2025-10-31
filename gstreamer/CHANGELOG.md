@@ -5,6 +5,18 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.24.3] - 2025-10-31
+### Added
+- `gst_video::is_dma_drm_caps()` helper function.
+- `gst_tag::TagImageType` enum.
+- `gst::ControlBinding` `property_name()` and `property_pspec()` accessors.
+- Remove some unused imports and dead code warnings on macOS.
+- New `gst_controller::TimedValueControlSource::list_control_points()` 1.28.
+
+### Changed
+- `ges::TimelineElement` accepts any `Into<glib::Value>` in
+  `set_child_property()` now.
+
 ## [0.24.2] - 2025-09-18
 ### Fixed
 - Allow using `DMA_DRM` and `ENCODED` formats with `gst_video::VideoMeta` and
@@ -1945,7 +1957,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.24.2...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.24.3...HEAD
+[0.24.3]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.24.2...0.24.3
 [0.24.2]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.24.1...0.24.2
 [0.24.1]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.24.0...0.24.1
 [0.24.0]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.23.7...0.24.0
