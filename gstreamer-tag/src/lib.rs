@@ -13,6 +13,9 @@ macro_rules! skip_assert_initialized {
     () => {};
 }
 
+mod auto;
+pub use crate::auto::*;
+
 mod tags;
 pub use crate::tags::*;
 
