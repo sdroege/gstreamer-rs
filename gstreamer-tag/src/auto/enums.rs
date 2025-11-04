@@ -3,11 +3,10 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{ffi};
-use glib::{prelude::*,translate::*};
+use crate::ffi;
+use glib::{prelude::*, translate::*};
 
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash)]
-#[derive(Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstTagImageType")]
 pub enum TagImageType {
@@ -51,7 +50,7 @@ pub enum TagImageType {
     BandArtistLogo,
     #[doc(alias = "GST_TAG_IMAGE_TYPE_PUBLISHER_STUDIO_LOGO")]
     PublisherStudioLogo,
-#[doc(hidden)]
+    #[doc(hidden)]
     __Unknown(i32),
 }
 
@@ -60,7 +59,7 @@ impl IntoGlib for TagImageType {
     type GlibType = ffi::GstTagImageType;
 
     fn into_glib(self) -> ffi::GstTagImageType {
-match self {
+        match self {
             Self::None => ffi::GST_TAG_IMAGE_TYPE_NONE,
             Self::Undefined => ffi::GST_TAG_IMAGE_TYPE_UNDEFINED,
             Self::FrontCover => ffi::GST_TAG_IMAGE_TYPE_FRONT_COVER,
@@ -82,16 +81,16 @@ match self {
             Self::BandArtistLogo => ffi::GST_TAG_IMAGE_TYPE_BAND_ARTIST_LOGO,
             Self::PublisherStudioLogo => ffi::GST_TAG_IMAGE_TYPE_PUBLISHER_STUDIO_LOGO,
             Self::__Unknown(value) => value,
-}
-}
+        }
+    }
 }
 
 #[doc(hidden)]
 impl FromGlib<ffi::GstTagImageType> for TagImageType {
     unsafe fn from_glib(value: ffi::GstTagImageType) -> Self {
         skip_assert_initialized!();
-        
-match value {
+
+        match value {
             ffi::GST_TAG_IMAGE_TYPE_NONE => Self::None,
             ffi::GST_TAG_IMAGE_TYPE_UNDEFINED => Self::Undefined,
             ffi::GST_TAG_IMAGE_TYPE_FRONT_COVER => Self::FrontCover,
@@ -113,26 +112,26 @@ match value {
             ffi::GST_TAG_IMAGE_TYPE_BAND_ARTIST_LOGO => Self::BandArtistLogo,
             ffi::GST_TAG_IMAGE_TYPE_PUBLISHER_STUDIO_LOGO => Self::PublisherStudioLogo,
             value => Self::__Unknown(value),
-}
-}
+        }
+    }
 }
 
 impl StaticType for TagImageType {
-                #[inline]
+    #[inline]
     #[doc(alias = "gst_tag_image_type_get_type")]
-   fn static_type() -> glib::Type {
-                    unsafe { from_glib(ffi::gst_tag_image_type_get_type()) }
-                }
-            }
+    fn static_type() -> glib::Type {
+        unsafe { from_glib(ffi::gst_tag_image_type_get_type()) }
+    }
+}
 
 impl glib::HasParamSpec for TagImageType {
-                type ParamSpec = glib::ParamSpecEnum;
-                type SetValue = Self;
-                type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
-    
-                fn param_spec_builder() -> Self::BuilderFn {
-                    Self::ParamSpec::builder_with_default
-                }
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        Self::ParamSpec::builder_with_default
+    }
 }
 
 impl glib::value::ValueType for TagImageType {
@@ -172,4 +171,3 @@ impl From<TagImageType> for glib::Value {
         ToValue::to_value(&v)
     }
 }
-
