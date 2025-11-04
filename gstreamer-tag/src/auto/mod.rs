@@ -5,4 +5,3 @@
 
 mod enums;
 pub use self::enums::TagImageType;
-
