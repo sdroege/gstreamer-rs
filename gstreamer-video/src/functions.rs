@@ -9,7 +9,7 @@ use glib::translate::{from_glib, from_glib_full, IntoGlib, ToGlibPtr};
 pub fn convert_sample(
     sample: &gst::Sample,
     caps: &gst::Caps,
-    timeout: gst::ClockTime,
+    timeout: Option<gst::ClockTime>,
 ) -> Result<gst::Sample, glib::Error> {
     skip_assert_initialized!();
     unsafe {
