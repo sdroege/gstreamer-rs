@@ -203,13 +203,6 @@ fn get_c_output(name: &str) -> Result<String, Box<dyn Error>> {
 
 const RUST_LAYOUTS: &[(&str, Layout)] = &[
     (
-        "GstAnalyticsBatchBuffer",
-        Layout {
-            size: size_of::<GstAnalyticsBatchBuffer>(),
-            alignment: align_of::<GstAnalyticsBatchBuffer>(),
-        },
-    ),
-    (
         "GstAnalyticsBatchMeta",
         Layout {
             size: size_of::<GstAnalyticsBatchMeta>(),
@@ -277,6 +270,13 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         Layout {
             size: size_of::<GstAnalyticsSegmentationMtd>(),
             alignment: align_of::<GstAnalyticsSegmentationMtd>(),
+        },
+    ),
+    (
+        "GstAnalyticsTensorMtd",
+        Layout {
+            size: size_of::<GstAnalyticsTensorMtd>(),
+            alignment: align_of::<GstAnalyticsTensorMtd>(),
         },
     ),
     (

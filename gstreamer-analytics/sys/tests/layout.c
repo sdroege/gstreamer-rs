@@ -8,7 +8,6 @@
 #include <stdio.h>
 
 int main() {
-    printf("%s;%zu;%zu\n", "GstAnalyticsBatchBuffer", sizeof(GstAnalyticsBatchBuffer), alignof(GstAnalyticsBatchBuffer));
     printf("%s;%zu;%zu\n", "GstAnalyticsBatchMeta", sizeof(GstAnalyticsBatchMeta), alignof(GstAnalyticsBatchMeta));
     printf("%s;%zu;%zu\n", "GstAnalyticsBatchStream", sizeof(GstAnalyticsBatchStream), alignof(GstAnalyticsBatchStream));
     printf("%s;%zu;%zu\n", "GstAnalyticsClsMtd", sizeof(GstAnalyticsClsMtd), alignof(GstAnalyticsClsMtd));
@@ -19,6 +18,7 @@ int main() {
     printf("%s;%zu;%zu\n", "GstAnalyticsRelTypes", sizeof(GstAnalyticsRelTypes), alignof(GstAnalyticsRelTypes));
     printf("%s;%zu;%zu\n", "GstAnalyticsRelationMetaInitParams", sizeof(GstAnalyticsRelationMetaInitParams), alignof(GstAnalyticsRelationMetaInitParams));
     printf("%s;%zu;%zu\n", "GstAnalyticsSegmentationMtd", sizeof(GstAnalyticsSegmentationMtd), alignof(GstAnalyticsSegmentationMtd));
+    printf("%s;%zu;%zu\n", "GstAnalyticsTensorMtd", sizeof(GstAnalyticsTensorMtd), alignof(GstAnalyticsTensorMtd));
     printf("%s;%zu;%zu\n", "GstAnalyticsTrackingMtd", sizeof(GstAnalyticsTrackingMtd), alignof(GstAnalyticsTrackingMtd));
     printf("%s;%zu;%zu\n", "GstSegmentationType", sizeof(GstSegmentationType), alignof(GstSegmentationType));
     printf("%s;%zu;%zu\n", "GstTensor", sizeof(GstTensor), alignof(GstTensor));

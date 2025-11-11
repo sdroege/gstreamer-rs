@@ -88,41 +88,6 @@ impl AnalyticsBatchStream {
         self.0.index
     }
 
-    pub fn buffers(&self) -> &[AnalyticsBatchBuffer] {
-        unsafe {
-            if self.0.buffers.is_null() {
-                &[]
-            } else {
-                slice::from_raw_parts(self.0.buffers as *const _, self.0.n_buffers)
-            }
-        }
-    }
-
-    pub fn buffers_mut(&mut self) -> &mut [AnalyticsBatchBuffer] {
-        unsafe {
-            if self.0.buffers.is_null() {
-                &mut []
-            } else {
-                slice::from_raw_parts_mut(self.0.buffers as *mut _, self.0.n_buffers)
-            }
-        }
-    }
-}
-
-impl fmt::Debug for AnalyticsBatchStream {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.debug_struct("AnalyticsBatchStream")
-            .field("index", &self.index())
-            .field("buffers", &self.buffers())
-            .finish()
-    }
-}
-
-#[repr(transparent)]
-#[doc(alias = "GstAnalyticsBatchBuffer")]
-pub struct AnalyticsBatchBuffer(ffi::GstAnalyticsBatchBuffer);
-
-impl AnalyticsBatchBuffer {
     pub fn sticky_events(&self) -> &[gst::Event] {
         unsafe {
             if self.0.sticky_events.is_null() {
@@ -133,107 +98,58 @@ impl AnalyticsBatchBuffer {
         }
     }
 
-    pub fn serialized_events(&self) -> &[gst::Event] {
+    pub fn sticky_events_mut(&mut self) -> &mut [gst::Event] {
         unsafe {
-            if self.0.serialized_events.is_null() {
+            if self.0.sticky_events.is_null() {
+                &mut []
+            } else {
+                slice::from_raw_parts_mut(self.0.sticky_events as *mut _, self.0.n_sticky_events)
+            }
+        }
+    }
+
+    pub fn objects(&self) -> &[gst::MiniObject] {
+        unsafe {
+            if self.0.objects.is_null() {
                 &[]
             } else {
-                slice::from_raw_parts(
-                    self.0.serialized_events as *const _,
-                    self.0.n_serialized_events,
-                )
+                slice::from_raw_parts(self.0.objects as *const _, self.0.n_objects)
             }
         }
     }
 
-    pub fn buffer(&self) -> Option<&gst::BufferRef> {
+    pub fn objects_mut(&mut self) -> &mut [gst::MiniObject] {
         unsafe {
-            if self.0.buffer.is_null() {
-                None
+            if self.0.objects.is_null() {
+                &mut []
             } else {
-                Some(gst::BufferRef::from_ptr(self.0.buffer))
+                slice::from_raw_parts_mut(self.0.objects as *mut _, self.0.n_objects)
             }
         }
     }
 
-    pub fn buffer_owned(&self) -> Option<gst::Buffer> {
-        unsafe {
-            if self.0.buffer.is_null() {
-                None
-            } else {
-                Some(gst::Buffer::from_glib_none(self.0.buffer))
-            }
-        }
-    }
-
-    pub fn buffer_mut(&mut self) -> Option<&mut gst::BufferRef> {
-        unsafe {
-            if self.0.serialized_events.is_null() {
-                None
-            } else {
-                self.0.buffer = gst::ffi::gst_mini_object_make_writable(
-                    self.0.buffer as *mut gst::ffi::GstMiniObject,
-                ) as *mut gst::ffi::GstBuffer;
-                Some(gst::BufferRef::from_mut_ptr(self.0.buffer))
-            }
-        }
-    }
-
-    pub fn buffer_list(&self) -> Option<&gst::BufferListRef> {
-        unsafe {
-            if self.0.buffer_list.is_null() {
-                None
-            } else {
-                Some(gst::BufferListRef::from_ptr(self.0.buffer_list))
-            }
-        }
-    }
-
-    pub fn buffer_list_owned(&self) -> Option<gst::BufferList> {
-        unsafe {
-            if self.0.buffer_list.is_null() {
-                None
-            } else {
-                Some(gst::BufferList::from_glib_none(self.0.buffer_list))
-            }
-        }
-    }
-
-    pub fn buffer_list_mut(&mut self) -> Option<&mut gst::BufferListRef> {
-        unsafe {
-            if self.0.serialized_events.is_null() {
-                None
-            } else {
-                self.0.buffer_list = gst::ffi::gst_mini_object_make_writable(
-                    self.0.buffer_list as *mut gst::ffi::GstMiniObject,
-                ) as *mut gst::ffi::GstBufferList;
-                Some(gst::BufferListRef::from_mut_ptr(self.0.buffer_list))
-            }
-        }
-    }
-
-    #[doc(alias = "gst_analytics_batch_buffer_get_caps")]
+    #[doc(alias = "gst_analytics_batch_stream_get_caps")]
     pub fn caps(&self) -> Option<gst::Caps> {
         unsafe {
-            from_glib_none(ffi::gst_analytics_batch_buffer_get_caps(mut_override(
+            from_glib_none(ffi::gst_analytics_batch_stream_get_caps(mut_override(
                 &self.0,
             )))
         }
     }
 
-    #[doc(alias = "gst_analytics_batch_buffer_get_segment")]
+    #[doc(alias = "gst_analytics_batch_stream_get_segment")]
     pub fn segment(&self) -> Option<gst::Segment> {
         unsafe {
-            from_glib_none(ffi::gst_analytics_batch_buffer_get_segment(mut_override(
+            from_glib_none(ffi::gst_analytics_batch_stream_get_segment(mut_override(
                 &self.0,
             )))
         }
     }
 
-    #[doc(alias = "gst_analytics_batch_buffer_get_stream_id")]
+    #[doc(alias = "gst_analytics_batch_stream_get_stream_id")]
     pub fn stream_id(&self) -> Option<&glib::GStr> {
         unsafe {
-            let res = ffi::gst_analytics_batch_buffer_get_stream_id(mut_override(&self.0));
+            let res = ffi::gst_analytics_batch_stream_get_stream_id(mut_override(&self.0));
 
             if res.is_null() {
                 None
@@ -244,12 +160,11 @@ impl AnalyticsBatchBuffer {
     }
 }
 
-impl fmt::Debug for AnalyticsBatchBuffer {
+impl fmt::Debug for AnalyticsBatchStream {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.debug_struct("AnalyticsBatchBuffer")
-            .field("sticky_events", &self.sticky_events())
-            .field("serialized_events", &self.serialized_events())
-            .field("buffer", &self.buffer())
+        f.debug_struct("AnalyticsBatchStream")
+            .field("index", &self.index())
+            .field("objects", &self.objects())
             .finish()
     }
 }
