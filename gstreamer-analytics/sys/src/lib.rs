@@ -106,31 +106,6 @@ pub const GST_ANALYTICS_REL_TYPE_ANY: GstAnalyticsRelTypes = 2147483647;
 // Records
 #[derive(Copy, Clone)]
 #[repr(C)]
-pub struct GstAnalyticsBatchBuffer {
-    pub sticky_events: *mut *mut gst::GstEvent,
-    pub n_sticky_events: size_t,
-    pub serialized_events: *mut *mut gst::GstEvent,
-    pub n_serialized_events: size_t,
-    pub buffer: *mut gst::GstBuffer,
-    pub buffer_list: *mut gst::GstBufferList,
-    pub padding: [gpointer; 4],
-}
-
-impl ::std::fmt::Debug for GstAnalyticsBatchBuffer {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstAnalyticsBatchBuffer @ {self:p}"))
-            .field("sticky_events", &self.sticky_events)
-            .field("n_sticky_events", &self.n_sticky_events)
-            .field("serialized_events", &self.serialized_events)
-            .field("n_serialized_events", &self.n_serialized_events)
-            .field("buffer", &self.buffer)
-            .field("buffer_list", &self.buffer_list)
-            .finish()
-    }
-}
-
-#[derive(Copy, Clone)]
-#[repr(C)]
 pub struct GstAnalyticsBatchMeta {
     pub meta: gst::GstMeta,
     pub streams: *mut GstAnalyticsBatchStream,
@@ -151,8 +126,10 @@ impl ::std::fmt::Debug for GstAnalyticsBatchMeta {
 #[repr(C)]
 pub struct GstAnalyticsBatchStream {
     pub index: c_uint,
-    pub buffers: *mut GstAnalyticsBatchBuffer,
-    pub n_buffers: size_t,
+    pub sticky_events: *mut *mut gst::GstEvent,
+    pub n_sticky_events: size_t,
+    pub objects: *mut *mut gst::GstMiniObject,
+    pub n_objects: size_t,
     pub padding: [gpointer; 4],
 }
 
@@ -160,8 +137,10 @@ impl ::std::fmt::Debug for GstAnalyticsBatchStream {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAnalyticsBatchStream @ {self:p}"))
             .field("index", &self.index)
-            .field("buffers", &self.buffers)
-            .field("n_buffers", &self.n_buffers)
+            .field("sticky_events", &self.sticky_events)
+            .field("n_sticky_events", &self.n_sticky_events)
+            .field("objects", &self.objects)
+            .field("n_objects", &self.n_objects)
             .finish()
     }
 }
@@ -284,6 +263,22 @@ impl ::std::fmt::Debug for GstAnalyticsSegmentationMtd {
 
 #[derive(Copy, Clone)]
 #[repr(C)]
+pub struct GstAnalyticsTensorMtd {
+    pub id: c_uint,
+    pub meta: *mut GstAnalyticsRelationMeta,
+}
+
+impl ::std::fmt::Debug for GstAnalyticsTensorMtd {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstAnalyticsTensorMtd @ {self:p}"))
+            .field("id", &self.id)
+            .field("meta", &self.meta)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
 pub struct GstAnalyticsTrackingMtd {
     pub id: c_uint,
     pub meta: *mut GstAnalyticsRelationMeta,
@@ -319,30 +314,30 @@ impl ::std::fmt::Debug for GstTensorMeta {
 extern "C" {
 
     //=========================================================================
-    // GstAnalyticsBatchBuffer
-    //=========================================================================
-    #[cfg(feature = "v1_28")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
-    pub fn gst_analytics_batch_buffer_get_caps(
-        buffer: *mut GstAnalyticsBatchBuffer,
-    ) -> *mut gst::GstCaps;
-    #[cfg(feature = "v1_28")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
-    pub fn gst_analytics_batch_buffer_get_segment(
-        buffer: *mut GstAnalyticsBatchBuffer,
-    ) -> *const gst::GstSegment;
-    #[cfg(feature = "v1_28")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
-    pub fn gst_analytics_batch_buffer_get_stream_id(
-        buffer: *mut GstAnalyticsBatchBuffer,
-    ) -> *const c_char;
-
-    //=========================================================================
     // GstAnalyticsBatchMeta
     //=========================================================================
     #[cfg(feature = "v1_28")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
     pub fn gst_analytics_batch_meta_get_info() -> *const gst::GstMetaInfo;
+
+    //=========================================================================
+    // GstAnalyticsBatchStream
+    //=========================================================================
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_analytics_batch_stream_get_caps(
+        stream: *mut GstAnalyticsBatchStream,
+    ) -> *mut gst::GstCaps;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_analytics_batch_stream_get_segment(
+        stream: *mut GstAnalyticsBatchStream,
+    ) -> *const gst::GstSegment;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_analytics_batch_stream_get_stream_id(
+        stream: *mut GstAnalyticsBatchStream,
+    ) -> *const c_char;
 
     //=========================================================================
     // GstAnalyticsClsMtd
@@ -458,6 +453,25 @@ extern "C" {
         masks_loc_h: c_uint,
         segmentation_mtd: *mut GstAnalyticsSegmentationMtd,
     ) -> gboolean;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_analytics_relation_meta_add_tensor_mtd(
+        instance: *mut GstAnalyticsRelationMeta,
+        num_dims: size_t,
+        tensor_mtd: *mut GstAnalyticsTensorMtd,
+    ) -> gboolean;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_analytics_relation_meta_add_tensor_mtd_simple(
+        instance: *mut GstAnalyticsRelationMeta,
+        id: glib::GQuark,
+        data_type: GstTensorDataType,
+        data: *mut gst::GstBuffer,
+        dims_order: GstTensorDimOrder,
+        num_dims: size_t,
+        dims: *mut size_t,
+        tensor_mtd: *mut GstAnalyticsTensorMtd,
+    ) -> gboolean;
     pub fn gst_analytics_relation_meta_add_tracking_mtd(
         instance: *mut GstAnalyticsRelationMeta,
         tracking_id: u64,
@@ -511,6 +525,13 @@ extern "C" {
         meta: *mut GstAnalyticsRelationMeta,
         an_meta_id: c_uint,
         rlt: *mut GstAnalyticsSegmentationMtd,
+    ) -> gboolean;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_analytics_relation_meta_get_tensor_mtd(
+        meta: *mut GstAnalyticsRelationMeta,
+        an_meta_id: c_uint,
+        rlt: *mut GstAnalyticsTensorMtd,
     ) -> gboolean;
     pub fn gst_analytics_relation_meta_get_tracking_mtd(
         meta: *mut GstAnalyticsRelationMeta,
@@ -566,6 +587,18 @@ extern "C" {
     pub fn gst_analytics_segmentation_mtd_get_mtd_type() -> GstAnalyticsMtdType;
 
     //=========================================================================
+    // GstAnalyticsTensorMtd
+    //=========================================================================
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_analytics_tensor_mtd_get_tensor(
+        instance: *const GstAnalyticsTensorMtd,
+    ) -> *mut GstTensor;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_analytics_tensor_mtd_get_mtd_type() -> GstAnalyticsMtdType;
+
+    //=========================================================================
     // GstAnalyticsTrackingMtd
     //=========================================================================
     pub fn gst_analytics_tracking_mtd_get_info(
@@ -619,6 +652,17 @@ extern "C" {
     #[cfg(feature = "v1_26")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
     pub fn gst_tensor_get_dims(tensor: *mut GstTensor, num_dims: *mut size_t) -> *mut size_t;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_tensor_set_simple(
+        tensor: *mut GstTensor,
+        id: glib::GQuark,
+        data_type: GstTensorDataType,
+        data: *mut gst::GstBuffer,
+        dims_order: GstTensorDimOrder,
+        num_dims: size_t,
+        dims: *mut size_t,
+    ) -> gboolean;
     #[cfg(feature = "v1_28")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
     pub fn gst_tensor_data_type_get_name(data_type: GstTensorDataType) -> *const c_char;
