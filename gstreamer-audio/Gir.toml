@@ -328,6 +328,16 @@ status = "generate"
     manual = true
 
     [[object.member]]
+    name = "s20_32"
+    # Platform dependant
+    manual = true
+
+    [[object.member]]
+    name = "u20_32"
+    # Platform dependant
+    manual = true
+
+    [[object.member]]
     name = "last"
     ignore = true
 

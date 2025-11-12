@@ -83,6 +83,12 @@ status = "generate"
     [[object.member]]
     name = "u32"
     ignore = true
+    [[object.member]]
+    name = "u20_32"
+    ignore = true
+    [[object.member]]
+    name = "s20_32"
+    ignore = true
 
 [[object]]
 name = "GstAudio.*"

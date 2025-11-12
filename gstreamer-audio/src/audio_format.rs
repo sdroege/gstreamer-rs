@@ -195,6 +195,10 @@ pub const AUDIO_FORMAT_U18: crate::AudioFormat = crate::AudioFormat::U18be;
 pub const AUDIO_FORMAT_F32: crate::AudioFormat = crate::AudioFormat::F32be;
 #[cfg(target_endian = "big")]
 pub const AUDIO_FORMAT_F64: crate::AudioFormat = crate::AudioFormat::F64be;
+#[cfg(all(target_endian = "big", feature = "v1_28"))]
+pub const AUDIO_FORMAT_S20_32: crate::AudioFormat = crate::AudioFormat::S2032be;
+#[cfg(all(target_endian = "big", feature = "v1_28"))]
+pub const AUDIO_FORMAT_U20_32: crate::AudioFormat = crate::AudioFormat::U2032be;
 
 #[cfg(target_endian = "little")]
 pub const AUDIO_FORMAT_S16: crate::AudioFormat = crate::AudioFormat::S16le;
@@ -224,6 +228,10 @@ pub const AUDIO_FORMAT_U18: crate::AudioFormat = crate::AudioFormat::U18le;
 pub const AUDIO_FORMAT_F32: crate::AudioFormat = crate::AudioFormat::F32le;
 #[cfg(target_endian = "little")]
 pub const AUDIO_FORMAT_F64: crate::AudioFormat = crate::AudioFormat::F64le;
+#[cfg(all(target_endian = "little", feature = "v1_28"))]
+pub const AUDIO_FORMAT_S20_32: crate::AudioFormat = crate::AudioFormat::S2032le;
+#[cfg(all(target_endian = "little", feature = "v1_28"))]
+pub const AUDIO_FORMAT_U20_32: crate::AudioFormat = crate::AudioFormat::U2032le;
 
 #[must_use = "iterators are lazy and do nothing unless consumed"]
 pub struct AudioFormatIterator {
