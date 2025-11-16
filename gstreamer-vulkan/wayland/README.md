@@ -89,18 +89,13 @@ problems.
 
 #### Homebrew
 
-Homebrew only installs various plugins if explicitly enabled, so some extra
-`--with-*` flags may be required.
+The Homebrew `gstreamer` formula bundles all `gst-*` GStreamer plugin modules
 
 ```console
-$ brew install gstreamer gst-plugins-base gst-plugins-good \
-      gst-plugins-bad gst-plugins-ugly gst-libav gst-rtsp-server \
-      gst-editing-services --with-orc --with-libogg --with-opus \
-      --with-pango --with-theora --with-libvorbis --with-libvpx \
-      --enable-gtk3
+$ brew install gstreamer
 ```
 
-Make sure the version of these libraries is >= 1.14.
+Make sure the version is >= 1.14.
 
 <a name="installation-windows"/>
 
