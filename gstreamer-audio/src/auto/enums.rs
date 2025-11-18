@@ -178,6 +178,22 @@ pub enum AudioFormat {
     F64le,
     #[doc(alias = "GST_AUDIO_FORMAT_F64BE")]
     F64be,
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "GST_AUDIO_FORMAT_S20_32LE")]
+    S2032le,
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "GST_AUDIO_FORMAT_S20_32BE")]
+    S2032be,
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "GST_AUDIO_FORMAT_U20_32LE")]
+    U2032le,
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "GST_AUDIO_FORMAT_U20_32BE")]
+    U2032be,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -235,6 +251,14 @@ impl IntoGlib for AudioFormat {
             Self::F32be => ffi::GST_AUDIO_FORMAT_F32BE,
             Self::F64le => ffi::GST_AUDIO_FORMAT_F64LE,
             Self::F64be => ffi::GST_AUDIO_FORMAT_F64BE,
+            #[cfg(feature = "v1_28")]
+            Self::S2032le => ffi::GST_AUDIO_FORMAT_S20_32LE,
+            #[cfg(feature = "v1_28")]
+            Self::S2032be => ffi::GST_AUDIO_FORMAT_S20_32BE,
+            #[cfg(feature = "v1_28")]
+            Self::U2032le => ffi::GST_AUDIO_FORMAT_U20_32LE,
+            #[cfg(feature = "v1_28")]
+            Self::U2032be => ffi::GST_AUDIO_FORMAT_U20_32BE,
             Self::__Unknown(value) => value,
         }
     }
@@ -278,6 +302,14 @@ impl FromGlib<ffi::GstAudioFormat> for AudioFormat {
             ffi::GST_AUDIO_FORMAT_F32BE => Self::F32be,
             ffi::GST_AUDIO_FORMAT_F64LE => Self::F64le,
             ffi::GST_AUDIO_FORMAT_F64BE => Self::F64be,
+            #[cfg(feature = "v1_28")]
+            ffi::GST_AUDIO_FORMAT_S20_32LE => Self::S2032le,
+            #[cfg(feature = "v1_28")]
+            ffi::GST_AUDIO_FORMAT_S20_32BE => Self::S2032be,
+            #[cfg(feature = "v1_28")]
+            ffi::GST_AUDIO_FORMAT_U20_32LE => Self::U2032le,
+            #[cfg(feature = "v1_28")]
+            ffi::GST_AUDIO_FORMAT_U20_32BE => Self::U2032be,
             value => Self::__Unknown(value),
         }
     }
