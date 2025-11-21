@@ -1145,7 +1145,6 @@ extern "C" {
         reporter: *mut GstValidateReporter,
         message: *const c_char,
     ) -> *mut GstValidateReport;
-    pub fn gst_validate_report_add_message(report: *mut GstValidateReport, message: *const c_char);
     pub fn gst_validate_report_add_repeated_report(
         report: *mut GstValidateReport,
         repeated_report: *mut GstValidateReport,

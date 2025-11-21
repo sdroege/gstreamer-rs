@@ -1814,6 +1814,7 @@ extern "C" {
     //=========================================================================
     // GstAudioFormatInfo
     //=========================================================================
+    pub fn gst_audio_format_info_get_type() -> GType;
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_audio_format_info_fill_silence(
@@ -2451,7 +2452,6 @@ extern "C" {
     ) -> gboolean;
     pub fn gst_audio_clipping_meta_api_get_type() -> GType;
     pub fn gst_audio_downmix_meta_api_get_type() -> GType;
-    pub fn gst_audio_format_info_get_type() -> GType;
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_audio_formats_raw(len: *mut c_uint) -> *const GstAudioFormat;
