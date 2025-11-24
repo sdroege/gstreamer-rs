@@ -486,4 +486,67 @@ mod tests {
         let extracted: [u8; 5] = mem.try_into_inner().unwrap();
         assert_eq!(extracted, expected);
     }
+
+    #[test]
+    fn test_wrap_array_u8_mem_ops() {
+        crate::init().unwrap();
+
+        let data = [0, 1, 2, 3, 4, 5, 6, 7];
+
+        let memory = Memory::from_slice(data);
+        assert_eq!(memory.size(), data.len());
+
+        {
+            let map = memory.map_readable().unwrap();
+            assert_eq!(map.as_slice(), &data);
+        }
+
+        let copy = memory.copy();
+        assert!(copy.parent().is_none());
+
+        {
+            let map1 = memory.map_readable().unwrap();
+            let map2 = copy.map_readable().unwrap();
+            assert_eq!(map1.as_slice(), map2.as_slice());
+        }
+
+        let share = memory.share(..);
+        assert_eq!(share.parent().unwrap().as_ptr(), memory.as_ptr());
+
+        {
+            let map1 = memory.map_readable().unwrap();
+            let map2 = share.map_readable().unwrap();
+            assert_eq!(map1.as_slice(), map2.as_slice());
+        }
+
+        let sub1 = memory.share(..2);
+        assert_eq!(sub1.size(), 2);
+        assert_eq!(sub1.parent().unwrap().as_ptr(), memory.as_ptr());
+
+        {
+            let map = sub1.map_readable().unwrap();
+            assert_eq!(map.as_slice(), &data[..2]);
+        }
+
+        let sub2 = memory.share(2..);
+        assert_eq!(sub2.size(), 6);
+        assert_eq!(sub2.parent().unwrap().as_ptr(), memory.as_ptr());
+
+        {
+            let map = sub2.map_readable().unwrap();
+            assert_eq!(map.as_slice(), &data[2..]);
+        }
+
+        let offset = sub1.is_span(&sub2).unwrap();
+        assert_eq!(offset, 0);
+
+        let sub3 = sub2.share(2..);
+        assert_eq!(sub3.size(), 4);
+        assert_eq!(sub3.parent().unwrap().as_ptr(), memory.as_ptr());
+
+        {
+            let map = sub3.map_readable().unwrap();
+            assert_eq!(map.as_slice(), &data[4..]);
+        }
+    }
 }
