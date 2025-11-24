@@ -44,6 +44,8 @@ struct WrappedMemory<T> {
 }
 
 unsafe extern "C" fn free(_allocator: *mut ffi::GstAllocator, mem: *mut ffi::GstMemory) {
+    debug_assert_eq!((*mem).mini_object.refcount, 0);
+
     let mem = mem as *mut WrappedMemory<()>;
 
     if (*mem).wrap_offset > 0 {
