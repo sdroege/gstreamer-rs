@@ -16,8 +16,6 @@ pub enum MemoryIntoInnerError {
     NotWritable,
     #[error("Cannot extract wrapped value from sub-memory (shared memory)")]
     SubMemory,
-    #[error("Memory does not wrap anything")]
-    NothingWrapped,
     #[error("Memory does not wrap the requested type (expected {expected:?}, found {actual:?})")]
     TypeMismatch { expected: TypeId, actual: TypeId },
     #[error("Buffer must contain exactly one memory block")]
@@ -252,11 +250,6 @@ pub(crate) unsafe fn try_into_from_memory_ptr<T: 'static>(
     // because these fields are in the same position regardless of the generic type T.
     // We verify the actual type using wrap_type_id before accessing the `wrap` field.
     let mem_wrapper = &*(mem_ptr as *mut WrappedMemory<T>);
-
-    // Check that wrap_offset is set (meaning something is wrapped)
-    if mem_wrapper.wrap_offset == 0 {
-        return Err(MemoryIntoInnerError::NothingWrapped);
-    }
 
     // Check that the wrapped type is actually T
     // Only after this check passes is it safe to access mem_wrapper.wrap
