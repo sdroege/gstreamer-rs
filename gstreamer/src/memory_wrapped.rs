@@ -35,7 +35,7 @@ struct WrappedMemory<T> {
     // Offset from the beginning of the struct until `wrap`
     wrap_offset: usize,
     // `ptr::drop_in_place()` for `T`
-    wrap_drop_in_place: unsafe fn(*mut T),
+    wrap_drop_in_place: Option<unsafe fn(*mut T)>,
     // TypeId of the wrapped type for runtime type checking
     wrap_type_id: TypeId,
     wrap: T,
@@ -46,9 +46,9 @@ unsafe extern "C" fn free(_allocator: *mut ffi::GstAllocator, mem: *mut ffi::Gst
 
     let mem = mem as *mut WrappedMemory<()>;
 
-    if (*mem).wrap_offset > 0 {
+    if let Some(wrap_drop_in_place) = (*mem).wrap_drop_in_place {
         let wrap = (mem as *mut u8).add((*mem).wrap_offset) as *mut ();
-        ((*mem).wrap_drop_in_place)(wrap);
+        wrap_drop_in_place(wrap);
     }
 
     alloc::dealloc(mem as *mut u8, (*mem).layout);
@@ -111,7 +111,7 @@ unsafe extern "C" fn mem_share(
     ptr::write(ptr::addr_of_mut!((*sub).data), (*mem).data);
     ptr::write(ptr::addr_of_mut!((*sub).layout), layout);
     ptr::write(ptr::addr_of_mut!((*sub).wrap_offset), 0);
-    ptr::write(ptr::addr_of_mut!((*sub).wrap_drop_in_place), |_| ());
+    ptr::write(ptr::addr_of_mut!((*sub).wrap_drop_in_place), None);
 
     sub as *mut ffi::GstMemory
 }
@@ -264,8 +264,8 @@ pub(crate) unsafe fn try_into_from_memory_ptr<T: 'static>(
     let mem_wrapper_mut = &mut *(mem_ptr as *mut WrappedMemory<T>);
     let value = ptr::read(&mem_wrapper_mut.wrap);
 
-    // Mark the wrap_offset as 0 to prevent drop from running on the wrapped value
-    mem_wrapper_mut.wrap_offset = 0;
+    // Unset drop function to prevent drop from running on the wrapped value
+    mem_wrapper_mut.wrap_drop_in_place = None;
 
     Ok(value)
 }
@@ -306,7 +306,11 @@ impl Memory {
 
             ptr::write(
                 ptr::addr_of_mut!((*mem).wrap_drop_in_place),
-                ptr::drop_in_place::<T>,
+                if mem::needs_drop::<T>() {
+                    Some(ptr::drop_in_place::<T>)
+                } else {
+                    None
+                },
             );
 
             ptr::write(ptr::addr_of_mut!((*mem).wrap_type_id), TypeId::of::<T>());
@@ -350,7 +354,11 @@ impl Memory {
 
             ptr::write(
                 ptr::addr_of_mut!((*mem).wrap_drop_in_place),
-                ptr::drop_in_place::<T>,
+                if mem::needs_drop::<T>() {
+                    Some(ptr::drop_in_place::<T>)
+                } else {
+                    None
+                },
             );
 
             ptr::write(ptr::addr_of_mut!((*mem).wrap_type_id), TypeId::of::<T>());
