@@ -425,8 +425,62 @@ mod tests {
 
         let mem = Memory::from_slice(data);
         assert_eq!(mem.size(), 5);
+        {
+            let map = mem.map_readable().unwrap();
+            assert_eq!(&expected, map.as_slice());
+        }
+    }
+
+    #[test]
+    fn test_wrap_array_u8() {
+        crate::init().unwrap();
+
+        let data: [u8; 5] = [1u8, 2, 3, 4, 5];
+        let expected = data;
+
+        let mem = Memory::from_slice(data);
+        assert_eq!(mem.size(), 5);
+        assert_eq!(mem.size(), 5);
+        {
+            let map = mem.map_readable().unwrap();
+            assert_eq!(&expected, map.as_slice());
+        }
+    }
+
+    #[test]
+    fn test_wrap_vec_u8_and_back() {
+        crate::init().unwrap();
+
+        let data = vec![1u8, 2, 3, 4, 5];
+        let expected = data.clone();
+
+        let mem = Memory::from_slice(data);
+        assert_eq!(mem.size(), 5);
+        {
+            let map = mem.map_readable().unwrap();
+            assert_eq!(&expected, map.as_slice());
+        }
 
         let extracted: Vec<u8> = mem.try_into_inner().unwrap();
+        assert_eq!(extracted, expected);
+    }
+
+    #[test]
+    fn test_wrap_array_u8_and_back() {
+        crate::init().unwrap();
+
+        let data: [u8; 5] = [1u8, 2, 3, 4, 5];
+        let expected = data;
+
+        let mem = Memory::from_slice(data);
+        assert_eq!(mem.size(), 5);
+        assert_eq!(mem.size(), 5);
+        {
+            let map = mem.map_readable().unwrap();
+            assert_eq!(&expected, map.as_slice());
+        }
+
+        let extracted: [u8; 5] = mem.try_into_inner().unwrap();
         assert_eq!(extracted, expected);
     }
 }
