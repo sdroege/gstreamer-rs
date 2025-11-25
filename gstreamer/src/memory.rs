@@ -52,6 +52,25 @@ pub enum Writable {}
 
 impl Memory {
     #[inline]
+    pub fn default_alignment() -> usize {
+        #[cfg(not(windows))]
+        {
+            extern "C" {
+                static gst_memory_alignment: usize;
+            }
+            unsafe { gst_memory_alignment }
+        }
+        #[cfg(windows)]
+        {
+            // FIXME: Windows is special and accessing variables exported from
+            // shared libraries need different handling than from static libraries
+            // so just return the default MEMORY_ALIGNMENT_MALLOC here until someone
+            // figures out how to do this properly on Windows.
+            7
+        }
+    }
+
+    #[inline]
     pub fn with_size(size: usize) -> Self {
         assert_initialized_main_thread!();
         unsafe {
