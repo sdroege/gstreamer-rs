@@ -41,6 +41,77 @@ struct WrappedMemory<T> {
     wrap: T,
 }
 
+unsafe extern "C" fn alloc(
+    allocator: *mut ffi::GstAllocator,
+    size: usize,
+    params: *mut ffi::GstAllocationParams,
+) -> *mut ffi::GstMemory {
+    let params = &*params;
+
+    let Some(maxsize) = size
+        .checked_add(params.prefix)
+        .and_then(|s| s.checked_add(params.padding))
+    else {
+        return ptr::null_mut();
+    };
+
+    let align = params.align | crate::Memory::default_alignment();
+
+    let layout_base = alloc::Layout::new::<WrappedMemory<()>>();
+
+    let layout_data = match alloc::Layout::from_size_align(maxsize, align + 1) {
+        Ok(res) => res,
+        Err(err) => {
+            crate::warning!(
+                crate::CAT_RUST,
+                "Invalid size {maxsize} or alignment {align}: {err}"
+            );
+            return ptr::null_mut();
+        }
+    };
+    let (layout, data_offset) = match layout_base.extend(layout_data) {
+        Ok(res) => res,
+        Err(err) => {
+            crate::warning!(
+                crate::CAT_RUST,
+                "Can't extend base memory layout to {maxsize} or alignment {align}: {err}"
+            );
+            return ptr::null_mut();
+        }
+    };
+    let layout = layout.pad_to_align();
+
+    let mem = alloc::alloc(layout);
+    let data = mem.add(data_offset);
+
+    if params.prefix > 0 && (params.flags & ffi::GST_MEMORY_FLAG_ZERO_PREFIXED) != 0 {
+        ptr::write_bytes(data, 0, params.prefix);
+    }
+
+    if (params.flags & ffi::GST_MEMORY_FLAG_ZERO_PADDED) != 0 {
+        ptr::write_bytes(data.add(params.prefix).add(size), 0, params.padding);
+    }
+
+    let mem = mem as *mut WrappedMemory<()>;
+    ffi::gst_memory_init(
+        ptr::addr_of_mut!((*mem).mem),
+        params.flags,
+        allocator,
+        ptr::null_mut(),
+        maxsize,
+        params.align,
+        params.prefix,
+        size,
+    );
+    ptr::write(ptr::addr_of_mut!((*mem).data), data);
+    ptr::write(ptr::addr_of_mut!((*mem).layout), layout);
+    ptr::write(ptr::addr_of_mut!((*mem).wrap_type_id), TypeId::of::<()>());
+    ptr::write(ptr::addr_of_mut!((*mem).wrap_offset), 0);
+    ptr::write(ptr::addr_of_mut!((*mem).wrap_drop_in_place), None);
+
+    mem as *mut ffi::GstMemory
+}
+
 unsafe extern "C" fn free(_allocator: *mut ffi::GstAllocator, mem: *mut ffi::GstMemory) {
     debug_assert_eq!((*mem).mini_object.refcount, 0);
 
@@ -148,6 +219,7 @@ unsafe extern "C" fn mem_is_span(
 unsafe extern "C" fn class_init(class: glib::ffi::gpointer, _class_data: glib::ffi::gpointer) {
     let class = class as *mut ffi::GstAllocatorClass;
 
+    (*class).alloc = Some(alloc);
     (*class).free = Some(free);
 }
 
@@ -166,12 +238,16 @@ unsafe extern "C" fn instance_init(
     (*allocator).mem_share = Some(mem_share);
     (*allocator).mem_is_span = Some(mem_is_span);
 
-    // TODO: Could also implement alloc()
-    (*allocator).object.flags |= ffi::GST_ALLOCATOR_FLAG_CUSTOM_ALLOC;
     (*allocator).object.flags |= ffi::GST_OBJECT_FLAG_MAY_BE_LEAKED;
 }
 
-fn rust_allocator() -> &'static crate::Allocator {
+pub fn rust_allocator() -> &'static crate::Allocator {
+    assert_initialized_main_thread!();
+
+    rust_allocator_internal()
+}
+
+fn rust_allocator_internal() -> &'static crate::Allocator {
     static RUST_ALLOCATOR: std::sync::OnceLock<crate::Allocator> = std::sync::OnceLock::new();
 
     RUST_ALLOCATOR.get_or_init(|| unsafe {
@@ -230,7 +306,8 @@ pub(crate) unsafe fn try_into_from_memory_ptr<T: 'static>(
     skip_assert_initialized!();
 
     // Check if this memory uses our rust allocator
-    if (*mem_ptr).allocator.is_null() || (*mem_ptr).allocator != rust_allocator().as_ptr() {
+    if (*mem_ptr).allocator.is_null() || (*mem_ptr).allocator != rust_allocator_internal().as_ptr()
+    {
         let actual_allocator = if (*mem_ptr).allocator.is_null() {
             None
         } else {
@@ -294,7 +371,7 @@ impl Memory {
             ffi::gst_memory_init(
                 mem as *mut ffi::GstMemory,
                 ffi::GST_MINI_OBJECT_FLAG_LOCK_READONLY,
-                rust_allocator().to_glib_none().0,
+                rust_allocator_internal().to_glib_none().0,
                 ptr::null_mut(),
                 len,
                 0,
@@ -342,7 +419,7 @@ impl Memory {
             ffi::gst_memory_init(
                 mem as *mut ffi::GstMemory,
                 0,
-                rust_allocator().to_glib_none().0,
+                rust_allocator_internal().to_glib_none().0,
                 ptr::null_mut(),
                 len,
                 0,
@@ -427,6 +504,131 @@ impl Memory {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn test_alloc() {
+        use crate::prelude::AllocatorExt;
+
+        crate::init().unwrap();
+
+        let data = [0, 1, 2, 3, 4, 5, 6, 7];
+
+        let mut mem = rust_allocator().alloc(data.len(), None).unwrap();
+        assert_eq!(mem.size(), data.len());
+        assert_eq!(mem.allocator().unwrap(), rust_allocator());
+
+        {
+            let mem = mem.get_mut().unwrap();
+            let mut map = mem.map_writable().unwrap();
+            assert_eq!(
+                map.as_ptr() as usize & crate::Memory::default_alignment(),
+                0
+            );
+            map.copy_from_slice(&data);
+        }
+
+        let copy = mem.copy();
+        assert_eq!(copy.size(), data.len());
+        assert_eq!(copy.allocator().unwrap(), rust_allocator());
+
+        {
+            let map = copy.map_readable().unwrap();
+            assert_eq!(
+                copy.as_ptr() as usize & crate::Memory::default_alignment(),
+                0
+            );
+            assert_eq!(map.as_slice(), &data);
+        }
+
+        let mut mem = rust_allocator()
+            .alloc(
+                data.len(),
+                Some(&crate::AllocationParams::new(
+                    crate::MemoryFlags::empty(),
+                    1023,
+                    0,
+                    0,
+                )),
+            )
+            .unwrap();
+        assert_eq!(mem.size(), data.len());
+        assert_eq!(mem.maxsize(), data.len());
+        assert_eq!(mem.allocator().unwrap(), rust_allocator());
+
+        {
+            let mem = mem.get_mut().unwrap();
+            let mut map = mem.map_writable().unwrap();
+            assert_eq!(map.as_ptr() as usize & 1023, 0);
+            map.copy_from_slice(&data);
+        }
+
+        let copy = mem.copy();
+        assert_eq!(copy.size(), data.len());
+        assert_eq!(copy.allocator().unwrap(), rust_allocator());
+
+        {
+            let map = copy.map_readable().unwrap();
+            assert_eq!(map.as_slice(), &data);
+        }
+
+        let share = mem.share(2..4);
+        assert_eq!(share.size(), 2);
+        assert_eq!(share.allocator().unwrap(), rust_allocator());
+        {
+            let map = share.map_readable().unwrap();
+            assert_eq!(map.as_slice(), &data[2..4]);
+        }
+
+        let mut mem = rust_allocator()
+            .alloc(
+                data.len(),
+                Some(&crate::AllocationParams::new(
+                    crate::MemoryFlags::ZERO_PADDED | crate::MemoryFlags::ZERO_PREFIXED,
+                    1023,
+                    32,
+                    32,
+                )),
+            )
+            .unwrap();
+        assert_eq!(mem.size(), data.len());
+        assert_eq!(mem.maxsize(), data.len() + 32 + 32);
+        assert_eq!(mem.allocator().unwrap(), rust_allocator());
+
+        {
+            let mem = mem.get_mut().unwrap();
+            let mut map = mem.map_writable().unwrap();
+            assert_eq!((map.as_ptr() as usize - 32) & 1023, 0);
+            map.copy_from_slice(&data);
+        }
+
+        let copy = mem.copy();
+        assert_eq!(copy.size(), data.len());
+        assert_eq!(copy.allocator().unwrap(), rust_allocator());
+
+        {
+            let map = copy.map_readable().unwrap();
+            assert_eq!(map.as_slice(), &data);
+        }
+
+        let share = mem.share(2..4);
+        assert_eq!(share.size(), 2);
+        assert_eq!(share.allocator().unwrap(), rust_allocator());
+        {
+            let map = share.map_readable().unwrap();
+            assert_eq!(map.as_slice(), &data[2..4]);
+        }
+
+        let share = mem.share_maxsize(0..(data.len() + 32 + 32));
+        assert_eq!(share.size(), data.len() + 32 + 32);
+        assert_eq!(share.allocator().unwrap(), rust_allocator());
+        {
+            let map = share.map_readable().unwrap();
+            let padding = [0; 32];
+            assert_eq!(&map.as_slice()[..32], &padding);
+            assert_eq!(&map.as_slice()[32..][..data.len()], &data);
+            assert_eq!(&map.as_slice()[(32 + data.len())..], &padding);
+        }
+    }
 
     #[test]
     fn test_wrap_vec_u8() {
