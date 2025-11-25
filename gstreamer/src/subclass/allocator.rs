@@ -126,8 +126,9 @@ mod tests {
                     else {
                         return ptr::null_mut();
                     };
-                    let Ok(layout) = alloc::Layout::from_size_align(maxsize, params.align() + 1)
-                    else {
+
+                    let align = params.align() | crate::Memory::default_alignment();
+                    let Ok(layout) = alloc::Layout::from_size_align(maxsize, align + 1) else {
                         return ptr::null_mut();
                     };
 
