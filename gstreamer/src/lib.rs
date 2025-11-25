@@ -148,7 +148,7 @@ mod memory_wrapped;
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
 pub use crate::memory::MemoryRefTrace;
 pub use crate::memory::{MappedMemory, Memory, MemoryMap, MemoryRef};
-pub use crate::memory_wrapped::MemoryIntoInnerError;
+pub use crate::memory_wrapped::{rust_allocator, MemoryIntoInnerError};
 #[cfg(feature = "serde")]
 mod buffer_serde;
 pub mod slice;
