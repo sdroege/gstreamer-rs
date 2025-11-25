@@ -30,13 +30,6 @@ impl Report {
         }
     }
 
-    #[doc(alias = "gst_validate_report_add_message")]
-    pub fn add_message(&self, message: &str) {
-        unsafe {
-            ffi::gst_validate_report_add_message(self.to_glib_none().0, message.to_glib_none().0);
-        }
-    }
-
     #[doc(alias = "gst_validate_report_add_repeated_report")]
     pub fn add_repeated_report(&self, repeated_report: &Report) {
         unsafe {
