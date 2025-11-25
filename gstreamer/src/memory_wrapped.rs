@@ -61,6 +61,7 @@ unsafe extern "C" fn mem_map(
 ) -> glib::ffi::gpointer {
     let mem = mem as *mut WrappedMemory<()>;
 
+    // `(*mem).offset` is added to the pointer by `gst_memory_map()`
     (*mem).data as glib::ffi::gpointer
 }
 
@@ -124,14 +125,22 @@ unsafe extern "C" fn mem_is_span(
     let mem1 = mem1 as *mut WrappedMemory<()>;
     let mem2 = mem2 as *mut WrappedMemory<()>;
 
+    // Same parent is checked by `gst_memory_is_span()` already
+    let parent1 = (*mem1).mem.parent as *mut WrappedMemory<()>;
+    let parent2 = (*mem2).mem.parent as *mut WrappedMemory<()>;
+    debug_assert_eq!(parent1, parent2);
+
     // Basically a re-implementation of _sysmem_is_span()
     if !offset.is_null() {
-        let parent = (*mem1).mem.parent as *mut WrappedMemory<()>;
-        *offset = (*mem1).mem.offset - (*parent).mem.offset;
+        // Offset that can be used on the parent memory to create a
+        // shared memory that starts with `mem1`.
+        //
+        // This needs to use wrapping arithmetic too as in `mem_share()`.
+        *offset = (*mem1).mem.offset.wrapping_sub((*parent1).mem.offset);
     }
 
-    let is_span = (*mem1).data.add((*mem1).mem.offset).add((*mem1).mem.size)
-        == (*mem2).data.add((*mem2).mem.offset);
+    // Check if both memories are contiguous.
+    let is_span = ((*mem1).mem.offset + ((*mem1).mem.size)) == (*mem2).mem.offset;
 
     is_span.into_glib()
 }
