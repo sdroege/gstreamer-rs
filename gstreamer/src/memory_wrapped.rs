@@ -35,7 +35,7 @@ struct WrappedMemory<T> {
     // Offset from the beginning of the struct until `wrap`
     wrap_offset: usize,
     // `ptr::drop_in_place()` for `T`
-    wrap_drop_in_place: Option<unsafe fn(*mut T)>,
+    wrap_drop_in_place: Option<unsafe fn(*mut ())>,
     // TypeId of the wrapped type for runtime type checking
     wrap_type_id: TypeId,
     wrap: T,
@@ -307,7 +307,7 @@ impl Memory {
             ptr::write(
                 ptr::addr_of_mut!((*mem).wrap_drop_in_place),
                 if mem::needs_drop::<T>() {
-                    Some(ptr::drop_in_place::<T>)
+                    Some(|ptr| ptr::drop_in_place::<T>(ptr as *mut T))
                 } else {
                     None
                 },
@@ -355,7 +355,7 @@ impl Memory {
             ptr::write(
                 ptr::addr_of_mut!((*mem).wrap_drop_in_place),
                 if mem::needs_drop::<T>() {
-                    Some(ptr::drop_in_place::<T>)
+                    Some(|ptr| ptr::drop_in_place::<T>(ptr as *mut T))
                 } else {
                     None
                 },
