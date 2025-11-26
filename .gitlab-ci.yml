@@ -494,6 +494,7 @@ docs:
     - PATH=~/.cargo/bin/:$PATH ./generator.py --gir-files-directories gir-files gst-gir-files --embed-docs --no-fmt
     - |
       RUSTDOCFLAGS="$RUST_DOCS_FLAGS"
+      DOCS_RS="1"
       eval $(./gir-rustdoc.py pre-docs)
       cargo +nightly doc --workspace --exclude examples --exclude tutorials --exclude gstreamer-d3d12 --exclude gstreamer-d3d12-sys --all-features --color=always --no-deps
     - mv target/doc docs
