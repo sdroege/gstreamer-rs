@@ -1,9 +1,11 @@
-#[cfg(docsrs)]
-fn main() {} // prevent linking libraries to avoid documentation failure
-
 // https://github.com/rust-lang/cargo/issues/5077#issuecomment-1284482987
-#[cfg(not(docsrs))]
 fn main() {
+    #[allow(clippy::needless_return)]
+    if std::env::var("DOCS_RS").is_ok() {
+        // prevent linking libraries to avoid documentation failure
+        return;
+    }
+
     #[cfg(target_os = "macos")]
     match system_deps::Config::new().probe() {
         Ok(deps) => {

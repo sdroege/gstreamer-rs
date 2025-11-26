@@ -21,7 +21,12 @@ fn main() {
     generate_gl_bindings();
 
     // https://github.com/rust-lang/cargo/issues/5077#issuecomment-1284482987
-    #[cfg(all(not(docsrs), target_os = "macos"))]
+    #[allow(clippy::needless_return)]
+    if std::env::var("DOCS_RS").is_ok() {
+        // prevent linking libraries to avoid documentation failure
+        return;
+    }
+    #[cfg(target_os = "macos")]
     match system_deps::Config::new().probe() {
         Ok(deps) => {
             let usr = std::path::Path::new("/usr/lib");
