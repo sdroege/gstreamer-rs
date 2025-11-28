@@ -84,6 +84,26 @@ pub fn filename_compare(a: &std::path::Path, b: &std::path::Path) -> std::cmp::O
     }
 }
 
+#[doc(alias = "gst_segtrap_is_enabled")]
+pub fn segtrap_is_enabled() -> bool {
+    skip_assert_initialized!();
+    unsafe { from_glib(ffi::gst_segtrap_is_enabled()) }
+}
+
+#[doc(alias = "gst_segtrap_set_enabled")]
+pub fn segtrap_set_enabled(enabled: bool) {
+    skip_assert_initialized!();
+
+    // Ensure this is called before GStreamer is initialized
+    if unsafe { ffi::gst_is_initialized() } == glib::ffi::GTRUE {
+        panic!("segtrap_set_enabled() must be called before gst::init()");
+    }
+
+    unsafe {
+        ffi::gst_segtrap_set_enabled(enabled.into_glib());
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -101,5 +121,11 @@ mod tests {
         let (m_num, m_denom, b, xbase, _) =
             calculate_linear_regression(&values, Some(&mut temp)).unwrap();
         assert_eq!((m_num, m_denom, b, xbase), (10, 10, 3, 3));
+    }
+
+    #[test]
+    fn test_segtrap_is_enabled() {
+        // Default should be enabled
+        assert!(segtrap_is_enabled());
     }
 }
