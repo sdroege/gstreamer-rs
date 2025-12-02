@@ -5,6 +5,25 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.24.4] - 2025-12-02
+### Added
+- Add `Buffer::try_into_inner()` and `Memory::try_into_inner()` to extract a
+  wrapped Rust value (e.g. a `Vec<u8>`).
+- Add `Memory::default_alignment()`, implement `alloc()` for the Rust allocator
+  and add `gst::rust_allocator()` for getting a reference to the allocator.
+
+### Fixed
+- Export `auto` module in `gstreamer-tag` so that `TagImageType` is actually
+  accessible.
+- Fix `gst::Allocator` subclassing API. This was not actually usable before
+  and as such the fixing required a couple of breaking changes.
+- Fix docs build on docs.rs.
+
+### Changed
+- Update `gst_analytics::AnalyticsBatchMeta` and `gst_validate` to the latest API.
+- Fix various new clippy / compiler warnings.
+- Various cleanups to wrapped memory implementation.
+
 ## [0.24.3] - 2025-10-31
 ### Added
 - `gst_video::is_dma_drm_caps()` helper function.
@@ -1957,7 +1976,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.24.3...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.24.4...HEAD
+[0.24.4]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.24.3...0.24.4
 [0.24.3]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.24.2...0.24.3
 [0.24.2]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.24.1...0.24.2
 [0.24.1]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.24.0...0.24.1
