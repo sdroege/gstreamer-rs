@@ -199,7 +199,7 @@ impl ConsumptionLink {
         }
         new_producer.add_consumer_internal(
             &self.consumer,
-            self.settings,
+            self.settings.clone(),
             self.dropped.clone(),
             self.pushed.clone(),
             self.discard.clone(),
@@ -259,7 +259,7 @@ impl ConsumptionLink {
 
     /// Get the settings for this Consumer.
     pub fn settings(&self) -> ConsumerSettings {
-        self.settings
+        self.settings.clone()
     }
 }
 
@@ -276,13 +276,17 @@ impl Drop for ConsumptionLink {
 /// * `max-buffers` <- `0` (unlimited)
 /// * `max-bytes` <- `0` (unlimited)
 /// * `max-time` <- `500ms`
+/// * `event-types` <- `gst::UpstreamForceKeyUnitEvent`
+///   Note: force-key-unit events are always forwarded in addition to any
+///   of the `gst::EventType` set through this property
 ///
 /// Use `ConsumerSettings::builder()` if you need different values.
-#[derive(Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Debug, Clone, Eq, PartialEq, Hash)]
 pub struct ConsumerSettings {
     pub max_buffer: u64,
     pub max_bytes: gst::format::Bytes,
     pub max_time: gst::ClockTime,
+    pub event_types: Vec<gst::EventType>,
 }
 
 impl Default for ConsumerSettings {
@@ -291,6 +295,7 @@ impl Default for ConsumerSettings {
             max_buffer: DEFAULT_CONSUMER_MAX_BUFFERS,
             max_bytes: DEFAULT_CONSUMER_MAX_BYTES,
             max_time: DEFAULT_CONSUMER_MAX_TIME,
+            event_types: Vec::new(),
         }
     }
 }
@@ -402,7 +407,7 @@ impl StreamProducer {
 
         self.add_consumer_internal(
             consumer,
-            settings,
+            settings.clone(),
             dropped.clone(),
             pushed.clone(),
             discard.clone(),
@@ -449,6 +454,7 @@ impl StreamProducer {
             consumer
         );
 
+        let settings_clone = settings.clone();
         Self::configure_consumer_with(consumer, settings);
 
         // Forward force-keyunit events upstream to the appsink
@@ -465,8 +471,19 @@ impl StreamProducer {
                             return gst::PadProbeReturn::Ok;
                         };
 
-                        if gst_video::UpstreamForceKeyUnitEvent::parse(event).is_ok() {
-                            gst::debug!(CAT, obj = &appsink, "Requesting keyframe");
+                        if gst_video::UpstreamForceKeyUnitEvent::parse(event).is_ok()
+                            || settings_clone.event_types.contains(&event.type_())
+                        {
+                            if gst_video::ForceKeyUnitEvent::is(event) {
+                                gst::debug!(CAT, obj = &appsink, "Requesting keyframe");
+                            } else {
+                                gst::debug!(
+                                    CAT,
+                                    obj = &appsink,
+                                    "pushing upstream event {:?}",
+                                    event
+                                );
+                            }
                             // Do not use `gst_element_send_event()` as it takes the state lock which may lead to dead locks.
                             let pad = appsink.static_pad("sink").unwrap();
                             let _ = pad.push_event(event.clone());
