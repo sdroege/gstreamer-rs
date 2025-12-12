@@ -14,7 +14,7 @@ pub trait TimedValueControlSourceExtManual: IsA<TimedValueControlSource> + 'stat
                 self.as_ref().to_glib_none().0,
                 n_control_points.as_mut_ptr(),
             );
-            let len = n_control_points.assume_init() as usize;
+            let len = n_control_points.assume_init();
             FromGlibContainer::from_glib_full_num(ptr, len)
         }
         #[cfg(not(feature = "v1_28"))]
