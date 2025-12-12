@@ -3,7 +3,7 @@ $env:ErrorActionPreference='Stop'
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;
 
 # Download gstreamer and all its subprojects
-git clone -b 1.5.1 --depth 1 https://code.videolan.org/videolan/dav1d.git C:\dav1d
+git clone -b 1.5.2 --depth 1 https://code.videolan.org/videolan/dav1d.git C:\dav1d
 if (!$?) {
   Write-Host "Failed to clone dav1d"
   Exit 1
