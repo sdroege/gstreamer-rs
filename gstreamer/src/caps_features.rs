@@ -921,7 +921,6 @@ pub static CAPS_FEATURES_MEMORY_SYSTEM_MEMORY: LazyLock<CapsFeatures> =
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::idstr;
     use glib::gstr;
 
     #[test]
