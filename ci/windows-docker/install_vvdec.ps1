@@ -9,7 +9,7 @@ if (!$?) {
 }
 
 Set-Location C:\vvdec
-git checkout v3.0.0
+git checkout v3.1.0
 
 # This is fine, we are not going to use the GtkMedia* apis
 $env:CMAKE_ARGS = "-GNinja -DCMAKE_INSTALL_PREFIX=C:\gst-install\ -DBUILD_SHARED_LIBS=ON"
