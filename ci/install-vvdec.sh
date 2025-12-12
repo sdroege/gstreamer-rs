@@ -1,6 +1,6 @@
 set -e
 
-RELEASE=v3.0.0
+RELEASE=v3.1.0
 
 git clone https://github.com/fraunhoferhhi/vvdec.git
 cd vvdec
