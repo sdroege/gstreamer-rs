@@ -488,6 +488,14 @@ macro_rules! mini_object_wrapper (
                 skip_assert_initialized!();
                 this.as_ptr() == other.as_ptr()
             }
+
+            #[inline]
+            pub fn mark_may_be_leaked(&mut self) {
+                unsafe {
+                    (*(self.as_mut_ptr() as *mut $crate::ffi::GstMiniObject)).flags
+                        |= $crate::ffi::GST_MINI_OBJECT_FLAG_MAY_BE_LEAKED;
+                }
+            }
         }
 
         impl $crate::glib::translate::GlibPtrDefault for $ref_name {
