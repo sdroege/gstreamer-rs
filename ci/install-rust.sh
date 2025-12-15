@@ -5,7 +5,7 @@ source ./ci/env.sh
 set -e
 export CARGO_HOME='/usr/local/cargo'
 
-RUSTUP_VERSION=1.28.1
+RUSTUP_VERSION=1.28.2
 RUST_VERSION=$1
 RUST_IMAGE_FULL=$2
 RUST_ARCH="x86_64-unknown-linux-gnu"
@@ -43,7 +43,7 @@ fi
 if [ "$RUST_VERSION" = "1.83.0" ]; then
     cargo install --locked cargo-c --version 0.10.11+cargo-0.86.0
 else
-    cargo install --locked cargo-c --version 0.10.17+cargo-0.92.0
+    cargo install --locked cargo-c --version 0.10.19+cargo-0.93.0
 fi
 
 if [ "$RUST_VERSION" = "nightly" ]; then
