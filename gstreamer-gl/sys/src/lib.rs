@@ -1533,7 +1533,7 @@ pub struct GstGLOverlayCompositor {
     pub context: *mut GstGLContext,
     pub last_window_width: c_uint,
     pub last_window_height: c_uint,
-    pub overlays: *mut glib::GList,
+    pub overlays: *mut glib::GQueue,
     pub shader: *mut GstGLShader,
     pub position_attrib: c_int,
     pub texcoord_attrib: c_int,

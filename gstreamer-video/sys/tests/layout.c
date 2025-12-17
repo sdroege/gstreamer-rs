@@ -64,6 +64,7 @@ int main() {
     printf("%s;%zu;%zu\n", "GstVideoDirectionInterface", sizeof(GstVideoDirectionInterface), alignof(GstVideoDirectionInterface));
     printf("%s;%zu;%zu\n", "GstVideoDitherFlags", sizeof(GstVideoDitherFlags), alignof(GstVideoDitherFlags));
     printf("%s;%zu;%zu\n", "GstVideoDitherMethod", sizeof(GstVideoDitherMethod), alignof(GstVideoDitherMethod));
+    printf("%s;%zu;%zu\n", "GstVideoDmabufPoolClass", sizeof(GstVideoDmabufPoolClass), alignof(GstVideoDmabufPoolClass));
     printf("%s;%zu;%zu\n", "GstVideoEncoder", sizeof(GstVideoEncoder), alignof(GstVideoEncoder));
     printf("%s;%zu;%zu\n", "GstVideoEncoderClass", sizeof(GstVideoEncoderClass), alignof(GstVideoEncoderClass));
     printf("%s;%zu;%zu\n", "GstVideoFieldOrder", sizeof(GstVideoFieldOrder), alignof(GstVideoFieldOrder));
@@ -88,6 +89,7 @@ int main() {
     printf("%s;%zu;%zu\n", "GstVideoMatrixMode", sizeof(GstVideoMatrixMode), alignof(GstVideoMatrixMode));
     printf("%s;%zu;%zu\n", "GstVideoMeta", sizeof(GstVideoMeta), alignof(GstVideoMeta));
     printf("%s;%zu;%zu\n", "GstVideoMetaTransform", sizeof(GstVideoMetaTransform), alignof(GstVideoMetaTransform));
+    printf("%s;%zu;%zu\n", "GstVideoMetaTransformMatrix", sizeof(GstVideoMetaTransformMatrix), alignof(GstVideoMetaTransformMatrix));
     printf("%s;%zu;%zu\n", "GstVideoMultiviewFlags", sizeof(GstVideoMultiviewFlags), alignof(GstVideoMultiviewFlags));
     printf("%s;%zu;%zu\n", "GstVideoMultiviewFramePacking", sizeof(GstVideoMultiviewFramePacking), alignof(GstVideoMultiviewFramePacking));
     printf("%s;%zu;%zu\n", "GstVideoMultiviewMode", sizeof(GstVideoMultiviewMode), alignof(GstVideoMultiviewMode));

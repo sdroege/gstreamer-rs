@@ -577,6 +577,33 @@ pub trait RTSPClientExt: IsA<RTSPClient> + 'static {
         }
     }
 
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "pre-closed")]
+    fn connect_pre_closed<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn pre_closed_trampoline<
+            P: IsA<RTSPClient>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstRTSPClient,
+            f: glib::ffi::gpointer,
+        ) {
+            let f: &F = &*(f as *const F);
+            f(RTSPClient::from_glib_borrow(this).unsafe_cast_ref())
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"pre-closed".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    pre_closed_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
     #[doc(alias = "pre-describe-request")]
     fn connect_pre_describe_request<
         F: Fn(&Self, &RTSPContext) -> gst_rtsp::RTSPStatusCode + Send + Sync + 'static,

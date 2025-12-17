@@ -526,6 +526,7 @@ pub const GST_TAG_ALBUM: &[u8] = b"album\0";
 pub const GST_TAG_ALBUM_ARTIST: &[u8] = b"album-artist\0";
 pub const GST_TAG_ALBUM_ARTIST_SORTNAME: &[u8] = b"album-artist-sortname\0";
 pub const GST_TAG_ALBUM_GAIN: &[u8] = b"replaygain-album-gain\0";
+pub const GST_TAG_ALBUM_GAIN_R128: &[u8] = b"r128-album-gain\0";
 pub const GST_TAG_ALBUM_PEAK: &[u8] = b"replaygain-album-peak\0";
 pub const GST_TAG_ALBUM_SORTNAME: &[u8] = b"album-sortname\0";
 pub const GST_TAG_ALBUM_VOLUME_COUNT: &[u8] = b"album-disc-count\0";
@@ -603,11 +604,13 @@ pub const GST_TAG_TITLE: &[u8] = b"title\0";
 pub const GST_TAG_TITLE_SORTNAME: &[u8] = b"title-sortname\0";
 pub const GST_TAG_TRACK_COUNT: &[u8] = b"track-count\0";
 pub const GST_TAG_TRACK_GAIN: &[u8] = b"replaygain-track-gain\0";
+pub const GST_TAG_TRACK_GAIN_R128: &[u8] = b"r128-track-gain\0";
 pub const GST_TAG_TRACK_NUMBER: &[u8] = b"track-number\0";
 pub const GST_TAG_TRACK_PEAK: &[u8] = b"replaygain-track-peak\0";
 pub const GST_TAG_USER_RATING: &[u8] = b"user-rating\0";
 pub const GST_TAG_VERSION: &[u8] = b"version\0";
 pub const GST_TAG_VIDEO_CODEC: &[u8] = b"video-codec\0";
+pub const GST_TASK_POOL_CONTEXT_TYPE: &[u8] = b"gst.task.pool\0";
 pub const GST_TOC_REPEAT_COUNT_INFINITE: c_int = -1;
 pub const GST_URI_NO_PORT: c_int = 0;
 pub const GST_USECOND: GstClockTimeDiff = 1000;
@@ -747,6 +750,9 @@ pub const GST_LOG_CONTEXT_USE_STRING_ARGS: GstLogContextHashFlags = 16;
 pub type GstMapFlags = c_uint;
 pub const GST_MAP_READ: GstMapFlags = 1;
 pub const GST_MAP_WRITE: GstMapFlags = 2;
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+pub const GST_MAP_REF_MEMORY: GstMapFlags = 256;
 pub const GST_MAP_FLAG_LAST: GstMapFlags = 65536;
 
 pub type GstMemoryFlags = c_uint;
@@ -800,6 +806,9 @@ pub const GST_MESSAGE_STREAMS_SELECTED: GstMessageType = 2147483653;
 pub const GST_MESSAGE_REDIRECT: GstMessageType = 2147483654;
 pub const GST_MESSAGE_DEVICE_CHANGED: GstMessageType = 2147483655;
 pub const GST_MESSAGE_INSTANT_RATE_REQUEST: GstMessageType = 2147483656;
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+pub const GST_MESSAGE_DEVICE_MONITOR_STARTED: GstMessageType = 2147483657;
 pub const GST_MESSAGE_ANY: GstMessageType = 4294967295;
 
 pub type GstMetaFlags = c_uint;
@@ -957,6 +966,9 @@ pub const GST_STREAM_TYPE_AUDIO: GstStreamType = 2;
 pub const GST_STREAM_TYPE_VIDEO: GstStreamType = 4;
 pub const GST_STREAM_TYPE_CONTAINER: GstStreamType = 8;
 pub const GST_STREAM_TYPE_TEXT: GstStreamType = 16;
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+pub const GST_STREAM_TYPE_METADATA: GstStreamType = 32;
 
 pub type GstTracerValueFlags = c_uint;
 pub const GST_TRACER_VALUE_FLAGS_NONE: GstTracerValueFlags = 0;
@@ -1043,6 +1055,7 @@ pub type GstBusFunc =
     Option<unsafe extern "C" fn(*mut GstBus, *mut GstMessage, gpointer) -> gboolean>;
 pub type GstBusSyncHandler =
     Option<unsafe extern "C" fn(*mut GstBus, *mut GstMessage, gpointer) -> GstBusSyncReply>;
+pub type GstCallAsyncFunc = Option<unsafe extern "C" fn(gpointer)>;
 pub type GstCapsFilterMapFunc =
     Option<unsafe extern "C" fn(*mut GstCapsFeatures, *mut GstStructure, gpointer) -> gboolean>;
 pub type GstCapsForeachFunc =
@@ -1139,6 +1152,7 @@ pub type GstMiniObjectDisposeFunction =
     Option<unsafe extern "C" fn(*mut GstMiniObject) -> gboolean>;
 pub type GstMiniObjectFreeFunction = Option<unsafe extern "C" fn(*mut GstMiniObject)>;
 pub type GstMiniObjectNotify = Option<unsafe extern "C" fn(gpointer, *mut GstMiniObject)>;
+pub type GstObjectCallAsyncFunc = Option<unsafe extern "C" fn(*mut GstObject, gpointer)>;
 pub type GstPadActivateFunction =
     Option<unsafe extern "C" fn(*mut GstPad, *mut GstObject) -> gboolean>;
 pub type GstPadActivateModeFunction =
@@ -2155,6 +2169,15 @@ impl ::std::fmt::Debug for GstMeta {
             .finish()
     }
 }
+
+#[repr(C)]
+#[allow(dead_code)]
+pub struct _GstMetaFactoryClass {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
+
+pub type GstMetaFactoryClass = _GstMetaFactoryClass;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -3601,6 +3624,20 @@ impl ::std::fmt::Debug for GstIntRange {
     }
 }
 
+#[repr(C)]
+#[allow(dead_code)]
+pub struct GstMetaFactory {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
+
+impl ::std::fmt::Debug for GstMetaFactory {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstMetaFactory @ {self:p}"))
+            .finish()
+    }
+}
+
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct GstObject {
@@ -4017,6 +4054,20 @@ impl ::std::fmt::Debug for GstValueList {
     }
 }
 
+#[repr(C)]
+#[allow(dead_code)]
+pub struct GstValueUniqueList {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
+
+impl ::std::fmt::Debug for GstValueUniqueList {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstValueUniqueList @ {self:p}"))
+            .finish()
+    }
+}
+
 // Interfaces
 #[repr(C)]
 #[allow(dead_code)]
@@ -4261,6 +4312,9 @@ extern "C" {
     // GstState
     //=========================================================================
     pub fn gst_state_get_type() -> GType;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_state_get_name(state: GstState) -> *const c_char;
 
     //=========================================================================
     // GstStateChange
@@ -4272,6 +4326,9 @@ extern "C" {
     // GstStateChangeReturn
     //=========================================================================
     pub fn gst_state_change_return_get_type() -> GType;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_state_change_return_get_name(state_ret: GstStateChangeReturn) -> *const c_char;
 
     //=========================================================================
     // GstStreamError
@@ -5115,6 +5172,12 @@ extern "C" {
     pub fn gst_context_copy(context: *const GstContext) -> *mut GstContext;
     pub fn gst_context_get_context_type(context: *const GstContext) -> *const c_char;
     pub fn gst_context_get_structure(context: *const GstContext) -> *const GstStructure;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_context_get_task_pool(
+        context: *mut GstContext,
+        pool: *mut *mut GstTaskPool,
+    ) -> gboolean;
     pub fn gst_context_has_context_type(
         context: *const GstContext,
         context_type: *const c_char,
@@ -5125,6 +5188,9 @@ extern "C" {
     #[cfg(feature = "v1_18_3")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18_3")))]
     pub fn gst_context_ref(context: *mut GstContext) -> *mut GstContext;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_context_set_task_pool(context: *mut GstContext, pool: *mut GstTaskPool);
     #[cfg(feature = "v1_18_3")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18_3")))]
     pub fn gst_context_unref(context: *mut GstContext);
@@ -5664,6 +5730,19 @@ extern "C" {
     ) -> *mut GstLogContextBuilder;
 
     //=========================================================================
+    // GstMapInfo
+    //=========================================================================
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_map_info_clear(info: *mut GstMapInfo);
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_map_info_get_data(info: *mut GstMapInfo, size: *mut size_t) -> *mut u8;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_map_info_init(info: *mut GstMapInfo);
+
+    //=========================================================================
     // GstMemory
     //=========================================================================
     pub fn gst_memory_get_type() -> GType;
@@ -5770,6 +5849,12 @@ extern "C" {
         device: *mut GstDevice,
         changed_device: *mut GstDevice,
     ) -> *mut GstMessage;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_message_new_device_monitor_started(
+        src: *mut GstObject,
+        success: gboolean,
+    ) -> *mut GstMessage;
     pub fn gst_message_new_device_removed(
         src: *mut GstObject,
         device: *mut GstDevice,
@@ -5841,7 +5926,7 @@ extern "C" {
         src: *mut GstObject,
         location: *const c_char,
         tag_list: *mut GstTagList,
-        entry_struct: *const GstStructure,
+        entry_struct: *mut GstStructure,
     ) -> *mut GstMessage;
     pub fn gst_message_new_request_state(src: *mut GstObject, state: GstState) -> *mut GstMessage;
     pub fn gst_message_new_reset_time(
@@ -5925,7 +6010,7 @@ extern "C" {
         message: *mut GstMessage,
         location: *const c_char,
         tag_list: *mut GstTagList,
-        entry_struct: *const GstStructure,
+        entry_struct: *mut GstStructure,
     );
     #[cfg(feature = "v1_18_3")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18_3")))]
@@ -5967,6 +6052,12 @@ extern "C" {
         message: *mut GstMessage,
         device: *mut *mut GstDevice,
         changed_device: *mut *mut GstDevice,
+    );
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_message_parse_device_monitor_started(
+        message: *mut GstMessage,
+        success: *mut gboolean,
     );
     pub fn gst_message_parse_device_removed(message: *mut GstMessage, device: *mut *mut GstDevice);
     pub fn gst_message_parse_error(
@@ -6328,7 +6419,34 @@ extern "C" {
     pub fn gst_pad_probe_info_get_buffer(info: *mut GstPadProbeInfo) -> *mut GstBuffer;
     pub fn gst_pad_probe_info_get_buffer_list(info: *mut GstPadProbeInfo) -> *mut GstBufferList;
     pub fn gst_pad_probe_info_get_event(info: *mut GstPadProbeInfo) -> *mut GstEvent;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_pad_probe_info_get_flow_return(info: *mut GstPadProbeInfo) -> GstFlowReturn;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_pad_probe_info_get_id(info: *mut GstPadProbeInfo) -> c_ulong;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_pad_probe_info_get_offset(info: *mut GstPadProbeInfo) -> u64;
     pub fn gst_pad_probe_info_get_query(info: *mut GstPadProbeInfo) -> *mut GstQuery;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_pad_probe_info_get_size(info: *mut GstPadProbeInfo) -> size_t;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_pad_probe_info_get_type(info: *mut GstPadProbeInfo) -> GstPadProbeType;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_pad_probe_info_set_buffer(info: *mut GstPadProbeInfo, buffer: *mut GstBuffer);
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_pad_probe_info_set_buffer_list(info: *mut GstPadProbeInfo, list: *mut GstBufferList);
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_pad_probe_info_set_event(info: *mut GstPadProbeInfo, event: *mut GstEvent);
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_pad_probe_info_set_flow_return(info: *mut GstPadProbeInfo, flow_ret: GstFlowReturn);
 
     //=========================================================================
     // GstParentBufferMeta
@@ -8055,6 +8173,9 @@ extern "C" {
     pub fn gst_clock_get_time(clock: *mut GstClock) -> GstClockTime;
     pub fn gst_clock_get_timeout(clock: *mut GstClock) -> GstClockTime;
     pub fn gst_clock_is_synced(clock: *mut GstClock) -> gboolean;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_clock_is_system_monotonic(clock: *mut GstClock) -> gboolean;
     pub fn gst_clock_new_periodic_id(
         clock: *mut GstClock,
         start_time: GstClockTime,
@@ -8703,6 +8824,22 @@ extern "C" {
     pub fn gst_int_range_get_type() -> GType;
 
     //=========================================================================
+    // GstMetaFactory
+    //=========================================================================
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_meta_factory_get_type() -> GType;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_meta_factory_load(factoryname: *const c_char) -> *const GstMetaInfo;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_meta_factory_register(
+        plugin: *mut GstPlugin,
+        meta_info: *const GstMetaInfo,
+    ) -> gboolean;
+
+    //=========================================================================
     // GstObject
     //=========================================================================
     pub fn gst_object_get_type() -> GType;
@@ -8719,6 +8856,13 @@ extern "C" {
         object: *mut GstObject,
         binding: *mut GstControlBinding,
     ) -> gboolean;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_object_call_async(
+        object: *mut GstObject,
+        func: GstObjectCallAsyncFunc,
+        user_data: gpointer,
+    );
     pub fn gst_object_default_error(
         source: *mut GstObject,
         error: *const glib::GError,
@@ -8740,6 +8884,9 @@ extern "C" {
     pub fn gst_object_get_name(object: *mut GstObject) -> *mut c_char;
     pub fn gst_object_get_parent(object: *mut GstObject) -> *mut GstObject;
     pub fn gst_object_get_path_string(object: *mut GstObject) -> *mut c_char;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_object_get_toplevel(object: *mut GstObject) -> *mut GstObject;
     pub fn gst_object_get_value(
         object: *mut GstObject,
         property_name: *const c_char,
@@ -9494,6 +9641,47 @@ extern "C" {
     );
 
     //=========================================================================
+    // GstValueUniqueList
+    //=========================================================================
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_value_unique_list_get_type() -> GType;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_value_unique_list_append_and_take_value(
+        value: *mut gobject::GValue,
+        append_value: *mut gobject::GValue,
+    );
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_value_unique_list_append_value(
+        value: *mut gobject::GValue,
+        append_value: *const gobject::GValue,
+    );
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_value_unique_list_concat(
+        dest: *mut gobject::GValue,
+        value1: *const gobject::GValue,
+        value2: *const gobject::GValue,
+    );
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_value_unique_list_get_size(value: *const gobject::GValue) -> c_uint;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_value_unique_list_get_value(
+        value: *const gobject::GValue,
+        index: c_uint,
+    ) -> *const gobject::GValue;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_value_unique_list_prepend_value(
+        value: *mut gobject::GValue,
+        prepend_value: *const gobject::GValue,
+    );
+
+    //=========================================================================
     // GstChildProxy
     //=========================================================================
     pub fn gst_child_proxy_get_type() -> GType;
@@ -9641,6 +9829,12 @@ extern "C" {
         xbase: *mut GstClockTime,
         r_squared: *mut c_double,
     ) -> gboolean;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_call_async(func: GstCallAsyncFunc, user_data: gpointer);
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_check_version(major: c_uint, minor: c_uint, micro: c_uint) -> gboolean;
     #[cfg(feature = "v1_18_3")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18_3")))]
     pub fn gst_clear_buffer(buf_ptr: *mut *mut GstBuffer);
@@ -9683,6 +9877,42 @@ extern "C" {
     #[cfg(feature = "v1_18_3")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18_3")))]
     pub fn gst_clear_uri(uri_ptr: *mut *mut GstUri);
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_cpuid_supports_arm_neon() -> gboolean;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_cpuid_supports_arm_neon64() -> gboolean;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_cpuid_supports_x86_3dnow() -> gboolean;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_cpuid_supports_x86_avx() -> gboolean;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_cpuid_supports_x86_avx2() -> gboolean;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_cpuid_supports_x86_mmx() -> gboolean;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_cpuid_supports_x86_mmxext() -> gboolean;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_cpuid_supports_x86_sse2() -> gboolean;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_cpuid_supports_x86_sse3() -> gboolean;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_cpuid_supports_x86_sse4_1() -> gboolean;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_cpuid_supports_x86_sse4_2() -> gboolean;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_cpuid_supports_x86_ssse3() -> gboolean;
     pub fn gst_debug_add_log_function(
         func: GstLogFunction,
         user_data: gpointer,

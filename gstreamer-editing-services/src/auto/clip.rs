@@ -255,6 +255,17 @@ pub trait ClipExt: IsA<Clip> + 'static {
         }
     }
 
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "ges_clip_is_moving_between_layers")]
+    fn is_moving_between_layers(&self) -> bool {
+        unsafe {
+            from_glib(ffi::ges_clip_is_moving_between_layers(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
     #[doc(alias = "ges_clip_move_to_layer")]
     fn move_to_layer(&self, layer: &impl IsA<Layer>) -> Result<(), glib::error::BoolError> {
         unsafe {

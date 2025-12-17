@@ -3144,6 +3144,9 @@ extern "C" {
         effect: *mut GESBaseEffect,
     ) -> c_int;
     pub fn ges_clip_get_top_effects(clip: *mut GESClip) -> *mut glib::GList;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn ges_clip_is_moving_between_layers(clip: *mut GESClip) -> gboolean;
     pub fn ges_clip_move_to_layer(clip: *mut GESClip, layer: *mut GESLayer) -> gboolean;
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
@@ -4464,6 +4467,9 @@ extern "C" {
         buffer: *mut gst::GstBuffer,
     ) -> *mut GESFrameCompositionMeta;
     pub fn ges_deinit();
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn ges_error_quark() -> glib::GQuark;
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_find_formatter_for_uri(uri: *const c_char) -> *mut GESAsset;

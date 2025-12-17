@@ -224,6 +224,13 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "GstAnalyticsModelInfoTensorDirection",
+        Layout {
+            size: size_of::<GstAnalyticsModelInfoTensorDirection>(),
+            alignment: align_of::<GstAnalyticsModelInfoTensorDirection>(),
+        },
+    ),
+    (
         "GstAnalyticsMtd",
         Layout {
             size: size_of::<GstAnalyticsMtd>(),
@@ -343,6 +350,10 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
         "meta:GstAnalyticsBatchMeta",
     ),
     ("GST_INF_RELATION_SPAN", "-1"),
+    ("GST_MODELINFO_SECTION_NAME", "modelinfo"),
+    ("GST_MODELINFO_VERSION_MAJOR", "1"),
+    ("GST_MODELINFO_VERSION_MINOR", "0"),
+    ("GST_MODELINFO_VERSION_STR", "1.0"),
     ("(gint) GST_SEGMENTATION_TYPE_INSTANCE", "1"),
     ("(gint) GST_SEGMENTATION_TYPE_SEMANTIC", "0"),
     ("(gint) GST_TENSOR_DATA_TYPE_BFLOAT16", "13"),
@@ -370,4 +381,7 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_TENSOR_DIM_ORDER_COL_MAJOR", "1"),
     ("(gint) GST_TENSOR_DIM_ORDER_ROW_MAJOR", "0"),
     ("(gint) GST_TENSOR_LAYOUT_CONTIGUOUS", "0"),
+    ("(gint) MODELINFO_DIRECTION_INPUT", "1"),
+    ("(gint) MODELINFO_DIRECTION_OUTPUT", "2"),
+    ("(gint) MODELINFO_DIRECTION_UNKNOWN", "0"),
 ];

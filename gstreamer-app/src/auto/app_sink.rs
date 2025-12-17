@@ -225,6 +225,13 @@ impl AppSink {
         }
     }
 
+    //#[cfg(feature = "v1_28")]
+    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    //#[doc(alias = "gst_app_sink_set_simple_callbacks")]
+    //pub fn set_simple_callbacks(&self, cb: /*Ignored*/Option<AppSinkSimpleCallbacks>) {
+    //    unsafe { TODO: call ffi:gst_app_sink_set_simple_callbacks() }
+    //}
+
     #[doc(alias = "gst_app_sink_set_wait_on_eos")]
     #[doc(alias = "wait-on-eos")]
     pub fn set_wait_on_eos(&self, wait: bool) {

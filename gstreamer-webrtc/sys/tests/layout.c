@@ -16,7 +16,11 @@ int main() {
     printf("%s;%zu;%zu\n", "GstWebRTCError", sizeof(GstWebRTCError), alignof(GstWebRTCError));
     printf("%s;%zu;%zu\n", "GstWebRTCFECType", sizeof(GstWebRTCFECType), alignof(GstWebRTCFECType));
     printf("%s;%zu;%zu\n", "GstWebRTCICE", sizeof(GstWebRTCICE), alignof(GstWebRTCICE));
+    printf("%s;%zu;%zu\n", "GstWebRTCICECandidate", sizeof(GstWebRTCICECandidate), alignof(GstWebRTCICECandidate));
+    printf("%s;%zu;%zu\n", "GstWebRTCICECandidatePair", sizeof(GstWebRTCICECandidatePair), alignof(GstWebRTCICECandidatePair));
+    printf("%s;%zu;%zu\n", "GstWebRTCICECandidateProtocolType", sizeof(GstWebRTCICECandidateProtocolType), alignof(GstWebRTCICECandidateProtocolType));
     printf("%s;%zu;%zu\n", "GstWebRTCICECandidateStats", sizeof(GstWebRTCICECandidateStats), alignof(GstWebRTCICECandidateStats));
+    printf("%s;%zu;%zu\n", "GstWebRTCICECandidateType", sizeof(GstWebRTCICECandidateType), alignof(GstWebRTCICECandidateType));
     printf("%s;%zu;%zu\n", "GstWebRTCICEClass", sizeof(GstWebRTCICEClass), alignof(GstWebRTCICEClass));
     printf("%s;%zu;%zu\n", "GstWebRTCICEComponent", sizeof(GstWebRTCICEComponent), alignof(GstWebRTCICEComponent));
     printf("%s;%zu;%zu\n", "GstWebRTCICEConnectionState", sizeof(GstWebRTCICEConnectionState), alignof(GstWebRTCICEConnectionState));
