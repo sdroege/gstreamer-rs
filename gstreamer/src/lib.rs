@@ -292,6 +292,10 @@ pub use crate::utils::ObjectLockGuard;
 
 pub mod parse;
 
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+pub mod cpuid;
+
 #[cfg(feature = "v1_18")]
 mod gtype;
 
