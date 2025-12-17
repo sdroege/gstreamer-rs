@@ -2916,29 +2916,6 @@ pub enum State {
     Playing = ffi::GST_STATE_PLAYING,
 }
 
-impl State {
-    #[cfg(feature = "v1_28")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
-    pub fn name<'a>(self) -> &'a GStr {
-        unsafe {
-            GStr::from_ptr(
-                ffi::gst_state_get_name(self.into_glib())
-                    .as_ref()
-                    .expect("gst_state_get_name returned NULL"),
-            )
-        }
-    }
-}
-
-#[cfg(feature = "v1_28")]
-#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
-impl std::fmt::Display for State {
-    #[inline]
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        f.write_str(&self.name())
-    }
-}
-
 #[doc(hidden)]
 impl IntoGlib for State {
     type GlibType = ffi::GstState;
@@ -3170,29 +3147,6 @@ pub enum StateChangeReturn {
     Async = ffi::GST_STATE_CHANGE_ASYNC,
     #[doc(alias = "GST_STATE_CHANGE_NO_PREROLL")]
     NoPreroll = ffi::GST_STATE_CHANGE_NO_PREROLL,
-}
-
-impl StateChangeReturn {
-    #[cfg(feature = "v1_28")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
-    pub fn name<'a>(self) -> &'a GStr {
-        unsafe {
-            GStr::from_ptr(
-                ffi::gst_state_change_return_get_name(self.into_glib())
-                    .as_ref()
-                    .expect("gst_state_change_return_get_name returned NULL"),
-            )
-        }
-    }
-}
-
-#[cfg(feature = "v1_28")]
-#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
-impl std::fmt::Display for StateChangeReturn {
-    #[inline]
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        f.write_str(&self.name())
-    }
 }
 
 #[doc(hidden)]

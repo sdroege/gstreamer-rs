@@ -2226,6 +2226,10 @@ exhaustive = true
     cfg_condition = "feature = \"serde\""
     [[object.derive]]
     name = "Debug, PartialEq, Eq, PartialOrd, Ord, Hash"
+    [[object.function]]
+    name = "get_name"
+    # Backwards compat impl around the old name
+    ignore = true
 
 [[object]]
 name = "Gst.StateChange"
@@ -2241,6 +2245,10 @@ exhaustive = true
     variant = "Result"
     ok_type = "StateChangeSuccess"
     err_type = "StateChangeError"
+    [[object.function]]
+    name = "get_name"
+    # Backwards compat impl around the old name
+    ignore = true
 
 [[object]]
 name = "Gst.Stream"

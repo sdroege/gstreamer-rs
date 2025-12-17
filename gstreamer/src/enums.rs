@@ -91,6 +91,37 @@ impl StateChangeReturn {
         skip_assert_initialized!();
         unsafe { std::mem::transmute(v) }
     }
+
+    #[inline]
+    #[doc(alias = "gst_state_change_return_get_name")]
+    #[doc(alias = "gst_element_state_change_return_get_name")]
+    pub fn name<'a>(self) -> &'a glib::GStr {
+        unsafe {
+            #[cfg(feature = "v1_28")]
+            {
+                glib::GStr::from_ptr(
+                    ffi::gst_state_change_return_get_name(self.into_glib())
+                        .as_ref()
+                        .expect("gst_state_change_return_get_name returned NULL"),
+                )
+            }
+            #[cfg(not(feature = "v1_28"))]
+            {
+                glib::GStr::from_ptr(
+                    ffi::gst_element_state_change_return_get_name(self.into_glib())
+                        .as_ref()
+                        .expect("gst_element_state_change_return_get_name returned NULL"),
+                )
+            }
+        }
+    }
+}
+
+impl std::fmt::Display for StateChangeReturn {
+    #[inline]
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        f.write_str(self.name())
+    }
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq, Hash)]
@@ -781,6 +812,37 @@ impl State {
         let sign = (pending - current).signum();
 
         unsafe { from_glib(current + sign) }
+    }
+
+    #[inline]
+    #[doc(alias = "gst_state_get_name")]
+    #[doc(alias = "gst_element_state_get_name")]
+    pub fn name<'a>(self) -> &'a glib::GStr {
+        unsafe {
+            #[cfg(feature = "v1_28")]
+            {
+                glib::GStr::from_ptr(
+                    ffi::gst_state_get_name(self.into_glib())
+                        .as_ref()
+                        .expect("gst_state_get_name returned NULL"),
+                )
+            }
+            #[cfg(not(feature = "v1_28"))]
+            {
+                glib::GStr::from_ptr(
+                    ffi::gst_element_state_get_name(self.into_glib())
+                        .as_ref()
+                        .expect("gst_element_state_get_name returned NULL"),
+                )
+            }
+        }
+    }
+}
+
+impl std::fmt::Display for State {
+    #[inline]
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        f.write_str(self.name())
     }
 }
 
