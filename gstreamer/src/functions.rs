@@ -9,6 +9,8 @@ use glib::translate::*;
 use crate::Tracer;
 
 // import only functions which do not have their own module as namespace
+#[cfg(feature = "v1_28")]
+pub use crate::auto::functions::call_async;
 pub use crate::auto::functions::{
     main_executable_path, util_get_timestamp as get_timestamp, version, version_string,
 };
@@ -101,6 +103,33 @@ pub fn segtrap_set_enabled(enabled: bool) {
 
     unsafe {
         ffi::gst_segtrap_set_enabled(enabled.into_glib());
+    }
+}
+
+#[doc(alias = "gst_check_version")]
+pub fn check_version(major: u32, minor: u32, micro: u32) -> bool {
+    skip_assert_initialized!();
+
+    #[cfg(feature = "v1_28")]
+    {
+        crate::auto::functions::check_version(major, minor, micro)
+    }
+    #[cfg(not(feature = "v1_28"))]
+    {
+        let v = crate::auto::functions::version();
+        if v.0 != major {
+            return false;
+        }
+        if v.1 < minor {
+            return false;
+        }
+        if v.1 > minor {
+            return true;
+        }
+        if v.2 < micro {
+            return false;
+        }
+        true
     }
 }
 
