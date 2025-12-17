@@ -1,5 +1,8 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+#[cfg(feature = "v1_28")]
+use std::{future::Future, pin::Pin};
+
 use glib::{prelude::*, signal::SignalHandlerId, translate::*};
 
 use crate::{ffi, ClockTime, Object, ObjectFlags};
@@ -100,6 +103,48 @@ pub trait GstObjectExtManual: IsA<Object> + 'static {
     #[inline]
     fn object_lock(&self) -> crate::utils::ObjectLockGuard<'_, Self> {
         crate::utils::ObjectLockGuard::acquire(self)
+    }
+
+    #[cfg(feature = "v1_28")]
+    #[doc(alias = "gst_object_call_async")]
+    fn call_async<F>(&self, func: F)
+    where
+        F: FnOnce(&Self) + Send + 'static,
+    {
+        let user_data: Box<F> = Box::new(func);
+
+        unsafe extern "C" fn trampoline<O: IsA<Object>, F: FnOnce(&O) + Send + 'static>(
+            object: *mut ffi::GstObject,
+            user_data: glib::ffi::gpointer,
+        ) {
+            let callback: Box<F> = Box::from_raw(user_data as *mut _);
+            callback(Object::from_glib_borrow(object).unsafe_cast_ref());
+        }
+
+        unsafe {
+            ffi::gst_object_call_async(
+                self.as_ref().to_glib_none().0,
+                Some(trampoline::<Self, F>),
+                Box::into_raw(user_data) as *mut _,
+            );
+        }
+    }
+
+    #[cfg(feature = "v1_28")]
+    fn call_async_future<F, T>(&self, func: F) -> Pin<Box<dyn Future<Output = T> + Send + 'static>>
+    where
+        F: FnOnce(&Self) -> T + Send + 'static,
+        T: Send + 'static,
+    {
+        use futures_channel::oneshot;
+
+        let (sender, receiver) = oneshot::channel();
+
+        self.call_async(move |object| {
+            let _ = sender.send(func(object));
+        });
+
+        Box::pin(async move { receiver.await.expect("sender dropped") })
     }
 }
 

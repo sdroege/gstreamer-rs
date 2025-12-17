@@ -1615,6 +1615,11 @@ trait_name = "GstObjectExt"
     [object.function.return]
     bool_return_is_error = "Failed to add control binding"
 
+    [[object.function]]
+    name = "call_async"
+    # more specific closure type possible
+    manual = true
+
 [[object]]
 name = "Gst.ObjectFlags"
 status = "generate"
