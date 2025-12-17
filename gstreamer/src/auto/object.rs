@@ -72,30 +72,6 @@ pub trait GstObjectExt: IsA<Object> + 'static {
         }
     }
 
-    #[cfg(feature = "v1_28")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
-    #[doc(alias = "gst_object_call_async")]
-    fn call_async<P: FnOnce(&Object) + Send + Sync + 'static>(&self, func: P) {
-        let func_data: Box_<P> = Box_::new(func);
-        unsafe extern "C" fn func_func<P: FnOnce(&Object) + Send + Sync + 'static>(
-            object: *mut ffi::GstObject,
-            user_data: glib::ffi::gpointer,
-        ) {
-            let object = from_glib_borrow(object);
-            let callback = Box_::from_raw(user_data as *mut P);
-            (*callback)(&object)
-        }
-        let func = Some(func_func::<P> as _);
-        let super_callback0: Box_<P> = func_data;
-        unsafe {
-            ffi::gst_object_call_async(
-                self.as_ref().to_glib_none().0,
-                func,
-                Box_::into_raw(super_callback0) as *mut _,
-            );
-        }
-    }
-
     #[doc(alias = "gst_object_default_error")]
     fn default_error(&self, error: &glib::Error, debug: Option<&str>) {
         unsafe {

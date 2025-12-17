@@ -1,6 +1,8 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use std::{ffi::CStr, future::Future, mem, num::NonZeroU64, ops::ControlFlow, pin::Pin};
+use std::{ffi::CStr, mem, num::NonZeroU64, ops::ControlFlow};
+#[cfg(not(feature = "v1_28"))]
+use std::{future::Future, pin::Pin};
 
 use glib::translate::*;
 use itertools::Itertools;
@@ -638,6 +640,7 @@ pub trait ElementExtManual: IsA<Element> + 'static {
         }
     }
 
+    #[cfg(not(feature = "v1_28"))]
     #[doc(alias = "gst_element_call_async")]
     fn call_async<F>(&self, func: F)
     where
@@ -671,6 +674,7 @@ pub trait ElementExtManual: IsA<Element> + 'static {
         }
     }
 
+    #[cfg(not(feature = "v1_28"))]
     fn call_async_future<F, T>(&self, func: F) -> Pin<Box<dyn Future<Output = T> + Send + 'static>>
     where
         F: FnOnce(&Self) -> T + Send + 'static,
