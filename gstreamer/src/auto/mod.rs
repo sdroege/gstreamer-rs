@@ -39,6 +39,9 @@ pub use self::device_provider::DeviceProvider;
 mod device_provider_factory;
 pub use self::device_provider_factory::DeviceProviderFactory;
 
+mod dynamic_type_factory;
+pub use self::dynamic_type_factory::DynamicTypeFactory;
+
 mod element;
 pub use self::element::Element;
 

@@ -186,6 +186,8 @@ pub mod bus;
 mod element;
 pub mod element_factory;
 
+mod dynamic_type_factory;
+
 mod bin;
 pub use bin::BinBuilder;
 
