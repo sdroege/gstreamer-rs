@@ -1239,6 +1239,150 @@ unsafe impl gst::meta::MetaTransform for VideoMetaTransformScale {
     }
 }
 
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+mod video_meta_transform_matrix {
+    use super::*;
+
+    use std::mem;
+
+    #[repr(transparent)]
+    #[doc(alias = "GstVideoMetaTransformMatrix")]
+    pub struct VideoMetaTransformMatrix(ffi::GstVideoMetaTransformMatrix);
+
+    unsafe impl Sync for VideoMetaTransformMatrix {}
+    unsafe impl Send for VideoMetaTransformMatrix {}
+
+    impl VideoMetaTransformMatrix {
+        #[doc(alias = "gst_video_meta_transform_matrix_init")]
+        pub fn new(
+            in_info: &crate::VideoInfo,
+            in_rectangle: &crate::VideoRectangle,
+            out_info: &crate::VideoInfo,
+            out_rectangle: &crate::VideoRectangle,
+        ) -> Self {
+            skip_assert_initialized!();
+
+            unsafe {
+                let mut trans = mem::MaybeUninit::uninit();
+
+                ffi::gst_video_meta_transform_matrix_init(
+                    trans.as_mut_ptr(),
+                    in_info.to_glib_none().0,
+                    in_rectangle.to_glib_none().0,
+                    out_info.to_glib_none().0,
+                    out_rectangle.to_glib_none().0,
+                );
+
+                Self(trans.assume_init())
+            }
+        }
+
+        pub fn in_info(&self) -> &crate::VideoInfo {
+            unsafe { &*(self.0.in_info as *const crate::VideoInfo) }
+        }
+
+        pub fn in_rectangle(&self) -> &crate::VideoRectangle {
+            unsafe { &*(&self.0.in_rectangle as *const _ as *const crate::VideoRectangle) }
+        }
+
+        pub fn out_info(&self) -> &crate::VideoInfo {
+            unsafe { &*(self.0.out_info as *const crate::VideoInfo) }
+        }
+
+        pub fn out_rectangle(&self) -> &crate::VideoRectangle {
+            unsafe { &*(&self.0.out_rectangle as *const _ as *const crate::VideoRectangle) }
+        }
+
+        #[doc(alias = "gst_video_meta_transform_matrix_point")]
+        pub fn point(&self, x: i32, y: i32) -> Option<(i32, i32)> {
+            unsafe {
+                let mut x = x;
+                let mut y = y;
+                let res = from_glib(ffi::gst_video_meta_transform_matrix_point(
+                    &self.0, &mut x, &mut y,
+                ));
+                if res {
+                    Some((x, y))
+                } else {
+                    None
+                }
+            }
+        }
+
+        #[doc(alias = "gst_video_meta_transform_matrix_point_clipped")]
+        pub fn point_clipped(&self, x: i32, y: i32) -> Option<(i32, i32)> {
+            unsafe {
+                let mut x = x;
+                let mut y = y;
+                let res = from_glib(ffi::gst_video_meta_transform_matrix_point_clipped(
+                    &self.0, &mut x, &mut y,
+                ));
+                if res {
+                    Some((x, y))
+                } else {
+                    None
+                }
+            }
+        }
+
+        #[doc(alias = "gst_video_meta_transform_matrix_rectangle")]
+        pub fn rectangle(
+            &self,
+            rectangle: &crate::VideoRectangle,
+        ) -> Option<crate::VideoRectangle> {
+            unsafe {
+                let mut rectangle = rectangle.clone();
+                let res = from_glib(ffi::gst_video_meta_transform_matrix_rectangle(
+                    &self.0,
+                    rectangle.to_glib_none_mut().0,
+                ));
+                if res {
+                    Some(rectangle)
+                } else {
+                    None
+                }
+            }
+        }
+
+        #[doc(alias = "gst_video_meta_transform_matrix_rectangle_clipped")]
+        pub fn rectangle_clipped(
+            &self,
+            rectangle: &crate::VideoRectangle,
+        ) -> Option<crate::VideoRectangle> {
+            unsafe {
+                let mut rectangle = rectangle.clone();
+                let res = from_glib(ffi::gst_video_meta_transform_matrix_rectangle_clipped(
+                    &self.0,
+                    rectangle.to_glib_none_mut().0,
+                ));
+                if res {
+                    Some(rectangle)
+                } else {
+                    None
+                }
+            }
+        }
+    }
+
+    unsafe impl gst::meta::MetaTransform for VideoMetaTransformMatrix {
+        type GLibType = ffi::GstVideoMetaTransformMatrix;
+
+        #[doc(alias = "gst_video_meta_transform_matrix_get_quark")]
+        fn quark() -> glib::Quark {
+            unsafe { from_glib(ffi::gst_video_meta_transform_matrix_get_quark()) }
+        }
+
+        fn as_ptr(&self) -> *const ffi::GstVideoMetaTransformMatrix {
+            &self.0
+        }
+    }
+}
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+pub use video_meta_transform_matrix::*;
+
 #[cfg(test)]
 mod tests {
     use super::*;
