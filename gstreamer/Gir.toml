@@ -1060,6 +1060,11 @@ final_type = true
     manual = true
 
 [[object]]
+name = "Gst.DynamicTypeFactory"
+status = "generate"
+final_type = true
+
+[[object]]
 name = "Gst.Element"
 status = "generate"
 manual_traits = ["ElementExtManual"]
