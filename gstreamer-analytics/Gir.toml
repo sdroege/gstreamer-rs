@@ -17,12 +17,14 @@ external_libraries = [
 ]
 
 generate = [
+    "GstAnalytics.ModelInfoTensorDirection",
     "GstAnalytics.RelTypes",
     "GstAnalytics.TensorDataType",
     "GstAnalytics.TensorDimOrder"
 ]
 
 manual = [
+    "GLib.Quark",
     "GObject.Object",
     "Gst.Element",
     "Gst.MiniObject",
@@ -35,3 +37,24 @@ manual = [
 name = "Gst.Buffer"
 status = "manual"
 ref_mode = "ref"
+
+[[object]]
+name = "GstAnalytics.ModelInfo"
+status = "generate"
+    [[object.function]]
+    pattern = ".+"
+        [[object.function.parameter]]
+        name = "modelinfo"
+        const = true
+
+    [[object.function]]
+    name = "find_tensor_name"
+    manual = true
+
+    [[object.function]]
+    name = "get_input_scales_offsets"
+    manual = true
+
+    [[object.function]]
+    name = "get_target_ranges"
+    manual = true

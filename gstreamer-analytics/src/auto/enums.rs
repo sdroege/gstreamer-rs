@@ -8,6 +8,56 @@ use crate::ffi;
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
 use glib::translate::*;
 
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+#[doc(alias = "GstAnalyticsModelInfoTensorDirection")]
+pub enum ModelInfoTensorDirection {
+    #[doc(alias = "MODELINFO_DIRECTION_UNKNOWN")]
+    Unknown,
+    #[doc(alias = "MODELINFO_DIRECTION_INPUT")]
+    Input,
+    #[doc(alias = "MODELINFO_DIRECTION_OUTPUT")]
+    Output,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+#[doc(hidden)]
+impl IntoGlib for ModelInfoTensorDirection {
+    type GlibType = ffi::GstAnalyticsModelInfoTensorDirection;
+
+    #[inline]
+    fn into_glib(self) -> ffi::GstAnalyticsModelInfoTensorDirection {
+        match self {
+            Self::Unknown => ffi::MODELINFO_DIRECTION_UNKNOWN,
+            Self::Input => ffi::MODELINFO_DIRECTION_INPUT,
+            Self::Output => ffi::MODELINFO_DIRECTION_OUTPUT,
+            Self::__Unknown(value) => value,
+        }
+    }
+}
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+#[doc(hidden)]
+impl FromGlib<ffi::GstAnalyticsModelInfoTensorDirection> for ModelInfoTensorDirection {
+    #[inline]
+    unsafe fn from_glib(value: ffi::GstAnalyticsModelInfoTensorDirection) -> Self {
+        skip_assert_initialized!();
+
+        match value {
+            ffi::MODELINFO_DIRECTION_UNKNOWN => Self::Unknown,
+            ffi::MODELINFO_DIRECTION_INPUT => Self::Input,
+            ffi::MODELINFO_DIRECTION_OUTPUT => Self::Output,
+            value => Self::__Unknown(value),
+        }
+    }
+}
+
 #[cfg(feature = "v1_26")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]

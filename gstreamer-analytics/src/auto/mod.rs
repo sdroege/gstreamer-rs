@@ -3,7 +3,17 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+mod model_info;
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+pub use self::model_info::ModelInfo;
+
 mod enums;
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+pub use self::enums::ModelInfoTensorDirection;
 #[cfg(feature = "v1_26")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
 pub use self::enums::TensorDataType;
