@@ -256,7 +256,7 @@ mod tests {
         check_serialize!(crate::StreamFlags::all(), "\"sparse+select+unselect\"");
         check_serialize!(
             crate::StreamType::all(),
-            "\"unknown+audio+video+container+text\""
+            "\"unknown+audio+video+container+text+metadata\""
         );
     }
 
@@ -461,7 +461,7 @@ mod tests {
         check_deserialize!(
             crate::StreamType,
             crate::StreamType::all(),
-            "\"unknown+audio+video+container+text\""
+            "\"unknown+audio+video+container+text+metadata\""
         );
     }
 
