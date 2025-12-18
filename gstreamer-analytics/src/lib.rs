@@ -9,6 +9,15 @@ pub use glib;
 pub use gst;
 pub use gstreamer_analytics_sys as ffi;
 
+#[cfg(feature = "v1_28")]
+macro_rules! assert_initialized_main_thread {
+    () => {
+        if !gst::INITIALIZED.load(std::sync::atomic::Ordering::SeqCst) {
+            gst::assert_initialized();
+        }
+    };
+}
+
 macro_rules! skip_assert_initialized {
     () => {};
 }
@@ -49,6 +58,10 @@ mod batchmeta;
 #[cfg(feature = "v1_28")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
 pub use crate::batchmeta::*;
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+mod model_info;
 
 mod enums;
 
