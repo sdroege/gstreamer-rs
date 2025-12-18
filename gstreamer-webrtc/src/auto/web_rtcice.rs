@@ -52,13 +52,6 @@ pub trait WebRTCICEExt: IsA<WebRTCICE> + 'static {
         }
     }
 
-    //#[cfg(feature = "v1_28")]
-    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
-    //#[doc(alias = "gst_webrtc_ice_close")]
-    //fn close(&self, promise: /*Ignored*/Option<gst::Promise>) {
-    //    unsafe { TODO: call ffi:gst_webrtc_ice_close() }
-    //}
-
     #[doc(alias = "gst_webrtc_ice_find_transport")]
     fn find_transport(
         &self,

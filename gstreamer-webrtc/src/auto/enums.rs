@@ -881,6 +881,242 @@ impl From<WebRTCFECType> for glib::Value {
     }
 }
 
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+#[doc(alias = "GstWebRTCICECandidateProtocolType")]
+pub enum WebRTCICECandidateProtocolType {
+    #[doc(alias = "GST_WEBRTC_ICE_CANDIDATE_PROTOCOL_TYPE_TCP")]
+    Tcp,
+    #[doc(alias = "GST_WEBRTC_ICE_CANDIDATE_PROTOCOL_TYPE_UDP")]
+    Udp,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+#[doc(hidden)]
+impl IntoGlib for WebRTCICECandidateProtocolType {
+    type GlibType = ffi::GstWebRTCICECandidateProtocolType;
+
+    #[inline]
+    fn into_glib(self) -> ffi::GstWebRTCICECandidateProtocolType {
+        match self {
+            Self::Tcp => ffi::GST_WEBRTC_ICE_CANDIDATE_PROTOCOL_TYPE_TCP,
+            Self::Udp => ffi::GST_WEBRTC_ICE_CANDIDATE_PROTOCOL_TYPE_UDP,
+            Self::__Unknown(value) => value,
+        }
+    }
+}
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+#[doc(hidden)]
+impl FromGlib<ffi::GstWebRTCICECandidateProtocolType> for WebRTCICECandidateProtocolType {
+    #[inline]
+    unsafe fn from_glib(value: ffi::GstWebRTCICECandidateProtocolType) -> Self {
+        skip_assert_initialized!();
+
+        match value {
+            ffi::GST_WEBRTC_ICE_CANDIDATE_PROTOCOL_TYPE_TCP => Self::Tcp,
+            ffi::GST_WEBRTC_ICE_CANDIDATE_PROTOCOL_TYPE_UDP => Self::Udp,
+            value => Self::__Unknown(value),
+        }
+    }
+}
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+impl StaticType for WebRTCICECandidateProtocolType {
+    #[inline]
+    #[doc(alias = "gst_webrtc_ice_candidate_protocol_type_get_type")]
+    fn static_type() -> glib::Type {
+        unsafe { from_glib(ffi::gst_webrtc_ice_candidate_protocol_type_get_type()) }
+    }
+}
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+impl glib::HasParamSpec for WebRTCICECandidateProtocolType {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        Self::ParamSpec::builder_with_default
+    }
+}
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+impl glib::value::ValueType for WebRTCICECandidateProtocolType {
+    type Type = Self;
+}
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+unsafe impl<'a> glib::value::FromValue<'a> for WebRTCICECandidateProtocolType {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    #[inline]
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+impl ToValue for WebRTCICECandidateProtocolType {
+    #[inline]
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    #[inline]
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+impl From<WebRTCICECandidateProtocolType> for glib::Value {
+    #[inline]
+    fn from(v: WebRTCICECandidateProtocolType) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+#[doc(alias = "GstWebRTCICECandidateType")]
+pub enum WebRTCICECandidateType {
+    #[doc(alias = "GST_WEBRTC_ICE_CANDIDATE_TYPE_HOST")]
+    Host,
+    #[doc(alias = "GST_WEBRTC_ICE_CANDIDATE_TYPE_SERVER_REFLEXIVE")]
+    ServerReflexive,
+    #[doc(alias = "GST_WEBRTC_ICE_CANDIDATE_TYPE_PEER_REFLEXIVE")]
+    PeerReflexive,
+    #[doc(alias = "GST_WEBRTC_ICE_CANDIDATE_TYPE_RELAYED")]
+    Relayed,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+#[doc(hidden)]
+impl IntoGlib for WebRTCICECandidateType {
+    type GlibType = ffi::GstWebRTCICECandidateType;
+
+    #[inline]
+    fn into_glib(self) -> ffi::GstWebRTCICECandidateType {
+        match self {
+            Self::Host => ffi::GST_WEBRTC_ICE_CANDIDATE_TYPE_HOST,
+            Self::ServerReflexive => ffi::GST_WEBRTC_ICE_CANDIDATE_TYPE_SERVER_REFLEXIVE,
+            Self::PeerReflexive => ffi::GST_WEBRTC_ICE_CANDIDATE_TYPE_PEER_REFLEXIVE,
+            Self::Relayed => ffi::GST_WEBRTC_ICE_CANDIDATE_TYPE_RELAYED,
+            Self::__Unknown(value) => value,
+        }
+    }
+}
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+#[doc(hidden)]
+impl FromGlib<ffi::GstWebRTCICECandidateType> for WebRTCICECandidateType {
+    #[inline]
+    unsafe fn from_glib(value: ffi::GstWebRTCICECandidateType) -> Self {
+        skip_assert_initialized!();
+
+        match value {
+            ffi::GST_WEBRTC_ICE_CANDIDATE_TYPE_HOST => Self::Host,
+            ffi::GST_WEBRTC_ICE_CANDIDATE_TYPE_SERVER_REFLEXIVE => Self::ServerReflexive,
+            ffi::GST_WEBRTC_ICE_CANDIDATE_TYPE_PEER_REFLEXIVE => Self::PeerReflexive,
+            ffi::GST_WEBRTC_ICE_CANDIDATE_TYPE_RELAYED => Self::Relayed,
+            value => Self::__Unknown(value),
+        }
+    }
+}
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+impl StaticType for WebRTCICECandidateType {
+    #[inline]
+    #[doc(alias = "gst_webrtc_ice_candidate_type_get_type")]
+    fn static_type() -> glib::Type {
+        unsafe { from_glib(ffi::gst_webrtc_ice_candidate_type_get_type()) }
+    }
+}
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+impl glib::HasParamSpec for WebRTCICECandidateType {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        Self::ParamSpec::builder_with_default
+    }
+}
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+impl glib::value::ValueType for WebRTCICECandidateType {
+    type Type = Self;
+}
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+unsafe impl<'a> glib::value::FromValue<'a> for WebRTCICECandidateType {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    #[inline]
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+    }
+}
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+impl ToValue for WebRTCICECandidateType {
+    #[inline]
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    #[inline]
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+impl From<WebRTCICECandidateType> for glib::Value {
+    #[inline]
+    fn from(v: WebRTCICECandidateType) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstWebRTCICEComponent")]

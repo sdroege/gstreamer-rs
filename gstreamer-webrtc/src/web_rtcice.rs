@@ -63,6 +63,15 @@ pub trait WebRTCICEExtManual: IsA<WebRTCICE> + 'static {
             );
         }
     }
+
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "gst_webrtc_ice_close")]
+    fn close(&self, promise: Option<&gst::Promise>) {
+        unsafe {
+            ffi::gst_webrtc_ice_close(self.as_ref().to_glib_none().0, promise.to_glib_full());
+        }
+    }
 }
 
 impl<O: IsA<WebRTCICE>> WebRTCICEExtManual for O {}
