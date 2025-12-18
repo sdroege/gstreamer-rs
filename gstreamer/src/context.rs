@@ -62,7 +62,46 @@ impl ContextRef {
             ))
         }
     }
+
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "gst_context_get_task_pool")]
+    pub fn task_pool(&self) -> Option<crate::TaskPool> {
+        assert_eq!(self.context_type(), TASK_POOL_CONTEXT_TYPE);
+
+        unsafe {
+            use std::ptr;
+
+            let mut pool = ptr::null_mut();
+            if from_glib(ffi::gst_context_get_task_pool(self.as_mut_ptr(), &mut pool)) {
+                Some(from_glib_full(pool))
+            } else {
+                None
+            }
+        }
+    }
+
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "gst_context_set_task_pool")]
+    pub fn set_task_pool<'a, T: glib::prelude::IsA<crate::TaskPool>>(
+        &self,
+        pool: impl Into<Option<&'a T>>,
+    ) {
+        unsafe {
+            ffi::gst_context_set_task_pool(
+                self.as_mut_ptr(),
+                pool.into().map(|d| d.as_ref()).to_glib_none().0,
+            );
+        }
+    }
 }
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+#[doc(alias = "GST_TASK_POOL_CONTEXT_TYPE")]
+pub static TASK_POOL_CONTEXT_TYPE: &glib::GStr =
+    unsafe { glib::GStr::from_utf8_with_nul_unchecked(ffi::GST_TASK_POOL_CONTEXT_TYPE) };
 
 impl fmt::Debug for Context {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
