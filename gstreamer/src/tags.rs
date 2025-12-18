@@ -340,6 +340,28 @@ mod v1_24 {
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
 pub use v1_24::ContainerSpecificTrackId;
 
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+mod v1_28 {
+    use super::*;
+    impl_tag!(
+        TrackGainR128,
+        f64,
+        TAG_TRACK_GAIN_R128,
+        GST_TAG_TRACK_GAIN_R128
+    );
+    impl_tag!(
+        AlbumGainR128,
+        f64,
+        TAG_ALBUM_GAIN_R128,
+        GST_TAG_ALBUM_GAIN_R128
+    );
+}
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+pub use v1_28::{AlbumGainR128, TrackGainR128};
+
 mini_object_wrapper!(TagList, TagListRef, ffi::GstTagList, || {
     ffi::gst_tag_list_get_type()
 });
