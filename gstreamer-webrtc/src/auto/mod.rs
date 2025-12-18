@@ -46,6 +46,20 @@ mod web_rtcsctp_transport;
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub use self::web_rtcsctp_transport::WebRTCSCTPTransport;
 
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+mod web_rtcice_candidate;
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+pub use self::web_rtcice_candidate::WebRTCICECandidate;
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+mod web_rtcice_candidate_pair;
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+pub use self::web_rtcice_candidate_pair::WebRTCICECandidatePair;
+
 #[cfg(feature = "v1_22")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 mod web_rtcice_candidate_stats;
@@ -74,6 +88,12 @@ pub use self::enums::WebRTCError;
 #[cfg(feature = "v1_14_1")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_14_1")))]
 pub use self::enums::WebRTCFECType;
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+pub use self::enums::WebRTCICECandidateProtocolType;
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+pub use self::enums::WebRTCICECandidateType;
 pub use self::enums::WebRTCICEComponent;
 pub use self::enums::WebRTCICEConnectionState;
 pub use self::enums::WebRTCICEGatheringState;

@@ -25,7 +25,11 @@ generate = [
     "GstWebRTC.WebRTCDTLSTransportState",
     "GstWebRTC.WebRTCError",
     "GstWebRTC.WebRTCFECType",
+    "GstWebRTC.WebRTCICECandidate",
+    "GstWebRTC.WebRTCICECandidatePair",
+    "GstWebRTC.WebRTCICECandidateProtocolType",
     "GstWebRTC.WebRTCICECandidateStats",
+    "GstWebRTC.WebRTCICECandidateType",
     "GstWebRTC.WebRTCICEComponent",
     "GstWebRTC.WebRTCICEConnectionState",
     "GstWebRTC.WebRTCICEGatheringState",
@@ -79,6 +83,11 @@ status = "generate"
     [[object.function]]
     name = "add_candidate"
     # ABI breakage in 1.24 needs working around
+    manual = true
+
+    [[object.function]]
+    name = "close"
+    # take promise by reference
     manual = true
 
 [[object]]

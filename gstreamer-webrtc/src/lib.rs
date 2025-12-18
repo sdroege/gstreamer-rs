@@ -19,6 +19,12 @@ macro_rules! skip_assert_initialized {
 mod auto;
 pub use crate::auto::*;
 
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+mod web_rtc_ice_candidate;
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+mod web_rtc_ice_candidate_pair;
 #[cfg(feature = "v1_22")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 mod web_rtc_ice_candidate_stats;
