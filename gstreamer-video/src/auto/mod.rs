@@ -46,6 +46,17 @@ pub use self::video_buffer_pool::VideoBufferPool;
 mod video_decoder;
 pub use self::video_decoder::VideoDecoder;
 
+#[cfg(target_os = "linux")]
+#[cfg_attr(docsrs, doc(cfg(target_os = "linux")))]
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+mod video_dmabuf_pool;
+#[cfg(target_os = "linux")]
+#[cfg_attr(docsrs, doc(cfg(target_os = "linux")))]
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+pub use self::video_dmabuf_pool::VideoDmabufPool;
+
 mod video_encoder;
 pub use self::video_encoder::VideoEncoder;
 

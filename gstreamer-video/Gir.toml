@@ -510,6 +510,11 @@ manual_traits = ["VideoDecoderExtManual"]
         nullable_return_is_error = "Failed to allocate output buffer"
 
 [[object]]
+name = "GstVideo.VideoDmabufPool"
+status = "generate"
+cfg_condition = "target_os = \"linux\""
+
+[[object]]
 name = "GstVideo.VideoEncoder"
 status = "generate"
 manual_traits = ["VideoEncoderExtManual"]
