@@ -244,10 +244,19 @@ impl VideoMeta {
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "gst_video_meta_set_alignment")]
+    #[doc(alias = "gst_video_meta_set_alignment_full")]
     pub fn set_alignment(
         &mut self,
         alignment: &crate::VideoAlignment,
     ) -> Result<(), glib::BoolError> {
+        #[cfg(feature = "v1_28")]
+        unsafe {
+            glib::result_from_gboolean!(
+                ffi::gst_video_meta_set_alignment_full(&mut self.0, &alignment.0),
+                "Failed to set alignment on VideoMeta"
+            )
+        }
+        #[cfg(not(feature = "v1_28"))]
         unsafe {
             glib::result_from_gboolean!(
                 ffi::gst_video_meta_set_alignment(&mut self.0, alignment.0),
