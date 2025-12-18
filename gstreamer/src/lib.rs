@@ -168,6 +168,9 @@ pub use crate::query::{Query, QueryRef, QueryView, QueryViewMut};
 pub mod event;
 pub use crate::event::{Event, EventRef, EventView, EventViewMut, GroupId, Seqnum};
 pub mod context;
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+pub use crate::context::TASK_POOL_CONTEXT_TYPE;
 pub use crate::context::{Context, ContextRef};
 mod rank;
 pub use crate::rank::Rank;
