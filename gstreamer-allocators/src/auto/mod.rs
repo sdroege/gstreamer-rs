@@ -38,6 +38,17 @@ mod shm_allocator;
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
 pub use self::shm_allocator::ShmAllocator;
 
+#[cfg(target_os = "linux")]
+#[cfg_attr(docsrs, doc(cfg(target_os = "linux")))]
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+mod udmabuf_allocator;
+#[cfg(target_os = "linux")]
+#[cfg_attr(docsrs, doc(cfg(target_os = "linux")))]
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+pub use self::udmabuf_allocator::UdmabufAllocator;
+
 mod flags;
 pub use self::flags::FdMemoryFlags;
 
