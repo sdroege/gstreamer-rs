@@ -88,6 +88,9 @@ mod value;
 pub use crate::value::{
     Array, ArrayRef, Bitmask, Fraction, FractionRange, IntRange, List, ListRef,
 };
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+pub use crate::value::{UniqueList, UniqueListRef};
 #[cfg(feature = "serde")]
 #[macro_use]
 mod value_serde;
