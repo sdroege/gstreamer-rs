@@ -1270,6 +1270,269 @@ impl glib::types::StaticType for ListRef<'_> {
     }
 }
 
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+mod unique_list {
+    use std::mem;
+
+    use super::*;
+
+    #[derive(Clone)]
+    pub struct UniqueList(glib::SendValue);
+
+    unsafe impl Send for UniqueList {}
+    unsafe impl Sync for UniqueList {}
+
+    impl fmt::Debug for UniqueList {
+        fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+            f.debug_tuple("UniqueList").field(&self.as_slice()).finish()
+        }
+    }
+
+    impl UniqueList {
+        pub fn new<T: Into<glib::Value> + Send>(values: impl IntoIterator<Item = T>) -> Self {
+            assert_initialized_main_thread!();
+
+            unsafe {
+                let mut value = glib::Value::for_value_type::<UniqueList>();
+                for v in values.into_iter() {
+                    let mut v = v.into().into_raw();
+                    ffi::gst_value_unique_list_append_and_take_value(
+                        value.to_glib_none_mut().0,
+                        &mut v,
+                    );
+                }
+
+                Self(glib::SendValue::unsafe_from(value.into_raw()))
+            }
+        }
+
+        pub fn from_values(values: impl IntoIterator<Item = glib::SendValue>) -> Self {
+            skip_assert_initialized!();
+
+            Self::new(values)
+        }
+
+        #[inline]
+        pub fn as_slice(&self) -> &[glib::SendValue] {
+            unsafe {
+                let arr = (*self.0.as_ptr()).data[0].v_pointer as *const glib::ffi::GArray;
+                if arr.is_null() || (*arr).len == 0 {
+                    &[]
+                } else {
+                    #[allow(clippy::cast_ptr_alignment)]
+                    slice::from_raw_parts(
+                        (*arr).data as *const glib::SendValue,
+                        (*arr).len as usize,
+                    )
+                }
+            }
+        }
+
+        pub fn append_value(&mut self, value: glib::SendValue) {
+            unsafe {
+                ffi::gst_value_unique_list_append_and_take_value(
+                    self.0.to_glib_none_mut().0,
+                    &mut value.into_raw(),
+                );
+            }
+        }
+
+        pub fn append(&mut self, value: impl Into<glib::Value> + Send) {
+            self.append_value(glib::SendValue::from_owned(value));
+        }
+
+        #[doc(alias = "gst_value_list_concat")]
+        pub fn concat(a: &UniqueList, b: &UniqueList) -> UniqueList {
+            skip_assert_initialized!();
+
+            unsafe {
+                let mut res = mem::MaybeUninit::zeroed();
+                ffi::gst_value_list_concat(
+                    res.as_mut_ptr(),
+                    a.0.to_glib_none().0,
+                    b.0.to_glib_none().0,
+                );
+                UniqueList(glib::SendValue::unsafe_from(res.assume_init()))
+            }
+        }
+    }
+
+    impl Default for UniqueList {
+        fn default() -> Self {
+            skip_assert_initialized!();
+
+            unsafe {
+                let value = glib::Value::for_value_type::<UniqueList>();
+
+                Self(glib::SendValue::unsafe_from(value.into_raw()))
+            }
+        }
+    }
+
+    impl ops::Deref for UniqueList {
+        type Target = [glib::SendValue];
+
+        #[inline]
+        fn deref(&self) -> &[glib::SendValue] {
+            self.as_slice()
+        }
+    }
+
+    impl AsRef<[glib::SendValue]> for UniqueList {
+        #[inline]
+        fn as_ref(&self) -> &[glib::SendValue] {
+            self.as_slice()
+        }
+    }
+
+    impl std::iter::FromIterator<glib::SendValue> for UniqueList {
+        fn from_iter<T: IntoIterator<Item = glib::SendValue>>(iter: T) -> Self {
+            skip_assert_initialized!();
+            Self::from_values(iter)
+        }
+    }
+
+    impl std::iter::Extend<glib::SendValue> for UniqueList {
+        fn extend<T: IntoIterator<Item = glib::SendValue>>(&mut self, iter: T) {
+            for v in iter.into_iter() {
+                self.append_value(v);
+            }
+        }
+    }
+
+    impl glib::value::ValueType for UniqueList {
+        type Type = Self;
+    }
+
+    unsafe impl<'a> glib::value::FromValue<'a> for UniqueList {
+        type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+        unsafe fn from_value(value: &'a glib::Value) -> Self {
+            skip_assert_initialized!();
+            Self(glib::SendValue::unsafe_from(value.clone().into_raw()))
+        }
+    }
+
+    impl glib::value::ToValue for UniqueList {
+        fn to_value(&self) -> glib::Value {
+            self.0.clone().into()
+        }
+
+        fn value_type(&self) -> glib::Type {
+            Self::static_type()
+        }
+    }
+
+    impl From<UniqueList> for glib::Value {
+        fn from(v: UniqueList) -> glib::Value {
+            skip_assert_initialized!();
+            v.0.into()
+        }
+    }
+
+    impl glib::types::StaticType for UniqueList {
+        #[inline]
+        fn static_type() -> glib::types::Type {
+            unsafe { from_glib(ffi::gst_value_unique_list_get_type()) }
+        }
+    }
+
+    #[derive(Debug, Clone)]
+    pub struct UniqueListRef<'a>(&'a [glib::SendValue]);
+
+    unsafe impl Send for UniqueListRef<'_> {}
+    unsafe impl Sync for UniqueListRef<'_> {}
+
+    impl<'a> UniqueListRef<'a> {
+        pub fn new(values: &'a [glib::SendValue]) -> Self {
+            skip_assert_initialized!();
+
+            Self(values)
+        }
+
+        #[inline]
+        pub fn as_slice(&self) -> &'a [glib::SendValue] {
+            self.0
+        }
+    }
+
+    impl ops::Deref for UniqueListRef<'_> {
+        type Target = [glib::SendValue];
+
+        #[inline]
+        fn deref(&self) -> &[glib::SendValue] {
+            self.as_slice()
+        }
+    }
+
+    impl AsRef<[glib::SendValue]> for UniqueListRef<'_> {
+        #[inline]
+        fn as_ref(&self) -> &[glib::SendValue] {
+            self.as_slice()
+        }
+    }
+
+    unsafe impl<'a> glib::value::FromValue<'a> for UniqueListRef<'a> {
+        type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+        #[inline]
+        unsafe fn from_value(value: &'a glib::Value) -> Self {
+            skip_assert_initialized!();
+            let arr = (*value.as_ptr()).data[0].v_pointer as *const glib::ffi::GArray;
+            if arr.is_null() || (*arr).len == 0 {
+                Self(&[])
+            } else {
+                #[allow(clippy::cast_ptr_alignment)]
+                Self(slice::from_raw_parts(
+                    (*arr).data as *const glib::SendValue,
+                    (*arr).len as usize,
+                ))
+            }
+        }
+    }
+
+    impl glib::value::ToValue for UniqueListRef<'_> {
+        #[inline]
+        fn to_value(&self) -> glib::Value {
+            let mut value = glib::Value::for_value_type::<UniqueList>();
+            unsafe {
+                for v in self.0 {
+                    ffi::gst_value_unique_list_append_value(
+                        value.to_glib_none_mut().0,
+                        v.to_glib_none().0,
+                    );
+                }
+            }
+            value
+        }
+
+        #[inline]
+        fn value_type(&self) -> glib::Type {
+            Self::static_type()
+        }
+    }
+
+    impl<'a> From<UniqueListRef<'a>> for glib::Value {
+        #[inline]
+        fn from(v: UniqueListRef<'a>) -> glib::Value {
+            skip_assert_initialized!();
+            glib::value::ToValue::to_value(&v)
+        }
+    }
+
+    impl glib::types::StaticType for UniqueListRef<'_> {
+        #[inline]
+        fn static_type() -> glib::types::Type {
+            unsafe { from_glib(ffi::gst_value_unique_list_get_type()) }
+        }
+    }
+}
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+pub use unique_list::*;
+
 pub trait GstValueExt: Sized {
     #[doc(alias = "gst_value_can_compare")]
     fn can_compare(&self, other: &Self) -> bool;
