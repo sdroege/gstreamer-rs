@@ -176,6 +176,8 @@ impl MessageRef {
                 ffi::GST_MESSAGE_DEVICE_CHANGED => DeviceChanged::view(self),
                 #[cfg(feature = "v1_18")]
                 ffi::GST_MESSAGE_INSTANT_RATE_REQUEST => InstantRateRequest::view(self),
+                #[cfg(feature = "v1_28")]
+                ffi::GST_MESSAGE_DEVICE_MONITOR_STARTED => DeviceMonitorStarted::view(self),
                 _ => MessageView::Other,
             }
         }
@@ -227,6 +229,8 @@ impl MessageRef {
                 ffi::GST_MESSAGE_DEVICE_CHANGED => DeviceChanged::view_mut(self),
                 #[cfg(feature = "v1_18")]
                 ffi::GST_MESSAGE_INSTANT_RATE_REQUEST => InstantRateRequest::view_mut(self),
+                #[cfg(feature = "v1_28")]
+                ffi::GST_MESSAGE_DEVICE_MONITOR_STARTED => DeviceMonitorStarted::view_mut(self),
                 _ => MessageViewMut::Other,
             }
         }
@@ -325,6 +329,9 @@ pub enum MessageView<'a> {
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     InstantRateRequest(&'a InstantRateRequest),
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    DeviceMonitorStarted(&'a DeviceMonitorStarted),
     Other,
 }
 
@@ -374,6 +381,9 @@ pub enum MessageViewMut<'a> {
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     InstantRateRequest(&'a mut InstantRateRequest),
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    DeviceMonitorStarted(&'a mut DeviceMonitorStarted),
     Other,
 }
 
@@ -2712,6 +2722,54 @@ impl std::fmt::Debug for InstantRateRequest<Message> {
     }
 }
 
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+declare_concrete_message!(DeviceMonitorStarted, T);
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+impl DeviceMonitorStarted {
+    #[doc(alias = "gst_message_new_device_monitor_started")]
+    #[allow(clippy::new_ret_no_self)]
+    pub fn new(started: bool) -> Message {
+        skip_assert_initialized!();
+        Self::builder(started).build()
+    }
+
+    pub fn builder<'a>(started: bool) -> DeviceMonitorStartedBuilder<'a> {
+        assert_initialized_main_thread!();
+        DeviceMonitorStartedBuilder::new(started)
+    }
+
+    #[doc(alias = "gst_message_parse_device_monitor_started")]
+    pub fn started(&self) -> bool {
+        unsafe {
+            let mut started = mem::MaybeUninit::uninit();
+
+            ffi::gst_message_parse_device_monitor_started(self.as_mut_ptr(), started.as_mut_ptr());
+
+            from_glib(started.assume_init())
+        }
+    }
+}
+
+#[cfg(feature = "v1_28")]
+impl std::fmt::Debug for DeviceMonitorStarted {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("DeviceMonitorStarted")
+            .field("structure", &self.message().structure())
+            .field("source", &self.src().map(|obj| (obj, obj.name())))
+            .field("started", &self.started())
+            .finish()
+    }
+}
+
+#[cfg(feature = "v1_28")]
+impl std::fmt::Debug for DeviceMonitorStarted<Message> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        DeviceMonitorStarted::<MessageRef>::fmt(self, f)
+    }
+}
+
 struct MessageBuilder<'a> {
     src: Option<Object>,
     seqnum: Option<Seqnum>,
@@ -4419,6 +4477,30 @@ impl<'a> InstantRateRequestBuilder<'a> {
 
     message_builder_generic_impl!(
         |s: &mut Self, src| ffi::gst_message_new_instant_rate_request(src, s.rate_multiplier,)
+    );
+}
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+#[must_use = "The builder must be built to be used"]
+pub struct DeviceMonitorStartedBuilder<'a> {
+    builder: MessageBuilder<'a>,
+    started: bool,
+}
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+impl<'a> DeviceMonitorStartedBuilder<'a> {
+    fn new(started: bool) -> Self {
+        skip_assert_initialized!();
+        Self {
+            builder: MessageBuilder::new(),
+            started,
+        }
+    }
+
+    message_builder_generic_impl!(
+        |s: &mut Self, src| ffi::gst_message_new_device_monitor_started(src, s.started.into_glib(),)
     );
 }
 
