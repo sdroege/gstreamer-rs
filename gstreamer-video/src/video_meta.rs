@@ -967,7 +967,7 @@ impl VideoSeiUserDataUnregisteredMeta {
         unsafe {
             let meta = ffi::gst_buffer_add_video_sei_user_data_unregistered_meta(
                 buffer.as_mut_ptr(),
-                mut_override(uuid.as_ptr()),
+                mut_override(uuid as *const _),
                 mut_override(data.as_ptr()),
                 data.len(),
             );
