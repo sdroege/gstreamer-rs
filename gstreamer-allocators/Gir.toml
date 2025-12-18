@@ -109,3 +109,10 @@ cfg_condition = "unix"
     name = "init_once"
     manual = true
 
+[[object]]
+name = "GstAllocators.UdmabufAllocator"
+status = "generate"
+cfg_condition = "target_os = \"linux\""
+    [[object.function]]
+    name = "init_once"
+    ignore = true
