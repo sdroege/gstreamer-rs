@@ -71,3 +71,23 @@ impl<'a> glib::translate::ToGlibPtrMut<'a, *mut ffi::GstVideoRectangle> for Vide
         glib::translate::StashMut(self as *mut _ as *mut _, PhantomData)
     }
 }
+
+#[doc(hidden)]
+impl<'a> glib::translate::ToGlibPtr<'a, *const ffi::GstVideoRectangle> for VideoRectangle {
+    type Storage = PhantomData<&'a Self>;
+
+    #[inline]
+    fn to_glib_none(&'a self) -> glib::translate::Stash<'a, *const ffi::GstVideoRectangle, Self> {
+        glib::translate::Stash(self as *const _ as *const _, PhantomData)
+    }
+}
+
+#[doc(hidden)]
+impl<'a> glib::translate::ToGlibPtr<'a, *mut ffi::GstVideoRectangle> for VideoRectangle {
+    type Storage = PhantomData<&'a Self>;
+
+    #[inline]
+    fn to_glib_none(&'a self) -> glib::translate::Stash<'a, *mut ffi::GstVideoRectangle, Self> {
+        glib::translate::Stash(self as *const _ as *mut _, PhantomData)
+    }
+}
