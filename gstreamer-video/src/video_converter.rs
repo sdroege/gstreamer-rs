@@ -113,6 +113,28 @@ impl VideoConverter {
             ffi::gst_video_converter_frame(self.0.as_ptr(), src.as_ptr(), dest.as_mut_ptr());
         }
     }
+
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "gst_video_converter_transform_metas")]
+    pub fn transform_metas(
+        &self,
+        src: &gst::BufferRef,
+        dest: &mut gst::BufferRef,
+    ) -> Result<(), glib::BoolError> {
+        unsafe {
+            let res = from_glib(ffi::gst_video_converter_transform_metas(
+                self.0.as_ptr(),
+                mut_override(src.as_ptr()),
+                dest.as_mut_ptr(),
+            ));
+            if res {
+                Ok(())
+            } else {
+                Err(glib::bool_error!("Couldn't transform metas"))
+            }
+        }
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
