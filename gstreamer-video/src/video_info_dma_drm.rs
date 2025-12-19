@@ -37,6 +37,8 @@ pub fn dma_drm_fourcc_to_format(v: u32) -> Result<VideoFormat, glib::BoolError> 
 pub fn dma_drm_fourcc_to_string(fourcc: u32, modifier: u64) -> glib::GString {
     skip_assert_initialized!();
     unsafe {
+        assert_ne!(fourcc, 0);
+        assert_ne!(modifier, 0x00ffffffffffffff);
         glib::GString::from_glib_full(ffi::gst_video_dma_drm_fourcc_to_string(fourcc, modifier))
     }
 }
