@@ -118,7 +118,7 @@ impl Drop for StreamProducerInner {
 /// * `sync` <- `true` (sync on the clock)
 ///
 /// Use `ConsumerSettings::builder()` if you need different values.
-#[derive(Debug, Copy, Clone, Eq, PartialEq, Ord, PartialOrd, Hash)]
+#[derive(Debug, Clone, Eq, PartialEq, Hash)]
 pub struct ProducerSettings {
     pub sync: bool,
 }
