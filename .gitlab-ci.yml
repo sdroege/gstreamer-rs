@@ -434,7 +434,7 @@ coverage:
     - grcov . --binary-path ./target/debug/ -s . -t html,cobertura --branch --ignore-not-existing --ignore "*target*" --ignore "*/sys/*" --ignore "examples/*" --ignore "tutorials/*" --ignore "*/build.rs" -o ./coverage/
     # output coverage summary for gitlab parsing.
     # TODO: use grcov once https://github.com/mozilla/grcov/issues/556 is fixed
-    - grep % coverage/html/index.html | head -1 ; true
+    - grep % coverage/html/index.html | head -1 || true
   artifacts:
     paths:
       - 'coverage'
