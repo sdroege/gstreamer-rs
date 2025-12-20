@@ -40,6 +40,10 @@ pub const GST_PLAY_COLOR_BALANCE_CONTRAST: GstPlayColorBalanceType = 1;
 pub type GstPlayError = c_int;
 pub const GST_PLAY_ERROR_FAILED: GstPlayError = 0;
 
+pub type GstPlayLoop = c_int;
+pub const GST_PLAY_LOOP_NONE: GstPlayLoop = 0;
+pub const GST_PLAY_LOOP_TRACK: GstPlayLoop = 1;
+
 pub type GstPlayMessage = c_int;
 pub const GST_PLAY_MESSAGE_URI_LOADED: GstPlayMessage = 0;
 pub const GST_PLAY_MESSAGE_POSITION_UPDATED: GstPlayMessage = 1;
@@ -317,6 +321,16 @@ extern "C" {
     pub fn gst_play_error_quark() -> glib::GQuark;
 
     //=========================================================================
+    // GstPlayLoop
+    //=========================================================================
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_play_loop_get_type() -> GType;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_play_loop_get_name(loop_: GstPlayLoop) -> *const c_char;
+
+    //=========================================================================
     // GstPlayMessage
     //=========================================================================
     pub fn gst_play_message_get_type() -> GType;
@@ -418,6 +432,9 @@ extern "C" {
     //=========================================================================
     pub fn gst_play_get_type() -> GType;
     pub fn gst_play_new(video_renderer: *mut GstPlayVideoRenderer) -> *mut GstPlay;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_play_config_get_loop(config: *const gst::GstStructure) -> GstPlayLoop;
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_play_config_get_pipeline_dump_in_error_details(
@@ -427,6 +444,9 @@ extern "C" {
         -> c_uint;
     pub fn gst_play_config_get_seek_accurate(config: *const gst::GstStructure) -> gboolean;
     pub fn gst_play_config_get_user_agent(config: *const gst::GstStructure) -> *mut c_char;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_play_config_set_loop(config: *mut gst::GstStructure, loop_: GstPlayLoop);
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_play_config_set_pipeline_dump_in_error_details(

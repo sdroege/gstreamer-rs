@@ -10,6 +10,7 @@
 int main() {
     printf("%s;%zu;%zu\n", "GstPlayColorBalanceType", sizeof(GstPlayColorBalanceType), alignof(GstPlayColorBalanceType));
     printf("%s;%zu;%zu\n", "GstPlayError", sizeof(GstPlayError), alignof(GstPlayError));
+    printf("%s;%zu;%zu\n", "GstPlayLoop", sizeof(GstPlayLoop), alignof(GstPlayLoop));
     printf("%s;%zu;%zu\n", "GstPlayMessage", sizeof(GstPlayMessage), alignof(GstPlayMessage));
     printf("%s;%zu;%zu\n", "GstPlaySnapshotFormat", sizeof(GstPlaySnapshotFormat), alignof(GstPlaySnapshotFormat));
     printf("%s;%zu;%zu\n", "GstPlayState", sizeof(GstPlayState), alignof(GstPlayState));

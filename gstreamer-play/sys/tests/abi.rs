@@ -217,6 +217,13 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "GstPlayLoop",
+        Layout {
+            size: size_of::<GstPlayLoop>(),
+            alignment: align_of::<GstPlayLoop>(),
+        },
+    ),
+    (
         "GstPlayMessage",
         Layout {
             size: size_of::<GstPlayMessage>(),
@@ -259,6 +266,8 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_PLAY_COLOR_BALANCE_HUE", "3"),
     ("(gint) GST_PLAY_COLOR_BALANCE_SATURATION", "2"),
     ("(gint) GST_PLAY_ERROR_FAILED", "0"),
+    ("(gint) GST_PLAY_LOOP_NONE", "0"),
+    ("(gint) GST_PLAY_LOOP_TRACK", "1"),
     ("(gint) GST_PLAY_MESSAGE_BUFFERING", "4"),
     ("(gint) GST_PLAY_MESSAGE_DURATION_CHANGED", "2"),
     ("(gint) GST_PLAY_MESSAGE_END_OF_STREAM", "5"),
