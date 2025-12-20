@@ -19,6 +19,7 @@ external_libraries = [
 generate = [
     "GstPlay.PlayColorBalanceType",
     "GstPlay.PlayError",
+    "GstPlay.PlayLoop",
     "GstPlay.PlayMediaInfo",
     "GstPlay.PlaySnapshotFormat",
     "GstPlay.PlayState",

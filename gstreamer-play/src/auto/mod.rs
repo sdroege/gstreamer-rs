@@ -36,6 +36,9 @@ pub use self::play_visualization::PlayVisualization;
 mod enums;
 pub use self::enums::PlayColorBalanceType;
 pub use self::enums::PlayError;
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+pub use self::enums::PlayLoop;
 pub(crate) use self::enums::PlayMessage;
 pub use self::enums::PlaySnapshotFormat;
 pub use self::enums::PlayState;
