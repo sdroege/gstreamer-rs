@@ -116,6 +116,24 @@ impl PlayConfig {
             );
         }
     }
+
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "gst_play_config_get_loop")]
+    pub fn loop_(&self) -> crate::PlayLoop {
+        skip_assert_initialized!();
+        unsafe { from_glib(ffi::gst_play_config_get_loop(self.0.to_glib_none().0)) }
+    }
+
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "gst_play_config_set_loop")]
+    pub fn set_loop(&mut self, loop_: crate::PlayLoop) {
+        skip_assert_initialized!();
+        unsafe {
+            ffi::gst_play_config_set_loop(self.0.to_glib_none_mut().0, loop_.into_glib());
+        }
+    }
 }
 
 impl IntoGlibPtr<*mut gst::ffi::GstStructure> for PlayConfig {
