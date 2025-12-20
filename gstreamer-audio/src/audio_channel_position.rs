@@ -358,7 +358,10 @@ pub fn buffer_reorder_channels(
     }
 
     let formatinfo = crate::AudioFormatInfo::from_format(format);
-    if buffer.size() % ((formatinfo.width() * channels) as usize) != 0 {
+    if !buffer
+        .size()
+        .is_multiple_of((formatinfo.width() * channels) as usize)
+    {
         return Err(glib::bool_error!("Incomplete number of samples in buffer"));
     }
 
@@ -395,7 +398,10 @@ pub fn reorder_channels(
     assert!(channels > 0 && channels <= 64);
 
     let formatinfo = crate::AudioFormatInfo::from_format(format);
-    if data.len() % ((formatinfo.width() * channels) as usize) != 0 {
+    if !data
+        .len()
+        .is_multiple_of((formatinfo.width() * channels) as usize)
+    {
         return Err(glib::bool_error!("Incomplete number of samples in buffer"));
     }
 
@@ -465,7 +471,7 @@ pub fn reorder_channels_with_reorder_map(
 
     assert!(bps > 0 && bps <= 64);
     assert!(channels > 0 && channels <= 64);
-    if data.len() % (bps * channels as usize) != 0 {
+    if !data.len().is_multiple_of(bps * channels as usize) {
         return Err(glib::bool_error!("Incomplete number of samples in buffer"));
     }
     if reorder_map.len() < channels as usize {

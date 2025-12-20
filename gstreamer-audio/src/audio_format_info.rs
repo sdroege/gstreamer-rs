@@ -117,7 +117,7 @@ impl AudioFormatInfo {
             panic!("No width for {self:?}");
         }
 
-        if src.len() % (self_width / 8) != 0 {
+        if !src.len().is_multiple_of(self_width / 8) {
             panic!("Incomplete number of samples in src");
         }
 
@@ -151,7 +151,7 @@ impl AudioFormatInfo {
             panic!("No width for {self:?}");
         }
 
-        if src.len() % (unpack_width / 8) != 0 {
+        if !src.len().is_multiple_of(unpack_width / 8) {
             panic!("Incomplete number of samples in src");
         }
 
@@ -181,7 +181,7 @@ impl AudioFormatInfo {
             panic!("Filling with silence unsupported");
         }
 
-        if dest.len() % (self_width / 8) != 0 {
+        if !dest.len().is_multiple_of(self_width / 8) {
             panic!("Incomplete number of samples in dest");
         }
 

@@ -597,7 +597,7 @@ mod tests {
         let buffer_list_ref = buffer_list.make_mut();
 
         buffer_list_ref.foreach_mut(|buf, _n| {
-            let keep_packet = (buf.pts().unwrap() / ClockTime::SECOND) % 3 != 0;
+            let keep_packet = !(buf.pts().unwrap() / ClockTime::SECOND).is_multiple_of(3);
             ControlFlow::Continue(keep_packet.then_some(buf))
         });
 
