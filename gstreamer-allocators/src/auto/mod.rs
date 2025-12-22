@@ -49,6 +49,9 @@ pub use self::constants::ALLOCATOR_FD;
 #[cfg(feature = "v1_24")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
 pub use self::constants::ALLOCATOR_SHM;
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+pub use self::constants::ALLOCATOR_UDMABUF;
 pub use self::constants::CAPS_FEATURE_MEMORY_DMABUF;
 
 pub(crate) mod traits {

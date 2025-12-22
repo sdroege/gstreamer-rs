@@ -595,6 +595,13 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "GstVideoDmabufPoolClass",
+        Layout {
+            size: size_of::<GstVideoDmabufPoolClass>(),
+            alignment: align_of::<GstVideoDmabufPoolClass>(),
+        },
+    ),
+    (
         "GstVideoEncoder",
         Layout {
             size: size_of::<GstVideoEncoder>(),
@@ -760,6 +767,13 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         Layout {
             size: size_of::<GstVideoMetaTransform>(),
             alignment: align_of::<GstVideoMetaTransform>(),
+        },
+    ),
+    (
+        "GstVideoMetaTransformMatrix",
+        Layout {
+            size: size_of::<GstVideoMetaTransformMatrix>(),
+            alignment: align_of::<GstVideoMetaTransformMatrix>(),
         },
     ),
     (

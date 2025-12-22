@@ -40,6 +40,21 @@ pub const GST_APP_STREAM_TYPE_STREAM: GstAppStreamType = 0;
 pub const GST_APP_STREAM_TYPE_SEEKABLE: GstAppStreamType = 1;
 pub const GST_APP_STREAM_TYPE_RANDOM_ACCESS: GstAppStreamType = 2;
 
+// Callbacks
+pub type GstAppSinkEosCallback = Option<unsafe extern "C" fn(*mut GstAppSink, gpointer)>;
+pub type GstAppSinkNewEventCallback =
+    Option<unsafe extern "C" fn(*mut GstAppSink, gpointer) -> gboolean>;
+pub type GstAppSinkNewPrerollCallback =
+    Option<unsafe extern "C" fn(*mut GstAppSink, gpointer) -> gst::GstFlowReturn>;
+pub type GstAppSinkNewSampleCallback =
+    Option<unsafe extern "C" fn(*mut GstAppSink, gpointer) -> gst::GstFlowReturn>;
+pub type GstAppSinkProposeAllocationCallback =
+    Option<unsafe extern "C" fn(*mut GstAppSink, *mut gst::GstQuery, gpointer) -> gboolean>;
+pub type GstAppSrcEnoughDataCallback = Option<unsafe extern "C" fn(*mut GstAppSrc, gpointer)>;
+pub type GstAppSrcNeedDataCallback = Option<unsafe extern "C" fn(*mut GstAppSrc, c_uint, gpointer)>;
+pub type GstAppSrcSeekDataCallback =
+    Option<unsafe extern "C" fn(*mut GstAppSrc, u64, gpointer) -> gboolean>;
+
 // Records
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -108,6 +123,20 @@ pub struct _GstAppSinkPrivate {
 
 pub type GstAppSinkPrivate = _GstAppSinkPrivate;
 
+#[repr(C)]
+#[allow(dead_code)]
+pub struct GstAppSinkSimpleCallbacks {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
+
+impl ::std::fmt::Debug for GstAppSinkSimpleCallbacks {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstAppSinkSimpleCallbacks @ {self:p}"))
+            .finish()
+    }
+}
+
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct GstAppSrcCallbacks {
@@ -168,6 +197,20 @@ pub struct _GstAppSrcPrivate {
 
 pub type GstAppSrcPrivate = _GstAppSrcPrivate;
 
+#[repr(C)]
+#[allow(dead_code)]
+pub struct GstAppSrcSimpleCallbacks {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
+
+impl ::std::fmt::Debug for GstAppSrcSimpleCallbacks {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstAppSrcSimpleCallbacks @ {self:p}"))
+            .finish()
+    }
+}
+
 // Classes
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -214,6 +257,106 @@ extern "C" {
     // GstAppStreamType
     //=========================================================================
     pub fn gst_app_stream_type_get_type() -> GType;
+
+    //=========================================================================
+    // GstAppSinkSimpleCallbacks
+    //=========================================================================
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_app_sink_simple_callbacks_get_type() -> GType;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_app_sink_simple_callbacks_new() -> *mut GstAppSinkSimpleCallbacks;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_app_sink_simple_callbacks_ref(
+        cb: *mut GstAppSinkSimpleCallbacks,
+    ) -> *mut GstAppSinkSimpleCallbacks;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_app_sink_simple_callbacks_set_eos(
+        cb: *mut GstAppSinkSimpleCallbacks,
+        eos_cb: GstAppSinkEosCallback,
+        user_data: gpointer,
+        destroy_notify: glib::GDestroyNotify,
+    );
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_app_sink_simple_callbacks_set_new_event(
+        cb: *mut GstAppSinkSimpleCallbacks,
+        new_event_cb: GstAppSinkNewEventCallback,
+        user_data: gpointer,
+        destroy_notify: glib::GDestroyNotify,
+    );
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_app_sink_simple_callbacks_set_new_preroll(
+        cb: *mut GstAppSinkSimpleCallbacks,
+        new_preroll_cb: GstAppSinkNewPrerollCallback,
+        user_data: gpointer,
+        destroy_notify: glib::GDestroyNotify,
+    );
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_app_sink_simple_callbacks_set_new_sample(
+        cb: *mut GstAppSinkSimpleCallbacks,
+        new_sample_cb: GstAppSinkNewSampleCallback,
+        user_data: gpointer,
+        destroy_notify: glib::GDestroyNotify,
+    );
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_app_sink_simple_callbacks_set_propose_allocation(
+        cb: *mut GstAppSinkSimpleCallbacks,
+        propose_allocation_cb: GstAppSinkProposeAllocationCallback,
+        user_data: gpointer,
+        destroy_notify: glib::GDestroyNotify,
+    );
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_app_sink_simple_callbacks_unref(cb: *mut GstAppSinkSimpleCallbacks);
+
+    //=========================================================================
+    // GstAppSrcSimpleCallbacks
+    //=========================================================================
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_app_src_simple_callbacks_get_type() -> GType;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_app_src_simple_callbacks_new() -> *mut GstAppSrcSimpleCallbacks;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_app_src_simple_callbacks_ref(
+        cb: *mut GstAppSrcSimpleCallbacks,
+    ) -> *mut GstAppSrcSimpleCallbacks;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_app_src_simple_callbacks_set_enough_data(
+        cb: *mut GstAppSrcSimpleCallbacks,
+        enough_data_cb: GstAppSrcEnoughDataCallback,
+        user_data: gpointer,
+        destroy_notify: glib::GDestroyNotify,
+    );
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_app_src_simple_callbacks_set_need_data(
+        cb: *mut GstAppSrcSimpleCallbacks,
+        need_data_cb: GstAppSrcNeedDataCallback,
+        user_data: gpointer,
+        destroy_notify: glib::GDestroyNotify,
+    );
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_app_src_simple_callbacks_set_seek_data(
+        cb: *mut GstAppSrcSimpleCallbacks,
+        seek_data_cb: GstAppSrcSeekDataCallback,
+        user_data: gpointer,
+        destroy_notify: glib::GDestroyNotify,
+    );
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_app_src_simple_callbacks_unref(cb: *mut GstAppSrcSimpleCallbacks);
 
     //=========================================================================
     // GstAppSink
@@ -269,6 +412,12 @@ extern "C" {
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_app_sink_set_max_time(appsink: *mut GstAppSink, max: gst::GstClockTime);
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_app_sink_set_simple_callbacks(
+        appsink: *mut GstAppSink,
+        cb: *mut GstAppSinkSimpleCallbacks,
+    );
     pub fn gst_app_sink_set_wait_on_eos(appsink: *mut GstAppSink, wait: gboolean);
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
@@ -345,6 +494,12 @@ extern "C" {
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_app_src_set_max_time(appsrc: *mut GstAppSrc, max: gst::GstClockTime);
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_app_src_set_simple_callbacks(
+        appsrc: *mut GstAppSrc,
+        cb: *mut GstAppSrcSimpleCallbacks,
+    );
     pub fn gst_app_src_set_size(appsrc: *mut GstAppSrc, size: i64);
     pub fn gst_app_src_set_stream_type(appsrc: *mut GstAppSrc, type_: GstAppStreamType);
 

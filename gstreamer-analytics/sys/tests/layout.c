@@ -11,6 +11,7 @@ int main() {
     printf("%s;%zu;%zu\n", "GstAnalyticsBatchMeta", sizeof(GstAnalyticsBatchMeta), alignof(GstAnalyticsBatchMeta));
     printf("%s;%zu;%zu\n", "GstAnalyticsBatchStream", sizeof(GstAnalyticsBatchStream), alignof(GstAnalyticsBatchStream));
     printf("%s;%zu;%zu\n", "GstAnalyticsClsMtd", sizeof(GstAnalyticsClsMtd), alignof(GstAnalyticsClsMtd));
+    printf("%s;%zu;%zu\n", "GstAnalyticsModelInfoTensorDirection", sizeof(GstAnalyticsModelInfoTensorDirection), alignof(GstAnalyticsModelInfoTensorDirection));
     printf("%s;%zu;%zu\n", "GstAnalyticsMtd", sizeof(GstAnalyticsMtd), alignof(GstAnalyticsMtd));
     printf("%s;%zu;%zu\n", "GstAnalyticsMtdImpl", sizeof(GstAnalyticsMtdImpl), alignof(GstAnalyticsMtdImpl));
     printf("%s;%zu;%zu\n", "GstAnalyticsMtdType", sizeof(GstAnalyticsMtdType), alignof(GstAnalyticsMtdType));

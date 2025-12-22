@@ -1558,6 +1558,20 @@ pub type GstVideoDither = _GstVideoDither;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
+pub struct GstVideoDmabufPoolClass {
+    pub parent_class: GstVideoBufferPoolClass,
+}
+
+impl ::std::fmt::Debug for GstVideoDmabufPoolClass {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstVideoDmabufPoolClass @ {self:p}"))
+            .field("parent_class", &self.parent_class)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
 pub struct GstVideoEncoderClass {
     pub element_class: gst::GstElementClass,
     pub open: Option<unsafe extern "C" fn(*mut GstVideoEncoder) -> gboolean>,
@@ -1965,6 +1979,28 @@ impl ::std::fmt::Debug for GstVideoMetaTransform {
         f.debug_struct(&format!("GstVideoMetaTransform @ {self:p}"))
             .field("in_info", &self.in_info)
             .field("out_info", &self.out_info)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstVideoMetaTransformMatrix {
+    pub in_info: *const GstVideoInfo,
+    pub in_rectangle: GstVideoRectangle,
+    pub out_info: *const GstVideoInfo,
+    pub out_rectangle: GstVideoRectangle,
+    pub matrix: [c_float; 9],
+}
+
+impl ::std::fmt::Debug for GstVideoMetaTransformMatrix {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstVideoMetaTransformMatrix @ {self:p}"))
+            .field("in_info", &self.in_info)
+            .field("in_rectangle", &self.in_rectangle)
+            .field("out_info", &self.out_info)
+            .field("out_rectangle", &self.out_rectangle)
+            .field("matrix", &self.matrix)
             .finish()
     }
 }
@@ -2453,6 +2489,20 @@ pub struct GstVideoDecoder {
 impl ::std::fmt::Debug for GstVideoDecoder {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstVideoDecoder @ {self:p}"))
+            .finish()
+    }
+}
+
+#[repr(C)]
+#[allow(dead_code)]
+pub struct GstVideoDmabufPool {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
+
+impl ::std::fmt::Debug for GstVideoDmabufPool {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstVideoDmabufPool @ {self:p}"))
             .finish()
     }
 }
@@ -3153,6 +3203,13 @@ extern "C" {
         convert: *mut GstVideoConverter,
         config: *mut gst::GstStructure,
     ) -> gboolean;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_video_converter_transform_metas(
+        convert: *mut GstVideoConverter,
+        src: *mut gst::GstBuffer,
+        dest: *mut gst::GstBuffer,
+    ) -> gboolean;
     pub fn gst_video_converter_new(
         in_info: *const GstVideoInfo,
         out_info: *const GstVideoInfo,
@@ -3187,7 +3244,7 @@ extern "C" {
         method: GstVideoDitherMethod,
         flags: GstVideoDitherFlags,
         format: GstVideoFormat,
-        quantizer: *mut c_uint,
+        quantizer: *mut [c_uint; 4],
         width: c_uint,
     ) -> *mut GstVideoDither;
 
@@ -3401,6 +3458,12 @@ extern "C" {
         meta: *mut GstVideoMeta,
         alignment: GstVideoAlignment,
     ) -> gboolean;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_video_meta_set_alignment_full(
+        meta: *mut GstVideoMeta,
+        alignment: *const GstVideoAlignment,
+    ) -> gboolean;
     pub fn gst_video_meta_unmap(
         meta: *mut GstVideoMeta,
         plane: c_uint,
@@ -3412,6 +3475,48 @@ extern "C" {
     // GstVideoMetaTransform
     //=========================================================================
     pub fn gst_video_meta_transform_scale_get_quark() -> glib::GQuark;
+
+    //=========================================================================
+    // GstVideoMetaTransformMatrix
+    //=========================================================================
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_video_meta_transform_matrix_init(
+        trans: *mut GstVideoMetaTransformMatrix,
+        in_info: *const GstVideoInfo,
+        in_rectangle: *const GstVideoRectangle,
+        out_info: *const GstVideoInfo,
+        out_rectangle: *const GstVideoRectangle,
+    );
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_video_meta_transform_matrix_point(
+        transform: *const GstVideoMetaTransformMatrix,
+        x: *mut c_int,
+        y: *mut c_int,
+    ) -> gboolean;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_video_meta_transform_matrix_point_clipped(
+        transform: *const GstVideoMetaTransformMatrix,
+        x: *mut c_int,
+        y: *mut c_int,
+    ) -> gboolean;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_video_meta_transform_matrix_rectangle(
+        transform: *const GstVideoMetaTransformMatrix,
+        rect: *mut GstVideoRectangle,
+    ) -> gboolean;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_video_meta_transform_matrix_rectangle_clipped(
+        transform: *const GstVideoMetaTransformMatrix,
+        rect: *mut GstVideoRectangle,
+    ) -> gboolean;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_video_meta_transform_matrix_get_quark() -> glib::GQuark;
 
     //=========================================================================
     // GstVideoOverlayComposition
@@ -4011,6 +4116,16 @@ extern "C" {
     );
 
     //=========================================================================
+    // GstVideoDmabufPool
+    //=========================================================================
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_video_dmabuf_pool_get_type() -> GType;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_video_dmabuf_pool_new() -> *mut gst::GstBufferPool;
+
+    //=========================================================================
     // GstVideoEncoder
     //=========================================================================
     pub fn gst_video_encoder_get_type() -> GType;
@@ -4574,7 +4689,7 @@ extern "C" {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_buffer_add_video_sei_user_data_unregistered_meta(
         buffer: *mut gst::GstBuffer,
-        uuid: *mut u8,
+        uuid: *mut [u8; 16],
         data: *mut u8,
         size: size_t,
     ) -> *mut GstVideoSEIUserDataUnregisteredMeta;

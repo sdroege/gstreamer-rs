@@ -17,5 +17,6 @@ int main() {
     printf("%s;%zu;%zu\n", "GstPhysMemoryAllocatorInterface", sizeof(GstPhysMemoryAllocatorInterface), alignof(GstPhysMemoryAllocatorInterface));
     printf("%s;%zu;%zu\n", "GstShmAllocator", sizeof(GstShmAllocator), alignof(GstShmAllocator));
     printf("%s;%zu;%zu\n", "GstShmAllocatorClass", sizeof(GstShmAllocatorClass), alignof(GstShmAllocatorClass));
+    printf("%s;%zu;%zu\n", "GstUdmabufAllocatorClass", sizeof(GstUdmabufAllocatorClass), alignof(GstUdmabufAllocatorClass));
     return 0;
 }

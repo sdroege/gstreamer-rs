@@ -42,6 +42,14 @@ impl WebRTCICETransport {
         }
     }
 
+    //#[cfg(feature = "v1_28")]
+    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    //#[doc(alias = "gst_webrtc_ice_transport_get_selected_candidate_pair")]
+    //#[doc(alias = "get_selected_candidate_pair")]
+    //pub fn selected_candidate_pair(&self) -> /*Ignored*/Option<WebRTCICECandidatePair> {
+    //    unsafe { TODO: call ffi:gst_webrtc_ice_transport_get_selected_candidate_pair() }
+    //}
+
     #[doc(alias = "gst_webrtc_ice_transport_new_candidate")]
     pub fn new_candidate(&self, stream_id: u32, component: WebRTCICEComponent, attr: &str) {
         unsafe {

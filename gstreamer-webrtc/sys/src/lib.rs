@@ -81,6 +81,16 @@ pub type GstWebRTCFECType = c_int;
 pub const GST_WEBRTC_FEC_TYPE_NONE: GstWebRTCFECType = 0;
 pub const GST_WEBRTC_FEC_TYPE_ULP_RED: GstWebRTCFECType = 1;
 
+pub type GstWebRTCICECandidateProtocolType = c_int;
+pub const GST_WEBRTC_ICE_CANDIDATE_PROTOCOL_TYPE_TCP: GstWebRTCICECandidateProtocolType = 0;
+pub const GST_WEBRTC_ICE_CANDIDATE_PROTOCOL_TYPE_UDP: GstWebRTCICECandidateProtocolType = 1;
+
+pub type GstWebRTCICECandidateType = c_int;
+pub const GST_WEBRTC_ICE_CANDIDATE_TYPE_HOST: GstWebRTCICECandidateType = 0;
+pub const GST_WEBRTC_ICE_CANDIDATE_TYPE_SERVER_REFLEXIVE: GstWebRTCICECandidateType = 1;
+pub const GST_WEBRTC_ICE_CANDIDATE_TYPE_PEER_REFLEXIVE: GstWebRTCICECandidateType = 2;
+pub const GST_WEBRTC_ICE_CANDIDATE_TYPE_RELAYED: GstWebRTCICECandidateType = 3;
+
 pub type GstWebRTCICEComponent = c_int;
 pub const GST_WEBRTC_ICE_COMPONENT_RTP: GstWebRTCICEComponent = 0;
 pub const GST_WEBRTC_ICE_COMPONENT_RTCP: GstWebRTCICEComponent = 1;
@@ -216,6 +226,46 @@ pub type GstWebRTCDataChannelClass = _GstWebRTCDataChannelClass;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
+pub struct GstWebRTCICECandidate {
+    pub candidate: *mut c_char,
+    pub component: c_int,
+    pub sdp_mid: *mut c_char,
+    pub sdp_mline_index: c_int,
+    pub stats: *mut GstWebRTCICECandidateStats,
+    pub _gst_reserved: [gpointer; 20],
+}
+
+impl ::std::fmt::Debug for GstWebRTCICECandidate {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstWebRTCICECandidate @ {self:p}"))
+            .field("candidate", &self.candidate)
+            .field("component", &self.component)
+            .field("sdp_mid", &self.sdp_mid)
+            .field("sdp_mline_index", &self.sdp_mline_index)
+            .field("stats", &self.stats)
+            .field("_gst_reserved", &self._gst_reserved)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstWebRTCICECandidatePair {
+    pub local: *mut GstWebRTCICECandidate,
+    pub remote: *mut GstWebRTCICECandidate,
+}
+
+impl ::std::fmt::Debug for GstWebRTCICECandidatePair {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstWebRTCICECandidatePair @ {self:p}"))
+            .field("local", &self.local)
+            .field("remote", &self.remote)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
 pub struct GstWebRTCICECandidateStats {
     pub ipaddr: *mut c_char,
     pub port: c_uint,
@@ -344,7 +394,8 @@ pub struct GstWebRTCICEClass {
             *mut *mut GstWebRTCICECandidateStats,
         ) -> gboolean,
     >,
-    pub _gst_reserved: [gpointer; 4],
+    pub close: Option<unsafe extern "C" fn(*mut GstWebRTCICE, *mut gst::GstPromise)>,
+    pub _gst_reserved: [gpointer; 3],
 }
 
 impl ::std::fmt::Debug for GstWebRTCICEClass {
@@ -372,6 +423,7 @@ impl ::std::fmt::Debug for GstWebRTCICEClass {
             .field("get_local_candidates", &self.get_local_candidates)
             .field("get_remote_candidates", &self.get_remote_candidates)
             .field("get_selected_pair", &self.get_selected_pair)
+            .field("close", &self.close)
             .field("_gst_reserved", &self._gst_reserved)
             .finish()
     }
@@ -405,7 +457,9 @@ impl ::std::fmt::Debug for GstWebRTCICEStreamClass {
 pub struct GstWebRTCICETransportClass {
     pub parent_class: gst::GstObjectClass,
     pub gather_candidates: Option<unsafe extern "C" fn(*mut GstWebRTCICETransport) -> gboolean>,
-    pub _padding: [gpointer; 4],
+    pub get_selected_candidate_pair:
+        Option<unsafe extern "C" fn(*mut GstWebRTCICETransport) -> *mut GstWebRTCICECandidatePair>,
+    pub _padding: [gpointer; 3],
 }
 
 impl ::std::fmt::Debug for GstWebRTCICETransportClass {
@@ -413,6 +467,10 @@ impl ::std::fmt::Debug for GstWebRTCICETransportClass {
         f.debug_struct(&format!("GstWebRTCICETransportClass @ {self:p}"))
             .field("parent_class", &self.parent_class)
             .field("gather_candidates", &self.gather_candidates)
+            .field(
+                "get_selected_candidate_pair",
+                &self.get_selected_candidate_pair,
+            )
             .field("_padding", &self._padding)
             .finish()
     }
@@ -674,6 +732,20 @@ extern "C" {
     pub fn gst_webrtc_fec_type_get_type() -> GType;
 
     //=========================================================================
+    // GstWebRTCICECandidateProtocolType
+    //=========================================================================
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_webrtc_ice_candidate_protocol_type_get_type() -> GType;
+
+    //=========================================================================
+    // GstWebRTCICECandidateType
+    //=========================================================================
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_webrtc_ice_candidate_type_get_type() -> GType;
+
+    //=========================================================================
     // GstWebRTCICEComponent
     //=========================================================================
     pub fn gst_webrtc_ice_component_get_type() -> GType;
@@ -753,6 +825,36 @@ extern "C" {
     // GstWebRTCStatsType
     //=========================================================================
     pub fn gst_webrtc_stats_type_get_type() -> GType;
+
+    //=========================================================================
+    // GstWebRTCICECandidate
+    //=========================================================================
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_webrtc_ice_candidate_get_type() -> GType;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_webrtc_ice_candidate_copy(
+        candidate: *mut GstWebRTCICECandidate,
+    ) -> *mut GstWebRTCICECandidate;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_webrtc_ice_candidate_free(candidate: *mut GstWebRTCICECandidate);
+
+    //=========================================================================
+    // GstWebRTCICECandidatePair
+    //=========================================================================
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_webrtc_ice_candidate_pair_get_type() -> GType;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_webrtc_ice_candidate_pair_copy(
+        pair: *mut GstWebRTCICECandidatePair,
+    ) -> *mut GstWebRTCICECandidatePair;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_webrtc_ice_candidate_pair_free(pair: *mut GstWebRTCICECandidatePair);
 
     //=========================================================================
     // GstWebRTCICECandidateStats
@@ -846,6 +948,9 @@ extern "C" {
     #[cfg(feature = "v1_22")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_webrtc_ice_add_turn_server(ice: *mut GstWebRTCICE, uri: *const c_char) -> gboolean;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_webrtc_ice_close(ice: *mut GstWebRTCICE, promise: *mut gst::GstPromise);
     #[cfg(feature = "v1_22")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_webrtc_ice_find_transport(
@@ -966,6 +1071,11 @@ extern "C" {
         ice: *mut GstWebRTCICETransport,
         new_state: GstWebRTCICEGatheringState,
     );
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_webrtc_ice_transport_get_selected_candidate_pair(
+        transport: *mut GstWebRTCICETransport,
+    ) -> *mut GstWebRTCICECandidatePair;
     pub fn gst_webrtc_ice_transport_new_candidate(
         ice: *mut GstWebRTCICETransport,
         stream_id: c_uint,

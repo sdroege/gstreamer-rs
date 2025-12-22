@@ -2826,6 +2826,10 @@ bitflags! {
         const CONTAINER = ffi::GST_STREAM_TYPE_CONTAINER as _;
         #[doc(alias = "GST_STREAM_TYPE_TEXT")]
         const TEXT = ffi::GST_STREAM_TYPE_TEXT as _;
+        #[cfg(feature = "v1_28")]
+        #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+        #[doc(alias = "GST_STREAM_TYPE_METADATA")]
+        const METADATA = ffi::GST_STREAM_TYPE_METADATA as _;
     }
 }
 

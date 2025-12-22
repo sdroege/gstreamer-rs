@@ -209,6 +209,13 @@ impl AppSrc {
         }
     }
 
+    //#[cfg(feature = "v1_28")]
+    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    //#[doc(alias = "gst_app_src_set_simple_callbacks")]
+    //pub fn set_simple_callbacks(&self, cb: /*Ignored*/Option<AppSrcSimpleCallbacks>) {
+    //    unsafe { TODO: call ffi:gst_app_src_set_simple_callbacks() }
+    //}
+
     #[doc(alias = "gst_app_src_set_size")]
     #[doc(alias = "size")]
     pub fn set_size(&self, size: i64) {

@@ -259,10 +259,38 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "GstWebRTCICECandidate",
+        Layout {
+            size: size_of::<GstWebRTCICECandidate>(),
+            alignment: align_of::<GstWebRTCICECandidate>(),
+        },
+    ),
+    (
+        "GstWebRTCICECandidatePair",
+        Layout {
+            size: size_of::<GstWebRTCICECandidatePair>(),
+            alignment: align_of::<GstWebRTCICECandidatePair>(),
+        },
+    ),
+    (
+        "GstWebRTCICECandidateProtocolType",
+        Layout {
+            size: size_of::<GstWebRTCICECandidateProtocolType>(),
+            alignment: align_of::<GstWebRTCICECandidateProtocolType>(),
+        },
+    ),
+    (
         "GstWebRTCICECandidateStats",
         Layout {
             size: size_of::<GstWebRTCICECandidateStats>(),
             alignment: align_of::<GstWebRTCICECandidateStats>(),
+        },
+    ),
+    (
+        "GstWebRTCICECandidateType",
+        Layout {
+            size: size_of::<GstWebRTCICECandidateType>(),
+            alignment: align_of::<GstWebRTCICECandidateType>(),
         },
     ),
     (
@@ -444,6 +472,12 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_WEBRTC_ERROR_TYPE_ERROR", "10"),
     ("(gint) GST_WEBRTC_FEC_TYPE_NONE", "0"),
     ("(gint) GST_WEBRTC_FEC_TYPE_ULP_RED", "1"),
+    ("(gint) GST_WEBRTC_ICE_CANDIDATE_PROTOCOL_TYPE_TCP", "0"),
+    ("(gint) GST_WEBRTC_ICE_CANDIDATE_PROTOCOL_TYPE_UDP", "1"),
+    ("(gint) GST_WEBRTC_ICE_CANDIDATE_TYPE_HOST", "0"),
+    ("(gint) GST_WEBRTC_ICE_CANDIDATE_TYPE_PEER_REFLEXIVE", "2"),
+    ("(gint) GST_WEBRTC_ICE_CANDIDATE_TYPE_RELAYED", "3"),
+    ("(gint) GST_WEBRTC_ICE_CANDIDATE_TYPE_SERVER_REFLEXIVE", "1"),
     ("(gint) GST_WEBRTC_ICE_COMPONENT_RTCP", "1"),
     ("(gint) GST_WEBRTC_ICE_COMPONENT_RTP", "0"),
     ("(gint) GST_WEBRTC_ICE_CONNECTION_STATE_CHECKING", "1"),

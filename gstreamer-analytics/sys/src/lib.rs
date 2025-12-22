@@ -36,6 +36,11 @@ use glib::{gboolean, gconstpointer, gpointer, GType};
 pub type GstAnalyticsMtdType = uintptr_t;
 
 // Enums
+pub type GstAnalyticsModelInfoTensorDirection = c_int;
+pub const MODELINFO_DIRECTION_UNKNOWN: GstAnalyticsModelInfoTensorDirection = 0;
+pub const MODELINFO_DIRECTION_INPUT: GstAnalyticsModelInfoTensorDirection = 1;
+pub const MODELINFO_DIRECTION_OUTPUT: GstAnalyticsModelInfoTensorDirection = 2;
+
 pub type GstSegmentationType = c_int;
 pub const GST_SEGMENTATION_TYPE_SEMANTIC: GstSegmentationType = 0;
 pub const GST_SEGMENTATION_TYPE_INSTANCE: GstSegmentationType = 1;
@@ -90,6 +95,10 @@ pub const GST_TENSOR_LAYOUT_CONTIGUOUS: GstTensorLayout = 0;
 // Constants
 pub const GST_CAPS_FEATURE_META_GST_ANALYTICS_BATCH_META: &[u8] = b"meta:GstAnalyticsBatchMeta\0";
 pub const GST_INF_RELATION_SPAN: c_int = -1;
+pub const GST_MODELINFO_SECTION_NAME: &[u8] = b"modelinfo\0";
+pub const GST_MODELINFO_VERSION_MAJOR: c_int = 1;
+pub const GST_MODELINFO_VERSION_MINOR: c_int = 0;
+pub const GST_MODELINFO_VERSION_STR: &[u8] = b"1.0\0";
 pub const GST_ANALYTICS_MTD_TYPE_ANY: c_int = 0;
 
 // Flags
@@ -157,6 +166,20 @@ impl ::std::fmt::Debug for GstAnalyticsClsMtd {
         f.debug_struct(&format!("GstAnalyticsClsMtd @ {self:p}"))
             .field("id", &self.id)
             .field("meta", &self.meta)
+            .finish()
+    }
+}
+
+#[repr(C)]
+#[allow(dead_code)]
+pub struct GstAnalyticsModelInfo {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
+
+impl ::std::fmt::Debug for GstAnalyticsModelInfo {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstAnalyticsModelInfo @ {self:p}"))
             .finish()
     }
 }
@@ -356,6 +379,86 @@ extern "C" {
         index: size_t,
     ) -> glib::GQuark;
     pub fn gst_analytics_cls_mtd_get_mtd_type() -> GstAnalyticsMtdType;
+
+    //=========================================================================
+    // GstAnalyticsModelInfo
+    //=========================================================================
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_analytics_modelinfo_get_type() -> GType;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_analytics_modelinfo_find_tensor_name(
+        modelinfo: *mut GstAnalyticsModelInfo,
+        dir: GstAnalyticsModelInfoTensorDirection,
+        index: size_t,
+        in_tensor_name: *const c_char,
+        data_type: GstTensorDataType,
+        num_dims: size_t,
+        dims: *const size_t,
+    ) -> *mut c_char;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_analytics_modelinfo_free(model_info: *mut GstAnalyticsModelInfo);
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_analytics_modelinfo_get_dims_order(
+        modelinfo: *mut GstAnalyticsModelInfo,
+        tensor_name: *const c_char,
+    ) -> GstTensorDimOrder;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_analytics_modelinfo_get_group_id(
+        modelinfo: *mut GstAnalyticsModelInfo,
+    ) -> *mut c_char;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_analytics_modelinfo_get_id(
+        modelinfo: *mut GstAnalyticsModelInfo,
+        tensor_name: *const c_char,
+    ) -> *mut c_char;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_analytics_modelinfo_get_input_scales_offsets(
+        modelinfo: *mut GstAnalyticsModelInfo,
+        tensor_name: *const c_char,
+        num_input_ranges: size_t,
+        input_mins: *const c_double,
+        input_maxs: *const c_double,
+        num_output_ranges: *mut size_t,
+        output_scales: *mut *mut c_double,
+        output_offsets: *mut *mut c_double,
+    ) -> gboolean;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_analytics_modelinfo_get_quark_group_id(
+        modelinfo: *mut GstAnalyticsModelInfo,
+    ) -> glib::GQuark;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_analytics_modelinfo_get_quark_id(
+        modelinfo: *mut GstAnalyticsModelInfo,
+        tensor_name: *const c_char,
+    ) -> glib::GQuark;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_analytics_modelinfo_get_target_ranges(
+        modelinfo: *mut GstAnalyticsModelInfo,
+        tensor_name: *const c_char,
+        num_ranges: *mut size_t,
+        mins: *mut *mut c_double,
+        maxs: *mut *mut c_double,
+    ) -> gboolean;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_analytics_modelinfo_get_version(
+        modelinfo: *mut GstAnalyticsModelInfo,
+    ) -> *mut c_char;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_analytics_modelinfo_load(
+        model_filename: *const c_char,
+    ) -> *mut GstAnalyticsModelInfo;
 
     //=========================================================================
     // GstAnalyticsMtd

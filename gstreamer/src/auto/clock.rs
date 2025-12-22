@@ -196,6 +196,17 @@ pub trait ClockExt: IsA<Clock> + 'static {
         unsafe { from_glib(ffi::gst_clock_is_synced(self.as_ref().to_glib_none().0)) }
     }
 
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    #[doc(alias = "gst_clock_is_system_monotonic")]
+    fn is_system_monotonic(&self) -> bool {
+        unsafe {
+            from_glib(ffi::gst_clock_is_system_monotonic(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
     #[doc(alias = "gst_clock_set_master")]
     fn set_master(&self, master: Option<&impl IsA<Clock>>) -> Result<(), glib::error::BoolError> {
         unsafe {

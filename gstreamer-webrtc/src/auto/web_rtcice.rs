@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
+#![allow(deprecated)]
 
 use crate::{
     ffi, WebRTCICECandidateStats, WebRTCICEComponent, WebRTCICEStream, WebRTCICETransport,
@@ -50,6 +51,13 @@ pub trait WebRTCICEExt: IsA<WebRTCICE> + 'static {
             ))
         }
     }
+
+    //#[cfg(feature = "v1_28")]
+    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    //#[doc(alias = "gst_webrtc_ice_close")]
+    //fn close(&self, promise: /*Ignored*/Option<gst::Promise>) {
+    //    unsafe { TODO: call ffi:gst_webrtc_ice_close() }
+    //}
 
     #[doc(alias = "gst_webrtc_ice_find_transport")]
     fn find_transport(
@@ -121,6 +129,8 @@ pub trait WebRTCICEExt: IsA<WebRTCICE> + 'static {
         }
     }
 
+    #[cfg_attr(feature = "v1_28", deprecated = "Since 1.28")]
+    #[allow(deprecated)]
     #[doc(alias = "gst_webrtc_ice_get_selected_pair")]
     #[doc(alias = "get_selected_pair")]
     fn selected_pair(

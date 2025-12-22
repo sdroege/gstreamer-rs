@@ -427,6 +427,33 @@ impl FromGlib<ffi::GESError> for Error {
     }
 }
 
+impl glib::error::ErrorDomain for Error {
+    #[inline]
+    fn domain() -> glib::Quark {
+        skip_assert_initialized!();
+
+        static QUARK: ::std::sync::OnceLock<glib::ffi::GQuark> = ::std::sync::OnceLock::new();
+        let quark = *QUARK.get_or_init(|| unsafe {
+            glib::ffi::g_quark_from_static_string(b"GES_ERROR\0".as_ptr() as *const _)
+        });
+        unsafe { from_glib(quark) }
+    }
+
+    #[inline]
+    fn code(self) -> i32 {
+        self.into_glib()
+    }
+
+    #[inline]
+    #[allow(clippy::match_single_binding)]
+    fn from(code: i32) -> Option<Self> {
+        skip_assert_initialized!();
+        match unsafe { from_glib(code) } {
+            value => Some(value),
+        }
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GESTextHAlign")]

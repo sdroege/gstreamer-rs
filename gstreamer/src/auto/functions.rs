@@ -5,6 +5,132 @@
 
 use crate::{ffi, Bin, ClockTime, DebugGraphDetails, DebugLevel, Element, StackTraceFlags};
 use glib::{prelude::*, translate::*};
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+use std::boxed::Box as Box_;
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+#[doc(alias = "gst_call_async")]
+pub fn call_async<P: FnOnce() + Send + Sync + 'static>(func: P) {
+    assert_initialized_main_thread!();
+    let func_data: Box_<P> = Box_::new(func);
+    unsafe extern "C" fn func_func<P: FnOnce() + Send + Sync + 'static>(
+        user_data: glib::ffi::gpointer,
+    ) {
+        let callback = Box_::from_raw(user_data as *mut P);
+        (*callback)()
+    }
+    let func = Some(func_func::<P> as _);
+    let super_callback0: Box_<P> = func_data;
+    unsafe {
+        ffi::gst_call_async(func, Box_::into_raw(super_callback0) as *mut _);
+    }
+}
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+#[doc(alias = "gst_check_version")]
+pub fn check_version(major: u32, minor: u32, micro: u32) -> bool {
+    assert_initialized_main_thread!();
+    unsafe { from_glib(ffi::gst_check_version(major, minor, micro)) }
+}
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+#[doc(alias = "gst_cpuid_supports_arm_neon")]
+pub fn cpuid_supports_arm_neon() -> bool {
+    assert_initialized_main_thread!();
+    unsafe { from_glib(ffi::gst_cpuid_supports_arm_neon()) }
+}
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+#[doc(alias = "gst_cpuid_supports_arm_neon64")]
+pub fn cpuid_supports_arm_neon64() -> bool {
+    assert_initialized_main_thread!();
+    unsafe { from_glib(ffi::gst_cpuid_supports_arm_neon64()) }
+}
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+#[doc(alias = "gst_cpuid_supports_x86_3dnow")]
+pub fn cpuid_supports_x86_3dnow() -> bool {
+    assert_initialized_main_thread!();
+    unsafe { from_glib(ffi::gst_cpuid_supports_x86_3dnow()) }
+}
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+#[doc(alias = "gst_cpuid_supports_x86_avx")]
+pub fn cpuid_supports_x86_avx() -> bool {
+    assert_initialized_main_thread!();
+    unsafe { from_glib(ffi::gst_cpuid_supports_x86_avx()) }
+}
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+#[doc(alias = "gst_cpuid_supports_x86_avx2")]
+pub fn cpuid_supports_x86_avx2() -> bool {
+    assert_initialized_main_thread!();
+    unsafe { from_glib(ffi::gst_cpuid_supports_x86_avx2()) }
+}
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+#[doc(alias = "gst_cpuid_supports_x86_mmx")]
+pub fn cpuid_supports_x86_mmx() -> bool {
+    assert_initialized_main_thread!();
+    unsafe { from_glib(ffi::gst_cpuid_supports_x86_mmx()) }
+}
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+#[doc(alias = "gst_cpuid_supports_x86_mmxext")]
+pub fn cpuid_supports_x86_mmxext() -> bool {
+    assert_initialized_main_thread!();
+    unsafe { from_glib(ffi::gst_cpuid_supports_x86_mmxext()) }
+}
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+#[doc(alias = "gst_cpuid_supports_x86_sse2")]
+pub fn cpuid_supports_x86_sse2() -> bool {
+    assert_initialized_main_thread!();
+    unsafe { from_glib(ffi::gst_cpuid_supports_x86_sse2()) }
+}
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+#[doc(alias = "gst_cpuid_supports_x86_sse3")]
+pub fn cpuid_supports_x86_sse3() -> bool {
+    assert_initialized_main_thread!();
+    unsafe { from_glib(ffi::gst_cpuid_supports_x86_sse3()) }
+}
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+#[doc(alias = "gst_cpuid_supports_x86_sse4_1")]
+pub fn cpuid_supports_x86_sse4_1() -> bool {
+    assert_initialized_main_thread!();
+    unsafe { from_glib(ffi::gst_cpuid_supports_x86_sse4_1()) }
+}
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+#[doc(alias = "gst_cpuid_supports_x86_sse4_2")]
+pub fn cpuid_supports_x86_sse4_2() -> bool {
+    assert_initialized_main_thread!();
+    unsafe { from_glib(ffi::gst_cpuid_supports_x86_sse4_2()) }
+}
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+#[doc(alias = "gst_cpuid_supports_x86_ssse3")]
+pub fn cpuid_supports_x86_ssse3() -> bool {
+    assert_initialized_main_thread!();
+    unsafe { from_glib(ffi::gst_cpuid_supports_x86_ssse3()) }
+}
 
 #[doc(alias = "gst_debug_add_ring_buffer_logger")]
 pub fn debug_add_ring_buffer_logger(max_size_per_thread: u32, thread_timeout: u32) {
