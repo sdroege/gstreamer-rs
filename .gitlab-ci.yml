@@ -158,6 +158,7 @@ trigger:
       libtiff-dev libpng-dev libjpeg-dev libepoxy-dev libsass-dev sassc
       libcsound64-dev llvm clang nasm libsodium-dev libwebp-dev
       libflac-dev libmysofa-dev libgtk-4-dev libdav1d-dev libclang-dev libvulkan-dev
+      python3-dev
     FDO_DISTRIBUTION_EXEC: >-
       bash ci/install-gst.sh &&
       bash ci/install-vvdec.sh &&
