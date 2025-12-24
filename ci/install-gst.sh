@@ -30,6 +30,7 @@ meson setup build \
     -Dugly=enabled \
     -Dexamples=disabled \
     -Dgtk_doc=disabled \
+    -Dtests=disabled \
     -Dintrospection=disabled \
     -Dlibav=disabled \
     -Dpython=disabled \
