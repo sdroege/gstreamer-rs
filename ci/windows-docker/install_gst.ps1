@@ -26,6 +26,7 @@ $MESON_ARGS = @(`
   "--prefix=C:\gst-install", `
   "-Dnls=disabled", `
   "-Dtests=disabled", `
+  "-Dgstreamer:tests=enabled", `
   "-Dintrospection=disabled", `
   "-Dcairo:tests=disabled", `
   "-Dfribidi:tests=false", `

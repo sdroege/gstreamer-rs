@@ -31,6 +31,7 @@ meson setup build \
     -Dexamples=disabled \
     -Dgtk_doc=disabled \
     -Dtests=disabled \
+    -Dgstreamer:tests=enabled \
     -Dintrospection=disabled \
     -Dlibav=disabled \
     -Dpython=disabled \
