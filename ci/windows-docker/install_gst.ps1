@@ -25,6 +25,8 @@ if (!$?) {
 $MESON_ARGS = @(`
   "--prefix=C:\gst-install", `
   "-Dnls=disabled", `
+  "-Dtests=disabled", `
+  "-Dintrospection=disabled", `
   "-Dcairo:tests=disabled", `
   "-Dfribidi:tests=false", `
   "-Dfribidi:bin=false", `
