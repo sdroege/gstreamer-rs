@@ -9,8 +9,8 @@
 #![cfg_attr(docsrs, feature(doc_cfg))]
 #![allow(clippy::missing_safety_doc)]
 
-pub use ffi;
 pub use gst_vulkan;
+pub use gstreamer_vulkan_xcb_sys as ffi;
 
 macro_rules! assert_initialized_main_thread {
     () => {

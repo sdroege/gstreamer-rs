@@ -1,6 +1,7 @@
 use glib::prelude::*;
 use glib::translate::*;
 
+use crate::ffi;
 use crate::VulkanDevice;
 use crate::VulkanDisplay;
 use crate::VulkanInstance;

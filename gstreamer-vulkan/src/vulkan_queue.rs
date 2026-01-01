@@ -1,3 +1,4 @@
+use crate::ffi;
 use crate::VulkanQueue;
 
 use glib::{prelude::*, translate::*};

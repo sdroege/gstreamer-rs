@@ -1,3 +1,4 @@
+use crate::ffi;
 use crate::VulkanCommandPool;
 
 use glib::{prelude::*, translate::*};

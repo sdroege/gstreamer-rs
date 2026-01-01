@@ -5,11 +5,11 @@
 #![allow(unused_imports)]
 #![doc = include_str!("../README.md")]
 
-pub use ffi;
 pub use glib;
 pub use gst;
 pub use gst_base;
 pub use gst_video;
+pub use gstreamer_vulkan_sys as ffi;
 
 macro_rules! assert_initialized_main_thread {
     () => {

@@ -1,4 +1,5 @@
-use super::VulkanOperation;
+use crate::ffi;
+use crate::VulkanOperation;
 use glib::{prelude::*, translate::*};
 
 #[derive(Debug)]
