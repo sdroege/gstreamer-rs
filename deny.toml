@@ -27,20 +27,6 @@ multiple-versions = "deny"
 wildcards = "allow"
 highlight = "all"
 
-# libloading depends on an old version
-[[bans.skip]]
-name = "windows-link"
-version = "0.1"
-
-# system-deps depends on an old version
-[[bans.skip]]
-name = "toml_edit"
-version = "0.22"
-
-[[bans.skip]]
-name = "toml_datetime"
-version = "0.6"
-
 [sources]
 unknown-registry = "deny"
 unknown-git = "deny"
