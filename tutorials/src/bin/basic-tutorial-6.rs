@@ -1,4 +1,4 @@
-use gst::prelude::*;
+use gst::{prelude::*, MessageType};
 
 #[path = "../tutorials-common.rs"]
 mod tutorials_common;
@@ -121,7 +121,14 @@ fn tutorial_main() {
     // Wait until error, EOS or State Change
     let bus = pipeline.bus().unwrap();
 
-    for msg in bus.iter_timed(gst::ClockTime::NONE) {
+    for msg in bus.iter_timed_filtered(
+        gst::ClockTime::NONE,
+        &[
+            MessageType::Error,
+            MessageType::Eos,
+            MessageType::StateChanged,
+        ],
+    ) {
         use gst::MessageView;
 
         match msg.view() {
