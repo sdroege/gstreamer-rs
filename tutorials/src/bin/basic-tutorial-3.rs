@@ -1,4 +1,4 @@
-use gst::prelude::*;
+use gst::{prelude::*, MessageType};
 
 #[path = "../tutorials-common.rs"]
 mod tutorials_common;
@@ -82,9 +82,16 @@ fn tutorial_main() {
         .set_state(gst::State::Playing)
         .expect("Unable to set the pipeline to the `Playing` state");
 
-    // Wait until error or EOS
+    // Wait until State Change, error, or EOS
     let bus = pipeline.bus().unwrap();
-    for msg in bus.iter_timed(gst::ClockTime::NONE) {
+    for msg in bus.iter_timed_filtered(
+        gst::ClockTime::NONE,
+        &[
+            MessageType::StateChanged,
+            MessageType::Error,
+            MessageType::Eos,
+        ],
+    ) {
         use gst::MessageView;
 
         match msg.view() {
