@@ -285,14 +285,36 @@ impl Bus {
     #[doc(alias = "gst_bus_timed_pop_filtered")]
     pub fn timed_pop_filtered(
         &self,
-        timeout: impl Into<Option<crate::ClockTime>> + Clone,
+        timeout: impl Into<Option<crate::ClockTime>>,
         msg_types: &[MessageType],
     ) -> Option<Message> {
+        // Infinite wait: just loop forever
+        let Some(timeout) = timeout.into() else {
+            loop {
+                let msg = self.timed_pop(None)?;
+                if msg_types.contains(&msg.type_()) {
+                    return Some(msg);
+                }
+            }
+        };
+
+        // Finite timeout
+        let total = timeout;
+        let start = std::time::Instant::now();
+
         loop {
-            let msg = self.timed_pop(timeout.clone())?;
+            let elapsed = crate::ClockTime::from_nseconds(start.elapsed().as_nanos() as u64);
+
+            // If timeout budget is exhausted, return None
+            let remaining = total.checked_sub(elapsed)?;
+
+            let msg = self.timed_pop(Some(remaining))?;
+
             if msg_types.contains(&msg.type_()) {
                 return Some(msg);
             }
+
+            // Discard non-matching messages without restarting the timeout
         }
     }
 
@@ -421,7 +443,11 @@ impl Drop for BusWatchGuard {
 
 #[cfg(test)]
 mod tests {
-    use std::sync::{Arc, Mutex};
+    use std::{
+        sync::{Arc, Barrier, Mutex},
+        thread,
+        time::{Duration, Instant},
+    };
 
     use super::*;
 
@@ -464,5 +490,59 @@ mod tests {
             crate::MessageView::Eos(_) => (),
             _ => unreachable!(),
         }
+    }
+
+    #[test]
+    fn test_bus_timed_pop_filtered_does_not_restart_timeout_for_filtered_messages() {
+        crate::init().unwrap();
+
+        let bus = Bus::new();
+        let bus_clone = bus.clone();
+
+        let timeout = Duration::from_millis(100);
+        let timeout_allowance = Duration::from_millis(50);
+
+        let barrier = Arc::new(Barrier::new(2));
+        let barrier_clone = barrier.clone();
+
+        // Post non-matching messages for longer than the timeout
+        let message_poster = thread::spawn(move || {
+            // Signal that posting is about to start
+            barrier_clone.wait();
+
+            let start = Instant::now();
+            while start.elapsed() < timeout * 3 {
+                bus_clone
+                    .post(crate::message::DurationChanged::new())
+                    .unwrap();
+                thread::sleep(Duration::from_millis(10));
+            }
+        });
+
+        // Wait until the poster thread is ready
+        barrier.wait();
+
+        let start = Instant::now();
+
+        let msg = bus.timed_pop_filtered(
+            crate::ClockTime::from_mseconds(timeout.as_millis() as u64),
+            &[MessageType::Eos],
+        );
+
+        let elapsed = start.elapsed();
+
+        assert!(msg.is_none());
+
+        // While filtering messages, `timed_pop_filtered` must not restart the
+        // timeout for each discarded message. The timeout applies to the full
+        // wait for a matching message.
+        assert!(
+            elapsed < timeout + timeout_allowance,
+            "timed_pop_filtered exceeded the requested timeout while filtering"
+        );
+
+        message_poster
+            .join()
+            .expect("message_poster thread panicked");
     }
 }
