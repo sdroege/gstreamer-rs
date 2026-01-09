@@ -1376,6 +1376,172 @@ mod video_meta_transform_matrix {
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
 pub use video_meta_transform_matrix::*;
 
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+mod video_meta_dsc {
+    use super::*;
+
+    #[repr(transparent)]
+    #[doc(alias = "GstVideoDSCInitializationMeta")]
+    pub struct VideoDSCInitializationMeta(ffi::GstVideoDSCInitializationMeta);
+
+    unsafe impl Send for VideoDSCInitializationMeta {}
+    unsafe impl Sync for VideoDSCInitializationMeta {}
+
+    impl VideoDSCInitializationMeta {
+        #[doc(alias = "gst_buffer_add_video_dsc_initialization_meta")]
+        pub fn add<'a>(
+            buffer: &'a mut gst::BufferRef,
+            dsc_initialization: &crate::H274DigitallySignedContentInitialization,
+        ) -> gst::MetaRefMut<'a, Self, gst::meta::Standalone> {
+            skip_assert_initialized!();
+            unsafe {
+                let meta = ffi::gst_buffer_add_video_dsc_initialization_meta(
+                    buffer.as_mut_ptr(),
+                    dsc_initialization.as_ptr(),
+                );
+
+                Self::from_mut_ptr(buffer, meta)
+            }
+        }
+
+        #[inline]
+        pub fn dsc_initialization(&self) -> &crate::H274DigitallySignedContentInitialization {
+            unsafe {
+                crate::H274DigitallySignedContentInitialization::from_glib_ptr_borrow(
+                    &self.0.dsc_initialization,
+                )
+            }
+        }
+    }
+
+    unsafe impl MetaAPI for VideoDSCInitializationMeta {
+        type GstType = ffi::GstVideoDSCInitializationMeta;
+
+        #[doc(alias = "gst_video_dsc_initialization_meta_api_get_type")]
+        #[inline]
+        fn meta_api() -> glib::Type {
+            unsafe { from_glib(ffi::gst_video_dsc_initialization_meta_api_get_type()) }
+        }
+    }
+
+    impl fmt::Debug for VideoDSCInitializationMeta {
+        fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+            f.debug_struct("VideoDSCInitializationMeta")
+                .field("dsc_initialization", &self.dsc_initialization())
+                .finish()
+        }
+    }
+
+    #[repr(transparent)]
+    #[doc(alias = "GstVideoDSCSelectionMeta")]
+    pub struct VideoDSCSelectionMeta(ffi::GstVideoDSCSelectionMeta);
+
+    unsafe impl Send for VideoDSCSelectionMeta {}
+    unsafe impl Sync for VideoDSCSelectionMeta {}
+
+    impl VideoDSCSelectionMeta {
+        #[doc(alias = "gst_buffer_add_video_dsc_selection_meta")]
+        pub fn add<'a>(
+            buffer: &'a mut gst::BufferRef,
+            dsc_selection: &crate::H274DigitallySignedContentSelection,
+        ) -> gst::MetaRefMut<'a, Self, gst::meta::Standalone> {
+            skip_assert_initialized!();
+            unsafe {
+                let meta = ffi::gst_buffer_add_video_dsc_selection_meta(
+                    buffer.as_mut_ptr(),
+                    dsc_selection.as_ptr(),
+                );
+
+                Self::from_mut_ptr(buffer, meta)
+            }
+        }
+
+        #[inline]
+        pub fn dsc_selection(&self) -> &crate::H274DigitallySignedContentSelection {
+            unsafe {
+                crate::H274DigitallySignedContentSelection::from_glib_ptr_borrow(
+                    &self.0.dsc_selection,
+                )
+            }
+        }
+    }
+
+    unsafe impl MetaAPI for VideoDSCSelectionMeta {
+        type GstType = ffi::GstVideoDSCSelectionMeta;
+
+        #[doc(alias = "gst_video_dsc_selection_meta_api_get_type")]
+        #[inline]
+        fn meta_api() -> glib::Type {
+            unsafe { from_glib(ffi::gst_video_dsc_selection_meta_api_get_type()) }
+        }
+    }
+
+    impl fmt::Debug for VideoDSCSelectionMeta {
+        fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+            f.debug_struct("VideoDSCSelectionMeta")
+                .field("dsc_selection", &self.dsc_selection())
+                .finish()
+        }
+    }
+
+    #[repr(transparent)]
+    #[doc(alias = "GstVideoDSCVerificationMeta")]
+    pub struct VideoDSCVerificationMeta(ffi::GstVideoDSCVerificationMeta);
+
+    unsafe impl Send for VideoDSCVerificationMeta {}
+    unsafe impl Sync for VideoDSCVerificationMeta {}
+
+    impl VideoDSCVerificationMeta {
+        #[doc(alias = "gst_buffer_add_video_dsc_verification_meta")]
+        pub fn add<'a>(
+            buffer: &'a mut gst::BufferRef,
+            dsc_verification: &crate::H274DigitallySignedContentVerification,
+        ) -> gst::MetaRefMut<'a, Self, gst::meta::Standalone> {
+            skip_assert_initialized!();
+            unsafe {
+                let meta = ffi::gst_buffer_add_video_dsc_verification_meta(
+                    buffer.as_mut_ptr(),
+                    dsc_verification.as_ptr(),
+                );
+
+                Self::from_mut_ptr(buffer, meta)
+            }
+        }
+
+        #[inline]
+        pub fn dsc_verification(&self) -> &crate::H274DigitallySignedContentVerification {
+            unsafe {
+                crate::H274DigitallySignedContentVerification::from_glib_ptr_borrow(
+                    &self.0.dsc_verification,
+                )
+            }
+        }
+    }
+
+    unsafe impl MetaAPI for VideoDSCVerificationMeta {
+        type GstType = ffi::GstVideoDSCVerificationMeta;
+
+        #[doc(alias = "gst_video_dsc_verification_meta_api_get_type")]
+        #[inline]
+        fn meta_api() -> glib::Type {
+            unsafe { from_glib(ffi::gst_video_dsc_verification_meta_api_get_type()) }
+        }
+    }
+
+    impl fmt::Debug for VideoDSCVerificationMeta {
+        fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+            f.debug_struct("VideoDSCVerificationMeta")
+                .field("dsc_verification", &self.dsc_verification())
+                .finish()
+        }
+    }
+}
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub use video_meta_dsc::*;
+
 #[cfg(test)]
 mod tests {
     use super::*;
