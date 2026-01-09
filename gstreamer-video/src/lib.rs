@@ -94,6 +94,20 @@ pub use crate::video_meta::{
     VideoAffineTransformationMeta, VideoCropMeta, VideoMeta, VideoOverlayCompositionMeta,
     VideoRegionOfInterestMeta,
 };
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+mod video_dsc;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub use crate::video_dsc::{
+    H274DigitallySignedContentInitialization, H274DigitallySignedContentSelection,
+    H274DigitallySignedContentVerification,
+};
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub use crate::video_meta::{
+    VideoDSCInitializationMeta, VideoDSCSelectionMeta, VideoDSCVerificationMeta,
+};
 mod video_time_code;
 pub use crate::video_time_code::{ValidVideoTimeCode, VideoTimeCode, VideoTimeCodeMeta};
 mod video_time_code_interval;
