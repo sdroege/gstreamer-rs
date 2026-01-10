@@ -14,13 +14,13 @@ get_features() {
     crate=$1
     case "$crate" in
         gstreamer-audio|gstreamer-editing-services|gstreamer-gl|gstreamer-pbutils|gstreamer-rtp|gstreamer-rtsp|gstreamer-video|gstreamer)
-            echo "--features=serde,v1_26"
+            echo "--features=serde,v1_28"
             ;;
         gstreamer-mse)
             echo ""
             ;;
         *)
-            echo "--features=v1_26"
+            echo "--features=v1_28"
             ;;
     esac
 }
