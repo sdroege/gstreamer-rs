@@ -25,50 +25,50 @@ fn validate(
         ));
     }
 
-    if let Some(month) = month {
-        if month <= 0 || month > 12 {
-            return Err(glib::bool_error!(
-                "Can't create DateTime: Month out of range"
-            ));
-        }
+    if let Some(month) = month
+        && (month <= 0 || month > 12)
+    {
+        return Err(glib::bool_error!(
+            "Can't create DateTime: Month out of range"
+        ));
     }
 
-    if let Some(day) = day {
-        if day <= 0 || day > 31 {
-            return Err(glib::bool_error!("Can't create DateTime: Day out of range"));
-        }
+    if let Some(day) = day
+        && (day <= 0 || day > 31)
+    {
+        return Err(glib::bool_error!("Can't create DateTime: Day out of range"));
     }
 
-    if let Some(hour) = hour {
-        if hour < 0 || hour >= 24 {
-            return Err(glib::bool_error!(
-                "Can't create DateTime: Hour out of range"
-            ));
-        }
+    if let Some(hour) = hour
+        && (hour < 0 || hour >= 24)
+    {
+        return Err(glib::bool_error!(
+            "Can't create DateTime: Hour out of range"
+        ));
     }
 
-    if let Some(minute) = minute {
-        if minute < 0 || minute >= 60 {
-            return Err(glib::bool_error!(
-                "Can't create DateTime: Minute out of range"
-            ));
-        }
+    if let Some(minute) = minute
+        && (minute < 0 || minute >= 60)
+    {
+        return Err(glib::bool_error!(
+            "Can't create DateTime: Minute out of range"
+        ));
     }
 
-    if let Some(seconds) = seconds {
-        if seconds < 0.0 || seconds >= 60.0 {
-            return Err(glib::bool_error!(
-                "Can't create DateTime: Seconds out of range"
-            ));
-        }
+    if let Some(seconds) = seconds
+        && (seconds < 0.0 || seconds >= 60.0)
+    {
+        return Err(glib::bool_error!(
+            "Can't create DateTime: Seconds out of range"
+        ));
     }
 
-    if let Some(tzoffset) = tzoffset {
-        if tzoffset < -12.0 || tzoffset > 12.0 {
-            return Err(glib::bool_error!(
-                "Can't create DateTime: Timezone offset out of range"
-            ));
-        }
+    if let Some(tzoffset) = tzoffset
+        && (tzoffset < -12.0 || tzoffset > 12.0)
+    {
+        return Err(glib::bool_error!(
+            "Can't create DateTime: Timezone offset out of range"
+        ));
     }
 
     // If day is provided, month also has to be provided

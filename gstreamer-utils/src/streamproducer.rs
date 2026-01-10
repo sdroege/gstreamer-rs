@@ -564,8 +564,8 @@ impl StreamProducer {
             .consumers
             .values()
             .filter_map(|consumer| {
-                if let Some(latency) = latency {
-                    if consumer
+                if let Some(latency) = latency
+                    && (consumer
                         .forwarded_latency
                         .compare_exchange(
                             false,
@@ -574,11 +574,10 @@ impl StreamProducer {
                             atomic::Ordering::SeqCst,
                         )
                         .is_ok()
-                        || latency_updated
-                    {
-                        gst::info!(CAT, obj = appsink, "setting new latency: {latency}");
-                        consumer.appsrc.set_latency(latency, gst::ClockTime::NONE);
-                    }
+                        || latency_updated)
+                {
+                    gst::info!(CAT, obj = appsink, "setting new latency: {latency}");
+                    consumer.appsrc.set_latency(latency, gst::ClockTime::NONE);
                 }
 
                 if consumer.discard.load(atomic::Ordering::SeqCst) {

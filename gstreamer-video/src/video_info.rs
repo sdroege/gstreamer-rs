@@ -353,12 +353,11 @@ impl<'a> VideoInfoBuilder<'a> {
                             self.height,
                         ));
 
-                        if res {
-                            if let Some(interlace_mode) = self.interlace_mode {
+                        if res
+                            && let Some(interlace_mode) = self.interlace_mode {
                                 let info = info.as_mut_ptr();
                                 (*info).interlace_mode = interlace_mode.into_glib();
                             }
-                        }
 
                         res
                     };

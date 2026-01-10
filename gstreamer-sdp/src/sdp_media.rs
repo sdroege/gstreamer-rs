@@ -391,10 +391,10 @@ impl SDPMediaRef {
         idx: Option<u32>,
         attr: SDPAttribute,
     ) -> Result<(), glib::BoolError> {
-        if let Some(idx) = idx {
-            if idx >= self.attributes_len() {
-                return Err(glib::bool_error!("Failed to insert attribute"));
-            }
+        if let Some(idx) = idx
+            && idx >= self.attributes_len()
+        {
+            return Err(glib::bool_error!("Failed to insert attribute"));
         }
 
         let idx = idx.map(|idx| idx as i32).unwrap_or(-1);
@@ -412,10 +412,10 @@ impl SDPMediaRef {
         idx: Option<u32>,
         bw: SDPBandwidth,
     ) -> Result<(), glib::BoolError> {
-        if let Some(idx) = idx {
-            if idx >= self.bandwidths_len() {
-                return Err(glib::bool_error!("Failed to insert bandwidth"));
-            }
+        if let Some(idx) = idx
+            && idx >= self.bandwidths_len()
+        {
+            return Err(glib::bool_error!("Failed to insert bandwidth"));
         }
 
         let idx = idx.map(|idx| idx as i32).unwrap_or(-1);
@@ -433,10 +433,10 @@ impl SDPMediaRef {
         idx: Option<u32>,
         conn: SDPConnection,
     ) -> Result<(), glib::BoolError> {
-        if let Some(idx) = idx {
-            if idx >= self.connections_len() {
-                return Err(glib::bool_error!("Failed to insert connection"));
-            }
+        if let Some(idx) = idx
+            && idx >= self.connections_len()
+        {
+            return Err(glib::bool_error!("Failed to insert connection"));
         }
 
         let idx = idx.map(|idx| idx as i32).unwrap_or(-1);
@@ -450,10 +450,10 @@ impl SDPMediaRef {
 
     #[doc(alias = "gst_sdp_media_insert_format")]
     pub fn insert_format(&mut self, idx: Option<u32>, format: &str) -> Result<(), glib::BoolError> {
-        if let Some(idx) = idx {
-            if idx >= self.formats_len() {
-                return Err(glib::bool_error!("Failed to insert format"));
-            }
+        if let Some(idx) = idx
+            && idx >= self.formats_len()
+        {
+            return Err(glib::bool_error!("Failed to insert format"));
         }
 
         let idx = idx.map(|idx| idx as i32).unwrap_or(-1);

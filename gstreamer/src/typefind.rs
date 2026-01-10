@@ -278,10 +278,10 @@ impl<T: AsRef<[u8]>> SliceTypeFind<T> {
 
         for factory in factories {
             factory.call_function(self);
-            if let Some(prob) = self.probability {
-                if prob >= TypeFindProbability::Maximum {
-                    break;
-                }
+            if let Some(prob) = self.probability
+                && prob >= TypeFindProbability::Maximum
+            {
+                break;
             }
         }
     }
@@ -389,10 +389,10 @@ mod tests {
             |typefind| {
                 assert_eq!(typefind.length(), Some(8));
                 let mut found = false;
-                if let Some(data) = typefind.peek(0, 8) {
-                    if data == b"abcdefgh" {
-                        found = true;
-                    }
+                if let Some(data) = typefind.peek(0, 8)
+                    && data == b"abcdefgh"
+                {
+                    found = true;
                 }
 
                 if found {

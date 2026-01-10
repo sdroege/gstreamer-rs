@@ -143,13 +143,12 @@ fn tutorial_main() -> Result<(), Error> {
             }
         }
 
-        if let Some(position) = pipeline.query_position::<gst::ClockTime>() {
-            if let Some(duration) = pipeline.query_duration::<gst::ClockTime>() {
-                let current_progress =
-                    GRAPH_LENGTH as u64 * position.seconds() / duration.seconds();
-                let buffering_level = buffering_level.lock().unwrap();
-                graph[current_progress as usize] = if *buffering_level < 100 { b'X' } else { b'>' };
-            }
+        if let Some(position) = pipeline.query_position::<gst::ClockTime>()
+            && let Some(duration) = pipeline.query_duration::<gst::ClockTime>()
+        {
+            let current_progress = GRAPH_LENGTH as u64 * position.seconds() / duration.seconds();
+            let buffering_level = buffering_level.lock().unwrap();
+            graph[current_progress as usize] = if *buffering_level < 100 { b'X' } else { b'>' };
         }
 
         print!("[{}]", std::str::from_utf8(&graph).unwrap());

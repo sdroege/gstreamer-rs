@@ -241,14 +241,14 @@ pub trait TrackElementExt: IsA<TrackElement> + 'static {
     fn list_children_properties(&self) -> Vec<glib::ParamSpec> {
         unsafe {
             let mut n_properties = std::mem::MaybeUninit::uninit();
-            let ret = FromGlibContainer::from_glib_full_num(
+
+            FromGlibContainer::from_glib_full_num(
                 ffi::ges_track_element_list_children_properties(
                     self.as_ref().to_glib_none().0,
                     n_properties.as_mut_ptr(),
                 ),
                 n_properties.assume_init() as _,
-            );
-            ret
+            )
         }
     }
 

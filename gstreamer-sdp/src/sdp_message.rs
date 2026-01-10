@@ -522,10 +522,10 @@ impl SDPMessageRef {
         idx: Option<u32>,
         attr: SDPAttribute,
     ) -> Result<(), glib::BoolError> {
-        if let Some(idx) = idx {
-            if idx >= self.attributes_len() {
-                return Err(glib::bool_error!("Failed to insert attribute"));
-            }
+        if let Some(idx) = idx
+            && idx >= self.attributes_len()
+        {
+            return Err(glib::bool_error!("Failed to insert attribute"));
         }
 
         let idx = idx.map(|idx| idx as i32).unwrap_or(-1);
@@ -544,10 +544,10 @@ impl SDPMessageRef {
         idx: Option<u32>,
         bw: SDPBandwidth,
     ) -> Result<(), glib::BoolError> {
-        if let Some(idx) = idx {
-            if idx >= self.bandwidths_len() {
-                return Err(glib::bool_error!("Failed to insert bandwidth"));
-            }
+        if let Some(idx) = idx
+            && idx >= self.bandwidths_len()
+        {
+            return Err(glib::bool_error!("Failed to insert bandwidth"));
         }
 
         let idx = idx.map(|idx| idx as i32).unwrap_or(-1);
@@ -561,10 +561,10 @@ impl SDPMessageRef {
 
     #[doc(alias = "gst_sdp_message_insert_email")]
     pub fn insert_email(&mut self, idx: Option<u32>, email: &str) -> Result<(), glib::BoolError> {
-        if let Some(idx) = idx {
-            if idx >= self.emails_len() {
-                return Err(glib::bool_error!("Failed to insert email"));
-            }
+        if let Some(idx) = idx
+            && idx >= self.emails_len()
+        {
+            return Err(glib::bool_error!("Failed to insert email"));
         }
 
         let idx = idx.map(|idx| idx as i32).unwrap_or(-1);
@@ -578,10 +578,10 @@ impl SDPMessageRef {
 
     #[doc(alias = "gst_sdp_message_insert_phone")]
     pub fn insert_phone(&mut self, idx: Option<u32>, phone: &str) -> Result<(), glib::BoolError> {
-        if let Some(idx) = idx {
-            if idx >= self.phones_len() {
-                return Err(glib::bool_error!("Failed to insert phone"));
-            }
+        if let Some(idx) = idx
+            && idx >= self.phones_len()
+        {
+            return Err(glib::bool_error!("Failed to insert phone"));
         }
 
         let idx = idx.map(|idx| idx as i32).unwrap_or(-1);
@@ -595,10 +595,10 @@ impl SDPMessageRef {
 
     #[doc(alias = "gst_sdp_message_insert_time")]
     pub fn insert_time(&mut self, idx: Option<u32>, time: SDPTime) -> Result<(), glib::BoolError> {
-        if let Some(idx) = idx {
-            if idx >= self.times_len() {
-                return Err(glib::bool_error!("Failed to insert time"));
-            }
+        if let Some(idx) = idx
+            && idx >= self.times_len()
+        {
+            return Err(glib::bool_error!("Failed to insert time"));
         }
 
         let idx = idx.map(|idx| idx as i32).unwrap_or(-1);
@@ -612,10 +612,10 @@ impl SDPMessageRef {
 
     #[doc(alias = "gst_sdp_message_insert_zone")]
     pub fn insert_zone(&mut self, idx: Option<u32>, zone: SDPZone) -> Result<(), glib::BoolError> {
-        if let Some(idx) = idx {
-            if idx >= self.zones_len() {
-                return Err(glib::bool_error!("Failed to insert zone"));
-            }
+        if let Some(idx) = idx
+            && idx >= self.zones_len()
+        {
+            return Err(glib::bool_error!("Failed to insert zone"));
         }
 
         let idx = idx.map(|idx| idx as i32).unwrap_or(-1);

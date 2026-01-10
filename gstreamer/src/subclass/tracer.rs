@@ -154,17 +154,21 @@ unsafe impl<T: TracerImpl> IsSubclassable<T> for Tracer {
                     &mut *(class.as_mut() as *mut _ as *mut glib::gobject_ffi::GObjectClass);
                 TRACER_CONSTRUCTED_FUNC.get_or_init(|| class.constructed.unwrap());
                 unsafe extern "C" fn constructed(objptr: *mut glib::gobject_ffi::GObject) {
-                    let obj = glib::Object::from_glib_borrow(objptr);
+                    let obj = unsafe { glib::Object::from_glib_ptr_borrow(&objptr) };
                     let params = obj.property::<Option<String>>("params");
 
                     let Some(params) = params else {
-                        TRACER_CONSTRUCTED_FUNC.get().unwrap()(objptr);
+                        unsafe {
+                            TRACER_CONSTRUCTED_FUNC.get().unwrap()(objptr);
+                        }
 
                         return;
                     };
 
                     if params.is_empty() {
-                        TRACER_CONSTRUCTED_FUNC.get().unwrap()(objptr);
+                        unsafe {
+                            TRACER_CONSTRUCTED_FUNC.get().unwrap()(objptr);
+                        }
 
                         return;
                     }
@@ -173,7 +177,7 @@ unsafe impl<T: TracerImpl> IsSubclassable<T> for Tracer {
                         Ok(s) => s,
                         Err(err) => {
                             emit_property_warning(
-                                &obj,
+                                obj,
                                 &format!(
                                     "Can't setup tracer {err:?}: invalid parameters '{params}'"
                                 ),
@@ -189,7 +193,7 @@ unsafe impl<T: TracerImpl> IsSubclassable<T> for Tracer {
                             Some(p) => p,
                             None => {
                                 emit_property_warning(
-                                    &obj,
+                                    obj,
                                     &format!(
                                         "Can't setup tracer: property '{}' not found",
                                         field.as_str()
@@ -209,7 +213,7 @@ unsafe impl<T: TracerImpl> IsSubclassable<T> for Tracer {
                                     Ok(v) => v,
                                     Err(_) => {
                                         emit_property_warning(
-                                            &obj,
+                                            obj,
                                             &format!(
                                                 "Can't instantiate tracer: invalid property '{}' value: '{}'",
                                                 field.as_str(),
@@ -226,7 +230,7 @@ unsafe impl<T: TracerImpl> IsSubclassable<T> for Tracer {
                                     Ok(v) => v,
                                     Err(_) => {
                                         emit_property_warning(
-                                            &obj,
+                                            obj,
                                             &format!(
                                                 "Can't instantiate tracer: invalid property '{}' value: '{}'",
                                                 field.as_str(),
@@ -239,7 +243,7 @@ unsafe impl<T: TracerImpl> IsSubclassable<T> for Tracer {
                             }
                         } else {
                             emit_property_warning(
-                                &obj,
+                                obj,
                                 &format!(
                                     "Can't setup tracer: property '{}' type mismatch, expected {}, got {}",
                                     field.as_str(),
@@ -254,7 +258,9 @@ unsafe impl<T: TracerImpl> IsSubclassable<T> for Tracer {
                         obj.set_property(field.as_str(), &value);
                     }
 
-                    TRACER_CONSTRUCTED_FUNC.get().unwrap()(objptr);
+                    unsafe {
+                        TRACER_CONSTRUCTED_FUNC.get().unwrap()(objptr);
+                    }
                 }
 
                 class.constructed = Some(constructed);

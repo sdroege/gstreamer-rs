@@ -1503,10 +1503,10 @@ impl Drop for AppSinkStream {
         {
             // This is not thread-safe before 1.16.3, see
             // https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/merge_requests/570
-            if gst::version() >= (1, 16, 3, 0) {
-                if let Some(app_sink) = self.app_sink.upgrade() {
-                    app_sink.set_callbacks(AppSinkCallbacks::builder().build());
-                }
+            if gst::version() >= (1, 16, 3, 0)
+                && let Some(app_sink) = self.app_sink.upgrade()
+            {
+                app_sink.set_callbacks(AppSinkCallbacks::builder().build());
             }
         }
     }

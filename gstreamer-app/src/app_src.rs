@@ -720,10 +720,10 @@ impl Drop for AppSrcSink {
         {
             // This is not thread-safe before 1.16.3, see
             // https://gitlab.freedesktop.org/gstreamer/gst-plugins-base/merge_requests/570
-            if gst::version() >= (1, 16, 3, 0) {
-                if let Some(app_src) = self.app_src.upgrade() {
-                    app_src.set_callbacks(AppSrcCallbacks::builder().build());
-                }
+            if gst::version() >= (1, 16, 3, 0)
+                && let Some(app_src) = self.app_src.upgrade()
+            {
+                app_src.set_callbacks(AppSrcCallbacks::builder().build());
             }
         }
     }
