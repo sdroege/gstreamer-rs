@@ -3,7 +3,9 @@ name = "examples"
 version.workspace = true
 license = "MIT"
 authors = ["Sebastian Dröge <sebastian@centricular.com>"]
-edition.workspace = true
+# edition.workspace = true
+# See https://github.com/rust-windowing/gl-rs/issues/561
+edition = "2021"
 rust-version.workspace = true
 
 [dependencies]

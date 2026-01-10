@@ -2,7 +2,7 @@
 
 use thiserror::Error;
 
-use crate::{prelude::ElementExt, ErrorMessage, FlowReturn};
+use crate::{ErrorMessage, FlowReturn, prelude::ElementExt};
 
 #[doc(hidden)]
 #[inline(never)]
@@ -45,6 +45,7 @@ macro_rules! panic_to_error(
                 $ret
             }
         }
+        #[allow(unused_unsafe)]
         #[cfg(not(panic = "abort"))]
         {
             let panicked = $imp.panicked();

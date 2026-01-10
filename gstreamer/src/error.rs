@@ -131,10 +131,12 @@ impl LoggableError {
     pub fn log_with_imp(&self, imp: &impl glib::subclass::types::ObjectSubclass) {
         use glib::subclass::prelude::*;
 
-        self.log_with_object_internal_and_level(
-            unsafe { imp.obj().unsafe_cast_ref::<glib::Object>() },
-            crate::DebugLevel::Error,
-        );
+        unsafe {
+            self.log_with_object_internal_and_level(
+                imp.obj().unsafe_cast_ref::<glib::Object>(),
+                crate::DebugLevel::Error,
+            );
+        }
     }
 
     pub fn log_with_imp_and_level(
@@ -144,10 +146,12 @@ impl LoggableError {
     ) {
         use glib::subclass::prelude::*;
 
-        self.log_with_object_internal_and_level(
-            unsafe { imp.obj().unsafe_cast_ref::<glib::Object>() },
-            level,
-        );
+        unsafe {
+            self.log_with_object_internal_and_level(
+                imp.obj().unsafe_cast_ref::<glib::Object>(),
+                level,
+            );
+        }
     }
 
     pub fn category(&self) -> crate::DebugCategory {

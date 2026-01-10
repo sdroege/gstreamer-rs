@@ -3,7 +3,7 @@ use std::{fmt, mem, os::unix::prelude::IntoRawFd};
 use glib::{prelude::*, translate::*};
 use gst::{Memory, MemoryRef};
 
-use crate::{ffi, DRMDumbAllocator, DmaBufMemory};
+use crate::{DRMDumbAllocator, DmaBufMemory, ffi};
 
 gst::memory_object_wrapper!(
     DRMDumbMemory,
@@ -79,7 +79,7 @@ pub trait DRMDumbAllocatorExtManual: IsA<DRMDumbAllocator> + 'static {
                 out_pitch.as_mut_ptr(),
             ))
             .ok_or_else(|| glib::bool_error!("Failed to allocate memory"))
-            .map(|mem| (mem, unsafe { out_pitch.assume_init() }))
+            .map(|mem| (mem, out_pitch.assume_init()))
         }
     }
 }
