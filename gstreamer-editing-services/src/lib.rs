@@ -57,6 +57,7 @@ mod asset;
 #[allow(clippy::needless_borrow)]
 #[allow(deprecated)]
 #[allow(unused_imports)]
+#[allow(clippy::let_and_return)]
 mod auto;
 mod formatter;
 pub use crate::auto::*;
