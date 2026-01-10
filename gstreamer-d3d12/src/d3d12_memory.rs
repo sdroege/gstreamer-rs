@@ -1,12 +1,11 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::{ffi, ffi::GstD3D12Memory, D3D12Device};
+use crate::{D3D12Device, ffi, ffi::GstD3D12Memory};
 use glib::translate::*;
-use gst::{ffi as gst_ffi, Memory, MemoryRef};
+use gst::{Memory, MemoryRef, ffi as gst_ffi};
 use std::{fmt, marker::PhantomData, mem};
 
 use windows::{
-    core::Interface,
     Win32::{
         Foundation::{HANDLE, RECT},
         Graphics::{
@@ -14,6 +13,7 @@ use windows::{
             Direct3D12::{ID3D12DescriptorHeap, ID3D12Fence, ID3D12Resource},
         },
     },
+    core::Interface,
 };
 
 gst::memory_object_wrapper!(
@@ -155,11 +155,7 @@ impl D3D12MemoryRef {
                 plane,
                 index.as_mut_ptr(),
             ));
-            if ret {
-                Some(index.assume_init())
-            } else {
-                None
-            }
+            if ret { Some(index.assume_init()) } else { None }
         }
     }
 

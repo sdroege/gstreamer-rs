@@ -2,8 +2,8 @@
 
 use glib::translate::*;
 
-use crate::{ffi, D3D12DescHeap};
-use windows::{core::Interface, Win32::Graphics::Direct3D12::ID3D12DescriptorHeap};
+use crate::{D3D12DescHeap, ffi};
+use windows::{Win32::Graphics::Direct3D12::ID3D12DescriptorHeap, core::Interface};
 
 impl D3D12DescHeap {
     #[doc(alias = "gst_d3d12_desc_heap_get_handle")]

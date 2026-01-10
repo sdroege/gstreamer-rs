@@ -136,14 +136,10 @@ impl IntoGlib for BusSyncReply {
 impl FromGlib<ffi::GstBusSyncReply> for BusSyncReply {
     #[inline]
     unsafe fn from_glib(value: ffi::GstBusSyncReply) -> Self {
-        unsafe {
-            skip_assert_initialized!();
+        skip_assert_initialized!();
 
-            debug_assert!(
-                [ffi::GST_BUS_DROP, ffi::GST_BUS_PASS, ffi::GST_BUS_ASYNC].contains(&value)
-            );
-            std::mem::transmute(value)
-        }
+        debug_assert!([ffi::GST_BUS_DROP, ffi::GST_BUS_PASS, ffi::GST_BUS_ASYNC].contains(&value));
+        unsafe { std::mem::transmute(value) }
     }
 }
 
@@ -432,24 +428,22 @@ impl IntoGlib for ClockReturn {
 impl FromGlib<ffi::GstClockReturn> for ClockReturn {
     #[inline]
     unsafe fn from_glib(value: ffi::GstClockReturn) -> Self {
-        unsafe {
-            skip_assert_initialized!();
+        skip_assert_initialized!();
 
-            debug_assert!(
-                [
-                    ffi::GST_CLOCK_OK,
-                    ffi::GST_CLOCK_EARLY,
-                    ffi::GST_CLOCK_UNSCHEDULED,
-                    ffi::GST_CLOCK_BUSY,
-                    ffi::GST_CLOCK_BADTIME,
-                    ffi::GST_CLOCK_ERROR,
-                    ffi::GST_CLOCK_UNSUPPORTED,
-                    ffi::GST_CLOCK_DONE
-                ]
-                .contains(&value)
-            );
-            std::mem::transmute(value)
-        }
+        debug_assert!(
+            [
+                ffi::GST_CLOCK_OK,
+                ffi::GST_CLOCK_EARLY,
+                ffi::GST_CLOCK_UNSCHEDULED,
+                ffi::GST_CLOCK_BUSY,
+                ffi::GST_CLOCK_BADTIME,
+                ffi::GST_CLOCK_ERROR,
+                ffi::GST_CLOCK_UNSUPPORTED,
+                ffi::GST_CLOCK_DONE
+            ]
+            .contains(&value)
+        );
+        unsafe { std::mem::transmute(value) }
     }
 }
 
@@ -1489,14 +1483,10 @@ impl IntoGlib for PadDirection {
 impl FromGlib<ffi::GstPadDirection> for PadDirection {
     #[inline]
     unsafe fn from_glib(value: ffi::GstPadDirection) -> Self {
-        unsafe {
-            skip_assert_initialized!();
+        skip_assert_initialized!();
 
-            debug_assert!(
-                [ffi::GST_PAD_UNKNOWN, ffi::GST_PAD_SRC, ffi::GST_PAD_SINK].contains(&value)
-            );
-            std::mem::transmute(value)
-        }
+        debug_assert!([ffi::GST_PAD_UNKNOWN, ffi::GST_PAD_SRC, ffi::GST_PAD_SINK].contains(&value));
+        unsafe { std::mem::transmute(value) }
     }
 }
 
@@ -1601,19 +1591,17 @@ impl IntoGlib for PadMode {
 impl FromGlib<ffi::GstPadMode> for PadMode {
     #[inline]
     unsafe fn from_glib(value: ffi::GstPadMode) -> Self {
-        unsafe {
-            skip_assert_initialized!();
+        skip_assert_initialized!();
 
-            debug_assert!(
-                [
-                    ffi::GST_PAD_MODE_NONE,
-                    ffi::GST_PAD_MODE_PUSH,
-                    ffi::GST_PAD_MODE_PULL
-                ]
-                .contains(&value)
-            );
-            std::mem::transmute(value)
-        }
+        debug_assert!(
+            [
+                ffi::GST_PAD_MODE_NONE,
+                ffi::GST_PAD_MODE_PUSH,
+                ffi::GST_PAD_MODE_PULL
+            ]
+            .contains(&value)
+        );
+        unsafe { std::mem::transmute(value) }
     }
 }
 
@@ -1700,19 +1688,17 @@ impl IntoGlib for PadPresence {
 impl FromGlib<ffi::GstPadPresence> for PadPresence {
     #[inline]
     unsafe fn from_glib(value: ffi::GstPadPresence) -> Self {
-        unsafe {
-            skip_assert_initialized!();
+        skip_assert_initialized!();
 
-            debug_assert!(
-                [
-                    ffi::GST_PAD_ALWAYS,
-                    ffi::GST_PAD_SOMETIMES,
-                    ffi::GST_PAD_REQUEST
-                ]
-                .contains(&value)
-            );
-            std::mem::transmute(value)
-        }
+        debug_assert!(
+            [
+                ffi::GST_PAD_ALWAYS,
+                ffi::GST_PAD_SOMETIMES,
+                ffi::GST_PAD_REQUEST
+            ]
+            .contains(&value)
+        );
+        unsafe { std::mem::transmute(value) }
     }
 }
 
@@ -1802,21 +1788,19 @@ impl IntoGlib for PadProbeReturn {
 impl FromGlib<ffi::GstPadProbeReturn> for PadProbeReturn {
     #[inline]
     unsafe fn from_glib(value: ffi::GstPadProbeReturn) -> Self {
-        unsafe {
-            skip_assert_initialized!();
+        skip_assert_initialized!();
 
-            debug_assert!(
-                [
-                    ffi::GST_PAD_PROBE_DROP,
-                    ffi::GST_PAD_PROBE_OK,
-                    ffi::GST_PAD_PROBE_REMOVE,
-                    ffi::GST_PAD_PROBE_PASS,
-                    ffi::GST_PAD_PROBE_HANDLED
-                ]
-                .contains(&value)
-            );
-            std::mem::transmute(value)
-        }
+        debug_assert!(
+            [
+                ffi::GST_PAD_PROBE_DROP,
+                ffi::GST_PAD_PROBE_OK,
+                ffi::GST_PAD_PROBE_REMOVE,
+                ffi::GST_PAD_PROBE_PASS,
+                ffi::GST_PAD_PROBE_HANDLED
+            ]
+            .contains(&value)
+        );
+        unsafe { std::mem::transmute(value) }
     }
 }
 
@@ -2855,19 +2839,17 @@ impl IntoGlib for SeekType {
 impl FromGlib<ffi::GstSeekType> for SeekType {
     #[inline]
     unsafe fn from_glib(value: ffi::GstSeekType) -> Self {
-        unsafe {
-            skip_assert_initialized!();
+        skip_assert_initialized!();
 
-            debug_assert!(
-                [
-                    ffi::GST_SEEK_TYPE_NONE,
-                    ffi::GST_SEEK_TYPE_SET,
-                    ffi::GST_SEEK_TYPE_END
-                ]
-                .contains(&value)
-            );
-            std::mem::transmute(value)
-        }
+        debug_assert!(
+            [
+                ffi::GST_SEEK_TYPE_NONE,
+                ffi::GST_SEEK_TYPE_SET,
+                ffi::GST_SEEK_TYPE_END
+            ]
+            .contains(&value)
+        );
+        unsafe { std::mem::transmute(value) }
     }
 }
 
@@ -2958,21 +2940,19 @@ impl IntoGlib for State {
 impl FromGlib<ffi::GstState> for State {
     #[inline]
     unsafe fn from_glib(value: ffi::GstState) -> Self {
-        unsafe {
-            skip_assert_initialized!();
+        skip_assert_initialized!();
 
-            debug_assert!(
-                [
-                    ffi::GST_STATE_VOID_PENDING,
-                    ffi::GST_STATE_NULL,
-                    ffi::GST_STATE_READY,
-                    ffi::GST_STATE_PAUSED,
-                    ffi::GST_STATE_PLAYING
-                ]
-                .contains(&value)
-            );
-            std::mem::transmute(value)
-        }
+        debug_assert!(
+            [
+                ffi::GST_STATE_VOID_PENDING,
+                ffi::GST_STATE_NULL,
+                ffi::GST_STATE_READY,
+                ffi::GST_STATE_PAUSED,
+                ffi::GST_STATE_PLAYING
+            ]
+            .contains(&value)
+        );
+        unsafe { std::mem::transmute(value) }
     }
 }
 
@@ -3091,26 +3071,24 @@ impl IntoGlib for StateChange {
 impl FromGlib<ffi::GstStateChange> for StateChange {
     #[inline]
     unsafe fn from_glib(value: ffi::GstStateChange) -> Self {
-        unsafe {
-            skip_assert_initialized!();
+        skip_assert_initialized!();
 
-            debug_assert!(
-                [
-                    ffi::GST_STATE_CHANGE_NULL_TO_READY,
-                    ffi::GST_STATE_CHANGE_READY_TO_PAUSED,
-                    ffi::GST_STATE_CHANGE_PAUSED_TO_PLAYING,
-                    ffi::GST_STATE_CHANGE_PLAYING_TO_PAUSED,
-                    ffi::GST_STATE_CHANGE_PAUSED_TO_READY,
-                    ffi::GST_STATE_CHANGE_READY_TO_NULL,
-                    ffi::GST_STATE_CHANGE_NULL_TO_NULL,
-                    ffi::GST_STATE_CHANGE_READY_TO_READY,
-                    ffi::GST_STATE_CHANGE_PAUSED_TO_PAUSED,
-                    ffi::GST_STATE_CHANGE_PLAYING_TO_PLAYING
-                ]
-                .contains(&value)
-            );
-            std::mem::transmute(value)
-        }
+        debug_assert!(
+            [
+                ffi::GST_STATE_CHANGE_NULL_TO_READY,
+                ffi::GST_STATE_CHANGE_READY_TO_PAUSED,
+                ffi::GST_STATE_CHANGE_PAUSED_TO_PLAYING,
+                ffi::GST_STATE_CHANGE_PLAYING_TO_PAUSED,
+                ffi::GST_STATE_CHANGE_PAUSED_TO_READY,
+                ffi::GST_STATE_CHANGE_READY_TO_NULL,
+                ffi::GST_STATE_CHANGE_NULL_TO_NULL,
+                ffi::GST_STATE_CHANGE_READY_TO_READY,
+                ffi::GST_STATE_CHANGE_PAUSED_TO_PAUSED,
+                ffi::GST_STATE_CHANGE_PLAYING_TO_PLAYING
+            ]
+            .contains(&value)
+        );
+        unsafe { std::mem::transmute(value) }
     }
 }
 
@@ -3199,20 +3177,18 @@ impl IntoGlib for StateChangeReturn {
 impl FromGlib<ffi::GstStateChangeReturn> for StateChangeReturn {
     #[inline]
     unsafe fn from_glib(value: ffi::GstStateChangeReturn) -> Self {
-        unsafe {
-            skip_assert_initialized!();
+        skip_assert_initialized!();
 
-            debug_assert!(
-                [
-                    ffi::GST_STATE_CHANGE_FAILURE,
-                    ffi::GST_STATE_CHANGE_SUCCESS,
-                    ffi::GST_STATE_CHANGE_ASYNC,
-                    ffi::GST_STATE_CHANGE_NO_PREROLL
-                ]
-                .contains(&value)
-            );
-            std::mem::transmute(value)
-        }
+        debug_assert!(
+            [
+                ffi::GST_STATE_CHANGE_FAILURE,
+                ffi::GST_STATE_CHANGE_SUCCESS,
+                ffi::GST_STATE_CHANGE_ASYNC,
+                ffi::GST_STATE_CHANGE_NO_PREROLL
+            ]
+            .contains(&value)
+        );
+        unsafe { std::mem::transmute(value) }
     }
 }
 
@@ -4660,14 +4636,10 @@ impl IntoGlib for URIType {
 impl FromGlib<ffi::GstURIType> for URIType {
     #[inline]
     unsafe fn from_glib(value: ffi::GstURIType) -> Self {
-        unsafe {
-            skip_assert_initialized!();
+        skip_assert_initialized!();
 
-            debug_assert!(
-                [ffi::GST_URI_UNKNOWN, ffi::GST_URI_SINK, ffi::GST_URI_SRC].contains(&value)
-            );
-            std::mem::transmute(value)
-        }
+        debug_assert!([ffi::GST_URI_UNKNOWN, ffi::GST_URI_SINK, ffi::GST_URI_SRC].contains(&value));
+        unsafe { std::mem::transmute(value) }
     }
 }
 

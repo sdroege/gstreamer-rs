@@ -2,7 +2,7 @@
 
 use glib::translate::*;
 
-use crate::{ffi, D3D12FenceData};
+use crate::{D3D12FenceData, ffi};
 
 impl D3D12FenceData {
     #[doc(alias = "gst_d3d12_fence_data_push")]
@@ -13,10 +13,12 @@ impl D3D12FenceData {
         let f: Box<F> = Box::new(func);
         let f = Box::into_raw(f);
 
-        unsafe extern "C" fn trampoline<F: FnOnce() + Send + 'static>(data: glib::ffi::gpointer) { unsafe {
-            let func = Box::from_raw(data as *mut F);
-            func()
-        }}
+        unsafe extern "C" fn trampoline<F: FnOnce() + Send + 'static>(data: glib::ffi::gpointer) {
+            unsafe {
+                let func = Box::from_raw(data as *mut F);
+                func()
+            }
+        }
 
         unsafe {
             ffi::gst_d3d12_fence_data_push(

@@ -2,8 +2,8 @@
 
 use glib::translate::*;
 
-use crate::{ffi, D3D12CmdAlloc};
-use windows::{core::Interface, Win32::Graphics::Direct3D12::ID3D12CommandAllocator};
+use crate::{D3D12CmdAlloc, ffi};
+use windows::{Win32::Graphics::Direct3D12::ID3D12CommandAllocator, core::Interface};
 
 impl D3D12CmdAlloc {
     #[doc(alias = "gst_d3d12_cmd_alloc_get_handle")]

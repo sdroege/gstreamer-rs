@@ -3,7 +3,7 @@
 use glib::{prelude::*, translate::*};
 use windows::Win32::Graphics::Direct3D12::{D3D12_HEAP_FLAGS, D3D12_RESOURCE_FLAGS};
 
-use crate::{ffi, D3D12AllocationFlags, D3D12AllocationParams, D3D12Device};
+use crate::{D3D12AllocationFlags, D3D12AllocationParams, D3D12Device, ffi};
 
 impl D3D12AllocationParams {
     #[doc(alias = "gst_d3d12_allocation_params_new")]

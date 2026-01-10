@@ -2,11 +2,11 @@
 
 use glib::translate::*;
 use windows::{
+    Win32::Graphics::Direct3D12::{D3D12_COMMAND_LIST_TYPE, ID3D12Device},
     core::Interface,
-    Win32::Graphics::Direct3D12::{ID3D12Device, D3D12_COMMAND_LIST_TYPE},
 };
 
-use crate::{ffi, D3D12CmdAllocPool};
+use crate::{D3D12CmdAllocPool, ffi};
 
 impl D3D12CmdAllocPool {
     #[doc(alias = "gst_d3d12_cmd_alloc_pool_new")]

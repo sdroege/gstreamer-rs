@@ -1,11 +1,11 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::{ffi, D3D12CmdQueue, D3D12Converter, D3D12Device, D3D12FenceData};
+use crate::{D3D12CmdQueue, D3D12Converter, D3D12Device, D3D12FenceData, ffi};
 use glib::{prelude::*, translate::*};
 
 use windows::{
+    Win32::Graphics::Direct3D12::{D3D12_BLEND_DESC, ID3D12GraphicsCommandList},
     core::Interface,
-    Win32::Graphics::Direct3D12::{ID3D12GraphicsCommandList, D3D12_BLEND_DESC},
 };
 
 impl D3D12Converter {

@@ -1,6 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::{ffi, D3D12AllocationParams, D3D12BufferPool, D3D12Device};
+use crate::{D3D12AllocationParams, D3D12BufferPool, D3D12Device, ffi};
 use glib::translate::*;
 
 impl D3D12BufferPool {

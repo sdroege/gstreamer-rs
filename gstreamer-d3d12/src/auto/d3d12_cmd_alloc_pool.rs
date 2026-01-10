@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{ffi, D3D12CmdAlloc};
+use crate::{D3D12CmdAlloc, ffi};
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
@@ -31,11 +31,7 @@ pub trait D3D12CmdAllocPoolExt: IsA<D3D12CmdAllocPool> + 'static {
                 self.as_ref().to_glib_none().0,
                 &mut ca,
             ));
-            if ret {
-                Some(from_glib_full(ca))
-            } else {
-                None
-            }
+            if ret { Some(from_glib_full(ca)) } else { None }
         }
     }
 }

@@ -1,13 +1,13 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::{ffi, D3D12Allocator, D3D12Device};
+use crate::{D3D12Allocator, D3D12Device, ffi};
 use glib::{prelude::*, translate::*};
 use windows::{
-    core::Interface,
     Win32::Graphics::Direct3D12::{
-        ID3D12Resource, D3D12_CLEAR_VALUE, D3D12_HEAP_FLAGS, D3D12_HEAP_PROPERTIES,
-        D3D12_RESOURCE_DESC, D3D12_RESOURCE_STATES,
+        D3D12_CLEAR_VALUE, D3D12_HEAP_FLAGS, D3D12_HEAP_PROPERTIES, D3D12_RESOURCE_DESC,
+        D3D12_RESOURCE_STATES, ID3D12Resource,
     },
+    core::Interface,
 };
 
 impl D3D12Allocator {

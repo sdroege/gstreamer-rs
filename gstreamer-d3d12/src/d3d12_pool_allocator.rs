@@ -1,6 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::{ffi, D3D12Device, D3D12PoolAllocator};
+use crate::{D3D12Device, D3D12PoolAllocator, ffi};
 use glib::{prelude::*, translate::*};
 
 use windows::Win32::Graphics::Direct3D12::{

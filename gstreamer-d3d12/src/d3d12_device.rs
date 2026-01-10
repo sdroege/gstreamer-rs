@@ -3,14 +3,14 @@
 use glib::{ffi::gpointer, prelude::*, translate::*};
 use std::mem;
 use windows::{
-    core::{Interface, Result, HRESULT},
     Win32::Graphics::Direct3D12::{
-        ID3D12CommandList, ID3D12Device, ID3D12Fence, D3D12_COMMAND_LIST_TYPE,
+        D3D12_COMMAND_LIST_TYPE, ID3D12CommandList, ID3D12Device, ID3D12Fence,
     },
     Win32::Graphics::Dxgi::{IDXGIAdapter1, IDXGIFactory2},
+    core::{HRESULT, Interface, Result},
 };
 
-use crate::{ffi, D3D12CmdQueue, D3D12Device};
+use crate::{D3D12CmdQueue, D3D12Device, ffi};
 
 pub trait D3D12DeviceExtManual: IsA<D3D12Device> + 'static {
     #[doc(alias = "gst_d3d12_device_execute_command_lists")]
@@ -92,11 +92,7 @@ pub trait D3D12DeviceExtManual: IsA<D3D12Device> + 'static {
                 fence_value,
             ));
 
-            if hr.is_ok() {
-                Ok(())
-            } else {
-                Err(hr.into())
-            }
+            if hr.is_ok() { Ok(()) } else { Err(hr.into()) }
         }
     }
 
@@ -132,10 +128,12 @@ pub trait D3D12DeviceExtManual: IsA<D3D12Device> + 'static {
         let f: Box<F> = Box::new(func);
         let f = Box::into_raw(f);
 
-        unsafe extern "C" fn trampoline<F: FnOnce() + Send + 'static>(data: glib::ffi::gpointer) { unsafe {
-            let func = Box::from_raw(data as *mut F);
-            func()
-        }}
+        unsafe extern "C" fn trampoline<F: FnOnce() + Send + 'static>(data: glib::ffi::gpointer) {
+            unsafe {
+                let func = Box::from_raw(data as *mut F);
+                func()
+            }
+        }
 
         unsafe {
             glib::result_from_gboolean!(

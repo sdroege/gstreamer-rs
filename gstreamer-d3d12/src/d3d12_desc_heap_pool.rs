@@ -2,11 +2,11 @@
 
 use glib::translate::*;
 use windows::{
+    Win32::Graphics::Direct3D12::{D3D12_DESCRIPTOR_HEAP_DESC, ID3D12Device},
     core::Interface,
-    Win32::Graphics::Direct3D12::{ID3D12Device, D3D12_DESCRIPTOR_HEAP_DESC},
 };
 
-use crate::{ffi, D3D12DescHeapPool};
+use crate::{D3D12DescHeapPool, ffi};
 
 impl D3D12DescHeapPool {
     #[doc(alias = "gst_d3d12_desc_heap_pool_new")]

@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{ffi, D3D12Allocator};
+use crate::{D3D12Allocator, ffi};
 
 glib::wrapper! {
     #[doc(alias = "GstD3D12PoolAllocator")]
