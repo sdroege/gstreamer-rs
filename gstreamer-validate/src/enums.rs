@@ -103,14 +103,16 @@ impl IntoGlib for ActionReturn {
 impl FromGlib<ffi::GstValidateActionReturn> for ActionReturn {
     #[inline]
     unsafe fn from_glib(value: ffi::GstValidateActionReturn) -> Self {
-        skip_assert_initialized!();
+        unsafe {
+            skip_assert_initialized!();
 
-        if !(ffi::GST_VALIDATE_EXECUTE_ACTION_ERROR..=ffi::GST_VALIDATE_EXECUTE_ACTION_DONE)
-            .contains(&value)
-        {
-            ActionReturn::Error
-        } else {
-            std::mem::transmute::<i32, ActionReturn>(value)
+            if !(ffi::GST_VALIDATE_EXECUTE_ACTION_ERROR..=ffi::GST_VALIDATE_EXECUTE_ACTION_DONE)
+                .contains(&value)
+            {
+                ActionReturn::Error
+            } else {
+                std::mem::transmute::<i32, ActionReturn>(value)
+            }
         }
     }
 }
@@ -122,8 +124,10 @@ impl TryFromGlib<ffi::GstValidateActionReturn> for ActionSuccess {
     unsafe fn try_from_glib(
         val: ffi::GstValidateActionReturn,
     ) -> Result<ActionSuccess, ActionError> {
-        skip_assert_initialized!();
-        ActionReturn::from_glib(val).into_result()
+        unsafe {
+            skip_assert_initialized!();
+            ActionReturn::from_glib(val).into_result()
+        }
     }
 }
 

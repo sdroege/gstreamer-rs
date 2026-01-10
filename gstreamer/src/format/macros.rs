@@ -259,7 +259,7 @@ macro_rules! impl_common_ops_for_newtype_uint(
         impl_common_ops_for_newtype_uint!($typ, $inner, one: 1);
     };
 
-    ($typ:ty, $inner:ty, one: $one:expr$(,)?) => {
+    ($typ:ty, $inner:ty, one: $one:expr_2021$(,)?) => {
         impl $typ {
             pub const ZERO: Self = Self(0);
             pub const NONE: Option<Self> = None;
@@ -583,7 +583,7 @@ macro_rules! impl_signed_ops(
         impl_signed_ops!(usize, usize, 0);
     };
 
-    ($typ:ty, $inner:ty, $zero:expr) => {
+    ($typ:ty, $inner:ty, $zero:expr_2021) => {
         impl crate::Signed<$typ> {
             // rustdoc-stripper-ignore-next
             /// Returns the signum for this `Signed`.
@@ -980,7 +980,7 @@ macro_rules! impl_signed_div_mul(
         impl_signed_div_mul_trait!($newtyp, u32, i32, |val: $newtyp| *val);
     };
 
-    ($typ:ty, $inner:ty, $signed_rhs:ty, $into_inner:expr) => {
+    ($typ:ty, $inner:ty, $signed_rhs:ty, $into_inner:expr_2021) => {
         impl crate::Signed<$typ> {
             #[allow(dead_code)]
             #[inline]
@@ -1441,7 +1441,7 @@ macro_rules! impl_signed_extra_div_mul(
 );
 
 macro_rules! impl_signed_div_mul_trait(
-    ($typ:ty, $inner:ty, $signed_rhs:ty, $into_inner:expr) => {
+    ($typ:ty, $inner:ty, $signed_rhs:ty, $into_inner:expr_2021) => {
         #[allow(clippy::redundant_closure_call)]
         impl muldiv::MulDiv<$signed_rhs> for crate::Signed<$typ> {
             type Output = Self;
@@ -1584,10 +1584,10 @@ macro_rules! impl_format_value_traits(
 
         impl FormattedValueFullRange for Option<$typ> {
             #[inline]
-            unsafe fn from_raw(format: Format, value: i64) -> Self {
+            unsafe fn from_raw(format: Format, value: i64) -> Self { unsafe {
                 debug_assert_eq!(format, Format::$format);
                 FromGlib::from_glib(value as u64)
-            }
+            }}
         }
 
         impl FormattedValueNoneBuilder for Option<$typ> {
@@ -1668,16 +1668,16 @@ macro_rules! impl_format_value_traits(
         impl TryFromGlib<i64> for $typ {
             type Error = GlibNoneError;
             #[inline]
-            unsafe fn try_from_glib(val: i64) -> Result<Self, GlibNoneError> {
+            unsafe fn try_from_glib(val: i64) -> Result<Self, GlibNoneError> { unsafe {
                 skip_assert_initialized!();
                 <$typ as TryFromGlib<u64>>::try_from_glib(val as u64)
-            }
+            }}
         }
     };
 );
 
 macro_rules! option_glib_newtype_from_to {
-    ($typ:ident, $none_value:expr) => {
+    ($typ:ident, $none_value:expr_2021) => {
         #[doc(hidden)]
         impl IntoGlib for $typ {
             type GlibType = u64;
@@ -1820,7 +1820,7 @@ macro_rules! impl_signed_int_into_signed(
         impl_signed_int_into_signed!($newtyp, u32, i32, |val: $newtyp| *val);
     };
 
-    ($typ:ty, $inner:ty, $signed:ty, $into_inner:expr) => {
+    ($typ:ty, $inner:ty, $signed:ty, $into_inner:expr_2021) => {
         #[allow(clippy::redundant_closure_call)]
         impl TryFrom<crate::Signed<$typ>> for $signed {
             type Error = std::num::TryFromIntError;

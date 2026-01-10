@@ -61,18 +61,22 @@ unsafe impl<T: RTSPServerImpl> IsSubclassable<T> for RTSPServer {
 unsafe extern "C" fn server_create_client<T: RTSPServerImpl>(
     ptr: *mut ffi::GstRTSPServer,
 ) -> *mut ffi::GstRTSPClient {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    imp.create_client().into_glib_ptr()
+        imp.create_client().into_glib_ptr()
+    }
 }
 
 unsafe extern "C" fn server_client_connected<T: RTSPServerImpl>(
     ptr: *mut ffi::GstRTSPServer,
     client: *mut ffi::GstRTSPClient,
 ) {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    imp.client_connected(&from_glib_borrow(client));
+        imp.client_connected(&from_glib_borrow(client));
+    }
 }

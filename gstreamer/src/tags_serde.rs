@@ -149,12 +149,12 @@ impl Serialize for TagList {
 }
 
 macro_rules! de_tag(
-    ($tag_name:expr, $seq:expr, $t:ty) => (
+    ($tag_name:expr_2021, $seq:expr_2021, $t:ty) => (
         de_some_send_value!("Tag", $tag_name, $seq, $t)
     );
 );
 macro_rules! de_opt_tag(
-    ($tag_name:expr, $seq:expr, $t:ty) => (
+    ($tag_name:expr_2021, $seq:expr_2021, $t:ty) => (
         de_opt_send_value!("Tag", $tag_name, $seq, $t)
     );
 );

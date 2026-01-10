@@ -663,14 +663,16 @@ impl<T> VideoFrameRef<T> {
 impl<'a> VideoFrameRef<&'a gst::BufferRef> {
     #[inline]
     pub unsafe fn from_glib_borrow(frame: *const ffi::GstVideoFrame) -> Borrowed<Self> {
-        debug_assert!(!frame.is_null());
+        unsafe {
+            debug_assert!(!frame.is_null());
 
-        let frame = ptr::read(frame);
-        Borrowed::new(Self {
-            frame,
-            unmap: false,
-            phantom: PhantomData,
-        })
+            let frame = ptr::read(frame);
+            Borrowed::new(Self {
+                frame,
+                unmap: false,
+                phantom: PhantomData,
+            })
+        }
     }
 
     #[inline]
@@ -750,13 +752,15 @@ impl<'a> VideoFrameRef<&'a gst::BufferRef> {
 impl<'a> VideoFrameRef<&'a mut gst::BufferRef> {
     #[inline]
     pub unsafe fn from_glib_borrow_mut(frame: *mut ffi::GstVideoFrame) -> Self {
-        debug_assert!(!frame.is_null());
+        unsafe {
+            debug_assert!(!frame.is_null());
 
-        let frame = ptr::read(frame);
-        Self {
-            frame,
-            unmap: false,
-            phantom: PhantomData,
+            let frame = ptr::read(frame);
+            Self {
+                frame,
+                unmap: false,
+                phantom: PhantomData,
+            }
         }
     }
 

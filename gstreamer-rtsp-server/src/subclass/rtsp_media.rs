@@ -423,25 +423,29 @@ unsafe extern "C" fn media_handle_message<T: RTSPMediaImpl>(
     ptr: *mut ffi::GstRTSPMedia,
     message: *mut gst::ffi::GstMessage,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    imp.handle_message(gst::MessageRef::from_ptr(message))
-        .into_glib()
+        imp.handle_message(gst::MessageRef::from_ptr(message))
+            .into_glib()
+    }
 }
 
 unsafe extern "C" fn media_prepare<T: RTSPMediaImpl>(
     ptr: *mut ffi::GstRTSPMedia,
     thread: *mut ffi::GstRTSPThread,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    match imp.prepare(&from_glib_borrow(thread)) {
-        Ok(()) => glib::ffi::GTRUE,
-        Err(err) => {
-            err.log_with_imp(imp);
-            glib::ffi::GFALSE
+        match imp.prepare(&from_glib_borrow(thread)) {
+            Ok(()) => glib::ffi::GTRUE,
+            Err(err) => {
+                err.log_with_imp(imp);
+                glib::ffi::GFALSE
+            }
         }
     }
 }
@@ -449,14 +453,16 @@ unsafe extern "C" fn media_prepare<T: RTSPMediaImpl>(
 unsafe extern "C" fn media_unprepare<T: RTSPMediaImpl>(
     ptr: *mut ffi::GstRTSPMedia,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    match imp.unprepare() {
-        Ok(()) => glib::ffi::GTRUE,
-        Err(err) => {
-            err.log_with_imp(imp);
-            glib::ffi::GFALSE
+        match imp.unprepare() {
+            Ok(()) => glib::ffi::GTRUE,
+            Err(err) => {
+                err.log_with_imp(imp);
+                glib::ffi::GFALSE
+            }
         }
     }
 }
@@ -464,14 +470,16 @@ unsafe extern "C" fn media_unprepare<T: RTSPMediaImpl>(
 unsafe extern "C" fn media_suspend<T: RTSPMediaImpl>(
     ptr: *mut ffi::GstRTSPMedia,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    match imp.suspend() {
-        Ok(()) => glib::ffi::GTRUE,
-        Err(err) => {
-            err.log_with_imp(imp);
-            glib::ffi::GFALSE
+        match imp.suspend() {
+            Ok(()) => glib::ffi::GTRUE,
+            Err(err) => {
+                err.log_with_imp(imp);
+                glib::ffi::GFALSE
+            }
         }
     }
 }
@@ -479,14 +487,16 @@ unsafe extern "C" fn media_suspend<T: RTSPMediaImpl>(
 unsafe extern "C" fn media_unsuspend<T: RTSPMediaImpl>(
     ptr: *mut ffi::GstRTSPMedia,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    match imp.unsuspend() {
-        Ok(()) => glib::ffi::GTRUE,
-        Err(err) => {
-            err.log_with_imp(imp);
-            glib::ffi::GFALSE
+        match imp.unsuspend() {
+            Ok(()) => glib::ffi::GTRUE,
+            Err(err) => {
+                err.log_with_imp(imp);
+                glib::ffi::GFALSE
+            }
         }
     }
 }
@@ -495,15 +505,17 @@ unsafe extern "C" fn media_query_position<T: RTSPMediaImpl>(
     ptr: *mut ffi::GstRTSPMedia,
     position: *mut i64,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    match imp.query_position() {
-        Some(pos) => {
-            *position = pos.into_glib() as i64;
-            glib::ffi::GTRUE
+        match imp.query_position() {
+            Some(pos) => {
+                *position = pos.into_glib() as i64;
+                glib::ffi::GTRUE
+            }
+            None => glib::ffi::GFALSE,
         }
-        None => glib::ffi::GFALSE,
     }
 }
 
@@ -511,58 +523,64 @@ unsafe extern "C" fn media_query_stop<T: RTSPMediaImpl>(
     ptr: *mut ffi::GstRTSPMedia,
     stop: *mut i64,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    match imp.query_stop() {
-        Some(s) => {
-            *stop = s.into_glib() as i64;
-            glib::ffi::GTRUE
+        match imp.query_stop() {
+            Some(s) => {
+                *stop = s.into_glib() as i64;
+                glib::ffi::GTRUE
+            }
+            None => glib::ffi::GFALSE,
         }
-        None => glib::ffi::GFALSE,
     }
 }
 
 unsafe extern "C" fn media_create_rtpbin<T: RTSPMediaImpl>(
     ptr: *mut ffi::GstRTSPMedia,
 ) -> *mut gst::ffi::GstElement {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    let res: *mut gst::ffi::GstElement = imp.create_rtpbin().into_glib_ptr();
+        let res: *mut gst::ffi::GstElement = imp.create_rtpbin().into_glib_ptr();
 
-    if !res.is_null() {
-        glib::gobject_ffi::g_object_force_floating(res as *mut _);
+        if !res.is_null() {
+            glib::gobject_ffi::g_object_force_floating(res as *mut _);
+        }
+
+        res
     }
-
-    res
 }
 
 unsafe extern "C" fn media_setup_rtpbin<T: RTSPMediaImpl>(
     ptr: *mut ffi::GstRTSPMedia,
     rtpbin: *mut gst::ffi::GstElement,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    // If the rtpbin was floating before make sure it is not anymore for now so
-    // we don't accidentally take ownership of it somewhere along the line
-    if glib::gobject_ffi::g_object_is_floating(rtpbin as *mut _) != glib::ffi::GFALSE {
-        glib::gobject_ffi::g_object_ref_sink(rtpbin as *mut _);
-    }
-
-    let res = match imp.setup_rtpbin(&from_glib_borrow(rtpbin)) {
-        Ok(()) => glib::ffi::GTRUE,
-        Err(err) => {
-            err.log_with_imp(imp);
-            glib::ffi::GFALSE
+        // If the rtpbin was floating before make sure it is not anymore for now so
+        // we don't accidentally take ownership of it somewhere along the line
+        if glib::gobject_ffi::g_object_is_floating(rtpbin as *mut _) != glib::ffi::GFALSE {
+            glib::gobject_ffi::g_object_ref_sink(rtpbin as *mut _);
         }
-    };
 
-    // Ensure that the rtpbin is still floating afterwards here
-    glib::gobject_ffi::g_object_force_floating(rtpbin as *mut _);
+        let res = match imp.setup_rtpbin(&from_glib_borrow(rtpbin)) {
+            Ok(()) => glib::ffi::GTRUE,
+            Err(err) => {
+                err.log_with_imp(imp);
+                glib::ffi::GFALSE
+            }
+        };
 
-    res
+        // Ensure that the rtpbin is still floating afterwards here
+        glib::gobject_ffi::g_object_force_floating(rtpbin as *mut _);
+
+        res
+    }
 }
 
 unsafe extern "C" fn media_setup_sdp<T: RTSPMediaImpl>(
@@ -570,17 +588,19 @@ unsafe extern "C" fn media_setup_sdp<T: RTSPMediaImpl>(
     sdp: *mut gst_sdp::ffi::GstSDPMessage,
     info: *mut ffi::GstSDPInfo,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    match imp.setup_sdp(
-        &mut *(sdp as *mut gst_sdp::SDPMessageRef),
-        &SDPInfo(ptr::NonNull::new(info).expect("NULL SDPInfo")),
-    ) {
-        Ok(()) => glib::ffi::GTRUE,
-        Err(err) => {
-            err.log_with_imp(imp);
-            glib::ffi::GFALSE
+        match imp.setup_sdp(
+            &mut *(sdp as *mut gst_sdp::SDPMessageRef),
+            &SDPInfo(ptr::NonNull::new(info).expect("NULL SDPInfo")),
+        ) {
+            Ok(()) => glib::ffi::GTRUE,
+            Err(err) => {
+                err.log_with_imp(imp);
+                glib::ffi::GFALSE
+            }
         }
     }
 }
@@ -589,68 +609,82 @@ unsafe extern "C" fn media_new_stream<T: RTSPMediaImpl>(
     ptr: *mut ffi::GstRTSPMedia,
     stream: *mut ffi::GstRTSPStream,
 ) {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    imp.new_stream(&from_glib_borrow(stream));
+        imp.new_stream(&from_glib_borrow(stream));
+    }
 }
 
 unsafe extern "C" fn media_removed_stream<T: RTSPMediaImpl>(
     ptr: *mut ffi::GstRTSPMedia,
     stream: *mut ffi::GstRTSPStream,
 ) {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    imp.removed_stream(&from_glib_borrow(stream));
+        imp.removed_stream(&from_glib_borrow(stream));
+    }
 }
 
 unsafe extern "C" fn media_prepared<T: RTSPMediaImpl>(ptr: *mut ffi::GstRTSPMedia) {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    imp.prepared();
+        imp.prepared();
+    }
 }
 
 unsafe extern "C" fn media_unprepared<T: RTSPMediaImpl>(ptr: *mut ffi::GstRTSPMedia) {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    imp.unprepared();
+        imp.unprepared();
+    }
 }
 
 unsafe extern "C" fn media_target_state<T: RTSPMediaImpl>(
     ptr: *mut ffi::GstRTSPMedia,
     state: gst::ffi::GstState,
 ) {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    imp.target_state(from_glib(state));
+        imp.target_state(from_glib(state));
+    }
 }
 
 unsafe extern "C" fn media_new_state<T: RTSPMediaImpl>(
     ptr: *mut ffi::GstRTSPMedia,
     state: gst::ffi::GstState,
 ) {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    imp.new_state(from_glib(state));
+        imp.new_state(from_glib(state));
+    }
 }
 
 unsafe extern "C" fn media_handle_sdp<T: RTSPMediaImpl>(
     ptr: *mut ffi::GstRTSPMedia,
     sdp: *mut gst_sdp::ffi::GstSDPMessage,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    match imp.handle_sdp(&*(sdp as *const gst_sdp::SDPMessageRef)) {
-        Ok(()) => glib::ffi::GTRUE,
-        Err(err) => {
-            err.log_with_imp(imp);
-            glib::ffi::GFALSE
+        match imp.handle_sdp(&*(sdp as *const gst_sdp::SDPMessageRef)) {
+            Ok(()) => glib::ffi::GTRUE,
+            Err(err) => {
+                err.log_with_imp(imp);
+                glib::ffi::GFALSE
+            }
         }
     }
 }

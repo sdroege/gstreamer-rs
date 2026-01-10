@@ -14,7 +14,7 @@ use crate::{
     VideoCodecFrame, VideoDecoder, VideoFormat,
 };
 
-extern "C" {
+unsafe extern "C" {
     fn _gst_video_decoder_error(
         dec: *mut ffi::GstVideoDecoder,
         weight: i32,
@@ -314,7 +314,7 @@ impl HasStreamLock for VideoDecoder {
 
 #[macro_export]
 macro_rules! video_decoder_error(
-    ($obj:expr, $weight:expr, $err:expr, ($($msg:tt)*), [$($debug:tt)*]) => { {
+    ($obj:expr_2021, $weight:expr_2021, $err:expr_2021, ($($msg:tt)*), [$($debug:tt)*]) => { {
         use $crate::prelude::VideoDecoderExtManual;
         $obj.error(
             $weight,
@@ -326,7 +326,7 @@ macro_rules! video_decoder_error(
             line!(),
         )
     }};
-    ($obj:expr, $weight:expr, $err:expr, ($($msg:tt)*)) => { {
+    ($obj:expr_2021, $weight:expr_2021, $err:expr_2021, ($($msg:tt)*)) => { {
         use $crate::prelude::VideoDecoderExtManual;
         $obj.error(
             $weight,
@@ -338,7 +338,7 @@ macro_rules! video_decoder_error(
             line!(),
         )
     }};
-    ($obj:expr, $weight:expr, $err:expr, [$($debug:tt)*]) => { {
+    ($obj:expr_2021, $weight:expr_2021, $err:expr_2021, [$($debug:tt)*]) => { {
         use $crate::prelude::VideoDecoderExtManual;
         $obj.error(
             $weight,

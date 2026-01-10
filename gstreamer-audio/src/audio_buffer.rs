@@ -301,8 +301,8 @@ impl ops::Deref for AudioBufferPtr {
     #[inline]
     fn deref(&self) -> &Self::Target {
         match self {
-            Self::Owned(ref b) => b,
-            Self::Borrowed(ref b) => unsafe { b.as_ref() },
+            Self::Owned(b) => b,
+            Self::Borrowed(b) => unsafe { b.as_ref() },
         }
     }
 }
@@ -311,8 +311,8 @@ impl ops::DerefMut for AudioBufferPtr {
     #[inline]
     fn deref_mut(&mut self) -> &mut Self::Target {
         match self {
-            Self::Owned(ref mut b) => &mut *b,
-            Self::Borrowed(ref mut b) => unsafe { b.as_mut() },
+            Self::Owned(b) => &mut *b,
+            Self::Borrowed(b) => unsafe { b.as_mut() },
         }
     }
 }
@@ -447,14 +447,16 @@ impl<T> AudioBufferRef<T> {
 impl<'a> AudioBufferRef<&'a gst::BufferRef> {
     #[inline]
     pub unsafe fn from_glib_borrow(audio_buffer: *const ffi::GstAudioBuffer) -> Borrowed<Self> {
-        debug_assert!(!audio_buffer.is_null());
+        unsafe {
+            debug_assert!(!audio_buffer.is_null());
 
-        Borrowed::new(Self {
-            audio_buffer: AudioBufferPtr::Borrowed(ptr::NonNull::new_unchecked(
-                audio_buffer as *mut _,
-            )),
-            phantom: PhantomData,
-        })
+            Borrowed::new(Self {
+                audio_buffer: AudioBufferPtr::Borrowed(ptr::NonNull::new_unchecked(
+                    audio_buffer as *mut _,
+                )),
+                phantom: PhantomData,
+            })
+        }
     }
 
     #[inline]
@@ -495,12 +497,14 @@ impl<'a> AudioBufferRef<&'a gst::BufferRef> {
 impl<'a> AudioBufferRef<&'a mut gst::BufferRef> {
     #[inline]
     pub unsafe fn from_glib_borrow_mut(audio_buffer: *mut ffi::GstAudioBuffer) -> Borrowed<Self> {
-        debug_assert!(!audio_buffer.is_null());
+        unsafe {
+            debug_assert!(!audio_buffer.is_null());
 
-        Borrowed::new(Self {
-            audio_buffer: AudioBufferPtr::Borrowed(ptr::NonNull::new_unchecked(audio_buffer)),
-            phantom: PhantomData,
-        })
+            Borrowed::new(Self {
+                audio_buffer: AudioBufferPtr::Borrowed(ptr::NonNull::new_unchecked(audio_buffer)),
+                phantom: PhantomData,
+            })
+        }
     }
 
     #[inline]

@@ -191,9 +191,11 @@ impl AnalyticsRelationMeta {
 
 impl UnsafeFrom<&AnalyticsRelationMeta> for ffi::GstAnalyticsMtd {
     unsafe fn unsafe_from(t: &AnalyticsRelationMeta) -> Self {
-        ffi::GstAnalyticsMtd {
-            id: 0,
-            meta: t.as_mut_ptr(),
+        unsafe {
+            ffi::GstAnalyticsMtd {
+                id: 0,
+                meta: t.as_mut_ptr(),
+            }
         }
     }
 }
@@ -327,9 +329,11 @@ impl<'a> AnalyticsMtdRefMut<'a, AnalyticsAnyMtd> {
 
 impl<'a, T: AnalyticsMtd> UnsafeFrom<&AnalyticsMtdRef<'a, T>> for ffi::GstAnalyticsMtd {
     unsafe fn unsafe_from(t: &AnalyticsMtdRef<'a, T>) -> Self {
-        ffi::GstAnalyticsMtd {
-            id: t.id,
-            meta: t.meta.as_mut_ptr(),
+        unsafe {
+            ffi::GstAnalyticsMtd {
+                id: t.id,
+                meta: t.meta.as_mut_ptr(),
+            }
         }
     }
 }
@@ -467,7 +471,7 @@ impl<'a, T: AnalyticsMtd> AsRef<AnalyticsMtdRef<'a, T>> for AnalyticsMtdRefMut<'
 }
 
 macro_rules! define_mtd_iter {
-    ($name:ident, $metaref:ty, $itemref:ty, $copy_meta:expr) => {
+    ($name:ident, $metaref:ty, $itemref:ty, $copy_meta:expr_2021) => {
         #[must_use = "iterators are lazy and do nothing unless consumed"]
         pub struct $name<'a, T: AnalyticsMtd> {
             meta: $metaref,

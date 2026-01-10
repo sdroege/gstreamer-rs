@@ -168,31 +168,37 @@ unsafe impl<T: DeviceProviderImpl> IsSubclassable<T> for DeviceProvider {
 unsafe extern "C" fn device_provider_probe<T: DeviceProviderImpl>(
     ptr: *mut ffi::GstDeviceProvider,
 ) -> *mut glib::ffi::GList {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    imp.probe().to_glib_full()
+        imp.probe().to_glib_full()
+    }
 }
 
 unsafe extern "C" fn device_provider_start<T: DeviceProviderImpl>(
     ptr: *mut ffi::GstDeviceProvider,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    match imp.start() {
-        Ok(()) => true,
-        Err(err) => {
-            err.log_with_imp(imp);
-            false
+        match imp.start() {
+            Ok(()) => true,
+            Err(err) => {
+                err.log_with_imp(imp);
+                false
+            }
         }
+        .into_glib()
     }
-    .into_glib()
 }
 
 unsafe extern "C" fn device_provider_stop<T: DeviceProviderImpl>(ptr: *mut ffi::GstDeviceProvider) {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    imp.stop();
+        imp.stop();
+    }
 }

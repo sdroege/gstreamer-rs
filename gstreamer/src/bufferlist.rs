@@ -148,10 +148,12 @@ impl BufferListRef {
             idx: u32,
             user_data: glib::ffi::gpointer,
         ) -> glib::ffi::gboolean {
-            let func = user_data as *mut F;
-            let res = (*func)(&Buffer::from_glib_borrow(*buffer), idx as usize);
+            unsafe {
+                let func = user_data as *mut F;
+                let res = (*func)(&Buffer::from_glib_borrow(*buffer), idx as usize);
 
-            matches!(res, ControlFlow::Continue(_)).into_glib()
+                matches!(res, ControlFlow::Continue(_)).into_glib()
+            }
         }
 
         unsafe {
@@ -178,30 +180,32 @@ impl BufferListRef {
             idx: u32,
             user_data: glib::ffi::gpointer,
         ) -> glib::ffi::gboolean {
-            let func = user_data as *mut F;
-            let res = (*func)(
-                Buffer::from_glib_full(ptr::replace(
-                    buffer as *mut *const ffi::GstBuffer,
-                    ptr::null_mut::<ffi::GstBuffer>(),
-                )),
-                idx as usize,
-            );
+            unsafe {
+                let func = user_data as *mut F;
+                let res = (*func)(
+                    Buffer::from_glib_full(ptr::replace(
+                        buffer as *mut *const ffi::GstBuffer,
+                        ptr::null_mut::<ffi::GstBuffer>(),
+                    )),
+                    idx as usize,
+                );
 
-            let (cont, res_buffer) = match res {
-                ControlFlow::Continue(res_buffer) => (true, res_buffer),
-                ControlFlow::Break(res_buffer) => (false, res_buffer),
-            };
+                let (cont, res_buffer) = match res {
+                    ControlFlow::Continue(res_buffer) => (true, res_buffer),
+                    ControlFlow::Break(res_buffer) => (false, res_buffer),
+                };
 
-            match res_buffer {
-                None => {
-                    *buffer = ptr::null_mut();
+                match res_buffer {
+                    None => {
+                        *buffer = ptr::null_mut();
+                    }
+                    Some(new_buffer) => {
+                        *buffer = new_buffer.into_glib_ptr();
+                    }
                 }
-                Some(new_buffer) => {
-                    *buffer = new_buffer.into_glib_ptr();
-                }
+
+                cont.into_glib()
             }
-
-            cont.into_glib()
         }
 
         unsafe {
@@ -259,7 +263,7 @@ impl fmt::Debug for BufferListRef {
 }
 
 macro_rules! define_iter(
-    ($name:ident, $styp:ty, $get_item:expr) => {
+    ($name:ident, $styp:ty, $get_item:expr_2021) => {
         crate::utils::define_fixed_size_iter!(
             $name, &'a BufferListRef, $styp,
             |collection: &BufferListRef| collection.len(),

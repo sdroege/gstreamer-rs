@@ -26,8 +26,10 @@ unsafe extern "C" fn trampoline_watch<F: FnMut(&Bus, &Message) -> ControlFlow + 
     msg: *mut ffi::GstMessage,
     func: gpointer,
 ) -> gboolean {
-    let func: &mut F = &mut *(func as *mut F);
-    func(&from_glib_borrow(bus), &Message::from_glib_borrow(msg)).into_glib()
+    unsafe {
+        let func: &mut F = &mut *(func as *mut F);
+        func(&from_glib_borrow(bus), &Message::from_glib_borrow(msg)).into_glib()
+    }
 }
 
 unsafe extern "C" fn destroy_closure_watch<
@@ -35,7 +37,9 @@ unsafe extern "C" fn destroy_closure_watch<
 >(
     ptr: gpointer,
 ) {
-    let _ = Box::<F>::from_raw(ptr as *mut _);
+    unsafe {
+        let _ = Box::<F>::from_raw(ptr as *mut _);
+    }
 }
 
 fn into_raw_watch<F: FnMut(&Bus, &Message) -> ControlFlow + Send + 'static>(func: F) -> gpointer {
@@ -49,9 +53,11 @@ unsafe extern "C" fn trampoline_watch_local<F: FnMut(&Bus, &Message) -> ControlF
     msg: *mut ffi::GstMessage,
     func: gpointer,
 ) -> gboolean {
-    let func: &mut glib::thread_guard::ThreadGuard<F> =
-        &mut *(func as *mut glib::thread_guard::ThreadGuard<F>);
-    (func.get_mut())(&from_glib_borrow(bus), &Message::from_glib_borrow(msg)).into_glib()
+    unsafe {
+        let func: &mut glib::thread_guard::ThreadGuard<F> =
+            &mut *(func as *mut glib::thread_guard::ThreadGuard<F>);
+        (func.get_mut())(&from_glib_borrow(bus), &Message::from_glib_borrow(msg)).into_glib()
+    }
 }
 
 unsafe extern "C" fn destroy_closure_watch_local<
@@ -59,7 +65,9 @@ unsafe extern "C" fn destroy_closure_watch_local<
 >(
     ptr: gpointer,
 ) {
-    let _ = Box::<glib::thread_guard::ThreadGuard<F>>::from_raw(ptr as *mut _);
+    unsafe {
+        let _ = Box::<glib::thread_guard::ThreadGuard<F>>::from_raw(ptr as *mut _);
+    }
 }
 
 fn into_raw_watch_local<F: FnMut(&Bus, &Message) -> ControlFlow + 'static>(func: F) -> gpointer {
@@ -76,14 +84,16 @@ unsafe extern "C" fn trampoline_sync<
     msg: *mut ffi::GstMessage,
     func: gpointer,
 ) -> ffi::GstBusSyncReply {
-    let f: &F = &*(func as *const F);
-    let res = f(&from_glib_borrow(bus), &Message::from_glib_borrow(msg)).into_glib();
+    unsafe {
+        let f: &F = &*(func as *const F);
+        let res = f(&from_glib_borrow(bus), &Message::from_glib_borrow(msg)).into_glib();
 
-    if res == ffi::GST_BUS_DROP {
-        ffi::gst_mini_object_unref(msg as *mut _);
+        if res == ffi::GST_BUS_DROP {
+            ffi::gst_mini_object_unref(msg as *mut _);
+        }
+
+        res
     }
-
-    res
 }
 
 unsafe extern "C" fn destroy_closure_sync<
@@ -91,7 +101,9 @@ unsafe extern "C" fn destroy_closure_sync<
 >(
     ptr: gpointer,
 ) {
-    let _ = Box::<F>::from_raw(ptr as *mut _);
+    unsafe {
+        let _ = Box::<F>::from_raw(ptr as *mut _);
+    }
 }
 
 fn into_raw_sync<F: Fn(&Bus, &Message) -> BusSyncReply + Send + Sync + 'static>(
@@ -335,7 +347,7 @@ impl Bus {
     pub fn stream_filtered<'a>(
         &self,
         message_types: &'a [MessageType],
-    ) -> impl FusedStream<Item = Message> + Unpin + Send + 'a {
+    ) -> impl FusedStream<Item = Message> + Unpin + Send + 'a + use<'a> {
         self.stream().filter(move |message| {
             let message_type = message.type_();
 
@@ -483,7 +495,7 @@ mod tests {
         let eos_message = crate::message::Eos::new();
         bus.post(eos_message).unwrap();
 
-        let bus_future = bus_stream.into_future();
+        let bus_future = StreamExt::into_future(bus_stream);
         let (message, _) = futures_executor::block_on(bus_future);
 
         match message.unwrap().view() {

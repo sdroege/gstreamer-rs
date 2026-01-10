@@ -650,10 +650,12 @@ impl BufferRef {
             meta: *mut *mut ffi::GstMeta,
             user_data: glib::ffi::gpointer,
         ) -> glib::ffi::gboolean {
-            let func = user_data as *mut F;
-            let res = (*func)(Meta::from_ptr(BufferRef::from_ptr(buffer), *meta));
+            unsafe {
+                let func = user_data as *mut F;
+                let res = (*func)(Meta::from_ptr(BufferRef::from_ptr(buffer), *meta));
 
-            matches!(res, ControlFlow::Continue(_)).into_glib()
+                matches!(res, ControlFlow::Continue(_)).into_glib()
+            }
         }
 
         unsafe {
@@ -686,19 +688,21 @@ impl BufferRef {
             meta: *mut *mut ffi::GstMeta,
             user_data: glib::ffi::gpointer,
         ) -> glib::ffi::gboolean {
-            let func = user_data as *mut F;
-            let res = (*func)(Meta::from_mut_ptr(BufferRef::from_mut_ptr(buffer), *meta));
+            unsafe {
+                let func = user_data as *mut F;
+                let res = (*func)(Meta::from_mut_ptr(BufferRef::from_mut_ptr(buffer), *meta));
 
-            let (cont, action) = match res {
-                ControlFlow::Continue(action) => (true, action),
-                ControlFlow::Break(action) => (false, action),
-            };
+                let (cont, action) = match res {
+                    ControlFlow::Continue(action) => (true, action),
+                    ControlFlow::Break(action) => (false, action),
+                };
 
-            if action == BufferMetaForeachAction::Remove {
-                *meta = ptr::null_mut();
+                if action == BufferMetaForeachAction::Remove {
+                    *meta = ptr::null_mut();
+                }
+
+                cont.into_glib()
             }
-
-            cont.into_glib()
         }
 
         unsafe {
@@ -930,7 +934,7 @@ impl BufferRef {
 }
 
 macro_rules! define_meta_iter(
-    ($name:ident, $typ:ty, $mtyp:ty, $prepare_buffer:expr, $from_ptr:expr) => {
+    ($name:ident, $typ:ty, $mtyp:ty, $prepare_buffer:expr_2021, $from_ptr:expr_2021) => {
     #[must_use = "iterators are lazy and do nothing unless consumed"]
     pub struct $name<'a, T: MetaAPI + 'a> {
         buffer: $typ,
@@ -1008,7 +1012,7 @@ define_meta_iter!(
 );
 
 macro_rules! define_iter(
-    ($name:ident, $typ:ty, $mtyp:ty, $get_item:expr) => {
+    ($name:ident, $typ:ty, $mtyp:ty, $get_item:expr_2021) => {
         crate::utils::define_fixed_size_iter!(
             $name, $typ, $mtyp,
             |buffer: &BufferRef| buffer.n_memory() as usize,

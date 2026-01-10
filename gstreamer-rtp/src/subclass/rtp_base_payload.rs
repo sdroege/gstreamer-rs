@@ -180,52 +180,58 @@ unsafe extern "C" fn rtp_base_payload_get_caps<T: RTPBasePayloadImpl>(
     pad: *mut gst::ffi::GstPad,
     filter: *mut gst::ffi::GstCaps,
 ) -> *mut gst::ffi::GstCaps {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, gst::Caps::new_empty(), {
-        RTPBasePayloadImpl::caps(
-            imp,
-            &from_glib_borrow(pad),
-            Option::<gst::Caps>::from_glib_borrow(filter)
-                .as_ref()
-                .as_ref(),
-        )
-    })
-    .into_glib_ptr()
+        gst::panic_to_error!(imp, gst::Caps::new_empty(), {
+            RTPBasePayloadImpl::caps(
+                imp,
+                &from_glib_borrow(pad),
+                Option::<gst::Caps>::from_glib_borrow(filter)
+                    .as_ref()
+                    .as_ref(),
+            )
+        })
+        .into_glib_ptr()
+    }
 }
 
 unsafe extern "C" fn rtp_base_payload_set_caps<T: RTPBasePayloadImpl>(
     ptr: *mut ffi::GstRTPBasePayload,
     caps: *mut gst::ffi::GstCaps,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
-    let caps = from_glib_borrow(caps);
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
+        let caps = from_glib_borrow(caps);
 
-    gst::panic_to_error!(imp, false, {
-        match imp.set_caps(&caps) {
-            Ok(()) => true,
-            Err(err) => {
-                err.log_with_imp(imp);
-                false
+        gst::panic_to_error!(imp, false, {
+            match imp.set_caps(&caps) {
+                Ok(()) => true,
+                Err(err) => {
+                    err.log_with_imp(imp);
+                    false
+                }
             }
-        }
-    })
-    .into_glib()
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn rtp_base_payload_handle_buffer<T: RTPBasePayloadImpl>(
     ptr: *mut ffi::GstRTPBasePayload,
     buffer: *mut gst::ffi::GstBuffer,
 ) -> gst::ffi::GstFlowReturn {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, gst::FlowReturn::Error, {
-        imp.handle_buffer(from_glib_full(buffer)).into()
-    })
-    .into_glib()
+        gst::panic_to_error!(imp, gst::FlowReturn::Error, {
+            imp.handle_buffer(from_glib_full(buffer)).into()
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn rtp_base_payload_query<T: RTPBasePayloadImpl>(
@@ -233,35 +239,41 @@ unsafe extern "C" fn rtp_base_payload_query<T: RTPBasePayloadImpl>(
     pad: *mut gst::ffi::GstPad,
     query: *mut gst::ffi::GstQuery,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, false, {
-        RTPBasePayloadImpl::query(
-            imp,
-            &from_glib_borrow(pad),
-            gst::QueryRef::from_mut_ptr(query),
-        )
-    })
-    .into_glib()
+        gst::panic_to_error!(imp, false, {
+            RTPBasePayloadImpl::query(
+                imp,
+                &from_glib_borrow(pad),
+                gst::QueryRef::from_mut_ptr(query),
+            )
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn rtp_base_payload_sink_event<T: RTPBasePayloadImpl>(
     ptr: *mut ffi::GstRTPBasePayload,
     event: *mut gst::ffi::GstEvent,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, false, { imp.sink_event(from_glib_full(event)) }).into_glib()
+        gst::panic_to_error!(imp, false, { imp.sink_event(from_glib_full(event)) }).into_glib()
+    }
 }
 
 unsafe extern "C" fn rtp_base_payload_src_event<T: RTPBasePayloadImpl>(
     ptr: *mut ffi::GstRTPBasePayload,
     event: *mut gst::ffi::GstEvent,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, false, { imp.src_event(from_glib_full(event)) }).into_glib()
+        gst::panic_to_error!(imp, false, { imp.src_event(from_glib_full(event)) }).into_glib()
+    }
 }

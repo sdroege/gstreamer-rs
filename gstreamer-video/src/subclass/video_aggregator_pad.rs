@@ -131,10 +131,12 @@ unsafe impl<T: VideoAggregatorPadImpl> IsSubclassable<T> for VideoAggregatorPad 
 unsafe extern "C" fn video_aggregator_pad_update_conversion_info<T: VideoAggregatorPadImpl>(
     ptr: *mut ffi::GstVideoAggregatorPad,
 ) {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    imp.update_conversion_info();
+        imp.update_conversion_info();
+    }
 }
 
 unsafe extern "C" fn video_aggregator_pad_prepare_frame<T: VideoAggregatorPadImpl>(
@@ -143,22 +145,24 @@ unsafe extern "C" fn video_aggregator_pad_prepare_frame<T: VideoAggregatorPadImp
     buffer: *mut gst::ffi::GstBuffer,
     prepared_frame: *mut ffi::GstVideoFrame,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
-    let aggregator: Borrowed<VideoAggregator> = from_glib_borrow(aggregator);
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
+        let aggregator: Borrowed<VideoAggregator> = from_glib_borrow(aggregator);
 
-    let token = AggregateFramesToken(&aggregator);
+        let token = AggregateFramesToken(&aggregator);
 
-    match imp.prepare_frame(&aggregator, &token, &from_glib_borrow(buffer)) {
-        Some(frame) => {
-            *prepared_frame = frame.into_raw();
+        match imp.prepare_frame(&aggregator, &token, &from_glib_borrow(buffer)) {
+            Some(frame) => {
+                *prepared_frame = frame.into_raw();
+            }
+            None => {
+                ptr::write(prepared_frame, mem::zeroed());
+            }
         }
-        None => {
-            ptr::write(prepared_frame, mem::zeroed());
-        }
+
+        glib::ffi::GTRUE
     }
-
-    glib::ffi::GTRUE
 }
 
 unsafe extern "C" fn video_aggregator_pad_clean_frame<T: VideoAggregatorPadImpl>(
@@ -166,19 +170,21 @@ unsafe extern "C" fn video_aggregator_pad_clean_frame<T: VideoAggregatorPadImpl>
     aggregator: *mut ffi::GstVideoAggregator,
     prepared_frame: *mut ffi::GstVideoFrame,
 ) {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
-    let aggregator: Borrowed<VideoAggregator> = from_glib_borrow(aggregator);
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
+        let aggregator: Borrowed<VideoAggregator> = from_glib_borrow(aggregator);
 
-    let token = AggregateFramesToken(&aggregator);
+        let token = AggregateFramesToken(&aggregator);
 
-    let frame = if (*prepared_frame).buffer.is_null() {
-        None
-    } else {
-        let frame = crate::VideoFrame::from_glib_full(*prepared_frame);
-        ptr::write(prepared_frame, mem::zeroed());
-        Some(frame)
-    };
+        let frame = if (*prepared_frame).buffer.is_null() {
+            None
+        } else {
+            let frame = crate::VideoFrame::from_glib_full(*prepared_frame);
+            ptr::write(prepared_frame, mem::zeroed());
+            Some(frame)
+        };
 
-    imp.clean_frame(&aggregator, &token, frame);
+        imp.clean_frame(&aggregator, &token, frame);
+    }
 }

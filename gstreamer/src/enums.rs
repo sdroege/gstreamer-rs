@@ -64,8 +64,10 @@ macro_rules! impl_return_result_traits {
 
             #[inline]
             unsafe fn try_from_glib(val: ffi::$ffi_type) -> Result<$ok_type, $err_type> {
-                skip_assert_initialized!();
-                $ret_type::from_glib(val).into_result()
+                unsafe {
+                    skip_assert_initialized!();
+                    $ret_type::from_glib(val).into_result()
+                }
             }
         }
     };
@@ -191,18 +193,20 @@ impl IntoGlib for FlowReturn {
 impl FromGlib<ffi::GstFlowReturn> for FlowReturn {
     #[inline]
     unsafe fn from_glib(value: ffi::GstFlowReturn) -> Self {
-        skip_assert_initialized!();
+        unsafe {
+            skip_assert_initialized!();
 
-        if value < ffi::GST_FLOW_NOT_SUPPORTED
-            && (value > ffi::GST_FLOW_CUSTOM_ERROR || value < ffi::GST_FLOW_CUSTOM_ERROR_2)
-        {
-            FlowReturn::Error
-        } else if value > 0
-            && (value < ffi::GST_FLOW_CUSTOM_SUCCESS || value > ffi::GST_FLOW_CUSTOM_SUCCESS_2)
-        {
-            FlowReturn::Ok
-        } else {
-            std::mem::transmute::<i32, FlowReturn>(value)
+            if value < ffi::GST_FLOW_NOT_SUPPORTED
+                && (value > ffi::GST_FLOW_CUSTOM_ERROR || value < ffi::GST_FLOW_CUSTOM_ERROR_2)
+            {
+                FlowReturn::Error
+            } else if value > 0
+                && (value < ffi::GST_FLOW_CUSTOM_SUCCESS || value > ffi::GST_FLOW_CUSTOM_SUCCESS_2)
+            {
+                FlowReturn::Ok
+            } else {
+                std::mem::transmute::<i32, FlowReturn>(value)
+            }
         }
     }
 }
@@ -223,8 +227,10 @@ unsafe impl<'a> FromValue<'a> for FlowReturn {
 
     #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
-        skip_assert_initialized!();
-        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        unsafe {
+            skip_assert_initialized!();
+            from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        }
     }
 }
 
@@ -345,14 +351,16 @@ impl IntoGlib for PadLinkReturn {
 impl FromGlib<ffi::GstPadLinkReturn> for PadLinkReturn {
     #[inline]
     unsafe fn from_glib(value: ffi::GstPadLinkReturn) -> Self {
-        skip_assert_initialized!();
+        unsafe {
+            skip_assert_initialized!();
 
-        if value >= 0 {
-            PadLinkReturn::Ok
-        } else if value < ffi::GST_PAD_LINK_REFUSED {
-            PadLinkReturn::Refused
-        } else {
-            std::mem::transmute::<i32, PadLinkReturn>(value)
+            if value >= 0 {
+                PadLinkReturn::Ok
+            } else if value < ffi::GST_PAD_LINK_REFUSED {
+                PadLinkReturn::Refused
+            } else {
+                std::mem::transmute::<i32, PadLinkReturn>(value)
+            }
         }
     }
 }
@@ -373,8 +381,10 @@ unsafe impl<'a> FromValue<'a> for PadLinkReturn {
 
     #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
-        skip_assert_initialized!();
-        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        unsafe {
+            skip_assert_initialized!();
+            from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        }
     }
 }
 
@@ -773,8 +783,12 @@ unsafe impl FromValue<'_> for MessageType {
 
     #[inline]
     unsafe fn from_value(value: &glib::Value) -> Self {
-        skip_assert_initialized!();
-        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0) as ffi::GstMessageType)
+        unsafe {
+            skip_assert_initialized!();
+            from_glib(
+                glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0) as ffi::GstMessageType
+            )
+        }
     }
 }
 

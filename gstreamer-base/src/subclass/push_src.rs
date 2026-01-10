@@ -191,36 +191,40 @@ unsafe extern "C" fn push_src_fill<T: PushSrcImpl>(
     ptr: *mut ffi::GstPushSrc,
     buffer: *mut gst::ffi::GstBuffer,
 ) -> gst::ffi::GstFlowReturn {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
-    let buffer = gst::BufferRef::from_mut_ptr(buffer);
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
+        let buffer = gst::BufferRef::from_mut_ptr(buffer);
 
-    gst::panic_to_error!(imp, gst::FlowReturn::Error, {
-        PushSrcImpl::fill(imp, buffer).into()
-    })
-    .into_glib()
+        gst::panic_to_error!(imp, gst::FlowReturn::Error, {
+            PushSrcImpl::fill(imp, buffer).into()
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn push_src_alloc<T: PushSrcImpl>(
     ptr: *mut ffi::GstPushSrc,
     buffer_ptr: *mut gst::ffi::GstBuffer,
 ) -> gst::ffi::GstFlowReturn {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
-    // FIXME: Wrong signature in -sys bindings
-    // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys/issues/3
-    let buffer_ptr = buffer_ptr as *mut *mut gst::ffi::GstBuffer;
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
+        // FIXME: Wrong signature in -sys bindings
+        // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys/issues/3
+        let buffer_ptr = buffer_ptr as *mut *mut gst::ffi::GstBuffer;
 
-    gst::panic_to_error!(imp, gst::FlowReturn::Error, {
-        match PushSrcImpl::alloc(imp) {
-            Ok(buffer) => {
-                *buffer_ptr = buffer.into_glib_ptr();
-                gst::FlowReturn::Ok
+        gst::panic_to_error!(imp, gst::FlowReturn::Error, {
+            match PushSrcImpl::alloc(imp) {
+                Ok(buffer) => {
+                    *buffer_ptr = buffer.into_glib_ptr();
+                    gst::FlowReturn::Ok
+                }
+                Err(err) => gst::FlowReturn::from(err),
             }
-            Err(err) => gst::FlowReturn::from(err),
-        }
-    })
-    .into_glib()
+        })
+        .into_glib()
+    }
 }
 
 #[allow(clippy::needless_option_as_deref)]
@@ -228,98 +232,102 @@ unsafe extern "C" fn push_src_create<T: PushSrcImpl>(
     ptr: *mut ffi::GstPushSrc,
     buffer_ptr: *mut gst::ffi::GstBuffer,
 ) -> gst::ffi::GstFlowReturn {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
-    // FIXME: Wrong signature in -sys bindings
-    // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys/issues/3
-    let buffer_ptr = buffer_ptr as *mut *mut gst::ffi::GstBuffer;
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
+        // FIXME: Wrong signature in -sys bindings
+        // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys/issues/3
+        let buffer_ptr = buffer_ptr as *mut *mut gst::ffi::GstBuffer;
 
-    let mut buffer = if (*buffer_ptr).is_null() {
-        None
-    } else {
-        Some(gst::BufferRef::from_mut_ptr(*buffer_ptr))
-    };
+        let mut buffer = if (*buffer_ptr).is_null() {
+            None
+        } else {
+            Some(gst::BufferRef::from_mut_ptr(*buffer_ptr))
+        };
 
-    let instance_data = imp
-        .instance_data::<super::base_src::InstanceData>(crate::BaseSrc::static_type())
-        .unwrap();
+        let instance_data = imp
+            .instance_data::<super::base_src::InstanceData>(crate::BaseSrc::static_type())
+            .unwrap();
 
-    gst::panic_to_error!(imp, gst::FlowReturn::Error, {
-        match PushSrcImpl::create(imp, buffer.as_deref_mut()) {
-            Ok(CreateSuccess::NewBuffer(new_buffer)) => {
-                // Clear any pending buffer list
-                *instance_data.pending_buffer_list.borrow_mut() = None;
+        gst::panic_to_error!(imp, gst::FlowReturn::Error, {
+            match PushSrcImpl::create(imp, buffer.as_deref_mut()) {
+                Ok(CreateSuccess::NewBuffer(new_buffer)) => {
+                    // Clear any pending buffer list
+                    *instance_data.pending_buffer_list.borrow_mut() = None;
 
-                if let Some(passed_buffer) = buffer {
-                    if passed_buffer.as_ptr() != new_buffer.as_ptr() {
-                        gst::debug!(
+                    if let Some(passed_buffer) = buffer {
+                        if passed_buffer.as_ptr() != new_buffer.as_ptr() {
+                            gst::debug!(
                             gst::CAT_PERFORMANCE,
                             imp = imp,
                             "Returned new buffer from create function, copying into passed buffer"
                         );
 
-                        let mut map = match passed_buffer.map_writable() {
-                            Ok(map) => map,
-                            Err(_) => {
-                                gst::error!(
-                                    gst::CAT_RUST,
-                                    imp = imp,
-                                    "Failed to map passed buffer writable"
-                                );
-                                return gst::FlowReturn::Error;
+                            let mut map = match passed_buffer.map_writable() {
+                                Ok(map) => map,
+                                Err(_) => {
+                                    gst::error!(
+                                        gst::CAT_RUST,
+                                        imp = imp,
+                                        "Failed to map passed buffer writable"
+                                    );
+                                    return gst::FlowReturn::Error;
+                                }
+                            };
+
+                            let copied_size = new_buffer.copy_to_slice(0, &mut map);
+                            drop(map);
+
+                            if let Err(copied_size) = copied_size {
+                                passed_buffer.set_size(copied_size);
                             }
-                        };
 
-                        let copied_size = new_buffer.copy_to_slice(0, &mut map);
-                        drop(map);
+                            match new_buffer.copy_into(passed_buffer, gst::BUFFER_COPY_METADATA, ..)
+                            {
+                                Ok(_) => gst::FlowReturn::Ok,
+                                Err(_) => {
+                                    gst::error!(
+                                        gst::CAT_RUST,
+                                        imp = imp,
+                                        "Failed to copy buffer metadata"
+                                    );
 
-                        if let Err(copied_size) = copied_size {
-                            passed_buffer.set_size(copied_size);
-                        }
-
-                        match new_buffer.copy_into(passed_buffer, gst::BUFFER_COPY_METADATA, ..) {
-                            Ok(_) => gst::FlowReturn::Ok,
-                            Err(_) => {
-                                gst::error!(
-                                    gst::CAT_RUST,
-                                    imp = imp,
-                                    "Failed to copy buffer metadata"
-                                );
-
-                                gst::FlowReturn::Error
+                                    gst::FlowReturn::Error
+                                }
                             }
+                        } else {
+                            gst::FlowReturn::Ok
                         }
                     } else {
+                        *buffer_ptr = new_buffer.into_glib_ptr();
                         gst::FlowReturn::Ok
                     }
-                } else {
-                    *buffer_ptr = new_buffer.into_glib_ptr();
+                }
+                Ok(CreateSuccess::NewBufferList(new_buffer_list)) => {
+                    if buffer.is_some()
+                        || imp.obj().unsafe_cast_ref::<PushSrc>().src_pad().mode()
+                            == gst::PadMode::Pull
+                    {
+                        panic!("Buffer lists can only be returned in push mode");
+                    }
+
+                    *buffer_ptr = ptr::null_mut();
+
+                    // Store it in the instance data so that in the end base_src_create() can
+                    // submit it.
+                    *instance_data.pending_buffer_list.borrow_mut() = Some(new_buffer_list);
+
                     gst::FlowReturn::Ok
                 }
-            }
-            Ok(CreateSuccess::NewBufferList(new_buffer_list)) => {
-                if buffer.is_some()
-                    || imp.obj().unsafe_cast_ref::<PushSrc>().src_pad().mode() == gst::PadMode::Pull
-                {
-                    panic!("Buffer lists can only be returned in push mode");
+                Ok(CreateSuccess::FilledBuffer) => {
+                    // Clear any pending buffer list
+                    *instance_data.pending_buffer_list.borrow_mut() = None;
+
+                    gst::FlowReturn::Ok
                 }
-
-                *buffer_ptr = ptr::null_mut();
-
-                // Store it in the instance data so that in the end base_src_create() can
-                // submit it.
-                *instance_data.pending_buffer_list.borrow_mut() = Some(new_buffer_list);
-
-                gst::FlowReturn::Ok
+                Err(err) => gst::FlowReturn::from(err),
             }
-            Ok(CreateSuccess::FilledBuffer) => {
-                // Clear any pending buffer list
-                *instance_data.pending_buffer_list.borrow_mut() = None;
-
-                gst::FlowReturn::Ok
-            }
-            Err(err) => gst::FlowReturn::from(err),
-        }
-    })
-    .into_glib()
+        })
+        .into_glib()
+    }
 }

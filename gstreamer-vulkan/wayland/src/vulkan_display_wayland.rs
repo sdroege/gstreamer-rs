@@ -16,9 +16,11 @@ impl VulkanDisplayWayland {
     pub unsafe fn with_display(
         display: uintptr_t,
     ) -> Result<VulkanDisplayWayland, glib::error::BoolError> {
-        from_glib_full::<_, Option<VulkanDisplayWayland>>(
-            ffi::gst_vulkan_display_wayland_new_with_display(display as gpointer),
-        )
-        .ok_or_else(|| glib::bool_error!("Failed to create new Wayland Vulkan display"))
+        unsafe {
+            from_glib_full::<_, Option<VulkanDisplayWayland>>(
+                ffi::gst_vulkan_display_wayland_new_with_display(display as gpointer),
+            )
+            .ok_or_else(|| glib::bool_error!("Failed to create new Wayland Vulkan display"))
+        }
     }
 }

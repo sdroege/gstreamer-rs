@@ -46,8 +46,10 @@ unsafe impl<T: RTSPOnvifMediaFactoryImpl> IsSubclassable<T> for RTSPOnvifMediaFa
 unsafe extern "C" fn factory_has_backchannel_support<T: RTSPOnvifMediaFactoryImpl>(
     ptr: *mut ffi::GstRTSPOnvifMediaFactory,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    imp.has_backchannel_support().into_glib()
+        imp.has_backchannel_support().into_glib()
+    }
 }

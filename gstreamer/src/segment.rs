@@ -633,10 +633,11 @@ unsafe impl<'a> glib::value::FromValue<'a> for Segment {
 
     #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
-        skip_assert_initialized!();
-        from_glib_none(
-            glib::gobject_ffi::g_value_get_boxed(value.to_glib_none().0) as *mut ffi::GstSegment
-        )
+        unsafe {
+            skip_assert_initialized!();
+            from_glib_none(glib::gobject_ffi::g_value_get_boxed(value.to_glib_none().0)
+                as *mut ffi::GstSegment)
+        }
     }
 }
 
@@ -646,10 +647,12 @@ unsafe impl<'a> glib::value::FromValue<'a> for &'a Segment {
 
     #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
-        skip_assert_initialized!();
-        Segment::from_glib_ptr_borrow(
-            glib::gobject_ffi::g_value_get_boxed(value.to_glib_none().0) as *const ffi::GstSegment
-        )
+        unsafe {
+            skip_assert_initialized!();
+            Segment::from_glib_ptr_borrow(glib::gobject_ffi::g_value_get_boxed(
+                value.to_glib_none().0,
+            ) as *const ffi::GstSegment)
+        }
     }
 }
 

@@ -79,9 +79,11 @@ impl fmt::Debug for BaseParseFrame<'_> {
 impl<'a> BaseParseFrame<'a> {
     #[inline]
     pub(crate) unsafe fn new(frame: *mut ffi::GstBaseParseFrame, _parse: &'a BaseParse) -> Self {
-        skip_assert_initialized!();
-        debug_assert!(!frame.is_null());
-        Self(ptr::NonNull::new_unchecked(frame), PhantomData)
+        unsafe {
+            skip_assert_initialized!();
+            debug_assert!(!frame.is_null());
+            Self(ptr::NonNull::new_unchecked(frame), PhantomData)
+        }
     }
 
     #[doc(alias = "get_buffer")]

@@ -156,16 +156,18 @@ impl SingleShotClockId {
             id: gpointer,
             func: gpointer,
         ) -> gboolean {
-            let f: &mut Option<F> = &mut *(func as *mut Option<F>);
-            let f = f.take().unwrap();
+            unsafe {
+                let f: &mut Option<F> = &mut *(func as *mut Option<F>);
+                let f = f.take().unwrap();
 
-            f(
-                &from_glib_borrow(clock),
-                from_glib(time),
-                &from_glib_borrow(id),
-            );
+                f(
+                    &from_glib_borrow(clock),
+                    from_glib(time),
+                    &from_glib_borrow(id),
+                );
 
-            glib::ffi::GTRUE
+                glib::ffi::GTRUE
+            }
         }
 
         unsafe extern "C" fn destroy_notify<
@@ -173,7 +175,9 @@ impl SingleShotClockId {
         >(
             ptr: gpointer,
         ) {
-            let _ = Box::<Option<F>>::from_raw(ptr as *mut _);
+            unsafe {
+                let _ = Box::<Option<F>>::from_raw(ptr as *mut _);
+            }
         }
 
         let func: Box<Option<F>> = Box::new(Some(func));
@@ -281,13 +285,15 @@ impl PeriodicClockId {
             id: gpointer,
             func: gpointer,
         ) -> gboolean {
-            let f: &F = &*(func as *const F);
-            f(
-                &from_glib_borrow(clock),
-                from_glib(time),
-                &from_glib_borrow(id),
-            );
-            glib::ffi::GTRUE
+            unsafe {
+                let f: &F = &*(func as *const F);
+                f(
+                    &from_glib_borrow(clock),
+                    from_glib(time),
+                    &from_glib_borrow(id),
+                );
+                glib::ffi::GTRUE
+            }
         }
 
         unsafe extern "C" fn destroy_notify<
@@ -295,7 +301,9 @@ impl PeriodicClockId {
         >(
             ptr: gpointer,
         ) {
-            let _ = Box::<F>::from_raw(ptr as *mut _);
+            unsafe {
+                let _ = Box::<F>::from_raw(ptr as *mut _);
+            }
         }
 
         let func: Box<F> = Box::new(func);

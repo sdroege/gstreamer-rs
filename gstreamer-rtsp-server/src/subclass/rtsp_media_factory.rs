@@ -189,90 +189,104 @@ unsafe extern "C" fn factory_gen_key<T: RTSPMediaFactoryImpl>(
     ptr: *mut ffi::GstRTSPMediaFactory,
     url: *const gst_rtsp::ffi::GstRTSPUrl,
 ) -> *mut std::os::raw::c_char {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    imp.gen_key(&from_glib_borrow(url)).into_glib_ptr()
+        imp.gen_key(&from_glib_borrow(url)).into_glib_ptr()
+    }
 }
 
 unsafe extern "C" fn factory_create_element<T: RTSPMediaFactoryImpl>(
     ptr: *mut ffi::GstRTSPMediaFactory,
     url: *const gst_rtsp::ffi::GstRTSPUrl,
 ) -> *mut gst::ffi::GstElement {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    let element = imp.create_element(&from_glib_borrow(url)).into_glib_ptr();
-    glib::gobject_ffi::g_object_force_floating(element as *mut _);
-    element
+        let element = imp.create_element(&from_glib_borrow(url)).into_glib_ptr();
+        glib::gobject_ffi::g_object_force_floating(element as *mut _);
+        element
+    }
 }
 
 unsafe extern "C" fn factory_construct<T: RTSPMediaFactoryImpl>(
     ptr: *mut ffi::GstRTSPMediaFactory,
     url: *const gst_rtsp::ffi::GstRTSPUrl,
 ) -> *mut ffi::GstRTSPMedia {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    imp.construct(&from_glib_borrow(url)).into_glib_ptr()
+        imp.construct(&from_glib_borrow(url)).into_glib_ptr()
+    }
 }
 
 unsafe extern "C" fn factory_create_pipeline<T: RTSPMediaFactoryImpl>(
     ptr: *mut ffi::GstRTSPMediaFactory,
     media: *mut ffi::GstRTSPMedia,
 ) -> *mut gst::ffi::GstElement {
-    static PIPELINE_QUARK: std::sync::OnceLock<glib::Quark> = std::sync::OnceLock::new();
+    unsafe {
+        static PIPELINE_QUARK: std::sync::OnceLock<glib::Quark> = std::sync::OnceLock::new();
 
-    let pipeline_quark =
-        PIPELINE_QUARK.get_or_init(|| glib::Quark::from_str("gstreamer-rs-rtsp-media-pipeline"));
+        let pipeline_quark = PIPELINE_QUARK
+            .get_or_init(|| glib::Quark::from_str("gstreamer-rs-rtsp-media-pipeline"));
 
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    let pipeline: *mut gst::ffi::GstPipeline = imp
-        .create_pipeline(&from_glib_borrow(media))
-        .into_glib_ptr();
+        let pipeline: *mut gst::ffi::GstPipeline = imp
+            .create_pipeline(&from_glib_borrow(media))
+            .into_glib_ptr();
 
-    // FIXME We somehow need to ensure the pipeline actually stays alive...
-    glib::gobject_ffi::g_object_set_qdata_full(
-        media as *mut _,
-        pipeline_quark.into_glib(),
-        pipeline as *mut _,
-        Some(transmute::<
-            *const (),
-            unsafe extern "C" fn(glib::ffi::gpointer),
-        >(glib::gobject_ffi::g_object_unref as *const ())),
-    );
+        // FIXME We somehow need to ensure the pipeline actually stays alive...
+        glib::gobject_ffi::g_object_set_qdata_full(
+            media as *mut _,
+            pipeline_quark.into_glib(),
+            pipeline as *mut _,
+            Some(transmute::<
+                *const (),
+                unsafe extern "C" fn(glib::ffi::gpointer),
+            >(glib::gobject_ffi::g_object_unref as *const ())),
+        );
 
-    pipeline as *mut _
+        pipeline as *mut _
+    }
 }
 
 unsafe extern "C" fn factory_configure<T: RTSPMediaFactoryImpl>(
     ptr: *mut ffi::GstRTSPMediaFactory,
     media: *mut ffi::GstRTSPMedia,
 ) {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    imp.configure(&from_glib_borrow(media));
+        imp.configure(&from_glib_borrow(media));
+    }
 }
 
 unsafe extern "C" fn factory_media_constructed<T: RTSPMediaFactoryImpl>(
     ptr: *mut ffi::GstRTSPMediaFactory,
     media: *mut ffi::GstRTSPMedia,
 ) {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    imp.media_constructed(&from_glib_borrow(media));
+        imp.media_constructed(&from_glib_borrow(media));
+    }
 }
 
 unsafe extern "C" fn factory_media_configure<T: RTSPMediaFactoryImpl>(
     ptr: *mut ffi::GstRTSPMediaFactory,
     media: *mut ffi::GstRTSPMedia,
 ) {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    imp.media_configure(&from_glib_borrow(media));
+        imp.media_configure(&from_glib_borrow(media));
+    }
 }

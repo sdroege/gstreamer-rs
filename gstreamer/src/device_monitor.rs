@@ -21,9 +21,11 @@ impl IntoGlib for DeviceMonitorFilterId {
 impl FromGlib<libc::c_uint> for DeviceMonitorFilterId {
     #[inline]
     unsafe fn from_glib(val: libc::c_uint) -> DeviceMonitorFilterId {
-        skip_assert_initialized!();
-        debug_assert_ne!(val, 0);
-        DeviceMonitorFilterId(NonZeroU32::new_unchecked(val))
+        unsafe {
+            skip_assert_initialized!();
+            debug_assert_ne!(val, 0);
+            DeviceMonitorFilterId(NonZeroU32::new_unchecked(val))
+        }
     }
 }
 

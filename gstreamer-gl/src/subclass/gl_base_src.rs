@@ -87,43 +87,49 @@ unsafe impl<T: GLBaseSrcImpl> IsSubclassable<T> for GLBaseSrc {
 }
 
 unsafe extern "C" fn gl_start<T: GLBaseSrcImpl>(ptr: *mut GstGLBaseSrc) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, false, {
-        match imp.gl_start() {
-            Ok(()) => true,
-            Err(err) => {
-                err.log_with_imp(imp);
-                false
+        gst::panic_to_error!(imp, false, {
+            match imp.gl_start() {
+                Ok(()) => true,
+                Err(err) => {
+                    err.log_with_imp(imp);
+                    false
+                }
             }
-        }
-    })
-    .into_glib()
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn gl_stop<T: GLBaseSrcImpl>(ptr: *mut GstGLBaseSrc) {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, (), { imp.gl_stop() })
+        gst::panic_to_error!(imp, (), { imp.gl_stop() })
+    }
 }
 
 unsafe extern "C" fn fill_gl_memory<T: GLBaseSrcImpl>(
     ptr: *mut GstGLBaseSrc,
     memory: *mut GstGLMemory,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, false, {
-        match imp.fill_gl_memory(&from_glib_borrow(memory)) {
-            Ok(()) => true,
-            Err(err) => {
-                err.log_with_imp(imp);
-                false
+        gst::panic_to_error!(imp, false, {
+            match imp.fill_gl_memory(&from_glib_borrow(memory)) {
+                Ok(()) => true,
+                Err(err) => {
+                    err.log_with_imp(imp);
+                    false
+                }
             }
-        }
-    })
-    .into_glib()
+        })
+        .into_glib()
+    }
 }

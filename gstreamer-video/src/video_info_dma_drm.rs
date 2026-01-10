@@ -257,9 +257,11 @@ unsafe impl<'a> glib::value::FromValue<'a> for VideoInfoDmaDrm {
     type Checker = glib::value::GenericValueTypeOrNoneChecker<Self>;
 
     unsafe fn from_value(value: &'a glib::Value) -> Self {
-        skip_assert_initialized!();
-        from_glib_none(glib::gobject_ffi::g_value_get_boxed(value.to_glib_none().0)
-            as *mut ffi::GstVideoInfoDmaDrm)
+        unsafe {
+            skip_assert_initialized!();
+            from_glib_none(glib::gobject_ffi::g_value_get_boxed(value.to_glib_none().0)
+                as *mut ffi::GstVideoInfoDmaDrm)
+        }
     }
 }
 
@@ -308,7 +310,7 @@ impl From<VideoInfoDmaDrm> for glib::Value {
 impl glib::translate::Uninitialized for VideoInfoDmaDrm {
     #[inline]
     unsafe fn uninitialized() -> Self {
-        mem::zeroed()
+        unsafe { mem::zeroed() }
     }
 }
 
@@ -335,7 +337,7 @@ impl<'a> glib::translate::ToGlibPtr<'a, *const ffi::GstVideoInfoDmaDrm> for Vide
 impl glib::translate::FromGlibPtrNone<*const ffi::GstVideoInfoDmaDrm> for VideoInfoDmaDrm {
     #[inline]
     unsafe fn from_glib_none(ptr: *const ffi::GstVideoInfoDmaDrm) -> Self {
-        Self(ptr::read(ptr))
+        unsafe { Self(ptr::read(ptr)) }
     }
 }
 
@@ -343,7 +345,7 @@ impl glib::translate::FromGlibPtrNone<*const ffi::GstVideoInfoDmaDrm> for VideoI
 impl glib::translate::FromGlibPtrNone<*mut ffi::GstVideoInfoDmaDrm> for VideoInfoDmaDrm {
     #[inline]
     unsafe fn from_glib_none(ptr: *mut ffi::GstVideoInfoDmaDrm) -> Self {
-        Self(ptr::read(ptr))
+        unsafe { Self(ptr::read(ptr)) }
     }
 }
 
@@ -351,8 +353,10 @@ impl glib::translate::FromGlibPtrNone<*mut ffi::GstVideoInfoDmaDrm> for VideoInf
 impl glib::translate::FromGlibPtrFull<*mut ffi::GstVideoInfoDmaDrm> for VideoInfoDmaDrm {
     #[inline]
     unsafe fn from_glib_full(ptr: *mut ffi::GstVideoInfoDmaDrm) -> Self {
-        let info = from_glib_none(ptr);
-        glib::ffi::g_free(ptr as *mut _);
-        info
+        unsafe {
+            let info = from_glib_none(ptr);
+            glib::ffi::g_free(ptr as *mut _);
+            info
+        }
     }
 }

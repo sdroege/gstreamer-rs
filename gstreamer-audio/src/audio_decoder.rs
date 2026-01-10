@@ -6,7 +6,7 @@ use glib::{prelude::*, translate::*};
 
 use crate::{ffi, AudioDecoder, AudioInfo};
 
-extern "C" {
+unsafe extern "C" {
     fn _gst_audio_decoder_error(
         dec: *mut ffi::GstAudioDecoder,
         weight: i32,
@@ -147,7 +147,7 @@ impl<O: IsA<AudioDecoder>> AudioDecoderExtManual for O {}
 
 #[macro_export]
 macro_rules! audio_decoder_error(
-    ($obj:expr, $weight:expr, $err:expr, ($($msg:tt)*), [$($debug:tt)*]) => { {
+    ($obj:expr_2021, $weight:expr_2021, $err:expr_2021, ($($msg:tt)*), [$($debug:tt)*]) => { {
         use $crate::prelude::AudioDecoderExtManual;
         $obj.error(
             $weight,
@@ -159,7 +159,7 @@ macro_rules! audio_decoder_error(
             line!(),
         )
     }};
-    ($obj:expr, $weight:expr, $err:expr, ($($msg:tt)*)) => { {
+    ($obj:expr_2021, $weight:expr_2021, $err:expr_2021, ($($msg:tt)*)) => { {
         use $crate::prelude::AudioDecoderExtManual;
         $obj.error(
             $weight,
@@ -171,7 +171,7 @@ macro_rules! audio_decoder_error(
             line!(),
         )
     }};
-    ($obj:expr, $weight:expr, $err:expr, [$($debug:tt)*]) => { {
+    ($obj:expr_2021, $weight:expr_2021, $err:expr_2021, [$($debug:tt)*]) => { {
         use $crate::prelude::AudioDecoderExtManual;
         $obj.error(
             $weight,

@@ -144,12 +144,14 @@ impl StreamCollection {
             p0: *mut glib::gobject_ffi::GParamSpec,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                &from_glib_borrow(this),
-                &from_glib_borrow(object),
-                &from_glib_borrow(p0),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    &from_glib_borrow(this),
+                    &from_glib_borrow(object),
+                    &from_glib_borrow(p0),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

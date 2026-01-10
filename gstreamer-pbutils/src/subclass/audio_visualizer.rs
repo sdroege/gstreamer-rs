@@ -125,23 +125,25 @@ unsafe impl<T: AudioVisualizerImpl> IsSubclassable<T> for AudioVisualizer {
 unsafe extern "C" fn audio_visualizer_setup<T: AudioVisualizerImpl>(
     ptr: *mut ffi::GstAudioVisualizer,
 ) -> gst::ffi::GstFlowReturn {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, false, {
-        let instance = imp.obj();
-        let instance = instance.unsafe_cast_ref::<AudioVisualizer>();
-        let token = AudioVisualizerSetupToken(instance);
+        gst::panic_to_error!(imp, false, {
+            let instance = imp.obj();
+            let instance = instance.unsafe_cast_ref::<AudioVisualizer>();
+            let token = AudioVisualizerSetupToken(instance);
 
-        match imp.setup(&token) {
-            Ok(()) => true,
-            Err(err) => {
-                err.log_with_imp(imp);
-                false
+            match imp.setup(&token) {
+                Ok(()) => true,
+                Err(err) => {
+                    err.log_with_imp(imp);
+                    false
+                }
             }
-        }
-    })
-    .into_glib()
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn audio_visualizer_render<T: AudioVisualizerImpl>(
@@ -149,44 +151,48 @@ unsafe extern "C" fn audio_visualizer_render<T: AudioVisualizerImpl>(
     audio_buffer: *mut gst::ffi::GstBuffer,
     video_frame: *mut gst_video::ffi::GstVideoFrame,
 ) -> gst::ffi::GstFlowReturn {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
-    let buffer = gst::BufferRef::from_ptr(audio_buffer);
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
+        let buffer = gst::BufferRef::from_ptr(audio_buffer);
 
-    gst::panic_to_error!(imp, false, {
-        match imp.render(
-            buffer,
-            &mut gst_video::VideoFrameRef::from_glib_borrow_mut(video_frame),
-        ) {
-            Ok(()) => true,
-            Err(err) => {
-                err.log_with_imp(imp);
-                false
+        gst::panic_to_error!(imp, false, {
+            match imp.render(
+                buffer,
+                &mut gst_video::VideoFrameRef::from_glib_borrow_mut(video_frame),
+            ) {
+                Ok(()) => true,
+                Err(err) => {
+                    err.log_with_imp(imp);
+                    false
+                }
             }
-        }
-    })
-    .into_glib()
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn audio_visualizer_decide_allocation<T: AudioVisualizerImpl>(
     ptr: *mut ffi::GstAudioVisualizer,
     query: *mut gst::ffi::GstQuery,
 ) -> gst::ffi::GstFlowReturn {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
-    let query = match gst::QueryRef::from_mut_ptr(query).view_mut() {
-        gst::QueryViewMut::Allocation(allocation) => allocation,
-        _ => unreachable!(),
-    };
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
+        let query = match gst::QueryRef::from_mut_ptr(query).view_mut() {
+            gst::QueryViewMut::Allocation(allocation) => allocation,
+            _ => unreachable!(),
+        };
 
-    gst::panic_to_error!(imp, false, {
-        match imp.decide_allocation(query) {
-            Ok(()) => true,
-            Err(err) => {
-                err.log_with_imp(imp);
-                false
+        gst::panic_to_error!(imp, false, {
+            match imp.decide_allocation(query) {
+                Ok(()) => true,
+                Err(err) => {
+                    err.log_with_imp(imp);
+                    false
+                }
             }
-        }
-    })
-    .into_glib()
+        })
+        .into_glib()
+    }
 }

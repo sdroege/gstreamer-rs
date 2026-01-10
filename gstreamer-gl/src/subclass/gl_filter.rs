@@ -190,19 +190,21 @@ unsafe extern "C" fn filter<T: GLFilterImpl>(
     input: *mut GstBuffer,
     output: *mut GstBuffer,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, false, {
-        match imp.filter(&from_glib_borrow(input), &from_glib_borrow(output)) {
-            Ok(()) => true,
-            Err(err) => {
-                err.log_with_imp(imp);
-                false
+        gst::panic_to_error!(imp, false, {
+            match imp.filter(&from_glib_borrow(input), &from_glib_borrow(output)) {
+                Ok(()) => true,
+                Err(err) => {
+                    err.log_with_imp(imp);
+                    false
+                }
             }
-        }
-    })
-    .into_glib()
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn filter_texture<T: GLFilterImpl>(
@@ -210,35 +212,39 @@ unsafe extern "C" fn filter_texture<T: GLFilterImpl>(
     input: *mut GstGLMemory,
     output: *mut GstGLMemory,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, false, {
-        match imp.filter_texture(&from_glib_borrow(input), &from_glib_borrow(output)) {
-            Ok(()) => true,
-            Err(err) => {
-                err.log_with_imp(imp);
-                false
+        gst::panic_to_error!(imp, false, {
+            match imp.filter_texture(&from_glib_borrow(input), &from_glib_borrow(output)) {
+                Ok(()) => true,
+                Err(err) => {
+                    err.log_with_imp(imp);
+                    false
+                }
             }
-        }
-    })
-    .into_glib()
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn init_fbo<T: GLFilterImpl>(ptr: *mut GstGLFilter) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, false, {
-        match imp.init_fbo() {
-            Ok(()) => true,
-            Err(err) => {
-                err.log_with_imp(imp);
-                false
+        gst::panic_to_error!(imp, false, {
+            match imp.init_fbo() {
+                Ok(()) => true,
+                Err(err) => {
+                    err.log_with_imp(imp);
+                    false
+                }
             }
-        }
-    })
-    .into_glib()
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn set_caps<T: GLFilterImpl>(
@@ -246,19 +252,22 @@ unsafe extern "C" fn set_caps<T: GLFilterImpl>(
     incaps: *mut gst::ffi::GstCaps,
     outcaps: *mut gst::ffi::GstCaps,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, false, {
-        match GLFilterImpl::set_caps(imp, &from_glib_borrow(incaps), &from_glib_borrow(outcaps)) {
-            Ok(()) => true,
-            Err(err) => {
-                err.log_with_imp(imp);
-                false
+        gst::panic_to_error!(imp, false, {
+            match GLFilterImpl::set_caps(imp, &from_glib_borrow(incaps), &from_glib_borrow(outcaps))
+            {
+                Ok(()) => true,
+                Err(err) => {
+                    err.log_with_imp(imp);
+                    false
+                }
             }
-        }
-    })
-    .into_glib()
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn transform_internal_caps<T: GLFilterImpl>(
@@ -267,18 +276,20 @@ unsafe extern "C" fn transform_internal_caps<T: GLFilterImpl>(
     caps: *mut gst::ffi::GstCaps,
     filter_caps: *mut gst::ffi::GstCaps,
 ) -> *mut gst::ffi::GstCaps {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, None, {
-        let filter_caps: Borrowed<Option<Caps>> = from_glib_borrow(filter_caps);
+        gst::panic_to_error!(imp, None, {
+            let filter_caps: Borrowed<Option<Caps>> = from_glib_borrow(filter_caps);
 
-        imp.transform_internal_caps(
-            from_glib(direction),
-            &from_glib_borrow(caps),
-            filter_caps.as_ref().as_ref(),
-        )
-    })
-    .map(|caps| caps.into_glib_ptr())
-    .unwrap_or(std::ptr::null_mut())
+            imp.transform_internal_caps(
+                from_glib(direction),
+                &from_glib_borrow(caps),
+                filter_caps.as_ref().as_ref(),
+            )
+        })
+        .map(|caps| caps.into_glib_ptr())
+        .unwrap_or(std::ptr::null_mut())
+    }
 }

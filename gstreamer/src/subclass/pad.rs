@@ -63,17 +63,21 @@ unsafe impl<T: PadImpl> IsSubclassable<T> for Pad {
 }
 
 unsafe extern "C" fn pad_linked<T: PadImpl>(ptr: *mut ffi::GstPad, peer: *mut ffi::GstPad) {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    imp.linked(&from_glib_borrow(peer))
+        imp.linked(&from_glib_borrow(peer))
+    }
 }
 
 unsafe extern "C" fn pad_unlinked<T: PadImpl>(ptr: *mut ffi::GstPad, peer: *mut ffi::GstPad) {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    imp.unlinked(&from_glib_borrow(peer))
+        imp.unlinked(&from_glib_borrow(peer))
+    }
 }
 
 #[cfg(test)]

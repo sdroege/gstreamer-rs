@@ -68,17 +68,19 @@ pub trait DRMDumbAllocatorExtManual: IsA<DRMDumbAllocator> + 'static {
         width: u32,
         height: u32,
     ) -> Result<(gst::Memory, u32), glib::BoolError> {
-        skip_assert_initialized!();
-        let mut out_pitch = mem::MaybeUninit::uninit();
-        Option::<_>::from_glib_full(ffi::gst_drm_dumb_allocator_alloc(
-            self.as_ref().to_glib_none().0,
-            drm_fourcc,
-            width,
-            height,
-            out_pitch.as_mut_ptr(),
-        ))
-        .ok_or_else(|| glib::bool_error!("Failed to allocate memory"))
-        .map(|mem| (mem, unsafe { out_pitch.assume_init() }))
+        unsafe {
+            skip_assert_initialized!();
+            let mut out_pitch = mem::MaybeUninit::uninit();
+            Option::<_>::from_glib_full(ffi::gst_drm_dumb_allocator_alloc(
+                self.as_ref().to_glib_none().0,
+                drm_fourcc,
+                width,
+                height,
+                out_pitch.as_mut_ptr(),
+            ))
+            .ok_or_else(|| glib::bool_error!("Failed to allocate memory"))
+            .map(|mem| (mem, unsafe { out_pitch.assume_init() }))
+        }
     }
 }
 

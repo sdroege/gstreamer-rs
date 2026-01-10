@@ -184,83 +184,93 @@ unsafe impl<T: AudioSrcImpl> IsSubclassable<T> for AudioSrc {
 unsafe extern "C" fn audiosrc_close<T: AudioSrcImpl>(
     ptr: *mut ffi::GstAudioSrc,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, false, {
-        match imp.close() {
-            Ok(()) => true,
-            Err(err) => {
-                err.log_with_imp(imp);
-                false
+        gst::panic_to_error!(imp, false, {
+            match imp.close() {
+                Ok(()) => true,
+                Err(err) => {
+                    err.log_with_imp(imp);
+                    false
+                }
             }
-        }
-    })
-    .into_glib()
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn audiosrc_delay<T: AudioSrcImpl>(ptr: *mut ffi::GstAudioSrc) -> u32 {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, 0, { imp.delay() })
+        gst::panic_to_error!(imp, 0, { imp.delay() })
+    }
 }
 
 unsafe extern "C" fn audiosrc_open<T: AudioSrcImpl>(
     ptr: *mut ffi::GstAudioSrc,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, false, {
-        match imp.open() {
-            Ok(()) => true,
-            Err(err) => {
-                err.log_with_imp(imp);
-                false
+        gst::panic_to_error!(imp, false, {
+            match imp.open() {
+                Ok(()) => true,
+                Err(err) => {
+                    err.log_with_imp(imp);
+                    false
+                }
             }
-        }
-    })
-    .into_glib()
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn audiosrc_prepare<T: AudioSrcImpl>(
     ptr: *mut ffi::GstAudioSrc,
     spec: *mut ffi::GstAudioRingBufferSpec,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    let spec = &mut *(spec as *mut AudioRingBufferSpec);
+        let spec = &mut *(spec as *mut AudioRingBufferSpec);
 
-    gst::panic_to_error!(imp, false, {
-        match AudioSrcImpl::prepare(imp, spec) {
-            Ok(()) => true,
-            Err(err) => {
-                err.log_with_imp(imp);
-                false
+        gst::panic_to_error!(imp, false, {
+            match AudioSrcImpl::prepare(imp, spec) {
+                Ok(()) => true,
+                Err(err) => {
+                    err.log_with_imp(imp);
+                    false
+                }
             }
-        }
-    })
-    .into_glib()
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn audiosrc_unprepare<T: AudioSrcImpl>(
     ptr: *mut ffi::GstAudioSrc,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, false, {
-        match imp.unprepare() {
-            Ok(()) => true,
-            Err(err) => {
-                err.log_with_imp(imp);
-                false
+        gst::panic_to_error!(imp, false, {
+            match imp.unprepare() {
+                Ok(()) => true,
+                Err(err) => {
+                    err.log_with_imp(imp);
+                    false
+                }
             }
-        }
-    })
-    .into_glib()
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn audiosrc_read<T: AudioSrcImpl>(
@@ -269,27 +279,31 @@ unsafe extern "C" fn audiosrc_read<T: AudioSrcImpl>(
     length: u32,
     timestamp: *mut gst::ffi::GstClockTime,
 ) -> u32 {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
-    let data_slice = if length == 0 {
-        &mut []
-    } else {
-        std::slice::from_raw_parts_mut(data as *mut u8, length as usize)
-    };
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
+        let data_slice = if length == 0 {
+            &mut []
+        } else {
+            std::slice::from_raw_parts_mut(data as *mut u8, length as usize)
+        };
 
-    gst::panic_to_error!(imp, 0, {
-        let (res, timestamp_res) = imp.read(data_slice).unwrap_or((0, gst::ClockTime::NONE));
-        *timestamp = timestamp_res.into_glib();
+        gst::panic_to_error!(imp, 0, {
+            let (res, timestamp_res) = imp.read(data_slice).unwrap_or((0, gst::ClockTime::NONE));
+            *timestamp = timestamp_res.into_glib();
 
-        res
-    })
+            res
+        })
+    }
 }
 
 unsafe extern "C" fn audiosrc_reset<T: AudioSrcImpl>(ptr: *mut ffi::GstAudioSrc) {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, (), {
-        imp.reset();
-    });
+        gst::panic_to_error!(imp, (), {
+            imp.reset();
+        });
+    }
 }

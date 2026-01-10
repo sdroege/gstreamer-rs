@@ -15,9 +15,11 @@ impl GLDisplayWayland {
     pub unsafe fn with_display(
         display: uintptr_t,
     ) -> Result<GLDisplayWayland, glib::error::BoolError> {
-        from_glib_full::<_, Option<GLDisplayWayland>>(
-            crate::ffi::gst_gl_display_wayland_new_with_display(display as gpointer),
-        )
-        .ok_or_else(|| glib::bool_error!("Failed to create new Wayland GL display"))
+        unsafe {
+            from_glib_full::<_, Option<GLDisplayWayland>>(
+                crate::ffi::gst_gl_display_wayland_new_with_display(display as gpointer),
+            )
+            .ok_or_else(|| glib::bool_error!("Failed to create new Wayland GL display"))
+        }
     }
 }

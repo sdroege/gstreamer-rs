@@ -120,30 +120,36 @@ unsafe extern "C" fn child_proxy_get_child_by_name<T: ChildProxyImpl>(
     child_proxy: *mut ffi::GstChildProxy,
     name: *const libc::c_char,
 ) -> *mut glib::gobject_ffi::GObject {
-    let instance = &*(child_proxy as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(child_proxy as *mut T::Instance);
+        let imp = instance.imp();
 
-    imp.child_by_name(&glib::GString::from_glib_borrow(name))
-        .into_glib_ptr()
+        imp.child_by_name(&glib::GString::from_glib_borrow(name))
+            .into_glib_ptr()
+    }
 }
 
 unsafe extern "C" fn child_proxy_get_child_by_index<T: ChildProxyImpl>(
     child_proxy: *mut ffi::GstChildProxy,
     index: u32,
 ) -> *mut glib::gobject_ffi::GObject {
-    let instance = &*(child_proxy as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(child_proxy as *mut T::Instance);
+        let imp = instance.imp();
 
-    imp.child_by_index(index).into_glib_ptr()
+        imp.child_by_index(index).into_glib_ptr()
+    }
 }
 
 unsafe extern "C" fn child_proxy_get_children_count<T: ChildProxyImpl>(
     child_proxy: *mut ffi::GstChildProxy,
 ) -> u32 {
-    let instance = &*(child_proxy as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(child_proxy as *mut T::Instance);
+        let imp = instance.imp();
 
-    imp.children_count()
+        imp.children_count()
+    }
 }
 
 unsafe extern "C" fn child_proxy_child_added<T: ChildProxyImpl>(
@@ -151,13 +157,15 @@ unsafe extern "C" fn child_proxy_child_added<T: ChildProxyImpl>(
     child: *mut glib::gobject_ffi::GObject,
     name: *const libc::c_char,
 ) {
-    let instance = &*(child_proxy as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(child_proxy as *mut T::Instance);
+        let imp = instance.imp();
 
-    imp.child_added(
-        &from_glib_borrow(child),
-        &glib::GString::from_glib_borrow(name),
-    )
+        imp.child_added(
+            &from_glib_borrow(child),
+            &glib::GString::from_glib_borrow(name),
+        )
+    }
 }
 
 unsafe extern "C" fn child_proxy_child_removed<T: ChildProxyImpl>(
@@ -165,11 +173,13 @@ unsafe extern "C" fn child_proxy_child_removed<T: ChildProxyImpl>(
     child: *mut glib::gobject_ffi::GObject,
     name: *const libc::c_char,
 ) {
-    let instance = &*(child_proxy as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(child_proxy as *mut T::Instance);
+        let imp = instance.imp();
 
-    imp.child_removed(
-        &from_glib_borrow(child),
-        &glib::GString::from_glib_borrow(name),
-    )
+        imp.child_removed(
+            &from_glib_borrow(child),
+            &glib::GString::from_glib_borrow(name),
+        )
+    }
 }

@@ -49,13 +49,15 @@ pub trait DmaBufAllocatorExtManual: IsA<DmaBufAllocator> + 'static {
         fd: A,
         size: usize,
     ) -> Result<gst::Memory, glib::BoolError> {
-        skip_assert_initialized!();
-        Option::<_>::from_glib_full(ffi::gst_dmabuf_allocator_alloc(
-            self.unsafe_cast_ref::<gst::Allocator>().to_glib_none().0,
-            fd.into_raw_fd(),
-            size,
-        ))
-        .ok_or_else(|| glib::bool_error!("Failed to allocate memory"))
+        unsafe {
+            skip_assert_initialized!();
+            Option::<_>::from_glib_full(ffi::gst_dmabuf_allocator_alloc(
+                self.unsafe_cast_ref::<gst::Allocator>().to_glib_none().0,
+                fd.into_raw_fd(),
+                size,
+            ))
+            .ok_or_else(|| glib::bool_error!("Failed to allocate memory"))
+        }
     }
 
     #[cfg(feature = "v1_16")]
@@ -67,14 +69,16 @@ pub trait DmaBufAllocatorExtManual: IsA<DmaBufAllocator> + 'static {
         size: usize,
         flags: FdMemoryFlags,
     ) -> Result<gst::Memory, glib::BoolError> {
-        skip_assert_initialized!();
-        Option::<_>::from_glib_full(ffi::gst_dmabuf_allocator_alloc_with_flags(
-            self.unsafe_cast_ref::<gst::Allocator>().to_glib_none().0,
-            fd,
-            size,
-            flags.into_glib(),
-        ))
-        .ok_or_else(|| glib::bool_error!("Failed to allocate memory"))
+        unsafe {
+            skip_assert_initialized!();
+            Option::<_>::from_glib_full(ffi::gst_dmabuf_allocator_alloc_with_flags(
+                self.unsafe_cast_ref::<gst::Allocator>().to_glib_none().0,
+                fd,
+                size,
+                flags.into_glib(),
+            ))
+            .ok_or_else(|| glib::bool_error!("Failed to allocate memory"))
+        }
     }
 }
 

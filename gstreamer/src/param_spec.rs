@@ -44,7 +44,7 @@ impl HasParamSpec for crate::Fraction {
 impl FromGlibPtrFull<*mut gobject_ffi::GParamSpec> for ParamSpecFraction {
     #[inline]
     unsafe fn from_glib_full(ptr: *mut gobject_ffi::GParamSpec) -> Self {
-        from_glib_full(ptr as *mut ffi::GstParamSpecFraction)
+        unsafe { from_glib_full(ptr as *mut ffi::GstParamSpecFraction) }
     }
 }
 
@@ -240,7 +240,7 @@ impl HasParamSpec for crate::Array {
 impl FromGlibPtrFull<*mut gobject_ffi::GParamSpec> for ParamSpecArray {
     #[inline]
     unsafe fn from_glib_full(ptr: *mut gobject_ffi::GParamSpec) -> Self {
-        from_glib_full(ptr as *mut ffi::GstParamSpecArray)
+        unsafe { from_glib_full(ptr as *mut ffi::GstParamSpecArray) }
     }
 }
 

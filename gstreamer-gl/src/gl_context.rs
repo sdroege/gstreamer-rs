@@ -12,12 +12,14 @@ impl GLContext {
         context_type: GLPlatform,
         available_apis: GLAPI,
     ) -> Option<Self> {
-        from_glib_full(ffi::gst_gl_context_new_wrapped(
-            display.as_ref().to_glib_none().0,
-            handle,
-            context_type.into_glib(),
-            available_apis.into_glib(),
-        ))
+        unsafe {
+            from_glib_full(ffi::gst_gl_context_new_wrapped(
+                display.as_ref().to_glib_none().0,
+                handle,
+                context_type.into_glib(),
+                available_apis.into_glib(),
+            ))
+        }
     }
 
     #[doc(alias = "get_current_gl_context")]
@@ -72,9 +74,11 @@ pub trait GLContextExtManual: IsA<GLContext> + 'static {
             context: *mut ffi::GstGLContext,
             data: glib::ffi::gpointer,
         ) {
-            let func = std::ptr::read(data as *mut F);
-            let context = GLContext::from_glib_borrow(context);
-            func(context.unsafe_cast_ref())
+            unsafe {
+                let func = std::ptr::read(data as *mut F);
+                let context = GLContext::from_glib_borrow(context);
+                func(context.unsafe_cast_ref())
+            }
         }
 
         unsafe {

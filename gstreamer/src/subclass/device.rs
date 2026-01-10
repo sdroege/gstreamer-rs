@@ -81,26 +81,30 @@ unsafe extern "C" fn device_create_element<T: DeviceImpl>(
     ptr: *mut ffi::GstDevice,
     name: *const libc::c_char,
 ) -> *mut ffi::GstElement {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    match imp.create_element(
-        Option::<glib::GString>::from_glib_borrow(name)
-            .as_ref()
-            .as_ref()
-            .map(|s| s.as_str()),
-    ) {
-        Ok(element) => {
-            // The reference we're going to return, the initial reference is going to
-            // be dropped here now
-            let element = element.into_glib_ptr();
-            // See https://gitlab.freedesktop.org/gstreamer/gstreamer/issues/444
-            glib::gobject_ffi::g_object_force_floating(element as *mut glib::gobject_ffi::GObject);
-            element
-        }
-        Err(err) => {
-            err.log_with_imp(imp);
-            ptr::null_mut()
+        match imp.create_element(
+            Option::<glib::GString>::from_glib_borrow(name)
+                .as_ref()
+                .as_ref()
+                .map(|s| s.as_str()),
+        ) {
+            Ok(element) => {
+                // The reference we're going to return, the initial reference is going to
+                // be dropped here now
+                let element = element.into_glib_ptr();
+                // See https://gitlab.freedesktop.org/gstreamer/gstreamer/issues/444
+                glib::gobject_ffi::g_object_force_floating(
+                    element as *mut glib::gobject_ffi::GObject,
+                );
+                element
+            }
+            Err(err) => {
+                err.log_with_imp(imp);
+                ptr::null_mut()
+            }
         }
     }
 }
@@ -109,15 +113,17 @@ unsafe extern "C" fn device_reconfigure_element<T: DeviceImpl>(
     ptr: *mut ffi::GstDevice,
     element: *mut ffi::GstElement,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    match imp.reconfigure_element(&from_glib_borrow(element)) {
-        Ok(()) => true,
-        Err(err) => {
-            err.log_with_imp(imp);
-            false
+        match imp.reconfigure_element(&from_glib_borrow(element)) {
+            Ok(()) => true,
+            Err(err) => {
+                err.log_with_imp(imp);
+                false
+            }
         }
+        .into_glib()
     }
-    .into_glib()
 }

@@ -336,8 +336,10 @@ pub fn init() -> Result<(), glib::Error> {
 /// This must only be called once during the lifetime of the process, once no GStreamer threads
 /// are running anymore and all GStreamer resources are released.
 pub unsafe fn deinit() {
-    crate::INITIALIZED.store(false, std::sync::atomic::Ordering::SeqCst);
-    ffi::gst_deinit();
+    unsafe {
+        crate::INITIALIZED.store(false, std::sync::atomic::Ordering::SeqCst);
+        ffi::gst_deinit();
+    }
 }
 
 pub const PARAM_FLAG_CONTROLLABLE: glib::ParamFlags = glib::ParamFlags::USER_1;

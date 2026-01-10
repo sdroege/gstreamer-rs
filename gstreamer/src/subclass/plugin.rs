@@ -18,9 +18,9 @@ cfg_if::cfg_if! {
 
 #[macro_export]
 macro_rules! plugin_define(
-    ($name:ident, $description:expr, $plugin_init:ident,
-     $version:expr, $license:expr, $source:expr,
-     $package:expr, $origin:expr $(, $release_datetime:expr)?) => {
+    ($name:ident, $description:expr_2021, $plugin_init:ident,
+     $version:expr_2021, $license:expr_2021, $source:expr_2021,
+     $package:expr_2021, $origin:expr_2021 $(, $release_datetime:expr_2021)?) => {
         pub mod plugin_desc {
             #[repr(transparent)]
             pub struct GstPluginDesc($crate::ffi::GstPluginDesc);
@@ -87,13 +87,13 @@ macro_rules! plugin_define(
             }
 
             $crate::pastey::item! {
-                #[no_mangle]
+                #[unsafe(no_mangle)]
                 #[allow(clippy::missing_safety_doc)]
                 pub unsafe extern "C" fn [<gst_plugin_ $name _register>] () {
                     let _ = plugin_register_static();
                 }
 
-                #[no_mangle]
+                #[unsafe(no_mangle)]
                 #[allow(clippy::missing_safety_doc)]
                 pub unsafe extern "C" fn [<gst_plugin_ $name _get_desc>] () -> *const $crate::ffi::GstPluginDesc {
                     &GST_PLUGIN_DESC.0
@@ -101,7 +101,7 @@ macro_rules! plugin_define(
             }
 
             #[allow(clippy::missing_safety_doc)]
-            unsafe extern "C" fn plugin_init_trampoline(plugin: *mut $crate::ffi::GstPlugin) -> $crate::glib::ffi::gboolean {
+            unsafe extern "C" fn plugin_init_trampoline(plugin: *mut $crate::ffi::GstPlugin) -> $crate::glib::ffi::gboolean { unsafe {
                 let panic_result = std::panic::catch_unwind(
                     std::panic::AssertUnwindSafe(|| super::$plugin_init(&$crate::glib::translate::from_glib_borrow(plugin)))
                 );
@@ -126,7 +126,7 @@ macro_rules! plugin_define(
                         $crate::glib::ffi::GFALSE
                     }
                 }
-            }
+            }}
         }
         pub use self::plugin_desc::plugin_register_static;
     };

@@ -45,10 +45,10 @@ macro_rules! declare_concrete_message(
             }
 
             #[inline]
-            unsafe fn view(message: &gst::MessageRef) -> PlayMessage<'_> {
+            unsafe fn view(message: &gst::MessageRef) -> PlayMessage<'_> { unsafe {
                 let message = &*(message as *const gst::MessageRef as *const Self);
                 PlayMessage::$name(message)
-            }
+            }}
         }
 
         impl std::ops::Deref for $name {

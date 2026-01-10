@@ -12,22 +12,24 @@ mod tutorials_common;
 fn send_value_as_str(v: &glib::SendValue) -> Option<String> {
     if let Ok(s) = v.get::<&str>() {
         Some(s.to_string())
-    } else if let Ok(serialized) = v.serialize() {
-        Some(serialized.into())
     } else {
-        None
+        match v.serialize() {
+            Ok(serialized) => Some(serialized.into()),
+            _ => None,
+        }
     }
 }
 
 fn print_stream_info(info: &DiscovererStreamInfo, depth: usize) {
-    let caps_str = if let Some(caps) = info.caps() {
-        if caps.is_fixed() {
-            gst_pbutils::pb_utils_get_codec_description(&caps)
-        } else {
-            glib::GString::from(caps.to_string())
+    let caps_str = match info.caps() {
+        Some(caps) => {
+            if caps.is_fixed() {
+                gst_pbutils::pb_utils_get_codec_description(&caps)
+            } else {
+                glib::GString::from(caps.to_string())
+            }
         }
-    } else {
-        glib::GString::from("")
+        _ => glib::GString::from(""),
     };
 
     let stream_nick = info.stream_type_nick();
@@ -66,11 +68,16 @@ fn print_stream_info(info: &DiscovererStreamInfo, depth: usize) {
 fn print_topology(info: &DiscovererStreamInfo, depth: usize) {
     print_stream_info(info, depth);
 
-    if let Some(next) = info.next() {
-        print_topology(&next, depth + 1);
-    } else if let Some(container_info) = info.downcast_ref::<DiscovererContainerInfo>() {
-        for stream in container_info.streams() {
-            print_topology(&stream, depth + 1);
+    match info.next() {
+        Some(next) => {
+            print_topology(&next, depth + 1);
+        }
+        _ => {
+            if let Some(container_info) = info.downcast_ref::<DiscovererContainerInfo>() {
+                for stream in container_info.streams() {
+                    print_topology(&stream, depth + 1);
+                }
+            }
         }
     }
 }

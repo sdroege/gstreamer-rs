@@ -460,265 +460,297 @@ unsafe impl<T: AudioEncoderImpl> IsSubclassable<T> for AudioEncoder {
 unsafe extern "C" fn audio_encoder_open<T: AudioEncoderImpl>(
     ptr: *mut ffi::GstAudioEncoder,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, false, {
-        match imp.open() {
-            Ok(()) => true,
-            Err(err) => {
-                imp.post_error_message(err);
-                false
+        gst::panic_to_error!(imp, false, {
+            match imp.open() {
+                Ok(()) => true,
+                Err(err) => {
+                    imp.post_error_message(err);
+                    false
+                }
             }
-        }
-    })
-    .into_glib()
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn audio_encoder_close<T: AudioEncoderImpl>(
     ptr: *mut ffi::GstAudioEncoder,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, false, {
-        match imp.close() {
-            Ok(()) => true,
-            Err(err) => {
-                imp.post_error_message(err);
-                false
+        gst::panic_to_error!(imp, false, {
+            match imp.close() {
+                Ok(()) => true,
+                Err(err) => {
+                    imp.post_error_message(err);
+                    false
+                }
             }
-        }
-    })
-    .into_glib()
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn audio_encoder_start<T: AudioEncoderImpl>(
     ptr: *mut ffi::GstAudioEncoder,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, false, {
-        match imp.start() {
-            Ok(()) => true,
-            Err(err) => {
-                imp.post_error_message(err);
-                false
+        gst::panic_to_error!(imp, false, {
+            match imp.start() {
+                Ok(()) => true,
+                Err(err) => {
+                    imp.post_error_message(err);
+                    false
+                }
             }
-        }
-    })
-    .into_glib()
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn audio_encoder_stop<T: AudioEncoderImpl>(
     ptr: *mut ffi::GstAudioEncoder,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, false, {
-        match imp.stop() {
-            Ok(()) => true,
-            Err(err) => {
-                imp.post_error_message(err);
-                false
+        gst::panic_to_error!(imp, false, {
+            match imp.stop() {
+                Ok(()) => true,
+                Err(err) => {
+                    imp.post_error_message(err);
+                    false
+                }
             }
-        }
-    })
-    .into_glib()
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn audio_encoder_set_format<T: AudioEncoderImpl>(
     ptr: *mut ffi::GstAudioEncoder,
     info: *mut ffi::GstAudioInfo,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, false, {
-        match imp.set_format(&from_glib_none(info)) {
-            Ok(()) => true,
-            Err(err) => {
-                err.log_with_imp(imp);
-                false
+        gst::panic_to_error!(imp, false, {
+            match imp.set_format(&from_glib_none(info)) {
+                Ok(()) => true,
+                Err(err) => {
+                    err.log_with_imp(imp);
+                    false
+                }
             }
-        }
-    })
-    .into_glib()
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn audio_encoder_handle_frame<T: AudioEncoderImpl>(
     ptr: *mut ffi::GstAudioEncoder,
     buffer: *mut *mut gst::ffi::GstBuffer,
 ) -> gst::ffi::GstFlowReturn {
-    // FIXME: Misgenerated in gstreamer-audio-sys
-    let buffer = buffer as *mut gst::ffi::GstBuffer;
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        // FIXME: Misgenerated in gstreamer-audio-sys
+        let buffer = buffer as *mut gst::ffi::GstBuffer;
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, gst::FlowReturn::Error, {
-        imp.handle_frame(Option::<gst::Buffer>::from_glib_none(buffer).as_ref())
-            .into()
-    })
-    .into_glib()
+        gst::panic_to_error!(imp, gst::FlowReturn::Error, {
+            imp.handle_frame(Option::<gst::Buffer>::from_glib_none(buffer).as_ref())
+                .into()
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn audio_encoder_pre_push<T: AudioEncoderImpl>(
     ptr: *mut ffi::GstAudioEncoder,
     buffer: *mut *mut gst::ffi::GstBuffer,
 ) -> gst::ffi::GstFlowReturn {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, gst::FlowReturn::Error, {
-        match imp.pre_push(from_glib_full(*buffer)) {
-            Ok(Some(new_buffer)) => {
-                *buffer = new_buffer.into_glib_ptr();
-                Ok(gst::FlowSuccess::Ok)
+        gst::panic_to_error!(imp, gst::FlowReturn::Error, {
+            match imp.pre_push(from_glib_full(*buffer)) {
+                Ok(Some(new_buffer)) => {
+                    *buffer = new_buffer.into_glib_ptr();
+                    Ok(gst::FlowSuccess::Ok)
+                }
+                Ok(None) => {
+                    *buffer = ptr::null_mut();
+                    Ok(gst::FlowSuccess::Ok)
+                }
+                Err(err) => Err(err),
             }
-            Ok(None) => {
-                *buffer = ptr::null_mut();
-                Ok(gst::FlowSuccess::Ok)
-            }
-            Err(err) => Err(err),
-        }
-        .into()
-    })
-    .into_glib()
+            .into()
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn audio_encoder_flush<T: AudioEncoderImpl>(ptr: *mut ffi::GstAudioEncoder) {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, (), { AudioEncoderImpl::flush(imp,) })
+        gst::panic_to_error!(imp, (), { AudioEncoderImpl::flush(imp,) })
+    }
 }
 
 unsafe extern "C" fn audio_encoder_negotiate<T: AudioEncoderImpl>(
     ptr: *mut ffi::GstAudioEncoder,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, false, {
-        match imp.negotiate() {
-            Ok(()) => true,
-            Err(err) => {
-                err.log_with_imp(imp);
-                false
+        gst::panic_to_error!(imp, false, {
+            match imp.negotiate() {
+                Ok(()) => true,
+                Err(err) => {
+                    err.log_with_imp(imp);
+                    false
+                }
             }
-        }
-    })
-    .into_glib()
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn audio_encoder_getcaps<T: AudioEncoderImpl>(
     ptr: *mut ffi::GstAudioEncoder,
     filter: *mut gst::ffi::GstCaps,
 ) -> *mut gst::ffi::GstCaps {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, gst::Caps::new_empty(), {
-        AudioEncoderImpl::caps(
-            imp,
-            Option::<gst::Caps>::from_glib_borrow(filter)
-                .as_ref()
-                .as_ref(),
-        )
-    })
-    .into_glib_ptr()
+        gst::panic_to_error!(imp, gst::Caps::new_empty(), {
+            AudioEncoderImpl::caps(
+                imp,
+                Option::<gst::Caps>::from_glib_borrow(filter)
+                    .as_ref()
+                    .as_ref(),
+            )
+        })
+        .into_glib_ptr()
+    }
 }
 
 unsafe extern "C" fn audio_encoder_sink_event<T: AudioEncoderImpl>(
     ptr: *mut ffi::GstAudioEncoder,
     event: *mut gst::ffi::GstEvent,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, false, { imp.sink_event(from_glib_full(event)) }).into_glib()
+        gst::panic_to_error!(imp, false, { imp.sink_event(from_glib_full(event)) }).into_glib()
+    }
 }
 
 unsafe extern "C" fn audio_encoder_sink_query<T: AudioEncoderImpl>(
     ptr: *mut ffi::GstAudioEncoder,
     query: *mut gst::ffi::GstQuery,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, false, {
-        imp.sink_query(gst::QueryRef::from_mut_ptr(query))
-    })
-    .into_glib()
+        gst::panic_to_error!(imp, false, {
+            imp.sink_query(gst::QueryRef::from_mut_ptr(query))
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn audio_encoder_src_event<T: AudioEncoderImpl>(
     ptr: *mut ffi::GstAudioEncoder,
     event: *mut gst::ffi::GstEvent,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, false, { imp.src_event(from_glib_full(event)) }).into_glib()
+        gst::panic_to_error!(imp, false, { imp.src_event(from_glib_full(event)) }).into_glib()
+    }
 }
 
 unsafe extern "C" fn audio_encoder_src_query<T: AudioEncoderImpl>(
     ptr: *mut ffi::GstAudioEncoder,
     query: *mut gst::ffi::GstQuery,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, false, {
-        imp.src_query(gst::QueryRef::from_mut_ptr(query))
-    })
-    .into_glib()
+        gst::panic_to_error!(imp, false, {
+            imp.src_query(gst::QueryRef::from_mut_ptr(query))
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn audio_encoder_propose_allocation<T: AudioEncoderImpl>(
     ptr: *mut ffi::GstAudioEncoder,
     query: *mut gst::ffi::GstQuery,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
-    let query = match gst::QueryRef::from_mut_ptr(query).view_mut() {
-        gst::QueryViewMut::Allocation(allocation) => allocation,
-        _ => unreachable!(),
-    };
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
+        let query = match gst::QueryRef::from_mut_ptr(query).view_mut() {
+            gst::QueryViewMut::Allocation(allocation) => allocation,
+            _ => unreachable!(),
+        };
 
-    gst::panic_to_error!(imp, false, {
-        match imp.propose_allocation(query) {
-            Ok(()) => true,
-            Err(err) => {
-                err.log_with_imp(imp);
-                false
+        gst::panic_to_error!(imp, false, {
+            match imp.propose_allocation(query) {
+                Ok(()) => true,
+                Err(err) => {
+                    err.log_with_imp(imp);
+                    false
+                }
             }
-        }
-    })
-    .into_glib()
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn audio_encoder_decide_allocation<T: AudioEncoderImpl>(
     ptr: *mut ffi::GstAudioEncoder,
     query: *mut gst::ffi::GstQuery,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
-    let query = match gst::QueryRef::from_mut_ptr(query).view_mut() {
-        gst::QueryViewMut::Allocation(allocation) => allocation,
-        _ => unreachable!(),
-    };
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
+        let query = match gst::QueryRef::from_mut_ptr(query).view_mut() {
+            gst::QueryViewMut::Allocation(allocation) => allocation,
+            _ => unreachable!(),
+        };
 
-    gst::panic_to_error!(imp, false, {
-        match imp.decide_allocation(query) {
-            Ok(()) => true,
-            Err(err) => {
-                err.log_with_imp(imp);
-                false
+        gst::panic_to_error!(imp, false, {
+            match imp.decide_allocation(query) {
+                Ok(()) => true,
+                Err(err) => {
+                    err.log_with_imp(imp);
+                    false
+                }
             }
-        }
-    })
-    .into_glib()
+        })
+        .into_glib()
+    }
 }

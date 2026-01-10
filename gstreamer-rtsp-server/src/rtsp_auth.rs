@@ -72,18 +72,20 @@ unsafe extern "C" fn accept_certificate_trampoline<
 where
     P: IsA<RTSPAuth>,
 {
-    let f: &F = &*(f as *const F);
-    match f(
-        RTSPAuth::from_glib_borrow(this).unsafe_cast_ref(),
-        &from_glib_borrow(connection),
-        &from_glib_borrow(peer_cert),
-        from_glib(errors),
-    ) {
-        Ok(()) => true,
-        Err(err) => {
-            err.log();
-            false
+    unsafe {
+        let f: &F = &*(f as *const F);
+        match f(
+            RTSPAuth::from_glib_borrow(this).unsafe_cast_ref(),
+            &from_glib_borrow(connection),
+            &from_glib_borrow(peer_cert),
+            from_glib(errors),
+        ) {
+            Ok(()) => true,
+            Err(err) => {
+                err.log();
+                false
+            }
         }
+        .into_glib()
     }
-    .into_glib()
 }

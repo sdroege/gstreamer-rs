@@ -661,7 +661,7 @@ impl ToOwned for SDPMediaRef {
 }
 
 macro_rules! define_iter(
-    ($name:ident, $typ:ty, $get_item:expr, $get_len:expr) => {
+    ($name:ident, $typ:ty, $get_item:expr_2021, $get_len:expr_2021) => {
     #[must_use = "iterators are lazy and do nothing unless consumed"]
     #[derive(Debug)]
     pub struct $name<'a> {

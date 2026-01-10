@@ -595,9 +595,11 @@ impl Harness {
 
     #[inline]
     unsafe fn from_glib_full(ptr: *mut ffi::GstHarness) -> Harness {
-        debug_assert!(!ptr.is_null());
+        unsafe {
+            debug_assert!(!ptr.is_null());
 
-        Harness(ptr::NonNull::new_unchecked(ptr))
+            Harness(ptr::NonNull::new_unchecked(ptr))
+        }
     }
 
     #[doc(alias = "gst_harness_new")]

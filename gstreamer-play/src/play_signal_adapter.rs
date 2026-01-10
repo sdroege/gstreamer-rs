@@ -25,8 +25,10 @@ impl PlaySignalAdapter {
             object: u64,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(&from_glib_borrow(this), FromGlib::from_glib(object))
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(&from_glib_borrow(this), FromGlib::from_glib(object))
+            }
         }
         #[allow(clippy::cast_ptr_alignment)]
         unsafe {
@@ -56,8 +58,10 @@ impl PlaySignalAdapter {
             object: u64,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(&from_glib_borrow(this), FromGlib::from_glib(object))
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(&from_glib_borrow(this), FromGlib::from_glib(object))
+            }
         }
         #[allow(clippy::cast_ptr_alignment)]
         unsafe {
@@ -85,11 +89,13 @@ impl PlaySignalAdapter {
             object: u64,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                &from_glib_borrow(this),
-                try_from_glib(object).expect("undefined seek position"),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    &from_glib_borrow(this),
+                    try_from_glib(object).expect("undefined seek position"),
+                )
+            }
         }
         #[allow(clippy::cast_ptr_alignment)]
         unsafe {

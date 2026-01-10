@@ -995,13 +995,15 @@ impl CapsRef {
                 s: *mut ffi::GstStructure,
                 user_data: glib::ffi::gpointer,
             ) -> glib::ffi::gboolean {
-                let func = &mut *(user_data as *mut F);
-                let res = func(
-                    CapsFeaturesRef::from_glib_borrow(features),
-                    StructureRef::from_glib_borrow(s),
-                );
+                unsafe {
+                    let func = &mut *(user_data as *mut F);
+                    let res = func(
+                        CapsFeaturesRef::from_glib_borrow(features),
+                        StructureRef::from_glib_borrow(s),
+                    );
 
-                matches!(res, std::ops::ControlFlow::Continue(_)).into_glib()
+                    matches!(res, std::ops::ControlFlow::Continue(_)).into_glib()
+                }
             }
             let func = &mut func as *mut F;
             from_glib(ffi::gst_caps_foreach(
@@ -1027,13 +1029,15 @@ impl CapsRef {
                 s: *mut ffi::GstStructure,
                 user_data: glib::ffi::gpointer,
             ) -> glib::ffi::gboolean {
-                let func = &mut *(user_data as *mut F);
-                let res = func(
-                    CapsFeaturesRef::from_glib_borrow_mut(features),
-                    StructureRef::from_glib_borrow_mut(s),
-                );
+                unsafe {
+                    let func = &mut *(user_data as *mut F);
+                    let res = func(
+                        CapsFeaturesRef::from_glib_borrow_mut(features),
+                        StructureRef::from_glib_borrow_mut(s),
+                    );
 
-                matches!(res, std::ops::ControlFlow::Continue(_)).into_glib()
+                    matches!(res, std::ops::ControlFlow::Continue(_)).into_glib()
+                }
             }
             let func = &mut func as *mut F;
             let _ = ffi::gst_caps_map_in_place(
@@ -1059,16 +1063,18 @@ impl CapsRef {
                 s: *mut ffi::GstStructure,
                 user_data: glib::ffi::gpointer,
             ) -> glib::ffi::gboolean {
-                let func = &mut *(user_data as *mut F);
+                unsafe {
+                    let func = &mut *(user_data as *mut F);
 
-                let res = func(
-                    CapsFeaturesRef::from_glib_borrow_mut(features),
-                    StructureRef::from_glib_borrow_mut(s),
-                );
+                    let res = func(
+                        CapsFeaturesRef::from_glib_borrow_mut(features),
+                        StructureRef::from_glib_borrow_mut(s),
+                    );
 
-                match res {
-                    CapsFilterMapAction::Keep => glib::ffi::GTRUE,
-                    CapsFilterMapAction::Remove => glib::ffi::GFALSE,
+                    match res {
+                        CapsFilterMapAction::Keep => glib::ffi::GTRUE,
+                        CapsFilterMapAction::Remove => glib::ffi::GFALSE,
+                    }
                 }
             }
 
@@ -1089,7 +1095,7 @@ pub enum CapsFilterMapAction {
 }
 
 macro_rules! define_iter(
-    ($name:ident, $typ:ty, $styp:ty, $get_item:expr) => {
+    ($name:ident, $typ:ty, $styp:ty, $get_item:expr_2021) => {
         crate::utils::define_fixed_size_iter!(
             $name, $typ, $styp,
             |collection: &CapsRef| collection.size(),

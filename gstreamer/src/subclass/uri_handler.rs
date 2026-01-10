@@ -100,20 +100,24 @@ unsafe extern "C" fn uri_handler_get_type<T: URIHandlerImpl>(
 unsafe extern "C" fn uri_handler_get_protocols<T: URIHandlerImpl>(
     _type_: glib::ffi::GType,
 ) -> *const *const libc::c_char {
-    let data = <T as ObjectSubclassType>::type_data();
-    data.as_ref()
-        .class_data::<glib::StrV>(URIHandler::static_type())
-        .map(|p| p.as_ptr() as *const *const _)
-        .unwrap_or(ptr::null())
+    unsafe {
+        let data = <T as ObjectSubclassType>::type_data();
+        data.as_ref()
+            .class_data::<glib::StrV>(URIHandler::static_type())
+            .map(|p| p.as_ptr() as *const *const _)
+            .unwrap_or(ptr::null())
+    }
 }
 
 unsafe extern "C" fn uri_handler_get_uri<T: URIHandlerImpl>(
     uri_handler: *mut ffi::GstURIHandler,
 ) -> *mut libc::c_char {
-    let instance = &*(uri_handler as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(uri_handler as *mut T::Instance);
+        let imp = instance.imp();
 
-    imp.uri().to_glib_full()
+        imp.uri().to_glib_full()
+    }
 }
 
 unsafe extern "C" fn uri_handler_set_uri<T: URIHandlerImpl>(
@@ -121,16 +125,18 @@ unsafe extern "C" fn uri_handler_set_uri<T: URIHandlerImpl>(
     uri: *const libc::c_char,
     err: *mut *mut glib::ffi::GError,
 ) -> glib::ffi::gboolean {
-    let instance = &*(uri_handler as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(uri_handler as *mut T::Instance);
+        let imp = instance.imp();
 
-    match imp.set_uri(glib::GString::from_glib_borrow(uri).as_str()) {
-        Ok(()) => true.into_glib(),
-        Err(error) => {
-            if !err.is_null() {
-                *err = error.into_glib_ptr();
+        match imp.set_uri(glib::GString::from_glib_borrow(uri).as_str()) {
+            Ok(()) => true.into_glib(),
+            Err(error) => {
+                if !err.is_null() {
+                    *err = error.into_glib_ptr();
+                }
+                false.into_glib()
             }
-            false.into_glib()
         }
     }
 }

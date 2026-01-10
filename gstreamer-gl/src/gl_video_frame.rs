@@ -279,14 +279,16 @@ impl<T> Debug for GLVideoFrameRef<T> {
 impl<'a> GLVideoFrameRef<&'a gst::BufferRef> {
     #[inline]
     pub unsafe fn from_glib_borrow(frame: *const gst_video::ffi::GstVideoFrame) -> Borrowed<Self> {
-        debug_assert!(!frame.is_null());
+        unsafe {
+            debug_assert!(!frame.is_null());
 
-        let frame = ptr::read(frame);
-        Borrowed::new(Self {
-            frame,
-            unmap: false,
-            phantom: PhantomData,
-        })
+            let frame = ptr::read(frame);
+            Borrowed::new(Self {
+                frame,
+                unmap: false,
+                phantom: PhantomData,
+            })
+        }
     }
 
     #[inline]
@@ -355,13 +357,15 @@ impl<'a> GLVideoFrameRef<&'a gst::BufferRef> {
 impl<'a> GLVideoFrameRef<&'a mut gst::BufferRef> {
     #[inline]
     pub unsafe fn from_glib_borrow_mut(frame: *mut gst_video::ffi::GstVideoFrame) -> Self {
-        debug_assert!(!frame.is_null());
+        unsafe {
+            debug_assert!(!frame.is_null());
 
-        let frame = ptr::read(frame);
-        Self {
-            frame,
-            unmap: false,
-            phantom: PhantomData,
+            let frame = ptr::read(frame);
+            Self {
+                frame,
+                unmap: false,
+                phantom: PhantomData,
+            }
         }
     }
 

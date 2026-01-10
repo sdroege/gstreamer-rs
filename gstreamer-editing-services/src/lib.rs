@@ -33,7 +33,9 @@ pub fn init() -> Result<(), glib::BoolError> {
 }
 
 pub unsafe fn deinit() {
-    ffi::ges_deinit();
+    unsafe {
+        ffi::ges_deinit();
+    }
 }
 
 macro_rules! assert_initialized_main_thread {

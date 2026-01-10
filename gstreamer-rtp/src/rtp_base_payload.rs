@@ -49,8 +49,10 @@ pub trait RTPBasePayloadExtManual: IsA<RTPBasePayload> + 'static {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(RTPBasePayload::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(RTPBasePayload::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box<F> = Box::new(f);

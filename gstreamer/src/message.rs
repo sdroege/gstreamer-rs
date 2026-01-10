@@ -404,16 +404,16 @@ macro_rules! declare_concrete_message(
             }
 
             #[inline]
-            unsafe fn view(message: &MessageRef) -> MessageView<'_> {
+            unsafe fn view(message: &MessageRef) -> MessageView<'_> { unsafe {
                 let message = &*(message as *const MessageRef as *const Self);
                 MessageView::$name(message)
-            }
+            }}
 
             #[inline]
-            unsafe fn view_mut(message: &mut MessageRef) -> MessageViewMut<'_> {
+            unsafe fn view_mut(message: &mut MessageRef) -> MessageViewMut<'_> { unsafe {
                 let message = &mut *(message as *mut MessageRef as *mut Self);
                 MessageViewMut::$name(message)
-            }
+            }}
         }
 
         impl Deref for $name {
@@ -2823,7 +2823,7 @@ impl<'a> MessageBuilder<'a> {
 }
 
 macro_rules! message_builder_generic_impl {
-    ($new_fn:expr) => {
+    ($new_fn:expr_2021) => {
         #[allow(clippy::needless_update)]
         pub fn src<O: IsA<Object> + Cast + Clone>(self, src: &O) -> Self {
             Self {

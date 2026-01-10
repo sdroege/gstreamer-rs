@@ -43,12 +43,14 @@ unsafe extern "C" fn video_sink_show_frame<T: VideoSinkImpl>(
     ptr: *mut ffi::GstVideoSink,
     buffer: *mut gst::ffi::GstBuffer,
 ) -> gst::ffi::GstFlowReturn {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
-    let buffer = from_glib_borrow(buffer);
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
+        let buffer = from_glib_borrow(buffer);
 
-    gst::panic_to_error!(imp, gst::FlowReturn::Error, {
-        imp.show_frame(&buffer).into()
-    })
-    .into_glib()
+        gst::panic_to_error!(imp, gst::FlowReturn::Error, {
+            imp.show_frame(&buffer).into()
+        })
+        .into_glib()
+    }
 }

@@ -18,8 +18,10 @@ unsafe extern "C" fn trampoline_watch<
     pool: *mut ffi::GstRTSPSessionPool,
     func: gpointer,
 ) -> gboolean {
-    let func: &mut F = &mut *(func as *mut F);
-    func(&from_glib_borrow(pool)).into_glib()
+    unsafe {
+        let func: &mut F = &mut *(func as *mut F);
+        func(&from_glib_borrow(pool)).into_glib()
+    }
 }
 
 unsafe extern "C" fn destroy_closure_watch<
@@ -27,7 +29,9 @@ unsafe extern "C" fn destroy_closure_watch<
 >(
     ptr: gpointer,
 ) {
-    let _ = Box::<F>::from_raw(ptr as *mut _);
+    unsafe {
+        let _ = Box::<F>::from_raw(ptr as *mut _);
+    }
 }
 
 fn into_raw_watch<F: FnMut(&RTSPSessionPool) -> ControlFlow + Send + 'static>(func: F) -> gpointer {

@@ -245,16 +245,16 @@ macro_rules! declare_concrete_query(
             }
 
             #[inline]
-            unsafe fn view(query: &QueryRef) -> QueryView<'_> {
+            unsafe fn view(query: &QueryRef) -> QueryView<'_> { unsafe {
                 let query = &*(query as *const QueryRef as *const Self);
                 QueryView::$name(query)
-            }
+            }}
 
             #[inline]
-            unsafe fn view_mut(query: &mut QueryRef) -> QueryViewMut<'_> {
+            unsafe fn view_mut(query: &mut QueryRef) -> QueryViewMut<'_> { unsafe {
                 let query = &mut *(query as *mut QueryRef as *mut Self);
                 QueryViewMut::$name(query)
-            }
+            }}
         }
 
         impl Deref for $name {

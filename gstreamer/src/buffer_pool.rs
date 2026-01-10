@@ -52,18 +52,22 @@ pub struct BufferPoolConfigRef(StructureRef);
 impl BufferPoolConfigRef {
     #[inline]
     pub unsafe fn from_glib_borrow<'a>(ptr: *const ffi::GstStructure) -> &'a BufferPoolConfigRef {
-        debug_assert!(!ptr.is_null());
+        unsafe {
+            debug_assert!(!ptr.is_null());
 
-        &*(ptr as *mut StructureRef as *mut BufferPoolConfigRef)
+            &*(ptr as *mut StructureRef as *mut BufferPoolConfigRef)
+        }
     }
 
     #[inline]
     pub unsafe fn from_glib_borrow_mut<'a>(
         ptr: *mut ffi::GstStructure,
     ) -> &'a mut BufferPoolConfigRef {
-        debug_assert!(!ptr.is_null());
+        unsafe {
+            debug_assert!(!ptr.is_null());
 
-        &mut *(ptr as *mut StructureRef as *mut BufferPoolConfigRef)
+            &mut *(ptr as *mut StructureRef as *mut BufferPoolConfigRef)
+        }
     }
 
     #[inline]
@@ -378,7 +382,7 @@ impl<'a> ToGlibPtrMut<'a, *mut ffi::GstBufferPoolAcquireParams> for BufferPoolAc
 impl FromGlibPtrNone<*mut ffi::GstBufferPoolAcquireParams> for BufferPoolAcquireParams {
     #[inline]
     unsafe fn from_glib_none(ptr: *mut ffi::GstBufferPoolAcquireParams) -> Self {
-        Self(*ptr)
+        unsafe { Self(*ptr) }
     }
 }
 

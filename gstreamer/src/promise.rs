@@ -51,22 +51,24 @@ impl Promise {
             promise: *mut ffi::GstPromise,
             user_data: glib::ffi::gpointer,
         ) {
-            let user_data: &mut Option<F> = &mut *(user_data as *mut _);
-            let callback = user_data.take().unwrap();
+            unsafe {
+                let user_data: &mut Option<F> = &mut *(user_data as *mut _);
+                let callback = user_data.take().unwrap();
 
-            let promise: Borrowed<Promise> = from_glib_borrow(promise);
+                let promise: Borrowed<Promise> = from_glib_borrow(promise);
 
-            let res = match promise.wait() {
-                PromiseResult::Replied => Ok(promise.get_reply()),
-                PromiseResult::Interrupted => Err(PromiseError::Interrupted),
-                PromiseResult::Expired => Err(PromiseError::Expired),
-                PromiseResult::Pending => {
-                    panic!("Promise resolved but returned Pending");
-                }
-                err => Err(PromiseError::Other(err)),
-            };
+                let res = match promise.wait() {
+                    PromiseResult::Replied => Ok(promise.get_reply()),
+                    PromiseResult::Interrupted => Err(PromiseError::Interrupted),
+                    PromiseResult::Expired => Err(PromiseError::Expired),
+                    PromiseResult::Pending => {
+                        panic!("Promise resolved but returned Pending");
+                    }
+                    err => Err(PromiseError::Other(err)),
+                };
 
-            callback(res);
+                callback(res);
+            }
         }
 
         unsafe extern "C" fn free_user_data<
@@ -74,7 +76,9 @@ impl Promise {
         >(
             user_data: glib::ffi::gpointer,
         ) {
-            let _: Box<Option<F>> = Box::from_raw(user_data as *mut _);
+            unsafe {
+                let _: Box<Option<F>> = Box::from_raw(user_data as *mut _);
+            }
         }
 
         unsafe {

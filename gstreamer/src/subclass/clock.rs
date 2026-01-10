@@ -197,38 +197,44 @@ unsafe extern "C" fn clock_change_resolution<T: ClockImpl>(
     old_resolution: ffi::GstClockTime,
     new_resolution: ffi::GstClockTime,
 ) -> ffi::GstClockTime {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    let old_resolution = match from_glib(old_resolution) {
-        Some(old_resolution) => old_resolution,
-        None => return ffi::GST_CLOCK_TIME_NONE,
-    };
-    let new_resolution = match from_glib(new_resolution) {
-        Some(new_resolution) => new_resolution,
-        None => return ffi::GST_CLOCK_TIME_NONE,
-    };
+        let old_resolution = match from_glib(old_resolution) {
+            Some(old_resolution) => old_resolution,
+            None => return ffi::GST_CLOCK_TIME_NONE,
+        };
+        let new_resolution = match from_glib(new_resolution) {
+            Some(new_resolution) => new_resolution,
+            None => return ffi::GST_CLOCK_TIME_NONE,
+        };
 
-    imp.change_resolution(old_resolution, new_resolution)
-        .into_glib()
+        imp.change_resolution(old_resolution, new_resolution)
+            .into_glib()
+    }
 }
 
 unsafe extern "C" fn clock_get_resolution<T: ClockImpl>(
     ptr: *mut ffi::GstClock,
 ) -> ffi::GstClockTime {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    imp.resolution().into_glib()
+        imp.resolution().into_glib()
+    }
 }
 
 unsafe extern "C" fn clock_get_internal_time<T: ClockImpl>(
     ptr: *mut ffi::GstClock,
 ) -> ffi::GstClockTime {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    imp.internal_time().into_glib()
+        imp.internal_time().into_glib()
+    }
 }
 
 unsafe extern "C" fn clock_wait<T: ClockImpl>(
@@ -236,33 +242,39 @@ unsafe extern "C" fn clock_wait<T: ClockImpl>(
     id: *mut ffi::GstClockEntry,
     jitter: *mut ffi::GstClockTimeDiff,
 ) -> ffi::GstClockReturn {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    let (res, j) = imp.wait(&from_glib_borrow(id as ffi::GstClockID));
-    if !jitter.is_null() {
-        *jitter = j;
+        let (res, j) = imp.wait(&from_glib_borrow(id as ffi::GstClockID));
+        if !jitter.is_null() {
+            *jitter = j;
+        }
+
+        ClockReturn::from(res).into_glib()
     }
-
-    ClockReturn::from(res).into_glib()
 }
 
 unsafe extern "C" fn clock_wait_async<T: ClockImpl>(
     ptr: *mut ffi::GstClock,
     id: *mut ffi::GstClockEntry,
 ) -> ffi::GstClockReturn {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    ClockReturn::from(imp.wait_async(&from_glib_borrow(id as ffi::GstClockID))).into_glib()
+        ClockReturn::from(imp.wait_async(&from_glib_borrow(id as ffi::GstClockID))).into_glib()
+    }
 }
 
 unsafe extern "C" fn clock_unschedule<T: ClockImpl>(
     ptr: *mut ffi::GstClock,
     id: *mut ffi::GstClockEntry,
 ) {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    imp.unschedule(&from_glib_borrow(id as ffi::GstClockID));
+        imp.unschedule(&from_glib_borrow(id as ffi::GstClockID));
+    }
 }

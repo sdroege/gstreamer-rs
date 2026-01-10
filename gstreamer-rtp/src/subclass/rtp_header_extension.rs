@@ -283,23 +283,27 @@ unsafe impl<T: RTPHeaderExtensionImpl> IsSubclassable<T> for RTPHeaderExtension 
 unsafe extern "C" fn get_supported_flags<T: RTPHeaderExtensionImpl>(
     ptr: *mut ffi::GstRTPHeaderExtension,
 ) -> ffi::GstRTPHeaderExtensionFlags {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, crate::RTPHeaderExtensionFlags::empty(), {
-        imp.supported_flags()
-    })
-    .into_glib()
+        gst::panic_to_error!(imp, crate::RTPHeaderExtensionFlags::empty(), {
+            imp.supported_flags()
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn get_max_size<T: RTPHeaderExtensionImpl>(
     ptr: *mut ffi::GstRTPHeaderExtension,
     input: *const gst::ffi::GstBuffer,
 ) -> usize {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, 0, { imp.max_size(gst::BufferRef::from_ptr(input)) })
+        gst::panic_to_error!(imp, 0, { imp.max_size(gst::BufferRef::from_ptr(input)) })
+    }
 }
 
 unsafe extern "C" fn write<T: RTPHeaderExtensionImpl>(
@@ -310,27 +314,29 @@ unsafe extern "C" fn write<T: RTPHeaderExtensionImpl>(
     output_data: *mut u8,
     output_data_len: usize,
 ) -> isize {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, -1, {
-        match imp.write(
-            gst::BufferRef::from_ptr(input),
-            from_glib(write_flags),
-            gst::BufferRef::from_ptr(output),
-            if output_data_len == 0 {
-                &mut []
-            } else {
-                std::slice::from_raw_parts_mut(output_data, output_data_len)
-            },
-        ) {
-            Ok(len) => len as isize,
-            Err(err) => {
-                err.log_with_imp(imp);
-                -1
+        gst::panic_to_error!(imp, -1, {
+            match imp.write(
+                gst::BufferRef::from_ptr(input),
+                from_glib(write_flags),
+                gst::BufferRef::from_ptr(output),
+                if output_data_len == 0 {
+                    &mut []
+                } else {
+                    std::slice::from_raw_parts_mut(output_data, output_data_len)
+                },
+            ) {
+                Ok(len) => len as isize,
+                Err(err) => {
+                    err.log_with_imp(imp);
+                    -1
+                }
             }
-        }
-    })
+        })
+    }
 }
 
 unsafe extern "C" fn read<T: RTPHeaderExtensionImpl>(
@@ -340,65 +346,71 @@ unsafe extern "C" fn read<T: RTPHeaderExtensionImpl>(
     input_data_len: usize,
     output: *mut gst::ffi::GstBuffer,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, false, {
-        match imp.read(
-            from_glib(read_flags),
-            if input_data_len == 0 {
-                &[]
-            } else {
-                std::slice::from_raw_parts(input_data, input_data_len)
-            },
-            gst::BufferRef::from_mut_ptr(output),
-        ) {
-            Ok(_) => true,
-            Err(err) => {
-                err.log_with_imp(imp);
-                false
+        gst::panic_to_error!(imp, false, {
+            match imp.read(
+                from_glib(read_flags),
+                if input_data_len == 0 {
+                    &[]
+                } else {
+                    std::slice::from_raw_parts(input_data, input_data_len)
+                },
+                gst::BufferRef::from_mut_ptr(output),
+            ) {
+                Ok(_) => true,
+                Err(err) => {
+                    err.log_with_imp(imp);
+                    false
+                }
             }
-        }
-    })
-    .into_glib()
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn set_non_rtp_sink_caps<T: RTPHeaderExtensionImpl>(
     ptr: *mut ffi::GstRTPHeaderExtension,
     caps: *mut gst::ffi::GstCaps,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, false, {
-        match imp.set_non_rtp_sink_caps(&from_glib_borrow(caps)) {
-            Ok(_) => true,
-            Err(err) => {
-                err.log_with_imp(imp);
-                false
+        gst::panic_to_error!(imp, false, {
+            match imp.set_non_rtp_sink_caps(&from_glib_borrow(caps)) {
+                Ok(_) => true,
+                Err(err) => {
+                    err.log_with_imp(imp);
+                    false
+                }
             }
-        }
-    })
-    .into_glib()
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn update_non_rtp_src_caps<T: RTPHeaderExtensionImpl>(
     ptr: *mut ffi::GstRTPHeaderExtension,
     caps: *mut gst::ffi::GstCaps,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, false, {
-        match imp.update_non_rtp_src_caps(gst::CapsRef::from_mut_ptr(caps)) {
-            Ok(_) => true,
-            Err(err) => {
-                err.log_with_imp(imp);
-                false
+        gst::panic_to_error!(imp, false, {
+            match imp.update_non_rtp_src_caps(gst::CapsRef::from_mut_ptr(caps)) {
+                Ok(_) => true,
+                Err(err) => {
+                    err.log_with_imp(imp);
+                    false
+                }
             }
-        }
-    })
-    .into_glib()
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn set_attributes<T: RTPHeaderExtensionImpl>(
@@ -406,39 +418,43 @@ unsafe extern "C" fn set_attributes<T: RTPHeaderExtensionImpl>(
     direction: ffi::GstRTPHeaderExtensionDirection,
     attributes: *const libc::c_char,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, false, {
-        match imp.set_attributes(
-            from_glib(direction),
-            &glib::GString::from_glib_borrow(attributes),
-        ) {
-            Ok(_) => true,
-            Err(err) => {
-                err.log_with_imp(imp);
-                false
+        gst::panic_to_error!(imp, false, {
+            match imp.set_attributes(
+                from_glib(direction),
+                &glib::GString::from_glib_borrow(attributes),
+            ) {
+                Ok(_) => true,
+                Err(err) => {
+                    err.log_with_imp(imp);
+                    false
+                }
             }
-        }
-    })
-    .into_glib()
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn set_caps_from_attributes<T: RTPHeaderExtensionImpl>(
     ptr: *mut ffi::GstRTPHeaderExtension,
     caps: *mut gst::ffi::GstCaps,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, false, {
-        match imp.set_caps_from_attributes(gst::CapsRef::from_mut_ptr(caps)) {
-            Ok(_) => true,
-            Err(err) => {
-                err.log_with_imp(imp);
-                false
+        gst::panic_to_error!(imp, false, {
+            match imp.set_caps_from_attributes(gst::CapsRef::from_mut_ptr(caps)) {
+                Ok(_) => true,
+                Err(err) => {
+                    err.log_with_imp(imp);
+                    false
+                }
             }
-        }
-    })
-    .into_glib()
+        })
+        .into_glib()
+    }
 }

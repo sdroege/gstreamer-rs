@@ -93,12 +93,14 @@ unsafe extern "C" fn audio_aggregator_create_output_buffer<T: AudioAggregatorImp
     ptr: *mut ffi::GstAudioAggregator,
     num_frames: u32,
 ) -> *mut gst::ffi::GstBuffer {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, None, { imp.create_output_buffer(num_frames) })
-        .map(|buffer| buffer.into_glib_ptr())
-        .unwrap_or(ptr::null_mut())
+        gst::panic_to_error!(imp, None, { imp.create_output_buffer(num_frames) })
+            .map(|buffer| buffer.into_glib_ptr())
+            .unwrap_or(ptr::null_mut())
+    }
 }
 
 unsafe extern "C" fn audio_aggregator_aggregate_one_buffer<T: AudioAggregatorImpl>(
@@ -110,18 +112,20 @@ unsafe extern "C" fn audio_aggregator_aggregate_one_buffer<T: AudioAggregatorImp
     out_offset: u32,
     num_frames: u32,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, true, {
-        imp.aggregate_one_buffer(
-            &from_glib_borrow(pad),
-            gst::BufferRef::from_ptr(inbuf),
-            in_offset,
-            gst::BufferRef::from_mut_ptr(outbuf),
-            out_offset,
-            num_frames,
-        )
-    })
-    .into_glib()
+        gst::panic_to_error!(imp, true, {
+            imp.aggregate_one_buffer(
+                &from_glib_borrow(pad),
+                gst::BufferRef::from_ptr(inbuf),
+                in_offset,
+                gst::BufferRef::from_mut_ptr(outbuf),
+                out_offset,
+                num_frames,
+            )
+        })
+        .into_glib()
+    }
 }

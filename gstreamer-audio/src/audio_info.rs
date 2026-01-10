@@ -411,10 +411,11 @@ unsafe impl<'a> glib::value::FromValue<'a> for AudioInfo {
     type Checker = glib::value::GenericValueTypeOrNoneChecker<Self>;
 
     unsafe fn from_value(value: &'a glib::Value) -> Self {
-        skip_assert_initialized!();
-        from_glib_none(
-            glib::gobject_ffi::g_value_get_boxed(value.to_glib_none().0) as *mut ffi::GstAudioInfo
-        )
+        unsafe {
+            skip_assert_initialized!();
+            from_glib_none(glib::gobject_ffi::g_value_get_boxed(value.to_glib_none().0)
+                as *mut ffi::GstAudioInfo)
+        }
     }
 }
 
@@ -463,7 +464,7 @@ impl glib::value::ToValueOptional for AudioInfo {
 impl glib::translate::Uninitialized for AudioInfo {
     #[inline]
     unsafe fn uninitialized() -> Self {
-        mem::zeroed()
+        unsafe { mem::zeroed() }
     }
 }
 
@@ -490,7 +491,7 @@ impl<'a> glib::translate::ToGlibPtr<'a, *const ffi::GstAudioInfo> for AudioInfo 
 impl glib::translate::FromGlibPtrNone<*const ffi::GstAudioInfo> for AudioInfo {
     #[inline]
     unsafe fn from_glib_none(ptr: *const ffi::GstAudioInfo) -> Self {
-        Self(ptr::read(ptr))
+        unsafe { Self(ptr::read(ptr)) }
     }
 }
 
@@ -498,7 +499,7 @@ impl glib::translate::FromGlibPtrNone<*const ffi::GstAudioInfo> for AudioInfo {
 impl glib::translate::FromGlibPtrNone<*mut ffi::GstAudioInfo> for AudioInfo {
     #[inline]
     unsafe fn from_glib_none(ptr: *mut ffi::GstAudioInfo) -> Self {
-        Self(ptr::read(ptr))
+        unsafe { Self(ptr::read(ptr)) }
     }
 }
 
@@ -506,9 +507,11 @@ impl glib::translate::FromGlibPtrNone<*mut ffi::GstAudioInfo> for AudioInfo {
 impl glib::translate::FromGlibPtrFull<*mut ffi::GstAudioInfo> for AudioInfo {
     #[inline]
     unsafe fn from_glib_full(ptr: *mut ffi::GstAudioInfo) -> Self {
-        let info = from_glib_none(ptr);
-        glib::ffi::g_free(ptr as *mut _);
-        info
+        unsafe {
+            let info = from_glib_none(ptr);
+            glib::ffi::g_free(ptr as *mut _);
+            info
+        }
     }
 }
 

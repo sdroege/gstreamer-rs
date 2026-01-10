@@ -11,9 +11,11 @@ pub trait GLFramebufferExtManual: IsA<GLFramebuffer> + 'static {
         unsafe extern "C" fn trampoline<F: FnOnce()>(
             data: glib::ffi::gpointer,
         ) -> glib::ffi::gboolean {
-            let func = std::ptr::read(data as *mut F);
-            func();
-            glib::ffi::GTRUE
+            unsafe {
+                let func = std::ptr::read(data as *mut F);
+                func();
+                glib::ffi::GTRUE
+            }
         }
 
         unsafe {

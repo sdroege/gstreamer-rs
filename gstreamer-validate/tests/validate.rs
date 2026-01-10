@@ -9,7 +9,8 @@ use std::{
 fn init() {
     std::sync::Once::new().call_once(|| {
         // Validate should not exit process on criticals
-        env::set_var("GST_VALIDATE", "");
+        // TODO: Audit that the environment access only happens in single-threaded code.
+        unsafe { env::set_var("GST_VALIDATE", "") };
 
         gst::init().unwrap();
         gst_validate::init();

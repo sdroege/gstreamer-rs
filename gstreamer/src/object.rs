@@ -117,8 +117,10 @@ pub trait GstObjectExtManual: IsA<Object> + 'static {
             object: *mut ffi::GstObject,
             user_data: glib::ffi::gpointer,
         ) {
-            let callback: Box<F> = Box::from_raw(user_data as *mut _);
-            callback(Object::from_glib_borrow(object).unsafe_cast_ref());
+            unsafe {
+                let callback: Box<F> = Box::from_raw(user_data as *mut _);
+                callback(Object::from_glib_borrow(object).unsafe_cast_ref());
+            }
         }
 
         unsafe {

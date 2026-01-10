@@ -50,17 +50,19 @@ impl Action {
     pub(crate) unsafe fn from_glib_ptr_borrow_mut(
         ptr: &mut *mut ffi::GstValidateAction,
     ) -> &mut Self {
-        assert_initialized_main_thread!();
+        unsafe {
+            assert_initialized_main_thread!();
 
-        debug_assert_eq!((*(*ptr)).mini_object.refcount, 1);
+            debug_assert_eq!((*(*ptr)).mini_object.refcount, 1);
 
-        debug_assert_eq!(
-            std::mem::size_of::<Action>(),
-            std::mem::size_of::<gst::glib::ffi::gpointer>()
-        );
-        debug_assert!(!ptr.is_null());
+            debug_assert_eq!(
+                std::mem::size_of::<Action>(),
+                std::mem::size_of::<gst::glib::ffi::gpointer>()
+            );
+            debug_assert!(!ptr.is_null());
 
-        &mut *(ptr as *mut *mut ffi::GstValidateAction as *mut Action)
+            &mut *(ptr as *mut *mut ffi::GstValidateAction as *mut Action)
+        }
     }
 
     #[doc(alias = "gst_validate_action_new")]

@@ -286,16 +286,18 @@ unsafe extern "C" fn buffer_pool_acquire_buffer<T: BufferPoolImpl>(
     buffer: *mut *mut ffi::GstBuffer,
     params: *mut ffi::GstBufferPoolAcquireParams,
 ) -> ffi::GstFlowReturn {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
-    let params: Option<BufferPoolAcquireParams> = from_glib_none(params);
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
+        let params: Option<BufferPoolAcquireParams> = from_glib_none(params);
 
-    match imp.acquire_buffer(params.as_ref()) {
-        Ok(b) => {
-            *buffer = b.into_glib_ptr();
-            ffi::GST_FLOW_OK
+        match imp.acquire_buffer(params.as_ref()) {
+            Ok(b) => {
+                *buffer = b.into_glib_ptr();
+                ffi::GST_FLOW_OK
+            }
+            Err(err) => err.into_glib(),
         }
-        Err(err) => err.into_glib(),
     }
 }
 
@@ -304,147 +306,169 @@ unsafe extern "C" fn buffer_pool_alloc_buffer<T: BufferPoolImpl>(
     buffer: *mut *mut ffi::GstBuffer,
     params: *mut ffi::GstBufferPoolAcquireParams,
 ) -> ffi::GstFlowReturn {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
-    let params: Option<BufferPoolAcquireParams> = from_glib_none(params);
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
+        let params: Option<BufferPoolAcquireParams> = from_glib_none(params);
 
-    match imp.alloc_buffer(params.as_ref()) {
-        Ok(b) => {
-            *buffer = b.into_glib_ptr();
-            ffi::GST_FLOW_OK
+        match imp.alloc_buffer(params.as_ref()) {
+            Ok(b) => {
+                *buffer = b.into_glib_ptr();
+                ffi::GST_FLOW_OK
+            }
+            Err(err) => err.into_glib(),
         }
-        Err(err) => err.into_glib(),
     }
 }
 
 unsafe extern "C" fn buffer_pool_flush_start<T: BufferPoolImpl>(ptr: *mut ffi::GstBufferPool) {
-    // the GstBufferPool implementation calls this
-    // in finalize where the ref_count will already
-    // be zero and we are actually destroyed
-    // see: https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/1645
-    if (*(ptr as *const glib::gobject_ffi::GObject)).ref_count == 0 {
-        // flush_start is a no-op in GstBufferPool
-        return;
-    }
+    unsafe {
+        // the GstBufferPool implementation calls this
+        // in finalize where the ref_count will already
+        // be zero and we are actually destroyed
+        // see: https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/1645
+        if (*(ptr as *const glib::gobject_ffi::GObject)).ref_count == 0 {
+            // flush_start is a no-op in GstBufferPool
+            return;
+        }
 
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
-    imp.flush_start();
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
+        imp.flush_start();
+    }
 }
 
 unsafe extern "C" fn buffer_pool_flush_stop<T: BufferPoolImpl>(ptr: *mut ffi::GstBufferPool) {
-    // the GstBufferPool implementation calls this
-    // in finalize where the ref_count will already
-    // be zero and we are actually destroyed
-    // see: https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/1645
-    if (*(ptr as *const glib::gobject_ffi::GObject)).ref_count == 0 {
-        // flush_stop is a no-op in GstBufferPool
-        return;
-    }
+    unsafe {
+        // the GstBufferPool implementation calls this
+        // in finalize where the ref_count will already
+        // be zero and we are actually destroyed
+        // see: https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/1645
+        if (*(ptr as *const glib::gobject_ffi::GObject)).ref_count == 0 {
+            // flush_stop is a no-op in GstBufferPool
+            return;
+        }
 
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
-    imp.flush_stop();
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
+        imp.flush_stop();
+    }
 }
 
 unsafe extern "C" fn buffer_pool_free_buffer<T: BufferPoolImpl>(
     ptr: *mut ffi::GstBufferPool,
     buffer: *mut ffi::GstBuffer,
 ) {
-    // the GstBufferPool implementation calls this
-    // in finalize where the ref_count will already
-    // be zero and we are actually destroyed
-    // see: https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/1645
-    if (*(ptr as *const glib::gobject_ffi::GObject)).ref_count == 0 {
-        // As a workaround we call free_buffer directly on the
-        // GstBufferPool to prevent leaking the buffer
-        // This will NOT call free_buffer on a subclass.
-        let pool_class =
-            glib::Class::<crate::BufferPool>::from_type(crate::BufferPool::static_type()).unwrap();
-        let pool_class = pool_class.as_ref();
-        if let Some(f) = pool_class.free_buffer {
-            f(ptr, buffer)
+    unsafe {
+        // the GstBufferPool implementation calls this
+        // in finalize where the ref_count will already
+        // be zero and we are actually destroyed
+        // see: https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/1645
+        if (*(ptr as *const glib::gobject_ffi::GObject)).ref_count == 0 {
+            // As a workaround we call free_buffer directly on the
+            // GstBufferPool to prevent leaking the buffer
+            // This will NOT call free_buffer on a subclass.
+            let pool_class =
+                glib::Class::<crate::BufferPool>::from_type(crate::BufferPool::static_type())
+                    .unwrap();
+            let pool_class = pool_class.as_ref();
+            if let Some(f) = pool_class.free_buffer {
+                f(ptr, buffer)
+            }
+            return;
         }
-        return;
-    }
 
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
-    imp.free_buffer(from_glib_full(buffer));
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
+        imp.free_buffer(from_glib_full(buffer));
+    }
 }
 
 unsafe extern "C" fn buffer_pool_release_buffer<T: BufferPoolImpl>(
     ptr: *mut ffi::GstBufferPool,
     buffer: *mut ffi::GstBuffer,
 ) {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
-    imp.release_buffer(from_glib_full(buffer));
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
+        imp.release_buffer(from_glib_full(buffer));
+    }
 }
 
 unsafe extern "C" fn buffer_pool_reset_buffer<T: BufferPoolImpl>(
     ptr: *mut ffi::GstBufferPool,
     buffer: *mut ffi::GstBuffer,
 ) {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
-    imp.reset_buffer(crate::BufferRef::from_mut_ptr(buffer));
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
+        imp.reset_buffer(crate::BufferRef::from_mut_ptr(buffer));
+    }
 }
 
 unsafe extern "C" fn buffer_pool_start<T: BufferPoolImpl>(
     ptr: *mut ffi::GstBufferPool,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
-    imp.start().into_glib()
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
+        imp.start().into_glib()
+    }
 }
 
 unsafe extern "C" fn buffer_pool_stop<T: BufferPoolImpl>(
     ptr: *mut ffi::GstBufferPool,
 ) -> glib::ffi::gboolean {
-    // the GstBufferPool implementation calls this
-    // in finalize where the ref_count will already
-    // be zero and we are actually destroyed
-    // see: https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/1645
-    if (*(ptr as *const glib::gobject_ffi::GObject)).ref_count == 0 {
-        // As a workaround we call stop directly on the GstBufferPool
-        // This is needed because the default implementation clears
-        // the pool in stop.
-        let pool_class =
-            glib::Class::<crate::BufferPool>::from_type(crate::BufferPool::static_type()).unwrap();
-        let pool_class = pool_class.as_ref();
-        let result = if let Some(f) = pool_class.stop {
-            f(ptr)
-        } else {
-            true.into_glib()
-        };
+    unsafe {
+        // the GstBufferPool implementation calls this
+        // in finalize where the ref_count will already
+        // be zero and we are actually destroyed
+        // see: https://gitlab.freedesktop.org/gstreamer/gstreamer/-/merge_requests/1645
+        if (*(ptr as *const glib::gobject_ffi::GObject)).ref_count == 0 {
+            // As a workaround we call stop directly on the GstBufferPool
+            // This is needed because the default implementation clears
+            // the pool in stop.
+            let pool_class =
+                glib::Class::<crate::BufferPool>::from_type(crate::BufferPool::static_type())
+                    .unwrap();
+            let pool_class = pool_class.as_ref();
+            let result = if let Some(f) = pool_class.stop {
+                f(ptr)
+            } else {
+                true.into_glib()
+            };
 
-        return result;
+            return result;
+        }
+
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
+        imp.stop().into_glib()
     }
-
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
-    imp.stop().into_glib()
 }
 
 unsafe extern "C" fn buffer_pool_get_options<T: BufferPoolImpl>(
     ptr: *mut ffi::GstBufferPool,
 ) -> *mut *const c_char {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
-    T::instance_data::<glib::StrV>(imp, T::type_())
-        .map(|p| p.as_ptr() as *mut *const _)
-        .unwrap_or(ptr::null_mut())
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
+        T::instance_data::<glib::StrV>(imp, T::type_())
+            .map(|p| p.as_ptr() as *mut *const _)
+            .unwrap_or(ptr::null_mut())
+    }
 }
 
 unsafe extern "C" fn buffer_pool_set_config<T: BufferPoolImpl>(
     ptr: *mut ffi::GstBufferPool,
     config: *mut ffi::GstStructure,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
-    imp.set_config(BufferPoolConfigRef::from_glib_borrow_mut(config))
-        .into_glib()
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
+        imp.set_config(BufferPoolConfigRef::from_glib_borrow_mut(config))
+            .into_glib()
+    }
 }
 
 #[cfg(test)]
@@ -572,7 +596,9 @@ mod tests {
         data: *mut libc::c_void,
         _mini_object: *mut ffi::GstMiniObject,
     ) {
-        let finalized = Arc::from_raw(data as *const AtomicBool);
-        finalized.store(true, Ordering::SeqCst);
+        unsafe {
+            let finalized = Arc::from_raw(data as *const AtomicBool);
+            finalized.store(true, Ordering::SeqCst);
+        }
     }
 }

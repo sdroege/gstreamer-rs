@@ -46,83 +46,87 @@ unsafe extern "C" fn alloc(
     size: usize,
     params: *mut ffi::GstAllocationParams,
 ) -> *mut ffi::GstMemory {
-    let params = &*params;
+    unsafe {
+        let params = &*params;
 
-    let Some(maxsize) = size
-        .checked_add(params.prefix)
-        .and_then(|s| s.checked_add(params.padding))
-    else {
-        return ptr::null_mut();
-    };
-
-    let align = params.align | crate::Memory::default_alignment();
-
-    let layout_base = alloc::Layout::new::<WrappedMemory<()>>();
-
-    let layout_data = match alloc::Layout::from_size_align(maxsize, align + 1) {
-        Ok(res) => res,
-        Err(err) => {
-            crate::warning!(
-                crate::CAT_RUST,
-                "Invalid size {maxsize} or alignment {align}: {err}"
-            );
+        let Some(maxsize) = size
+            .checked_add(params.prefix)
+            .and_then(|s| s.checked_add(params.padding))
+        else {
             return ptr::null_mut();
+        };
+
+        let align = params.align | crate::Memory::default_alignment();
+
+        let layout_base = alloc::Layout::new::<WrappedMemory<()>>();
+
+        let layout_data = match alloc::Layout::from_size_align(maxsize, align + 1) {
+            Ok(res) => res,
+            Err(err) => {
+                crate::warning!(
+                    crate::CAT_RUST,
+                    "Invalid size {maxsize} or alignment {align}: {err}"
+                );
+                return ptr::null_mut();
+            }
+        };
+        let (layout, data_offset) = match layout_base.extend(layout_data) {
+            Ok(res) => res,
+            Err(err) => {
+                crate::warning!(
+                    crate::CAT_RUST,
+                    "Can't extend base memory layout to {maxsize} or alignment {align}: {err}"
+                );
+                return ptr::null_mut();
+            }
+        };
+        let layout = layout.pad_to_align();
+
+        let mem = alloc::alloc(layout);
+        let data = mem.add(data_offset);
+
+        if params.prefix > 0 && (params.flags & ffi::GST_MEMORY_FLAG_ZERO_PREFIXED) != 0 {
+            ptr::write_bytes(data, 0, params.prefix);
         }
-    };
-    let (layout, data_offset) = match layout_base.extend(layout_data) {
-        Ok(res) => res,
-        Err(err) => {
-            crate::warning!(
-                crate::CAT_RUST,
-                "Can't extend base memory layout to {maxsize} or alignment {align}: {err}"
-            );
-            return ptr::null_mut();
+
+        if (params.flags & ffi::GST_MEMORY_FLAG_ZERO_PADDED) != 0 {
+            ptr::write_bytes(data.add(params.prefix).add(size), 0, params.padding);
         }
-    };
-    let layout = layout.pad_to_align();
 
-    let mem = alloc::alloc(layout);
-    let data = mem.add(data_offset);
+        let mem = mem as *mut WrappedMemory<()>;
+        ffi::gst_memory_init(
+            ptr::addr_of_mut!((*mem).mem),
+            params.flags,
+            allocator,
+            ptr::null_mut(),
+            maxsize,
+            params.align,
+            params.prefix,
+            size,
+        );
+        ptr::write(ptr::addr_of_mut!((*mem).data), data);
+        ptr::write(ptr::addr_of_mut!((*mem).layout), layout);
+        ptr::write(ptr::addr_of_mut!((*mem).wrap_type_id), TypeId::of::<()>());
+        ptr::write(ptr::addr_of_mut!((*mem).wrap_offset), 0);
+        ptr::write(ptr::addr_of_mut!((*mem).wrap_drop_in_place), None);
 
-    if params.prefix > 0 && (params.flags & ffi::GST_MEMORY_FLAG_ZERO_PREFIXED) != 0 {
-        ptr::write_bytes(data, 0, params.prefix);
+        mem as *mut ffi::GstMemory
     }
-
-    if (params.flags & ffi::GST_MEMORY_FLAG_ZERO_PADDED) != 0 {
-        ptr::write_bytes(data.add(params.prefix).add(size), 0, params.padding);
-    }
-
-    let mem = mem as *mut WrappedMemory<()>;
-    ffi::gst_memory_init(
-        ptr::addr_of_mut!((*mem).mem),
-        params.flags,
-        allocator,
-        ptr::null_mut(),
-        maxsize,
-        params.align,
-        params.prefix,
-        size,
-    );
-    ptr::write(ptr::addr_of_mut!((*mem).data), data);
-    ptr::write(ptr::addr_of_mut!((*mem).layout), layout);
-    ptr::write(ptr::addr_of_mut!((*mem).wrap_type_id), TypeId::of::<()>());
-    ptr::write(ptr::addr_of_mut!((*mem).wrap_offset), 0);
-    ptr::write(ptr::addr_of_mut!((*mem).wrap_drop_in_place), None);
-
-    mem as *mut ffi::GstMemory
 }
 
 unsafe extern "C" fn free(_allocator: *mut ffi::GstAllocator, mem: *mut ffi::GstMemory) {
-    debug_assert_eq!((*mem).mini_object.refcount, 0);
+    unsafe {
+        debug_assert_eq!((*mem).mini_object.refcount, 0);
 
-    let mem = mem as *mut WrappedMemory<()>;
+        let mem = mem as *mut WrappedMemory<()>;
 
-    if let Some(wrap_drop_in_place) = (*mem).wrap_drop_in_place {
-        let wrap = (mem as *mut u8).add((*mem).wrap_offset) as *mut ();
-        wrap_drop_in_place(wrap);
+        if let Some(wrap_drop_in_place) = (*mem).wrap_drop_in_place {
+            let wrap = (mem as *mut u8).add((*mem).wrap_offset) as *mut ();
+            wrap_drop_in_place(wrap);
+        }
+
+        alloc::dealloc(mem as *mut u8, (*mem).layout);
     }
-
-    alloc::dealloc(mem as *mut u8, (*mem).layout);
 }
 
 unsafe extern "C" fn mem_map(
@@ -130,10 +134,12 @@ unsafe extern "C" fn mem_map(
     _maxsize: usize,
     _flags: ffi::GstMapFlags,
 ) -> glib::ffi::gpointer {
-    let mem = mem as *mut WrappedMemory<()>;
+    unsafe {
+        let mem = mem as *mut WrappedMemory<()>;
 
-    // `(*mem).offset` is added to the pointer by `gst_memory_map()`
-    (*mem).data as glib::ffi::gpointer
+        // `(*mem).offset` is added to the pointer by `gst_memory_map()`
+        (*mem).data as glib::ffi::gpointer
+    }
 }
 
 unsafe extern "C" fn mem_unmap(_mem: *mut ffi::GstMemory) {}
@@ -143,49 +149,51 @@ unsafe extern "C" fn mem_share(
     offset: isize,
     size: isize,
 ) -> *mut ffi::GstMemory {
-    let mem = mem as *mut WrappedMemory<()>;
+    unsafe {
+        let mem = mem as *mut WrappedMemory<()>;
 
-    // Basically a re-implementation of _sysmem_share()
+        // Basically a re-implementation of _sysmem_share()
 
-    let parent = if (*mem).mem.parent.is_null() {
-        mem
-    } else {
-        (*mem).mem.parent as *mut WrappedMemory<()>
-    };
+        let parent = if (*mem).mem.parent.is_null() {
+            mem
+        } else {
+            (*mem).mem.parent as *mut WrappedMemory<()>
+        };
 
-    // Offset and size are actually usizes and the API assumes that negative values simply wrap
-    // around, so let's cast to usizes here and do wrapping arithmetic.
-    let offset = offset as usize;
-    let mut size = size as usize;
+        // Offset and size are actually usizes and the API assumes that negative values simply wrap
+        // around, so let's cast to usizes here and do wrapping arithmetic.
+        let offset = offset as usize;
+        let mut size = size as usize;
 
-    let new_offset = (*mem).mem.offset.wrapping_add(offset);
-    debug_assert!(new_offset < (*mem).mem.maxsize);
+        let new_offset = (*mem).mem.offset.wrapping_add(offset);
+        debug_assert!(new_offset < (*mem).mem.maxsize);
 
-    if size == usize::MAX {
-        size = (*mem).mem.size.wrapping_sub(offset);
+        if size == usize::MAX {
+            size = (*mem).mem.size.wrapping_sub(offset);
+        }
+        debug_assert!(new_offset <= usize::MAX - size);
+        debug_assert!(new_offset + size <= (*mem).mem.maxsize);
+
+        let layout = alloc::Layout::new::<WrappedMemory<()>>();
+        let sub = alloc::alloc(layout) as *mut WrappedMemory<()>;
+
+        ffi::gst_memory_init(
+            sub as *mut ffi::GstMemory,
+            (*mem).mem.mini_object.flags | ffi::GST_MINI_OBJECT_FLAG_LOCK_READONLY,
+            (*mem).mem.allocator,
+            parent as *mut ffi::GstMemory,
+            (*mem).mem.maxsize,
+            (*mem).mem.align,
+            new_offset,
+            size,
+        );
+        ptr::write(ptr::addr_of_mut!((*sub).data), (*mem).data);
+        ptr::write(ptr::addr_of_mut!((*sub).layout), layout);
+        ptr::write(ptr::addr_of_mut!((*sub).wrap_offset), 0);
+        ptr::write(ptr::addr_of_mut!((*sub).wrap_drop_in_place), None);
+
+        sub as *mut ffi::GstMemory
     }
-    debug_assert!(new_offset <= usize::MAX - size);
-    debug_assert!(new_offset + size <= (*mem).mem.maxsize);
-
-    let layout = alloc::Layout::new::<WrappedMemory<()>>();
-    let sub = alloc::alloc(layout) as *mut WrappedMemory<()>;
-
-    ffi::gst_memory_init(
-        sub as *mut ffi::GstMemory,
-        (*mem).mem.mini_object.flags | ffi::GST_MINI_OBJECT_FLAG_LOCK_READONLY,
-        (*mem).mem.allocator,
-        parent as *mut ffi::GstMemory,
-        (*mem).mem.maxsize,
-        (*mem).mem.align,
-        new_offset,
-        size,
-    );
-    ptr::write(ptr::addr_of_mut!((*sub).data), (*mem).data);
-    ptr::write(ptr::addr_of_mut!((*sub).layout), layout);
-    ptr::write(ptr::addr_of_mut!((*sub).wrap_offset), 0);
-    ptr::write(ptr::addr_of_mut!((*sub).wrap_drop_in_place), None);
-
-    sub as *mut ffi::GstMemory
 }
 
 unsafe extern "C" fn mem_is_span(
@@ -193,52 +201,58 @@ unsafe extern "C" fn mem_is_span(
     mem2: *mut ffi::GstMemory,
     offset: *mut usize,
 ) -> glib::ffi::gboolean {
-    let mem1 = mem1 as *mut WrappedMemory<()>;
-    let mem2 = mem2 as *mut WrappedMemory<()>;
+    unsafe {
+        let mem1 = mem1 as *mut WrappedMemory<()>;
+        let mem2 = mem2 as *mut WrappedMemory<()>;
 
-    // Same parent is checked by `gst_memory_is_span()` already
-    let parent1 = (*mem1).mem.parent as *mut WrappedMemory<()>;
-    let parent2 = (*mem2).mem.parent as *mut WrappedMemory<()>;
-    debug_assert_eq!(parent1, parent2);
+        // Same parent is checked by `gst_memory_is_span()` already
+        let parent1 = (*mem1).mem.parent as *mut WrappedMemory<()>;
+        let parent2 = (*mem2).mem.parent as *mut WrappedMemory<()>;
+        debug_assert_eq!(parent1, parent2);
 
-    // Basically a re-implementation of _sysmem_is_span()
-    if !offset.is_null() {
-        // Offset that can be used on the parent memory to create a
-        // shared memory that starts with `mem1`.
-        //
-        // This needs to use wrapping arithmetic too as in `mem_share()`.
-        *offset = (*mem1).mem.offset.wrapping_sub((*parent1).mem.offset);
+        // Basically a re-implementation of _sysmem_is_span()
+        if !offset.is_null() {
+            // Offset that can be used on the parent memory to create a
+            // shared memory that starts with `mem1`.
+            //
+            // This needs to use wrapping arithmetic too as in `mem_share()`.
+            *offset = (*mem1).mem.offset.wrapping_sub((*parent1).mem.offset);
+        }
+
+        // Check if both memories are contiguous.
+        let is_span = ((*mem1).mem.offset + ((*mem1).mem.size)) == (*mem2).mem.offset;
+
+        is_span.into_glib()
     }
-
-    // Check if both memories are contiguous.
-    let is_span = ((*mem1).mem.offset + ((*mem1).mem.size)) == (*mem2).mem.offset;
-
-    is_span.into_glib()
 }
 
 unsafe extern "C" fn class_init(class: glib::ffi::gpointer, _class_data: glib::ffi::gpointer) {
-    let class = class as *mut ffi::GstAllocatorClass;
+    unsafe {
+        let class = class as *mut ffi::GstAllocatorClass;
 
-    (*class).alloc = Some(alloc);
-    (*class).free = Some(free);
+        (*class).alloc = Some(alloc);
+        (*class).free = Some(free);
+    }
 }
 
 unsafe extern "C" fn instance_init(
     obj: *mut glib::gobject_ffi::GTypeInstance,
     _class: glib::ffi::gpointer,
 ) {
-    static ALLOCATOR_TYPE: &[u8] = b"RustGlobalAllocatorMemory\0";
+    unsafe {
+        static ALLOCATOR_TYPE: &[u8] = b"RustGlobalAllocatorMemory\0";
 
-    let allocator = obj as *mut ffi::GstAllocator;
+        let allocator = obj as *mut ffi::GstAllocator;
 
-    (*allocator).mem_type = ALLOCATOR_TYPE.as_ptr() as *const _;
-    (*allocator).mem_map = Some(mem_map);
-    (*allocator).mem_unmap = Some(mem_unmap);
-    // mem_copy not set because the fallback already does the right thing
-    (*allocator).mem_share = Some(mem_share);
-    (*allocator).mem_is_span = Some(mem_is_span);
+        (*allocator).mem_type = ALLOCATOR_TYPE.as_ptr() as *const _;
+        (*allocator).mem_map = Some(mem_map);
+        (*allocator).mem_unmap = Some(mem_unmap);
+        // mem_copy not set because the fallback already does the right thing
+        (*allocator).mem_share = Some(mem_share);
+        (*allocator).mem_is_span = Some(mem_is_span);
 
-    (*allocator).object.flags |= ffi::GST_OBJECT_FLAG_MAY_BE_LEAKED;
+        (*allocator).object.flags |= ffi::GST_OBJECT_FLAG_MAY_BE_LEAKED;
+    }
 }
 
 pub fn rust_allocator() -> &'static crate::Allocator {
@@ -303,57 +317,61 @@ fn rust_allocator_internal() -> &'static crate::Allocator {
 pub(crate) unsafe fn try_into_from_memory_ptr<T: 'static>(
     mem_ptr: *mut ffi::GstMemory,
 ) -> Result<T, MemoryIntoInnerError> {
-    skip_assert_initialized!();
+    unsafe {
+        skip_assert_initialized!();
 
-    // Check if this memory uses our rust allocator
-    if (*mem_ptr).allocator.is_null() || (*mem_ptr).allocator != rust_allocator_internal().as_ptr()
-    {
-        let actual_allocator = if (*mem_ptr).allocator.is_null() {
-            None
-        } else {
-            Some(
-                std::ffi::CStr::from_ptr(glib::gobject_ffi::g_type_name_from_instance(
-                    (*mem_ptr).allocator as *mut glib::gobject_ffi::GTypeInstance,
-                ))
-                .to_string_lossy()
-                .to_string(),
-            )
-        };
-        return Err(MemoryIntoInnerError::WrongAllocator { actual_allocator });
+        // Check if this memory uses our rust allocator
+        if (*mem_ptr).allocator.is_null()
+            || (*mem_ptr).allocator != rust_allocator_internal().as_ptr()
+        {
+            let actual_allocator = if (*mem_ptr).allocator.is_null() {
+                None
+            } else {
+                Some(
+                    std::ffi::CStr::from_ptr(glib::gobject_ffi::g_type_name_from_instance(
+                        (*mem_ptr).allocator as *mut glib::gobject_ffi::GTypeInstance,
+                    ))
+                    .to_string_lossy()
+                    .to_string(),
+                )
+            };
+            return Err(MemoryIntoInnerError::WrongAllocator { actual_allocator });
+        }
+
+        if ffi::gst_mini_object_is_writable(mem_ptr as *mut ffi::GstMiniObject) == glib::ffi::GFALSE
+        {
+            return Err(MemoryIntoInnerError::NotWritable);
+        }
+
+        // Check that this is not a sub-memory
+        if !(*mem_ptr).parent.is_null() {
+            return Err(MemoryIntoInnerError::SubMemory);
+        }
+
+        // Cast to WrappedMemory<T> and create a reference.
+        // SAFETY: This cast is safe for reading the wrap_offset and wrap_type_id fields
+        // because these fields are in the same position regardless of the generic type T.
+        // We verify the actual type using wrap_type_id before accessing the `wrap` field.
+        let mem_wrapper = &*(mem_ptr as *mut WrappedMemory<T>);
+
+        // Check that the wrapped type is actually T
+        // Only after this check passes is it safe to access mem_wrapper.wrap
+        if mem_wrapper.wrap_type_id != TypeId::of::<T>() {
+            return Err(MemoryIntoInnerError::TypeMismatch {
+                expected: std::any::TypeId::of::<T>(),
+                actual: mem_wrapper.wrap_type_id,
+            });
+        }
+
+        // Extract the wrapped value
+        let mem_wrapper_mut = &mut *(mem_ptr as *mut WrappedMemory<T>);
+        let value = ptr::read(&mem_wrapper_mut.wrap);
+
+        // Unset drop function to prevent drop from running on the wrapped value
+        mem_wrapper_mut.wrap_drop_in_place = None;
+
+        Ok(value)
     }
-
-    if ffi::gst_mini_object_is_writable(mem_ptr as *mut ffi::GstMiniObject) == glib::ffi::GFALSE {
-        return Err(MemoryIntoInnerError::NotWritable);
-    }
-
-    // Check that this is not a sub-memory
-    if !(*mem_ptr).parent.is_null() {
-        return Err(MemoryIntoInnerError::SubMemory);
-    }
-
-    // Cast to WrappedMemory<T> and create a reference.
-    // SAFETY: This cast is safe for reading the wrap_offset and wrap_type_id fields
-    // because these fields are in the same position regardless of the generic type T.
-    // We verify the actual type using wrap_type_id before accessing the `wrap` field.
-    let mem_wrapper = &*(mem_ptr as *mut WrappedMemory<T>);
-
-    // Check that the wrapped type is actually T
-    // Only after this check passes is it safe to access mem_wrapper.wrap
-    if mem_wrapper.wrap_type_id != TypeId::of::<T>() {
-        return Err(MemoryIntoInnerError::TypeMismatch {
-            expected: std::any::TypeId::of::<T>(),
-            actual: mem_wrapper.wrap_type_id,
-        });
-    }
-
-    // Extract the wrapped value
-    let mem_wrapper_mut = &mut *(mem_ptr as *mut WrappedMemory<T>);
-    let value = ptr::read(&mem_wrapper_mut.wrap);
-
-    // Unset drop function to prevent drop from running on the wrapped value
-    mem_wrapper_mut.wrap_drop_in_place = None;
-
-    Ok(value)
 }
 
 impl Memory {

@@ -15,21 +15,21 @@ bitflags_serde_impl!(crate::TrackType);
 #[cfg(test)]
 mod tests {
     macro_rules! check_serialize {
-        ($flags:expr, $expected:expr) => {
+        ($flags:expr_2021, $expected:expr_2021) => {
             let actual = serde_json::to_string(&$flags).unwrap();
             assert_eq!(actual, $expected);
         };
     }
 
     macro_rules! check_deserialize {
-        ($ty:ty, $expected:expr, $json:expr) => {
+        ($ty:ty, $expected:expr_2021, $json:expr_2021) => {
             let actual: $ty = serde_json::from_str(&$json).unwrap();
             assert_eq!(actual, $expected);
         };
     }
 
     macro_rules! check_roundtrip {
-        ($ty:ty, $flags:expr) => {
+        ($ty:ty, $flags:expr_2021) => {
             let json = serde_json::to_string(&$flags).unwrap();
             let deserialized: $ty = serde_json::from_str(&json).unwrap();
             assert_eq!(deserialized, $flags);

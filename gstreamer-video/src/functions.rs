@@ -70,39 +70,45 @@ unsafe fn convert_sample_async_unsafe<F>(
 ) where
     F: FnOnce(Result<gst::Sample, glib::Error>) + 'static,
 {
-    unsafe extern "C" fn convert_sample_async_trampoline<F>(
-        sample: *mut gst::ffi::GstSample,
-        error: *mut glib::ffi::GError,
-        user_data: glib::ffi::gpointer,
-    ) where
-        F: FnOnce(Result<gst::Sample, glib::Error>) + 'static,
-    {
-        let callback: &mut Option<F> = &mut *(user_data as *mut Option<F>);
-        let callback = callback.take().unwrap();
+    unsafe {
+        unsafe extern "C" fn convert_sample_async_trampoline<F>(
+            sample: *mut gst::ffi::GstSample,
+            error: *mut glib::ffi::GError,
+            user_data: glib::ffi::gpointer,
+        ) where
+            F: FnOnce(Result<gst::Sample, glib::Error>) + 'static,
+        {
+            unsafe {
+                let callback: &mut Option<F> = &mut *(user_data as *mut Option<F>);
+                let callback = callback.take().unwrap();
 
-        if error.is_null() {
-            callback(Ok(from_glib_full(sample)))
-        } else {
-            callback(Err(from_glib_full(error)))
+                if error.is_null() {
+                    callback(Ok(from_glib_full(sample)))
+                } else {
+                    callback(Err(from_glib_full(error)))
+                }
+            }
         }
-    }
-    unsafe extern "C" fn convert_sample_async_free<F>(user_data: glib::ffi::gpointer)
-    where
-        F: FnOnce(Result<gst::Sample, glib::Error>) + 'static,
-    {
-        let _: Box<Option<F>> = Box::from_raw(user_data as *mut _);
-    }
+        unsafe extern "C" fn convert_sample_async_free<F>(user_data: glib::ffi::gpointer)
+        where
+            F: FnOnce(Result<gst::Sample, glib::Error>) + 'static,
+        {
+            unsafe {
+                let _: Box<Option<F>> = Box::from_raw(user_data as *mut _);
+            }
+        }
 
-    let user_data: Box<Option<F>> = Box::new(Some(func));
+        let user_data: Box<Option<F>> = Box::new(Some(func));
 
-    ffi::gst_video_convert_sample_async(
-        sample.to_glib_none().0,
-        caps.to_glib_none().0,
-        timeout.into_glib(),
-        Some(convert_sample_async_trampoline::<F>),
-        Box::into_raw(user_data) as glib::ffi::gpointer,
-        Some(convert_sample_async_free::<F>),
-    );
+        ffi::gst_video_convert_sample_async(
+            sample.to_glib_none().0,
+            caps.to_glib_none().0,
+            timeout.into_glib(),
+            Some(convert_sample_async_trampoline::<F>),
+            Box::into_raw(user_data) as glib::ffi::gpointer,
+            Some(convert_sample_async_free::<F>),
+        );
+    }
 }
 
 pub fn convert_sample_future(

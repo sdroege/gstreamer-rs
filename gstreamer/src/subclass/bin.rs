@@ -115,71 +115,79 @@ unsafe extern "C" fn bin_add_element<T: BinImpl>(
     ptr: *mut ffi::GstBin,
     element: *mut ffi::GstElement,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    panic_to_error!(imp, false, {
-        match imp.add_element(&from_glib_none(element)) {
-            Ok(()) => true,
-            Err(err) => {
-                err.log_with_imp(imp);
-                false
+        panic_to_error!(imp, false, {
+            match imp.add_element(&from_glib_none(element)) {
+                Ok(()) => true,
+                Err(err) => {
+                    err.log_with_imp(imp);
+                    false
+                }
             }
-        }
-    })
-    .into_glib()
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn bin_remove_element<T: BinImpl>(
     ptr: *mut ffi::GstBin,
     element: *mut ffi::GstElement,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    // If we get a floating reference passed simply return FALSE here. It can't be
-    // stored inside this bin, and if we continued to use it we would take ownership
-    // of this floating reference.
-    if glib::gobject_ffi::g_object_is_floating(element as *mut glib::gobject_ffi::GObject)
-        != glib::ffi::GFALSE
-    {
-        return glib::ffi::GFALSE;
-    }
-
-    panic_to_error!(imp, false, {
-        match imp.remove_element(&from_glib_none(element)) {
-            Ok(()) => true,
-            Err(err) => {
-                err.log_with_imp(imp);
-                false
-            }
+        // If we get a floating reference passed simply return FALSE here. It can't be
+        // stored inside this bin, and if we continued to use it we would take ownership
+        // of this floating reference.
+        if glib::gobject_ffi::g_object_is_floating(element as *mut glib::gobject_ffi::GObject)
+            != glib::ffi::GFALSE
+        {
+            return glib::ffi::GFALSE;
         }
-    })
-    .into_glib()
+
+        panic_to_error!(imp, false, {
+            match imp.remove_element(&from_glib_none(element)) {
+                Ok(()) => true,
+                Err(err) => {
+                    err.log_with_imp(imp);
+                    false
+                }
+            }
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn bin_do_latency<T: BinImpl>(ptr: *mut ffi::GstBin) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    panic_to_error!(imp, false, {
-        match imp.do_latency() {
-            Ok(()) => true,
-            Err(err) => {
-                err.log_with_imp(imp);
-                false
+        panic_to_error!(imp, false, {
+            match imp.do_latency() {
+                Ok(()) => true,
+                Err(err) => {
+                    err.log_with_imp(imp);
+                    false
+                }
             }
-        }
-    })
-    .into_glib()
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn bin_handle_message<T: BinImpl>(
     ptr: *mut ffi::GstBin,
     message: *mut ffi::GstMessage,
 ) {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    panic_to_error!(imp, (), { imp.handle_message(from_glib_full(message)) });
+        panic_to_error!(imp, (), { imp.handle_message(from_glib_full(message)) });
+    }
 }

@@ -6,7 +6,7 @@ use gst::{ffi as gst_ffi, prelude::*, Element, Message, Seqnum};
 use crate::ffi;
 
 macro_rules! message_builder_generic_impl {
-    ($new_fn:expr) => {
+    ($new_fn:expr_2021) => {
         #[allow(clippy::needless_update)]
         pub fn src<O: IsA<Element> + Cast + Clone>(self, src: &O) -> Self {
             Self {
@@ -499,8 +499,10 @@ pub fn install_plugins_async<F: FnOnce(crate::InstallPluginsReturn) + Send + 'st
         ret: ffi::GstInstallPluginsReturn,
         user_data: glib::ffi::gpointer,
     ) {
-        let callback = Box::from_raw(user_data as *mut F);
-        callback(from_glib(ret));
+        unsafe {
+            let callback = Box::from_raw(user_data as *mut F);
+            callback(from_glib(ret));
+        }
     }
 
     unsafe {

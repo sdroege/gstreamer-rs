@@ -114,8 +114,10 @@ unsafe extern "C" fn duration_changed_trampoline<
     object: u64,
     f: glib::ffi::gpointer,
 ) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this), FromGlib::from_glib(object))
+    unsafe {
+        let f: &F = &*(f as *const F);
+        f(&from_glib_borrow(this), FromGlib::from_glib(object))
+    }
 }
 
 unsafe extern "C" fn position_updated_trampoline<
@@ -125,8 +127,10 @@ unsafe extern "C" fn position_updated_trampoline<
     object: u64,
     f: glib::ffi::gpointer,
 ) {
-    let f: &F = &*(f as *const F);
-    f(&from_glib_borrow(this), FromGlib::from_glib(object))
+    unsafe {
+        let f: &F = &*(f as *const F);
+        f(&from_glib_borrow(this), FromGlib::from_glib(object))
+    }
 }
 
 unsafe extern "C" fn seek_done_trampoline<F: Fn(&Player, gst::ClockTime) + Send + 'static>(
@@ -134,9 +138,11 @@ unsafe extern "C" fn seek_done_trampoline<F: Fn(&Player, gst::ClockTime) + Send 
     object: u64,
     f: glib::ffi::gpointer,
 ) {
-    let f: &F = &*(f as *const F);
-    f(
-        &from_glib_borrow(this),
-        try_from_glib(object).expect("undefined seek position"),
-    )
+    unsafe {
+        let f: &F = &*(f as *const F);
+        f(
+            &from_glib_borrow(this),
+            try_from_glib(object).expect("undefined seek position"),
+        )
+    }
 }

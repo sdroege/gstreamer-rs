@@ -252,18 +252,22 @@ unsafe extern "C" fn rs_iterator_copy<T, I: IteratorImpl<T>>(
 ) where
     for<'a> T: FromValue<'a> + StaticType + ToValue + Send + 'static,
 {
-    let it = it as *const RsIterator<T, I>;
-    let copy = copy as *mut RsIterator<T, I>;
+    unsafe {
+        let it = it as *const RsIterator<T, I>;
+        let copy = copy as *mut RsIterator<T, I>;
 
-    ptr::write(&mut (*copy).imp, (*it).imp.clone());
+        ptr::write(&mut (*copy).imp, (*it).imp.clone());
+    }
 }
 
 unsafe extern "C" fn rs_iterator_free<T, I: IteratorImpl<T>>(it: *mut ffi::GstIterator)
 where
     for<'a> T: FromValue<'a> + StaticType + ToValue + Send + 'static,
 {
-    let it = it as *mut RsIterator<T, I>;
-    ptr::drop_in_place(&mut (*it).imp);
+    unsafe {
+        let it = it as *mut RsIterator<T, I>;
+        ptr::drop_in_place(&mut (*it).imp);
+    }
 }
 
 unsafe extern "C" fn rs_iterator_next<T, I: IteratorImpl<T>>(
@@ -273,18 +277,20 @@ unsafe extern "C" fn rs_iterator_next<T, I: IteratorImpl<T>>(
 where
     for<'a> T: FromValue<'a> + StaticType + ToValue + Send + 'static,
 {
-    let it = it as *mut RsIterator<T, I>;
-    match (*it).imp.next() {
-        Some(Ok(value)) => {
-            let value = value.to_value();
-            ptr::write(result, value.into_raw());
-            ffi::GST_ITERATOR_OK
+    unsafe {
+        let it = it as *mut RsIterator<T, I>;
+        match (*it).imp.next() {
+            Some(Ok(value)) => {
+                let value = value.to_value();
+                ptr::write(result, value.into_raw());
+                ffi::GST_ITERATOR_OK
+            }
+            None => ffi::GST_ITERATOR_DONE,
+            Some(Err(res)) => match res {
+                IteratorError::Resync => ffi::GST_ITERATOR_RESYNC,
+                IteratorError::Error => ffi::GST_ITERATOR_ERROR,
+            },
         }
-        None => ffi::GST_ITERATOR_DONE,
-        Some(Err(res)) => match res {
-            IteratorError::Resync => ffi::GST_ITERATOR_RESYNC,
-            IteratorError::Error => ffi::GST_ITERATOR_ERROR,
-        },
     }
 }
 
@@ -292,8 +298,10 @@ unsafe extern "C" fn rs_iterator_resync<T, I: IteratorImpl<T>>(it: *mut ffi::Gst
 where
     for<'a> T: FromValue<'a> + StaticType + ToValue + Send + 'static,
 {
-    let it = it as *mut RsIterator<T, I>;
-    (*it).imp.resync();
+    unsafe {
+        let it = it as *mut RsIterator<T, I>;
+        (*it).imp.resync();
+    }
 }
 
 #[derive(Clone)]
@@ -379,65 +387,73 @@ unsafe extern "C" fn filter_trampoline<
     value: gconstpointer,
     func: gconstpointer,
 ) -> i32 {
-    let value = value as *const glib::gobject_ffi::GValue;
+    unsafe {
+        let value = value as *const glib::gobject_ffi::GValue;
 
-    let func = func as *const glib::gobject_ffi::GValue;
-    let func = glib::gobject_ffi::g_value_get_boxed(func);
-    let func = &*(func as *const &(dyn Any + Send + Sync + 'static));
-    let func = func.downcast_ref::<F>().unwrap();
+        let func = func as *const glib::gobject_ffi::GValue;
+        let func = glib::gobject_ffi::g_value_get_boxed(func);
+        let func = &*(func as *const &(dyn Any + Send + Sync + 'static));
+        let func = func.downcast_ref::<F>().unwrap();
 
-    let value = &*(value as *const glib::Value);
-    let value = value.get::<T>().expect("Iterator filter_trampoline");
+        let value = &*(value as *const glib::Value);
+        let value = value.get::<T>().expect("Iterator filter_trampoline");
 
-    if func(value) {
-        0
-    } else {
-        -1
+        if func(value) {
+            0
+        } else {
+            -1
+        }
     }
 }
 
 unsafe extern "C" fn filter_boxed_ref(boxed: gpointer) -> gpointer {
-    let boxed = Arc::from_raw(boxed as *const Box<dyn Any + Send + Sync + 'static>);
-    let copy = Arc::clone(&boxed);
+    unsafe {
+        let boxed = Arc::from_raw(boxed as *const Box<dyn Any + Send + Sync + 'static>);
+        let copy = Arc::clone(&boxed);
 
-    // Forget it and keep it alive, we will still need it later
-    let _ = Arc::into_raw(boxed);
+        // Forget it and keep it alive, we will still need it later
+        let _ = Arc::into_raw(boxed);
 
-    Arc::into_raw(copy) as gpointer
+        Arc::into_raw(copy) as gpointer
+    }
 }
 
 unsafe extern "C" fn filter_boxed_unref(boxed: gpointer) {
-    let _ = Arc::from_raw(boxed as *const Box<dyn Any + Send + Sync + 'static>);
+    unsafe {
+        let _ = Arc::from_raw(boxed as *const Box<dyn Any + Send + Sync + 'static>);
+    }
 }
 
 unsafe extern "C" fn filter_boxed_get_type() -> glib::Type {
-    static TYPE: std::sync::OnceLock<glib::Type> = std::sync::OnceLock::new();
+    unsafe {
+        static TYPE: std::sync::OnceLock<glib::Type> = std::sync::OnceLock::new();
 
-    *TYPE.get_or_init(|| {
-        let iter_type_name = {
-            let mut idx = 0;
+        *TYPE.get_or_init(|| {
+            let iter_type_name = {
+                let mut idx = 0;
 
-            loop {
-                let iter_type_name = glib::gformat!("GstRsIteratorFilterBoxed-{}", idx);
-                if glib::gobject_ffi::g_type_from_name(iter_type_name.as_ptr())
-                    == glib::gobject_ffi::G_TYPE_INVALID
-                {
-                    break iter_type_name;
+                loop {
+                    let iter_type_name = glib::gformat!("GstRsIteratorFilterBoxed-{}", idx);
+                    if glib::gobject_ffi::g_type_from_name(iter_type_name.as_ptr())
+                        == glib::gobject_ffi::G_TYPE_INVALID
+                    {
+                        break iter_type_name;
+                    }
+                    idx += 1;
                 }
-                idx += 1;
-            }
-        };
+            };
 
-        let t = glib::Type::from_glib(glib::gobject_ffi::g_boxed_type_register_static(
-            iter_type_name.as_ptr(),
-            Some(filter_boxed_ref),
-            Some(filter_boxed_unref),
-        ));
+            let t = glib::Type::from_glib(glib::gobject_ffi::g_boxed_type_register_static(
+                iter_type_name.as_ptr(),
+                Some(filter_boxed_ref),
+                Some(filter_boxed_unref),
+            ));
 
-        assert!(t.is_valid());
+            assert!(t.is_valid());
 
-        t
-    })
+            t
+        })
+    }
 }
 
 unsafe extern "C" fn find_trampoline<T, F: FnMut(T) -> bool>(
@@ -447,16 +463,18 @@ unsafe extern "C" fn find_trampoline<T, F: FnMut(T) -> bool>(
 where
     for<'a> T: FromValue<'a> + 'static,
 {
-    let value = value as *const glib::gobject_ffi::GValue;
+    unsafe {
+        let value = value as *const glib::gobject_ffi::GValue;
 
-    let func = func as *mut F;
-    let value = &*(value as *const glib::Value);
-    let value = value.get::<T>().expect("Iterator find_trampoline");
+        let func = func as *mut F;
+        let value = &*(value as *const glib::Value);
+        let value = value.get::<T>().expect("Iterator find_trampoline");
 
-    if (*func)(value) {
-        0
-    } else {
-        -1
+        if (*func)(value) {
+            0
+        } else {
+            -1
+        }
     }
 }
 
@@ -466,11 +484,13 @@ unsafe extern "C" fn foreach_trampoline<T, F: FnMut(T)>(
 ) where
     for<'a> T: FromValue<'a> + 'static,
 {
-    let func = func as *mut F;
-    let value = &*(value as *const glib::Value);
-    let value = value.get::<T>().expect("Iterator foreach_trampoline");
+    unsafe {
+        let func = func as *mut F;
+        let value = &*(value as *const glib::Value);
+        let value = value.get::<T>().expect("Iterator foreach_trampoline");
 
-    (*func)(value);
+        (*func)(value);
+    }
 }
 
 unsafe extern "C" fn fold_trampoline<T, U, F: FnMut(U, T) -> Result<U, U>>(
@@ -481,20 +501,22 @@ unsafe extern "C" fn fold_trampoline<T, U, F: FnMut(U, T) -> Result<U, U>>(
 where
     for<'a> T: FromValue<'a> + 'static,
 {
-    let func = func as *mut F;
-    let value = &*(value as *const glib::Value);
-    let value = value.get::<T>().expect("Iterator fold_trampoline");
+    unsafe {
+        let func = func as *mut F;
+        let value = &*(value as *const glib::Value);
+        let value = value.get::<T>().expect("Iterator fold_trampoline");
 
-    let accum = &mut *(glib::gobject_ffi::g_value_get_pointer(ret) as *mut Option<U>);
+        let accum = &mut *(glib::gobject_ffi::g_value_get_pointer(ret) as *mut Option<U>);
 
-    match (*func)(accum.take().unwrap(), value) {
-        Ok(next_accum) => {
-            *accum = Some(next_accum);
-            glib::ffi::GTRUE
-        }
-        Err(next_accum) => {
-            *accum = Some(next_accum);
-            glib::ffi::GFALSE
+        match (*func)(accum.take().unwrap(), value) {
+            Ok(next_accum) => {
+                *accum = Some(next_accum);
+                glib::ffi::GTRUE
+            }
+            Err(next_accum) => {
+                *accum = Some(next_accum);
+                glib::ffi::GFALSE
+            }
         }
     }
 }
@@ -552,10 +574,11 @@ unsafe impl<'a, T: StaticType + 'static> glib::value::FromValue<'a> for Iterator
     type Checker = glib::value::GenericValueTypeOrNoneChecker<Self>;
 
     unsafe fn from_value(value: &'a glib::Value) -> Self {
-        skip_assert_initialized!();
-        from_glib_none(
-            glib::gobject_ffi::g_value_get_boxed(value.to_glib_none().0) as *mut ffi::GstIterator
-        )
+        unsafe {
+            skip_assert_initialized!();
+            from_glib_none(glib::gobject_ffi::g_value_get_boxed(value.to_glib_none().0)
+                as *mut ffi::GstIterator)
+        }
     }
 }
 
@@ -642,11 +665,13 @@ impl<'a, T: 'static> glib::translate::ToGlibPtrMut<'a, *mut ffi::GstIterator> fo
 impl<T: StaticType> glib::translate::FromGlibPtrNone<*const ffi::GstIterator> for Iterator<T> {
     #[inline]
     unsafe fn from_glib_none(ptr: *const ffi::GstIterator) -> Self {
-        debug_assert_ne!(
-            glib::gobject_ffi::g_type_is_a((*ptr).type_, T::static_type().into_glib()),
-            glib::ffi::GFALSE
-        );
-        from_glib_full(ffi::gst_iterator_copy(ptr))
+        unsafe {
+            debug_assert_ne!(
+                glib::gobject_ffi::g_type_is_a((*ptr).type_, T::static_type().into_glib()),
+                glib::ffi::GFALSE
+            );
+            from_glib_full(ffi::gst_iterator_copy(ptr))
+        }
     }
 }
 
@@ -654,11 +679,13 @@ impl<T: StaticType> glib::translate::FromGlibPtrNone<*const ffi::GstIterator> fo
 impl<T: StaticType> glib::translate::FromGlibPtrNone<*mut ffi::GstIterator> for Iterator<T> {
     #[inline]
     unsafe fn from_glib_none(ptr: *mut ffi::GstIterator) -> Self {
-        debug_assert_ne!(
-            glib::gobject_ffi::g_type_is_a((*ptr).type_, T::static_type().into_glib()),
-            glib::ffi::GFALSE
-        );
-        from_glib_full(ffi::gst_iterator_copy(ptr))
+        unsafe {
+            debug_assert_ne!(
+                glib::gobject_ffi::g_type_is_a((*ptr).type_, T::static_type().into_glib()),
+                glib::ffi::GFALSE
+            );
+            from_glib_full(ffi::gst_iterator_copy(ptr))
+        }
     }
 }
 
@@ -666,15 +693,17 @@ impl<T: StaticType> glib::translate::FromGlibPtrNone<*mut ffi::GstIterator> for 
 impl<T: StaticType> glib::translate::FromGlibPtrBorrow<*mut ffi::GstIterator> for Iterator<T> {
     #[inline]
     unsafe fn from_glib_borrow(ptr: *mut ffi::GstIterator) -> Borrowed<Self> {
-        debug_assert!(!ptr.is_null());
-        debug_assert_ne!(
-            glib::gobject_ffi::g_type_is_a((*ptr).type_, T::static_type().into_glib()),
-            glib::ffi::GFALSE
-        );
-        Borrowed::new(Self {
-            iter: ptr::NonNull::new_unchecked(ptr),
-            phantom: PhantomData,
-        })
+        unsafe {
+            debug_assert!(!ptr.is_null());
+            debug_assert_ne!(
+                glib::gobject_ffi::g_type_is_a((*ptr).type_, T::static_type().into_glib()),
+                glib::ffi::GFALSE
+            );
+            Borrowed::new(Self {
+                iter: ptr::NonNull::new_unchecked(ptr),
+                phantom: PhantomData,
+            })
+        }
     }
 }
 
@@ -682,14 +711,16 @@ impl<T: StaticType> glib::translate::FromGlibPtrBorrow<*mut ffi::GstIterator> fo
 impl<T: StaticType> glib::translate::FromGlibPtrFull<*mut ffi::GstIterator> for Iterator<T> {
     #[inline]
     unsafe fn from_glib_full(ptr: *mut ffi::GstIterator) -> Self {
-        debug_assert!(!ptr.is_null());
-        debug_assert_ne!(
-            glib::gobject_ffi::g_type_is_a((*ptr).type_, T::static_type().into_glib()),
-            glib::ffi::GFALSE
-        );
-        Self {
-            iter: ptr::NonNull::new_unchecked(ptr),
-            phantom: PhantomData,
+        unsafe {
+            debug_assert!(!ptr.is_null());
+            debug_assert_ne!(
+                glib::gobject_ffi::g_type_is_a((*ptr).type_, T::static_type().into_glib()),
+                glib::ffi::GFALSE
+            );
+            Self {
+                iter: ptr::NonNull::new_unchecked(ptr),
+                phantom: PhantomData,
+            }
         }
     }
 }

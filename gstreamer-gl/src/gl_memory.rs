@@ -40,19 +40,21 @@ impl GLMemoryRef {
         width: i32,
         height: i32,
     ) -> Result<(), LoggableError> {
-        Self::init_once();
-        result_from_gboolean!(
-            ffi::gst_gl_memory_copy_into(
-                mut_override(&self.0),
-                tex_id,
-                target.into_glib(),
-                tex_format.into_glib(),
-                width,
-                height,
-            ),
-            CAT_RUST,
-            "Failed to copy memory into GL texture"
-        )
+        unsafe {
+            Self::init_once();
+            result_from_gboolean!(
+                ffi::gst_gl_memory_copy_into(
+                    mut_override(&self.0),
+                    tex_id,
+                    target.into_glib(),
+                    tex_format.into_glib(),
+                    width,
+                    height,
+                ),
+                CAT_RUST,
+                "Failed to copy memory into GL texture"
+            )
+        }
     }
 
     // rustdoc-stripper-ignore-next
@@ -67,19 +69,21 @@ impl GLMemoryRef {
         out_width: i32,
         out_height: i32,
     ) -> Result<(), LoggableError> {
-        Self::init_once();
-        result_from_gboolean!(
-            ffi::gst_gl_memory_copy_teximage(
-                mut_override(&self.0),
-                tex_id,
-                out_target.into_glib(),
-                out_tex_format.into_glib(),
-                out_width,
-                out_height,
-            ),
-            CAT_RUST,
-            "Failed to copy memory into GL texture"
-        )
+        unsafe {
+            Self::init_once();
+            result_from_gboolean!(
+                ffi::gst_gl_memory_copy_teximage(
+                    mut_override(&self.0),
+                    tex_id,
+                    out_target.into_glib(),
+                    out_tex_format.into_glib(),
+                    out_width,
+                    out_height,
+                ),
+                CAT_RUST,
+                "Failed to copy memory into GL texture"
+            )
+        }
     }
 
     #[doc(alias = "gst_gl_memory_get_texture_format")]

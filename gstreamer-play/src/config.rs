@@ -147,6 +147,6 @@ impl IntoGlibPtr<*mut gst::ffi::GstStructure> for PlayConfig {
 impl FromGlibPtrFull<*mut gst::ffi::GstStructure> for PlayConfig {
     #[inline]
     unsafe fn from_glib_full(ptr: *mut gst::ffi::GstStructure) -> Self {
-        PlayConfig(from_glib_full(ptr))
+        unsafe { PlayConfig(from_glib_full(ptr)) }
     }
 }

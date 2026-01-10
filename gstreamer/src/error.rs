@@ -5,18 +5,18 @@ use thiserror::Error;
 
 #[macro_export]
 macro_rules! error_msg(
-    ($err:expr, ($($msg:tt)*), [$($dbg:tt)*]) =>  { {
+    ($err:expr_2021, ($($msg:tt)*), [$($dbg:tt)*]) =>  { {
         $crate::ErrorMessage::new(&$err, Some(format!($($msg)*).as_ref()),
                           Some(format!($($dbg)*).as_ref()),
                           file!(), $crate::glib::function_name!(), line!())
     }};
-    ($err:expr, ($($msg:tt)*)) =>  { {
+    ($err:expr_2021, ($($msg:tt)*)) =>  { {
         $crate::ErrorMessage::new(&$err, Some(format!($($msg)*).as_ref()),
                           None,
                           file!(), $crate::glib::function_name!(), line!())
     }};
 
-    ($err:expr, [$($dbg:tt)*]) =>  { {
+    ($err:expr_2021, [$($dbg:tt)*]) =>  { {
         $crate::ErrorMessage::new(&$err, None,
                           Some(format!($($dbg)*).as_ref()),
                           file!(), $crate::glib::function_name!(), line!())
@@ -62,14 +62,14 @@ impl ErrorMessage {
 
 #[macro_export]
 macro_rules! loggable_error(
-    ($cat:expr, $($msg:tt)*) =>  { {
+    ($cat:expr_2021, $($msg:tt)*) =>  { {
         $crate::LoggableError::new($cat.clone(), $crate::glib::bool_error!($($msg)*))
     }};
 );
 
 #[macro_export]
 macro_rules! result_from_gboolean(
-    ($ffi_bool:expr, $cat:expr, $($msg:tt)*) =>  { {
+    ($ffi_bool:expr_2021, $cat:expr_2021, $($msg:tt)*) =>  { {
         $crate::glib::result_from_gboolean!($ffi_bool, $($msg)*)
             .map_err(|bool_err| $crate::LoggableError::new($cat.clone(), bool_err))
     }};

@@ -247,38 +247,46 @@ impl<'a> ToGlibPtrMut<'a, *mut ffi::GstCapsFeatures> for CapsFeatures {
 impl FromGlibPtrNone<*const ffi::GstCapsFeatures> for CapsFeatures {
     #[inline]
     unsafe fn from_glib_none(ptr: *const ffi::GstCapsFeatures) -> Self {
-        debug_assert!(!ptr.is_null());
-        let ptr = ffi::gst_caps_features_copy(ptr);
-        debug_assert!(!ptr.is_null());
-        CapsFeatures(ptr::NonNull::new_unchecked(ptr))
+        unsafe {
+            debug_assert!(!ptr.is_null());
+            let ptr = ffi::gst_caps_features_copy(ptr);
+            debug_assert!(!ptr.is_null());
+            CapsFeatures(ptr::NonNull::new_unchecked(ptr))
+        }
     }
 }
 
 impl FromGlibPtrNone<*mut ffi::GstCapsFeatures> for CapsFeatures {
     #[inline]
     unsafe fn from_glib_none(ptr: *mut ffi::GstCapsFeatures) -> Self {
-        debug_assert!(!ptr.is_null());
-        let ptr = ffi::gst_caps_features_copy(ptr);
-        debug_assert!(!ptr.is_null());
-        CapsFeatures(ptr::NonNull::new_unchecked(ptr))
+        unsafe {
+            debug_assert!(!ptr.is_null());
+            let ptr = ffi::gst_caps_features_copy(ptr);
+            debug_assert!(!ptr.is_null());
+            CapsFeatures(ptr::NonNull::new_unchecked(ptr))
+        }
     }
 }
 
 impl FromGlibPtrFull<*const ffi::GstCapsFeatures> for CapsFeatures {
     #[inline]
     unsafe fn from_glib_full(ptr: *const ffi::GstCapsFeatures) -> Self {
-        debug_assert!(!ptr.is_null());
-        CapsFeatures(ptr::NonNull::new_unchecked(
-            ptr as *mut ffi::GstCapsFeatures,
-        ))
+        unsafe {
+            debug_assert!(!ptr.is_null());
+            CapsFeatures(ptr::NonNull::new_unchecked(
+                ptr as *mut ffi::GstCapsFeatures,
+            ))
+        }
     }
 }
 
 impl FromGlibPtrFull<*mut ffi::GstCapsFeatures> for CapsFeatures {
     #[inline]
     unsafe fn from_glib_full(ptr: *mut ffi::GstCapsFeatures) -> Self {
-        debug_assert!(!ptr.is_null());
-        CapsFeatures(ptr::NonNull::new_unchecked(ptr))
+        unsafe {
+            debug_assert!(!ptr.is_null());
+            CapsFeatures(ptr::NonNull::new_unchecked(ptr))
+        }
     }
 }
 
@@ -292,9 +300,11 @@ unsafe impl<'a> glib::value::FromValue<'a> for CapsFeatures {
     type Checker = glib::value::GenericValueTypeOrNoneChecker<Self>;
 
     unsafe fn from_value(value: &'a glib::Value) -> Self {
-        skip_assert_initialized!();
-        from_glib_none(glib::gobject_ffi::g_value_get_boxed(value.to_glib_none().0)
-            as *mut ffi::GstCapsFeatures)
+        unsafe {
+            skip_assert_initialized!();
+            from_glib_none(glib::gobject_ffi::g_value_get_boxed(value.to_glib_none().0)
+                as *mut ffi::GstCapsFeatures)
+        }
     }
 }
 
@@ -356,18 +366,22 @@ pub struct CapsFeaturesRef(ffi::GstCapsFeatures);
 impl CapsFeaturesRef {
     #[inline]
     pub unsafe fn from_glib_borrow<'a>(ptr: *const ffi::GstCapsFeatures) -> &'a CapsFeaturesRef {
-        debug_assert!(!ptr.is_null());
+        unsafe {
+            debug_assert!(!ptr.is_null());
 
-        &*(ptr as *mut CapsFeaturesRef)
+            &*(ptr as *mut CapsFeaturesRef)
+        }
     }
 
     #[inline]
     pub unsafe fn from_glib_borrow_mut<'a>(
         ptr: *mut ffi::GstCapsFeatures,
     ) -> &'a mut CapsFeaturesRef {
-        debug_assert!(!ptr.is_null());
+        unsafe {
+            debug_assert!(!ptr.is_null());
 
-        &mut *(ptr as *mut CapsFeaturesRef)
+            &mut *(ptr as *mut CapsFeaturesRef)
+        }
     }
 
     #[inline]
@@ -618,8 +632,11 @@ unsafe impl<'a> glib::value::FromValue<'a> for &'a CapsFeaturesRef {
     type Checker = glib::value::GenericValueTypeOrNoneChecker<Self>;
 
     unsafe fn from_value(value: &'a glib::Value) -> Self {
-        skip_assert_initialized!();
-        &*(glib::gobject_ffi::g_value_get_boxed(value.to_glib_none().0) as *const CapsFeaturesRef)
+        unsafe {
+            skip_assert_initialized!();
+            &*(glib::gobject_ffi::g_value_get_boxed(value.to_glib_none().0)
+                as *const CapsFeaturesRef)
+        }
     }
 }
 

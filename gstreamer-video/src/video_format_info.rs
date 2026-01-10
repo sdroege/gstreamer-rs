@@ -12,8 +12,10 @@ pub struct VideoFormatInfo(&'static ffi::GstVideoFormatInfo);
 impl VideoFormatInfo {
     #[inline]
     pub unsafe fn from_ptr(format_info: *const ffi::GstVideoFormatInfo) -> Self {
-        debug_assert!(!format_info.is_null());
-        Self(&*format_info)
+        unsafe {
+            debug_assert!(!format_info.is_null());
+            Self(&*format_info)
+        }
     }
 
     #[inline]
@@ -571,7 +573,7 @@ impl<'a> glib::translate::ToGlibPtr<'a, *const ffi::GstVideoFormatInfo> for Vide
 impl glib::translate::FromGlibPtrNone<*mut ffi::GstVideoFormatInfo> for VideoFormatInfo {
     #[inline]
     unsafe fn from_glib_none(ptr: *mut ffi::GstVideoFormatInfo) -> Self {
-        Self(&*ptr)
+        unsafe { Self(&*ptr) }
     }
 }
 
@@ -579,7 +581,7 @@ impl glib::translate::FromGlibPtrNone<*mut ffi::GstVideoFormatInfo> for VideoFor
 impl glib::translate::FromGlibPtrNone<*const ffi::GstVideoFormatInfo> for VideoFormatInfo {
     #[inline]
     unsafe fn from_glib_none(ptr: *const ffi::GstVideoFormatInfo) -> Self {
-        Self(&*ptr)
+        unsafe { Self(&*ptr) }
     }
 }
 

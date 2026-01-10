@@ -32,14 +32,14 @@ macro_rules! mini_object_wrapper (
             #[inline]
             pub unsafe fn from_glib_ptr_borrow(
                 ptr: &*mut $ffi_name,
-            ) -> &Self {
+            ) -> &Self { unsafe {
                 debug_assert_eq!(std::mem::size_of::<$name>(), std::mem::size_of::<$crate::glib::ffi::gpointer>());
                 debug_assert!(!ptr.is_null());
                 &*(ptr as *const *mut $ffi_name as *const $name)
-            }
+            }}
 
             #[inline]
-            pub unsafe fn from_glib_none(ptr: *const $ffi_name) -> Self {
+            pub unsafe fn from_glib_none(ptr: *const $ffi_name) -> Self { unsafe {
                 skip_assert_initialized!();
                 debug_assert!(!ptr.is_null());
 
@@ -48,33 +48,33 @@ macro_rules! mini_object_wrapper (
                 $name {
                     obj: std::ptr::NonNull::new_unchecked(ptr as *mut $ffi_name),
                 }
-            }
+            }}
 
             #[inline]
-            pub unsafe fn from_glib_full(ptr: *const $ffi_name) -> Self {
+            pub unsafe fn from_glib_full(ptr: *const $ffi_name) -> Self { unsafe {
                 skip_assert_initialized!();
                 debug_assert!(!ptr.is_null());
 
                 $name {
                     obj: std::ptr::NonNull::new_unchecked(ptr as *mut $ffi_name),
                 }
-            }
+            }}
 
             #[inline]
-            pub unsafe fn from_glib_borrow(ptr: *const $ffi_name) -> $crate::glib::translate::Borrowed<Self> {
+            pub unsafe fn from_glib_borrow(ptr: *const $ffi_name) -> $crate::glib::translate::Borrowed<Self> { unsafe {
                 skip_assert_initialized!();
                 debug_assert!(!ptr.is_null());
 
                 $crate::glib::translate::Borrowed::new($name {
                     obj: std::ptr::NonNull::new_unchecked(ptr as *mut $ffi_name),
                 })
-            }
+            }}
 
             #[inline]
-            pub unsafe fn replace_ptr(&mut self, ptr: *mut $ffi_name) {
+            pub unsafe fn replace_ptr(&mut self, ptr: *mut $ffi_name) { unsafe {
                 debug_assert!(!ptr.is_null());
                 self.obj = std::ptr::NonNull::new_unchecked(ptr);
-            }
+            }}
 
             #[inline]
             #[doc(alias = "gst_mini_object_make_writable")]
@@ -298,50 +298,50 @@ macro_rules! mini_object_wrapper (
 
         impl $crate::glib::translate::FromGlibPtrNone<*const $ffi_name> for $name {
             #[inline]
-            unsafe fn from_glib_none(ptr: *const $ffi_name) -> Self {
+            unsafe fn from_glib_none(ptr: *const $ffi_name) -> Self { unsafe {
                 Self::from_glib_none(ptr)
-            }
+            }}
         }
 
         impl $crate::glib::translate::FromGlibPtrNone<*mut $ffi_name> for $name {
             #[inline]
-            unsafe fn from_glib_none(ptr: *mut $ffi_name) -> Self {
+            unsafe fn from_glib_none(ptr: *mut $ffi_name) -> Self { unsafe {
                 Self::from_glib_none(ptr)
-            }
+            }}
         }
 
         impl $crate::glib::translate::FromGlibPtrFull<*const $ffi_name> for $name {
             #[inline]
-            unsafe fn from_glib_full(ptr: *const $ffi_name) -> Self {
+            unsafe fn from_glib_full(ptr: *const $ffi_name) -> Self { unsafe {
                 Self::from_glib_full(ptr)
-            }
+            }}
         }
 
         impl $crate::glib::translate::FromGlibPtrFull<*mut $ffi_name> for $name {
             #[inline]
-            unsafe fn from_glib_full(ptr: *mut $ffi_name) -> Self {
+            unsafe fn from_glib_full(ptr: *mut $ffi_name) -> Self { unsafe {
                 Self::from_glib_full(ptr)
-            }
+            }}
         }
 
         impl $crate::glib::translate::FromGlibPtrBorrow<*const $ffi_name> for $name {
             #[inline]
-            unsafe fn from_glib_borrow(ptr: *const $ffi_name) -> $crate::glib::translate::Borrowed<Self> {
+            unsafe fn from_glib_borrow(ptr: *const $ffi_name) -> $crate::glib::translate::Borrowed<Self> { unsafe {
                 Self::from_glib_borrow(ptr)
-            }
+            }}
         }
 
         impl $crate::glib::translate::FromGlibPtrBorrow<*mut $ffi_name> for $name {
             #[inline]
-            unsafe fn from_glib_borrow(ptr: *mut $ffi_name) -> $crate::glib::translate::Borrowed<Self> {
+            unsafe fn from_glib_borrow(ptr: *mut $ffi_name) -> $crate::glib::translate::Borrowed<Self> { unsafe {
                 Self::from_glib_borrow(ptr)
-            }
+            }}
         }
 
         impl $crate::glib::translate::FromGlibContainerAsVec<*mut $ffi_name, *mut *mut $ffi_name>
             for $name
         {
-            unsafe fn from_glib_none_num_as_vec(ptr: *mut *mut $ffi_name, num: usize) -> Vec<Self> {
+            unsafe fn from_glib_none_num_as_vec(ptr: *mut *mut $ffi_name, num: usize) -> Vec<Self> { unsafe {
                 if num == 0 || ptr.is_null() {
                     return Vec::new();
                 }
@@ -353,15 +353,15 @@ macro_rules! mini_object_wrapper (
                 }
                 res.set_len(num);
                 res
-            }
+            }}
 
-            unsafe fn from_glib_container_num_as_vec(ptr: *mut *mut $ffi_name, num: usize) -> Vec<Self> {
+            unsafe fn from_glib_container_num_as_vec(ptr: *mut *mut $ffi_name, num: usize) -> Vec<Self> { unsafe {
                 let res = $crate::glib::translate::FromGlibContainerAsVec::from_glib_none_num_as_vec(ptr, num);
                 $crate::glib::ffi::g_free(ptr as *mut _);
                 res
-            }
+            }}
 
-            unsafe fn from_glib_full_num_as_vec(ptr: *mut *mut $ffi_name, num: usize) -> Vec<Self> {
+            unsafe fn from_glib_full_num_as_vec(ptr: *mut *mut $ffi_name, num: usize) -> Vec<Self> { unsafe {
                 if num == 0 || ptr.is_null() {
                     return Vec::new();
                 }
@@ -372,31 +372,31 @@ macro_rules! mini_object_wrapper (
                 res.set_len(num);
                 $crate::glib::ffi::g_free(ptr as *mut _);
                 res
-            }
+            }}
         }
 
         impl $crate::glib::translate::FromGlibPtrArrayContainerAsVec<*mut $ffi_name, *mut *mut $ffi_name>
             for $name
         {
-            unsafe fn from_glib_none_as_vec(ptr: *mut *mut $ffi_name) -> Vec<Self> {
+            unsafe fn from_glib_none_as_vec(ptr: *mut *mut $ffi_name) -> Vec<Self> { unsafe {
                 $crate::glib::translate::FromGlibContainerAsVec::from_glib_none_num_as_vec(ptr, glib::translate::c_ptr_array_len(ptr))
-            }
+            }}
 
-            unsafe fn from_glib_container_as_vec(ptr: *mut *mut $ffi_name) -> Vec<Self> {
+            unsafe fn from_glib_container_as_vec(ptr: *mut *mut $ffi_name) -> Vec<Self> { unsafe {
                 $crate::glib::translate::FromGlibContainerAsVec::from_glib_container_num_as_vec(ptr, glib::translate::c_ptr_array_len(ptr))
-            }
+            }}
 
-            unsafe fn from_glib_full_as_vec(ptr: *mut *mut $ffi_name) -> Vec<Self> {
+            unsafe fn from_glib_full_as_vec(ptr: *mut *mut $ffi_name) -> Vec<Self> { unsafe {
                 $crate::glib::translate::FromGlibContainerAsVec::from_glib_full_num_as_vec(ptr, glib::translate::c_ptr_array_len(ptr))
-            }
+            }}
         }
 
         impl $crate::glib::translate::FromGlibContainerAsVec<*mut $ffi_name, *const *mut $ffi_name>
             for $name
         {
-            unsafe fn from_glib_none_num_as_vec(ptr: *const *mut $ffi_name, num: usize) -> Vec<Self> {
+            unsafe fn from_glib_none_num_as_vec(ptr: *const *mut $ffi_name, num: usize) -> Vec<Self> { unsafe {
                 $crate::glib::translate::FromGlibContainerAsVec::from_glib_none_num_as_vec(ptr as *mut *mut _, num)
-            }
+            }}
 
             unsafe fn from_glib_container_num_as_vec(_: *const *mut $ffi_name, _: usize) -> Vec<Self> {
                 // Can't free a *const
@@ -411,9 +411,9 @@ macro_rules! mini_object_wrapper (
 
         impl $crate::glib::translate::FromGlibPtrArrayContainerAsVec<*mut $ffi_name, *const *mut $ffi_name> for $name
         {
-            unsafe fn from_glib_none_as_vec(ptr: *const *mut $ffi_name) -> Vec<Self> {
+            unsafe fn from_glib_none_as_vec(ptr: *const *mut $ffi_name) -> Vec<Self> { unsafe {
                 $crate::glib::translate::FromGlibPtrArrayContainerAsVec::from_glib_none_as_vec(ptr as *mut *mut _)
-            }
+            }}
 
             unsafe fn from_glib_container_as_vec(_: *const *mut $ffi_name) -> Vec<Self> {
                 // Can't free a *const
@@ -444,20 +444,20 @@ macro_rules! mini_object_wrapper (
             }
 
             #[inline]
-            pub unsafe fn from_ptr<'a>(ptr: *const $ffi_name) -> &'a Self {
+            pub unsafe fn from_ptr<'a>(ptr: *const $ffi_name) -> &'a Self { unsafe {
                 debug_assert!(!ptr.is_null());
                 &*(ptr as *const Self)
-            }
+            }}
 
             #[inline]
-            pub unsafe fn from_mut_ptr<'a>(ptr: *mut $ffi_name) -> &'a mut Self {
+            pub unsafe fn from_mut_ptr<'a>(ptr: *mut $ffi_name) -> &'a mut Self { unsafe {
                 debug_assert!(!ptr.is_null());
                 debug_assert_ne!(
                     $crate::ffi::gst_mini_object_is_writable(ptr as *mut $crate::ffi::GstMiniObject),
                     $crate::glib::ffi::GFALSE
                 );
                 &mut *(ptr as *mut Self)
-            }
+            }}
 
             #[doc(alias = "gst_mini_object_copy")]
             #[inline]
@@ -516,7 +516,7 @@ macro_rules! mini_object_wrapper (
         unsafe impl Sync for $name {}
         unsafe impl Send for $name {}
     };
-    ($name:ident, $ref_name:ident, $ffi_name:path, $get_type:expr) => {
+    ($name:ident, $ref_name:ident, $ffi_name:path, $get_type:expr_2021) => {
         $crate::mini_object_wrapper!($name, $ref_name, $ffi_name);
 
         impl $crate::glib::types::StaticType for $name {
@@ -545,23 +545,23 @@ macro_rules! mini_object_wrapper (
             type Checker = $crate::glib::value::GenericValueTypeOrNoneChecker<Self>;
 
             #[inline]
-            unsafe fn from_value(value: &'a $crate::glib::Value) -> Self {
+            unsafe fn from_value(value: &'a $crate::glib::Value) -> Self { unsafe {
                 skip_assert_initialized!();
                 $crate::glib::translate::from_glib_none(
                     $crate::glib::gobject_ffi::g_value_get_boxed($crate::glib::translate::ToGlibPtr::to_glib_none(value).0) as *mut $ffi_name
                 )
-            }
+            }}
         }
 
         unsafe impl<'a> $crate::glib::value::FromValue<'a> for &'a $name {
             type Checker = $crate::glib::value::GenericValueTypeOrNoneChecker<Self>;
 
             #[inline]
-            unsafe fn from_value(value: &'a $crate::glib::Value) -> Self {
+            unsafe fn from_value(value: &'a $crate::glib::Value) -> Self { unsafe {
                 skip_assert_initialized!();
                 let value = &*(value as *const $crate::glib::Value as *const $crate::glib::gobject_ffi::GValue);
                 $name::from_glib_ptr_borrow(&*(&value.data[0].v_pointer as *const $crate::glib::ffi::gpointer as *const *mut $ffi_name))
-            }
+            }}
         }
 
         impl $crate::glib::value::ToValue for $name {
@@ -617,10 +617,10 @@ macro_rules! mini_object_wrapper (
             type Checker = $crate::glib::value::GenericValueTypeOrNoneChecker<Self>;
 
             #[inline]
-            unsafe fn from_value(value: &'a $crate::glib::Value) -> Self {
+            unsafe fn from_value(value: &'a $crate::glib::Value) -> Self { unsafe {
                 skip_assert_initialized!();
                 &*($crate::glib::gobject_ffi::g_value_get_boxed($crate::glib::translate::ToGlibPtr::to_glib_none(value).0) as *const $ref_name)
-            }
+            }}
         }
 
         // Can't have SetValue/SetValueOptional impls as otherwise one could use it to get

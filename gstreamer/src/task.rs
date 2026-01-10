@@ -112,14 +112,18 @@ impl<F: FnMut(&Task) + Send + 'static> TaskBuilder<F> {
         unsafe extern "C" fn func_trampoline<F: FnMut(&Task) + Send + 'static>(
             user_data: glib::ffi::gpointer,
         ) {
-            let callback: &mut (F, *mut ffi::GstTask) = &mut *(user_data as *mut _);
-            (callback.0)(&from_glib_borrow(callback.1));
+            unsafe {
+                let callback: &mut (F, *mut ffi::GstTask) = &mut *(user_data as *mut _);
+                (callback.0)(&from_glib_borrow(callback.1));
+            }
         }
 
         unsafe extern "C" fn destroy_func<F: FnMut(&Task) + Send + 'static>(
             data: glib::ffi::gpointer,
         ) {
-            let _callback: Box<(F, *mut ffi::GstTask)> = Box::from_raw(data as *mut _);
+            unsafe {
+                let _callback: Box<(F, *mut ffi::GstTask)> = Box::from_raw(data as *mut _);
+            }
         }
 
         unsafe extern "C" fn callback_trampoline(
@@ -127,14 +131,18 @@ impl<F: FnMut(&Task) + Send + 'static> TaskBuilder<F> {
             _thread: *mut glib::ffi::GThread,
             data: glib::ffi::gpointer,
         ) {
-            let callback: &mut Box<dyn FnMut(&Task) + Send + 'static> = &mut *(data as *mut _);
-            callback(&from_glib_borrow(task));
+            unsafe {
+                let callback: &mut Box<dyn FnMut(&Task) + Send + 'static> = &mut *(data as *mut _);
+                callback(&from_glib_borrow(task));
+            }
         }
 
         #[allow(clippy::type_complexity)]
         unsafe extern "C" fn destroy_callback(data: glib::ffi::gpointer) {
-            let _callback: Box<Box<dyn FnMut(&Task) + Send + 'static>> =
-                Box::from_raw(data as *mut _);
+            unsafe {
+                let _callback: Box<Box<dyn FnMut(&Task) + Send + 'static>> =
+                    Box::from_raw(data as *mut _);
+            }
         }
 
         unsafe {

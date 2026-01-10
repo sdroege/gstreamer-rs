@@ -80,10 +80,12 @@ unsafe extern "C" fn navigation_send_event<T: NavigationImpl>(
     nav: *mut ffi::GstNavigation,
     structure: *mut gst::ffi::GstStructure,
 ) {
-    let instance = &*(nav as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(nav as *mut T::Instance);
+        let imp = instance.imp();
 
-    imp.send_event(from_glib_full(structure));
+        imp.send_event(from_glib_full(structure));
+    }
 }
 
 #[cfg(feature = "v1_22")]
@@ -92,8 +94,10 @@ unsafe extern "C" fn navigation_send_event_simple<T: NavigationImpl>(
     nav: *mut ffi::GstNavigation,
     event: *mut gst::ffi::GstEvent,
 ) {
-    let instance = &*(nav as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(nav as *mut T::Instance);
+        let imp = instance.imp();
 
-    imp.send_event_simple(from_glib_full(event));
+        imp.send_event_simple(from_glib_full(event));
+    }
 }

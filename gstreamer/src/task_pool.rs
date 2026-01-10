@@ -7,8 +7,10 @@ use glib::{ffi::gpointer, prelude::*, translate::*};
 use crate::{ffi, TaskPool};
 
 unsafe extern "C" fn task_pool_trampoline<P: FnOnce() + Send + 'static>(data: gpointer) {
-    let func = Box::from_raw(data as *mut P);
-    func()
+    unsafe {
+        let func = Box::from_raw(data as *mut P);
+        func()
+    }
 }
 
 pub trait TaskPoolExtManual: IsA<TaskPool> + 'static {
@@ -53,13 +55,13 @@ impl<O: IsA<TaskPool>> TaskPoolExtManual for O {}
 
 impl TaskPool {
     unsafe fn join(&self, id: ptr::NonNull<libc::c_void>) {
-        ffi::gst_task_pool_join(self.to_glib_none().0, id.as_ptr())
+        unsafe { ffi::gst_task_pool_join(self.to_glib_none().0, id.as_ptr()) }
     }
 
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     unsafe fn dispose_handle(&self, id: ptr::NonNull<libc::c_void>) {
-        ffi::gst_task_pool_dispose_handle(self.to_glib_none().0, id.as_ptr())
+        unsafe { ffi::gst_task_pool_dispose_handle(self.to_glib_none().0, id.as_ptr()) }
     }
 }
 

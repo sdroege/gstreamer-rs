@@ -292,33 +292,39 @@ impl AppSinkCallbacksBuilder {
 }
 
 unsafe extern "C" fn trampoline_eos(appsink: *mut ffi::GstAppSink, callbacks: gpointer) {
-    let callbacks = callbacks as *mut AppSinkCallbacks;
-    let element: Borrowed<AppSink> = from_glib_borrow(appsink);
-
-    #[cfg(not(panic = "abort"))]
-    if (*callbacks).panicked.load(Ordering::Relaxed) {
+    unsafe {
+        let callbacks = callbacks as *mut AppSinkCallbacks;
         let element: Borrowed<AppSink> = from_glib_borrow(appsink);
-        gst::subclass::post_panic_error_message(element.upcast_ref(), element.upcast_ref(), None);
-        return;
-    }
 
-    if let Some(ref mut eos) = (*callbacks).eos {
-        let result = panic::catch_unwind(panic::AssertUnwindSafe(|| eos(&element)));
-        match result {
-            Ok(result) => result,
-            Err(err) => {
-                #[cfg(panic = "abort")]
-                {
-                    unreachable!("{err:?}");
-                }
-                #[cfg(not(panic = "abort"))]
-                {
-                    (*callbacks).panicked.store(true, Ordering::Relaxed);
-                    gst::subclass::post_panic_error_message(
-                        element.upcast_ref(),
-                        element.upcast_ref(),
-                        Some(err),
-                    );
+        #[cfg(not(panic = "abort"))]
+        if (*callbacks).panicked.load(Ordering::Relaxed) {
+            let element: Borrowed<AppSink> = from_glib_borrow(appsink);
+            gst::subclass::post_panic_error_message(
+                element.upcast_ref(),
+                element.upcast_ref(),
+                None,
+            );
+            return;
+        }
+
+        if let Some(ref mut eos) = (*callbacks).eos {
+            let result = panic::catch_unwind(panic::AssertUnwindSafe(|| eos(&element)));
+            match result {
+                Ok(result) => result,
+                Err(err) => {
+                    #[cfg(panic = "abort")]
+                    {
+                        unreachable!("{err:?}");
+                    }
+                    #[cfg(not(panic = "abort"))]
+                    {
+                        (*callbacks).panicked.store(true, Ordering::Relaxed);
+                        gst::subclass::post_panic_error_message(
+                            element.upcast_ref(),
+                            element.upcast_ref(),
+                            Some(err),
+                        );
+                    }
                 }
             }
         }
@@ -329,129 +335,149 @@ unsafe extern "C" fn trampoline_new_preroll(
     appsink: *mut ffi::GstAppSink,
     callbacks: gpointer,
 ) -> gst::ffi::GstFlowReturn {
-    let callbacks = callbacks as *mut AppSinkCallbacks;
-    let element: Borrowed<AppSink> = from_glib_borrow(appsink);
-
-    #[cfg(not(panic = "abort"))]
-    if (*callbacks).panicked.load(Ordering::Relaxed) {
+    unsafe {
+        let callbacks = callbacks as *mut AppSinkCallbacks;
         let element: Borrowed<AppSink> = from_glib_borrow(appsink);
-        gst::subclass::post_panic_error_message(element.upcast_ref(), element.upcast_ref(), None);
-        return gst::FlowReturn::Error.into_glib();
-    }
 
-    let ret = if let Some(ref mut new_preroll) = (*callbacks).new_preroll {
-        let result = panic::catch_unwind(panic::AssertUnwindSafe(|| new_preroll(&element).into()));
-        match result {
-            Ok(result) => result,
-            Err(err) => {
-                #[cfg(panic = "abort")]
-                {
-                    unreachable!("{err:?}");
-                }
-                #[cfg(not(panic = "abort"))]
-                {
-                    (*callbacks).panicked.store(true, Ordering::Relaxed);
-                    gst::subclass::post_panic_error_message(
-                        element.upcast_ref(),
-                        element.upcast_ref(),
-                        Some(err),
-                    );
+        #[cfg(not(panic = "abort"))]
+        if (*callbacks).panicked.load(Ordering::Relaxed) {
+            let element: Borrowed<AppSink> = from_glib_borrow(appsink);
+            gst::subclass::post_panic_error_message(
+                element.upcast_ref(),
+                element.upcast_ref(),
+                None,
+            );
+            return gst::FlowReturn::Error.into_glib();
+        }
 
-                    gst::FlowReturn::Error
+        let ret = if let Some(ref mut new_preroll) = (*callbacks).new_preroll {
+            let result =
+                panic::catch_unwind(panic::AssertUnwindSafe(|| new_preroll(&element).into()));
+            match result {
+                Ok(result) => result,
+                Err(err) => {
+                    #[cfg(panic = "abort")]
+                    {
+                        unreachable!("{err:?}");
+                    }
+                    #[cfg(not(panic = "abort"))]
+                    {
+                        (*callbacks).panicked.store(true, Ordering::Relaxed);
+                        gst::subclass::post_panic_error_message(
+                            element.upcast_ref(),
+                            element.upcast_ref(),
+                            Some(err),
+                        );
+
+                        gst::FlowReturn::Error
+                    }
                 }
             }
-        }
-    } else {
-        gst::FlowReturn::Error
-    };
+        } else {
+            gst::FlowReturn::Error
+        };
 
-    ret.into_glib()
+        ret.into_glib()
+    }
 }
 
 unsafe extern "C" fn trampoline_new_sample(
     appsink: *mut ffi::GstAppSink,
     callbacks: gpointer,
 ) -> gst::ffi::GstFlowReturn {
-    let callbacks = callbacks as *mut AppSinkCallbacks;
-    let element: Borrowed<AppSink> = from_glib_borrow(appsink);
-
-    #[cfg(not(panic = "abort"))]
-    if (*callbacks).panicked.load(Ordering::Relaxed) {
+    unsafe {
+        let callbacks = callbacks as *mut AppSinkCallbacks;
         let element: Borrowed<AppSink> = from_glib_borrow(appsink);
-        gst::subclass::post_panic_error_message(element.upcast_ref(), element.upcast_ref(), None);
-        return gst::FlowReturn::Error.into_glib();
-    }
 
-    let ret = if let Some(ref mut new_sample) = (*callbacks).new_sample {
-        let result = panic::catch_unwind(panic::AssertUnwindSafe(|| new_sample(&element).into()));
-        match result {
-            Ok(result) => result,
-            Err(err) => {
-                #[cfg(panic = "abort")]
-                {
-                    unreachable!("{err:?}");
-                }
-                #[cfg(not(panic = "abort"))]
-                {
-                    (*callbacks).panicked.store(true, Ordering::Relaxed);
-                    gst::subclass::post_panic_error_message(
-                        element.upcast_ref(),
-                        element.upcast_ref(),
-                        Some(err),
-                    );
+        #[cfg(not(panic = "abort"))]
+        if (*callbacks).panicked.load(Ordering::Relaxed) {
+            let element: Borrowed<AppSink> = from_glib_borrow(appsink);
+            gst::subclass::post_panic_error_message(
+                element.upcast_ref(),
+                element.upcast_ref(),
+                None,
+            );
+            return gst::FlowReturn::Error.into_glib();
+        }
 
-                    gst::FlowReturn::Error
+        let ret = if let Some(ref mut new_sample) = (*callbacks).new_sample {
+            let result =
+                panic::catch_unwind(panic::AssertUnwindSafe(|| new_sample(&element).into()));
+            match result {
+                Ok(result) => result,
+                Err(err) => {
+                    #[cfg(panic = "abort")]
+                    {
+                        unreachable!("{err:?}");
+                    }
+                    #[cfg(not(panic = "abort"))]
+                    {
+                        (*callbacks).panicked.store(true, Ordering::Relaxed);
+                        gst::subclass::post_panic_error_message(
+                            element.upcast_ref(),
+                            element.upcast_ref(),
+                            Some(err),
+                        );
+
+                        gst::FlowReturn::Error
+                    }
                 }
             }
-        }
-    } else {
-        gst::FlowReturn::Error
-    };
+        } else {
+            gst::FlowReturn::Error
+        };
 
-    ret.into_glib()
+        ret.into_glib()
+    }
 }
 
 unsafe extern "C" fn trampoline_new_event(
     appsink: *mut ffi::GstAppSink,
     callbacks: gpointer,
 ) -> glib::ffi::gboolean {
-    let callbacks = callbacks as *mut AppSinkCallbacks;
-    let element: Borrowed<AppSink> = from_glib_borrow(appsink);
-
-    #[cfg(not(panic = "abort"))]
-    if (*callbacks).panicked.load(Ordering::Relaxed) {
+    unsafe {
+        let callbacks = callbacks as *mut AppSinkCallbacks;
         let element: Borrowed<AppSink> = from_glib_borrow(appsink);
-        gst::subclass::post_panic_error_message(element.upcast_ref(), element.upcast_ref(), None);
-        return false.into_glib();
-    }
 
-    let ret = if let Some(ref mut new_event) = (*callbacks).new_event {
-        let result = panic::catch_unwind(panic::AssertUnwindSafe(|| new_event(&element)));
-        match result {
-            Ok(result) => result,
-            Err(err) => {
-                #[cfg(panic = "abort")]
-                {
-                    unreachable!("{err:?}");
-                }
-                #[cfg(not(panic = "abort"))]
-                {
-                    (*callbacks).panicked.store(true, Ordering::Relaxed);
-                    gst::subclass::post_panic_error_message(
-                        element.upcast_ref(),
-                        element.upcast_ref(),
-                        Some(err),
-                    );
+        #[cfg(not(panic = "abort"))]
+        if (*callbacks).panicked.load(Ordering::Relaxed) {
+            let element: Borrowed<AppSink> = from_glib_borrow(appsink);
+            gst::subclass::post_panic_error_message(
+                element.upcast_ref(),
+                element.upcast_ref(),
+                None,
+            );
+            return false.into_glib();
+        }
 
-                    false
+        let ret = if let Some(ref mut new_event) = (*callbacks).new_event {
+            let result = panic::catch_unwind(panic::AssertUnwindSafe(|| new_event(&element)));
+            match result {
+                Ok(result) => result,
+                Err(err) => {
+                    #[cfg(panic = "abort")]
+                    {
+                        unreachable!("{err:?}");
+                    }
+                    #[cfg(not(panic = "abort"))]
+                    {
+                        (*callbacks).panicked.store(true, Ordering::Relaxed);
+                        gst::subclass::post_panic_error_message(
+                            element.upcast_ref(),
+                            element.upcast_ref(),
+                            Some(err),
+                        );
+
+                        false
+                    }
                 }
             }
-        }
-    } else {
-        false
-    };
+        } else {
+            false
+        };
 
-    ret.into_glib()
+        ret.into_glib()
+    }
 }
 
 unsafe extern "C" fn trampoline_propose_allocation(
@@ -459,52 +485,60 @@ unsafe extern "C" fn trampoline_propose_allocation(
     query: *mut gst::ffi::GstQuery,
     callbacks: gpointer,
 ) -> glib::ffi::gboolean {
-    let callbacks = callbacks as *mut AppSinkCallbacks;
-    let element: Borrowed<AppSink> = from_glib_borrow(appsink);
-
-    #[cfg(not(panic = "abort"))]
-    if (*callbacks).panicked.load(Ordering::Relaxed) {
+    unsafe {
+        let callbacks = callbacks as *mut AppSinkCallbacks;
         let element: Borrowed<AppSink> = from_glib_borrow(appsink);
-        gst::subclass::post_panic_error_message(element.upcast_ref(), element.upcast_ref(), None);
-        return false.into_glib();
-    }
 
-    let ret = if let Some(ref mut propose_allocation) = (*callbacks).propose_allocation {
-        let query = match gst::QueryRef::from_mut_ptr(query).view_mut() {
-            gst::QueryViewMut::Allocation(allocation) => allocation,
-            _ => unreachable!(),
-        };
-        let result = panic::catch_unwind(panic::AssertUnwindSafe(|| {
-            propose_allocation(&element, query)
-        }));
-        match result {
-            Ok(result) => result,
-            Err(err) => {
-                #[cfg(panic = "abort")]
-                {
-                    unreachable!("{err:?}");
-                }
-                #[cfg(not(panic = "abort"))]
-                {
-                    (*callbacks).panicked.store(true, Ordering::Relaxed);
-                    gst::subclass::post_panic_error_message(
-                        element.upcast_ref(),
-                        element.upcast_ref(),
-                        Some(err),
-                    );
-                    false
+        #[cfg(not(panic = "abort"))]
+        if (*callbacks).panicked.load(Ordering::Relaxed) {
+            let element: Borrowed<AppSink> = from_glib_borrow(appsink);
+            gst::subclass::post_panic_error_message(
+                element.upcast_ref(),
+                element.upcast_ref(),
+                None,
+            );
+            return false.into_glib();
+        }
+
+        let ret = if let Some(ref mut propose_allocation) = (*callbacks).propose_allocation {
+            let query = match gst::QueryRef::from_mut_ptr(query).view_mut() {
+                gst::QueryViewMut::Allocation(allocation) => allocation,
+                _ => unreachable!(),
+            };
+            let result = panic::catch_unwind(panic::AssertUnwindSafe(|| {
+                propose_allocation(&element, query)
+            }));
+            match result {
+                Ok(result) => result,
+                Err(err) => {
+                    #[cfg(panic = "abort")]
+                    {
+                        unreachable!("{err:?}");
+                    }
+                    #[cfg(not(panic = "abort"))]
+                    {
+                        (*callbacks).panicked.store(true, Ordering::Relaxed);
+                        gst::subclass::post_panic_error_message(
+                            element.upcast_ref(),
+                            element.upcast_ref(),
+                            Some(err),
+                        );
+                        false
+                    }
                 }
             }
-        }
-    } else {
-        false
-    };
+        } else {
+            false
+        };
 
-    ret.into_glib()
+        ret.into_glib()
+    }
 }
 
 unsafe extern "C" fn destroy_callbacks(ptr: gpointer) {
-    let _ = Box::<AppSinkCallbacks>::from_raw(ptr as *mut _);
+    unsafe {
+        let _ = Box::<AppSinkCallbacks>::from_raw(ptr as *mut _);
+    }
 }
 
 impl AppSink {
@@ -818,8 +852,10 @@ impl AppSink {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(AppSink::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(AppSink::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box<F> = Box::new(f);
@@ -846,8 +882,10 @@ impl AppSink {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(AppSink::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(AppSink::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box<F> = Box::new(f);
@@ -874,8 +912,10 @@ impl AppSink {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(AppSink::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(AppSink::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box<F> = Box::new(f);
@@ -902,8 +942,10 @@ impl AppSink {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(AppSink::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(AppSink::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box<F> = Box::new(f);
@@ -930,8 +972,10 @@ impl AppSink {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(AppSink::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(AppSink::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box<F> = Box::new(f);
@@ -958,8 +1002,10 @@ impl AppSink {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(AppSink::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(AppSink::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box<F> = Box::new(f);
@@ -988,8 +1034,10 @@ impl AppSink {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(AppSink::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(AppSink::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box<F> = Box::new(f);
@@ -1014,8 +1062,10 @@ impl AppSink {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(AppSink::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(AppSink::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box<F> = Box::new(f);
@@ -1042,8 +1092,10 @@ impl AppSink {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(AppSink::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(AppSink::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box<F> = Box::new(f);
@@ -1070,8 +1122,10 @@ impl AppSink {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(AppSink::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(AppSink::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box<F> = Box::new(f);
@@ -1096,8 +1150,10 @@ impl AppSink {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(AppSink::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(AppSink::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box<F> = Box::new(f);
@@ -1124,8 +1180,10 @@ impl AppSink {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(AppSink::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(AppSink::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box<F> = Box::new(f);
@@ -1152,8 +1210,10 @@ impl AppSink {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(AppSink::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(AppSink::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box<F> = Box::new(f);

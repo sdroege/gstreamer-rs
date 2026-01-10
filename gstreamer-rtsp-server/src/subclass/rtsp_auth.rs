@@ -82,10 +82,12 @@ unsafe extern "C" fn rtsp_auth_authenticate<T: RTSPAuthImpl>(
     ptr: *mut ffi::GstRTSPAuth,
     ctx: *mut ffi::GstRTSPContext,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    imp.authenticate(&from_glib_borrow(ctx)).into_glib()
+        imp.authenticate(&from_glib_borrow(ctx)).into_glib()
+    }
 }
 
 unsafe extern "C" fn rtsp_auth_check<T: RTSPAuthImpl>(
@@ -93,19 +95,23 @@ unsafe extern "C" fn rtsp_auth_check<T: RTSPAuthImpl>(
     ctx: *mut ffi::GstRTSPContext,
     check: *const c_char,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    imp.check(&from_glib_borrow(ctx), &from_glib_borrow(check))
-        .into_glib()
+        imp.check(&from_glib_borrow(ctx), &from_glib_borrow(check))
+            .into_glib()
+    }
 }
 
 unsafe extern "C" fn rtsp_auth_generate_authenticate_header<T: RTSPAuthImpl>(
     ptr: *mut ffi::GstRTSPAuth,
     ctx: *mut ffi::GstRTSPContext,
 ) {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    imp.generate_authenticate_header(&from_glib_borrow(ctx));
+        imp.generate_authenticate_header(&from_glib_borrow(ctx));
+    }
 }

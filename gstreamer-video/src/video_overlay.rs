@@ -7,11 +7,11 @@ use crate::{ffi, VideoOverlay};
 
 pub trait VideoOverlayExtManual: IsA<VideoOverlay> + 'static {
     unsafe fn set_window_handle(&self, handle: uintptr_t) {
-        ffi::gst_video_overlay_set_window_handle(self.as_ref().to_glib_none().0, handle)
+        unsafe { ffi::gst_video_overlay_set_window_handle(self.as_ref().to_glib_none().0, handle) }
     }
 
     unsafe fn got_window_handle(&self, handle: uintptr_t) {
-        ffi::gst_video_overlay_got_window_handle(self.as_ref().to_glib_none().0, handle)
+        unsafe { ffi::gst_video_overlay_got_window_handle(self.as_ref().to_glib_none().0, handle) }
     }
 }
 

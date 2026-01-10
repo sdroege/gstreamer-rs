@@ -64,24 +64,28 @@ unsafe extern "C" fn task_pool_prepare<T: TaskPoolImpl>(
     ptr: *mut ffi::GstTaskPool,
     error: *mut *mut glib::ffi::GError,
 ) {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    match imp.prepare() {
-        Ok(()) => {}
-        Err(err) => {
-            if !error.is_null() {
-                *error = err.into_glib_ptr();
+        match imp.prepare() {
+            Ok(()) => {}
+            Err(err) => {
+                if !error.is_null() {
+                    *error = err.into_glib_ptr();
+                }
             }
         }
     }
 }
 
 unsafe extern "C" fn task_pool_cleanup<T: TaskPoolImpl>(ptr: *mut ffi::GstTaskPool) {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    imp.cleanup();
+        imp.cleanup();
+    }
 }
 
 unsafe extern "C" fn task_pool_push<T: TaskPoolImpl>(
@@ -90,37 +94,41 @@ unsafe extern "C" fn task_pool_push<T: TaskPoolImpl>(
     user_data: gpointer,
     error: *mut *mut glib::ffi::GError,
 ) -> gpointer {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    let func = TaskPoolFunction::new(func.expect("Tried to push null func"), user_data);
+        let func = TaskPoolFunction::new(func.expect("Tried to push null func"), user_data);
 
-    match imp.push(func.clone()) {
-        Ok(None) => ptr::null_mut(),
-        Ok(Some(handle)) => Box::into_raw(Box::new(handle)) as gpointer,
-        Err(err) => {
-            func.prevent_call();
-            if !error.is_null() {
-                *error = err.into_glib_ptr();
+        match imp.push(func.clone()) {
+            Ok(None) => ptr::null_mut(),
+            Ok(Some(handle)) => Box::into_raw(Box::new(handle)) as gpointer,
+            Err(err) => {
+                func.prevent_call();
+                if !error.is_null() {
+                    *error = err.into_glib_ptr();
+                }
+                ptr::null_mut()
             }
-            ptr::null_mut()
         }
     }
 }
 
 unsafe extern "C" fn task_pool_join<T: TaskPoolImpl>(ptr: *mut ffi::GstTaskPool, id: gpointer) {
-    if id.is_null() {
-        let wrap: Borrowed<TaskPool> = from_glib_borrow(ptr);
-        crate::warning!(
-            crate::CAT_RUST,
-            obj = wrap.as_ref(),
-            "Tried to join null handle"
-        );
-        return;
-    }
+    unsafe {
+        if id.is_null() {
+            let wrap: Borrowed<TaskPool> = from_glib_borrow(ptr);
+            crate::warning!(
+                crate::CAT_RUST,
+                obj = wrap.as_ref(),
+                "Tried to join null handle"
+            );
+            return;
+        }
 
-    let handle = Box::from_raw(id as *mut T::Handle);
-    handle.join();
+        let handle = Box::from_raw(id as *mut T::Handle);
+        handle.join();
+    }
 }
 
 #[cfg(feature = "v1_20")]
@@ -129,18 +137,20 @@ unsafe extern "C" fn task_pool_dispose_handle<T: TaskPoolImpl>(
     ptr: *mut ffi::GstTaskPool,
     id: gpointer,
 ) {
-    if id.is_null() {
-        let wrap: Borrowed<TaskPool> = from_glib_borrow(ptr);
-        crate::warning!(
-            crate::CAT_RUST,
-            obj = wrap.as_ref(),
-            "Tried to dispose null handle"
-        );
-        return;
-    }
+    unsafe {
+        if id.is_null() {
+            let wrap: Borrowed<TaskPool> = from_glib_borrow(ptr);
+            crate::warning!(
+                crate::CAT_RUST,
+                obj = wrap.as_ref(),
+                "Tried to dispose null handle"
+            );
+            return;
+        }
 
-    let handle = Box::from_raw(id as *mut T::Handle);
-    drop(handle);
+        let handle = Box::from_raw(id as *mut T::Handle);
+        drop(handle);
+    }
 }
 
 // rustdoc-stripper-ignore-next

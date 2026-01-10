@@ -178,57 +178,63 @@ unsafe impl<T: BaseParseImpl> IsSubclassable<T> for BaseParse {
 unsafe extern "C" fn base_parse_start<T: BaseParseImpl>(
     ptr: *mut ffi::GstBaseParse,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, false, {
-        match imp.start() {
-            Ok(()) => true,
-            Err(err) => {
-                imp.post_error_message(err);
-                false
+        gst::panic_to_error!(imp, false, {
+            match imp.start() {
+                Ok(()) => true,
+                Err(err) => {
+                    imp.post_error_message(err);
+                    false
+                }
             }
-        }
-    })
-    .into_glib()
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn base_parse_stop<T: BaseParseImpl>(
     ptr: *mut ffi::GstBaseParse,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, false, {
-        match imp.stop() {
-            Ok(()) => true,
-            Err(err) => {
-                imp.post_error_message(err);
-                false
+        gst::panic_to_error!(imp, false, {
+            match imp.stop() {
+                Ok(()) => true,
+                Err(err) => {
+                    imp.post_error_message(err);
+                    false
+                }
             }
-        }
-    })
-    .into_glib()
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn base_parse_set_sink_caps<T: BaseParseImpl>(
     ptr: *mut ffi::GstBaseParse,
     caps: *mut gst::ffi::GstCaps,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
-    let caps: Borrowed<gst::Caps> = from_glib_borrow(caps);
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
+        let caps: Borrowed<gst::Caps> = from_glib_borrow(caps);
 
-    gst::panic_to_error!(imp, false, {
-        match imp.set_sink_caps(&caps) {
-            Ok(()) => true,
-            Err(err) => {
-                err.log_with_imp(imp);
-                false
+        gst::panic_to_error!(imp, false, {
+            match imp.set_sink_caps(&caps) {
+                Ok(()) => true,
+                Err(err) => {
+                    err.log_with_imp(imp);
+                    false
+                }
             }
-        }
-    })
-    .into_glib()
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn base_parse_handle_frame<T: BaseParseImpl>(
@@ -236,24 +242,26 @@ unsafe extern "C" fn base_parse_handle_frame<T: BaseParseImpl>(
     frame: *mut ffi::GstBaseParseFrame,
     skipsize: *mut i32,
 ) -> gst::ffi::GstFlowReturn {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
-    let instance = imp.obj();
-    let instance = instance.unsafe_cast_ref::<BaseParse>();
-    let wrap_frame = BaseParseFrame::new(frame, instance);
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
+        let instance = imp.obj();
+        let instance = instance.unsafe_cast_ref::<BaseParse>();
+        let wrap_frame = BaseParseFrame::new(frame, instance);
 
-    let res = gst::panic_to_error!(imp, Err(gst::FlowError::Error), {
-        imp.handle_frame(wrap_frame)
-    });
+        let res = gst::panic_to_error!(imp, Err(gst::FlowError::Error), {
+            imp.handle_frame(wrap_frame)
+        });
 
-    match res {
-        Ok((flow, skip)) => {
-            *skipsize = i32::try_from(skip).expect("skip is higher than i32::MAX");
-            gst::FlowReturn::from_ok(flow)
+        match res {
+            Ok((flow, skip)) => {
+                *skipsize = i32::try_from(skip).expect("skip is higher than i32::MAX");
+                gst::FlowReturn::from_ok(flow)
+            }
+            Err(flow) => gst::FlowReturn::from_error(flow),
         }
-        Err(flow) => gst::FlowReturn::from_error(flow),
+        .into_glib()
     }
-    .into_glib()
 }
 
 unsafe extern "C" fn base_parse_convert<T: BaseParseImpl>(
@@ -263,18 +271,20 @@ unsafe extern "C" fn base_parse_convert<T: BaseParseImpl>(
     dest_format: gst::ffi::GstFormat,
     dest_value: *mut i64,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
-    let source = gst::GenericFormattedValue::new(from_glib(source_format), source_value);
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
+        let source = gst::GenericFormattedValue::new(from_glib(source_format), source_value);
 
-    let res = gst::panic_to_error!(imp, None, { imp.convert(source, from_glib(dest_format)) });
+        let res = gst::panic_to_error!(imp, None, { imp.convert(source, from_glib(dest_format)) });
 
-    match res {
-        Some(dest) => {
-            *dest_value = dest.into_raw_value();
-            true
+        match res {
+            Some(dest) => {
+                *dest_value = dest.into_raw_value();
+                true
+            }
+            _ => false,
         }
-        _ => false,
+        .into_glib()
     }
-    .into_glib()
 }

@@ -32,26 +32,28 @@ impl UriClipAsset {
             res: *mut gio::ffi::GAsyncResult,
             user_data: glib::ffi::gpointer,
         ) {
-            let mut error = std::ptr::null_mut();
-            let ret = {
-                #[cfg(feature = "v1_16")]
-                {
-                    ffi::ges_uri_clip_asset_finish(res, &mut error)
-                }
-                #[cfg(not(feature = "v1_16"))]
-                {
-                    ffi::ges_asset_request_finish(res, &mut error) as *mut ffi::GESUriClipAsset
-                }
-            };
-            let result = if error.is_null() {
-                Ok(from_glib_full(ret))
-            } else {
-                Err(from_glib_full(error))
-            };
-            let callback: Box_<glib::thread_guard::ThreadGuard<P>> =
-                Box_::from_raw(user_data as *mut _);
-            let callback: P = callback.into_inner();
-            callback(result);
+            unsafe {
+                let mut error = std::ptr::null_mut();
+                let ret = {
+                    #[cfg(feature = "v1_16")]
+                    {
+                        ffi::ges_uri_clip_asset_finish(res, &mut error)
+                    }
+                    #[cfg(not(feature = "v1_16"))]
+                    {
+                        ffi::ges_asset_request_finish(res, &mut error) as *mut ffi::GESUriClipAsset
+                    }
+                };
+                let result = if error.is_null() {
+                    Ok(from_glib_full(ret))
+                } else {
+                    Err(from_glib_full(error))
+                };
+                let callback: Box_<glib::thread_guard::ThreadGuard<P>> =
+                    Box_::from_raw(user_data as *mut _);
+                let callback: P = callback.into_inner();
+                callback(result);
+            }
         }
         let callback = new_trampoline::<P>;
         unsafe {

@@ -467,14 +467,18 @@ macro_rules! declare_concrete_event {
 
             #[inline]
             unsafe fn view(event: &EventRef) -> EventView<'_> {
-                let event = &*(event as *const EventRef as *const Self);
-                EventView::$name(event)
+                unsafe {
+                    let event = &*(event as *const EventRef as *const Self);
+                    EventView::$name(event)
+                }
             }
 
             #[inline]
             unsafe fn view_mut(event: &mut EventRef) -> EventViewMut<'_> {
-                let event = &mut *(event as *mut EventRef as *mut Self);
-                EventViewMut::$name(event)
+                unsafe {
+                    let event = &mut *(event as *mut EventRef as *mut Self);
+                    EventViewMut::$name(event)
+                }
             }
         }
 
@@ -2210,7 +2214,7 @@ impl<'a> EventBuilder<'a> {
 }
 
 macro_rules! event_builder_generic_impl {
-    ($new_fn:expr) => {
+    ($new_fn:expr_2021) => {
         #[doc(alias = "gst_event_set_seqnum")]
         #[allow(clippy::needless_update)]
         pub fn seqnum(self, seqnum: Seqnum) -> Self {

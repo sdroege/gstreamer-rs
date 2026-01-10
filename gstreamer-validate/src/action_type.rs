@@ -43,13 +43,15 @@ fn into_glib_content(mut t: Vec<ActionParameter>) -> *mut ffi::GstValidateAction
 }
 
 unsafe extern "C" fn action_parameter_free(param: glib::ffi::gpointer) {
-    let param = param as *mut ffi::GstValidateActionParameter;
+    unsafe {
+        let param = param as *mut ffi::GstValidateActionParameter;
 
-    glib::ffi::g_free((*param).name as *mut _);
-    glib::ffi::g_free((*param).description as *mut _);
-    glib::ffi::g_free((*param).def as *mut _);
-    glib::ffi::g_free((*param).possible_variables as *mut _);
-    glib::ffi::g_free((*param).types as *mut _);
+        glib::ffi::g_free((*param).name as *mut _);
+        glib::ffi::g_free((*param).description as *mut _);
+        glib::ffi::g_free((*param).def as *mut _);
+        glib::ffi::g_free((*param).possible_variables as *mut _);
+        glib::ffi::g_free((*param).types as *mut _);
+    }
 }
 
 pub struct ActionParameterBuilder<'a> {
@@ -184,7 +186,9 @@ type ActionFunction = dyn Fn(&crate::Scenario, &mut crate::Action) -> Result<cra
     + 'static;
 
 unsafe extern "C" fn destroy_notify(ptr: glib::ffi::gpointer) {
-    let _ = Box::from_raw(ptr as *mut Box<ActionFunction>);
+    unsafe {
+        let _ = Box::from_raw(ptr as *mut Box<ActionFunction>);
+    }
 }
 
 pub struct ActionTypeBuilder<'a> {
@@ -322,27 +326,29 @@ impl<'a> ActionTypeBuilder<'a> {
             scenario: *mut ffi::GstValidateScenario,
             mut action_ptr: *mut ffi::GstValidateAction,
         ) -> c_int {
-            let action_type = ffi::gst_validate_get_action_type((*action_ptr).type_);
-            let scenario = from_glib_borrow(scenario);
+            unsafe {
+                let action_type = ffi::gst_validate_get_action_type((*action_ptr).type_);
+                let scenario = from_glib_borrow(scenario);
 
-            let func: &ActionFunction = &*(gst::ffi::gst_mini_object_get_qdata(
-                action_type as *mut gst::ffi::GstMiniObject,
-                QUARK_ACTION_TYPE_FUNC.get().unwrap().into_glib(),
-            ) as *const Box<ActionFunction>);
+                let func: &ActionFunction = &*(gst::ffi::gst_mini_object_get_qdata(
+                    action_type as *mut gst::ffi::GstMiniObject,
+                    QUARK_ACTION_TYPE_FUNC.get().unwrap().into_glib(),
+                ) as *const Box<ActionFunction>);
 
-            // SAFETY: `execute_func_trampoline` is called with the unic reference of `action_ptr`
-            // so we can safely borrow it mutably
-            let original_ptr = action_ptr;
-            let action = Action::from_glib_ptr_borrow_mut(&mut action_ptr);
-            let res = (*func)(&scenario, action);
+                // SAFETY: `execute_func_trampoline` is called with the unic reference of `action_ptr`
+                // so we can safely borrow it mutably
+                let original_ptr = action_ptr;
+                let action = Action::from_glib_ptr_borrow_mut(&mut action_ptr);
+                let res = (*func)(&scenario, action);
 
-            debug_assert_eq!(action.as_ptr(), original_ptr);
-            match res {
-                Err(crate::ActionError::Error(ref err)) => {
-                    action.report_error(err);
-                    ffi::GST_VALIDATE_EXECUTE_ACTION_ERROR_REPORTED
+                debug_assert_eq!(action.as_ptr(), original_ptr);
+                match res {
+                    Err(crate::ActionError::Error(ref err)) => {
+                        action.report_error(err);
+                        ffi::GST_VALIDATE_EXECUTE_ACTION_ERROR_REPORTED
+                    }
+                    Ok(v) => v.into_glib(),
                 }
-                Ok(v) => v.into_glib(),
             }
         }
 

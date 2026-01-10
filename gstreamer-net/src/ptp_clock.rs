@@ -89,8 +89,10 @@ impl PtpClock {
                 stats: *const gst::ffi::GstStructure,
                 user_data: glib::ffi::gpointer,
             ) -> glib::ffi::gboolean {
-                let callback = &*(user_data as *const F);
-                callback(domain, gst::StructureRef::from_glib_borrow(stats)).into_glib()
+                unsafe {
+                    let callback = &*(user_data as *const F);
+                    callback(domain, gst::StructureRef::from_glib_borrow(stats)).into_glib()
+                }
             }
 
             unsafe extern "C" fn destroy<
@@ -98,7 +100,9 @@ impl PtpClock {
             >(
                 user_data: glib::ffi::gpointer,
             ) {
-                let _ = Box::from_raw(user_data as *mut F);
+                unsafe {
+                    let _ = Box::from_raw(user_data as *mut F);
+                }
             }
 
             let user_data = Box::new(func);

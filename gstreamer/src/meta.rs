@@ -23,19 +23,21 @@ pub unsafe trait MetaAPI: Sync + Send + Sized {
 pub trait MetaAPIExt: MetaAPI {
     #[inline]
     unsafe fn from_ptr(buffer: &BufferRef, ptr: *const Self::GstType) -> MetaRef<'_, Self> {
-        debug_assert!(!ptr.is_null());
+        unsafe {
+            debug_assert!(!ptr.is_null());
 
-        let meta_api = Self::meta_api();
-        if meta_api != glib::Type::INVALID {
-            debug_assert_eq!(
-                meta_api,
-                from_glib((*(*(ptr as *const ffi::GstMeta)).info).api)
-            )
-        }
+            let meta_api = Self::meta_api();
+            if meta_api != glib::Type::INVALID {
+                debug_assert_eq!(
+                    meta_api,
+                    from_glib((*(*(ptr as *const ffi::GstMeta)).info).api)
+                )
+            }
 
-        MetaRef {
-            meta: &*(ptr as *const Self),
-            buffer,
+            MetaRef {
+                meta: &*(ptr as *const Self),
+                buffer,
+            }
         }
     }
 
@@ -44,20 +46,22 @@ pub trait MetaAPIExt: MetaAPI {
         buffer: &mut BufferRef,
         ptr: *mut Self::GstType,
     ) -> MetaRefMut<'_, Self, T> {
-        debug_assert!(!ptr.is_null());
+        unsafe {
+            debug_assert!(!ptr.is_null());
 
-        let meta_api = Self::meta_api();
-        if meta_api != glib::Type::INVALID {
-            debug_assert_eq!(
-                meta_api,
-                from_glib((*(*(ptr as *const ffi::GstMeta)).info).api)
-            )
-        }
+            let meta_api = Self::meta_api();
+            if meta_api != glib::Type::INVALID {
+                debug_assert_eq!(
+                    meta_api,
+                    from_glib((*(*(ptr as *const ffi::GstMeta)).info).api)
+                )
+            }
 
-        MetaRefMut {
-            meta: &mut *(ptr as *mut Self),
-            buffer,
-            mode: PhantomData,
+            MetaRefMut {
+                meta: &mut *(ptr as *mut Self),
+                buffer,
+                mode: PhantomData,
+            }
         }
     }
 }
@@ -284,16 +288,18 @@ impl<'a, T> MetaRef<'a, T> {
                 iface_: *mut ffi::GstByteArrayInterface,
                 size: usize,
             ) -> glib::ffi::gboolean {
-                let iface_ = &mut *(iface_ as *mut Writer<B>);
+                unsafe {
+                    let iface_ = &mut *(iface_ as *mut Writer<B>);
 
-                match iface_.writer.resize(size) {
-                    Some(new_data) => {
-                        iface_.iface_.data = new_data.as_mut_ptr();
-                        iface_.iface_.len = size;
+                    match iface_.writer.resize(size) {
+                        Some(new_data) => {
+                            iface_.iface_.data = new_data.as_mut_ptr();
+                            iface_.iface_.len = size;
 
-                        glib::ffi::GTRUE
+                            glib::ffi::GTRUE
+                        }
+                        None => glib::ffi::GFALSE,
                     }
-                    None => glib::ffi::GFALSE,
                 }
             }
 
@@ -936,18 +942,22 @@ impl CustomMeta {
             _data: glib::ffi::gpointer,
             user_data: glib::ffi::gpointer,
         ) -> glib::ffi::gboolean {
-            let func = &*(user_data as *const F);
-            let res = func(
-                BufferRef::from_mut_ptr(dest),
-                &*(meta as *const CustomMeta),
-                BufferRef::from_ptr(src),
-                from_glib(type_),
-            );
-            res.into_glib()
+            unsafe {
+                let func = &*(user_data as *const F);
+                let res = func(
+                    BufferRef::from_mut_ptr(dest),
+                    &*(meta as *const CustomMeta),
+                    BufferRef::from_ptr(src),
+                    from_glib(type_),
+                );
+                res.into_glib()
+            }
         }
 
         unsafe extern "C" fn transform_func_free<F>(ptr: glib::ffi::gpointer) {
-            let _ = Box::from_raw(ptr as *mut F);
+            unsafe {
+                let _ = Box::from_raw(ptr as *mut F);
+            }
         }
 
         unsafe {

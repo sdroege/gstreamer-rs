@@ -160,18 +160,20 @@ unsafe extern "C" fn formatter_can_load_uri<T: FormatterImpl>(
     uri: *const libc::c_char,
     error: *mut *mut glib::ffi::GError,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    match imp.can_load_uri(glib::GString::from_glib_borrow(uri).as_str()) {
-        Err(err) => {
-            if !error.is_null() {
-                *error = err.into_glib_ptr();
+        match imp.can_load_uri(glib::GString::from_glib_borrow(uri).as_str()) {
+            Err(err) => {
+                if !error.is_null() {
+                    *error = err.into_glib_ptr();
+                }
+
+                glib::ffi::GFALSE
             }
-
-            glib::ffi::GFALSE
+            Ok(_) => glib::ffi::GTRUE,
         }
-        Ok(_) => glib::ffi::GTRUE,
     }
 }
 
@@ -181,19 +183,21 @@ unsafe extern "C" fn formatter_load_from_uri<T: FormatterImpl>(
     uri: *const libc::c_char,
     error: *mut *mut glib::ffi::GError,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
-    let timeline = from_glib_borrow(timeline);
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
+        let timeline = from_glib_borrow(timeline);
 
-    match imp.load_from_uri(&timeline, glib::GString::from_glib_borrow(uri).as_str()) {
-        Err(err) => {
-            if !error.is_null() {
-                *error = err.into_glib_ptr();
+        match imp.load_from_uri(&timeline, glib::GString::from_glib_borrow(uri).as_str()) {
+            Err(err) => {
+                if !error.is_null() {
+                    *error = err.into_glib_ptr();
+                }
+
+                glib::ffi::GFALSE
             }
-
-            glib::ffi::GFALSE
+            Ok(_) => glib::ffi::GTRUE,
         }
-        Ok(_) => glib::ffi::GTRUE,
     }
 }
 
@@ -204,23 +208,25 @@ unsafe extern "C" fn formatter_save_to_uri<T: FormatterImpl>(
     overwrite: glib::ffi::gboolean,
     error: *mut *mut glib::ffi::GError,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
-    let timeline = from_glib_borrow(timeline);
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
+        let timeline = from_glib_borrow(timeline);
 
-    match imp.save_to_uri(
-        &timeline,
-        glib::GString::from_glib_borrow(uri).as_str(),
-        from_glib(overwrite),
-    ) {
-        Err(err) => {
-            if !error.is_null() {
-                *error = err.into_glib_ptr();
+        match imp.save_to_uri(
+            &timeline,
+            glib::GString::from_glib_borrow(uri).as_str(),
+            from_glib(overwrite),
+        ) {
+            Err(err) => {
+                if !error.is_null() {
+                    *error = err.into_glib_ptr();
+                }
+
+                glib::ffi::GFALSE
             }
-
-            glib::ffi::GFALSE
+            Ok(_) => glib::ffi::GTRUE,
         }
-        Ok(_) => glib::ffi::GTRUE,
     }
 }
 

@@ -968,8 +968,10 @@ unsafe impl<'a> glib::value::FromValue<'a> for &'a SDPMessageRef {
     type Checker = glib::value::GenericValueTypeOrNoneChecker<Self>;
 
     unsafe fn from_value(value: &'a glib::Value) -> Self {
-        skip_assert_initialized!();
-        &*(glib::gobject_ffi::g_value_get_boxed(value.to_glib_none().0) as *mut SDPMessageRef)
+        unsafe {
+            skip_assert_initialized!();
+            &*(glib::gobject_ffi::g_value_get_boxed(value.to_glib_none().0) as *mut SDPMessageRef)
+        }
     }
 }
 
@@ -1006,7 +1008,7 @@ impl glib::value::ToValueOptional for SDPMessageRef {
 }
 
 macro_rules! define_iter(
-    ($name:ident, $typ:ty, $get_item:expr, $get_len:expr) => {
+    ($name:ident, $typ:ty, $get_item:expr_2021, $get_len:expr_2021) => {
     #[must_use = "iterators are lazy and do nothing unless consumed"]
     #[derive(Debug)]
     pub struct $name<'a> {
@@ -1103,7 +1105,7 @@ macro_rules! define_iter(
 );
 
 macro_rules! define_iter_mut(
-    ($name:ident, $typ:ty, $get_item:expr, $get_len:expr) => {
+    ($name:ident, $typ:ty, $get_item:expr_2021, $get_len:expr_2021) => {
     #[must_use = "iterators are lazy and do nothing unless consumed"]
     #[derive(Debug)]
     pub struct $name<'a> {

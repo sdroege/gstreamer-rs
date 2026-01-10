@@ -191,33 +191,40 @@ unsafe extern "C" fn trampoline_need_data(
     length: u32,
     callbacks: gpointer,
 ) {
-    let callbacks = callbacks as *mut AppSrcCallbacks;
-    let element: Borrowed<AppSrc> = from_glib_borrow(appsrc);
-
-    #[cfg(not(panic = "abort"))]
-    if (*callbacks).panicked.load(Ordering::Relaxed) {
+    unsafe {
+        let callbacks = callbacks as *mut AppSrcCallbacks;
         let element: Borrowed<AppSrc> = from_glib_borrow(appsrc);
-        gst::subclass::post_panic_error_message(element.upcast_ref(), element.upcast_ref(), None);
-        return;
-    }
 
-    if let Some(ref mut need_data) = (*callbacks).need_data {
-        let result = panic::catch_unwind(panic::AssertUnwindSafe(|| need_data(&element, length)));
-        match result {
-            Ok(result) => result,
-            Err(err) => {
-                #[cfg(panic = "abort")]
-                {
-                    unreachable!("{err:?}");
-                }
-                #[cfg(not(panic = "abort"))]
-                {
-                    (*callbacks).panicked.store(true, Ordering::Relaxed);
-                    gst::subclass::post_panic_error_message(
-                        element.upcast_ref(),
-                        element.upcast_ref(),
-                        Some(err),
-                    );
+        #[cfg(not(panic = "abort"))]
+        if (*callbacks).panicked.load(Ordering::Relaxed) {
+            let element: Borrowed<AppSrc> = from_glib_borrow(appsrc);
+            gst::subclass::post_panic_error_message(
+                element.upcast_ref(),
+                element.upcast_ref(),
+                None,
+            );
+            return;
+        }
+
+        if let Some(ref mut need_data) = (*callbacks).need_data {
+            let result =
+                panic::catch_unwind(panic::AssertUnwindSafe(|| need_data(&element, length)));
+            match result {
+                Ok(result) => result,
+                Err(err) => {
+                    #[cfg(panic = "abort")]
+                    {
+                        unreachable!("{err:?}");
+                    }
+                    #[cfg(not(panic = "abort"))]
+                    {
+                        (*callbacks).panicked.store(true, Ordering::Relaxed);
+                        gst::subclass::post_panic_error_message(
+                            element.upcast_ref(),
+                            element.upcast_ref(),
+                            Some(err),
+                        );
+                    }
                 }
             }
         }
@@ -225,33 +232,39 @@ unsafe extern "C" fn trampoline_need_data(
 }
 
 unsafe extern "C" fn trampoline_enough_data(appsrc: *mut ffi::GstAppSrc, callbacks: gpointer) {
-    let callbacks = callbacks as *const AppSrcCallbacks;
-    let element: Borrowed<AppSrc> = from_glib_borrow(appsrc);
-
-    #[cfg(not(panic = "abort"))]
-    if (*callbacks).panicked.load(Ordering::Relaxed) {
+    unsafe {
+        let callbacks = callbacks as *const AppSrcCallbacks;
         let element: Borrowed<AppSrc> = from_glib_borrow(appsrc);
-        gst::subclass::post_panic_error_message(element.upcast_ref(), element.upcast_ref(), None);
-        return;
-    }
 
-    if let Some(ref enough_data) = (*callbacks).enough_data {
-        let result = panic::catch_unwind(panic::AssertUnwindSafe(|| enough_data(&element)));
-        match result {
-            Ok(result) => result,
-            Err(err) => {
-                #[cfg(panic = "abort")]
-                {
-                    unreachable!("{err:?}");
-                }
-                #[cfg(not(panic = "abort"))]
-                {
-                    (*callbacks).panicked.store(true, Ordering::Relaxed);
-                    gst::subclass::post_panic_error_message(
-                        element.upcast_ref(),
-                        element.upcast_ref(),
-                        Some(err),
-                    );
+        #[cfg(not(panic = "abort"))]
+        if (*callbacks).panicked.load(Ordering::Relaxed) {
+            let element: Borrowed<AppSrc> = from_glib_borrow(appsrc);
+            gst::subclass::post_panic_error_message(
+                element.upcast_ref(),
+                element.upcast_ref(),
+                None,
+            );
+            return;
+        }
+
+        if let Some(ref enough_data) = (*callbacks).enough_data {
+            let result = panic::catch_unwind(panic::AssertUnwindSafe(|| enough_data(&element)));
+            match result {
+                Ok(result) => result,
+                Err(err) => {
+                    #[cfg(panic = "abort")]
+                    {
+                        unreachable!("{err:?}");
+                    }
+                    #[cfg(not(panic = "abort"))]
+                    {
+                        (*callbacks).panicked.store(true, Ordering::Relaxed);
+                        gst::subclass::post_panic_error_message(
+                            element.upcast_ref(),
+                            element.upcast_ref(),
+                            Some(err),
+                        );
+                    }
                 }
             }
         }
@@ -263,47 +276,56 @@ unsafe extern "C" fn trampoline_seek_data(
     offset: u64,
     callbacks: gpointer,
 ) -> gboolean {
-    let callbacks = callbacks as *const AppSrcCallbacks;
-    let element: Borrowed<AppSrc> = from_glib_borrow(appsrc);
-
-    #[cfg(not(panic = "abort"))]
-    if (*callbacks).panicked.load(Ordering::Relaxed) {
+    unsafe {
+        let callbacks = callbacks as *const AppSrcCallbacks;
         let element: Borrowed<AppSrc> = from_glib_borrow(appsrc);
-        gst::subclass::post_panic_error_message(element.upcast_ref(), element.upcast_ref(), None);
-        return false.into_glib();
-    }
 
-    let ret = if let Some(ref seek_data) = (*callbacks).seek_data {
-        let result = panic::catch_unwind(panic::AssertUnwindSafe(|| seek_data(&element, offset)));
-        match result {
-            Ok(result) => result,
-            Err(err) => {
-                #[cfg(panic = "abort")]
-                {
-                    unreachable!("{err:?}");
-                }
-                #[cfg(not(panic = "abort"))]
-                {
-                    (*callbacks).panicked.store(true, Ordering::Relaxed);
-                    gst::subclass::post_panic_error_message(
-                        element.upcast_ref(),
-                        element.upcast_ref(),
-                        Some(err),
-                    );
+        #[cfg(not(panic = "abort"))]
+        if (*callbacks).panicked.load(Ordering::Relaxed) {
+            let element: Borrowed<AppSrc> = from_glib_borrow(appsrc);
+            gst::subclass::post_panic_error_message(
+                element.upcast_ref(),
+                element.upcast_ref(),
+                None,
+            );
+            return false.into_glib();
+        }
 
-                    false
+        let ret = if let Some(ref seek_data) = (*callbacks).seek_data {
+            let result =
+                panic::catch_unwind(panic::AssertUnwindSafe(|| seek_data(&element, offset)));
+            match result {
+                Ok(result) => result,
+                Err(err) => {
+                    #[cfg(panic = "abort")]
+                    {
+                        unreachable!("{err:?}");
+                    }
+                    #[cfg(not(panic = "abort"))]
+                    {
+                        (*callbacks).panicked.store(true, Ordering::Relaxed);
+                        gst::subclass::post_panic_error_message(
+                            element.upcast_ref(),
+                            element.upcast_ref(),
+                            Some(err),
+                        );
+
+                        false
+                    }
                 }
             }
-        }
-    } else {
-        false
-    };
+        } else {
+            false
+        };
 
-    ret.into_glib()
+        ret.into_glib()
+    }
 }
 
 unsafe extern "C" fn destroy_callbacks(ptr: gpointer) {
-    let _ = Box::<AppSrcCallbacks>::from_raw(ptr as *mut _);
+    unsafe {
+        let _ = Box::<AppSrcCallbacks>::from_raw(ptr as *mut _);
+    }
 }
 
 impl AppSrc {
@@ -421,8 +443,10 @@ impl AppSrc {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(&AppSrc::from_glib_borrow(this))
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(&AppSrc::from_glib_borrow(this))
+            }
         }
         unsafe {
             let f: Box<F> = Box::new(f);

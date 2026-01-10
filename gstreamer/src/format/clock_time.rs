@@ -515,10 +515,12 @@ unsafe impl glib::value::FromValue<'_> for ClockTime {
 
     #[inline]
     unsafe fn from_value(value: &glib::Value) -> ClockTime {
-        skip_assert_initialized!();
-        ClockTime(glib::gobject_ffi::g_value_get_uint64(
-            value.to_glib_none().0,
-        ))
+        unsafe {
+            skip_assert_initialized!();
+            ClockTime(glib::gobject_ffi::g_value_get_uint64(
+                value.to_glib_none().0,
+            ))
+        }
     }
 }
 

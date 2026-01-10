@@ -57,10 +57,12 @@ impl<'a> VideoCodecFrame<'a> {
         frame: *mut ffi::GstVideoCodecFrame,
         element: &'a T,
     ) -> Self {
-        skip_assert_initialized!();
-        let stream_lock = element.stream_lock();
-        glib::ffi::g_rec_mutex_lock(stream_lock);
-        Self { frame, element }
+        unsafe {
+            skip_assert_initialized!();
+            let stream_lock = element.stream_lock();
+            glib::ffi::g_rec_mutex_lock(stream_lock);
+            Self { frame, element }
+        }
     }
 
     #[doc(alias = "get_flags")]

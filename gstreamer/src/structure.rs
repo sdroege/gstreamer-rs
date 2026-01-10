@@ -348,50 +348,58 @@ impl<'a> ToGlibPtrMut<'a, *mut ffi::GstStructure> for Structure {
 impl FromGlibPtrNone<*const ffi::GstStructure> for Structure {
     #[inline]
     unsafe fn from_glib_none(ptr: *const ffi::GstStructure) -> Self {
-        debug_assert!(!ptr.is_null());
-        let ptr = ffi::gst_structure_copy(ptr);
-        debug_assert!(!ptr.is_null());
-        Structure(ptr::NonNull::new_unchecked(ptr))
+        unsafe {
+            debug_assert!(!ptr.is_null());
+            let ptr = ffi::gst_structure_copy(ptr);
+            debug_assert!(!ptr.is_null());
+            Structure(ptr::NonNull::new_unchecked(ptr))
+        }
     }
 }
 
 impl FromGlibPtrNone<*mut ffi::GstStructure> for Structure {
     #[inline]
     unsafe fn from_glib_none(ptr: *mut ffi::GstStructure) -> Self {
-        debug_assert!(!ptr.is_null());
-        let ptr = ffi::gst_structure_copy(ptr);
-        debug_assert!(!ptr.is_null());
-        Structure(ptr::NonNull::new_unchecked(ptr))
+        unsafe {
+            debug_assert!(!ptr.is_null());
+            let ptr = ffi::gst_structure_copy(ptr);
+            debug_assert!(!ptr.is_null());
+            Structure(ptr::NonNull::new_unchecked(ptr))
+        }
     }
 }
 
 impl FromGlibPtrFull<*const ffi::GstStructure> for Structure {
     #[inline]
     unsafe fn from_glib_full(ptr: *const ffi::GstStructure) -> Self {
-        debug_assert!(!ptr.is_null());
-        Structure(ptr::NonNull::new_unchecked(ptr as *mut ffi::GstStructure))
+        unsafe {
+            debug_assert!(!ptr.is_null());
+            Structure(ptr::NonNull::new_unchecked(ptr as *mut ffi::GstStructure))
+        }
     }
 }
 
 impl FromGlibPtrFull<*mut ffi::GstStructure> for Structure {
     #[inline]
     unsafe fn from_glib_full(ptr: *mut ffi::GstStructure) -> Self {
-        debug_assert!(!ptr.is_null());
-        Structure(ptr::NonNull::new_unchecked(ptr))
+        unsafe {
+            debug_assert!(!ptr.is_null());
+            Structure(ptr::NonNull::new_unchecked(ptr))
+        }
     }
 }
 
 impl FromGlibPtrBorrow<*const ffi::GstStructure> for Structure {
     #[inline]
     unsafe fn from_glib_borrow(ptr: *const ffi::GstStructure) -> Borrowed<Self> {
-        Borrowed::new(from_glib_full(ptr))
+        unsafe { Borrowed::new(from_glib_full(ptr)) }
     }
 }
 
 impl FromGlibPtrBorrow<*mut ffi::GstStructure> for Structure {
     #[inline]
     unsafe fn from_glib_borrow(ptr: *mut ffi::GstStructure) -> Borrowed<Self> {
-        Borrowed::new(from_glib_full(ptr))
+        unsafe { Borrowed::new(from_glib_full(ptr)) }
     }
 }
 
@@ -405,10 +413,11 @@ unsafe impl<'a> glib::value::FromValue<'a> for Structure {
     type Checker = glib::value::GenericValueTypeOrNoneChecker<Self>;
 
     unsafe fn from_value(value: &'a glib::Value) -> Self {
-        skip_assert_initialized!();
-        from_glib_none(
-            glib::gobject_ffi::g_value_get_boxed(value.to_glib_none().0) as *mut ffi::GstStructure
-        )
+        unsafe {
+            skip_assert_initialized!();
+            from_glib_none(glib::gobject_ffi::g_value_get_boxed(value.to_glib_none().0)
+                as *mut ffi::GstStructure)
+        }
     }
 }
 
@@ -475,18 +484,22 @@ unsafe impl Sync for StructureRef {}
 impl StructureRef {
     #[inline]
     pub unsafe fn from_glib_borrow<'a>(ptr: *const ffi::GstStructure) -> &'a StructureRef {
-        debug_assert!(!ptr.is_null());
+        unsafe {
+            debug_assert!(!ptr.is_null());
 
-        &*(ptr as *mut StructureRef)
+            &*(ptr as *mut StructureRef)
+        }
     }
 
     #[inline]
     pub unsafe fn from_glib_borrow_mut<'a>(ptr: *mut ffi::GstStructure) -> &'a mut StructureRef {
-        debug_assert!(!ptr.is_null());
-        #[cfg(feature = "v1_28")]
-        debug_assert_ne!(ffi::gst_structure_is_writable(ptr), glib::ffi::GFALSE,);
+        unsafe {
+            debug_assert!(!ptr.is_null());
+            #[cfg(feature = "v1_28")]
+            debug_assert_ne!(ffi::gst_structure_is_writable(ptr), glib::ffi::GFALSE,);
 
-        &mut *(ptr as *mut StructureRef)
+            &mut *(ptr as *mut StructureRef)
+        }
     }
 
     #[inline]
@@ -1499,10 +1512,12 @@ impl StructureRef {
                 value: *const glib::gobject_ffi::GValue,
                 user_data: glib::ffi::gpointer,
             ) -> glib::ffi::gboolean {
-                let func = &mut *(user_data as *mut F);
-                let res = func(from_glib(quark), &*(value as *const glib::Value));
+                unsafe {
+                    let func = &mut *(user_data as *mut F);
+                    let res = func(from_glib(quark), &*(value as *const glib::Value));
 
-                matches!(res, std::ops::ControlFlow::Continue(_)).into_glib()
+                    matches!(res, std::ops::ControlFlow::Continue(_)).into_glib()
+                }
             }
             let func = &mut func as *mut F;
             from_glib(ffi::gst_structure_foreach(
@@ -1529,13 +1544,15 @@ impl StructureRef {
                 value: *mut glib::gobject_ffi::GValue,
                 user_data: glib::ffi::gpointer,
             ) -> glib::ffi::gboolean {
-                let func = &mut *(user_data as *mut F);
-                let res = func(
-                    &*(fieldname as *const IdStr),
-                    &mut *(value as *mut glib::Value),
-                );
+                unsafe {
+                    let func = &mut *(user_data as *mut F);
+                    let res = func(
+                        &*(fieldname as *const IdStr),
+                        &mut *(value as *mut glib::Value),
+                    );
 
-                matches!(res, std::ops::ControlFlow::Continue(_)).into_glib()
+                    matches!(res, std::ops::ControlFlow::Continue(_)).into_glib()
+                }
             }
             let func = &mut func as *mut F;
             let _ = ffi::gst_structure_map_in_place_id_str(
@@ -1566,17 +1583,19 @@ impl StructureRef {
                 value: *mut glib::gobject_ffi::GValue,
                 user_data: glib::ffi::gpointer,
             ) -> glib::ffi::gboolean {
-                let func = &mut *(user_data as *mut F);
+                unsafe {
+                    let func = &mut *(user_data as *mut F);
 
-                let v = mem::replace(
-                    &mut *(value as *mut glib::Value),
-                    glib::Value::uninitialized(),
-                );
-                match func(&*(fieldname as *const IdStr), v) {
-                    None => glib::ffi::GFALSE,
-                    Some(v) => {
-                        *value = v.into_raw();
-                        glib::ffi::GTRUE
+                    let v = mem::replace(
+                        &mut *(value as *mut glib::Value),
+                        glib::Value::uninitialized(),
+                    );
+                    match func(&*(fieldname as *const IdStr), v) {
+                        None => glib::ffi::GFALSE,
+                        Some(v) => {
+                            *value = v.into_raw();
+                            glib::ffi::GTRUE
+                        }
                     }
                 }
             }
@@ -1617,10 +1636,12 @@ impl StructureRef {
                 value: *mut glib::gobject_ffi::GValue,
                 user_data: glib::ffi::gpointer,
             ) -> glib::ffi::gboolean {
-                let func = &mut *(user_data as *mut F);
-                let res = func(from_glib(quark), &mut *(value as *mut glib::Value));
+                unsafe {
+                    let func = &mut *(user_data as *mut F);
+                    let res = func(from_glib(quark), &mut *(value as *mut glib::Value));
 
-                matches!(res, std::ops::ControlFlow::Continue(_)).into_glib()
+                    matches!(res, std::ops::ControlFlow::Continue(_)).into_glib()
+                }
             }
             let func = &mut func as *mut F;
             if from_glib(ffi::gst_structure_map_in_place(
@@ -1660,17 +1681,19 @@ impl StructureRef {
                 value: *mut glib::gobject_ffi::GValue,
                 user_data: glib::ffi::gpointer,
             ) -> glib::ffi::gboolean {
-                let func = &mut *(user_data as *mut F);
+                unsafe {
+                    let func = &mut *(user_data as *mut F);
 
-                let v = mem::replace(
-                    &mut *(value as *mut glib::Value),
-                    glib::Value::uninitialized(),
-                );
-                match func(from_glib(quark), v) {
-                    None => glib::ffi::GFALSE,
-                    Some(v) => {
-                        *value = v.into_raw();
-                        glib::ffi::GTRUE
+                    let v = mem::replace(
+                        &mut *(value as *mut glib::Value),
+                        glib::Value::uninitialized(),
+                    );
+                    match func(from_glib(quark), v) {
+                        None => glib::ffi::GFALSE,
+                        Some(v) => {
+                            *value = v.into_raw();
+                            glib::ffi::GTRUE
+                        }
                     }
                 }
             }
@@ -1735,8 +1758,10 @@ unsafe impl<'a> glib::value::FromValue<'a> for &'a StructureRef {
     type Checker = glib::value::GenericValueTypeOrNoneChecker<Self>;
 
     unsafe fn from_value(value: &'a glib::Value) -> Self {
-        skip_assert_initialized!();
-        &*(glib::gobject_ffi::g_value_get_boxed(value.to_glib_none().0) as *const StructureRef)
+        unsafe {
+            skip_assert_initialized!();
+            &*(glib::gobject_ffi::g_value_get_boxed(value.to_glib_none().0) as *const StructureRef)
+        }
     }
 }
 

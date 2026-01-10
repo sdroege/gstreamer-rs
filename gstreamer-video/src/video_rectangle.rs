@@ -56,7 +56,7 @@ pub fn center_video_rectangle(
 impl glib::translate::Uninitialized for VideoRectangle {
     #[inline]
     unsafe fn uninitialized() -> Self {
-        mem::zeroed()
+        unsafe { mem::zeroed() }
     }
 }
 

@@ -85,9 +85,11 @@ unsafe impl<'a> glib::value::FromValue<'a> for StaticPadTemplate {
 
     #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
-        skip_assert_initialized!();
-        from_glib_none(glib::gobject_ffi::g_value_get_boxed(value.to_glib_none().0)
-            as *mut ffi::GstStaticPadTemplate)
+        unsafe {
+            skip_assert_initialized!();
+            from_glib_none(glib::gobject_ffi::g_value_get_boxed(value.to_glib_none().0)
+                as *mut ffi::GstStaticPadTemplate)
+        }
     }
 }
 
@@ -160,8 +162,10 @@ impl<'a> glib::translate::ToGlibPtr<'a, *const ffi::GstStaticPadTemplate> for St
 impl glib::translate::FromGlibPtrNone<*const ffi::GstStaticPadTemplate> for StaticPadTemplate {
     #[inline]
     unsafe fn from_glib_none(ptr: *const ffi::GstStaticPadTemplate) -> Self {
-        debug_assert!(!ptr.is_null());
-        StaticPadTemplate(ptr::NonNull::new_unchecked(ptr as *mut _))
+        unsafe {
+            debug_assert!(!ptr.is_null());
+            StaticPadTemplate(ptr::NonNull::new_unchecked(ptr as *mut _))
+        }
     }
 }
 
@@ -169,8 +173,10 @@ impl glib::translate::FromGlibPtrNone<*const ffi::GstStaticPadTemplate> for Stat
 impl glib::translate::FromGlibPtrNone<*mut ffi::GstStaticPadTemplate> for StaticPadTemplate {
     #[inline]
     unsafe fn from_glib_none(ptr: *mut ffi::GstStaticPadTemplate) -> Self {
-        debug_assert!(!ptr.is_null());
-        StaticPadTemplate(ptr::NonNull::new_unchecked(ptr))
+        unsafe {
+            debug_assert!(!ptr.is_null());
+            StaticPadTemplate(ptr::NonNull::new_unchecked(ptr))
+        }
     }
 }
 
@@ -178,8 +184,10 @@ impl glib::translate::FromGlibPtrNone<*mut ffi::GstStaticPadTemplate> for Static
 impl glib::translate::FromGlibPtrBorrow<*mut ffi::GstStaticPadTemplate> for StaticPadTemplate {
     #[inline]
     unsafe fn from_glib_borrow(ptr: *mut ffi::GstStaticPadTemplate) -> Borrowed<Self> {
-        debug_assert!(!ptr.is_null());
-        Borrowed::new(StaticPadTemplate(ptr::NonNull::new_unchecked(ptr)))
+        unsafe {
+            debug_assert!(!ptr.is_null());
+            Borrowed::new(StaticPadTemplate(ptr::NonNull::new_unchecked(ptr)))
+        }
     }
 }
 

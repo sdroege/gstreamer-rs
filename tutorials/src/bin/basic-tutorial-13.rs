@@ -54,13 +54,16 @@ fn send_seek_event(pipeline: &Element, rate: f64) -> bool {
     };
 
     // If we have not done so, obtain the sink through which we will send the seek events
-    if let Some(video_sink) = pipeline.property::<Option<Element>>("video-sink") {
-        println!("Current rate: {rate}\r");
-        // Send the event
-        video_sink.send_event(seek_event)
-    } else {
-        eprintln!("Failed to update rate...\r");
-        false
+    match pipeline.property::<Option<Element>>("video-sink") {
+        Some(video_sink) => {
+            println!("Current rate: {rate}\r");
+            // Send the event
+            video_sink.send_event(seek_event)
+        }
+        _ => {
+            eprintln!("Failed to update rate...\r");
+            false
+        }
     }
 }
 

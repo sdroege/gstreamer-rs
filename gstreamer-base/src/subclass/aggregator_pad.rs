@@ -70,11 +70,13 @@ unsafe extern "C" fn aggregator_pad_flush<T: AggregatorPadImpl>(
     ptr: *mut ffi::GstAggregatorPad,
     aggregator: *mut ffi::GstAggregator,
 ) -> gst::ffi::GstFlowReturn {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    let res: gst::FlowReturn = imp.flush(&from_glib_borrow(aggregator)).into();
-    res.into_glib()
+        let res: gst::FlowReturn = imp.flush(&from_glib_borrow(aggregator)).into();
+        res.into_glib()
+    }
 }
 
 unsafe extern "C" fn aggregator_pad_skip_buffer<T: AggregatorPadImpl>(
@@ -82,9 +84,11 @@ unsafe extern "C" fn aggregator_pad_skip_buffer<T: AggregatorPadImpl>(
     aggregator: *mut ffi::GstAggregator,
     buffer: *mut gst::ffi::GstBuffer,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    imp.skip_buffer(&from_glib_borrow(aggregator), &from_glib_borrow(buffer))
-        .into_glib()
+        imp.skip_buffer(&from_glib_borrow(aggregator), &from_glib_borrow(buffer))
+            .into_glib()
+    }
 }

@@ -839,37 +839,41 @@ pub enum InputBuffer<'a> {
 unsafe extern "C" fn base_transform_start<T: BaseTransformImpl>(
     ptr: *mut ffi::GstBaseTransform,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, false, {
-        match imp.start() {
-            Ok(()) => true,
-            Err(err) => {
-                imp.post_error_message(err);
-                false
+        gst::panic_to_error!(imp, false, {
+            match imp.start() {
+                Ok(()) => true,
+                Err(err) => {
+                    imp.post_error_message(err);
+                    false
+                }
             }
-        }
-    })
-    .into_glib()
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn base_transform_stop<T: BaseTransformImpl>(
     ptr: *mut ffi::GstBaseTransform,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, false, {
-        match imp.stop() {
-            Ok(()) => true,
-            Err(err) => {
-                imp.post_error_message(err);
-                false
+        gst::panic_to_error!(imp, false, {
+            match imp.stop() {
+                Ok(()) => true,
+                Err(err) => {
+                    imp.post_error_message(err);
+                    false
+                }
             }
-        }
-    })
-    .into_glib()
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn base_transform_transform_caps<T: BaseTransformImpl>(
@@ -878,20 +882,22 @@ unsafe extern "C" fn base_transform_transform_caps<T: BaseTransformImpl>(
     caps: *mut gst::ffi::GstCaps,
     filter: *mut gst::ffi::GstCaps,
 ) -> *mut gst::ffi::GstCaps {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, None, {
-        let filter: Borrowed<Option<gst::Caps>> = from_glib_borrow(filter);
+        gst::panic_to_error!(imp, None, {
+            let filter: Borrowed<Option<gst::Caps>> = from_glib_borrow(filter);
 
-        imp.transform_caps(
-            from_glib(direction),
-            &from_glib_borrow(caps),
-            filter.as_ref().as_ref(),
-        )
-    })
-    .map(|caps| caps.into_glib_ptr())
-    .unwrap_or(std::ptr::null_mut())
+            imp.transform_caps(
+                from_glib(direction),
+                &from_glib_borrow(caps),
+                filter.as_ref().as_ref(),
+            )
+        })
+        .map(|caps| caps.into_glib_ptr())
+        .unwrap_or(std::ptr::null_mut())
+    }
 }
 
 unsafe extern "C" fn base_transform_fixate_caps<T: BaseTransformImpl>(
@@ -900,17 +906,19 @@ unsafe extern "C" fn base_transform_fixate_caps<T: BaseTransformImpl>(
     caps: *mut gst::ffi::GstCaps,
     othercaps: *mut gst::ffi::GstCaps,
 ) -> *mut gst::ffi::GstCaps {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, gst::Caps::new_empty(), {
-        imp.fixate_caps(
-            from_glib(direction),
-            &from_glib_borrow(caps),
-            from_glib_full(othercaps),
-        )
-    })
-    .into_glib_ptr()
+        gst::panic_to_error!(imp, gst::Caps::new_empty(), {
+            imp.fixate_caps(
+                from_glib(direction),
+                &from_glib_borrow(caps),
+                from_glib_full(othercaps),
+            )
+        })
+        .into_glib_ptr()
+    }
 }
 
 unsafe extern "C" fn base_transform_set_caps<T: BaseTransformImpl>(
@@ -918,19 +926,21 @@ unsafe extern "C" fn base_transform_set_caps<T: BaseTransformImpl>(
     incaps: *mut gst::ffi::GstCaps,
     outcaps: *mut gst::ffi::GstCaps,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, false, {
-        match imp.set_caps(&from_glib_borrow(incaps), &from_glib_borrow(outcaps)) {
-            Ok(()) => true,
-            Err(err) => {
-                err.log_with_imp(imp);
-                false
+        gst::panic_to_error!(imp, false, {
+            match imp.set_caps(&from_glib_borrow(incaps), &from_glib_borrow(outcaps)) {
+                Ok(()) => true,
+                Err(err) => {
+                    err.log_with_imp(imp);
+                    false
+                }
             }
-        }
-    })
-    .into_glib()
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn base_transform_accept_caps<T: BaseTransformImpl>(
@@ -938,13 +948,15 @@ unsafe extern "C" fn base_transform_accept_caps<T: BaseTransformImpl>(
     direction: gst::ffi::GstPadDirection,
     caps: *mut gst::ffi::GstCaps,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, false, {
-        imp.accept_caps(from_glib(direction), &from_glib_borrow(caps))
-    })
-    .into_glib()
+        gst::panic_to_error!(imp, false, {
+            imp.accept_caps(from_glib(direction), &from_glib_borrow(caps))
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn base_transform_query<T: BaseTransformImpl>(
@@ -952,17 +964,19 @@ unsafe extern "C" fn base_transform_query<T: BaseTransformImpl>(
     direction: gst::ffi::GstPadDirection,
     query: *mut gst::ffi::GstQuery,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, false, {
-        BaseTransformImpl::query(
-            imp,
-            from_glib(direction),
-            gst::QueryRef::from_mut_ptr(query),
-        )
-    })
-    .into_glib()
+        gst::panic_to_error!(imp, false, {
+            BaseTransformImpl::query(
+                imp,
+                from_glib(direction),
+                gst::QueryRef::from_mut_ptr(query),
+            )
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn base_transform_transform_size<T: BaseTransformImpl>(
@@ -973,24 +987,26 @@ unsafe extern "C" fn base_transform_transform_size<T: BaseTransformImpl>(
     othercaps: *mut gst::ffi::GstCaps,
     othersize: *mut usize,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, false, {
-        match imp.transform_size(
-            from_glib(direction),
-            &from_glib_borrow(caps),
-            size,
-            &from_glib_borrow(othercaps),
-        ) {
-            Some(s) => {
-                *othersize = s;
-                true
+        gst::panic_to_error!(imp, false, {
+            match imp.transform_size(
+                from_glib(direction),
+                &from_glib_borrow(caps),
+                size,
+                &from_glib_borrow(othercaps),
+            ) {
+                Some(s) => {
+                    *othersize = s;
+                    true
+                }
+                None => false,
             }
-            None => false,
-        }
-    })
-    .into_glib()
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn base_transform_get_unit_size<T: BaseTransformImpl>(
@@ -998,19 +1014,21 @@ unsafe extern "C" fn base_transform_get_unit_size<T: BaseTransformImpl>(
     caps: *mut gst::ffi::GstCaps,
     size: *mut usize,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, false, {
-        match imp.unit_size(&from_glib_borrow(caps)) {
-            Some(s) => {
-                *size = s;
-                true
+        gst::panic_to_error!(imp, false, {
+            match imp.unit_size(&from_glib_borrow(caps)) {
+                Some(s) => {
+                    *size = s;
+                    true
+                }
+                None => false,
             }
-            None => false,
-        }
-    })
-    .into_glib()
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn base_transform_prepare_output_buffer<T: BaseTransformImpl>(
@@ -1018,65 +1036,71 @@ unsafe extern "C" fn base_transform_prepare_output_buffer<T: BaseTransformImpl>(
     inbuf: *mut gst::ffi::GstBuffer,
     outbuf: *mut gst::ffi::GstBuffer,
 ) -> gst::ffi::GstFlowReturn {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    // FIXME: Wrong signature in FFI
-    let outbuf = outbuf as *mut *mut gst::ffi::GstBuffer;
-    let is_passthrough: bool = from_glib(ffi::gst_base_transform_is_passthrough(ptr));
-    let is_in_place: bool = from_glib(ffi::gst_base_transform_is_in_place(ptr));
-    let writable = is_in_place
-        && !is_passthrough
-        && gst::ffi::gst_mini_object_is_writable(inbuf as *mut _) != glib::ffi::GFALSE;
-    let buffer = match writable {
-        false => InputBuffer::Readable(gst::BufferRef::from_ptr(inbuf)),
-        true => InputBuffer::Writable(gst::BufferRef::from_mut_ptr(inbuf)),
-    };
+        // FIXME: Wrong signature in FFI
+        let outbuf = outbuf as *mut *mut gst::ffi::GstBuffer;
+        let is_passthrough: bool = from_glib(ffi::gst_base_transform_is_passthrough(ptr));
+        let is_in_place: bool = from_glib(ffi::gst_base_transform_is_in_place(ptr));
+        let writable = is_in_place
+            && !is_passthrough
+            && gst::ffi::gst_mini_object_is_writable(inbuf as *mut _) != glib::ffi::GFALSE;
+        let buffer = match writable {
+            false => InputBuffer::Readable(gst::BufferRef::from_ptr(inbuf)),
+            true => InputBuffer::Writable(gst::BufferRef::from_mut_ptr(inbuf)),
+        };
 
-    *outbuf = ptr::null_mut();
+        *outbuf = ptr::null_mut();
 
-    gst::panic_to_error!(imp, gst::FlowReturn::Error, {
-        match imp.prepare_output_buffer(buffer) {
-            Ok(PrepareOutputBufferSuccess::InputBuffer) => {
-                assert!(
-                    is_passthrough || is_in_place,
-                    "Returning InputBuffer only allowed for passthrough or in-place mode"
-                );
-                *outbuf = inbuf;
-                gst::FlowReturn::Ok
+        gst::panic_to_error!(imp, gst::FlowReturn::Error, {
+            match imp.prepare_output_buffer(buffer) {
+                Ok(PrepareOutputBufferSuccess::InputBuffer) => {
+                    assert!(
+                        is_passthrough || is_in_place,
+                        "Returning InputBuffer only allowed for passthrough or in-place mode"
+                    );
+                    *outbuf = inbuf;
+                    gst::FlowReturn::Ok
+                }
+                Ok(PrepareOutputBufferSuccess::Buffer(buf)) => {
+                    assert!(
+                        !is_passthrough,
+                        "Returning Buffer not allowed for passthrough mode"
+                    );
+                    *outbuf = buf.into_glib_ptr();
+                    gst::FlowReturn::Ok
+                }
+                Err(err) => err.into(),
             }
-            Ok(PrepareOutputBufferSuccess::Buffer(buf)) => {
-                assert!(
-                    !is_passthrough,
-                    "Returning Buffer not allowed for passthrough mode"
-                );
-                *outbuf = buf.into_glib_ptr();
-                gst::FlowReturn::Ok
-            }
-            Err(err) => err.into(),
-        }
-    })
-    .into_glib()
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn base_transform_sink_event<T: BaseTransformImpl>(
     ptr: *mut ffi::GstBaseTransform,
     event: *mut gst::ffi::GstEvent,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, false, { imp.sink_event(from_glib_full(event)) }).into_glib()
+        gst::panic_to_error!(imp, false, { imp.sink_event(from_glib_full(event)) }).into_glib()
+    }
 }
 
 unsafe extern "C" fn base_transform_src_event<T: BaseTransformImpl>(
     ptr: *mut ffi::GstBaseTransform,
     event: *mut gst::ffi::GstEvent,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, false, { imp.src_event(from_glib_full(event)) }).into_glib()
+        gst::panic_to_error!(imp, false, { imp.src_event(from_glib_full(event)) }).into_glib()
+    }
 }
 
 unsafe extern "C" fn base_transform_transform<T: BaseTransformImpl>(
@@ -1084,37 +1108,41 @@ unsafe extern "C" fn base_transform_transform<T: BaseTransformImpl>(
     inbuf: *mut gst::ffi::GstBuffer,
     outbuf: *mut gst::ffi::GstBuffer,
 ) -> gst::ffi::GstFlowReturn {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, gst::FlowReturn::Error, {
-        imp.transform(
-            &from_glib_borrow(inbuf),
-            gst::BufferRef::from_mut_ptr(outbuf),
-        )
-        .into()
-    })
-    .into_glib()
+        gst::panic_to_error!(imp, gst::FlowReturn::Error, {
+            imp.transform(
+                &from_glib_borrow(inbuf),
+                gst::BufferRef::from_mut_ptr(outbuf),
+            )
+            .into()
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn base_transform_transform_ip<T: BaseTransformImpl>(
     ptr: *mut ffi::GstBaseTransform,
     buf: *mut *mut gst::ffi::GstBuffer,
 ) -> gst::ffi::GstFlowReturn {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    // FIXME: Wrong signature in FFI
-    let buf = buf as *mut gst::ffi::GstBuffer;
+        // FIXME: Wrong signature in FFI
+        let buf = buf as *mut gst::ffi::GstBuffer;
 
-    gst::panic_to_error!(imp, gst::FlowReturn::Error, {
-        if from_glib(ffi::gst_base_transform_is_passthrough(ptr)) {
-            imp.transform_ip_passthrough(&from_glib_borrow(buf)).into()
-        } else {
-            imp.transform_ip(gst::BufferRef::from_mut_ptr(buf)).into()
-        }
-    })
-    .into_glib()
+        gst::panic_to_error!(imp, gst::FlowReturn::Error, {
+            if from_glib(ffi::gst_base_transform_is_passthrough(ptr)) {
+                imp.transform_ip_passthrough(&from_glib_borrow(buf)).into()
+            } else {
+                imp.transform_ip(gst::BufferRef::from_mut_ptr(buf)).into()
+            }
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn base_transform_transform_meta<T: BaseTransformImpl>(
@@ -1123,19 +1151,21 @@ unsafe extern "C" fn base_transform_transform_meta<T: BaseTransformImpl>(
     meta: *mut gst::ffi::GstMeta,
     inbuf: *mut gst::ffi::GstBuffer,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    let inbuf = gst::BufferRef::from_ptr(inbuf);
+        let inbuf = gst::BufferRef::from_ptr(inbuf);
 
-    gst::panic_to_error!(imp, false, {
-        imp.transform_meta(
-            gst::BufferRef::from_mut_ptr(outbuf),
-            gst::Meta::from_ptr(inbuf, meta),
-            inbuf,
-        )
-    })
-    .into_glib()
+        gst::panic_to_error!(imp, false, {
+            imp.transform_meta(
+                gst::BufferRef::from_mut_ptr(outbuf),
+                gst::Meta::from_ptr(inbuf, meta),
+                inbuf,
+            )
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn base_transform_propose_allocation<T: BaseTransformImpl>(
@@ -1143,54 +1173,58 @@ unsafe extern "C" fn base_transform_propose_allocation<T: BaseTransformImpl>(
     decide_query: *mut gst::ffi::GstQuery,
     query: *mut gst::ffi::GstQuery,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
-    let decide_query = if decide_query.is_null() {
-        None
-    } else {
-        match gst::QueryRef::from_ptr(decide_query).view() {
-            gst::QueryView::Allocation(allocation) => Some(allocation),
-            _ => unreachable!(),
-        }
-    };
-    let query = match gst::QueryRef::from_mut_ptr(query).view_mut() {
-        gst::QueryViewMut::Allocation(allocation) => allocation,
-        _ => unreachable!(),
-    };
-
-    gst::panic_to_error!(imp, false, {
-        match imp.propose_allocation(decide_query, query) {
-            Ok(()) => true,
-            Err(err) => {
-                err.log_with_imp_and_level(imp, gst::DebugLevel::Info);
-                false
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
+        let decide_query = if decide_query.is_null() {
+            None
+        } else {
+            match gst::QueryRef::from_ptr(decide_query).view() {
+                gst::QueryView::Allocation(allocation) => Some(allocation),
+                _ => unreachable!(),
             }
-        }
-    })
-    .into_glib()
+        };
+        let query = match gst::QueryRef::from_mut_ptr(query).view_mut() {
+            gst::QueryViewMut::Allocation(allocation) => allocation,
+            _ => unreachable!(),
+        };
+
+        gst::panic_to_error!(imp, false, {
+            match imp.propose_allocation(decide_query, query) {
+                Ok(()) => true,
+                Err(err) => {
+                    err.log_with_imp_and_level(imp, gst::DebugLevel::Info);
+                    false
+                }
+            }
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn base_transform_decide_allocation<T: BaseTransformImpl>(
     ptr: *mut ffi::GstBaseTransform,
     query: *mut gst::ffi::GstQuery,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
-    let query = match gst::QueryRef::from_mut_ptr(query).view_mut() {
-        gst::QueryViewMut::Allocation(allocation) => allocation,
-        _ => unreachable!(),
-    };
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
+        let query = match gst::QueryRef::from_mut_ptr(query).view_mut() {
+            gst::QueryViewMut::Allocation(allocation) => allocation,
+            _ => unreachable!(),
+        };
 
-    gst::panic_to_error!(imp, false, {
-        match imp.decide_allocation(query) {
-            Ok(()) => true,
-            Err(err) => {
-                err.log_with_imp(imp);
-                false
+        gst::panic_to_error!(imp, false, {
+            match imp.decide_allocation(query) {
+                Ok(()) => true,
+                Err(err) => {
+                    err.log_with_imp(imp);
+                    false
+                }
             }
-        }
-    })
-    .into_glib()
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn base_transform_copy_metadata<T: BaseTransformImpl>(
@@ -1198,41 +1232,45 @@ unsafe extern "C" fn base_transform_copy_metadata<T: BaseTransformImpl>(
     inbuf: *mut gst::ffi::GstBuffer,
     outbuf: *mut gst::ffi::GstBuffer,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    if gst::ffi::gst_mini_object_is_writable(outbuf as *mut _) == glib::ffi::GFALSE {
-        let instance = imp.obj();
-        let obj = instance.unsafe_cast_ref::<BaseTransform>();
-        gst::warning!(gst::CAT_RUST, obj = obj, "buffer {:?} not writable", outbuf);
-        return glib::ffi::GFALSE;
-    }
-
-    gst::panic_to_error!(imp, true, {
-        match imp.copy_metadata(
-            gst::BufferRef::from_ptr(inbuf),
-            gst::BufferRef::from_mut_ptr(outbuf),
-        ) {
-            Ok(_) => true,
-            Err(err) => {
-                err.log_with_imp(imp);
-                false
-            }
+        if gst::ffi::gst_mini_object_is_writable(outbuf as *mut _) == glib::ffi::GFALSE {
+            let instance = imp.obj();
+            let obj = instance.unsafe_cast_ref::<BaseTransform>();
+            gst::warning!(gst::CAT_RUST, obj = obj, "buffer {:?} not writable", outbuf);
+            return glib::ffi::GFALSE;
         }
-    })
-    .into_glib()
+
+        gst::panic_to_error!(imp, true, {
+            match imp.copy_metadata(
+                gst::BufferRef::from_ptr(inbuf),
+                gst::BufferRef::from_mut_ptr(outbuf),
+            ) {
+                Ok(_) => true,
+                Err(err) => {
+                    err.log_with_imp(imp);
+                    false
+                }
+            }
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn base_transform_before_transform<T: BaseTransformImpl>(
     ptr: *mut ffi::GstBaseTransform,
     inbuf: *mut gst::ffi::GstBuffer,
 ) {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, (), {
-        imp.before_transform(gst::BufferRef::from_ptr(inbuf));
-    })
+        gst::panic_to_error!(imp, (), {
+            imp.before_transform(gst::BufferRef::from_ptr(inbuf));
+        })
+    }
 }
 
 unsafe extern "C" fn base_transform_submit_input_buffer<T: BaseTransformImpl>(
@@ -1240,37 +1278,41 @@ unsafe extern "C" fn base_transform_submit_input_buffer<T: BaseTransformImpl>(
     is_discont: glib::ffi::gboolean,
     buf: *mut gst::ffi::GstBuffer,
 ) -> gst::ffi::GstFlowReturn {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    gst::panic_to_error!(imp, gst::FlowReturn::Error, {
-        imp.submit_input_buffer(from_glib(is_discont), from_glib_full(buf))
-            .into()
-    })
-    .into_glib()
+        gst::panic_to_error!(imp, gst::FlowReturn::Error, {
+            imp.submit_input_buffer(from_glib(is_discont), from_glib_full(buf))
+                .into()
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn base_transform_generate_output<T: BaseTransformImpl>(
     ptr: *mut ffi::GstBaseTransform,
     buf: *mut *mut gst::ffi::GstBuffer,
 ) -> gst::ffi::GstFlowReturn {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    *buf = ptr::null_mut();
+        *buf = ptr::null_mut();
 
-    gst::panic_to_error!(imp, gst::FlowReturn::Error, {
-        match imp.generate_output() {
-            Ok(GenerateOutputSuccess::Dropped) => crate::BASE_TRANSFORM_FLOW_DROPPED.into(),
-            Ok(GenerateOutputSuccess::NoOutput) => gst::FlowReturn::Ok,
-            Ok(GenerateOutputSuccess::Buffer(outbuf)) => {
-                *buf = outbuf.into_glib_ptr();
-                gst::FlowReturn::Ok
+        gst::panic_to_error!(imp, gst::FlowReturn::Error, {
+            match imp.generate_output() {
+                Ok(GenerateOutputSuccess::Dropped) => crate::BASE_TRANSFORM_FLOW_DROPPED.into(),
+                Ok(GenerateOutputSuccess::NoOutput) => gst::FlowReturn::Ok,
+                Ok(GenerateOutputSuccess::Buffer(outbuf)) => {
+                    *buf = outbuf.into_glib_ptr();
+                    gst::FlowReturn::Ok
+                }
+                Err(err) => err.into(),
             }
-            Err(err) => err.into(),
-        }
-    })
-    .into_glib()
+        })
+        .into_glib()
+    }
 }
 
 #[cfg(test)]

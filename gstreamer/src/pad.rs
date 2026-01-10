@@ -33,9 +33,11 @@ impl IntoGlib for PadProbeId {
 impl FromGlib<libc::c_ulong> for PadProbeId {
     #[inline]
     unsafe fn from_glib(val: libc::c_ulong) -> PadProbeId {
-        skip_assert_initialized!();
-        debug_assert_ne!(val, 0);
-        PadProbeId(NonZeroU64::new_unchecked(val as _))
+        unsafe {
+            skip_assert_initialized!();
+            debug_assert_ne!(val, 0);
+            PadProbeId(NonZeroU64::new_unchecked(val as _))
+        }
     }
 }
 
@@ -393,13 +395,15 @@ pub trait PadExtManual: IsA<Pad> + 'static {
     where
         F: Fn(&Self, Option<&crate::Object>) -> Result<(), LoggableError> + Send + Sync + 'static,
     {
-        let func_box: Box<F> = Box::new(func);
-        ffi::gst_pad_set_activate_function_full(
-            self.as_ref().to_glib_none().0,
-            Some(trampoline_activate_function::<Self, F>),
-            Box::into_raw(func_box) as gpointer,
-            Some(destroy_closure::<F>),
-        );
+        unsafe {
+            let func_box: Box<F> = Box::new(func);
+            ffi::gst_pad_set_activate_function_full(
+                self.as_ref().to_glib_none().0,
+                Some(trampoline_activate_function::<Self, F>),
+                Box::into_raw(func_box) as gpointer,
+                Some(destroy_closure::<F>),
+            );
+        }
     }
 
     #[doc(alias = "gst_pad_set_activatemode_function")]
@@ -411,13 +415,15 @@ pub trait PadExtManual: IsA<Pad> + 'static {
             + Sync
             + 'static,
     {
-        let func_box: Box<F> = Box::new(func);
-        ffi::gst_pad_set_activatemode_function_full(
-            self.as_ref().to_glib_none().0,
-            Some(trampoline_activatemode_function::<Self, F>),
-            Box::into_raw(func_box) as gpointer,
-            Some(destroy_closure::<F>),
-        );
+        unsafe {
+            let func_box: Box<F> = Box::new(func);
+            ffi::gst_pad_set_activatemode_function_full(
+                self.as_ref().to_glib_none().0,
+                Some(trampoline_activatemode_function::<Self, F>),
+                Box::into_raw(func_box) as gpointer,
+                Some(destroy_closure::<F>),
+            );
+        }
     }
 
     #[doc(alias = "gst_pad_set_chain_function")]
@@ -429,13 +435,15 @@ pub trait PadExtManual: IsA<Pad> + 'static {
             + Sync
             + 'static,
     {
-        let func_box: Box<F> = Box::new(func);
-        ffi::gst_pad_set_chain_function_full(
-            self.as_ref().to_glib_none().0,
-            Some(trampoline_chain_function::<Self, F>),
-            Box::into_raw(func_box) as gpointer,
-            Some(destroy_closure::<F>),
-        );
+        unsafe {
+            let func_box: Box<F> = Box::new(func);
+            ffi::gst_pad_set_chain_function_full(
+                self.as_ref().to_glib_none().0,
+                Some(trampoline_chain_function::<Self, F>),
+                Box::into_raw(func_box) as gpointer,
+                Some(destroy_closure::<F>),
+            );
+        }
     }
 
     #[doc(alias = "gst_pad_set_chain_list_function")]
@@ -447,13 +455,15 @@ pub trait PadExtManual: IsA<Pad> + 'static {
             + Sync
             + 'static,
     {
-        let func_box: Box<F> = Box::new(func);
-        ffi::gst_pad_set_chain_list_function_full(
-            self.as_ref().to_glib_none().0,
-            Some(trampoline_chain_list_function::<Self, F>),
-            Box::into_raw(func_box) as gpointer,
-            Some(destroy_closure::<F>),
-        );
+        unsafe {
+            let func_box: Box<F> = Box::new(func);
+            ffi::gst_pad_set_chain_list_function_full(
+                self.as_ref().to_glib_none().0,
+                Some(trampoline_chain_list_function::<Self, F>),
+                Box::into_raw(func_box) as gpointer,
+                Some(destroy_closure::<F>),
+            );
+        }
     }
 
     #[doc(alias = "gst_pad_set_event_function")]
@@ -462,13 +472,15 @@ pub trait PadExtManual: IsA<Pad> + 'static {
     where
         F: Fn(&Self, Option<&crate::Object>, crate::Event) -> bool + Send + Sync + 'static,
     {
-        let func_box: Box<F> = Box::new(func);
-        ffi::gst_pad_set_event_function_full(
-            self.as_ref().to_glib_none().0,
-            Some(trampoline_event_function::<Self, F>),
-            Box::into_raw(func_box) as gpointer,
-            Some(destroy_closure::<F>),
-        );
+        unsafe {
+            let func_box: Box<F> = Box::new(func);
+            ffi::gst_pad_set_event_function_full(
+                self.as_ref().to_glib_none().0,
+                Some(trampoline_event_function::<Self, F>),
+                Box::into_raw(func_box) as gpointer,
+                Some(destroy_closure::<F>),
+            );
+        }
     }
 
     #[doc(alias = "gst_pad_set_event_full_function")]
@@ -480,13 +492,15 @@ pub trait PadExtManual: IsA<Pad> + 'static {
             + Sync
             + 'static,
     {
-        let func_box: Box<F> = Box::new(func);
-        ffi::gst_pad_set_event_full_function_full(
-            self.as_ref().to_glib_none().0,
-            Some(trampoline_event_full_function::<Self, F>),
-            Box::into_raw(func_box) as gpointer,
-            Some(destroy_closure::<F>),
-        );
+        unsafe {
+            let func_box: Box<F> = Box::new(func);
+            ffi::gst_pad_set_event_full_function_full(
+                self.as_ref().to_glib_none().0,
+                Some(trampoline_event_full_function::<Self, F>),
+                Box::into_raw(func_box) as gpointer,
+                Some(destroy_closure::<F>),
+            );
+        }
     }
 
     #[doc(alias = "gst_pad_set_getrange_function")]
@@ -504,13 +518,15 @@ pub trait PadExtManual: IsA<Pad> + 'static {
             + Sync
             + 'static,
     {
-        let func_box: Box<F> = Box::new(func);
-        ffi::gst_pad_set_getrange_function_full(
-            self.as_ref().to_glib_none().0,
-            Some(trampoline_getrange_function::<Self, F>),
-            Box::into_raw(func_box) as gpointer,
-            Some(destroy_closure::<F>),
-        );
+        unsafe {
+            let func_box: Box<F> = Box::new(func);
+            ffi::gst_pad_set_getrange_function_full(
+                self.as_ref().to_glib_none().0,
+                Some(trampoline_getrange_function::<Self, F>),
+                Box::into_raw(func_box) as gpointer,
+                Some(destroy_closure::<F>),
+            );
+        }
     }
 
     #[doc(alias = "gst_pad_set_iterate_internal_links_function")]
@@ -519,13 +535,15 @@ pub trait PadExtManual: IsA<Pad> + 'static {
     where
         F: Fn(&Self, Option<&crate::Object>) -> crate::Iterator<Pad> + Send + Sync + 'static,
     {
-        let func_box: Box<F> = Box::new(func);
-        ffi::gst_pad_set_iterate_internal_links_function_full(
-            self.as_ref().to_glib_none().0,
-            Some(trampoline_iterate_internal_links_function::<Self, F>),
-            Box::into_raw(func_box) as gpointer,
-            Some(destroy_closure::<F>),
-        );
+        unsafe {
+            let func_box: Box<F> = Box::new(func);
+            ffi::gst_pad_set_iterate_internal_links_function_full(
+                self.as_ref().to_glib_none().0,
+                Some(trampoline_iterate_internal_links_function::<Self, F>),
+                Box::into_raw(func_box) as gpointer,
+                Some(destroy_closure::<F>),
+            );
+        }
     }
 
     #[doc(alias = "gst_pad_set_link_function")]
@@ -541,13 +559,15 @@ pub trait PadExtManual: IsA<Pad> + 'static {
             + Sync
             + 'static,
     {
-        let func_box: Box<F> = Box::new(func);
-        ffi::gst_pad_set_link_function_full(
-            self.as_ref().to_glib_none().0,
-            Some(trampoline_link_function::<Self, F>),
-            Box::into_raw(func_box) as gpointer,
-            Some(destroy_closure::<F>),
-        );
+        unsafe {
+            let func_box: Box<F> = Box::new(func);
+            ffi::gst_pad_set_link_function_full(
+                self.as_ref().to_glib_none().0,
+                Some(trampoline_link_function::<Self, F>),
+                Box::into_raw(func_box) as gpointer,
+                Some(destroy_closure::<F>),
+            );
+        }
     }
 
     #[doc(alias = "gst_pad_set_query_function")]
@@ -556,13 +576,15 @@ pub trait PadExtManual: IsA<Pad> + 'static {
     where
         F: Fn(&Self, Option<&crate::Object>, &mut crate::QueryRef) -> bool + Send + Sync + 'static,
     {
-        let func_box: Box<F> = Box::new(func);
-        ffi::gst_pad_set_query_function_full(
-            self.as_ref().to_glib_none().0,
-            Some(trampoline_query_function::<Self, F>),
-            Box::into_raw(func_box) as gpointer,
-            Some(destroy_closure::<F>),
-        );
+        unsafe {
+            let func_box: Box<F> = Box::new(func);
+            ffi::gst_pad_set_query_function_full(
+                self.as_ref().to_glib_none().0,
+                Some(trampoline_query_function::<Self, F>),
+                Box::into_raw(func_box) as gpointer,
+                Some(destroy_closure::<F>),
+            );
+        }
     }
 
     #[doc(alias = "gst_pad_set_unlink_function")]
@@ -571,33 +593,41 @@ pub trait PadExtManual: IsA<Pad> + 'static {
     where
         F: Fn(&Self, Option<&crate::Object>) + Send + Sync + 'static,
     {
-        let func_box: Box<F> = Box::new(func);
-        ffi::gst_pad_set_unlink_function_full(
-            self.as_ref().to_glib_none().0,
-            Some(trampoline_unlink_function::<Self, F>),
-            Box::into_raw(func_box) as gpointer,
-            Some(destroy_closure::<F>),
-        );
+        unsafe {
+            let func_box: Box<F> = Box::new(func);
+            ffi::gst_pad_set_unlink_function_full(
+                self.as_ref().to_glib_none().0,
+                Some(trampoline_unlink_function::<Self, F>),
+                Box::into_raw(func_box) as gpointer,
+                Some(destroy_closure::<F>),
+            );
+        }
     }
 
     #[doc(alias = "gst_pad_start_task")]
     fn start_task<F: FnMut() + Send + 'static>(&self, func: F) -> Result<(), glib::BoolError> {
         unsafe extern "C" fn trampoline_pad_task<F: FnMut() + Send + 'static>(func: gpointer) {
-            let (func, pad) = &mut *(func as *mut (F, *mut ffi::GstPad));
-            let pad = Pad::from_glib_borrow(*pad);
-            let result = panic::catch_unwind(AssertUnwindSafe(func));
+            unsafe {
+                let (func, pad) = &mut *(func as *mut (F, *mut ffi::GstPad));
+                let pad = Pad::from_glib_borrow(*pad);
+                let result = panic::catch_unwind(AssertUnwindSafe(func));
 
-            if let Err(err) = result {
-                let element = match pad.parent_element() {
-                    Some(element) => element,
-                    None => panic::resume_unwind(err),
-                };
+                if let Err(err) = result {
+                    let element = match pad.parent_element() {
+                        Some(element) => element,
+                        None => panic::resume_unwind(err),
+                    };
 
-                if pad.pause_task().is_err() {
-                    crate::error!(crate::CAT_RUST, "could not stop pad task on panic");
+                    if pad.pause_task().is_err() {
+                        crate::error!(crate::CAT_RUST, "could not stop pad task on panic");
+                    }
+
+                    crate::subclass::post_panic_error_message(
+                        &element,
+                        pad.upcast_ref(),
+                        Some(err),
+                    );
                 }
-
-                crate::subclass::post_panic_error_message(&element, pad.upcast_ref(), Some(err));
             }
         }
 
@@ -611,7 +641,9 @@ pub trait PadExtManual: IsA<Pad> + 'static {
         }
 
         unsafe extern "C" fn destroy_closure_pad_task<F>(ptr: gpointer) {
-            let _ = Box::<(F, *mut ffi::GstPad)>::from_raw(ptr as *mut _);
+            unsafe {
+                let _ = Box::<(F, *mut ffi::GstPad)>::from_raw(ptr as *mut _);
+            }
         }
 
         unsafe {
@@ -881,29 +913,31 @@ pub trait PadExtManual: IsA<Pad> + 'static {
             event: *mut *mut ffi::GstEvent,
             user_data: glib::ffi::gpointer,
         ) -> glib::ffi::gboolean {
-            let func = user_data as *mut F;
-            let res = (*func)(&from_glib_borrow(*event));
+            unsafe {
+                let func = user_data as *mut F;
+                let res = (*func)(&from_glib_borrow(*event));
 
-            let (do_continue, ev_action) = match res {
-                ControlFlow::Continue(ev_action) => (glib::ffi::GTRUE, ev_action),
-                ControlFlow::Break(ev_action) => (glib::ffi::GFALSE, ev_action),
-            };
+                let (do_continue, ev_action) = match res {
+                    ControlFlow::Continue(ev_action) => (glib::ffi::GTRUE, ev_action),
+                    ControlFlow::Break(ev_action) => (glib::ffi::GFALSE, ev_action),
+                };
 
-            use EventForeachAction::*;
+                use EventForeachAction::*;
 
-            match ev_action {
-                Keep => (), // do nothing
-                Remove => {
-                    ffi::gst_mini_object_unref(*event as *mut _);
-                    *event = ptr::null_mut();
+                match ev_action {
+                    Keep => (), // do nothing
+                    Remove => {
+                        ffi::gst_mini_object_unref(*event as *mut _);
+                        *event = ptr::null_mut();
+                    }
+                    Replace(ev) => {
+                        ffi::gst_mini_object_unref(*event as *mut _);
+                        *event = ev.into_glib_ptr();
+                    }
                 }
-                Replace(ev) => {
-                    ffi::gst_mini_object_unref(*event as *mut _);
-                    *event = ev.into_glib_ptr();
-                }
+
+                do_continue
             }
-
-            do_continue
         }
 
         unsafe {
@@ -967,45 +1001,47 @@ impl<O: IsA<Pad>> PadExtManual for O {}
 unsafe fn create_probe_info<'a>(
     info: *mut ffi::GstPadProbeInfo,
 ) -> (PadProbeInfo<'a>, Option<glib::Type>) {
-    let mut data_type = None;
-    let flow_res = try_from_glib((*info).ABI.abi.flow_ret);
-    let info = PadProbeInfo {
-        mask: from_glib((*info).type_),
-        id: Some(PadProbeId(NonZeroU64::new_unchecked((*info).id as _))),
-        offset: (*info).offset,
-        size: (*info).size,
-        data: if (*info).data.is_null() {
-            None
-        } else {
-            let data = (*info).data as *mut ffi::GstMiniObject;
-            (*info).data = ptr::null_mut();
-            if (*data).type_ == Buffer::static_type().into_glib() {
-                data_type = Some(Buffer::static_type());
-                Some(PadProbeData::Buffer(from_glib_full(
-                    data as *const ffi::GstBuffer,
-                )))
-            } else if (*data).type_ == BufferList::static_type().into_glib() {
-                data_type = Some(BufferList::static_type());
-                Some(PadProbeData::BufferList(from_glib_full(
-                    data as *const ffi::GstBufferList,
-                )))
-            } else if (*data).type_ == Query::static_type().into_glib() {
-                data_type = Some(Query::static_type());
-                Some(PadProbeData::Query(QueryRef::from_mut_ptr(
-                    data as *mut ffi::GstQuery,
-                )))
-            } else if (*data).type_ == Event::static_type().into_glib() {
-                data_type = Some(Event::static_type());
-                Some(PadProbeData::Event(from_glib_full(
-                    data as *const ffi::GstEvent,
-                )))
+    unsafe {
+        let mut data_type = None;
+        let flow_res = try_from_glib((*info).ABI.abi.flow_ret);
+        let info = PadProbeInfo {
+            mask: from_glib((*info).type_),
+            id: Some(PadProbeId(NonZeroU64::new_unchecked((*info).id as _))),
+            offset: (*info).offset,
+            size: (*info).size,
+            data: if (*info).data.is_null() {
+                None
             } else {
-                Some(PadProbeData::__Unknown(data))
-            }
-        },
-        flow_res,
-    };
-    (info, data_type)
+                let data = (*info).data as *mut ffi::GstMiniObject;
+                (*info).data = ptr::null_mut();
+                if (*data).type_ == Buffer::static_type().into_glib() {
+                    data_type = Some(Buffer::static_type());
+                    Some(PadProbeData::Buffer(from_glib_full(
+                        data as *const ffi::GstBuffer,
+                    )))
+                } else if (*data).type_ == BufferList::static_type().into_glib() {
+                    data_type = Some(BufferList::static_type());
+                    Some(PadProbeData::BufferList(from_glib_full(
+                        data as *const ffi::GstBufferList,
+                    )))
+                } else if (*data).type_ == Query::static_type().into_glib() {
+                    data_type = Some(Query::static_type());
+                    Some(PadProbeData::Query(QueryRef::from_mut_ptr(
+                        data as *mut ffi::GstQuery,
+                    )))
+                } else if (*data).type_ == Event::static_type().into_glib() {
+                    data_type = Some(Event::static_type());
+                    Some(PadProbeData::Event(from_glib_full(
+                        data as *const ffi::GstEvent,
+                    )))
+                } else {
+                    Some(PadProbeData::__Unknown(data))
+                }
+            },
+            flow_res,
+        };
+        (info, data_type)
+    }
 }
 
 unsafe fn update_probe_info(
@@ -1014,80 +1050,84 @@ unsafe fn update_probe_info(
     data_type: Option<glib::Type>,
     info: *mut ffi::GstPadProbeInfo,
 ) {
-    if ret == PadProbeReturn::Handled {
-        // Handled queries need to be returned
-        // Handled buffers and buffer lists are consumed
-        // No other types can safely be used here
+    unsafe {
+        if ret == PadProbeReturn::Handled {
+            // Handled queries need to be returned
+            // Handled buffers and buffer lists are consumed
+            // No other types can safely be used here
 
-        match probe_info.data {
-            Some(PadProbeData::Query(query)) => {
-                assert_eq!(data_type, Some(Query::static_type()));
-                (*info).data = query.as_mut_ptr() as *mut libc::c_void;
+            match probe_info.data {
+                Some(PadProbeData::Query(query)) => {
+                    assert_eq!(data_type, Some(Query::static_type()));
+                    (*info).data = query.as_mut_ptr() as *mut libc::c_void;
+                }
+                Some(PadProbeData::Buffer(_)) => {
+                    assert_eq!(data_type, Some(Buffer::static_type()));
+                    // Buffer not consumed by probe; consume it here
+                }
+                Some(PadProbeData::BufferList(_)) => {
+                    assert_eq!(data_type, Some(BufferList::static_type()));
+                    // BufferList not consumed by probe; consume it here
+                }
+                Some(PadProbeData::Event(_)) => {
+                    assert_eq!(data_type, Some(Event::static_type()));
+                    // Event not consumed by probe; consume it here
+                }
+                None if data_type == Some(Buffer::static_type())
+                    || data_type == Some(BufferList::static_type())
+                    || data_type == Some(Event::static_type()) =>
+                {
+                    // Buffer or Event consumed by probe
+                    (*info).data = ptr::null_mut();
+                }
+                other => {
+                    panic!("Bad data for {data_type:?} pad probe returning Handled: {other:?}")
+                }
             }
-            Some(PadProbeData::Buffer(_)) => {
-                assert_eq!(data_type, Some(Buffer::static_type()));
-                // Buffer not consumed by probe; consume it here
+        } else if ret == PadProbeReturn::Drop {
+            // We may have consumed the object via PadProbeInfo::take_*() functions
+            match probe_info.data {
+                None if data_type == Some(Buffer::static_type())
+                    || data_type == Some(BufferList::static_type())
+                    || data_type == Some(Event::static_type()) =>
+                {
+                    (*info).data = ptr::null_mut();
+                }
+                _ => {
+                    // Nothing to do, it's going to be dropped
+                }
             }
-            Some(PadProbeData::BufferList(_)) => {
-                assert_eq!(data_type, Some(BufferList::static_type()));
-                // BufferList not consumed by probe; consume it here
+        } else {
+            match probe_info.data {
+                Some(PadProbeData::Buffer(buffer)) => {
+                    assert_eq!(data_type, Some(Buffer::static_type()));
+                    (*info).data = buffer.into_glib_ptr() as *mut libc::c_void;
+                }
+                Some(PadProbeData::BufferList(bufferlist)) => {
+                    assert_eq!(data_type, Some(BufferList::static_type()));
+                    (*info).data = bufferlist.into_glib_ptr() as *mut libc::c_void;
+                }
+                Some(PadProbeData::Event(event)) => {
+                    assert_eq!(data_type, Some(Event::static_type()));
+                    (*info).data = event.into_glib_ptr() as *mut libc::c_void;
+                }
+                Some(PadProbeData::Query(query)) => {
+                    assert_eq!(data_type, Some(Query::static_type()));
+                    (*info).data = query.as_mut_ptr() as *mut libc::c_void;
+                }
+                Some(PadProbeData::__Unknown(ptr)) => {
+                    assert_eq!(data_type, None);
+                    (*info).data = ptr as *mut libc::c_void;
+                }
+                None => {
+                    assert_eq!(data_type, None);
+                }
             }
-            Some(PadProbeData::Event(_)) => {
-                assert_eq!(data_type, Some(Event::static_type()));
-                // Event not consumed by probe; consume it here
-            }
-            None if data_type == Some(Buffer::static_type())
-                || data_type == Some(BufferList::static_type())
-                || data_type == Some(Event::static_type()) =>
-            {
-                // Buffer or Event consumed by probe
-                (*info).data = ptr::null_mut();
-            }
-            other => panic!("Bad data for {data_type:?} pad probe returning Handled: {other:?}"),
         }
-    } else if ret == PadProbeReturn::Drop {
-        // We may have consumed the object via PadProbeInfo::take_*() functions
-        match probe_info.data {
-            None if data_type == Some(Buffer::static_type())
-                || data_type == Some(BufferList::static_type())
-                || data_type == Some(Event::static_type()) =>
-            {
-                (*info).data = ptr::null_mut();
-            }
-            _ => {
-                // Nothing to do, it's going to be dropped
-            }
-        }
-    } else {
-        match probe_info.data {
-            Some(PadProbeData::Buffer(buffer)) => {
-                assert_eq!(data_type, Some(Buffer::static_type()));
-                (*info).data = buffer.into_glib_ptr() as *mut libc::c_void;
-            }
-            Some(PadProbeData::BufferList(bufferlist)) => {
-                assert_eq!(data_type, Some(BufferList::static_type()));
-                (*info).data = bufferlist.into_glib_ptr() as *mut libc::c_void;
-            }
-            Some(PadProbeData::Event(event)) => {
-                assert_eq!(data_type, Some(Event::static_type()));
-                (*info).data = event.into_glib_ptr() as *mut libc::c_void;
-            }
-            Some(PadProbeData::Query(query)) => {
-                assert_eq!(data_type, Some(Query::static_type()));
-                (*info).data = query.as_mut_ptr() as *mut libc::c_void;
-            }
-            Some(PadProbeData::__Unknown(ptr)) => {
-                assert_eq!(data_type, None);
-                (*info).data = ptr as *mut libc::c_void;
-            }
-            None => {
-                assert_eq!(data_type, None);
-            }
-        }
+
+        let flow_ret: FlowReturn = probe_info.flow_res.into();
+        (*info).ABI.abi.flow_ret = flow_ret.into_glib();
     }
-
-    let flow_ret: FlowReturn = probe_info.flow_res.into();
-    (*info).ABI.abi.flow_ret = flow_ret.into_glib();
 }
 
 unsafe extern "C" fn trampoline_pad_probe<
@@ -1101,18 +1141,20 @@ unsafe extern "C" fn trampoline_pad_probe<
 where
     T: IsA<Pad>,
 {
-    let func: &F = &*(func as *const F);
+    unsafe {
+        let func: &F = &*(func as *const F);
 
-    let (mut probe_info, data_type) = create_probe_info(info);
+        let (mut probe_info, data_type) = create_probe_info(info);
 
-    let ret = func(
-        Pad::from_glib_borrow(pad).unsafe_cast_ref(),
-        &mut probe_info,
-    );
+        let ret = func(
+            Pad::from_glib_borrow(pad).unsafe_cast_ref(),
+            &mut probe_info,
+        );
 
-    update_probe_info(ret, probe_info, data_type, info);
+        update_probe_info(ret, probe_info, data_type, info);
 
-    ret.into_glib()
+        ret.into_glib()
+    }
 }
 
 unsafe extern "C" fn trampoline_activate_function<
@@ -1125,21 +1167,23 @@ unsafe extern "C" fn trampoline_activate_function<
 where
     T: IsA<Pad>,
 {
-    let func: &F = &*((*pad).activatedata as *const F);
+    unsafe {
+        let func: &F = &*((*pad).activatedata as *const F);
 
-    match func(
-        Pad::from_glib_borrow(pad).unsafe_cast_ref(),
-        Option::<crate::Object>::from_glib_borrow(parent)
-            .as_ref()
-            .as_ref(),
-    ) {
-        Ok(()) => true,
-        Err(err) => {
-            err.log_with_object(&*Pad::from_glib_borrow(pad));
-            false
+        match func(
+            Pad::from_glib_borrow(pad).unsafe_cast_ref(),
+            Option::<crate::Object>::from_glib_borrow(parent)
+                .as_ref()
+                .as_ref(),
+        ) {
+            Ok(()) => true,
+            Err(err) => {
+                err.log_with_object(&*Pad::from_glib_borrow(pad));
+                false
+            }
         }
+        .into_glib()
     }
-    .into_glib()
 }
 
 unsafe extern "C" fn trampoline_activatemode_function<
@@ -1157,23 +1201,25 @@ unsafe extern "C" fn trampoline_activatemode_function<
 where
     T: IsA<Pad>,
 {
-    let func: &F = &*((*pad).activatemodedata as *const F);
+    unsafe {
+        let func: &F = &*((*pad).activatemodedata as *const F);
 
-    match func(
-        Pad::from_glib_borrow(pad).unsafe_cast_ref(),
-        Option::<crate::Object>::from_glib_borrow(parent)
-            .as_ref()
-            .as_ref(),
-        from_glib(mode),
-        from_glib(active),
-    ) {
-        Ok(()) => true,
-        Err(err) => {
-            err.log_with_object(&*Pad::from_glib_borrow(pad));
-            false
+        match func(
+            Pad::from_glib_borrow(pad).unsafe_cast_ref(),
+            Option::<crate::Object>::from_glib_borrow(parent)
+                .as_ref()
+                .as_ref(),
+            from_glib(mode),
+            from_glib(active),
+        ) {
+            Ok(()) => true,
+            Err(err) => {
+                err.log_with_object(&*Pad::from_glib_borrow(pad));
+                false
+            }
         }
+        .into_glib()
     }
-    .into_glib()
 }
 
 unsafe extern "C" fn trampoline_chain_function<
@@ -1190,17 +1236,19 @@ unsafe extern "C" fn trampoline_chain_function<
 where
     T: IsA<Pad>,
 {
-    let func: &F = &*((*pad).chaindata as *const F);
+    unsafe {
+        let func: &F = &*((*pad).chaindata as *const F);
 
-    let res: FlowReturn = func(
-        Pad::from_glib_borrow(pad).unsafe_cast_ref(),
-        Option::<crate::Object>::from_glib_borrow(parent)
-            .as_ref()
-            .as_ref(),
-        from_glib_full(buffer),
-    )
-    .into();
-    res.into_glib()
+        let res: FlowReturn = func(
+            Pad::from_glib_borrow(pad).unsafe_cast_ref(),
+            Option::<crate::Object>::from_glib_borrow(parent)
+                .as_ref()
+                .as_ref(),
+            from_glib_full(buffer),
+        )
+        .into();
+        res.into_glib()
+    }
 }
 
 unsafe extern "C" fn trampoline_chain_list_function<
@@ -1217,17 +1265,19 @@ unsafe extern "C" fn trampoline_chain_list_function<
 where
     T: IsA<Pad>,
 {
-    let func: &F = &*((*pad).chainlistdata as *const F);
+    unsafe {
+        let func: &F = &*((*pad).chainlistdata as *const F);
 
-    let res: FlowReturn = func(
-        Pad::from_glib_borrow(pad).unsafe_cast_ref(),
-        Option::<crate::Object>::from_glib_borrow(parent)
-            .as_ref()
-            .as_ref(),
-        from_glib_full(list),
-    )
-    .into();
-    res.into_glib()
+        let res: FlowReturn = func(
+            Pad::from_glib_borrow(pad).unsafe_cast_ref(),
+            Option::<crate::Object>::from_glib_borrow(parent)
+                .as_ref()
+                .as_ref(),
+            from_glib_full(list),
+        )
+        .into();
+        res.into_glib()
+    }
 }
 
 unsafe extern "C" fn trampoline_event_function<
@@ -1241,16 +1291,18 @@ unsafe extern "C" fn trampoline_event_function<
 where
     T: IsA<Pad>,
 {
-    let func: &F = &*((*pad).eventdata as *const F);
+    unsafe {
+        let func: &F = &*((*pad).eventdata as *const F);
 
-    func(
-        Pad::from_glib_borrow(pad).unsafe_cast_ref(),
-        Option::<crate::Object>::from_glib_borrow(parent)
-            .as_ref()
-            .as_ref(),
-        from_glib_full(event),
-    )
-    .into_glib()
+        func(
+            Pad::from_glib_borrow(pad).unsafe_cast_ref(),
+            Option::<crate::Object>::from_glib_borrow(parent)
+                .as_ref()
+                .as_ref(),
+            from_glib_full(event),
+        )
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn trampoline_event_full_function<
@@ -1267,17 +1319,19 @@ unsafe extern "C" fn trampoline_event_full_function<
 where
     T: IsA<Pad>,
 {
-    let func: &F = &*((*pad).eventdata as *const F);
+    unsafe {
+        let func: &F = &*((*pad).eventdata as *const F);
 
-    let res: FlowReturn = func(
-        Pad::from_glib_borrow(pad).unsafe_cast_ref(),
-        Option::<crate::Object>::from_glib_borrow(parent)
-            .as_ref()
-            .as_ref(),
-        from_glib_full(event),
-    )
-    .into();
-    res.into_glib()
+        let res: FlowReturn = func(
+            Pad::from_glib_borrow(pad).unsafe_cast_ref(),
+            Option::<crate::Object>::from_glib_borrow(parent)
+                .as_ref()
+                .as_ref(),
+            from_glib_full(event),
+        )
+        .into();
+        res.into_glib()
+    }
 }
 
 #[allow(clippy::needless_option_as_deref)]
@@ -1303,76 +1357,78 @@ unsafe extern "C" fn trampoline_getrange_function<
 where
     T: IsA<Pad>,
 {
-    let func: &F = &*((*pad).getrangedata as *const F);
+    unsafe {
+        let func: &F = &*((*pad).getrangedata as *const F);
 
-    debug_assert!(!buffer.is_null());
+        debug_assert!(!buffer.is_null());
 
-    let pad = Pad::from_glib_borrow(pad);
-    let pad = pad.unsafe_cast_ref();
-    let mut passed_buffer = if (*buffer).is_null() {
-        None
-    } else {
-        Some(crate::BufferRef::from_mut_ptr(*buffer))
-    };
+        let pad = Pad::from_glib_borrow(pad);
+        let pad = pad.unsafe_cast_ref();
+        let mut passed_buffer = if (*buffer).is_null() {
+            None
+        } else {
+            Some(crate::BufferRef::from_mut_ptr(*buffer))
+        };
 
-    match func(
-        pad,
-        Option::<crate::Object>::from_glib_borrow(parent)
-            .as_ref()
-            .as_ref(),
-        offset,
-        passed_buffer.as_deref_mut(),
-        length,
-    ) {
-        Ok(PadGetRangeSuccess::NewBuffer(new_buffer)) => {
-            if let Some(passed_buffer) = passed_buffer {
-                crate::debug!(
-                    crate::CAT_PERFORMANCE,
-                    obj = pad.unsafe_cast_ref::<glib::Object>(),
-                    "Returned new buffer from getrange function, copying into passed buffer"
-                );
+        match func(
+            pad,
+            Option::<crate::Object>::from_glib_borrow(parent)
+                .as_ref()
+                .as_ref(),
+            offset,
+            passed_buffer.as_deref_mut(),
+            length,
+        ) {
+            Ok(PadGetRangeSuccess::NewBuffer(new_buffer)) => {
+                if let Some(passed_buffer) = passed_buffer {
+                    crate::debug!(
+                        crate::CAT_PERFORMANCE,
+                        obj = pad.unsafe_cast_ref::<glib::Object>(),
+                        "Returned new buffer from getrange function, copying into passed buffer"
+                    );
 
-                let mut map = match passed_buffer.map_writable() {
-                    Ok(map) => map,
-                    Err(_) => {
-                        crate::error!(
-                            crate::CAT_RUST,
-                            obj = pad.unsafe_cast_ref::<glib::Object>(),
-                            "Failed to map passed buffer writable"
-                        );
-                        return ffi::GST_FLOW_ERROR;
+                    let mut map = match passed_buffer.map_writable() {
+                        Ok(map) => map,
+                        Err(_) => {
+                            crate::error!(
+                                crate::CAT_RUST,
+                                obj = pad.unsafe_cast_ref::<glib::Object>(),
+                                "Failed to map passed buffer writable"
+                            );
+                            return ffi::GST_FLOW_ERROR;
+                        }
+                    };
+
+                    let copied_size = new_buffer.copy_to_slice(0, &mut map);
+                    drop(map);
+
+                    if let Err(copied_size) = copied_size {
+                        passed_buffer.set_size(copied_size);
                     }
-                };
 
-                let copied_size = new_buffer.copy_to_slice(0, &mut map);
-                drop(map);
+                    match new_buffer.copy_into(passed_buffer, crate::BUFFER_COPY_METADATA, ..) {
+                        Ok(_) => FlowReturn::Ok.into_glib(),
+                        Err(_) => {
+                            crate::error!(
+                                crate::CAT_RUST,
+                                obj = pad.unsafe_cast_ref::<glib::Object>(),
+                                "Failed to copy buffer metadata"
+                            );
 
-                if let Err(copied_size) = copied_size {
-                    passed_buffer.set_size(copied_size);
-                }
-
-                match new_buffer.copy_into(passed_buffer, crate::BUFFER_COPY_METADATA, ..) {
-                    Ok(_) => FlowReturn::Ok.into_glib(),
-                    Err(_) => {
-                        crate::error!(
-                            crate::CAT_RUST,
-                            obj = pad.unsafe_cast_ref::<glib::Object>(),
-                            "Failed to copy buffer metadata"
-                        );
-
-                        FlowReturn::Error.into_glib()
+                            FlowReturn::Error.into_glib()
+                        }
                     }
+                } else {
+                    *buffer = new_buffer.into_glib_ptr();
+                    FlowReturn::Ok.into_glib()
                 }
-            } else {
-                *buffer = new_buffer.into_glib_ptr();
+            }
+            Ok(PadGetRangeSuccess::FilledBuffer) => {
+                assert!(passed_buffer.is_some());
                 FlowReturn::Ok.into_glib()
             }
+            Err(ret) => FlowReturn::from_error(ret).into_glib(),
         }
-        Ok(PadGetRangeSuccess::FilledBuffer) => {
-            assert!(passed_buffer.is_some());
-            FlowReturn::Ok.into_glib()
-        }
-        Err(ret) => FlowReturn::from_error(ret).into_glib(),
     }
 }
 
@@ -1386,17 +1442,19 @@ unsafe extern "C" fn trampoline_iterate_internal_links_function<
 where
     T: IsA<Pad>,
 {
-    let func: &F = &*((*pad).iterintlinkdata as *const F);
+    unsafe {
+        let func: &F = &*((*pad).iterintlinkdata as *const F);
 
-    // Steal the iterator and return it
-    let ret = func(
-        Pad::from_glib_borrow(pad).unsafe_cast_ref(),
-        Option::<crate::Object>::from_glib_borrow(parent)
-            .as_ref()
-            .as_ref(),
-    );
+        // Steal the iterator and return it
+        let ret = func(
+            Pad::from_glib_borrow(pad).unsafe_cast_ref(),
+            Option::<crate::Object>::from_glib_borrow(parent)
+                .as_ref()
+                .as_ref(),
+        );
 
-    ret.into_glib_ptr()
+        ret.into_glib_ptr()
+    }
 }
 
 unsafe extern "C" fn trampoline_link_function<
@@ -1417,17 +1475,19 @@ unsafe extern "C" fn trampoline_link_function<
 where
     T: IsA<Pad>,
 {
-    let func: &F = &*((*pad).linkdata as *const F);
+    unsafe {
+        let func: &F = &*((*pad).linkdata as *const F);
 
-    let res: crate::PadLinkReturn = func(
-        Pad::from_glib_borrow(pad).unsafe_cast_ref(),
-        Option::<crate::Object>::from_glib_borrow(parent)
-            .as_ref()
-            .as_ref(),
-        &from_glib_borrow(peer),
-    )
-    .into();
-    res.into_glib()
+        let res: crate::PadLinkReturn = func(
+            Pad::from_glib_borrow(pad).unsafe_cast_ref(),
+            Option::<crate::Object>::from_glib_borrow(parent)
+                .as_ref()
+                .as_ref(),
+            &from_glib_borrow(peer),
+        )
+        .into();
+        res.into_glib()
+    }
 }
 
 unsafe extern "C" fn trampoline_query_function<
@@ -1441,16 +1501,18 @@ unsafe extern "C" fn trampoline_query_function<
 where
     T: IsA<Pad>,
 {
-    let func: &F = &*((*pad).querydata as *const F);
+    unsafe {
+        let func: &F = &*((*pad).querydata as *const F);
 
-    func(
-        Pad::from_glib_borrow(pad).unsafe_cast_ref(),
-        Option::<crate::Object>::from_glib_borrow(parent)
-            .as_ref()
-            .as_ref(),
-        crate::QueryRef::from_mut_ptr(query),
-    )
-    .into_glib()
+        func(
+            Pad::from_glib_borrow(pad).unsafe_cast_ref(),
+            Option::<crate::Object>::from_glib_borrow(parent)
+                .as_ref()
+                .as_ref(),
+            crate::QueryRef::from_mut_ptr(query),
+        )
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn trampoline_unlink_function<
@@ -1462,18 +1524,22 @@ unsafe extern "C" fn trampoline_unlink_function<
 ) where
     T: IsA<Pad>,
 {
-    let func: &F = &*((*pad).unlinkdata as *const F);
+    unsafe {
+        let func: &F = &*((*pad).unlinkdata as *const F);
 
-    func(
-        Pad::from_glib_borrow(pad).unsafe_cast_ref(),
-        Option::<crate::Object>::from_glib_borrow(parent)
-            .as_ref()
-            .as_ref(),
-    )
+        func(
+            Pad::from_glib_borrow(pad).unsafe_cast_ref(),
+            Option::<crate::Object>::from_glib_borrow(parent)
+                .as_ref()
+                .as_ref(),
+        )
+    }
 }
 
 unsafe extern "C" fn destroy_closure<F>(ptr: gpointer) {
-    let _ = Box::<F>::from_raw(ptr as *mut _);
+    unsafe {
+        let _ = Box::<F>::from_raw(ptr as *mut _);
+    }
 }
 
 impl Pad {
@@ -2443,11 +2509,14 @@ mod tests {
         {
             let events = events.clone();
             pad.add_probe(crate::PadProbeType::EVENT_UPSTREAM, move |_, info| {
-                if let Some(event) = info.take_event() {
-                    let mut events = events.lock().unwrap();
-                    events.push(event);
-                } else {
-                    unreachable!();
+                match info.take_event() {
+                    Some(event) => {
+                        let mut events = events.lock().unwrap();
+                        events.push(event);
+                    }
+                    _ => {
+                        unreachable!();
+                    }
                 }
                 probe_return
             });
@@ -2456,16 +2525,19 @@ mod tests {
         {
             let buffers = buffers.clone();
             pad.add_probe(crate::PadProbeType::BUFFER, move |_, info| {
-                if let Some(buffer) = info.take_buffer() {
-                    let mut buffers = buffers.lock().unwrap();
-                    info.flow_res = if buffers.is_empty() {
-                        Ok(FlowSuccess::Ok)
-                    } else {
-                        flow_override
-                    };
-                    buffers.push(buffer);
-                } else {
-                    unreachable!();
+                match info.take_buffer() {
+                    Some(buffer) => {
+                        let mut buffers = buffers.lock().unwrap();
+                        info.flow_res = if buffers.is_empty() {
+                            Ok(FlowSuccess::Ok)
+                        } else {
+                            flow_override
+                        };
+                        buffers.push(buffer);
+                    }
+                    _ => {
+                        unreachable!();
+                    }
                 }
                 probe_return
             });

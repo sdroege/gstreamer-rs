@@ -83,10 +83,12 @@ unsafe impl<T: AudioAggregatorPadImpl> IsSubclassable<T> for AudioAggregatorPad 
 unsafe extern "C" fn audio_aggregator_pad_update_conversion_info<T: AudioAggregatorPadImpl>(
     ptr: *mut ffi::GstAudioAggregatorPad,
 ) {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    imp.update_conversion_info();
+        imp.update_conversion_info();
+    }
 }
 
 unsafe extern "C" fn audio_aggregator_pad_convert_buffer<T: AudioAggregatorPadImpl>(
@@ -95,14 +97,16 @@ unsafe extern "C" fn audio_aggregator_pad_convert_buffer<T: AudioAggregatorPadIm
     out_info: *mut ffi::GstAudioInfo,
     buffer: *mut gst::ffi::GstBuffer,
 ) -> *mut gst::ffi::GstBuffer {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    imp.convert_buffer(
-        &from_glib_none(in_info),
-        &from_glib_none(out_info),
-        &from_glib_borrow(buffer),
-    )
-    .map(|buffer| buffer.into_glib_ptr())
-    .unwrap_or(ptr::null_mut())
+        imp.convert_buffer(
+            &from_glib_none(in_info),
+            &from_glib_none(out_info),
+            &from_glib_borrow(buffer),
+        )
+        .map(|buffer| buffer.into_glib_ptr())
+        .unwrap_or(ptr::null_mut())
+    }
 }

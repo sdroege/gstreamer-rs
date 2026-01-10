@@ -29,7 +29,7 @@ pub struct BufferRefCursor<T> {
 }
 
 macro_rules! define_seek_impl(
-    ($get_buffer_ref:expr) => {
+    ($get_buffer_ref:expr_2021) => {
         fn seek(&mut self, pos: io::SeekFrom) -> Result<u64, io::Error> {
             match pos {
                 io::SeekFrom::Start(off) => {
@@ -98,7 +98,7 @@ macro_rules! define_seek_impl(
 );
 
 macro_rules! define_read_write_fn_impl(
-    ($self:ident, $data:ident, $data_type:ty, $get_buffer_ref:expr, $map_flags:path, $copy:expr, $split:expr) => {
+    ($self:ident, $data:ident, $data_type:ty, $get_buffer_ref:expr_2021, $map_flags:path, $copy:expr_2021, $split:expr_2021) => {
         #[allow(clippy::redundant_closure_call)]
         {
         let mut copied = 0;
@@ -161,7 +161,7 @@ macro_rules! define_read_write_fn_impl(
 );
 
 macro_rules! define_read_impl(
-    ($get_buffer_ref:expr) => {
+    ($get_buffer_ref:expr_2021) => {
         fn read(&mut self, mut data: &mut [u8]) -> Result<usize, io::Error> {
             define_read_write_fn_impl!(
                 self,
@@ -183,7 +183,7 @@ macro_rules! define_read_impl(
 );
 
 macro_rules! define_write_impl(
-    ($get_buffer_ref:expr) => {
+    ($get_buffer_ref:expr_2021) => {
         fn write(&mut self, mut data: &[u8]) -> Result<usize, io::Error> {
             define_read_write_fn_impl!(
                 self,

@@ -348,9 +348,11 @@ unsafe impl<'a> glib::value::FromValue<'a> for AudioFormatInfo {
     type Checker = glib::value::GenericValueTypeOrNoneChecker<Self>;
 
     unsafe fn from_value(value: &'a glib::Value) -> Self {
-        skip_assert_initialized!();
-        from_glib_none(glib::gobject_ffi::g_value_get_boxed(value.to_glib_none().0)
-            as *mut ffi::GstAudioFormatInfo)
+        unsafe {
+            skip_assert_initialized!();
+            from_glib_none(glib::gobject_ffi::g_value_get_boxed(value.to_glib_none().0)
+                as *mut ffi::GstAudioFormatInfo)
+        }
     }
 }
 
@@ -421,7 +423,7 @@ impl<'a> glib::translate::ToGlibPtr<'a, *const ffi::GstAudioFormatInfo> for Audi
 impl glib::translate::FromGlibPtrNone<*mut ffi::GstAudioFormatInfo> for AudioFormatInfo {
     #[inline]
     unsafe fn from_glib_none(ptr: *mut ffi::GstAudioFormatInfo) -> Self {
-        Self(&*ptr)
+        unsafe { Self(&*ptr) }
     }
 }
 
@@ -429,7 +431,7 @@ impl glib::translate::FromGlibPtrNone<*mut ffi::GstAudioFormatInfo> for AudioFor
 impl glib::translate::FromGlibPtrNone<*const ffi::GstAudioFormatInfo> for AudioFormatInfo {
     #[inline]
     unsafe fn from_glib_none(ptr: *const ffi::GstAudioFormatInfo) -> Self {
-        Self(&*ptr)
+        unsafe { Self(&*ptr) }
     }
 }
 

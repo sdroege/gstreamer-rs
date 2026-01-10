@@ -420,23 +420,25 @@ unsafe extern "C" fn element_change_state<T: ElementImpl>(
     ptr: *mut ffi::GstElement,
     transition: ffi::GstStateChange,
 ) -> ffi::GstStateChangeReturn {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    // *Never* fail downwards state changes, this causes bugs in GStreamer
-    // and leads to crashes and deadlocks.
-    let transition = from_glib(transition);
-    let fallback = match transition {
-        StateChange::PlayingToPaused | StateChange::PausedToReady | StateChange::ReadyToNull => {
-            StateChangeReturn::Success
-        }
-        _ => StateChangeReturn::Failure,
-    };
+        // *Never* fail downwards state changes, this causes bugs in GStreamer
+        // and leads to crashes and deadlocks.
+        let transition = from_glib(transition);
+        let fallback = match transition {
+            StateChange::PlayingToPaused
+            | StateChange::PausedToReady
+            | StateChange::ReadyToNull => StateChangeReturn::Success,
+            _ => StateChangeReturn::Failure,
+        };
 
-    panic_to_error!(imp, fallback, {
-        StateChangeReturn::from(imp.change_state(transition))
-    })
-    .into_glib()
+        panic_to_error!(imp, fallback, {
+            StateChangeReturn::from(imp.change_state(transition))
+        })
+        .into_glib()
+    }
 }
 
 unsafe extern "C" fn element_request_new_pad<T: ElementImpl>(
@@ -445,115 +447,131 @@ unsafe extern "C" fn element_request_new_pad<T: ElementImpl>(
     name: *const libc::c_char,
     caps: *const ffi::GstCaps,
 ) -> *mut ffi::GstPad {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    let caps = Option::<crate::Caps>::from_glib_borrow(caps);
-    let name = Option::<String>::from_glib_none(name);
+        let caps = Option::<crate::Caps>::from_glib_borrow(caps);
+        let name = Option::<String>::from_glib_none(name);
 
-    // XXX: This is effectively unsafe but the best we can do
-    // See https://bugzilla.gnome.org/show_bug.cgi?id=791193
-    let pad = panic_to_error!(imp, None, {
-        imp.request_new_pad(
-            &from_glib_borrow(templ),
-            name.as_deref(),
-            caps.as_ref().as_ref(),
-        )
-    });
+        // XXX: This is effectively unsafe but the best we can do
+        // See https://bugzilla.gnome.org/show_bug.cgi?id=791193
+        let pad = panic_to_error!(imp, None, {
+            imp.request_new_pad(
+                &from_glib_borrow(templ),
+                name.as_deref(),
+                caps.as_ref().as_ref(),
+            )
+        });
 
-    // Ensure that the pad is owned by the element now, if a pad was returned
-    if let Some(ref pad) = pad {
-        assert_eq!(
-            pad.parent().as_ref(),
-            Some(&*crate::Object::from_glib_borrow(
-                ptr as *mut ffi::GstObject
-            ))
-        );
+        // Ensure that the pad is owned by the element now, if a pad was returned
+        if let Some(ref pad) = pad {
+            assert_eq!(
+                pad.parent().as_ref(),
+                Some(&*crate::Object::from_glib_borrow(
+                    ptr as *mut ffi::GstObject
+                ))
+            );
+        }
+
+        pad.to_glib_none().0
     }
-
-    pad.to_glib_none().0
 }
 
 unsafe extern "C" fn element_release_pad<T: ElementImpl>(
     ptr: *mut ffi::GstElement,
     pad: *mut ffi::GstPad,
 ) {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    // If we get a floating reference passed simply return here. It can't be stored inside this
-    // element, and if we continued to use it we would take ownership of this floating reference.
-    if glib::gobject_ffi::g_object_is_floating(pad as *mut glib::gobject_ffi::GObject)
-        != glib::ffi::GFALSE
-    {
-        return;
+        // If we get a floating reference passed simply return here. It can't be stored inside this
+        // element, and if we continued to use it we would take ownership of this floating reference.
+        if glib::gobject_ffi::g_object_is_floating(pad as *mut glib::gobject_ffi::GObject)
+            != glib::ffi::GFALSE
+        {
+            return;
+        }
+
+        panic_to_error!(imp, (), { imp.release_pad(&from_glib_none(pad)) })
     }
-
-    panic_to_error!(imp, (), { imp.release_pad(&from_glib_none(pad)) })
 }
 
 unsafe extern "C" fn element_send_event<T: ElementImpl>(
     ptr: *mut ffi::GstElement,
     event: *mut ffi::GstEvent,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    panic_to_error!(imp, false, { imp.send_event(from_glib_full(event)) }).into_glib()
+        panic_to_error!(imp, false, { imp.send_event(from_glib_full(event)) }).into_glib()
+    }
 }
 
 unsafe extern "C" fn element_query<T: ElementImpl>(
     ptr: *mut ffi::GstElement,
     query: *mut ffi::GstQuery,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
-    let query = QueryRef::from_mut_ptr(query);
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
+        let query = QueryRef::from_mut_ptr(query);
 
-    panic_to_error!(imp, false, { imp.query(query) }).into_glib()
+        panic_to_error!(imp, false, { imp.query(query) }).into_glib()
+    }
 }
 
 unsafe extern "C" fn element_set_context<T: ElementImpl>(
     ptr: *mut ffi::GstElement,
     context: *mut ffi::GstContext,
 ) {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    panic_to_error!(imp, (), { imp.set_context(&from_glib_borrow(context)) })
+        panic_to_error!(imp, (), { imp.set_context(&from_glib_borrow(context)) })
+    }
 }
 
 unsafe extern "C" fn element_set_clock<T: ElementImpl>(
     ptr: *mut ffi::GstElement,
     clock: *mut ffi::GstClock,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    let clock = Option::<crate::Clock>::from_glib_borrow(clock);
+        let clock = Option::<crate::Clock>::from_glib_borrow(clock);
 
-    panic_to_error!(imp, false, { imp.set_clock(clock.as_ref().as_ref()) }).into_glib()
+        panic_to_error!(imp, false, { imp.set_clock(clock.as_ref().as_ref()) }).into_glib()
+    }
 }
 
 unsafe extern "C" fn element_provide_clock<T: ElementImpl>(
     ptr: *mut ffi::GstElement,
 ) -> *mut ffi::GstClock {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    panic_to_error!(imp, None, { imp.provide_clock() }).into_glib_ptr()
+        panic_to_error!(imp, None, { imp.provide_clock() }).into_glib_ptr()
+    }
 }
 
 unsafe extern "C" fn element_post_message<T: ElementImpl>(
     ptr: *mut ffi::GstElement,
     msg: *mut ffi::GstMessage,
 ) -> glib::ffi::gboolean {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    // Can't catch panics here as posting the error message would cause
-    // this code to be called again recursively forever.
-    imp.post_message(from_glib_full(msg)).into_glib()
+        // Can't catch panics here as posting the error message would cause
+        // this code to be called again recursively forever.
+        imp.post_message(from_glib_full(msg)).into_glib()
+    }
 }
 
 #[cfg(test)]

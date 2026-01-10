@@ -53,10 +53,12 @@ impl<'a> RTPBuffer<'a, Readable> {
     pub unsafe fn from_glib_borrow<'b>(
         rtp_buffer: *mut ffi::GstRTPBuffer,
     ) -> glib::translate::Borrowed<RTPBuffer<'b, Readable>> {
-        glib::translate::Borrowed::new(RTPBuffer {
-            rtp_buffer: *rtp_buffer,
-            phantom: PhantomData,
-        })
+        unsafe {
+            glib::translate::Borrowed::new(RTPBuffer {
+                rtp_buffer: *rtp_buffer,
+                phantom: PhantomData,
+            })
+        }
     }
 }
 

@@ -52,14 +52,16 @@ pub trait FdAllocatorExtManual: IsA<FdAllocator> + 'static {
         size: usize,
         flags: FdMemoryFlags,
     ) -> Result<gst::Memory, glib::BoolError> {
-        skip_assert_initialized!();
-        Option::<_>::from_glib_full(ffi::gst_fd_allocator_alloc(
-            self.unsafe_cast_ref::<gst::Allocator>().to_glib_none().0,
-            fd,
-            size,
-            flags.into_glib(),
-        ))
-        .ok_or_else(|| glib::bool_error!("Failed to allocate memory"))
+        unsafe {
+            skip_assert_initialized!();
+            Option::<_>::from_glib_full(ffi::gst_fd_allocator_alloc(
+                self.unsafe_cast_ref::<gst::Allocator>().to_glib_none().0,
+                fd,
+                size,
+                flags.into_glib(),
+            ))
+            .ok_or_else(|| glib::bool_error!("Failed to allocate memory"))
+        }
     }
 
     #[cfg(feature = "v1_28")]

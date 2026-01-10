@@ -324,11 +324,13 @@ unsafe impl<'a> glib::value::FromValue<'a> for Fraction {
 
     #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
-        skip_assert_initialized!();
-        let n = ffi::gst_value_get_fraction_numerator(value.to_glib_none().0);
-        let d = ffi::gst_value_get_fraction_denominator(value.to_glib_none().0);
+        unsafe {
+            skip_assert_initialized!();
+            let n = ffi::gst_value_get_fraction_numerator(value.to_glib_none().0);
+            let d = ffi::gst_value_get_fraction_denominator(value.to_glib_none().0);
 
-        Fraction::new(n, d)
+            Fraction::new(n, d)
+        }
     }
 }
 
@@ -507,12 +509,14 @@ unsafe impl<'a> glib::value::FromValue<'a> for IntRange<i32> {
 
     #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
-        skip_assert_initialized!();
-        let min = ffi::gst_value_get_int_range_min(value.to_glib_none().0);
-        let max = ffi::gst_value_get_int_range_max(value.to_glib_none().0);
-        let step = ffi::gst_value_get_int_range_step(value.to_glib_none().0);
+        unsafe {
+            skip_assert_initialized!();
+            let min = ffi::gst_value_get_int_range_min(value.to_glib_none().0);
+            let max = ffi::gst_value_get_int_range_max(value.to_glib_none().0);
+            let step = ffi::gst_value_get_int_range_step(value.to_glib_none().0);
 
-        Self::with_step(min, max, step)
+            Self::with_step(min, max, step)
+        }
     }
 }
 
@@ -561,12 +565,14 @@ unsafe impl<'a> glib::value::FromValue<'a> for IntRange<i64> {
 
     #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
-        skip_assert_initialized!();
-        let min = ffi::gst_value_get_int64_range_min(value.to_glib_none().0);
-        let max = ffi::gst_value_get_int64_range_max(value.to_glib_none().0);
-        let step = ffi::gst_value_get_int64_range_step(value.to_glib_none().0);
+        unsafe {
+            skip_assert_initialized!();
+            let min = ffi::gst_value_get_int64_range_min(value.to_glib_none().0);
+            let max = ffi::gst_value_get_int64_range_max(value.to_glib_none().0);
+            let step = ffi::gst_value_get_int64_range_step(value.to_glib_none().0);
 
-        Self::with_step(min, max, step)
+            Self::with_step(min, max, step)
+        }
     }
 }
 
@@ -655,16 +661,18 @@ unsafe impl<'a> glib::value::FromValue<'a> for FractionRange {
 
     #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
-        skip_assert_initialized!();
-        let min = ffi::gst_value_get_fraction_range_min(value.to_glib_none().0);
-        let max = ffi::gst_value_get_fraction_range_max(value.to_glib_none().0);
+        unsafe {
+            skip_assert_initialized!();
+            let min = ffi::gst_value_get_fraction_range_min(value.to_glib_none().0);
+            let max = ffi::gst_value_get_fraction_range_max(value.to_glib_none().0);
 
-        let min_n = ffi::gst_value_get_fraction_numerator(min);
-        let min_d = ffi::gst_value_get_fraction_denominator(min);
-        let max_n = ffi::gst_value_get_fraction_numerator(max);
-        let max_d = ffi::gst_value_get_fraction_denominator(max);
+            let min_n = ffi::gst_value_get_fraction_numerator(min);
+            let min_d = ffi::gst_value_get_fraction_denominator(min);
+            let max_n = ffi::gst_value_get_fraction_numerator(max);
+            let max_d = ffi::gst_value_get_fraction_denominator(max);
 
-        Self::new((min_n, min_d), (max_n, max_d))
+            Self::new((min_n, min_d), (max_n, max_d))
+        }
     }
 }
 
@@ -786,9 +794,11 @@ unsafe impl<'a> glib::value::FromValue<'a> for Bitmask {
 
     #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
-        skip_assert_initialized!();
-        let v = ffi::gst_value_get_bitmask(value.to_glib_none().0);
-        Self::new(v)
+        unsafe {
+            skip_assert_initialized!();
+            let v = ffi::gst_value_get_bitmask(value.to_glib_none().0);
+            Self::new(v)
+        }
     }
 }
 
@@ -927,8 +937,10 @@ unsafe impl<'a> glib::value::FromValue<'a> for Array {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     unsafe fn from_value(value: &'a glib::Value) -> Self {
-        skip_assert_initialized!();
-        Self(glib::SendValue::unsafe_from(value.clone().into_raw()))
+        unsafe {
+            skip_assert_initialized!();
+            Self(glib::SendValue::unsafe_from(value.clone().into_raw()))
+        }
     }
 }
 
@@ -996,16 +1008,18 @@ unsafe impl<'a> glib::value::FromValue<'a> for ArrayRef<'a> {
 
     #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
-        skip_assert_initialized!();
-        let arr = (*value.as_ptr()).data[0].v_pointer as *const glib::ffi::GArray;
-        if arr.is_null() || (*arr).len == 0 {
-            Self(&[])
-        } else {
-            #[allow(clippy::cast_ptr_alignment)]
-            Self(slice::from_raw_parts(
-                (*arr).data as *const glib::SendValue,
-                (*arr).len as usize,
-            ))
+        unsafe {
+            skip_assert_initialized!();
+            let arr = (*value.as_ptr()).data[0].v_pointer as *const glib::ffi::GArray;
+            if arr.is_null() || (*arr).len == 0 {
+                Self(&[])
+            } else {
+                #[allow(clippy::cast_ptr_alignment)]
+                Self(slice::from_raw_parts(
+                    (*arr).data as *const glib::SendValue,
+                    (*arr).len as usize,
+                ))
+            }
         }
     }
 }
@@ -1154,8 +1168,10 @@ unsafe impl<'a> glib::value::FromValue<'a> for List {
     type Checker = glib::value::GenericValueTypeChecker<Self>;
 
     unsafe fn from_value(value: &'a glib::Value) -> Self {
-        skip_assert_initialized!();
-        Self(glib::SendValue::unsafe_from(value.clone().into_raw()))
+        unsafe {
+            skip_assert_initialized!();
+            Self(glib::SendValue::unsafe_from(value.clone().into_raw()))
+        }
     }
 }
 
@@ -1223,16 +1239,18 @@ unsafe impl<'a> glib::value::FromValue<'a> for ListRef<'a> {
 
     #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
-        skip_assert_initialized!();
-        let arr = (*value.as_ptr()).data[0].v_pointer as *const glib::ffi::GArray;
-        if arr.is_null() || (*arr).len == 0 {
-            Self(&[])
-        } else {
-            #[allow(clippy::cast_ptr_alignment)]
-            Self(slice::from_raw_parts(
-                (*arr).data as *const glib::SendValue,
-                (*arr).len as usize,
-            ))
+        unsafe {
+            skip_assert_initialized!();
+            let arr = (*value.as_ptr()).data[0].v_pointer as *const glib::ffi::GArray;
+            if arr.is_null() || (*arr).len == 0 {
+                Self(&[])
+            } else {
+                #[allow(clippy::cast_ptr_alignment)]
+                Self(slice::from_raw_parts(
+                    (*arr).data as *const glib::SendValue,
+                    (*arr).len as usize,
+                ))
+            }
         }
     }
 }
@@ -1409,8 +1427,10 @@ mod unique_list {
         type Checker = glib::value::GenericValueTypeChecker<Self>;
 
         unsafe fn from_value(value: &'a glib::Value) -> Self {
-            skip_assert_initialized!();
-            Self(glib::SendValue::unsafe_from(value.clone().into_raw()))
+            unsafe {
+                skip_assert_initialized!();
+                Self(glib::SendValue::unsafe_from(value.clone().into_raw()))
+            }
         }
     }
 
@@ -1478,16 +1498,18 @@ mod unique_list {
 
         #[inline]
         unsafe fn from_value(value: &'a glib::Value) -> Self {
-            skip_assert_initialized!();
-            let arr = (*value.as_ptr()).data[0].v_pointer as *const glib::ffi::GArray;
-            if arr.is_null() || (*arr).len == 0 {
-                Self(&[])
-            } else {
-                #[allow(clippy::cast_ptr_alignment)]
-                Self(slice::from_raw_parts(
-                    (*arr).data as *const glib::SendValue,
-                    (*arr).len as usize,
-                ))
+            unsafe {
+                skip_assert_initialized!();
+                let arr = (*value.as_ptr()).data[0].v_pointer as *const glib::ffi::GArray;
+                if arr.is_null() || (*arr).len == 0 {
+                    Self(&[])
+                } else {
+                    #[allow(clippy::cast_ptr_alignment)]
+                    Self(slice::from_raw_parts(
+                        (*arr).data as *const glib::SendValue,
+                        (*arr).len as usize,
+                    ))
+                }
             }
         }
     }

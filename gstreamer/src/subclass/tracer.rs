@@ -269,11 +269,11 @@ macro_rules! define_tracer_hooks {
                             $this: *mut ffi::GstTracer,
                             $ts: u64,
                             $($cb_arg: $cb_arg_ty),*
-                        ) {
+                        ) { unsafe {
                             let $this = Tracer::from_glib_borrow($this);
                             let $this = T::from_obj($this.unsafe_cast_ref());
                             $impl
-                        }
+                        }}
                         (
                             concat!($quark, "\0"),
                             callback::<T> as unsafe extern "C" fn(_, _, $($cb_arg_ty),*) as *const ()

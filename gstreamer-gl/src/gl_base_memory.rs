@@ -47,16 +47,18 @@ impl GLBaseMemoryRef {
         offset: isize,
         size: isize,
     ) -> Result<(), glib::BoolError> {
-        Self::init_once();
-        glib::result_from_gboolean!(
-            ffi::gst_gl_base_memory_memcpy(
-                mut_override(&self.0),
-                dest.to_glib_none_mut().0,
-                offset,
-                size,
-            ),
-            "Failed to copy memory"
-        )
+        unsafe {
+            Self::init_once();
+            glib::result_from_gboolean!(
+                ffi::gst_gl_base_memory_memcpy(
+                    mut_override(&self.0),
+                    dest.to_glib_none_mut().0,
+                    offset,
+                    size,
+                ),
+                "Failed to copy memory"
+            )
+        }
     }
 
     #[doc(alias = "gst_gl_base_memory_alloc")]

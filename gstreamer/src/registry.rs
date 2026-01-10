@@ -21,10 +21,12 @@ impl Registry {
             feature: *mut ffi::GstPluginFeature,
             user_data: glib::ffi::gpointer,
         ) -> glib::ffi::gboolean {
-            let feature = from_glib_borrow(feature);
-            let callback = user_data as *mut P;
-            let res = (*callback)(&feature);
-            res.into_glib()
+            unsafe {
+                let feature = from_glib_borrow(feature);
+                let callback = user_data as *mut P;
+                let res = (*callback)(&feature);
+                res.into_glib()
+            }
         }
         let filter = Some(filter_func::<P> as _);
         let super_callback0: &mut P = &mut filter_data;
@@ -81,10 +83,12 @@ impl Registry {
             plugin: *mut ffi::GstPlugin,
             user_data: glib::ffi::gpointer,
         ) -> glib::ffi::gboolean {
-            let plugin = from_glib_borrow(plugin);
-            let callback = user_data as *mut P;
-            let res = (*callback)(&plugin);
-            res.into_glib()
+            unsafe {
+                let plugin = from_glib_borrow(plugin);
+                let callback = user_data as *mut P;
+                let res = (*callback)(&plugin);
+                res.into_glib()
+            }
         }
         let filter = Some(filter_func::<P> as _);
         let super_callback0: &mut P = &mut filter_data;

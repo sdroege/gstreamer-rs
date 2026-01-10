@@ -172,9 +172,11 @@ impl IntoGlib for AudioChannelPosition {
 impl FromGlib<ffi::GstAudioChannelPosition> for AudioChannelPosition {
     #[inline]
     unsafe fn from_glib(value: ffi::GstAudioChannelPosition) -> Self {
-        skip_assert_initialized!();
-        debug_assert!((ffi::GST_AUDIO_CHANNEL_POSITION_NONE..=64).contains(&value));
-        mem::transmute::<ffi::GstAudioChannelPosition, AudioChannelPosition>(value)
+        unsafe {
+            skip_assert_initialized!();
+            debug_assert!((ffi::GST_AUDIO_CHANNEL_POSITION_NONE..=64).contains(&value));
+            mem::transmute::<ffi::GstAudioChannelPosition, AudioChannelPosition>(value)
+        }
     }
 }
 
@@ -194,8 +196,10 @@ unsafe impl<'a> FromValue<'a> for AudioChannelPosition {
 
     #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
-        skip_assert_initialized!();
-        from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        unsafe {
+            skip_assert_initialized!();
+            from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0))
+        }
     }
 }
 

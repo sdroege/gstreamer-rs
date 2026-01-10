@@ -56,7 +56,7 @@ unsafe impl AnalyticsMtd for AnalyticsTrackingMtd {
 }
 
 unsafe fn from(t: ffi::GstAnalyticsMtd) -> ffi::GstAnalyticsTrackingMtd {
-    std::mem::transmute(t)
+    unsafe { std::mem::transmute(t) }
 }
 
 impl AnalyticsMtdRef<'_, AnalyticsTrackingMtd> {

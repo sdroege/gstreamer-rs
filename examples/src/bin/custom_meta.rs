@@ -109,15 +109,17 @@ mod custom_meta {
             params: glib::ffi::gpointer,
             _buffer: *mut gst::ffi::GstBuffer,
         ) -> glib::ffi::gboolean {
-            assert!(!params.is_null());
+            unsafe {
+                assert!(!params.is_null());
 
-            let meta = &mut *(meta as *mut CustomMeta);
-            let params = ptr::read(params as *const CustomMetaParams);
+                let meta = &mut *(meta as *mut CustomMeta);
+                let params = ptr::read(params as *const CustomMetaParams);
 
-            // Need to initialize all our fields correctly here.
-            ptr::write(&mut meta.label, params.label);
+                // Need to initialize all our fields correctly here.
+                ptr::write(&mut meta.label, params.label);
 
-            true.into_glib()
+                true.into_glib()
+            }
         }
 
         // Free function for our meta. This needs to free/drop all memory we allocated.
@@ -125,10 +127,12 @@ mod custom_meta {
             meta: *mut gst::ffi::GstMeta,
             _buffer: *mut gst::ffi::GstBuffer,
         ) {
-            let meta = &mut *(meta as *mut CustomMeta);
+            unsafe {
+                let meta = &mut *(meta as *mut CustomMeta);
 
-            // Need to free/drop all our fields here.
-            ptr::drop_in_place(&mut meta.label);
+                // Need to free/drop all our fields here.
+                ptr::drop_in_place(&mut meta.label);
+            }
         }
 
         // Transform function for our meta. This needs to get it from the old buffer to the new one
@@ -141,13 +145,15 @@ mod custom_meta {
             _type_: glib::ffi::GQuark,
             _data: glib::ffi::gpointer,
         ) -> glib::ffi::gboolean {
-            let meta = &*(meta as *mut CustomMeta);
+            unsafe {
+                let meta = &*(meta as *mut CustomMeta);
 
-            // We simply copy over our meta here. Other metas might have to look at the type
-            // and do things conditional on that, or even just drop the meta.
-            super::CustomMeta::add(gst::BufferRef::from_mut_ptr(dest), meta.label.clone());
+                // We simply copy over our meta here. Other metas might have to look at the type
+                // and do things conditional on that, or even just drop the meta.
+                super::CustomMeta::add(gst::BufferRef::from_mut_ptr(dest), meta.label.clone());
 
-            true.into_glib()
+                true.into_glib()
+            }
         }
 
         // Register the meta itself with its functions.

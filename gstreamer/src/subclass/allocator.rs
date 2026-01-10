@@ -11,7 +11,7 @@ pub unsafe trait AllocatorImpl:
     GstObjectImpl + ObjectSubclass<Type: IsA<Allocator>>
 {
     unsafe fn alloc(&self, size: usize, params: &AllocationParams) -> *mut ffi::GstMemory {
-        self.parent_alloc(size, params)
+        unsafe { self.parent_alloc(size, params) }
     }
 
     unsafe fn free(&self, memory: *mut ffi::GstMemory) {
@@ -68,24 +68,28 @@ unsafe extern "C" fn alloc<T: AllocatorImpl>(
     size: usize,
     params: *mut ffi::GstAllocationParams,
 ) -> *mut ffi::GstMemory {
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    let params = &*(params as *mut AllocationParams);
+        let params = &*(params as *mut AllocationParams);
 
-    imp.alloc(size, params)
+        imp.alloc(size, params)
+    }
 }
 
 unsafe extern "C" fn free<T: AllocatorImpl>(
     ptr: *mut ffi::GstAllocator,
     memory: *mut ffi::GstMemory,
 ) {
-    debug_assert_eq!((*memory).mini_object.refcount, 0);
+    unsafe {
+        debug_assert_eq!((*memory).mini_object.refcount, 0);
 
-    let instance = &*(ptr as *mut T::Instance);
-    let imp = instance.imp();
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
 
-    imp.free(memory);
+        imp.free(memory);
+    }
 }
 
 #[cfg(test)]
@@ -205,16 +209,18 @@ mod tests {
                 _maxsize: usize,
                 _flags: ffi::GstMapFlags,
             ) -> glib::ffi::gpointer {
-                let mem = mem as *mut Memory;
+                unsafe {
+                    let mem = mem as *mut Memory;
 
-                let parent = if (*mem).mem.parent.is_null() {
-                    mem
-                } else {
-                    (*mem).mem.parent as *mut Memory
-                };
+                    let parent = if (*mem).mem.parent.is_null() {
+                        mem
+                    } else {
+                        (*mem).mem.parent as *mut Memory
+                    };
 
-                // `(*mem).offset` is added to the pointer by `gst_memory_map()`
-                (*parent).data as *mut _
+                    // `(*mem).offset` is added to the pointer by `gst_memory_map()`
+                    (*parent).data as *mut _
+                }
             }
 
             unsafe extern "C" fn mem_unmap(_mem: *mut ffi::GstMemory) {}
@@ -224,46 +230,48 @@ mod tests {
                 offset: isize,
                 size: isize,
             ) -> *mut ffi::GstMemory {
-                let mem = mem as *mut Memory;
+                unsafe {
+                    let mem = mem as *mut Memory;
 
-                // Basically a re-implementation of _sysmem_share()
+                    // Basically a re-implementation of _sysmem_share()
 
-                let parent = if (*mem).mem.parent.is_null() {
-                    mem
-                } else {
-                    (*mem).mem.parent as *mut Memory
-                };
+                    let parent = if (*mem).mem.parent.is_null() {
+                        mem
+                    } else {
+                        (*mem).mem.parent as *mut Memory
+                    };
 
-                // Offset and size are actually usizes and the API assumes that negative values simply wrap
-                // around, so let's cast to usizes here and do wrapping arithmetic.
-                let offset = offset as usize;
-                let mut size = size as usize;
+                    // Offset and size are actually usizes and the API assumes that negative values simply wrap
+                    // around, so let's cast to usizes here and do wrapping arithmetic.
+                    let offset = offset as usize;
+                    let mut size = size as usize;
 
-                let new_offset = (*mem).mem.offset.wrapping_add(offset);
-                debug_assert!(new_offset < (*mem).mem.maxsize);
+                    let new_offset = (*mem).mem.offset.wrapping_add(offset);
+                    debug_assert!(new_offset < (*mem).mem.maxsize);
 
-                if size == usize::MAX {
-                    size = (*mem).mem.size.wrapping_sub(offset);
+                    if size == usize::MAX {
+                        size = (*mem).mem.size.wrapping_sub(offset);
+                    }
+                    debug_assert!(new_offset <= usize::MAX - size);
+                    debug_assert!(new_offset + size <= (*mem).mem.maxsize);
+
+                    let sub = alloc::alloc(LAYOUT) as *mut Memory;
+
+                    ffi::gst_memory_init(
+                        sub as *mut ffi::GstMemory,
+                        (*mem).mem.mini_object.flags | ffi::GST_MINI_OBJECT_FLAG_LOCK_READONLY,
+                        (*mem).mem.allocator,
+                        parent as *mut ffi::GstMemory,
+                        (*mem).mem.maxsize,
+                        (*mem).mem.align,
+                        new_offset,
+                        size,
+                    );
+                    // This is never actually accessed
+                    ptr::write(ptr::addr_of_mut!((*sub).data), ptr::null_mut());
+
+                    sub as *mut ffi::GstMemory
                 }
-                debug_assert!(new_offset <= usize::MAX - size);
-                debug_assert!(new_offset + size <= (*mem).mem.maxsize);
-
-                let sub = alloc::alloc(LAYOUT) as *mut Memory;
-
-                ffi::gst_memory_init(
-                    sub as *mut ffi::GstMemory,
-                    (*mem).mem.mini_object.flags | ffi::GST_MINI_OBJECT_FLAG_LOCK_READONLY,
-                    (*mem).mem.allocator,
-                    parent as *mut ffi::GstMemory,
-                    (*mem).mem.maxsize,
-                    (*mem).mem.align,
-                    new_offset,
-                    size,
-                );
-                // This is never actually accessed
-                ptr::write(ptr::addr_of_mut!((*sub).data), ptr::null_mut());
-
-                sub as *mut ffi::GstMemory
             }
 
             unsafe extern "C" fn mem_is_span(
@@ -271,26 +279,28 @@ mod tests {
                 mem2: *mut ffi::GstMemory,
                 offset: *mut usize,
             ) -> glib::ffi::gboolean {
-                let mem1 = mem1 as *mut Memory;
-                let mem2 = mem2 as *mut Memory;
+                unsafe {
+                    let mem1 = mem1 as *mut Memory;
+                    let mem2 = mem2 as *mut Memory;
 
-                // Same parent is checked by `gst_memory_is_span()` already
-                let parent1 = (*mem1).mem.parent as *mut Memory;
-                let parent2 = (*mem2).mem.parent as *mut Memory;
-                debug_assert_eq!(parent1, parent2);
+                    // Same parent is checked by `gst_memory_is_span()` already
+                    let parent1 = (*mem1).mem.parent as *mut Memory;
+                    let parent2 = (*mem2).mem.parent as *mut Memory;
+                    debug_assert_eq!(parent1, parent2);
 
-                if !offset.is_null() {
-                    // Offset that can be used on the parent memory to create a
-                    // shared memory that starts with `mem1`.
-                    //
-                    // This needs to use wrapping arithmetic too as in `mem_share()`.
-                    *offset = (*mem1).mem.offset.wrapping_sub((*parent1).mem.offset);
+                    if !offset.is_null() {
+                        // Offset that can be used on the parent memory to create a
+                        // shared memory that starts with `mem1`.
+                        //
+                        // This needs to use wrapping arithmetic too as in `mem_share()`.
+                        *offset = (*mem1).mem.offset.wrapping_sub((*parent1).mem.offset);
+                    }
+
+                    // Check if both memories are contiguous.
+                    let is_span = ((*mem1).mem.offset + ((*mem1).mem.size)) == (*mem2).mem.offset;
+
+                    is_span.into_glib()
                 }
-
-                // Check if both memories are contiguous.
-                let is_span = ((*mem1).mem.offset + ((*mem1).mem.size)) == (*mem2).mem.offset;
-
-                is_span.into_glib()
             }
         }
     }

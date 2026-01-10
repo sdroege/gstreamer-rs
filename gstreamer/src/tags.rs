@@ -1111,7 +1111,9 @@ pub fn register<T: for<'a> CustomTag<'a>>() {
         dest: *mut glib::gobject_ffi::GValue,
         src: *const glib::gobject_ffi::GValue,
     ) {
-        *dest = T::merge_func(&*(src as *const Value)).into_raw();
+        unsafe {
+            *dest = T::merge_func(&*(src as *const Value)).into_raw();
+        }
     }
 
     unsafe {

@@ -50,10 +50,11 @@ unsafe impl<'a> glib::value::FromValue<'a> for StaticCaps {
 
     #[inline]
     unsafe fn from_value(value: &'a glib::Value) -> Self {
-        skip_assert_initialized!();
-        from_glib_none(
-            glib::gobject_ffi::g_value_get_boxed(value.to_glib_none().0) as *mut ffi::GstStaticCaps
-        )
+        unsafe {
+            skip_assert_initialized!();
+            from_glib_none(glib::gobject_ffi::g_value_get_boxed(value.to_glib_none().0)
+                as *mut ffi::GstStaticCaps)
+        }
     }
 }
 
@@ -124,8 +125,10 @@ impl<'a> glib::translate::ToGlibPtr<'a, *const ffi::GstStaticCaps> for StaticCap
 impl glib::translate::FromGlibPtrNone<*const ffi::GstStaticCaps> for StaticCaps {
     #[inline]
     unsafe fn from_glib_none(ptr: *const ffi::GstStaticCaps) -> Self {
-        debug_assert!(!ptr.is_null());
-        StaticCaps(ptr::NonNull::new_unchecked(ptr as *mut _))
+        unsafe {
+            debug_assert!(!ptr.is_null());
+            StaticCaps(ptr::NonNull::new_unchecked(ptr as *mut _))
+        }
     }
 }
 
@@ -133,8 +136,10 @@ impl glib::translate::FromGlibPtrNone<*const ffi::GstStaticCaps> for StaticCaps 
 impl glib::translate::FromGlibPtrNone<*mut ffi::GstStaticCaps> for StaticCaps {
     #[inline]
     unsafe fn from_glib_none(ptr: *mut ffi::GstStaticCaps) -> Self {
-        debug_assert!(!ptr.is_null());
-        StaticCaps(ptr::NonNull::new_unchecked(ptr))
+        unsafe {
+            debug_assert!(!ptr.is_null());
+            StaticCaps(ptr::NonNull::new_unchecked(ptr))
+        }
     }
 }
 
@@ -142,8 +147,10 @@ impl glib::translate::FromGlibPtrNone<*mut ffi::GstStaticCaps> for StaticCaps {
 impl glib::translate::FromGlibPtrBorrow<*mut ffi::GstStaticCaps> for StaticCaps {
     #[inline]
     unsafe fn from_glib_borrow(ptr: *mut ffi::GstStaticCaps) -> Borrowed<Self> {
-        debug_assert!(!ptr.is_null());
-        Borrowed::new(StaticCaps(ptr::NonNull::new_unchecked(ptr)))
+        unsafe {
+            debug_assert!(!ptr.is_null());
+            Borrowed::new(StaticCaps(ptr::NonNull::new_unchecked(ptr)))
+        }
     }
 }
 

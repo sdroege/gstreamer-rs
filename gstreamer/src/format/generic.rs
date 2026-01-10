@@ -69,8 +69,10 @@ impl TryFromGlib<i64> for Other {
     type Error = GlibNoneError;
     #[inline]
     unsafe fn try_from_glib(val: i64) -> Result<Self, GlibNoneError> {
-        skip_assert_initialized!();
-        Self::try_from_glib(val as u64)
+        unsafe {
+            skip_assert_initialized!();
+            Self::try_from_glib(val as u64)
+        }
     }
 }
 
