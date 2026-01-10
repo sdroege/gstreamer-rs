@@ -85,21 +85,21 @@ bitflags_serde_impl!(crate::StreamType);
 #[cfg(test)]
 mod tests {
     macro_rules! check_serialize {
-        ($flags:expr_2021, $expected:expr_2021) => {
+        ($flags:expr, $expected:expr) => {
             let actual = serde_json::to_string(&$flags).unwrap();
             assert_eq!(actual, $expected);
         };
     }
 
     macro_rules! check_deserialize {
-        ($ty:ty, $expected:expr_2021, $json:expr_2021) => {
+        ($ty:ty, $expected:expr, $json:expr) => {
             let actual: $ty = serde_json::from_str(&$json).unwrap();
             assert_eq!(actual, $expected);
         };
     }
 
     macro_rules! check_roundtrip {
-        ($ty:ty, $flags:expr_2021) => {
+        ($ty:ty, $flags:expr) => {
             let json = serde_json::to_string(&$flags).unwrap();
             let deserialized: $ty = serde_json::from_str(&json).unwrap();
             assert_eq!(deserialized, $flags);

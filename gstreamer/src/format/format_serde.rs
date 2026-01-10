@@ -151,7 +151,7 @@ mod tests {
     #[test]
     fn test_serde_roundtrip() {
         macro_rules! test_roundrip(
-            ($value:expr_2021) => {
+            ($value:expr) => {
                 let value_ser = ron::ser::to_string(&$value).unwrap();
                 let value_de: GenericFormattedValue = ron::de::from_str(value_ser.as_str()).unwrap();
                 assert_eq!(value_de, $value);

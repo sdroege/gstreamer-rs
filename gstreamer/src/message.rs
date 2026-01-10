@@ -2828,7 +2828,7 @@ impl<'a> MessageBuilder<'a> {
 }
 
 macro_rules! message_builder_generic_impl {
-    ($new_fn:expr_2021) => {
+    ($new_fn:expr) => {
         #[allow(clippy::needless_update)]
         pub fn src<O: IsA<Object> + Cast + Clone>(self, src: &O) -> Self {
             Self {

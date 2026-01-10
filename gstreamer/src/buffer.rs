@@ -922,7 +922,7 @@ impl BufferRef {
 }
 
 macro_rules! define_meta_iter(
-    ($name:ident, $typ:ty, $mtyp:ty, $prepare_buffer:expr_2021, $from_ptr:expr_2021) => {
+    ($name:ident, $typ:ty, $mtyp:ty, $prepare_buffer:expr, $from_ptr:expr) => {
     #[must_use = "iterators are lazy and do nothing unless consumed"]
     pub struct $name<'a, T: MetaAPI + 'a> {
         buffer: $typ,
@@ -1000,7 +1000,7 @@ define_meta_iter!(
 );
 
 macro_rules! define_iter(
-    ($name:ident, $typ:ty, $mtyp:ty, $get_item:expr_2021) => {
+    ($name:ident, $typ:ty, $mtyp:ty, $get_item:expr) => {
         crate::utils::define_fixed_size_iter!(
             $name, $typ, $mtyp,
             |buffer: &BufferRef| buffer.n_memory() as usize,

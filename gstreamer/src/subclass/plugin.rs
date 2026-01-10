@@ -18,9 +18,9 @@ cfg_if::cfg_if! {
 
 #[macro_export]
 macro_rules! plugin_define(
-    ($name:ident, $description:expr_2021, $plugin_init:ident,
-     $version:expr_2021, $license:expr_2021, $source:expr_2021,
-     $package:expr_2021, $origin:expr_2021 $(, $release_datetime:expr_2021)?) => {
+    ($name:ident, $description:expr, $plugin_init:ident,
+     $version:expr, $license:expr, $source:expr,
+     $package:expr, $origin:expr $(, $release_datetime:expr)?) => {
         pub mod plugin_desc {
             #[repr(transparent)]
             pub struct GstPluginDesc($crate::ffi::GstPluginDesc);

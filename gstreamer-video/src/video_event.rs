@@ -11,7 +11,7 @@ use crate::{NavigationCommand, NavigationEventType, ffi};
 
 // FIXME: Copy from gstreamer/src/event.rs
 macro_rules! event_builder_generic_impl {
-    ($new_fn:expr_2021) => {
+    ($new_fn:expr) => {
         pub fn seqnum(self, seqnum: gst::Seqnum) -> Self {
             Self {
                 seqnum: Some(seqnum),
@@ -488,7 +488,7 @@ impl StillFrameEvent {
 }
 
 macro_rules! nav_event_builder {
-    ($builder:ident, $($event_field:ident: $event_type:ty,)? [$( $field_names:ident : $field_types:ty),*], $new_fn: expr_2021) => {
+    ($builder:ident, $($event_field:ident: $event_type:ty,)? [$( $field_names:ident : $field_types:ty),*], $new_fn:expr) => {
         #[must_use = "The builder must be built to be used"]
         pub struct $builder<'a> {
             seqnum: Option<gst::Seqnum>,

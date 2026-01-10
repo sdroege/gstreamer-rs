@@ -313,7 +313,7 @@ impl HasStreamLock for VideoDecoder {
 
 #[macro_export]
 macro_rules! video_decoder_error(
-    ($obj:expr_2021, $weight:expr_2021, $err:expr_2021, ($($msg:tt)*), [$($debug:tt)*]) => { {
+    ($obj:expr, $weight:expr, $err:expr, ($($msg:tt)*), [$($debug:tt)*]) => { {
         use $crate::prelude::VideoDecoderExtManual;
         $obj.error(
             $weight,
@@ -325,7 +325,7 @@ macro_rules! video_decoder_error(
             line!(),
         )
     }};
-    ($obj:expr_2021, $weight:expr_2021, $err:expr_2021, ($($msg:tt)*)) => { {
+    ($obj:expr, $weight:expr, $err:expr, ($($msg:tt)*)) => { {
         use $crate::prelude::VideoDecoderExtManual;
         $obj.error(
             $weight,
@@ -337,7 +337,7 @@ macro_rules! video_decoder_error(
             line!(),
         )
     }};
-    ($obj:expr_2021, $weight:expr_2021, $err:expr_2021, [$($debug:tt)*]) => { {
+    ($obj:expr, $weight:expr, $err:expr, [$($debug:tt)*]) => { {
         use $crate::prelude::VideoDecoderExtManual;
         $obj.error(
             $weight,

@@ -50,7 +50,7 @@ impl<'de> Deserialize<'de> for Fraction {
 }
 
 macro_rules! ser_some_value (
-    ($value:expr_2021, $t:ty, $ser_closure:expr_2021) => {
+    ($value:expr, $t:ty, $ser_closure:expr) => {
         {
             let value = $value.get::<$t>().expect("ser_some_value macro");
             $ser_closure(stringify!($t), value)
@@ -58,7 +58,7 @@ macro_rules! ser_some_value (
     }
 );
 macro_rules! ser_opt_value (
-    ($value:expr_2021, $t:ty, $ser_closure:expr_2021) => {
+    ($value:expr, $t:ty, $ser_closure:expr) => {
         {
             let value = $value.get::<Option<$t>>().expect("ser_opt_value macro");
             $ser_closure(stringify!($t), value)
@@ -66,7 +66,7 @@ macro_rules! ser_opt_value (
     }
 );
 macro_rules! ser_value (
-    ($value:expr_2021, $ser_closure:expr_2021) => {
+    ($value:expr, $ser_closure:expr) => {
         #[allow(clippy::redundant_closure_call)]
         match $value.type_() {
             glib::Type::I8 => ser_some_value!($value, i8, $ser_closure),
@@ -166,23 +166,23 @@ impl_ser_send_value_collection!(Array);
 impl_ser_send_value_collection!(List);
 
 macro_rules! de_some_send_value(
-    ($type_name:expr_2021, $seq:expr_2021, $t:ty) => (
+    ($type_name:expr, $seq:expr, $t:ty) => (
         de_some_send_value!("Value", $type_name, $seq, $t)
     );
-    ($outer_type:expr_2021, $type_name:expr_2021, $seq:expr_2021, $t:ty) => (
+    ($outer_type:expr, $type_name:expr, $seq:expr, $t:ty) => (
         de_send_value!($outer_type, $type_name, $seq, $t, $t)
     );
 );
 macro_rules! de_opt_send_value(
-    ($type_name:expr_2021, $seq:expr_2021, $t:ty) => (
+    ($type_name:expr, $seq:expr, $t:ty) => (
         de_opt_send_value!("Value", $type_name, $seq, $t)
     );
-    ($outer_type:expr_2021, $type_name:expr_2021, $seq:expr_2021, $t:ty) => (
+    ($outer_type:expr, $type_name:expr, $seq:expr, $t:ty) => (
         de_send_value!($outer_type, $type_name, $seq, Option<$t>, $t)
     );
 );
 macro_rules! de_send_value(
-    ($outer_type:expr_2021, $type_name:expr_2021, $seq:expr_2021, $elem_t:ty, $t:ty) => (
+    ($outer_type:expr, $type_name:expr, $seq:expr, $elem_t:ty, $t:ty) => (
         Ok(match $seq.next_element::<$elem_t>()? {
             Some(base_value) => {
                 Some(SendValue::from(base_value
@@ -200,7 +200,7 @@ macro_rules! de_send_value(
             None => None
         })
     );
-    ($type_name:expr_2021, $seq:expr_2021) => (
+    ($type_name:expr, $seq:expr) => (
         match $type_name.as_str() {
             "i8" => de_some_send_value!($type_name, $seq, i8),
             "u8" => de_some_send_value!($type_name, $seq, u8),

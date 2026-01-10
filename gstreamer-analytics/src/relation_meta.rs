@@ -471,7 +471,7 @@ impl<'a, T: AnalyticsMtd> AsRef<AnalyticsMtdRef<'a, T>> for AnalyticsMtdRefMut<'
 }
 
 macro_rules! define_mtd_iter {
-    ($name:ident, $metaref:ty, $itemref:ty, $copy_meta:expr_2021) => {
+    ($name:ident, $metaref:ty, $itemref:ty, $copy_meta:expr) => {
         #[must_use = "iterators are lazy and do nothing unless consumed"]
         pub struct $name<'a, T: AnalyticsMtd> {
             meta: $metaref,

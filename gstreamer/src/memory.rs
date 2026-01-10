@@ -720,7 +720,7 @@ impl MemoryRef {
 
 #[macro_export]
 macro_rules! memory_object_wrapper {
-    ($name:ident, $ref_name:ident, $ffi_name:path, $mem_type_check:expr_2021, $parent_memory_type:path, $parent_memory_ref_type:path) => {
+    ($name:ident, $ref_name:ident, $ffi_name:path, $mem_type_check:expr, $parent_memory_type:path, $parent_memory_ref_type:path) => {
         $crate::mini_object_wrapper!($name, $ref_name, $ffi_name);
 
         unsafe impl $crate::memory::MemoryType for $name {
@@ -937,7 +937,7 @@ macro_rules! memory_object_wrapper {
         // Can't have SetValue/SetValueOptional impls as otherwise one could use it to get
         // immutable references from a mutable reference without borrowing via the value
     };
-    ($name:ident, $ref_name:ident, $ffi_name:path, $mem_type_check:expr_2021, $parent_memory_type:path, $parent_memory_ref_type:path, $($parent_parent_memory_type:path, $parent_parent_memory_ref_type:path),*) => {
+    ($name:ident, $ref_name:ident, $ffi_name:path, $mem_type_check:expr, $parent_memory_type:path, $parent_memory_ref_type:path, $($parent_parent_memory_type:path, $parent_parent_memory_ref_type:path),*) => {
         $crate::memory_object_wrapper!($name, $ref_name, $ffi_name, $mem_type_check, $parent_memory_type, $parent_memory_ref_type);
 
         $(

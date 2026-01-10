@@ -6,7 +6,7 @@ use gst::{Element, Message, Seqnum, ffi as gst_ffi, prelude::*};
 use crate::ffi;
 
 macro_rules! message_builder_generic_impl {
-    ($new_fn:expr_2021) => {
+    ($new_fn:expr) => {
         #[allow(clippy::needless_update)]
         pub fn src<O: IsA<Element> + Cast + Clone>(self, src: &O) -> Self {
             Self {

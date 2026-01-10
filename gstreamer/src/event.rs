@@ -2213,7 +2213,7 @@ impl<'a> EventBuilder<'a> {
 }
 
 macro_rules! event_builder_generic_impl {
-    ($new_fn:expr_2021) => {
+    ($new_fn:expr) => {
         #[doc(alias = "gst_event_set_seqnum")]
         #[allow(clippy::needless_update)]
         pub fn seqnum(self, seqnum: Seqnum) -> Self {

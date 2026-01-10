@@ -944,7 +944,7 @@ pub static ELEMENT_METADATA_LONGNAME: &glib::GStr =
 #[doc(alias = "GST_ELEMENT_ERROR_WITH_DETAILS")]
 #[macro_export]
 macro_rules! element_error(
-    ($obj:expr_2021, $err:expr_2021, ($($msg:tt)*), [$($debug:tt)*]) => { {
+    ($obj:expr, $err:expr, ($($msg:tt)*), [$($debug:tt)*]) => { {
         use $crate::prelude::ElementExtManual;
         $obj.message_full(
             $crate::ElementMessageType::Error,
@@ -956,7 +956,7 @@ macro_rules! element_error(
             line!(),
         );
     }};
-    ($obj:expr_2021, $err:expr_2021, ($($msg:tt)*)) => { {
+    ($obj:expr, $err:expr, ($($msg:tt)*)) => { {
         use $crate::prelude::ElementExtManual;
         $obj.message_full(
             $crate::ElementMessageType::Error,
@@ -968,7 +968,7 @@ macro_rules! element_error(
             line!(),
         );
     }};
-    ($obj:expr_2021, $err:expr_2021, [$($debug:tt)*]) => { {
+    ($obj:expr, $err:expr, [$($debug:tt)*]) => { {
         use $crate::prelude::ElementExtManual;
         $obj.message_full(
             $crate::ElementMessageType::Error,
@@ -981,7 +981,7 @@ macro_rules! element_error(
         );
     }};
 
-    ($obj:expr_2021, $err:expr_2021, ($($msg:tt)*), [$($debug:tt)*], details: $details:expr_2021) => { {
+    ($obj:expr, $err:expr, ($($msg:tt)*), [$($debug:tt)*], details: $details:expr) => { {
         use $crate::prelude::ElementExtManual;
         $obj.message_full_with_details(
             $crate::ElementMessageType::Error,
@@ -994,7 +994,7 @@ macro_rules! element_error(
             $details,
         );
     }};
-    ($obj:expr_2021, $err:expr_2021, ($($msg:tt)*), details: $details:expr_2021) => { {
+    ($obj:expr, $err:expr, ($($msg:tt)*), details: $details:expr) => { {
         use $crate::prelude::ElementExtManual;
         $obj.message_full_with_details(
             $crate::ElementMessageType::Error,
@@ -1007,7 +1007,7 @@ macro_rules! element_error(
             $details,
         );
     }};
-    ($obj:expr_2021, $err:expr_2021, [$($debug:tt)*], details: $details:expr_2021) => { {
+    ($obj:expr, $err:expr, [$($debug:tt)*], details: $details:expr) => { {
         use $crate::prelude::ElementExtManual;
         $obj.message_full_with_details(
             $crate::ElementMessageType::Error,
@@ -1026,7 +1026,7 @@ macro_rules! element_error(
 #[doc(alias = "GST_ELEMENT_WARNING_WITH_DETAILS")]
 #[macro_export]
 macro_rules! element_warning(
-    ($obj:expr_2021, $err:expr_2021, ($($msg:tt)*), [$($debug:tt)*]) => { {
+    ($obj:expr, $err:expr, ($($msg:tt)*), [$($debug:tt)*]) => { {
         use $crate::prelude::ElementExtManual;
         $obj.message_full(
             $crate::ElementMessageType::Warning,
@@ -1038,7 +1038,7 @@ macro_rules! element_warning(
             line!(),
         );
     }};
-    ($obj:expr_2021, $err:expr_2021, ($($msg:tt)*)) => { {
+    ($obj:expr, $err:expr, ($($msg:tt)*)) => { {
         use $crate::prelude::ElementExtManual;
         $obj.message_full(
             $crate::ElementMessageType::Warning,
@@ -1050,7 +1050,7 @@ macro_rules! element_warning(
             line!(),
         );
     }};
-    ($obj:expr_2021, $err:expr_2021, [$($debug:tt)*]) => { {
+    ($obj:expr, $err:expr, [$($debug:tt)*]) => { {
         use $crate::prelude::ElementExtManual;
         $obj.message_full(
             $crate::ElementMessageType::Warning,
@@ -1063,7 +1063,7 @@ macro_rules! element_warning(
         );
     }};
 
-    ($obj:expr_2021, $err:expr_2021, ($($msg:tt)*), [$($debug:tt)*], details: $details:expr_2021) => { {
+    ($obj:expr, $err:expr, ($($msg:tt)*), [$($debug:tt)*], details: $details:expr) => { {
         use $crate::prelude::ElementExtManual;
         $obj.message_full_with_details(
             $crate::ElementMessageType::Warning,
@@ -1076,7 +1076,7 @@ macro_rules! element_warning(
             $details,
         );
     }};
-    ($obj:expr_2021, $err:expr_2021, ($($msg:tt)*), details: $details:expr_2021) => { {
+    ($obj:expr, $err:expr, ($($msg:tt)*), details: $details:expr) => { {
         use $crate::prelude::ElementExtManual;
         $obj.message_full_with_details(
             $crate::ElementMessageType::Warning,
@@ -1089,7 +1089,7 @@ macro_rules! element_warning(
             $details,
         );
     }};
-    ($obj:expr_2021, $err:expr_2021, [$($debug:tt)*], details: $details:expr_2021) => { {
+    ($obj:expr, $err:expr, [$($debug:tt)*], details: $details:expr) => { {
         use $crate::prelude::ElementExtManual;
         $obj.message_full_with_details(
             $crate::ElementMessageType::Warning,
@@ -1108,7 +1108,7 @@ macro_rules! element_warning(
 #[doc(alias = "GST_ELEMENT_INFO_WITH_DETAILS")]
 #[macro_export]
 macro_rules! element_info(
-    ($obj:expr_2021, $err:expr_2021, ($($msg:tt)*), [$($debug:tt)*]) => { {
+    ($obj:expr, $err:expr, ($($msg:tt)*), [$($debug:tt)*]) => { {
         use $crate::prelude::ElementExtManual;
         $obj.message_full(
             $crate::ElementMessageType::Info,
@@ -1120,7 +1120,7 @@ macro_rules! element_info(
             line!(),
         );
     }};
-    ($obj:expr_2021, $err:expr_2021, ($($msg:tt)*)) => { {
+    ($obj:expr, $err:expr, ($($msg:tt)*)) => { {
         use $crate::prelude::ElementExtManual;
         $obj.message_full(
             $crate::ElementMessageType::Info,
@@ -1132,7 +1132,7 @@ macro_rules! element_info(
             line!(),
         );
     }};
-    ($obj:expr_2021, $err:expr_2021, [$($debug:tt)*]) => { {
+    ($obj:expr, $err:expr, [$($debug:tt)*]) => { {
         use $crate::prelude::ElementExtManual;
         $obj.message_full(
             $crate::ElementMessageType::Info,
@@ -1145,7 +1145,7 @@ macro_rules! element_info(
         );
     }};
 
-    ($obj:expr_2021, $err:expr_2021, ($($msg:tt)*), [$($debug:tt)*], details: $details:expr_2021) => { {
+    ($obj:expr, $err:expr, ($($msg:tt)*), [$($debug:tt)*], details: $details:expr) => { {
         use $crate::prelude::ElementExtManual;
         $obj.message_full_with_details(
             $crate::ElementMessageType::Info,
@@ -1158,7 +1158,7 @@ macro_rules! element_info(
             $details,
         );
     }};
-    ($obj:expr_2021, $err:expr_2021, ($($msg:tt)*), details: $details:expr_2021) => { {
+    ($obj:expr, $err:expr, ($($msg:tt)*), details: $details:expr) => { {
         use $crate::prelude::ElementExtManual;
         $obj.message_full_with_details(
             $crate::ElementMessageType::Info,
@@ -1171,7 +1171,7 @@ macro_rules! element_info(
             $details,
         );
     }};
-    ($obj:expr_2021, $err:expr_2021, [$($debug:tt)*], details: $details:expr_2021) => { {
+    ($obj:expr, $err:expr, [$($debug:tt)*], details: $details:expr) => { {
         use $crate::prelude::ElementExtManual;
         $obj.message_full_with_details(
             $crate::ElementMessageType::Info,
@@ -1190,28 +1190,28 @@ macro_rules! element_info(
 #[doc(alias = "GST_ELEMENT_ERROR_WITH_DETAILS")]
 #[macro_export]
 macro_rules! element_imp_error(
-    ($imp:expr_2021, $err:expr_2021, ($($msg:tt)*), [$($debug:tt)*]) => { {
+    ($imp:expr, $err:expr, ($($msg:tt)*), [$($debug:tt)*]) => { {
         let obj = $imp.obj();
         $crate::element_error!(obj, $err, ($($msg)*), [$($debug)*]);
     }};
-    ($imp:expr_2021, $err:expr_2021, ($($msg:tt)*)) => { {
+    ($imp:expr, $err:expr, ($($msg:tt)*)) => { {
         let obj = $imp.obj();
         $crate::element_error!(obj, $err, ($($msg)*));
     }};
-    ($imp:expr_2021, $err:expr_2021, [$($debug:tt)*]) => { {
+    ($imp:expr, $err:expr, [$($debug:tt)*]) => { {
         let obj = $imp.obj();
         $crate::element_error!(obj, $err, [$($debug)*]);
     }};
 
-    ($imp:expr_2021, $err:expr_2021, ($($msg:tt)*), [$($debug:tt)*], details: $details:expr_2021) => { {
+    ($imp:expr, $err:expr, ($($msg:tt)*), [$($debug:tt)*], details: $details:expr) => { {
         let obj = $imp.obj();
         $crate::element_error!(obj, $err, ($($msg)*), [$($debug)*], details: $details);
     }};
-    ($imp:expr_2021, $err:expr_2021, ($($msg:tt)*), details: $details:expr_2021) => { {
+    ($imp:expr, $err:expr, ($($msg:tt)*), details: $details:expr) => { {
         let obj = $imp.obj();
         $crate::element_error!(obj, $err, ($($msg)*), details: $details);
     }};
-    ($imp:expr_2021, $err:expr_2021, [$($debug:tt)*], details: $details:expr_2021) => { {
+    ($imp:expr, $err:expr, [$($debug:tt)*], details: $details:expr) => { {
         let obj = $imp.obj();
         $crate::element_error!(obj, $err, [$($debug)*], details: $details);
     }};
@@ -1221,28 +1221,28 @@ macro_rules! element_imp_error(
 #[doc(alias = "GST_ELEMENT_WARNING_WITH_DETAILS")]
 #[macro_export]
 macro_rules! element_imp_warning(
-    ($imp:expr_2021, $err:expr_2021, ($($msg:tt)*), [$($debug:tt)*]) => { {
+    ($imp:expr, $err:expr, ($($msg:tt)*), [$($debug:tt)*]) => { {
         let obj = $imp.obj();
         $crate::element_warning!(obj, $err, ($($msg)*), [$($debug)*]);
     }};
-    ($imp:expr_2021, $err:expr_2021, ($($msg:tt)*)) => { {
+    ($imp:expr, $err:expr, ($($msg:tt)*)) => { {
         let obj = $imp.obj();
         $crate::element_warning!(obj, $err, ($($msg)*));
     }};
-    ($imp:expr_2021, $err:expr_2021, [$($debug:tt)*]) => { {
+    ($imp:expr, $err:expr, [$($debug:tt)*]) => { {
         let obj = $imp.obj();
         $crate::element_warning!(obj, $err, [$($debug)*]);
     }};
 
-    ($imp:expr_2021, $err:expr_2021, ($($msg:tt)*), [$($debug:tt)*], details: $details:expr_2021) => { {
+    ($imp:expr, $err:expr, ($($msg:tt)*), [$($debug:tt)*], details: $details:expr) => { {
         let obj = $imp.obj();
         $crate::element_warning!(obj, $err, ($($msg)*), [$($debug)*], details: $details);
     }};
-    ($imp:expr_2021, $err:expr_2021, ($($msg:tt)*), details: $details:expr_2021) => { {
+    ($imp:expr, $err:expr, ($($msg:tt)*), details: $details:expr) => { {
         let obj = $imp.obj();
         $crate::element_warning!(obj, $err, ($($msg)*), details: $details);
     }};
-    ($imp:expr_2021, $err:expr_2021, [$($debug:tt)*], details: $details:expr_2021) => { {
+    ($imp:expr, $err:expr, [$($debug:tt)*], details: $details:expr) => { {
         let obj = $imp.obj();
         $crate::element_warning!(obj, $err, [$($debug)*], details: $details);
     }};
@@ -1252,28 +1252,28 @@ macro_rules! element_imp_warning(
 #[doc(alias = "GST_ELEMENT_INFO_WITH_DETAILS")]
 #[macro_export]
 macro_rules! element_imp_info(
-    ($imp:expr_2021, $err:expr_2021, ($($msg:tt)*), [$($debug:tt)*]) => { {
+    ($imp:expr, $err:expr, ($($msg:tt)*), [$($debug:tt)*]) => { {
         let obj = $imp.obj();
         $crate::element_info!(obj, $err, ($($msg)*), [$($debug)*]);
     }};
-    ($imp:expr_2021, $err:expr_2021, ($($msg:tt)*)) => { {
+    ($imp:expr, $err:expr, ($($msg:tt)*)) => { {
         let obj = $imp.obj();
         $crate::element_info!(obj, $err, ($($msg)*));
     }};
-    ($imp:expr_2021, $err:expr_2021, [$($debug:tt)*]) => { {
+    ($imp:expr, $err:expr, [$($debug:tt)*]) => { {
         let obj = $imp.obj();
         $crate::element_info!(obj, $err, [$($debug)*]);
     }};
 
-    ($imp:expr_2021, $err:expr_2021, ($($msg:tt)*), [$($debug:tt)*], details: $details:expr_2021) => { {
+    ($imp:expr, $err:expr, ($($msg:tt)*), [$($debug:tt)*], details: $details:expr) => { {
         let obj = $imp.obj();
         $crate::element_info!(obj, $err, ($($msg)*), [$($debug)*], details: $details);
     }};
-    ($imp:expr_2021, $err:expr_2021, ($($msg:tt)*), details: $details:expr_2021) => { {
+    ($imp:expr, $err:expr, ($($msg:tt)*), details: $details:expr) => { {
         let obj = $imp.obj();
         $crate::element_info!(obj, $err, ($($msg)*), details: $details);
     }};
-    ($imp:expr_2021, $err:expr_2021, [$($debug:tt)*], details: $details:expr_2021) => { {
+    ($imp:expr, $err:expr, [$($debug:tt)*], details: $details:expr) => { {
         let obj = $imp.obj();
         $crate::element_info!(obj, $err, [$($debug)*], details: $details);
     }};

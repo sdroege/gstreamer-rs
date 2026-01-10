@@ -1095,7 +1095,7 @@ pub enum CapsFilterMapAction {
 }
 
 macro_rules! define_iter(
-    ($name:ident, $typ:ty, $styp:ty, $get_item:expr_2021) => {
+    ($name:ident, $typ:ty, $styp:ty, $get_item:expr) => {
         crate::utils::define_fixed_size_iter!(
             $name, $typ, $styp,
             |collection: &CapsRef| collection.size(),

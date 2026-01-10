@@ -516,7 +516,7 @@ macro_rules! mini_object_wrapper (
         unsafe impl Sync for $name {}
         unsafe impl Send for $name {}
     };
-    ($name:ident, $ref_name:ident, $ffi_name:path, $get_type:expr_2021) => {
+    ($name:ident, $ref_name:ident, $ffi_name:path, $get_type:expr) => {
         $crate::mini_object_wrapper!($name, $ref_name, $ffi_name);
 
         impl $crate::glib::types::StaticType for $name {

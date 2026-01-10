@@ -32,7 +32,7 @@ pub fn post_panic_error_message(
 
 #[macro_export]
 macro_rules! panic_to_error(
-    ($imp:expr_2021, $ret:expr_2021, $code:block) => {{
+    ($imp:expr, $ret:expr, $code:block) => {{
         #[allow(clippy::unused_unit)]
         #[cfg(panic = "abort")]
         {

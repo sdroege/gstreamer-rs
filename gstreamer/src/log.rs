@@ -587,7 +587,7 @@ pub static CAT_RUST: LazyLock<DebugCategory> = LazyLock::new(|| {
 });
 
 macro_rules! declare_debug_category_from_name(
-    ($cat:ident, $cat_name:expr_2021) => (
+    ($cat:ident, $cat_name:expr) => (
         pub static $cat: LazyLock<DebugCategory> = LazyLock::new(|| DebugCategory::get($cat_name)
             .expect(&format!("Unable to find `DebugCategory` with name {}", $cat_name)));
     );
@@ -674,135 +674,135 @@ pub trait DebugLogger {
 
 #[macro_export]
 macro_rules! error(
-    ($logger:expr_2021, obj = $obj:expr_2021, $($args:tt)*) => { {
+    ($logger:expr, obj = $obj:expr, $($args:tt)*) => { {
         $crate::log_with_level!($logger, $crate::DebugLevel::Error, obj = $obj, $($args)*)
     }};
-    ($logger:expr_2021, imp = $imp:expr_2021, $($args:tt)*) => { {
+    ($logger:expr, imp = $imp:expr, $($args:tt)*) => { {
         $crate::log_with_level!($logger, $crate::DebugLevel::Error, imp = $imp, $($args)*)
     }};
-    ($logger:expr_2021, id = $id:expr_2021, $($args:tt)*) => { {
+    ($logger:expr, id = $id:expr, $($args:tt)*) => { {
         $crate::log_with_level!($logger, $crate::DebugLevel::Error, id = $id, $($args)*)
     }};
-    ($logger:expr_2021, $($args:tt)*) => { {
+    ($logger:expr, $($args:tt)*) => { {
         $crate::log_with_level!($logger, $crate::DebugLevel::Error, $($args)*)
     }};
 );
 
 #[macro_export]
 macro_rules! warning(
-    ($logger:expr_2021, obj = $obj:expr_2021, $($args:tt)*) => { {
+    ($logger:expr, obj = $obj:expr, $($args:tt)*) => { {
         $crate::log_with_level!($logger, $crate::DebugLevel::Warning, obj = $obj, $($args)*)
     }};
-    ($logger:expr_2021, imp = $imp:expr_2021, $($args:tt)*) => { {
+    ($logger:expr, imp = $imp:expr, $($args:tt)*) => { {
         $crate::log_with_level!($logger, $crate::DebugLevel::Warning, imp = $imp, $($args)*)
     }};
-    ($logger:expr_2021, id = $id:expr_2021, $($args:tt)*) => { {
+    ($logger:expr, id = $id:expr, $($args:tt)*) => { {
         $crate::log_with_level!($logger, $crate::DebugLevel::Warning, id = $id, $($args)*)
     }};
-    ($logger:expr_2021, $($args:tt)*) => { {
+    ($logger:expr, $($args:tt)*) => { {
         $crate::log_with_level!($logger, $crate::DebugLevel::Warning, $($args)*)
     }};
 );
 
 #[macro_export]
 macro_rules! fixme(
-    ($logger:expr_2021, obj = $obj:expr_2021, $($args:tt)*) => { {
+    ($logger:expr, obj = $obj:expr, $($args:tt)*) => { {
         $crate::log_with_level!($logger, $crate::DebugLevel::Fixme, obj = $obj, $($args)*)
     }};
-    ($logger:expr_2021, imp = $imp:expr_2021, $($args:tt)*) => { {
+    ($logger:expr, imp = $imp:expr, $($args:tt)*) => { {
         $crate::log_with_level!($logger, $crate::DebugLevel::Fixme, imp = $imp, $($args)*)
     }};
-    ($logger:expr_2021, id = $id:expr_2021, $($args:tt)*) => { {
+    ($logger:expr, id = $id:expr, $($args:tt)*) => { {
         $crate::log_with_level!($logger, $crate::DebugLevel::Fixme, id = $id, $($args)*)
     }};
-    ($logger:expr_2021, $($args:tt)*) => { {
+    ($logger:expr, $($args:tt)*) => { {
         $crate::log_with_level!($logger, $crate::DebugLevel::Fixme, $($args)*)
     }};
 );
 
 #[macro_export]
 macro_rules! info(
-    ($logger:expr_2021, obj = $obj:expr_2021, $($args:tt)*) => { {
+    ($logger:expr, obj = $obj:expr, $($args:tt)*) => { {
         $crate::log_with_level!($logger, $crate::DebugLevel::Info, obj = $obj, $($args)*)
     }};
-    ($logger:expr_2021, imp = $imp:expr_2021, $($args:tt)*) => { {
+    ($logger:expr, imp = $imp:expr, $($args:tt)*) => { {
         $crate::log_with_level!($logger, $crate::DebugLevel::Info, imp = $imp, $($args)*)
     }};
-    ($logger:expr_2021, id = $id:expr_2021, $($args:tt)*) => { {
+    ($logger:expr, id = $id:expr, $($args:tt)*) => { {
         $crate::log_with_level!($logger, $crate::DebugLevel::Info, id = $id, $($args)*)
     }};
-    ($logger:expr_2021, $($args:tt)*) => { {
+    ($logger:expr, $($args:tt)*) => { {
         $crate::log_with_level!($logger, $crate::DebugLevel::Info, $($args)*)
     }};
 );
 
 #[macro_export]
 macro_rules! debug(
-    ($logger:expr_2021, obj = $obj:expr_2021, $($args:tt)*) => { {
+    ($logger:expr, obj = $obj:expr, $($args:tt)*) => { {
         $crate::log_with_level!($logger, $crate::DebugLevel::Debug, obj = $obj, $($args)*)
     }};
-    ($logger:expr_2021, imp = $imp:expr_2021, $($args:tt)*) => { {
+    ($logger:expr, imp = $imp:expr, $($args:tt)*) => { {
         $crate::log_with_level!($logger, $crate::DebugLevel::Debug, imp = $imp, $($args)*)
     }};
-    ($logger:expr_2021, id = $id:expr_2021, $($args:tt)*) => { {
+    ($logger:expr, id = $id:expr, $($args:tt)*) => { {
         $crate::log_with_level!($logger, $crate::DebugLevel::Debug, id = $id, $($args)*)
     }};
-    ($logger:expr_2021, $($args:tt)*) => { {
+    ($logger:expr, $($args:tt)*) => { {
         $crate::log_with_level!($logger, $crate::DebugLevel::Debug, $($args)*)
     }};
 );
 
 #[macro_export]
 macro_rules! log(
-    ($logger:expr_2021, obj = $obj:expr_2021, $($args:tt)*) => { {
+    ($logger:expr, obj = $obj:expr, $($args:tt)*) => { {
         $crate::log_with_level!($logger, $crate::DebugLevel::Log, obj = $obj, $($args)*)
     }};
-    ($logger:expr_2021, imp = $imp:expr_2021, $($args:tt)*) => { {
+    ($logger:expr, imp = $imp:expr, $($args:tt)*) => { {
         $crate::log_with_level!($logger, $crate::DebugLevel::Log, imp = $imp, $($args)*)
     }};
-    ($logger:expr_2021, id = $id:expr_2021, $($args:tt)*) => { {
+    ($logger:expr, id = $id:expr, $($args:tt)*) => { {
         $crate::log_with_level!($logger, $crate::DebugLevel::Log, id = $id, $($args)*)
     }};
-    ($logger:expr_2021, $($args:tt)*) => { {
+    ($logger:expr, $($args:tt)*) => { {
         $crate::log_with_level!($logger, $crate::DebugLevel::Log, $($args)*)
     }};
 );
 
 #[macro_export]
 macro_rules! trace(
-    ($logger:expr_2021, obj = $obj:expr_2021, $($args:tt)*) => { {
+    ($logger:expr, obj = $obj:expr, $($args:tt)*) => { {
         $crate::log_with_level!($logger, $crate::DebugLevel::Trace, obj = $obj, $($args)*)
     }};
-    ($logger:expr_2021, imp = $imp:expr_2021, $($args:tt)*) => { {
+    ($logger:expr, imp = $imp:expr, $($args:tt)*) => { {
         $crate::log_with_level!($logger, $crate::DebugLevel::Trace, imp = $imp, $($args)*)
     }};
-    ($logger:expr_2021, id = $id:expr_2021, $($args:tt)*) => { {
+    ($logger:expr, id = $id:expr, $($args:tt)*) => { {
         $crate::log_with_level!($logger, $crate::DebugLevel::Trace, id = $id, $($args)*)
     }};
-    ($logger:expr_2021, $($args:tt)*) => { {
+    ($logger:expr, $($args:tt)*) => { {
         $crate::log_with_level!($logger, $crate::DebugLevel::Trace, $($args)*)
     }};
 );
 
 #[macro_export]
 macro_rules! memdump(
-    ($logger:expr_2021, obj = $obj:expr_2021, $($args:tt)*) => { {
+    ($logger:expr, obj = $obj:expr, $($args:tt)*) => { {
         $crate::log_with_level!($logger, $crate::DebugLevel::Memdump, obj = $obj, $($args)*)
     }};
-    ($logger:expr_2021, imp = $imp:expr_2021, $($args:tt)*) => { {
+    ($logger:expr, imp = $imp:expr, $($args:tt)*) => { {
         $crate::log_with_level!($logger, $crate::DebugLevel::Memdump, imp = $imp, $($args)*)
     }};
-    ($logger:expr_2021, id = $id:expr_2021, $($args:tt)*) => { {
+    ($logger:expr, id = $id:expr, $($args:tt)*) => { {
         $crate::log_with_level!($logger, $crate::DebugLevel::Memdump, id = $id, $($args)*)
     }};
-    ($logger:expr_2021, $($args:tt)*) => { {
+    ($logger:expr, $($args:tt)*) => { {
         $crate::log_with_level!($logger, $crate::DebugLevel::Memdump, $($args)*)
     }};
 );
 
 #[macro_export]
 macro_rules! log_with_level(
-    ($logger:expr_2021, $level:expr_2021, obj = $obj:expr_2021, $msg:literal) => { {
+    ($logger:expr, $level:expr, obj = $obj:expr, $msg:literal) => { {
         #[allow(unused_imports)]
         use $crate::log::DebugLogger;
         let logger = &$logger;
@@ -847,7 +847,7 @@ macro_rules! log_with_level(
             })(format_args!($msg))
         }
     }};
-    ($logger:expr_2021, $level:expr_2021, obj = $obj:expr_2021, $($args:tt)*) => { {
+    ($logger:expr, $level:expr, obj = $obj:expr, $($args:tt)*) => { {
         #[allow(unused_imports)]
         use $crate::log::DebugLogger;
         let logger = &$logger;
@@ -873,7 +873,7 @@ macro_rules! log_with_level(
                 )
         }
     }};
-    ($logger:expr_2021, $level:expr_2021, imp = $imp:expr_2021, $msg:literal) => { {
+    ($logger:expr, $level:expr, imp = $imp:expr, $msg:literal) => { {
         #[allow(unused_imports)]
         use $crate::log::DebugLogger;
         let logger = &$logger;
@@ -918,7 +918,7 @@ macro_rules! log_with_level(
             })(format_args!($msg))
         }
     }};
-    ($logger:expr_2021, $level:expr_2021, imp = $imp:expr_2021, $($args:tt)*) => { {
+    ($logger:expr, $level:expr, imp = $imp:expr, $($args:tt)*) => { {
         #[allow(unused_imports)]
         use $crate::log::DebugLogger;
         let logger = &$logger;
@@ -944,7 +944,7 @@ macro_rules! log_with_level(
                 )
         }
     }};
-    ($logger:expr_2021, $level:expr_2021, id = $id:literal, $msg:literal) => { {
+    ($logger:expr, $level:expr, id = $id:literal, $msg:literal) => { {
         #[allow(unused_imports)]
         use $crate::log::DebugLogger;
         let logger = &$logger;
@@ -985,7 +985,7 @@ macro_rules! log_with_level(
             })(format_args!($msg))
         }
     }};
-    ($logger:expr_2021, $level:expr_2021, id = $id:literal, $($args:tt)*) => { {
+    ($logger:expr, $level:expr, id = $id:literal, $($args:tt)*) => { {
         #[allow(unused_imports)]
         use $crate::log::DebugLogger;
         let logger = &$logger;
@@ -1007,7 +1007,7 @@ macro_rules! log_with_level(
                 )
         }
     }};
-    ($logger:expr_2021, $level:expr_2021, id = $id:expr_2021, $msg:literal) => { {
+    ($logger:expr, $level:expr, id = $id:expr, $msg:literal) => { {
         #[allow(unused_imports)]
         use $crate::log::DebugLogger;
         let logger = &$logger;
@@ -1048,7 +1048,7 @@ macro_rules! log_with_level(
             })(format_args!($msg))
         }
     }};
-    ($logger:expr_2021, $level:expr_2021, id = $id:expr_2021, $($args:tt)*) => { {
+    ($logger:expr, $level:expr, id = $id:expr, $($args:tt)*) => { {
         #[allow(unused_imports)]
         use $crate::log::DebugLogger;
         let logger = &$logger;
@@ -1070,7 +1070,7 @@ macro_rules! log_with_level(
             )
         }
     }};
-    ($logger:expr_2021, $level:expr_2021, $msg:literal) => { {
+    ($logger:expr, $level:expr, $msg:literal) => { {
         #[allow(unused_imports)]
         use $crate::log::DebugLogger;
         let logger = &$logger;
@@ -1111,7 +1111,7 @@ macro_rules! log_with_level(
             })(format_args!($msg))
         }
     }};
-    ($logger:expr_2021, $level:expr_2021, $($args:tt)*) => { {
+    ($logger:expr, $level:expr, $($args:tt)*) => { {
         #[allow(unused_imports)]
         use $crate::log::DebugLogger;
         let logger = &$logger;

@@ -4,7 +4,7 @@
 macro_rules! bitflags_serialize_impl {
     // this implementation serializes only flags using only one bit,
     // ignoring all other flags
-    ($type:ty, single_bit_flags$(, $feature:expr_2021)?) => {
+    ($type:ty, single_bit_flags$(, $feature:expr)?) => {
         $(#[cfg(any(feature = $feature, docsrs))]
         #[cfg_attr(docsrs, doc(cfg(feature = $feature)))])?
         impl serde::Serialize for $type {
@@ -35,7 +35,7 @@ macro_rules! bitflags_serialize_impl {
     };
 
     // considers the flags using the most bits first
-    ($type:ty, by_ones_decreasing$(, $feature:expr_2021)?) => {
+    ($type:ty, by_ones_decreasing$(, $feature:expr)?) => {
         $(#[cfg(any(feature = $feature, docsrs))]
         #[cfg_attr(docsrs, doc(cfg(feature = $feature)))])?
         impl serde::Serialize for $type {
@@ -84,7 +84,7 @@ macro_rules! bitflags_serialize_impl {
 
 #[macro_export]
 macro_rules! bitflags_deserialize_impl {
-    ($type:ty$(, $feature:expr_2021)?) => {
+    ($type:ty$(, $feature:expr)?) => {
         $(#[cfg(any(feature = $feature, docsrs))]
         #[cfg_attr(docsrs, doc(cfg(feature = $feature)))])?
         impl<'de> serde::Deserialize<'de> for $type {
@@ -138,7 +138,7 @@ macro_rules! bitflags_deserialize_impl {
 
 #[macro_export]
 macro_rules! bitflags_serde_impl {
-    ($type:ty$(, $feature:expr_2021)?) => {
+    ($type:ty$(, $feature:expr)?) => {
         $crate::bitflags_serialize_impl!($type, single_bit_flags$(, $feature)?);
         $crate::bitflags_deserialize_impl!($type$(, $feature)?);
     };
