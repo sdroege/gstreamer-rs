@@ -50,9 +50,9 @@ impl Action {
     pub(crate) unsafe fn from_glib_ptr_borrow_mut(
         ptr: &mut *mut ffi::GstValidateAction,
     ) -> &mut Self {
-        unsafe {
-            assert_initialized_main_thread!();
+        assert_initialized_main_thread!();
 
+        unsafe {
             debug_assert_eq!((*(*ptr)).mini_object.refcount, 1);
 
             debug_assert_eq!(

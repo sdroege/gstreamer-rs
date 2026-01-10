@@ -81,8 +81,8 @@ impl<'a> VideoCodecState<'a, InNegotiation<'a>> {
         state: *mut ffi::GstVideoCodecState,
         element: &'a T,
     ) -> Self {
+        skip_assert_initialized!();
         unsafe {
-            skip_assert_initialized!();
             let stream_lock = element.stream_lock();
             glib::ffi::g_rec_mutex_lock(stream_lock);
             Self {

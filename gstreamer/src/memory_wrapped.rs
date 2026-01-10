@@ -317,9 +317,9 @@ fn rust_allocator_internal() -> &'static crate::Allocator {
 pub(crate) unsafe fn try_into_from_memory_ptr<T: 'static>(
     mem_ptr: *mut ffi::GstMemory,
 ) -> Result<T, MemoryIntoInnerError> {
-    unsafe {
-        skip_assert_initialized!();
+    skip_assert_initialized!();
 
+    unsafe {
         // Check if this memory uses our rust allocator
         if (*mem_ptr).allocator.is_null()
             || (*mem_ptr).allocator != rust_allocator_internal().as_ptr()
