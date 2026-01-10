@@ -123,7 +123,7 @@ version = "0.25.0-alpha.1"
 categories = ["api-bindings", "multimedia"]
 repository = "https://gitlab.freedesktop.org/gstreamer/gstreamer-rs"
 homepage = "https://gstreamer.freedesktop.org"
-edition = "2021"
+edition = "2024"
 rust-version = "1.92"
 
 [workspace.dependencies]
