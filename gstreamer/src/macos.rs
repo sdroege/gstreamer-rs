@@ -3,7 +3,7 @@
 #[cfg(feature = "v1_22")]
 type GstMainFuncSimple = Option<unsafe extern "C" fn(glib::ffi::gpointer)>;
 
-extern "C" {
+unsafe extern "C" {
     #[cfg(feature = "v1_22")]
     fn gst_macos_main_simple(func: GstMainFuncSimple, user_data: glib::ffi::gpointer);
 }
