@@ -18,8 +18,10 @@ pub fn call_async<P: FnOnce() + Send + Sync + 'static>(func: P) {
     unsafe extern "C" fn func_func<P: FnOnce() + Send + Sync + 'static>(
         user_data: glib::ffi::gpointer,
     ) {
-        let callback = Box_::from_raw(user_data as *mut P);
-        (*callback)()
+        unsafe {
+            let callback = Box_::from_raw(user_data as *mut P);
+            (*callback)()
+        }
     }
     let func = Some(func_func::<P> as _);
     let super_callback0: Box_<P> = func_data;

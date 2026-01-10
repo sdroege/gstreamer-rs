@@ -600,7 +600,7 @@ impl ::std::fmt::Debug for GstRTPHeaderExtension {
     }
 }
 
-extern "C" {
+unsafe extern "C" {
 
     //=========================================================================
     // GstRTCPFBType

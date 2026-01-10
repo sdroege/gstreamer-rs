@@ -221,11 +221,13 @@ pub trait ProjectExt: IsA<Project> + 'static {
             asset: *mut ffi::GESAsset,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                Project::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(asset),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    Project::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(asset),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -250,11 +252,13 @@ pub trait ProjectExt: IsA<Project> + 'static {
             asset: *mut ffi::GESAsset,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                Project::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(asset),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    Project::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(asset),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -279,11 +283,13 @@ pub trait ProjectExt: IsA<Project> + 'static {
             asset: *mut ffi::GESAsset,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                Project::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(asset),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    Project::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(asset),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -314,12 +320,14 @@ pub trait ProjectExt: IsA<Project> + 'static {
             error: *mut glib::ffi::GError,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                Project::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(timeline),
-                &from_glib_borrow(error),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    Project::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(timeline),
+                    &from_glib_borrow(error),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -351,13 +359,15 @@ pub trait ProjectExt: IsA<Project> + 'static {
             extractable_type: glib::ffi::GType,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                Project::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(error),
-                &glib::GString::from_glib_borrow(id),
-                from_glib(extractable_type),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    Project::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(error),
+                    &glib::GString::from_glib_borrow(id),
+                    from_glib(extractable_type),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -379,11 +389,13 @@ pub trait ProjectExt: IsA<Project> + 'static {
             timeline: *mut ffi::GESTimeline,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                Project::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(timeline),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    Project::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(timeline),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -407,11 +419,13 @@ pub trait ProjectExt: IsA<Project> + 'static {
             timeline: *mut ffi::GESTimeline,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                Project::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(timeline),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    Project::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(timeline),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -442,13 +456,15 @@ pub trait ProjectExt: IsA<Project> + 'static {
             wrong_asset: *mut ffi::GESAsset,
             f: glib::ffi::gpointer,
         ) -> *mut std::ffi::c_char {
-            let f: &F = &*(f as *const F);
-            f(
-                Project::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(error),
-                &from_glib_borrow(wrong_asset),
-            )
-            .to_glib_full()
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    Project::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(error),
+                    &from_glib_borrow(wrong_asset),
+                )
+                .to_glib_full()
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

@@ -123,10 +123,12 @@ pub trait VulkanDeviceExt: IsA<VulkanDevice> + 'static {
             queue: *mut ffi::GstVulkanQueue,
             user_data: glib::ffi::gpointer,
         ) -> glib::ffi::gboolean {
-            let device = from_glib_borrow(device);
-            let queue = from_glib_borrow(queue);
-            let callback = user_data as *mut P;
-            (*callback)(&device, &queue).into_glib()
+            unsafe {
+                let device = from_glib_borrow(device);
+                let queue = from_glib_borrow(queue);
+                let callback = user_data as *mut P;
+                (*callback)(&device, &queue).into_glib()
+            }
         }
         let func = Some(func_func::<P> as _);
         let super_callback0: &mut P = &mut func_data;
@@ -235,8 +237,10 @@ pub trait VulkanDeviceExt: IsA<VulkanDevice> + 'static {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(VulkanDevice::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(VulkanDevice::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

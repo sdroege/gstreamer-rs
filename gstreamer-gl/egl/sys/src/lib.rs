@@ -66,7 +66,7 @@ impl ::std::fmt::Debug for GstGLDisplayEGL {
     }
 }
 
-extern "C" {
+unsafe extern "C" {
 
     //=========================================================================
     // GstGLDisplayEGL

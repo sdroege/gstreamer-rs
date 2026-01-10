@@ -157,8 +157,10 @@ impl WebRTCDataChannel {
             this: *mut ffi::GstWebRTCDataChannel,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(&from_glib_borrow(this))
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(&from_glib_borrow(this))
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -181,8 +183,10 @@ impl WebRTCDataChannel {
             this: *mut ffi::GstWebRTCDataChannel,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(&from_glib_borrow(this))
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(&from_glib_borrow(this))
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -209,8 +213,10 @@ impl WebRTCDataChannel {
             error: *mut glib::ffi::GError,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(&from_glib_borrow(this), &from_glib_borrow(error))
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(&from_glib_borrow(this), &from_glib_borrow(error))
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -237,13 +243,15 @@ impl WebRTCDataChannel {
             data: *mut glib::ffi::GBytes,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                &from_glib_borrow(this),
-                Option::<glib::Bytes>::from_glib_borrow(data)
-                    .as_ref()
-                    .as_ref(),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    &from_glib_borrow(this),
+                    Option::<glib::Bytes>::from_glib_borrow(data)
+                        .as_ref()
+                        .as_ref(),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -270,14 +278,16 @@ impl WebRTCDataChannel {
             data: *mut std::ffi::c_char,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                &from_glib_borrow(this),
-                Option::<glib::GString>::from_glib_borrow(data)
-                    .as_ref()
-                    .as_ref()
-                    .map(|s| s.as_str()),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    &from_glib_borrow(this),
+                    Option::<glib::GString>::from_glib_borrow(data)
+                        .as_ref()
+                        .as_ref()
+                        .map(|s| s.as_str()),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -300,8 +310,10 @@ impl WebRTCDataChannel {
             this: *mut ffi::GstWebRTCDataChannel,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(&from_glib_borrow(this))
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(&from_glib_borrow(this))
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -328,8 +340,10 @@ impl WebRTCDataChannel {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(&from_glib_borrow(this))
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(&from_glib_borrow(this))
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -356,8 +370,10 @@ impl WebRTCDataChannel {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(&from_glib_borrow(this))
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(&from_glib_borrow(this))
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -384,8 +400,10 @@ impl WebRTCDataChannel {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(&from_glib_borrow(this))
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(&from_glib_borrow(this))
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

@@ -886,18 +886,20 @@ pub trait RTSPStreamExt: IsA<RTSPStream> + 'static {
             trans: *mut ffi::GstRTSPStreamTransport,
             user_data: glib::ffi::gpointer,
         ) -> ffi::GstRTSPFilterResult {
-            let stream = from_glib_borrow(stream);
-            let trans = from_glib_borrow(trans);
-            let callback = user_data
-                as *mut Option<
-                    &mut dyn FnMut(&RTSPStream, &RTSPStreamTransport) -> RTSPFilterResult,
-                >;
-            if let Some(ref mut callback) = *callback {
-                callback(&stream, &trans)
-            } else {
-                panic!("cannot get closure...")
+            unsafe {
+                let stream = from_glib_borrow(stream);
+                let trans = from_glib_borrow(trans);
+                let callback = user_data
+                    as *mut Option<
+                        &mut dyn FnMut(&RTSPStream, &RTSPStreamTransport) -> RTSPFilterResult,
+                    >;
+                if let Some(ref mut callback) = *callback {
+                    callback(&stream, &trans)
+                } else {
+                    panic!("cannot get closure...")
+                }
+                .into_glib()
             }
-            .into_glib()
         }
         let func = if func_data.is_some() {
             Some(func_func as _)
@@ -978,11 +980,13 @@ pub trait RTSPStreamExt: IsA<RTSPStream> + 'static {
             object: *mut gst::ffi::GstElement,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                RTSPStream::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(object),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    RTSPStream::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(object),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1010,11 +1014,13 @@ pub trait RTSPStreamExt: IsA<RTSPStream> + 'static {
             object: *mut gst::ffi::GstElement,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                RTSPStream::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(object),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    RTSPStream::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(object),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1042,11 +1048,13 @@ pub trait RTSPStreamExt: IsA<RTSPStream> + 'static {
             object: *mut gst::ffi::GstElement,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                RTSPStream::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(object),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    RTSPStream::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(object),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1074,8 +1082,10 @@ pub trait RTSPStreamExt: IsA<RTSPStream> + 'static {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(RTSPStream::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(RTSPStream::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1103,8 +1113,10 @@ pub trait RTSPStreamExt: IsA<RTSPStream> + 'static {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(RTSPStream::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(RTSPStream::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1132,8 +1144,10 @@ pub trait RTSPStreamExt: IsA<RTSPStream> + 'static {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(RTSPStream::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(RTSPStream::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

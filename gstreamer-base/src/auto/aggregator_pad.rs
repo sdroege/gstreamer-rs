@@ -128,11 +128,13 @@ pub trait AggregatorPadExt: IsA<AggregatorPad> + 'static {
             object: *mut gst::ffi::GstBuffer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                AggregatorPad::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(object),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    AggregatorPad::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(object),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -162,8 +164,10 @@ pub trait AggregatorPadExt: IsA<AggregatorPad> + 'static {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(AggregatorPad::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(AggregatorPad::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -193,8 +197,10 @@ pub trait AggregatorPadExt: IsA<AggregatorPad> + 'static {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(AggregatorPad::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(AggregatorPad::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -224,8 +230,10 @@ pub trait AggregatorPadExt: IsA<AggregatorPad> + 'static {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(AggregatorPad::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(AggregatorPad::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

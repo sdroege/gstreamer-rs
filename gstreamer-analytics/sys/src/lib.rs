@@ -334,7 +334,7 @@ impl ::std::fmt::Debug for GstTensorMeta {
     }
 }
 
-extern "C" {
+unsafe extern "C" {
 
     //=========================================================================
     // GstAnalyticsBatchMeta

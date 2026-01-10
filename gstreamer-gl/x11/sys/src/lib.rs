@@ -64,7 +64,7 @@ impl ::std::fmt::Debug for GstGLDisplayX11 {
     }
 }
 
-extern "C" {
+unsafe extern "C" {
 
     //=========================================================================
     // GstGLDisplayX11

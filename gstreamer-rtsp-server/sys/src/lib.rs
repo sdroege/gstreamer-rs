@@ -1328,7 +1328,7 @@ impl ::std::fmt::Debug for GstRTSPThreadPool {
     }
 }
 
-extern "C" {
+unsafe extern "C" {
 
     //=========================================================================
     // GstRTSPPublishClockMode

@@ -162,11 +162,13 @@ pub trait DeviceProviderExt: IsA<DeviceProvider> + 'static {
             object: *mut std::ffi::c_char,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                DeviceProvider::from_glib_borrow(this).unsafe_cast_ref(),
-                &glib::GString::from_glib_borrow(object),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    DeviceProvider::from_glib_borrow(this).unsafe_cast_ref(),
+                    &glib::GString::from_glib_borrow(object),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -194,11 +196,13 @@ pub trait DeviceProviderExt: IsA<DeviceProvider> + 'static {
             object: *mut std::ffi::c_char,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                DeviceProvider::from_glib_borrow(this).unsafe_cast_ref(),
-                &glib::GString::from_glib_borrow(object),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    DeviceProvider::from_glib_borrow(this).unsafe_cast_ref(),
+                    &glib::GString::from_glib_borrow(object),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

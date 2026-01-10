@@ -562,12 +562,14 @@ pub trait TimelineElementExt: IsA<TimelineElement> + 'static {
             prop: *mut glib::gobject_ffi::GParamSpec,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                TimelineElement::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(prop_object),
-                &from_glib_borrow(prop),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    TimelineElement::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(prop_object),
+                    &from_glib_borrow(prop),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -598,12 +600,14 @@ pub trait TimelineElementExt: IsA<TimelineElement> + 'static {
             prop: *mut glib::gobject_ffi::GParamSpec,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                TimelineElement::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(prop_object),
-                &from_glib_borrow(prop),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    TimelineElement::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(prop_object),
+                    &from_glib_borrow(prop),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -633,12 +637,14 @@ pub trait TimelineElementExt: IsA<TimelineElement> + 'static {
             prop: *mut glib::gobject_ffi::GParamSpec,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                TimelineElement::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(prop_object),
-                &from_glib_borrow(prop),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    TimelineElement::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(prop_object),
+                    &from_glib_borrow(prop),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -667,8 +673,10 @@ pub trait TimelineElementExt: IsA<TimelineElement> + 'static {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(TimelineElement::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(TimelineElement::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -693,8 +701,10 @@ pub trait TimelineElementExt: IsA<TimelineElement> + 'static {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(TimelineElement::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(TimelineElement::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -719,8 +729,10 @@ pub trait TimelineElementExt: IsA<TimelineElement> + 'static {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(TimelineElement::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(TimelineElement::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -745,8 +757,10 @@ pub trait TimelineElementExt: IsA<TimelineElement> + 'static {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(TimelineElement::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(TimelineElement::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -771,8 +785,10 @@ pub trait TimelineElementExt: IsA<TimelineElement> + 'static {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(TimelineElement::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(TimelineElement::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -798,8 +814,10 @@ pub trait TimelineElementExt: IsA<TimelineElement> + 'static {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(TimelineElement::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(TimelineElement::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -824,8 +842,10 @@ pub trait TimelineElementExt: IsA<TimelineElement> + 'static {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(TimelineElement::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(TimelineElement::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -850,8 +870,10 @@ pub trait TimelineElementExt: IsA<TimelineElement> + 'static {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(TimelineElement::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(TimelineElement::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -876,8 +898,10 @@ pub trait TimelineElementExt: IsA<TimelineElement> + 'static {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(TimelineElement::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(TimelineElement::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

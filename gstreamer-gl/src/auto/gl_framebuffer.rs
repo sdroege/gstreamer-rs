@@ -52,11 +52,13 @@ unsafe impl Sync for GLFramebuffer {}
 pub trait GLFramebufferExt: IsA<GLFramebuffer> + 'static {
     #[doc(alias = "gst_gl_framebuffer_attach")]
     unsafe fn attach(&self, attachment_point: u32, mem: &mut GLBaseMemory) {
-        ffi::gst_gl_framebuffer_attach(
-            self.as_ref().to_glib_none().0,
-            attachment_point,
-            mem.to_glib_none_mut().0,
-        );
+        unsafe {
+            ffi::gst_gl_framebuffer_attach(
+                self.as_ref().to_glib_none().0,
+                attachment_point,
+                mem.to_glib_none_mut().0,
+            );
+        }
     }
 
     #[doc(alias = "gst_gl_framebuffer_bind")]

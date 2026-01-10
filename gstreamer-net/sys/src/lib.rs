@@ -244,7 +244,7 @@ impl ::std::fmt::Debug for GstPtpClock {
     }
 }
 
-extern "C" {
+unsafe extern "C" {
 
     //=========================================================================
     // GstNetAddressMeta

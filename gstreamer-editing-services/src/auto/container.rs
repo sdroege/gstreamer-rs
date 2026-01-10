@@ -123,11 +123,13 @@ pub trait GESContainerExt: IsA<Container> + 'static {
             element: *mut ffi::GESTimelineElement,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                Container::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(element),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    Container::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(element),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -155,11 +157,13 @@ pub trait GESContainerExt: IsA<Container> + 'static {
             element: *mut ffi::GESTimelineElement,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                Container::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(element),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    Container::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(element),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -181,8 +185,10 @@ pub trait GESContainerExt: IsA<Container> + 'static {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(Container::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(Container::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

@@ -2648,7 +2648,7 @@ impl ::std::fmt::Debug for GstVideoOverlay {
     }
 }
 
-extern "C" {
+unsafe extern "C" {
 
     //=========================================================================
     // GstAncillaryMetaField

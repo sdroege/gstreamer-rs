@@ -550,7 +550,7 @@ impl ::std::fmt::Debug for GstSDPZone {
     }
 }
 
-extern "C" {
+unsafe extern "C" {
 
     //=========================================================================
     // GstMIKEYMessage

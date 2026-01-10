@@ -720,7 +720,7 @@ impl ::std::fmt::Debug for GstRTSPExtension {
     }
 }
 
-extern "C" {
+unsafe extern "C" {
 
     //=========================================================================
     // GstRTSPAuthMethod

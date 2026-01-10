@@ -975,7 +975,7 @@ impl ::std::fmt::Debug for GstValidateReporter {
     }
 }
 
-extern "C" {
+unsafe extern "C" {
 
     //=========================================================================
     // GstValidateActionReturn

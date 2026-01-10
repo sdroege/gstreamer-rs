@@ -244,7 +244,7 @@ impl ::std::fmt::Debug for GstAppSrc {
     }
 }
 
-extern "C" {
+unsafe extern "C" {
 
     //=========================================================================
     // GstAppLeakyType

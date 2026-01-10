@@ -145,16 +145,18 @@ pub trait RTSPClientExt: IsA<RTSPClient> + 'static {
             sess: *mut ffi::GstRTSPSession,
             user_data: glib::ffi::gpointer,
         ) -> ffi::GstRTSPFilterResult {
-            let client = from_glib_borrow(client);
-            let sess = from_glib_borrow(sess);
-            let callback = user_data
-                as *mut Option<&mut dyn FnMut(&RTSPClient, &RTSPSession) -> RTSPFilterResult>;
-            if let Some(ref mut callback) = *callback {
-                callback(&client, &sess)
-            } else {
-                panic!("cannot get closure...")
+            unsafe {
+                let client = from_glib_borrow(client);
+                let sess = from_glib_borrow(sess);
+                let callback = user_data
+                    as *mut Option<&mut dyn FnMut(&RTSPClient, &RTSPSession) -> RTSPFilterResult>;
+                if let Some(ref mut callback) = *callback {
+                    callback(&client, &sess)
+                } else {
+                    panic!("cannot get closure...")
+                }
+                .into_glib()
             }
-            .into_glib()
         }
         let func = if func_data.is_some() {
             Some(func_func as _)
@@ -269,11 +271,13 @@ pub trait RTSPClientExt: IsA<RTSPClient> + 'static {
             ctx: *mut ffi::GstRTSPContext,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(ctx),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(ctx),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -302,8 +306,10 @@ pub trait RTSPClientExt: IsA<RTSPClient> + 'static {
             this: *mut ffi::GstRTSPClient,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(RTSPClient::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(RTSPClient::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -331,11 +337,13 @@ pub trait RTSPClientExt: IsA<RTSPClient> + 'static {
             ctx: *mut ffi::GstRTSPContext,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(ctx),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(ctx),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -363,11 +371,13 @@ pub trait RTSPClientExt: IsA<RTSPClient> + 'static {
             ctx: *mut ffi::GstRTSPContext,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(ctx),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(ctx),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -395,11 +405,13 @@ pub trait RTSPClientExt: IsA<RTSPClient> + 'static {
             ctx: *mut ffi::GstRTSPContext,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(ctx),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(ctx),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -427,11 +439,13 @@ pub trait RTSPClientExt: IsA<RTSPClient> + 'static {
             object: *mut ffi::GstRTSPSession,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(object),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(object),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -459,11 +473,13 @@ pub trait RTSPClientExt: IsA<RTSPClient> + 'static {
             ctx: *mut ffi::GstRTSPContext,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(ctx),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(ctx),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -491,11 +507,13 @@ pub trait RTSPClientExt: IsA<RTSPClient> + 'static {
             ctx: *mut ffi::GstRTSPContext,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(ctx),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(ctx),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -523,11 +541,13 @@ pub trait RTSPClientExt: IsA<RTSPClient> + 'static {
             ctx: *mut ffi::GstRTSPContext,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(ctx),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(ctx),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -557,12 +577,14 @@ pub trait RTSPClientExt: IsA<RTSPClient> + 'static {
             ctx: *mut ffi::GstRTSPContext,
             f: glib::ffi::gpointer,
         ) -> gst_rtsp::ffi::GstRTSPStatusCode {
-            let f: &F = &*(f as *const F);
-            f(
-                RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(ctx),
-            )
-            .into_glib()
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(ctx),
+                )
+                .into_glib()
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -588,8 +610,10 @@ pub trait RTSPClientExt: IsA<RTSPClient> + 'static {
             this: *mut ffi::GstRTSPClient,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(RTSPClient::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(RTSPClient::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -619,12 +643,14 @@ pub trait RTSPClientExt: IsA<RTSPClient> + 'static {
             ctx: *mut ffi::GstRTSPContext,
             f: glib::ffi::gpointer,
         ) -> gst_rtsp::ffi::GstRTSPStatusCode {
-            let f: &F = &*(f as *const F);
-            f(
-                RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(ctx),
-            )
-            .into_glib()
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(ctx),
+                )
+                .into_glib()
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -654,12 +680,14 @@ pub trait RTSPClientExt: IsA<RTSPClient> + 'static {
             ctx: *mut ffi::GstRTSPContext,
             f: glib::ffi::gpointer,
         ) -> gst_rtsp::ffi::GstRTSPStatusCode {
-            let f: &F = &*(f as *const F);
-            f(
-                RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(ctx),
-            )
-            .into_glib()
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(ctx),
+                )
+                .into_glib()
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -689,12 +717,14 @@ pub trait RTSPClientExt: IsA<RTSPClient> + 'static {
             ctx: *mut ffi::GstRTSPContext,
             f: glib::ffi::gpointer,
         ) -> gst_rtsp::ffi::GstRTSPStatusCode {
-            let f: &F = &*(f as *const F);
-            f(
-                RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(ctx),
-            )
-            .into_glib()
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(ctx),
+                )
+                .into_glib()
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -724,12 +754,14 @@ pub trait RTSPClientExt: IsA<RTSPClient> + 'static {
             ctx: *mut ffi::GstRTSPContext,
             f: glib::ffi::gpointer,
         ) -> gst_rtsp::ffi::GstRTSPStatusCode {
-            let f: &F = &*(f as *const F);
-            f(
-                RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(ctx),
-            )
-            .into_glib()
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(ctx),
+                )
+                .into_glib()
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -759,12 +791,14 @@ pub trait RTSPClientExt: IsA<RTSPClient> + 'static {
             ctx: *mut ffi::GstRTSPContext,
             f: glib::ffi::gpointer,
         ) -> gst_rtsp::ffi::GstRTSPStatusCode {
-            let f: &F = &*(f as *const F);
-            f(
-                RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(ctx),
-            )
-            .into_glib()
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(ctx),
+                )
+                .into_glib()
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -794,12 +828,14 @@ pub trait RTSPClientExt: IsA<RTSPClient> + 'static {
             ctx: *mut ffi::GstRTSPContext,
             f: glib::ffi::gpointer,
         ) -> gst_rtsp::ffi::GstRTSPStatusCode {
-            let f: &F = &*(f as *const F);
-            f(
-                RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(ctx),
-            )
-            .into_glib()
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(ctx),
+                )
+                .into_glib()
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -829,12 +865,14 @@ pub trait RTSPClientExt: IsA<RTSPClient> + 'static {
             ctx: *mut ffi::GstRTSPContext,
             f: glib::ffi::gpointer,
         ) -> gst_rtsp::ffi::GstRTSPStatusCode {
-            let f: &F = &*(f as *const F);
-            f(
-                RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(ctx),
-            )
-            .into_glib()
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(ctx),
+                )
+                .into_glib()
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -864,12 +902,14 @@ pub trait RTSPClientExt: IsA<RTSPClient> + 'static {
             ctx: *mut ffi::GstRTSPContext,
             f: glib::ffi::gpointer,
         ) -> gst_rtsp::ffi::GstRTSPStatusCode {
-            let f: &F = &*(f as *const F);
-            f(
-                RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(ctx),
-            )
-            .into_glib()
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(ctx),
+                )
+                .into_glib()
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -899,12 +939,14 @@ pub trait RTSPClientExt: IsA<RTSPClient> + 'static {
             ctx: *mut ffi::GstRTSPContext,
             f: glib::ffi::gpointer,
         ) -> gst_rtsp::ffi::GstRTSPStatusCode {
-            let f: &F = &*(f as *const F);
-            f(
-                RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(ctx),
-            )
-            .into_glib()
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(ctx),
+                )
+                .into_glib()
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -932,11 +974,13 @@ pub trait RTSPClientExt: IsA<RTSPClient> + 'static {
             ctx: *mut ffi::GstRTSPContext,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(ctx),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(ctx),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -969,11 +1013,13 @@ pub trait RTSPClientExt: IsA<RTSPClient> + 'static {
             ctx: *mut ffi::GstRTSPContext,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(ctx),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(ctx),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1001,11 +1047,13 @@ pub trait RTSPClientExt: IsA<RTSPClient> + 'static {
             ctx: *mut ffi::GstRTSPContext,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(ctx),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(ctx),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1033,11 +1081,13 @@ pub trait RTSPClientExt: IsA<RTSPClient> + 'static {
             ctx: *mut ffi::GstRTSPContext,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(ctx),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    RTSPClient::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(ctx),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1065,8 +1115,10 @@ pub trait RTSPClientExt: IsA<RTSPClient> + 'static {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(RTSPClient::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(RTSPClient::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1094,8 +1146,10 @@ pub trait RTSPClientExt: IsA<RTSPClient> + 'static {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(RTSPClient::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(RTSPClient::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1123,8 +1177,10 @@ pub trait RTSPClientExt: IsA<RTSPClient> + 'static {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(RTSPClient::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(RTSPClient::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -1152,8 +1208,10 @@ pub trait RTSPClientExt: IsA<RTSPClient> + 'static {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(RTSPClient::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(RTSPClient::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

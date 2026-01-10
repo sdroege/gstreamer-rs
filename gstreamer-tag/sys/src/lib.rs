@@ -263,7 +263,7 @@ impl ::std::fmt::Debug for GstTagXmpWriter {
     }
 }
 
-extern "C" {
+unsafe extern "C" {
 
     //=========================================================================
     // GstTagDemuxResult

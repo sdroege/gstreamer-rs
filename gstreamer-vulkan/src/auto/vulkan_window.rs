@@ -169,8 +169,10 @@ pub trait VulkanWindowExt: IsA<VulkanWindow> + 'static {
             this: *mut ffi::GstVulkanWindow,
             f: glib::ffi::gpointer,
         ) -> glib::ffi::gboolean {
-            let f: &F = &*(f as *const F);
-            f(VulkanWindow::from_glib_borrow(this).unsafe_cast_ref()).into_glib()
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(VulkanWindow::from_glib_borrow(this).unsafe_cast_ref()).into_glib()
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -194,8 +196,10 @@ pub trait VulkanWindowExt: IsA<VulkanWindow> + 'static {
             this: *mut ffi::GstVulkanWindow,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(VulkanWindow::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(VulkanWindow::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -224,12 +228,14 @@ pub trait VulkanWindowExt: IsA<VulkanWindow> + 'static {
             key: *mut std::ffi::c_char,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                VulkanWindow::from_glib_borrow(this).unsafe_cast_ref(),
-                &glib::GString::from_glib_borrow(id),
-                &glib::GString::from_glib_borrow(key),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    VulkanWindow::from_glib_borrow(this).unsafe_cast_ref(),
+                    &glib::GString::from_glib_borrow(id),
+                    &glib::GString::from_glib_borrow(key),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -260,14 +266,16 @@ pub trait VulkanWindowExt: IsA<VulkanWindow> + 'static {
             y: std::ffi::c_double,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                VulkanWindow::from_glib_borrow(this).unsafe_cast_ref(),
-                &glib::GString::from_glib_borrow(id),
-                button,
-                x,
-                y,
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    VulkanWindow::from_glib_borrow(this).unsafe_cast_ref(),
+                    &glib::GString::from_glib_borrow(id),
+                    button,
+                    x,
+                    y,
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -296,12 +304,14 @@ pub trait VulkanWindowExt: IsA<VulkanWindow> + 'static {
             p0: std::ffi::c_uint,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                VulkanWindow::from_glib_borrow(this).unsafe_cast_ref(),
-                object,
-                p0,
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    VulkanWindow::from_glib_borrow(this).unsafe_cast_ref(),
+                    object,
+                    p0,
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -329,8 +339,10 @@ pub trait VulkanWindowExt: IsA<VulkanWindow> + 'static {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(VulkanWindow::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(VulkanWindow::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

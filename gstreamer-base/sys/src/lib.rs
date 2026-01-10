@@ -1279,7 +1279,7 @@ impl ::std::fmt::Debug for GstPushSrc {
     }
 }
 
-extern "C" {
+unsafe extern "C" {
 
     //=========================================================================
     // GstAggregatorStartTimeSelection

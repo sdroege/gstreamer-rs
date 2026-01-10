@@ -72,7 +72,7 @@ impl ::std::fmt::Debug for GstGLDisplayWayland {
     }
 }
 
-extern "C" {
+unsafe extern "C" {
 
     //=========================================================================
     // GstGLDisplayWayland

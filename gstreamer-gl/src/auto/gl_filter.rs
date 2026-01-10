@@ -61,10 +61,12 @@ pub trait GLFilterExt: IsA<GLFilter> + 'static {
             in_tex: *mut ffi::GstGLMemory,
             user_data: glib::ffi::gpointer,
         ) -> glib::ffi::gboolean {
-            let filter = from_glib_borrow(filter);
-            let in_tex = from_glib_borrow(in_tex);
-            let callback = user_data as *mut P;
-            (*callback)(&filter, &in_tex).into_glib()
+            unsafe {
+                let filter = from_glib_borrow(filter);
+                let in_tex = from_glib_borrow(in_tex);
+                let callback = user_data as *mut P;
+                (*callback)(&filter, &in_tex).into_glib()
+            }
         }
         let func = Some(func_func::<P> as _);
         let super_callback0: &mut P = &mut func_data;

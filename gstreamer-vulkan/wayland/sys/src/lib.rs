@@ -69,7 +69,7 @@ impl ::std::fmt::Debug for GstVulkanDisplayWayland {
     }
 }
 
-extern "C" {
+unsafe extern "C" {
 
     //=========================================================================
     // GstVulkanDisplayWayland

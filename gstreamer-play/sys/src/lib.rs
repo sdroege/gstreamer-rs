@@ -305,7 +305,7 @@ impl ::std::fmt::Debug for GstPlayVideoRenderer {
     }
 }
 
-extern "C" {
+unsafe extern "C" {
 
     //=========================================================================
     // GstPlayColorBalanceType

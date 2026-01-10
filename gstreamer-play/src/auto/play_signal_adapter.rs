@@ -65,8 +65,10 @@ impl PlaySignalAdapter {
             object: std::ffi::c_int,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(&from_glib_borrow(this), object)
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(&from_glib_borrow(this), object)
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -89,8 +91,10 @@ impl PlaySignalAdapter {
             this: *mut ffi::GstPlaySignalAdapter,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(&from_glib_borrow(this))
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(&from_glib_borrow(this))
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -118,14 +122,16 @@ impl PlaySignalAdapter {
             details: *mut gst::ffi::GstStructure,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                &from_glib_borrow(this),
-                &from_glib_borrow(error),
-                Option::<gst::Structure>::from_glib_borrow(details)
-                    .as_ref()
-                    .as_ref(),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    &from_glib_borrow(this),
+                    &from_glib_borrow(error),
+                    Option::<gst::Structure>::from_glib_borrow(details)
+                        .as_ref()
+                        .as_ref(),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -152,8 +158,10 @@ impl PlaySignalAdapter {
             object: *mut ffi::GstPlayMediaInfo,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(&from_glib_borrow(this), &from_glib_borrow(object))
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(&from_glib_borrow(this), &from_glib_borrow(object))
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -180,8 +188,10 @@ impl PlaySignalAdapter {
             object: glib::ffi::gboolean,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(&from_glib_borrow(this), from_glib(object))
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(&from_glib_borrow(this), from_glib(object))
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -208,8 +218,10 @@ impl PlaySignalAdapter {
             object: ffi::GstPlayState,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(&from_glib_borrow(this), from_glib(object))
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(&from_glib_borrow(this), from_glib(object))
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -233,11 +245,13 @@ impl PlaySignalAdapter {
             object: *mut std::ffi::c_char,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                &from_glib_borrow(this),
-                &glib::GString::from_glib_borrow(object),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    &from_glib_borrow(this),
+                    &glib::GString::from_glib_borrow(object),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -265,8 +279,10 @@ impl PlaySignalAdapter {
             p0: std::ffi::c_uint,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(&from_glib_borrow(this), object, p0)
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(&from_glib_borrow(this), object, p0)
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -293,8 +309,10 @@ impl PlaySignalAdapter {
             object: std::ffi::c_double,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(&from_glib_borrow(this), object)
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(&from_glib_borrow(this), object)
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -322,14 +340,16 @@ impl PlaySignalAdapter {
             details: *mut gst::ffi::GstStructure,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                &from_glib_borrow(this),
-                &from_glib_borrow(error),
-                Option::<gst::Structure>::from_glib_borrow(details)
-                    .as_ref()
-                    .as_ref(),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    &from_glib_borrow(this),
+                    &from_glib_borrow(error),
+                    Option::<gst::Structure>::from_glib_borrow(details)
+                        .as_ref()
+                        .as_ref(),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -356,8 +376,10 @@ impl PlaySignalAdapter {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(&from_glib_borrow(this))
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(&from_glib_borrow(this))
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

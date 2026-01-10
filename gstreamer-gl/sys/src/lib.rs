@@ -1688,7 +1688,7 @@ impl ::std::fmt::Debug for GstGLWindow {
     }
 }
 
-extern "C" {
+unsafe extern "C" {
 
     //=========================================================================
     // GstGLBaseMemoryError

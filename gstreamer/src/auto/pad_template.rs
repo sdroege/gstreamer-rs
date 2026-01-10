@@ -82,8 +82,10 @@ impl PadTemplate {
             pad: *mut ffi::GstPad,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(&from_glib_borrow(this), &from_glib_borrow(pad))
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(&from_glib_borrow(this), &from_glib_borrow(pad))
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

@@ -229,7 +229,7 @@ impl ::std::fmt::Debug for GstSourceBufferList {
     }
 }
 
-extern "C" {
+unsafe extern "C" {
 
     //=========================================================================
     // GstMediaSourceEOSError

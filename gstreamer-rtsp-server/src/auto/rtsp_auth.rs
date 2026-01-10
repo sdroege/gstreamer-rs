@@ -243,14 +243,16 @@ pub trait RTSPAuthExt: IsA<RTSPAuth> + 'static {
             errors: gio::ffi::GTlsCertificateFlags,
             f: glib::ffi::gpointer,
         ) -> glib::ffi::gboolean {
-            let f: &F = &*(f as *const F);
-            f(
-                RTSPAuth::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(connection),
-                &from_glib_borrow(peer_cert),
-                from_glib(errors),
-            )
-            .into_glib()
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    RTSPAuth::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(connection),
+                    &from_glib_borrow(peer_cert),
+                    from_glib(errors),
+                )
+                .into_glib()
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

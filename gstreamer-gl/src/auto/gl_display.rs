@@ -132,12 +132,14 @@ pub trait GLDisplayExt: IsA<GLDisplay> + 'static {
             context: *mut ffi::GstGLContext,
             f: glib::ffi::gpointer,
         ) -> *mut ffi::GstGLContext {
-            let f: &F = &*(f as *const F);
-            f(
-                GLDisplay::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(context),
-            )
-            .to_glib_full()
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    GLDisplay::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(context),
+                )
+                .to_glib_full()
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

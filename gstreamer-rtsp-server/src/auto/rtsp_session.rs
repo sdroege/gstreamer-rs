@@ -54,16 +54,20 @@ pub trait RTSPSessionExt: IsA<RTSPSession> + 'static {
             media: *mut ffi::GstRTSPSessionMedia,
             user_data: glib::ffi::gpointer,
         ) -> ffi::GstRTSPFilterResult {
-            let sess = from_glib_borrow(sess);
-            let media = from_glib_borrow(media);
-            let callback = user_data
-                as *mut Option<&mut dyn FnMut(&RTSPSession, &RTSPSessionMedia) -> RTSPFilterResult>;
-            if let Some(ref mut callback) = *callback {
-                callback(&sess, &media)
-            } else {
-                panic!("cannot get closure...")
+            unsafe {
+                let sess = from_glib_borrow(sess);
+                let media = from_glib_borrow(media);
+                let callback = user_data
+                    as *mut Option<
+                        &mut dyn FnMut(&RTSPSession, &RTSPSessionMedia) -> RTSPFilterResult,
+                    >;
+                if let Some(ref mut callback) = *callback {
+                    callback(&sess, &media)
+                } else {
+                    panic!("cannot get closure...")
+                }
+                .into_glib()
             }
-            .into_glib()
         }
         let func = if func_data.is_some() {
             Some(func_func as _)
@@ -213,8 +217,10 @@ pub trait RTSPSessionExt: IsA<RTSPSession> + 'static {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(RTSPSession::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(RTSPSession::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -242,8 +248,10 @@ pub trait RTSPSessionExt: IsA<RTSPSession> + 'static {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(RTSPSession::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(RTSPSession::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -271,8 +279,10 @@ pub trait RTSPSessionExt: IsA<RTSPSession> + 'static {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(RTSPSession::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(RTSPSession::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

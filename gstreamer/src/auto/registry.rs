@@ -159,8 +159,10 @@ impl Registry {
             feature: *mut ffi::GstPluginFeature,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(&from_glib_borrow(this), &from_glib_borrow(feature))
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(&from_glib_borrow(this), &from_glib_borrow(feature))
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -187,8 +189,10 @@ impl Registry {
             plugin: *mut ffi::GstPlugin,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(&from_glib_borrow(this), &from_glib_borrow(plugin))
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(&from_glib_borrow(this), &from_glib_borrow(plugin))
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

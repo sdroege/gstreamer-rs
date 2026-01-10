@@ -87,11 +87,13 @@ pub trait TimedValueControlSourceExt: IsA<TimedValueControlSource> + 'static {
             timed_value: *mut ffi::GstControlPoint,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                TimedValueControlSource::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(timed_value),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    TimedValueControlSource::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(timed_value),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -119,11 +121,13 @@ pub trait TimedValueControlSourceExt: IsA<TimedValueControlSource> + 'static {
             timed_value: *mut ffi::GstControlPoint,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                TimedValueControlSource::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(timed_value),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    TimedValueControlSource::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(timed_value),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -151,11 +155,13 @@ pub trait TimedValueControlSourceExt: IsA<TimedValueControlSource> + 'static {
             timed_value: *mut ffi::GstControlPoint,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                TimedValueControlSource::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(timed_value),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    TimedValueControlSource::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(timed_value),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

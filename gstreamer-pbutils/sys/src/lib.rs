@@ -428,7 +428,7 @@ impl ::std::fmt::Debug for GstEncodingVideoProfile {
     }
 }
 
-extern "C" {
+unsafe extern "C" {
 
     //=========================================================================
     // GstAudioVisualizerShader

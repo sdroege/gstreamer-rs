@@ -70,11 +70,13 @@ pub trait MetaContainerExt: IsA<MetaContainer> + 'static {
             value: *const glib::gobject_ffi::GValue,
             user_data: glib::ffi::gpointer,
         ) {
-            let container = from_glib_borrow(container);
-            let key: Borrowed<glib::GString> = from_glib_borrow(key);
-            let value = from_glib_borrow(value);
-            let callback = user_data as *mut P;
-            (*callback)(&container, key.as_str(), &value)
+            unsafe {
+                let container = from_glib_borrow(container);
+                let key: Borrowed<glib::GString> = from_glib_borrow(key);
+                let value = from_glib_borrow(value);
+                let callback = user_data as *mut P;
+                (*callback)(&container, key.as_str(), &value)
+            }
         }
         let func = Some(func_func::<P> as _);
         let super_callback0: &mut P = &mut func_data;
@@ -598,14 +600,16 @@ pub trait MetaContainerExt: IsA<MetaContainer> + 'static {
             value: *mut glib::gobject_ffi::GValue,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                MetaContainer::from_glib_borrow(this).unsafe_cast_ref(),
-                &glib::GString::from_glib_borrow(key),
-                Option::<glib::Value>::from_glib_borrow(value)
-                    .as_ref()
-                    .as_ref(),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    MetaContainer::from_glib_borrow(this).unsafe_cast_ref(),
+                    &glib::GString::from_glib_borrow(key),
+                    Option::<glib::Value>::from_glib_borrow(value)
+                        .as_ref()
+                        .as_ref(),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

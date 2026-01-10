@@ -1540,7 +1540,7 @@ impl ::std::fmt::Debug for GstStreamVolume {
     }
 }
 
-extern "C" {
+unsafe extern "C" {
 
     //=========================================================================
     // GstAudioBaseSinkDiscontReason

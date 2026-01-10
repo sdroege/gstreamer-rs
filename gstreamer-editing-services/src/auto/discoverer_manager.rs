@@ -101,14 +101,16 @@ impl DiscovererManager {
             error: *mut glib::ffi::GError,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                &from_glib_borrow(this),
-                &from_glib_borrow(info),
-                Option::<glib::Error>::from_glib_borrow(error)
-                    .as_ref()
-                    .as_ref(),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    &from_glib_borrow(this),
+                    &from_glib_borrow(info),
+                    Option::<glib::Error>::from_glib_borrow(error)
+                        .as_ref()
+                        .as_ref(),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -139,12 +141,14 @@ impl DiscovererManager {
             uri: *mut std::ffi::c_char,
             f: glib::ffi::gpointer,
         ) -> *mut gst_pbutils::ffi::GstDiscovererInfo {
-            let f: &F = &*(f as *const F);
-            f(
-                &from_glib_borrow(this),
-                &glib::GString::from_glib_borrow(uri),
-            )
-            .to_glib_full()
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    &from_glib_borrow(this),
+                    &glib::GString::from_glib_borrow(uri),
+                )
+                .to_glib_full()
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -173,8 +177,10 @@ impl DiscovererManager {
             source: *mut gst::ffi::GstElement,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(&from_glib_borrow(this), &from_glib_borrow(source))
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(&from_glib_borrow(this), &from_glib_borrow(source))
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -198,8 +204,10 @@ impl DiscovererManager {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(&from_glib_borrow(this))
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(&from_glib_borrow(this))
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -221,8 +229,10 @@ impl DiscovererManager {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(&from_glib_borrow(this))
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(&from_glib_borrow(this))
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

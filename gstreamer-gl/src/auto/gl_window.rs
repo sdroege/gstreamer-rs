@@ -240,12 +240,14 @@ pub trait GLWindowExt: IsA<GLWindow> + 'static {
             key: *mut std::ffi::c_char,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                GLWindow::from_glib_borrow(this).unsafe_cast_ref(),
-                &glib::GString::from_glib_borrow(id),
-                &glib::GString::from_glib_borrow(key),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    GLWindow::from_glib_borrow(this).unsafe_cast_ref(),
+                    &glib::GString::from_glib_borrow(id),
+                    &glib::GString::from_glib_borrow(key),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -276,14 +278,16 @@ pub trait GLWindowExt: IsA<GLWindow> + 'static {
             y: std::ffi::c_double,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                GLWindow::from_glib_borrow(this).unsafe_cast_ref(),
-                &glib::GString::from_glib_borrow(id),
-                button,
-                x,
-                y,
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    GLWindow::from_glib_borrow(this).unsafe_cast_ref(),
+                    &glib::GString::from_glib_borrow(id),
+                    button,
+                    x,
+                    y,
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -316,14 +320,16 @@ pub trait GLWindowExt: IsA<GLWindow> + 'static {
             delta_y: std::ffi::c_double,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                GLWindow::from_glib_borrow(this).unsafe_cast_ref(),
-                x,
-                y,
-                delta_x,
-                delta_y,
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    GLWindow::from_glib_borrow(this).unsafe_cast_ref(),
+                    x,
+                    y,
+                    delta_x,
+                    delta_y,
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -352,8 +358,10 @@ pub trait GLWindowExt: IsA<GLWindow> + 'static {
             this: *mut ffi::GstGLWindow,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(GLWindow::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(GLWindow::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

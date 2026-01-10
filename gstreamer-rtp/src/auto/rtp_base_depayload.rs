@@ -195,11 +195,13 @@ pub trait RTPBaseDepayloadExt: IsA<RTPBaseDepayload> + 'static {
             ext: *mut ffi::GstRTPHeaderExtension,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                RTPBaseDepayload::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_full(ext),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    RTPBaseDepayload::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_full(ext),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -234,8 +236,10 @@ pub trait RTPBaseDepayloadExt: IsA<RTPBaseDepayload> + 'static {
             this: *mut ffi::GstRTPBaseDepayload,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(RTPBaseDepayload::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(RTPBaseDepayload::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -274,16 +278,18 @@ pub trait RTPBaseDepayloadExt: IsA<RTPBaseDepayload> + 'static {
             ext_uri: *mut std::ffi::c_char,
             f: glib::ffi::gpointer,
         ) -> *mut ffi::GstRTPHeaderExtension {
-            let f: &F = &*(f as *const F);
-            f(
-                RTPBaseDepayload::from_glib_borrow(this).unsafe_cast_ref(),
-                ext_id,
-                Option::<glib::GString>::from_glib_borrow(ext_uri)
-                    .as_ref()
-                    .as_ref()
-                    .map(|s| s.as_str()),
-            )
-            .to_glib_full()
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    RTPBaseDepayload::from_glib_borrow(this).unsafe_cast_ref(),
+                    ext_id,
+                    Option::<glib::GString>::from_glib_borrow(ext_uri)
+                        .as_ref()
+                        .as_ref()
+                        .map(|s| s.as_str()),
+                )
+                .to_glib_full()
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -313,8 +319,10 @@ pub trait RTPBaseDepayloadExt: IsA<RTPBaseDepayload> + 'static {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(RTPBaseDepayload::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(RTPBaseDepayload::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -344,8 +352,10 @@ pub trait RTPBaseDepayloadExt: IsA<RTPBaseDepayload> + 'static {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(RTPBaseDepayload::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(RTPBaseDepayload::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -375,8 +385,10 @@ pub trait RTPBaseDepayloadExt: IsA<RTPBaseDepayload> + 'static {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(RTPBaseDepayload::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(RTPBaseDepayload::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -401,8 +413,10 @@ pub trait RTPBaseDepayloadExt: IsA<RTPBaseDepayload> + 'static {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(RTPBaseDepayload::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(RTPBaseDepayload::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

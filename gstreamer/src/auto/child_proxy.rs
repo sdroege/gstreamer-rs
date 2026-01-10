@@ -127,12 +127,14 @@ pub trait ChildProxyExt: IsA<ChildProxy> + 'static {
             name: *mut std::ffi::c_char,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                ChildProxy::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(object),
-                &glib::GString::from_glib_borrow(name),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    ChildProxy::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(object),
+                    &glib::GString::from_glib_borrow(name),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -161,12 +163,14 @@ pub trait ChildProxyExt: IsA<ChildProxy> + 'static {
             name: *mut std::ffi::c_char,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                ChildProxy::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(object),
-                &glib::GString::from_glib_borrow(name),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    ChildProxy::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(object),
+                    &glib::GString::from_glib_borrow(name),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

@@ -583,7 +583,7 @@ impl ::std::fmt::Debug for GstD3D12PoolAllocator {
     }
 }
 
-extern "C" {
+unsafe extern "C" {
 
     //=========================================================================
     // GstD3D12ConverterAlphaMode

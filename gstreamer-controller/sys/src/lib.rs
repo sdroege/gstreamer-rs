@@ -423,7 +423,7 @@ impl ::std::fmt::Debug for GstTriggerControlSource {
     }
 }
 
-extern "C" {
+unsafe extern "C" {
 
     //=========================================================================
     // GstInterpolationMode

@@ -331,12 +331,14 @@ pub trait VulkanInstanceExt: IsA<VulkanInstance> + 'static {
             device_index: std::ffi::c_uint,
             f: glib::ffi::gpointer,
         ) -> *mut ffi::GstVulkanDevice {
-            let f: &F = &*(f as *const F);
-            f(
-                VulkanInstance::from_glib_borrow(this).unsafe_cast_ref(),
-                device_index,
-            )
-            .to_glib_full()
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    VulkanInstance::from_glib_borrow(this).unsafe_cast_ref(),
+                    device_index,
+                )
+                .to_glib_full()
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -364,8 +366,10 @@ pub trait VulkanInstanceExt: IsA<VulkanInstance> + 'static {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(VulkanInstance::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(VulkanInstance::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -393,8 +397,10 @@ pub trait VulkanInstanceExt: IsA<VulkanInstance> + 'static {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(VulkanInstance::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(VulkanInstance::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

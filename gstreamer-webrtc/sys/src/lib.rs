@@ -681,7 +681,7 @@ impl ::std::fmt::Debug for GstWebRTCSCTPTransport {
     }
 }
 
-extern "C" {
+unsafe extern "C" {
 
     //=========================================================================
     // GstWebRTCBundlePolicy

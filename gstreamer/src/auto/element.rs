@@ -427,8 +427,10 @@ pub trait ElementExt: IsA<Element> + 'static {
             this: *mut ffi::GstElement,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(Element::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(Element::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -456,11 +458,13 @@ pub trait ElementExt: IsA<Element> + 'static {
             new_pad: *mut ffi::GstPad,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                Element::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(new_pad),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    Element::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(new_pad),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -488,11 +492,13 @@ pub trait ElementExt: IsA<Element> + 'static {
             old_pad: *mut ffi::GstPad,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                Element::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(old_pad),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    Element::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(old_pad),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

@@ -223,16 +223,20 @@ pub trait WebRTCICEExt: IsA<WebRTCICE> + 'static {
             candidate: *const std::ffi::c_char,
             user_data: glib::ffi::gpointer,
         ) {
-            let ice = from_glib_borrow(ice);
-            let candidate: Borrowed<glib::GString> = from_glib_borrow(candidate);
-            let callback = &*(user_data as *mut P);
-            (*callback)(&ice, stream_id, candidate.as_str())
+            unsafe {
+                let ice = from_glib_borrow(ice);
+                let candidate: Borrowed<glib::GString> = from_glib_borrow(candidate);
+                let callback = &*(user_data as *mut P);
+                (*callback)(&ice, stream_id, candidate.as_str())
+            }
         }
         let func = Some(func_func::<P> as _);
         unsafe extern "C" fn notify_func<P: Fn(&WebRTCICE, u32, &str) + Send + Sync + 'static>(
             data: glib::ffi::gpointer,
         ) {
-            let _callback = Box_::from_raw(data as *mut P);
+            unsafe {
+                let _callback = Box_::from_raw(data as *mut P);
+            }
         }
         let destroy_call3 = Some(notify_func::<P> as _);
         let super_callback0: Box_<P> = func_data;
@@ -335,12 +339,14 @@ pub trait WebRTCICEExt: IsA<WebRTCICE> + 'static {
             address: *mut std::ffi::c_char,
             f: glib::ffi::gpointer,
         ) -> glib::ffi::gboolean {
-            let f: &F = &*(f as *const F);
-            f(
-                WebRTCICE::from_glib_borrow(this).unsafe_cast_ref(),
-                &glib::GString::from_glib_borrow(address),
-            )
-            .into_glib()
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    WebRTCICE::from_glib_borrow(this).unsafe_cast_ref(),
+                    &glib::GString::from_glib_borrow(address),
+                )
+                .into_glib()
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -374,8 +380,10 @@ pub trait WebRTCICEExt: IsA<WebRTCICE> + 'static {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(WebRTCICE::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(WebRTCICE::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -405,8 +413,10 @@ pub trait WebRTCICEExt: IsA<WebRTCICE> + 'static {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(WebRTCICE::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(WebRTCICE::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

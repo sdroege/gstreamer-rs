@@ -226,8 +226,10 @@ pub trait GESTrackExt: IsA<Track> + 'static {
             this: *mut ffi::GESTrack,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(Track::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(Track::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -255,11 +257,13 @@ pub trait GESTrackExt: IsA<Track> + 'static {
             effect: *mut ffi::GESTrackElement,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                Track::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(effect),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    Track::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(effect),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -287,11 +291,13 @@ pub trait GESTrackExt: IsA<Track> + 'static {
             effect: *mut ffi::GESTrackElement,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                Track::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(effect),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    Track::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(effect),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -313,8 +319,10 @@ pub trait GESTrackExt: IsA<Track> + 'static {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(Track::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(Track::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -338,8 +346,10 @@ pub trait GESTrackExt: IsA<Track> + 'static {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(Track::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(Track::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -361,8 +371,10 @@ pub trait GESTrackExt: IsA<Track> + 'static {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(Track::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(Track::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -387,8 +399,10 @@ pub trait GESTrackExt: IsA<Track> + 'static {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(Track::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(Track::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

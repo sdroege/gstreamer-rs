@@ -59,7 +59,7 @@ impl ::std::fmt::Debug for GstVulkanDisplayXCB {
     }
 }
 
-extern "C" {
+unsafe extern "C" {
 
     //=========================================================================
     // GstVulkanDisplayXCB

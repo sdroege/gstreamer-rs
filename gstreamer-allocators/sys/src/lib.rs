@@ -217,7 +217,7 @@ impl ::std::fmt::Debug for GstPhysMemoryAllocator {
     }
 }
 
-extern "C" {
+unsafe extern "C" {
 
     //=========================================================================
     // GstDRMDumbAllocator

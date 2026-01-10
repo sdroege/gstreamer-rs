@@ -69,16 +69,20 @@ pub trait RTSPSessionPoolExt: IsA<RTSPSessionPool> + 'static {
             session: *mut ffi::GstRTSPSession,
             user_data: glib::ffi::gpointer,
         ) -> ffi::GstRTSPFilterResult {
-            let pool = from_glib_borrow(pool);
-            let session = from_glib_borrow(session);
-            let callback = user_data
-                as *mut Option<&mut dyn FnMut(&RTSPSessionPool, &RTSPSession) -> RTSPFilterResult>;
-            if let Some(ref mut callback) = *callback {
-                callback(&pool, &session)
-            } else {
-                panic!("cannot get closure...")
+            unsafe {
+                let pool = from_glib_borrow(pool);
+                let session = from_glib_borrow(session);
+                let callback = user_data
+                    as *mut Option<
+                        &mut dyn FnMut(&RTSPSessionPool, &RTSPSession) -> RTSPFilterResult,
+                    >;
+                if let Some(ref mut callback) = *callback {
+                    callback(&pool, &session)
+                } else {
+                    panic!("cannot get closure...")
+                }
+                .into_glib()
             }
-            .into_glib()
         }
         let func = if func_data.is_some() {
             Some(func_func as _)
@@ -154,11 +158,13 @@ pub trait RTSPSessionPoolExt: IsA<RTSPSessionPool> + 'static {
             object: *mut ffi::GstRTSPSession,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                RTSPSessionPool::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(object),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    RTSPSessionPool::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(object),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -186,8 +192,10 @@ pub trait RTSPSessionPoolExt: IsA<RTSPSessionPool> + 'static {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(RTSPSessionPool::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(RTSPSessionPool::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

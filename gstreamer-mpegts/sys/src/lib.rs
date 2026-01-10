@@ -2165,7 +2165,7 @@ impl ::std::fmt::Debug for GstMpegtsTerrestrialDeliverySystemDescriptor {
     }
 }
 
-extern "C" {
+unsafe extern "C" {
 
     //=========================================================================
     // GstMpegtsAtscEIT

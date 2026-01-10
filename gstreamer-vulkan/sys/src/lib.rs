@@ -1331,7 +1331,7 @@ impl ::std::fmt::Debug for GstVulkanWindow {
     }
 }
 
-extern "C" {
+unsafe extern "C" {
 
     //=========================================================================
     // GstVulkanBarrierFlags

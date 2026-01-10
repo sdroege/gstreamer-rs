@@ -117,9 +117,11 @@ pub trait PadExt: IsA<Pad> + 'static {
             pad: *mut ffi::GstPad,
             user_data: glib::ffi::gpointer,
         ) -> glib::ffi::gboolean {
-            let pad = from_glib_borrow(pad);
-            let callback = user_data as *mut P;
-            (*callback)(&pad).into_glib()
+            unsafe {
+                let pad = from_glib_borrow(pad);
+                let callback = user_data as *mut P;
+                (*callback)(&pad).into_glib()
+            }
         }
         let forward = Some(forward_func::<P> as _);
         let super_callback0: &mut P = &mut forward_data;
@@ -502,11 +504,13 @@ pub trait PadExt: IsA<Pad> + 'static {
             peer: *mut ffi::GstPad,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                Pad::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(peer),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    Pad::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(peer),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -534,11 +538,13 @@ pub trait PadExt: IsA<Pad> + 'static {
             peer: *mut ffi::GstPad,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                Pad::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(peer),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    Pad::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(peer),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -563,8 +569,10 @@ pub trait PadExt: IsA<Pad> + 'static {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(Pad::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(Pad::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -589,8 +597,10 @@ pub trait PadExt: IsA<Pad> + 'static {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(Pad::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(Pad::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

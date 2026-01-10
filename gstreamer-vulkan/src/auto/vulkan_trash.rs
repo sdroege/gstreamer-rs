@@ -30,9 +30,11 @@ impl VulkanTrash {
             device: *mut ffi::GstVulkanDevice,
             user_data: glib::ffi::gpointer,
         ) {
-            let device = from_glib_borrow(device);
-            let callback = Box_::from_raw(user_data as *mut P);
-            (*callback)(&device)
+            unsafe {
+                let device = from_glib_borrow(device);
+                let callback = Box_::from_raw(user_data as *mut P);
+                (*callback)(&device)
+            }
         }
         let notify = Some(notify_func::<P> as _);
         let super_callback0: Box_<P> = notify_data;

@@ -116,11 +116,13 @@ pub trait ScenarioExt: IsA<Scenario> + 'static {
             action: *mut ffi::GstValidateAction,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(
-                Scenario::from_glib_borrow(this).unsafe_cast_ref(),
-                &from_glib_borrow(action),
-            )
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    Scenario::from_glib_borrow(this).unsafe_cast_ref(),
+                    &from_glib_borrow(action),
+                )
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -144,8 +146,10 @@ pub trait ScenarioExt: IsA<Scenario> + 'static {
             this: *mut ffi::GstValidateScenario,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(Scenario::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(Scenario::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -171,8 +175,10 @@ pub trait ScenarioExt: IsA<Scenario> + 'static {
             this: *mut ffi::GstValidateScenario,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(Scenario::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(Scenario::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -200,8 +206,10 @@ pub trait ScenarioExt: IsA<Scenario> + 'static {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(Scenario::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(Scenario::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -229,8 +237,10 @@ pub trait ScenarioExt: IsA<Scenario> + 'static {
             _param_spec: glib::ffi::gpointer,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(Scenario::from_glib_borrow(this).unsafe_cast_ref())
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(Scenario::from_glib_borrow(this).unsafe_cast_ref())
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

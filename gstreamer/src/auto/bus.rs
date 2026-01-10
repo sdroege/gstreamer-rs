@@ -136,8 +136,10 @@ impl Bus {
             message: *mut ffi::GstMessage,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(&from_glib_borrow(this), &from_glib_borrow(message))
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(&from_glib_borrow(this), &from_glib_borrow(message))
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);
@@ -169,8 +171,10 @@ impl Bus {
             message: *mut ffi::GstMessage,
             f: glib::ffi::gpointer,
         ) {
-            let f: &F = &*(f as *const F);
-            f(&from_glib_borrow(this), &from_glib_borrow(message))
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(&from_glib_borrow(this), &from_glib_borrow(message))
+            }
         }
         unsafe {
             let f: Box_<F> = Box_::new(f);

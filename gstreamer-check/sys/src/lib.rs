@@ -125,7 +125,7 @@ impl ::std::fmt::Debug for GstTestClock {
     }
 }
 
-extern "C" {
+unsafe extern "C" {
 
     //=========================================================================
     // GstHarness

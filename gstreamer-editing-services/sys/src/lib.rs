@@ -2884,7 +2884,7 @@ impl ::std::fmt::Debug for GESMetaContainer {
     }
 }
 
-extern "C" {
+unsafe extern "C" {
 
     //=========================================================================
     // GESEdge

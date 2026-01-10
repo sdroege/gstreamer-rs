@@ -4134,7 +4134,7 @@ impl ::std::fmt::Debug for GstURIHandler {
     }
 }
 
-extern "C" {
+unsafe extern "C" {
 
     //=========================================================================
     // GstBufferingMode
