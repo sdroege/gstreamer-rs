@@ -6,8 +6,8 @@ use glib::{subclass::prelude::*, translate::*};
 
 use super::prelude::*;
 use crate::{
-    ffi, prelude::*, Element, Event, PadTemplate, QueryRef, StateChange, StateChangeError,
-    StateChangeReturn, StateChangeSuccess,
+    Element, Event, PadTemplate, QueryRef, StateChange, StateChangeError, StateChangeReturn,
+    StateChangeSuccess, ffi, prelude::*,
 };
 
 #[derive(Debug, Clone)]
@@ -576,7 +576,7 @@ unsafe extern "C" fn element_post_message<T: ElementImpl>(
 
 #[cfg(test)]
 mod tests {
-    use std::sync::{atomic, Arc, Mutex, OnceLock};
+    use std::sync::{Arc, Mutex, OnceLock, atomic};
 
     use super::*;
     use crate::ElementFactory;
@@ -857,41 +857,45 @@ mod tests {
         init();
 
         let elem = crate::ElementFactory::make("testelement").build().unwrap();
-        assert!(elem
-            .property::<crate::Array>("array")
-            .iter()
-            .map(|val| val.get::<&str>().unwrap())
-            .eq(["default0", "default1"]));
+        assert!(
+            elem.property::<crate::Array>("array")
+                .iter()
+                .map(|val| val.get::<&str>().unwrap())
+                .eq(["default0", "default1"])
+        );
 
         let elem = crate::ElementFactory::make("testelement")
             .property_from_iter::<crate::Array, _>("array", ["value0", "value1"])
             .build()
             .unwrap();
-        assert!(elem
-            .property::<crate::Array>("array")
-            .iter()
-            .map(|val| val.get::<&str>().unwrap())
-            .eq(["value0", "value1"]));
+        assert!(
+            elem.property::<crate::Array>("array")
+                .iter()
+                .map(|val| val.get::<&str>().unwrap())
+                .eq(["value0", "value1"])
+        );
 
         let array = Vec::<String>::new();
         let elem = crate::ElementFactory::make("testelement")
             .property_if_not_empty::<crate::Array, _>("array", &array)
             .build()
             .unwrap();
-        assert!(elem
-            .property::<crate::Array>("array")
-            .iter()
-            .map(|val| val.get::<&str>().unwrap())
-            .eq(["default0", "default1"]));
+        assert!(
+            elem.property::<crate::Array>("array")
+                .iter()
+                .map(|val| val.get::<&str>().unwrap())
+                .eq(["default0", "default1"])
+        );
 
         let elem = crate::ElementFactory::make("testelement")
             .property_if_not_empty::<crate::Array, _>("array", ["value0", "value1"])
             .build()
             .unwrap();
-        assert!(elem
-            .property::<crate::Array>("array")
-            .iter()
-            .map(|val| val.get::<&str>().unwrap())
-            .eq(["value0", "value1"]));
+        assert!(
+            elem.property::<crate::Array>("array")
+                .iter()
+                .map(|val| val.get::<&str>().unwrap())
+                .eq(["value0", "value1"])
+        );
     }
 }

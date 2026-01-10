@@ -3,7 +3,7 @@
 use glib::{prelude::*, subclass::prelude::*, translate::*};
 
 use super::prelude::*;
-use crate::{ffi, Pad};
+use crate::{Pad, ffi};
 
 pub trait PadImpl: GstObjectImpl + ObjectSubclass<Type: IsA<Pad>> {
     fn linked(&self, peer: &Pad) {
@@ -85,7 +85,7 @@ mod tests {
     use std::sync::atomic;
 
     use super::*;
-    use crate::{prelude::*, PadDirection};
+    use crate::{PadDirection, prelude::*};
 
     pub mod imp {
         use super::*;

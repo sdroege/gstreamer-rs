@@ -4,11 +4,11 @@ use std::{boxed::Box as Box_, mem::transmute};
 
 use glib::{
     prelude::*,
-    signal::{connect_raw, SignalHandlerId},
+    signal::{SignalHandlerId, connect_raw},
     translate::*,
 };
 
-use crate::{ffi, RTSPAuth, RTSPToken};
+use crate::{RTSPAuth, RTSPToken, ffi};
 
 pub trait RTSPAuthExtManual: IsA<RTSPAuth> + 'static {
     #[doc(alias = "gst_rtsp_auth_set_default_token")]

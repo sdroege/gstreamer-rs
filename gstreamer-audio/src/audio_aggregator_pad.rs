@@ -1,7 +1,7 @@
 use glib::translate::*;
 use gst::prelude::*;
 
-use crate::{ffi, AudioAggregatorPad};
+use crate::{AudioAggregatorPad, ffi};
 
 pub trait AudioAggregatorPadExtManual: IsA<AudioAggregatorPad> + 'static {
     fn audio_info(&self) -> Option<crate::AudioInfo> {

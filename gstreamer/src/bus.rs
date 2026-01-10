@@ -10,16 +10,16 @@ use std::{
 
 use futures_channel::mpsc::{self, UnboundedReceiver};
 use futures_core::Stream;
-use futures_util::{stream::FusedStream, StreamExt};
+use futures_util::{StreamExt, stream::FusedStream};
 use glib::{
+    ControlFlow,
     ffi::{gboolean, gpointer},
     prelude::*,
     source::Priority,
     translate::*,
-    ControlFlow,
 };
 
-use crate::{ffi, Bus, BusSyncReply, Message, MessageType};
+use crate::{Bus, BusSyncReply, Message, MessageType, ffi};
 
 unsafe extern "C" fn trampoline_watch<F: FnMut(&Bus, &Message) -> ControlFlow + Send + 'static>(
     bus: *mut ffi::GstBus,

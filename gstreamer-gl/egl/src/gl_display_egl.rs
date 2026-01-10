@@ -10,7 +10,7 @@ use glib::{ffi::gpointer, translate::*};
 use gst_gl::GLDisplayType;
 use libc::uintptr_t;
 
-use crate::{ffi, GLDisplayEGL};
+use crate::{GLDisplayEGL, ffi};
 
 impl GLDisplayEGL {
     #[doc(alias = "gst_gl_display_egl_new_with_egl_display")]

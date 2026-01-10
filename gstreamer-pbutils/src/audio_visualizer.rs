@@ -2,7 +2,7 @@
 
 use gst::prelude::*;
 
-use crate::{ffi, subclass::AudioVisualizerSetupToken, AudioVisualizer};
+use crate::{AudioVisualizer, ffi, subclass::AudioVisualizerSetupToken};
 
 pub trait AudioVisualizerExtManual: IsA<AudioVisualizer> + 'static {
     // rustdoc-stripper-ignore-next

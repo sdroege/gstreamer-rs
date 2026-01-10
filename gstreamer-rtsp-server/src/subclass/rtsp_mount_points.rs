@@ -3,7 +3,7 @@
 use glib::{prelude::*, subclass::prelude::*, translate::*};
 use gst_rtsp::ffi::GstRTSPUrl;
 
-use crate::{ffi, RTSPMountPoints};
+use crate::{RTSPMountPoints, ffi};
 
 pub trait RTSPMountPointsImpl:
     ObjectImpl + ObjectSubclass<Type: IsA<RTSPMountPoints>> + Send + Sync

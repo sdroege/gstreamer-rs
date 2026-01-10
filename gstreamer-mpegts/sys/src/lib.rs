@@ -15,18 +15,18 @@
 use glib_sys as glib;
 use gstreamer_sys as gst;
 
+#[allow(unused_imports)]
+use libc::{FILE, intptr_t, off_t, size_t, ssize_t, time_t, uintptr_t};
 #[cfg(unix)]
 #[allow(unused_imports)]
 use libc::{dev_t, gid_t, pid_t, socklen_t, uid_t};
-#[allow(unused_imports)]
-use libc::{intptr_t, off_t, size_t, ssize_t, time_t, uintptr_t, FILE};
 #[allow(unused_imports)]
 use std::ffi::{
     c_char, c_double, c_float, c_int, c_long, c_short, c_uchar, c_uint, c_ulong, c_ushort, c_void,
 };
 
 #[allow(unused_imports)]
-use glib::{gboolean, gconstpointer, gpointer, GType};
+use glib::{GType, gboolean, gconstpointer, gpointer};
 
 // Enums
 pub type GstMpegtsATSCDescriptorType = c_int;
@@ -2914,7 +2914,7 @@ unsafe extern "C" {
         section: *mut GstMpegtsSection,
     ) -> *mut gst::GstMessage;
     pub fn gst_message_parse_mpegts_section(message: *mut gst::GstMessage)
-        -> *mut GstMpegtsSection;
+    -> *mut GstMpegtsSection;
     pub fn gst_mpegts_parse_descriptors(buffer: *mut u8, buf_len: size_t) -> *mut glib::GPtrArray;
     pub fn gst_mpegts_pat_new() -> *mut glib::GPtrArray;
     #[cfg(feature = "v1_24")]

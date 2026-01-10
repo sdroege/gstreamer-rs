@@ -9,8 +9,8 @@
 use glib::{ffi::gpointer, translate::*};
 use libc::uintptr_t;
 
-use crate::ffi;
 use crate::VulkanDisplayWayland;
+use crate::ffi;
 
 impl VulkanDisplayWayland {
     pub unsafe fn with_display(

@@ -1,6 +1,6 @@
 use std::ops::{Deref, DerefMut};
 
-use gst::{prelude::*, IdStr};
+use gst::{IdStr, prelude::*};
 
 // rustdoc-stripper-ignore-next
 /// Wrapper around `gst::Structure` for `element-properties`
@@ -251,11 +251,7 @@ impl ElementPropertiesMapBuilder {
     }
 
     pub fn item_if(self, item: ElementPropertiesMapItem, predicate: bool) -> Self {
-        if predicate {
-            self.item(item)
-        } else {
-            self
-        }
+        if predicate { self.item(item) } else { self }
     }
 
     pub fn item_if_some(self, item: Option<ElementPropertiesMapItem>) -> Self {

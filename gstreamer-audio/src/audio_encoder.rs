@@ -4,7 +4,7 @@ use std::{mem, ptr};
 
 use glib::{prelude::*, translate::*};
 
-use crate::{ffi, AudioEncoder};
+use crate::{AudioEncoder, ffi};
 
 pub trait AudioEncoderExtManual: IsA<AudioEncoder> + 'static {
     #[doc(alias = "gst_audio_encoder_negotiate")]

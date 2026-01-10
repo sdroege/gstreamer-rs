@@ -1,4 +1,4 @@
-use crate::{ffi, RTSPAuthCredential, RTSPAuthMethod, RTSPAuthParam};
+use crate::{RTSPAuthCredential, RTSPAuthMethod, RTSPAuthParam, ffi};
 use glib::translate::*;
 
 impl RTSPAuthCredential {

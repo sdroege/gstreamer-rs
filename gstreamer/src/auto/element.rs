@@ -5,13 +5,13 @@
 #![allow(deprecated)]
 
 use crate::{
-    ffi, Bus, Caps, Clock, ClockTime, Context, ElementFactory, Message, Object, Pad, PadTemplate,
-    State, StateChange, StateChangeError, StateChangeReturn, StateChangeSuccess, URIType,
+    Bus, Caps, Clock, ClockTime, Context, ElementFactory, Message, Object, Pad, PadTemplate, State,
+    StateChange, StateChangeError, StateChangeReturn, StateChangeSuccess, URIType, ffi,
 };
 use glib::{
     object::ObjectType as _,
     prelude::*,
-    signal::{connect_raw, SignalHandlerId},
+    signal::{SignalHandlerId, connect_raw},
     translate::*,
 };
 use std::boxed::Box as Box_;

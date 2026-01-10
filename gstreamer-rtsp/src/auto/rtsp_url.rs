@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{ffi, RTSPResult};
+use crate::{RTSPResult, ffi};
 use glib::translate::*;
 
 glib::wrapper! {

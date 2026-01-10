@@ -76,13 +76,13 @@ pub use self::enums::GLUploadReturn;
 pub use self::enums::GLWindowError;
 
 mod flags;
+pub use self::flags::GLAPI;
 #[cfg(feature = "v1_20")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub use self::flags::GLConfigSurfaceType;
 pub use self::flags::GLDisplayType;
 pub use self::flags::GLPlatform;
 pub use self::flags::GLSLProfile;
-pub use self::flags::GLAPI;
 
 pub(crate) mod functions;
 
@@ -95,8 +95,8 @@ pub use self::constants::CAPS_FEATURE_MEMORY_GL_BUFFER;
 pub use self::constants::CAPS_FEATURE_MEMORY_GL_MEMORY;
 pub use self::constants::GL_API_GLES1_NAME;
 pub use self::constants::GL_API_GLES2_NAME;
-pub use self::constants::GL_API_OPENGL3_NAME;
 pub use self::constants::GL_API_OPENGL_NAME;
+pub use self::constants::GL_API_OPENGL3_NAME;
 pub use self::constants::GL_BASE_MEMORY_ALLOCATOR_NAME;
 pub use self::constants::GL_BUFFER_ALLOCATOR_NAME;
 pub use self::constants::GL_COLOR_CONVERT_VIDEO_CAPS;

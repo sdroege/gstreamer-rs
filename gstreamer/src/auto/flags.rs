@@ -4,7 +4,7 @@
 // DO NOT EDIT
 
 use crate::ffi;
-use glib::{bitflags::bitflags, prelude::*, translate::*, GStr};
+use glib::{GStr, bitflags::bitflags, prelude::*, translate::*};
 
 bitflags! {
     #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]

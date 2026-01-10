@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{ffi, VulkanDevice, VulkanFence};
+use crate::{VulkanDevice, VulkanFence, ffi};
 use glib::translate::*;
 use std::boxed::Box as Box_;
 

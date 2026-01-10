@@ -1,6 +1,6 @@
 use glib::{prelude::*, subclass::prelude::*};
 
-use crate::{subclass::fd_allocator::FdAllocatorImpl, DmaBufAllocator};
+use crate::{DmaBufAllocator, subclass::fd_allocator::FdAllocatorImpl};
 
 pub trait DmaBufAllocatorImpl:
     FdAllocatorImpl + ObjectSubclass<Type: IsA<DmaBufAllocator>>

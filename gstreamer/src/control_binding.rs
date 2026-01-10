@@ -2,7 +2,7 @@
 
 use glib::{prelude::*, translate::*};
 
-use crate::{ffi, ClockTime, ControlBinding};
+use crate::{ClockTime, ControlBinding, ffi};
 
 pub trait ControlBindingExtManual: IsA<ControlBinding> + 'static {
     fn property_name(&self) -> &glib::GStr {

@@ -5,7 +5,7 @@
 #![allow(deprecated)]
 
 use crate::{
-    ffi, Extractable, MetaContainer, Operation, TimelineElement, TrackElement, Transition,
+    Extractable, MetaContainer, Operation, TimelineElement, TrackElement, Transition, ffi,
 };
 use glib::translate::*;
 

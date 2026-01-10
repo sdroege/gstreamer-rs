@@ -5,12 +5,11 @@ use std::{fmt, marker::PhantomData, mem};
 use glib::{prelude::*, translate::*};
 
 use crate::{
-    ffi,
+    Format, GenericFormattedValue, SeekFlags, SeekType, ffi,
     format::{
         CompatibleFormattedValue, FormattedValue, FormattedValueFullRange, FormattedValueIntrinsic,
         FormattedValueNoneBuilder, NoneSignedBuilder, UnsignedIntoSigned,
     },
-    Format, GenericFormattedValue, SeekFlags, SeekType,
 };
 
 pub type Segment = FormattedSegment<GenericFormattedValue>;

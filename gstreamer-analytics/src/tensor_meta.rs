@@ -3,8 +3,8 @@
 use glib::translate::*;
 use gst::prelude::*;
 
-use crate::ffi;
 use crate::Tensor;
+use crate::ffi;
 
 #[repr(transparent)]
 #[doc(alias = "GstTensorMeta")]

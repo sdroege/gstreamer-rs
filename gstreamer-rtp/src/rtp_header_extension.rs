@@ -1,6 +1,6 @@
 use glib::{object::IsA, translate::*};
 
-use crate::{ffi, RTPHeaderExtension, RTPHeaderExtensionFlags};
+use crate::{RTPHeaderExtension, RTPHeaderExtensionFlags, ffi};
 
 pub trait RTPHeaderExtensionExtManual: IsA<RTPHeaderExtension> + 'static {
     #[doc(alias = "gst_rtp_header_extension_read")]

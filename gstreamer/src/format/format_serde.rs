@@ -62,8 +62,8 @@ impl<'de> Deserialize<'de> for Undefined {
 #[cfg(test)]
 mod tests {
     use crate::{
-        format::{prelude::*, Default, Other, Undefined},
         ClockTime, Format, GenericFormattedValue,
+        format::{Default, Other, Undefined, prelude::*},
     };
 
     #[test]

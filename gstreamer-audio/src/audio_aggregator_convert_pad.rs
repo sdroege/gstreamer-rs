@@ -2,11 +2,11 @@ use std::mem::transmute;
 
 use glib::{
     prelude::*,
-    signal::{connect_raw, SignalHandlerId},
+    signal::{SignalHandlerId, connect_raw},
     translate::*,
 };
 
-use crate::{ffi, AudioAggregatorConvertPad};
+use crate::{AudioAggregatorConvertPad, ffi};
 
 pub trait AudioAggregatorConvertPadExtManual: IsA<AudioAggregatorConvertPad> + 'static {
     #[doc(alias = "converter-config")]

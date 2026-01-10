@@ -5,9 +5,9 @@ use std::ffi::CStr;
 use glib::{prelude::*, translate::*};
 
 use crate::{
-    ffi, CapsRef, Element, ElementFactory, Rank, StaticPadTemplate, ELEMENT_METADATA_AUTHOR,
-    ELEMENT_METADATA_DESCRIPTION, ELEMENT_METADATA_DOC_URI, ELEMENT_METADATA_ICON_NAME,
-    ELEMENT_METADATA_KLASS, ELEMENT_METADATA_LONGNAME,
+    CapsRef, ELEMENT_METADATA_AUTHOR, ELEMENT_METADATA_DESCRIPTION, ELEMENT_METADATA_DOC_URI,
+    ELEMENT_METADATA_ICON_NAME, ELEMENT_METADATA_KLASS, ELEMENT_METADATA_LONGNAME, Element,
+    ElementFactory, Rank, StaticPadTemplate, ffi,
 };
 
 impl ElementFactory {

@@ -12,10 +12,9 @@ use glib::{object::IsA, translate::*};
 use smallvec::SmallVec;
 
 use crate::{
-    ffi,
+    QueryType, ffi,
     format::{CompatibleFormattedValue, FormattedValue, GenericFormattedValue},
     structure::*,
-    QueryType,
 };
 
 mini_object_wrapper!(Query, QueryRef, ffi::GstQuery, || {

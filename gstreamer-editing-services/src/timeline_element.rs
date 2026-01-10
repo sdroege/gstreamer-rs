@@ -1,7 +1,7 @@
 use glib::translate::*;
 
 use crate::prelude::*;
-use crate::{ffi, TimelineElement};
+use crate::{TimelineElement, ffi};
 
 pub trait TimelineElementExtManual: IsA<TimelineElement> + 'static {
     #[doc(alias = "ges_timeline_element_set_child_property")]

@@ -3,11 +3,11 @@
 use std::{ffi::CStr, fmt, mem, ptr};
 
 use glib::translate::{
-    from_glib, from_glib_full, from_glib_none, FromGlibPtrContainer, IntoGlib, IntoGlibPtr,
-    ToGlibPtr,
+    FromGlibPtrContainer, IntoGlib, IntoGlibPtr, ToGlibPtr, from_glib, from_glib_full,
+    from_glib_none,
 };
 
-use crate::{ffi, TagList, TagMergeMode, TocEntryType, TocLoopType, TocScope};
+use crate::{TagList, TagMergeMode, TocEntryType, TocLoopType, TocScope, ffi};
 
 mini_object_wrapper!(Toc, TocRef, ffi::GstToc, || { ffi::gst_toc_get_type() });
 

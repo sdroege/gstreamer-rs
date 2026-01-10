@@ -467,11 +467,7 @@ impl<'a> VideoInfoBuilder<'a> {
     }
 
     pub fn flags_if(self, flags: crate::VideoFlags, predicate: bool) -> Self {
-        if predicate {
-            self.flags(flags)
-        } else {
-            self
-        }
+        if predicate { self.flags(flags) } else { self }
     }
 
     pub fn flags_if_some(self, flags: Option<crate::VideoFlags>) -> Self {
@@ -490,11 +486,7 @@ impl<'a> VideoInfoBuilder<'a> {
     }
 
     pub fn size_if(self, size: usize, predicate: bool) -> Self {
-        if predicate {
-            self.size(size)
-        } else {
-            self
-        }
+        if predicate { self.size(size) } else { self }
     }
 
     pub fn size_if_some(self, size: Option<usize>) -> Self {
@@ -513,11 +505,7 @@ impl<'a> VideoInfoBuilder<'a> {
     }
 
     pub fn views_if(self, views: u32, predicate: bool) -> Self {
-        if predicate {
-            self.views(views)
-        } else {
-            self
-        }
+        if predicate { self.views(views) } else { self }
     }
 
     pub fn views_if_some(self, views: Option<u32>) -> Self {
@@ -589,11 +577,7 @@ impl<'a> VideoInfoBuilder<'a> {
     }
 
     pub fn par_if<T: Into<gst::Fraction>>(self, par: T, predicate: bool) -> Self {
-        if predicate {
-            self.par(par)
-        } else {
-            self
-        }
+        if predicate { self.par(par) } else { self }
     }
 
     pub fn par_if_some<T: Into<gst::Fraction>>(self, par: Option<T>) -> Self {
@@ -612,11 +596,7 @@ impl<'a> VideoInfoBuilder<'a> {
     }
 
     pub fn fps_if<T: Into<gst::Fraction>>(self, fps: T, predicate: bool) -> Self {
-        if predicate {
-            self.fps(fps)
-        } else {
-            self
-        }
+        if predicate { self.fps(fps) } else { self }
     }
 
     pub fn fps_if_some<T: Into<gst::Fraction>>(self, fps: Option<T>) -> Self {
@@ -635,11 +615,7 @@ impl<'a> VideoInfoBuilder<'a> {
     }
 
     pub fn offset_if(self, offset: &'a [usize], predicate: bool) -> VideoInfoBuilder<'a> {
-        if predicate {
-            self.offset(offset)
-        } else {
-            self
-        }
+        if predicate { self.offset(offset) } else { self }
     }
 
     pub fn offset_if_some(self, offset: Option<&'a [usize]>) -> VideoInfoBuilder<'a> {
@@ -658,11 +634,7 @@ impl<'a> VideoInfoBuilder<'a> {
     }
 
     pub fn stride_if(self, stride: &'a [i32], predicate: bool) -> VideoInfoBuilder<'a> {
-        if predicate {
-            self.stride(stride)
-        } else {
-            self
-        }
+        if predicate { self.stride(stride) } else { self }
     }
 
     pub fn stride_if_some(self, stride: Option<&'a [i32]>) -> VideoInfoBuilder<'a> {

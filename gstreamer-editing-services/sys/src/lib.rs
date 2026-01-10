@@ -18,18 +18,18 @@ use gobject_sys as gobject;
 use gstreamer_pbutils_sys as gst_pbutils;
 use gstreamer_sys as gst;
 
+#[allow(unused_imports)]
+use libc::{FILE, intptr_t, off_t, size_t, ssize_t, time_t, uintptr_t};
 #[cfg(unix)]
 #[allow(unused_imports)]
 use libc::{dev_t, gid_t, pid_t, socklen_t, uid_t};
-#[allow(unused_imports)]
-use libc::{intptr_t, off_t, size_t, ssize_t, time_t, uintptr_t, FILE};
 #[allow(unused_imports)]
 use std::ffi::{
     c_char, c_double, c_float, c_int, c_long, c_short, c_uchar, c_uint, c_ulong, c_ushort, c_void,
 };
 
 #[allow(unused_imports)]
-use glib::{gboolean, gconstpointer, gpointer, GType};
+use glib::{GType, gboolean, gconstpointer, gpointer};
 
 // Aliases
 pub type GESFrameNumber = i64;
@@ -3954,7 +3954,7 @@ unsafe extern "C" {
     pub fn ges_track_get_restriction_caps(track: *mut GESTrack) -> *mut gst::GstCaps;
     pub fn ges_track_get_timeline(track: *mut GESTrack) -> *const GESTimeline;
     pub fn ges_track_remove_element(track: *mut GESTrack, object: *mut GESTrackElement)
-        -> gboolean;
+    -> gboolean;
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_track_remove_element_full(
@@ -4050,7 +4050,7 @@ unsafe extern "C" {
         property_name: *const c_char,
     ) -> gboolean;
     pub fn ges_track_element_set_active(object: *mut GESTrackElement, active: gboolean)
-        -> gboolean;
+    -> gboolean;
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_track_element_set_auto_clamp_control_sources(
@@ -4099,7 +4099,7 @@ unsafe extern "C" {
         framerate_d: *mut c_int,
     ) -> gboolean;
     pub fn ges_track_element_asset_get_track_type(asset: *mut GESTrackElementAsset)
-        -> GESTrackType;
+    -> GESTrackType;
     pub fn ges_track_element_asset_set_track_type(
         asset: *mut GESTrackElementAsset,
         type_: GESTrackType,
@@ -4115,7 +4115,7 @@ unsafe extern "C" {
     //=========================================================================
     pub fn ges_transition_clip_get_type() -> GType;
     pub fn ges_transition_clip_new(vtype: GESVideoStandardTransitionType)
-        -> *mut GESTransitionClip;
+    -> *mut GESTransitionClip;
     pub fn ges_transition_clip_new_for_nick(nick: *mut c_char) -> *mut GESTransitionClip;
 
     //=========================================================================

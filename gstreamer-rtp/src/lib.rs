@@ -32,7 +32,7 @@ pub mod subclass;
 
 pub mod rtp_buffer;
 pub use crate::rtp_buffer::{
-    calc_header_len, calc_packet_len, calc_payload_len, compare_seqnum, ext_timestamp, RTPBuffer,
+    RTPBuffer, calc_header_len, calc_packet_len, calc_payload_len, compare_seqnum, ext_timestamp,
 };
 #[cfg(feature = "v1_20")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]

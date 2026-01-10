@@ -20,18 +20,18 @@ use gstreamer_rtsp_sys as gst_rtsp;
 use gstreamer_sdp_sys as gst_sdp;
 use gstreamer_sys as gst;
 
+#[allow(unused_imports)]
+use libc::{FILE, intptr_t, off_t, size_t, ssize_t, time_t, uintptr_t};
 #[cfg(unix)]
 #[allow(unused_imports)]
 use libc::{dev_t, gid_t, pid_t, socklen_t, uid_t};
-#[allow(unused_imports)]
-use libc::{intptr_t, off_t, size_t, ssize_t, time_t, uintptr_t, FILE};
 #[allow(unused_imports)]
 use std::ffi::{
     c_char, c_double, c_float, c_int, c_long, c_short, c_uchar, c_uint, c_ulong, c_ushort, c_void,
 };
 
 #[allow(unused_imports)]
-use glib::{gboolean, gconstpointer, gpointer, GType};
+use glib::{GType, gboolean, gconstpointer, gpointer};
 
 // Enums
 pub type GstRTSPAddressPoolResult = c_int;
@@ -1696,7 +1696,7 @@ unsafe extern "C" {
     pub fn gst_rtsp_media_lock(media: *mut GstRTSPMedia);
     pub fn gst_rtsp_media_n_streams(media: *mut GstRTSPMedia) -> c_uint;
     pub fn gst_rtsp_media_prepare(media: *mut GstRTSPMedia, thread: *mut GstRTSPThread)
-        -> gboolean;
+    -> gboolean;
     pub fn gst_rtsp_media_seek(
         media: *mut GstRTSPMedia,
         range: *mut gst_rtsp::GstRTSPTimeRange,
@@ -2339,7 +2339,7 @@ unsafe extern "C" {
     pub fn gst_rtsp_stream_get_multicast_iface(stream: *mut GstRTSPStream) -> *mut c_char;
     pub fn gst_rtsp_stream_get_profiles(stream: *mut GstRTSPStream) -> gst_rtsp::GstRTSPProfile;
     pub fn gst_rtsp_stream_get_protocols(stream: *mut GstRTSPStream)
-        -> gst_rtsp::GstRTSPLowerTrans;
+    -> gst_rtsp::GstRTSPLowerTrans;
     pub fn gst_rtsp_stream_get_pt(stream: *mut GstRTSPStream) -> c_uint;
     pub fn gst_rtsp_stream_get_publish_clock_mode(
         stream: *mut GstRTSPStream,
@@ -2356,7 +2356,7 @@ unsafe extern "C" {
     ) -> gboolean;
     pub fn gst_rtsp_stream_get_retransmission_pt(stream: *mut GstRTSPStream) -> c_uint;
     pub fn gst_rtsp_stream_get_retransmission_time(stream: *mut GstRTSPStream)
-        -> gst::GstClockTime;
+    -> gst::GstClockTime;
     pub fn gst_rtsp_stream_get_rtcp_multicast_socket(
         stream: *mut GstRTSPStream,
         family: gio::GSocketFamily,

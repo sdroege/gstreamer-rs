@@ -4,7 +4,7 @@ use std::ptr;
 
 use glib::translate::*;
 
-use crate::{ffi, TestClock};
+use crate::{TestClock, ffi};
 
 impl TestClock {
     #[doc(alias = "gst_test_clock_has_id")]
@@ -25,11 +25,7 @@ impl TestClock {
                 self.to_glib_none().0,
                 &mut id,
             ));
-            if ret {
-                from_glib_full(id)
-            } else {
-                None
-            }
+            if ret { from_glib_full(id) } else { None }
         }
     }
 

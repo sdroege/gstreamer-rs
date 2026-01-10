@@ -5,7 +5,7 @@ use serde::{
     ser::{Serialize, SerializeStruct, Serializer},
 };
 
-use crate::{toc::*, TagList, TocEntryType, TocLoopType, TocScope};
+use crate::{TagList, TocEntryType, TocLoopType, TocScope, toc::*};
 
 impl Serialize for TocRef {
     fn serialize<S: Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
@@ -115,7 +115,7 @@ impl<'de> Deserialize<'de> for TocEntry {
 
 #[cfg(test)]
 mod tests {
-    use crate::{tags::Title, toc::*, TagList, TagMergeMode, TocEntryType, TocScope};
+    use crate::{TagList, TagMergeMode, TocEntryType, TocScope, tags::Title, toc::*};
 
     #[test]
     fn test_serialize() {

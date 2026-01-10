@@ -4,7 +4,7 @@ use glib::translate::*;
 use gst::prelude::*;
 use std::marker::PhantomData;
 
-use crate::{ffi, RelTypes};
+use crate::{RelTypes, ffi};
 
 #[repr(transparent)]
 #[doc(alias = "GstAnalyticsRelationMeta")]
@@ -341,7 +341,7 @@ impl<'a, T: AnalyticsMtd> UnsafeFrom<&AnalyticsMtdRef<'a, T>> for ffi::GstAnalyt
 pub trait AnalyticsMetaRefMutExt<'a>: sealed::Sealed {
     #[doc(alias = "gst_analytics_relation_meta_get_mtd")]
     fn mtd_mut<T: AnalyticsMtd>(&'a mut self, an_meta_id: u32)
-        -> Option<AnalyticsMtdRefMut<'a, T>>;
+    -> Option<AnalyticsMtdRefMut<'a, T>>;
 
     fn iter_mut<T: AnalyticsMtd>(&'a mut self) -> AnalyticsMtdIterMut<'a, T>;
     fn iter_direct_related_mut<T: AnalyticsMtd>(

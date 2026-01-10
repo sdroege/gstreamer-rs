@@ -3,8 +3,8 @@
 use glib::translate::*;
 
 use crate::{
-    ffi, prelude::*, FlowError, FlowSuccess, GhostPad, LoggableError, Pad, PadBuilder, PadFlags,
-    PadGetRangeSuccess, PadMode, StaticPadTemplate,
+    FlowError, FlowSuccess, GhostPad, LoggableError, Pad, PadBuilder, PadFlags, PadGetRangeSuccess,
+    PadMode, StaticPadTemplate, ffi, prelude::*,
 };
 
 impl GhostPad {

@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{ffi, VulkanCommandBuffer, VulkanQueue};
+use crate::{VulkanCommandBuffer, VulkanQueue, ffi};
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {

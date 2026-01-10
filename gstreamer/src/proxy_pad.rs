@@ -4,7 +4,7 @@ use std::ptr;
 
 use glib::{prelude::*, translate::*};
 
-use crate::{ffi, Buffer, BufferList, FlowError, FlowSuccess, Pad, ProxyPad};
+use crate::{Buffer, BufferList, FlowError, FlowSuccess, Pad, ProxyPad, ffi};
 
 impl ProxyPad {
     #[doc(alias = "gst_proxy_pad_chain_default")]

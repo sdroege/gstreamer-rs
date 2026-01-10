@@ -4,7 +4,7 @@ use std::ptr;
 
 use glib::{ffi::gpointer, prelude::*, translate::*};
 
-use crate::{ffi, TaskPool};
+use crate::{TaskPool, ffi};
 
 unsafe extern "C" fn task_pool_trampoline<P: FnOnce() + Send + 'static>(data: gpointer) {
     unsafe {
@@ -121,7 +121,7 @@ impl Drop for TaskPoolTaskHandle {
 
 #[cfg(test)]
 mod tests {
-    use std::sync::mpsc::{channel, RecvError};
+    use std::sync::mpsc::{RecvError, channel};
 
     use super::*;
     use crate::prelude::*;

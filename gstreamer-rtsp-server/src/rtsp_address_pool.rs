@@ -4,7 +4,7 @@ use std::ptr;
 
 use glib::{prelude::*, translate::*};
 
-use crate::{ffi, RTSPAddress, RTSPAddressPool, RTSPAddressPoolResult};
+use crate::{RTSPAddress, RTSPAddressPool, RTSPAddressPoolResult, ffi};
 
 pub trait RTSPAddressPoolExtManual: IsA<RTSPAddressPool> + 'static {
     #[doc(alias = "gst_rtsp_address_pool_reserve_address")]

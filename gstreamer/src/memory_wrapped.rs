@@ -4,7 +4,7 @@ use glib::{prelude::*, translate::*};
 
 use std::{alloc, any::TypeId, mem, ptr};
 
-use crate::{ffi, Memory};
+use crate::{Memory, ffi};
 
 // rustdoc-stripper-ignore-next
 /// Error type for `try_into_inner` failures on Memory and Buffer.

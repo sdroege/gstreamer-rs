@@ -5,7 +5,7 @@ use std::{fmt, marker::PhantomData, mem, ops, ptr, str};
 use glib::translate::*;
 use gst::prelude::*;
 
-use crate::{ffi, VideoFormat, VideoInfo};
+use crate::{VideoFormat, VideoInfo, ffi};
 
 #[doc(alias = "gst_video_dma_drm_fourcc_from_format")]
 pub fn dma_drm_fourcc_from_format(v: VideoFormat) -> Result<u32, glib::BoolError> {

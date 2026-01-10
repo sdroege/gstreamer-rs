@@ -17,18 +17,18 @@ use glib_sys as glib;
 use gobject_sys as gobject;
 use gstreamer_sys as gst;
 
+#[allow(unused_imports)]
+use libc::{FILE, intptr_t, off_t, size_t, ssize_t, time_t, uintptr_t};
 #[cfg(unix)]
 #[allow(unused_imports)]
 use libc::{dev_t, gid_t, pid_t, socklen_t, uid_t};
-#[allow(unused_imports)]
-use libc::{intptr_t, off_t, size_t, ssize_t, time_t, uintptr_t, FILE};
 #[allow(unused_imports)]
 use std::ffi::{
     c_char, c_double, c_float, c_int, c_long, c_short, c_uchar, c_uint, c_ulong, c_ushort, c_void,
 };
 
 #[allow(unused_imports)]
-use glib::{gboolean, gconstpointer, gpointer, GType};
+use glib::{GType, gboolean, gconstpointer, gpointer};
 
 // Aliases
 pub type GstValidateIssueId = glib::GQuark;
@@ -993,7 +993,7 @@ unsafe extern "C" {
     //=========================================================================
     pub fn gst_validate_report_level_get_type() -> GType;
     pub fn gst_validate_report_level_from_name(level_name: *const c_char)
-        -> GstValidateReportLevel;
+    -> GstValidateReportLevel;
     pub fn gst_validate_report_level_get_name(level: GstValidateReportLevel) -> *const c_char;
 
     //=========================================================================
@@ -1346,7 +1346,7 @@ unsafe extern "C" {
         monitor: *mut GstValidateMonitor,
     ) -> *mut gst::GstPipeline;
     pub fn gst_validate_monitor_get_target(monitor: *mut GstValidateMonitor)
-        -> *mut gst::GstObject;
+    -> *mut gst::GstObject;
     pub fn gst_validate_monitor_set_media_descriptor(
         monitor: *mut GstValidateMonitor,
         media_descriptor: *mut GstValidateMediaDescriptor,

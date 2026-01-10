@@ -4,7 +4,7 @@ use std::marker::PhantomData;
 
 use glib::translate::*;
 
-use crate::{ffi, ClockTime};
+use crate::{ClockTime, ffi};
 
 #[derive(Debug, Clone, Copy)]
 #[doc(alias = "GstTimedValue")]

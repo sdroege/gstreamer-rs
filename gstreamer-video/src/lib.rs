@@ -38,14 +38,14 @@ pub use crate::caps::VideoCapsBuilder;
 mod caps_features;
 #[cfg(feature = "v1_16")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
-pub use crate::caps_features::{CAPS_FEATURES_FORMAT_INTERLACED, CAPS_FEATURE_FORMAT_INTERLACED};
+pub use crate::caps_features::{CAPS_FEATURE_FORMAT_INTERLACED, CAPS_FEATURES_FORMAT_INTERLACED};
 pub use crate::caps_features::{
-    CAPS_FEATURES_META_GST_VIDEO_AFFINE_TRANSFORMATION_META,
-    CAPS_FEATURES_META_GST_VIDEO_GL_TEXTURE_UPLOAD_META, CAPS_FEATURES_META_GST_VIDEO_META,
-    CAPS_FEATURES_META_GST_VIDEO_OVERLAY_COMPOSITION,
     CAPS_FEATURE_META_GST_VIDEO_AFFINE_TRANSFORMATION_META,
     CAPS_FEATURE_META_GST_VIDEO_GL_TEXTURE_UPLOAD_META, CAPS_FEATURE_META_GST_VIDEO_META,
     CAPS_FEATURE_META_GST_VIDEO_OVERLAY_COMPOSITION,
+    CAPS_FEATURES_META_GST_VIDEO_AFFINE_TRANSFORMATION_META,
+    CAPS_FEATURES_META_GST_VIDEO_GL_TEXTURE_UPLOAD_META, CAPS_FEATURES_META_GST_VIDEO_META,
+    CAPS_FEATURES_META_GST_VIDEO_OVERLAY_COMPOSITION,
 };
 mod video_color_matrix;
 mod video_format;
@@ -100,9 +100,9 @@ mod video_time_code_interval;
 pub use crate::video_time_code_interval::VideoTimeCodeInterval;
 mod video_buffer_pool;
 pub use crate::video_buffer_pool::{
-    VideoAlignment, VideoBufferPoolConfig, BUFFER_POOL_OPTION_VIDEO_AFFINE_TRANSFORMATION_META,
-    BUFFER_POOL_OPTION_VIDEO_ALIGNMENT, BUFFER_POOL_OPTION_VIDEO_GL_TEXTURE_UPLOAD_META,
-    BUFFER_POOL_OPTION_VIDEO_META,
+    BUFFER_POOL_OPTION_VIDEO_AFFINE_TRANSFORMATION_META, BUFFER_POOL_OPTION_VIDEO_ALIGNMENT,
+    BUFFER_POOL_OPTION_VIDEO_GL_TEXTURE_UPLOAD_META, BUFFER_POOL_OPTION_VIDEO_META, VideoAlignment,
+    VideoBufferPoolConfig,
 };
 pub mod video_converter;
 pub use crate::video_converter::{VideoConverter, VideoConverterConfig};
@@ -165,6 +165,7 @@ pub mod prelude {
     #[doc(hidden)]
     pub use gst_base::prelude::*;
 
+    pub use crate::VideoFrameExt;
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub use crate::video_aggregator::VideoAggregatorExtManual;
@@ -174,7 +175,6 @@ pub mod prelude {
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub use crate::video_aggregator_pad::VideoAggregatorPadExtManual;
-    pub use crate::VideoFrameExt;
     pub use crate::{
         auto::traits::*, video_buffer_pool::VideoBufferPoolConfig,
         video_decoder::VideoDecoderExtManual, video_encoder::VideoEncoderExtManual,

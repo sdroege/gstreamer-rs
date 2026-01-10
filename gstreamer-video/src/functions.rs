@@ -3,7 +3,7 @@
 use std::{mem, ptr};
 
 use crate::ffi;
-use glib::translate::{from_glib, from_glib_full, IntoGlib, ToGlibPtr};
+use glib::translate::{IntoGlib, ToGlibPtr, from_glib, from_glib_full};
 
 #[doc(alias = "gst_video_convert_sample")]
 pub fn convert_sample(
@@ -301,7 +301,10 @@ mod tests {
 
         let caps =
             video_make_raw_caps(&[crate::VideoFormat::Nv12, crate::VideoFormat::Nv16]).build();
-        assert_eq!(caps.to_string(), "video/x-raw, format=(string){ NV12, NV16 }, width=(int)[ 1, 2147483647 ], height=(int)[ 1, 2147483647 ], framerate=(fraction)[ 0/1, 2147483647/1 ]");
+        assert_eq!(
+            caps.to_string(),
+            "video/x-raw, format=(string){ NV12, NV16 }, width=(int)[ 1, 2147483647 ], height=(int)[ 1, 2147483647 ], framerate=(fraction)[ 0/1, 2147483647/1 ]"
+        );
 
         #[cfg(feature = "v1_18")]
         {
@@ -323,7 +326,10 @@ mod tests {
             .height(600)
             .framerate((30, 1).into())
             .build();
-        assert_eq!(caps.to_string(), "video/x-raw, format=(string){ NV12, NV16 }, width=(int)800, height=(int)600, framerate=(fraction)30/1");
+        assert_eq!(
+            caps.to_string(),
+            "video/x-raw, format=(string){ NV12, NV16 }, width=(int)800, height=(int)600, framerate=(fraction)30/1"
+        );
     }
 
     #[test]

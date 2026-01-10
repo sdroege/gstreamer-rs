@@ -3,13 +3,13 @@
 use std::{boxed::Box as Box_, mem::transmute, path};
 
 use glib::{
-    prelude::*,
-    signal::{connect_raw, SignalHandlerId},
-    translate::*,
     GString,
+    prelude::*,
+    signal::{SignalHandlerId, connect_raw},
+    translate::*,
 };
 
-use crate::{ffi, prelude::*, Bin, BinFlags, Element, LoggableError};
+use crate::{Bin, BinFlags, Element, LoggableError, ffi, prelude::*};
 
 impl Bin {
     // rustdoc-stripper-ignore-next

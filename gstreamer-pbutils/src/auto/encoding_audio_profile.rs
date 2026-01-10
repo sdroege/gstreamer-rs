@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{ffi, EncodingProfile};
+use crate::{EncodingProfile, ffi};
 
 glib::wrapper! {
     #[doc(alias = "GstEncodingAudioProfile")]

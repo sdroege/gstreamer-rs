@@ -11,13 +11,13 @@ use std::{
 
 use cfg_if::cfg_if;
 use glib::{
+    GStr, IntoGStr,
     prelude::*,
     translate::*,
     value::{FromValue, SendValue, Value},
-    GStr, IntoGStr,
 };
 
-use crate::{ffi, Fraction, IdStr};
+use crate::{Fraction, IdStr, ffi};
 
 #[derive(Clone, Debug, Eq, PartialEq, thiserror::Error)]
 pub enum GetError<E: std::error::Error> {
@@ -2123,7 +2123,7 @@ mod tests {
 
     #[test]
     fn new_set_get() {
-        use glib::{value, Type};
+        use glib::{Type, value};
 
         crate::init().unwrap();
 
@@ -2214,7 +2214,7 @@ mod tests {
 
     #[test]
     fn new_set_get_static() {
-        use glib::{value, Type};
+        use glib::{Type, value};
 
         crate::init().unwrap();
 
@@ -2262,7 +2262,7 @@ mod tests {
 
     #[test]
     fn new_set_get_id_str() {
-        use glib::{value, Type};
+        use glib::{Type, value};
 
         crate::init().unwrap();
 
@@ -2376,7 +2376,10 @@ mod tests {
             .field("f6", crate::List::new(["d", "e", "f"]))
             .build();
 
-        assert_eq!(format!("{s:?}"), "Structure(test { f1: (gchararray) \"abc\", f2: (gchararray) \"bcd\", f3: (gint) 123, f4: Structure(nested { badger: (gboolean) TRUE }), f5: Array([(gchararray) \"a\", (gchararray) \"b\", (gchararray) \"c\"]), f6: List([(gchararray) \"d\", (gchararray) \"e\", (gchararray) \"f\"]) })");
+        assert_eq!(
+            format!("{s:?}"),
+            "Structure(test { f1: (gchararray) \"abc\", f2: (gchararray) \"bcd\", f3: (gint) 123, f4: Structure(nested { badger: (gboolean) TRUE }), f5: Array([(gchararray) \"a\", (gchararray) \"b\", (gchararray) \"c\"]), f6: List([(gchararray) \"d\", (gchararray) \"e\", (gchararray) \"f\"]) })"
+        );
     }
 
     #[test]
@@ -2390,24 +2393,27 @@ mod tests {
             .field_with_static_from_iter::<crate::List, i32>(SLIST, [4, 5, 6])
             .field_with_id_from_iter::<crate::List, i32>(&ilist, [7, 8, 9])
             .build();
-        assert!(s
-            .get::<crate::Array>("array")
-            .unwrap()
-            .iter()
-            .map(|val| val.get::<i32>().unwrap())
-            .eq([1, 2, 3]));
-        assert!(s
-            .get::<crate::List>("slist")
-            .unwrap()
-            .iter()
-            .map(|val| val.get::<i32>().unwrap())
-            .eq([4, 5, 6]));
-        assert!(s
-            .get_by_id::<crate::List>(&ilist)
-            .unwrap()
-            .iter()
-            .map(|val| val.get::<i32>().unwrap())
-            .eq([7, 8, 9]));
+        assert!(
+            s.get::<crate::Array>("array")
+                .unwrap()
+                .iter()
+                .map(|val| val.get::<i32>().unwrap())
+                .eq([1, 2, 3])
+        );
+        assert!(
+            s.get::<crate::List>("slist")
+                .unwrap()
+                .iter()
+                .map(|val| val.get::<i32>().unwrap())
+                .eq([4, 5, 6])
+        );
+        assert!(
+            s.get_by_id::<crate::List>(&ilist)
+                .unwrap()
+                .iter()
+                .map(|val| val.get::<i32>().unwrap())
+                .eq([7, 8, 9])
+        );
 
         let array = Vec::<i32>::new();
         let s = Structure::builder("test")
@@ -2417,11 +2423,12 @@ mod tests {
             .build();
         assert!(s.get::<crate::Array>("array").unwrap().as_ref().is_empty());
         assert!(s.get::<crate::List>(SLIST).unwrap().as_ref().is_empty());
-        assert!(s
-            .get_by_id::<crate::List>(ilist)
-            .unwrap()
-            .as_ref()
-            .is_empty());
+        assert!(
+            s.get_by_id::<crate::List>(ilist)
+                .unwrap()
+                .as_ref()
+                .is_empty()
+        );
     }
 
     #[test]
@@ -2435,24 +2442,27 @@ mod tests {
             .field_with_static_if_not_empty::<crate::List, i32>(SLIST, [4, 5, 6])
             .field_with_id_if_not_empty::<crate::List, i32>(&ilist, [7, 8, 9])
             .build();
-        assert!(s
-            .get::<crate::Array>("array")
-            .unwrap()
-            .iter()
-            .map(|val| val.get::<i32>().unwrap())
-            .eq([1, 2, 3]));
-        assert!(s
-            .get::<crate::List>("slist")
-            .unwrap()
-            .iter()
-            .map(|val| val.get::<i32>().unwrap())
-            .eq([4, 5, 6]));
-        assert!(s
-            .get_by_id::<crate::List>(&ilist)
-            .unwrap()
-            .iter()
-            .map(|val| val.get::<i32>().unwrap())
-            .eq([7, 8, 9]));
+        assert!(
+            s.get::<crate::Array>("array")
+                .unwrap()
+                .iter()
+                .map(|val| val.get::<i32>().unwrap())
+                .eq([1, 2, 3])
+        );
+        assert!(
+            s.get::<crate::List>("slist")
+                .unwrap()
+                .iter()
+                .map(|val| val.get::<i32>().unwrap())
+                .eq([4, 5, 6])
+        );
+        assert!(
+            s.get_by_id::<crate::List>(&ilist)
+                .unwrap()
+                .iter()
+                .map(|val| val.get::<i32>().unwrap())
+                .eq([7, 8, 9])
+        );
 
         let array = Vec::<i32>::new();
         let s = Structure::builder("test")

@@ -2,7 +2,7 @@
 
 use glib::translate::*;
 
-use crate::{ffi, DynamicTypeFactory, Plugin};
+use crate::{DynamicTypeFactory, Plugin, ffi};
 
 impl DynamicTypeFactory {
     #[doc(alias = "gst_dynamic_type_register")]

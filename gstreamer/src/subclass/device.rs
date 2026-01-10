@@ -5,7 +5,7 @@ use std::ptr;
 use glib::{prelude::*, subclass::prelude::*, translate::*};
 
 use super::prelude::*;
-use crate::{ffi, Device, Element, LoggableError};
+use crate::{Device, Element, LoggableError, ffi};
 
 pub trait DeviceImpl: GstObjectImpl + ObjectSubclass<Type: IsA<Device>> {
     fn create_element(&self, name: Option<&str>) -> Result<Element, LoggableError> {

@@ -4,12 +4,12 @@
 // DO NOT EDIT
 
 use crate::{
-    ffi, RTSPAddress, RTSPAddressPool, RTSPFilterResult, RTSPPublishClockMode, RTSPStreamTransport,
+    RTSPAddress, RTSPAddressPool, RTSPFilterResult, RTSPPublishClockMode, RTSPStreamTransport, ffi,
 };
 use glib::{
     object::ObjectType as _,
     prelude::*,
-    signal::{connect_raw, SignalHandlerId},
+    signal::{SignalHandlerId, connect_raw},
     translate::*,
 };
 use std::boxed::Box as Box_;

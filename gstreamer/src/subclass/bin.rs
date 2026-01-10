@@ -3,7 +3,7 @@
 use glib::{prelude::*, subclass::prelude::*, translate::*};
 
 use super::prelude::*;
-use crate::{ffi, Bin, Element, LoggableError, Message};
+use crate::{Bin, Element, LoggableError, Message, ffi};
 
 pub trait BinImpl: ElementImpl + ObjectSubclass<Type: IsA<Bin>> {
     fn add_element(&self, element: &Element) -> Result<(), LoggableError> {

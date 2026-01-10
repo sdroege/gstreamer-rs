@@ -8,7 +8,7 @@ use std::{
 
 use glib::translate::*;
 
-use crate::{ffi, Buffer, BufferRef};
+use crate::{Buffer, BufferRef, ffi};
 
 mini_object_wrapper!(BufferList, BufferListRef, ffi::GstBufferList, || {
     ffi::gst_buffer_list_get_type()
@@ -244,7 +244,7 @@ impl fmt::Debug for BufferList {
 
 impl fmt::Debug for BufferListRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        use crate::{utils::Displayable, ClockTime};
+        use crate::{ClockTime, utils::Displayable};
 
         let size = self.iter().map(|b| b.size()).sum::<usize>();
         let (pts, dts) = self

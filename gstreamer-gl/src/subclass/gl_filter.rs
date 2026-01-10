@@ -1,11 +1,11 @@
 use ffi::{GstGLFilter, GstGLFilterClass, GstGLMemory};
 use glib::translate::*;
 use gst::{
-    ffi::GstBuffer, result_from_gboolean, Buffer, Caps, LoggableError, PadDirection, CAT_RUST,
+    Buffer, CAT_RUST, Caps, LoggableError, PadDirection, ffi::GstBuffer, result_from_gboolean,
 };
 
 use super::prelude::*;
-use crate::{ffi, prelude::*, GLFilter, GLMemory};
+use crate::{GLFilter, GLMemory, ffi, prelude::*};
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub enum GLFilterMode {

@@ -1,9 +1,9 @@
 use ffi::GstGLBaseFilter;
 use glib::translate::*;
-use gst::{ffi::GstCaps, result_from_gboolean, Caps, LoggableError, CAT_RUST};
+use gst::{CAT_RUST, Caps, LoggableError, ffi::GstCaps, result_from_gboolean};
 use gst_base::subclass::prelude::*;
 
-use crate::{ffi, prelude::*, GLBaseFilter};
+use crate::{GLBaseFilter, ffi, prelude::*};
 
 pub trait GLBaseFilterImpl: BaseTransformImpl + ObjectSubclass<Type: IsA<GLBaseFilter>> {
     fn gl_set_caps(&self, incaps: &Caps, outcaps: &Caps) -> Result<(), LoggableError> {

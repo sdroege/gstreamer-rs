@@ -2,8 +2,8 @@ use std::env;
 
 use anyhow::Error;
 use gst_pbutils::{
-    prelude::*, Discoverer, DiscovererContainerInfo, DiscovererInfo, DiscovererResult,
-    DiscovererStreamInfo,
+    Discoverer, DiscovererContainerInfo, DiscovererInfo, DiscovererResult, DiscovererStreamInfo,
+    prelude::*,
 };
 
 #[path = "../tutorials-common.rs"]

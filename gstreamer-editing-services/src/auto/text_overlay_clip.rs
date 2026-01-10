@@ -4,12 +4,12 @@
 // DO NOT EDIT
 
 use crate::{
-    ffi, Clip, Container, Extractable, MetaContainer, OperationClip, OverlayClip, TextHAlign,
-    TextVAlign, TimelineElement,
+    Clip, Container, Extractable, MetaContainer, OperationClip, OverlayClip, TextHAlign,
+    TextVAlign, TimelineElement, ffi,
 };
 use glib::{
     prelude::*,
-    signal::{connect_raw, SignalHandlerId},
+    signal::{SignalHandlerId, connect_raw},
     translate::*,
 };
 use std::boxed::Box as Box_;

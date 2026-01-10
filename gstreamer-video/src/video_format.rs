@@ -3,7 +3,7 @@
 use std::str;
 
 use crate::ffi;
-use glib::translate::{from_glib, FromGlib, IntoGlib};
+use glib::translate::{FromGlib, IntoGlib, from_glib};
 use std::sync::LazyLock;
 
 #[cfg(feature = "v1_18")]
@@ -534,7 +534,10 @@ mod tests {
             .into_video_caps()
             .unwrap()
             .build();
-        assert_eq!(caps.to_string(), "video/x-raw, format=(string){ NV12, NV16 }, width=(int)[ 1, 2147483647 ], height=(int)[ 1, 2147483647 ], framerate=(fraction)[ 0/1, 2147483647/1 ]");
+        assert_eq!(
+            caps.to_string(),
+            "video/x-raw, format=(string){ NV12, NV16 }, width=(int)[ 1, 2147483647 ], height=(int)[ 1, 2147483647 ], framerate=(fraction)[ 0/1, 2147483647/1 ]"
+        );
     }
 
     #[test]

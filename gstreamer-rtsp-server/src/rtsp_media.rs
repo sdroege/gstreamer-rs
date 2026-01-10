@@ -2,7 +2,7 @@
 
 use glib::{prelude::*, translate::*};
 
-use crate::{ffi, RTSPMedia};
+use crate::{RTSPMedia, ffi};
 
 pub trait RTSPMediaExtManual: IsA<RTSPMedia> + 'static {
     #[doc(alias = "gst_rtsp_media_take_pipeline")]

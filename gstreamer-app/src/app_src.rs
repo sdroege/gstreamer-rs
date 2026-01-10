@@ -18,7 +18,7 @@ use glib::{
     translate::*,
 };
 
-use crate::{ffi, AppSrc};
+use crate::{AppSrc, ffi};
 
 #[allow(clippy::type_complexity)]
 pub struct AppSrcCallbacks {

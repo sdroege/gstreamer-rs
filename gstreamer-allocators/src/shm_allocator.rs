@@ -1,6 +1,6 @@
 use glib::translate::*;
 
-use crate::{ffi, ShmAllocator};
+use crate::{ShmAllocator, ffi};
 
 impl ShmAllocator {
     #[doc(alias = "gst_shm_allocator_get")]

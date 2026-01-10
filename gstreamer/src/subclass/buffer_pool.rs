@@ -4,13 +4,13 @@ use std::ptr;
 
 use glib::{
     prelude::*,
-    subclass::{prelude::*, InitializingObject},
+    subclass::{InitializingObject, prelude::*},
     translate::*,
 };
 use libc::c_char;
 
 use super::prelude::*;
-use crate::{ffi, BufferPool, BufferPoolAcquireParams, BufferPoolConfigRef};
+use crate::{BufferPool, BufferPoolAcquireParams, BufferPoolConfigRef, ffi};
 
 pub trait BufferPoolImpl: GstObjectImpl + ObjectSubclass<Type: IsA<BufferPool>> {
     fn acquire_buffer(
@@ -474,8 +474,8 @@ unsafe extern "C" fn buffer_pool_set_config<T: BufferPoolImpl>(
 #[cfg(test)]
 mod tests {
     use std::sync::{
-        atomic::{AtomicBool, Ordering},
         Arc,
+        atomic::{AtomicBool, Ordering},
     };
 
     use super::*;

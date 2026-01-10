@@ -1,9 +1,9 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 #[cfg(feature = "v1_28")]
-use crate::ffi;
-#[cfg(feature = "v1_28")]
 use crate::TensorDataType;
+#[cfg(feature = "v1_28")]
+use crate::ffi;
 
 #[cfg(feature = "v1_28")]
 use glib::translate::*;

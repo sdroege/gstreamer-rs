@@ -5,9 +5,9 @@
 use std::{cell::RefCell, cmp, fmt, rc::Rc};
 
 use glib::{
-    translate::{from_glib, ToGlibPtr},
-    value::{SendValue, ToValue},
     Date,
+    translate::{ToGlibPtr, from_glib},
+    value::{SendValue, ToValue},
 };
 use serde::{
     de,
@@ -17,10 +17,9 @@ use serde::{
 };
 
 use crate::{
-    date_time_serde,
+    DateTime, Sample, TagMergeMode, TagScope, date_time_serde,
     tags::{GenericTagIter, TagList, TagListRef},
     value_serde::{DATE_OTHER_TYPE_ID, DATE_TIME_OTHER_TYPE_ID, SAMPLE_OTHER_TYPE_ID},
-    DateTime, Sample, TagMergeMode, TagScope,
 };
 
 macro_rules! ser_tag (
@@ -311,7 +310,7 @@ impl<'de> Deserialize<'de> for TagList {
 
 #[cfg(test)]
 mod tests {
-    use crate::{tags::*, Buffer, ClockTime, Sample, TagMergeMode, TagScope};
+    use crate::{Buffer, ClockTime, Sample, TagMergeMode, TagScope, tags::*};
 
     #[test]
     fn test_serialize() {

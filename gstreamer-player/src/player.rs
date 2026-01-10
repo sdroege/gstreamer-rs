@@ -4,11 +4,11 @@ use std::{boxed::Box as Box_, mem::transmute};
 
 use glib::{
     object::ObjectType,
-    signal::{connect_raw, SignalHandlerId},
+    signal::{SignalHandlerId, connect_raw},
     translate::*,
 };
 
-use crate::{ffi, Player};
+use crate::{Player, ffi};
 
 impl Player {
     #[doc(alias = "get_config")]

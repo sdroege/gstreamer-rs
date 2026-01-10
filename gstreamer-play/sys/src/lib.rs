@@ -17,18 +17,18 @@ use gobject_sys as gobject;
 use gstreamer_sys as gst;
 use gstreamer_video_sys as gst_video;
 
+#[allow(unused_imports)]
+use libc::{FILE, intptr_t, off_t, size_t, ssize_t, time_t, uintptr_t};
 #[cfg(unix)]
 #[allow(unused_imports)]
 use libc::{dev_t, gid_t, pid_t, socklen_t, uid_t};
-#[allow(unused_imports)]
-use libc::{intptr_t, off_t, size_t, ssize_t, time_t, uintptr_t, FILE};
 #[allow(unused_imports)]
 use std::ffi::{
     c_char, c_double, c_float, c_int, c_long, c_short, c_uchar, c_uint, c_ulong, c_ushort, c_void,
 };
 
 #[allow(unused_imports)]
-use glib::{gboolean, gconstpointer, gpointer, GType};
+use glib::{GType, gboolean, gconstpointer, gpointer};
 
 // Enums
 pub type GstPlayColorBalanceType = c_int;
@@ -441,7 +441,7 @@ unsafe extern "C" {
         config: *const gst::GstStructure,
     ) -> gboolean;
     pub fn gst_play_config_get_position_update_interval(config: *const gst::GstStructure)
-        -> c_uint;
+    -> c_uint;
     pub fn gst_play_config_get_seek_accurate(config: *const gst::GstStructure) -> gboolean;
     pub fn gst_play_config_get_user_agent(config: *const gst::GstStructure) -> *mut c_char;
     #[cfg(feature = "v1_28")]
@@ -526,7 +526,7 @@ unsafe extern "C" {
     #[cfg(feature = "v1_26")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
     pub fn gst_play_set_subtitle_track_id(play: *mut GstPlay, stream_id: *const c_char)
-        -> gboolean;
+    -> gboolean;
     pub fn gst_play_set_subtitle_uri(play: *mut GstPlay, uri: *const c_char);
     pub fn gst_play_set_subtitle_video_offset(play: *mut GstPlay, offset: i64);
     #[cfg(feature = "v1_26")]
@@ -563,21 +563,21 @@ unsafe extern "C" {
     //=========================================================================
     pub fn gst_play_media_info_get_type() -> GType;
     pub fn gst_play_media_info_get_audio_streams(info: *const GstPlayMediaInfo)
-        -> *mut glib::GList;
+    -> *mut glib::GList;
     pub fn gst_play_media_info_get_container_format(info: *const GstPlayMediaInfo)
-        -> *const c_char;
+    -> *const c_char;
     pub fn gst_play_media_info_get_duration(info: *const GstPlayMediaInfo) -> gst::GstClockTime;
     pub fn gst_play_media_info_get_image_sample(
         info: *const GstPlayMediaInfo,
     ) -> *mut gst::GstSample;
     pub fn gst_play_media_info_get_number_of_audio_streams(info: *const GstPlayMediaInfo)
-        -> c_uint;
+    -> c_uint;
     pub fn gst_play_media_info_get_number_of_streams(info: *const GstPlayMediaInfo) -> c_uint;
     pub fn gst_play_media_info_get_number_of_subtitle_streams(
         info: *const GstPlayMediaInfo,
     ) -> c_uint;
     pub fn gst_play_media_info_get_number_of_video_streams(info: *const GstPlayMediaInfo)
-        -> c_uint;
+    -> c_uint;
     pub fn gst_play_media_info_get_stream_list(info: *const GstPlayMediaInfo) -> *mut glib::GList;
     pub fn gst_play_media_info_get_subtitle_streams(
         info: *const GstPlayMediaInfo,
@@ -586,7 +586,7 @@ unsafe extern "C" {
     pub fn gst_play_media_info_get_title(info: *const GstPlayMediaInfo) -> *const c_char;
     pub fn gst_play_media_info_get_uri(info: *const GstPlayMediaInfo) -> *const c_char;
     pub fn gst_play_media_info_get_video_streams(info: *const GstPlayMediaInfo)
-        -> *mut glib::GList;
+    -> *mut glib::GList;
     pub fn gst_play_media_info_is_live(info: *const GstPlayMediaInfo) -> gboolean;
     pub fn gst_play_media_info_is_seekable(info: *const GstPlayMediaInfo) -> gboolean;
 

@@ -2,9 +2,9 @@
 
 use std::{fmt::Debug, marker::PhantomData, mem, ptr};
 
-use crate::{ffi, GLMemoryRef};
+use crate::{GLMemoryRef, ffi};
 use glib::translate::*;
-use gst_video::{video_frame::IsVideoFrame, VideoFrameExt};
+use gst_video::{VideoFrameExt, video_frame::IsVideoFrame};
 
 pub enum Readable {}
 pub enum Writable {}

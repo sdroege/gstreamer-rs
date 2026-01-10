@@ -15,18 +15,18 @@
 use glib_sys as glib;
 use gstreamer_sys as gst;
 
+#[allow(unused_imports)]
+use libc::{FILE, intptr_t, off_t, size_t, ssize_t, time_t, uintptr_t};
 #[cfg(unix)]
 #[allow(unused_imports)]
 use libc::{dev_t, gid_t, pid_t, socklen_t, uid_t};
-#[allow(unused_imports)]
-use libc::{intptr_t, off_t, size_t, ssize_t, time_t, uintptr_t, FILE};
 #[allow(unused_imports)]
 use std::ffi::{
     c_char, c_double, c_float, c_int, c_long, c_short, c_uchar, c_uint, c_ulong, c_ushort, c_void,
 };
 
 #[allow(unused_imports)]
-use glib::{gboolean, gconstpointer, gpointer, GType};
+use glib::{GType, gboolean, gconstpointer, gpointer};
 
 // Enums
 pub type GstMIKEYCacheType = c_int;
@@ -792,7 +792,7 @@ unsafe extern "C" {
         addr_number: c_uint,
     ) -> GstSDPResult;
     pub fn gst_sdp_media_add_format(media: *mut GstSDPMedia, format: *const c_char)
-        -> GstSDPResult;
+    -> GstSDPResult;
     pub fn gst_sdp_media_as_text(media: *const GstSDPMedia) -> *mut c_char;
     pub fn gst_sdp_media_attributes_len(media: *const GstSDPMedia) -> c_uint;
     pub fn gst_sdp_media_attributes_to_caps(
@@ -932,13 +932,13 @@ unsafe extern "C" {
         bandwidth: c_uint,
     ) -> GstSDPResult;
     pub fn gst_sdp_message_add_email(msg: *mut GstSDPMessage, email: *const c_char)
-        -> GstSDPResult;
+    -> GstSDPResult;
     pub fn gst_sdp_message_add_media(
         msg: *mut GstSDPMessage,
         media: *mut GstSDPMedia,
     ) -> GstSDPResult;
     pub fn gst_sdp_message_add_phone(msg: *mut GstSDPMessage, phone: *const c_char)
-        -> GstSDPResult;
+    -> GstSDPResult;
     pub fn gst_sdp_message_add_time(
         msg: *mut GstSDPMessage,
         start: *const c_char,

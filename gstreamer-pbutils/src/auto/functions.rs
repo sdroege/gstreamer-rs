@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{ffi, EncodingTarget};
+use crate::{EncodingTarget, ffi};
 use glib::translate::*;
 
 #[doc(alias = "gst_codec_utils_aac_get_channels")]

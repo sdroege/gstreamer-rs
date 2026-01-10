@@ -1,7 +1,7 @@
 use std::{
     collections::HashMap,
     mem,
-    sync::{atomic, Arc, Mutex, MutexGuard},
+    sync::{Arc, Mutex, MutexGuard, atomic},
 };
 
 use gst::{glib, prelude::*};
@@ -1073,12 +1073,12 @@ mod tests {
     };
 
     use futures::{
-        channel::{mpsc, mpsc::Receiver},
         SinkExt, StreamExt,
+        channel::{mpsc, mpsc::Receiver},
     };
     use gst::prelude::*;
 
-    use crate::{streamproducer::ConsumerSettings, ConsumptionLink, StreamProducer};
+    use crate::{ConsumptionLink, StreamProducer, streamproducer::ConsumerSettings};
 
     fn create_producer() -> (
         gst::Pipeline,

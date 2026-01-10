@@ -3,7 +3,7 @@ use std::ptr;
 use glib::{object::IsA, translate::*};
 
 pub use crate::auto::functions::*;
-use crate::{ffi, GLContext, GLDisplay};
+use crate::{GLContext, GLDisplay, ffi};
 
 #[doc(alias = "gst_gl_handle_context_query")]
 pub fn gl_handle_context_query(

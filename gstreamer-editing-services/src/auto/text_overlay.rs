@@ -5,8 +5,8 @@
 #![allow(deprecated)]
 
 use crate::{
-    ffi, Extractable, MetaContainer, Operation, TextHAlign, TextVAlign, TimelineElement,
-    TrackElement,
+    Extractable, MetaContainer, Operation, TextHAlign, TextVAlign, TimelineElement, TrackElement,
+    ffi,
 };
 use glib::{prelude::*, translate::*};
 

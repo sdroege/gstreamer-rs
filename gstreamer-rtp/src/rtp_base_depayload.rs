@@ -3,7 +3,7 @@ use glib::prelude::*;
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
 use glib::translate::*;
 
-use crate::{ffi, RTPBaseDepayload};
+use crate::{RTPBaseDepayload, ffi};
 
 pub trait RTPBaseDepayloadExtManual: IsA<RTPBaseDepayload> + 'static {
     #[cfg(feature = "v1_24")]

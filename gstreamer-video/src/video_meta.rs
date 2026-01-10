@@ -1311,11 +1311,7 @@ mod video_meta_transform_matrix {
                 let res = from_glib(ffi::gst_video_meta_transform_matrix_point(
                     &self.0, &mut x, &mut y,
                 ));
-                if res {
-                    Some((x, y))
-                } else {
-                    None
-                }
+                if res { Some((x, y)) } else { None }
             }
         }
 
@@ -1327,11 +1323,7 @@ mod video_meta_transform_matrix {
                 let res = from_glib(ffi::gst_video_meta_transform_matrix_point_clipped(
                     &self.0, &mut x, &mut y,
                 ));
-                if res {
-                    Some((x, y))
-                } else {
-                    None
-                }
+                if res { Some((x, y)) } else { None }
             }
         }
 
@@ -1346,11 +1338,7 @@ mod video_meta_transform_matrix {
                     &self.0,
                     rectangle.to_glib_none_mut().0,
                 ));
-                if res {
-                    Some(rectangle)
-                } else {
-                    None
-                }
+                if res { Some(rectangle) } else { None }
             }
         }
 
@@ -1365,11 +1353,7 @@ mod video_meta_transform_matrix {
                     &self.0,
                     rectangle.to_glib_none_mut().0,
                 ));
-                if res {
-                    Some(rectangle)
-                } else {
-                    None
-                }
+                if res { Some(rectangle) } else { None }
             }
         }
     }

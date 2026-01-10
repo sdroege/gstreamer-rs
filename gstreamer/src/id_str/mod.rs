@@ -50,7 +50,7 @@ macro_rules! idstr {
 
 #[cfg(test)]
 mod tests {
-    use glib::{gstr, GStr, GString};
+    use glib::{GStr, GString, gstr};
     use std::{ffi::CStr, sync::LazyLock};
 
     use super::IdStr;

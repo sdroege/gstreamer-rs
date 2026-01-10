@@ -4,11 +4,11 @@ use std::{boxed::Box as Box_, fmt, mem::transmute};
 
 use glib::{
     prelude::*,
-    signal::{connect_raw, SignalHandlerId},
+    signal::{SignalHandlerId, connect_raw},
     translate::*,
 };
 
-use crate::{ffi, Discoverer, DiscovererInfo};
+use crate::{Discoverer, DiscovererInfo, ffi};
 
 impl Discoverer {
     pub fn set_timeout(&self, timeout: gst::ClockTime) {

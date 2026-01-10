@@ -1,10 +1,10 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::{ffi, VideoFormat};
+use crate::{VideoFormat, ffi};
 use glib::translate::*;
 
 use crate::video_vbi::line_buffer_len;
-use crate::{VideoAncillaryDID, VideoAncillaryDID16, VideoVBIError, VBI_HD_MIN_PIXEL_WIDTH};
+use crate::{VBI_HD_MIN_PIXEL_WIDTH, VideoAncillaryDID, VideoAncillaryDID16, VideoVBIError};
 
 glib::wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -365,7 +365,9 @@ mod tests {
         assert_eq!(12, anc_len);
         assert_eq!(
             buf[0..anc_len],
-            [0x00, 0xff, 0xff, 0x61, 0x02, 0x03, 0x80, 0x94, 0x2c, 0xa6, 0x00, 0x00]
+            [
+                0x00, 0xff, 0xff, 0x61, 0x02, 0x03, 0x80, 0x94, 0x2c, 0xa6, 0x00, 0x00
+            ]
         );
     }
 

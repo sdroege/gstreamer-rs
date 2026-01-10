@@ -11,7 +11,7 @@ use std::{
 
 use glib::translate::*;
 
-use crate::{ffi, Buffer, BufferRef, Caps, CapsRef, ClockTime};
+use crate::{Buffer, BufferRef, Caps, CapsRef, ClockTime, ffi};
 
 pub unsafe trait MetaAPI: Sync + Send + Sized {
     type GstType;

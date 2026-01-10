@@ -9,7 +9,7 @@ use std::{
 
 use glib::translate::*;
 
-use crate::{ffi, PromiseResult, Structure, StructureRef};
+use crate::{PromiseResult, Structure, StructureRef, ffi};
 
 glib::wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]

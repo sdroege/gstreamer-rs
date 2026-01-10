@@ -2,7 +2,7 @@
 
 use glib::{prelude::*, translate::*};
 
-use crate::{ffi, RTSPMediaFactory};
+use crate::{RTSPMediaFactory, ffi};
 
 pub trait RTSPMediaFactoryExtManual: IsA<RTSPMediaFactory> + 'static {
     #[doc(alias = "gst_rtsp_media_factory_add_role_from_structure")]

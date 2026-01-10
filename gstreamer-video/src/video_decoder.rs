@@ -8,10 +8,9 @@ use glib::{prelude::*, translate::*};
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 use crate::VideoInterlaceMode;
 use crate::{
-    ffi,
+    VideoCodecFrame, VideoDecoder, VideoFormat, ffi,
     utils::HasStreamLock,
     video_codec_state::{InNegotiation, Readable, VideoCodecState, VideoCodecStateContext},
-    VideoCodecFrame, VideoDecoder, VideoFormat,
 };
 
 unsafe extern "C" {

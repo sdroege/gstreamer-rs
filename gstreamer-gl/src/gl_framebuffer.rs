@@ -1,6 +1,6 @@
 use glib::{prelude::*, translate::*};
 
-use crate::{ffi, GLFramebuffer, GLMemoryRef};
+use crate::{GLFramebuffer, GLMemoryRef, ffi};
 
 pub trait GLFramebufferExtManual: IsA<GLFramebuffer> + 'static {
     #[doc(alias = "gst_gl_framebuffer_draw_to_texture")]

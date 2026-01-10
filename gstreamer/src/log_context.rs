@@ -5,7 +5,7 @@ use std::{fmt, io::Write, ptr};
 use glib::{prelude::*, translate::*};
 
 use crate::log::DebugLogger;
-use crate::{ffi, ClockTime, DebugCategory, DebugLevel, LogContextFlags, LogContextHashFlags};
+use crate::{ClockTime, DebugCategory, DebugLevel, LogContextFlags, LogContextHashFlags, ffi};
 
 #[derive(Debug)]
 #[doc(alias = "GstLogContext")]
@@ -363,7 +363,7 @@ impl LogContextBuilder {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{log::DebugLogger, DebugLevel, LogContextFlags, LogContextHashFlags};
+    use crate::{DebugLevel, LogContextFlags, LogContextHashFlags, log::DebugLogger};
 
     #[test]
     fn log_context_builder_basic() {

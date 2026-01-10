@@ -4,14 +4,14 @@
 // DO NOT EDIT
 #![allow(deprecated)]
 
-use crate::{ffi, Extractable, MetaContainer, Timeline, TrackType};
 #[cfg(feature = "v1_18")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 use crate::{Edge, EditMode, Layer};
+use crate::{Extractable, MetaContainer, Timeline, TrackType, ffi};
 use glib::{
     object::ObjectType as _,
     prelude::*,
-    signal::{connect_raw, SignalHandlerId},
+    signal::{SignalHandlerId, connect_raw},
     translate::*,
 };
 use std::boxed::Box as Box_;
@@ -127,11 +127,7 @@ pub trait TimelineElementExt: IsA<TimelineElement> + 'static {
                 property_name.to_glib_none().0,
                 value.to_glib_none_mut().0,
             ));
-            if ret {
-                Some(value)
-            } else {
-                None
-            }
+            if ret { Some(value) } else { None }
         }
     }
 

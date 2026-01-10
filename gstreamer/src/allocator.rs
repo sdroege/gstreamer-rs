@@ -2,7 +2,7 @@
 
 use glib::{prelude::*, translate::*};
 
-use crate::{ffi, Allocator};
+use crate::{Allocator, ffi};
 
 impl Allocator {
     pub fn memory_type(&self) -> &'static glib::GStr {

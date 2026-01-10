@@ -34,7 +34,7 @@ mod uri_handler;
 pub use self::{
     device_provider::DeviceProviderMetadata,
     element::{CatchPanic, ElementMetadata},
-    error::{post_panic_error_message, FlowError},
+    error::{FlowError, post_panic_error_message},
     plugin::{MAJOR_VERSION, MINOR_VERSION},
     task_pool::TaskPoolFunction,
 };

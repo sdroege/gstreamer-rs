@@ -1,5 +1,5 @@
-use crate::ffi;
 use crate::VulkanOperation;
+use crate::ffi;
 use glib::{prelude::*, translate::*};
 
 #[derive(Debug)]

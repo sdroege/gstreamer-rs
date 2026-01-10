@@ -7,7 +7,7 @@ use gst::EventType;
 #[cfg(feature = "v1_22")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 use crate::NavigationModifierType;
-use crate::{ffi, NavigationCommand, NavigationEventType};
+use crate::{NavigationCommand, NavigationEventType, ffi};
 
 // FIXME: Copy from gstreamer/src/event.rs
 macro_rules! event_builder_generic_impl {
@@ -20,11 +20,7 @@ macro_rules! event_builder_generic_impl {
         }
 
         pub fn seqnum_if(self, seqnum: gst::Seqnum, predicate: bool) -> Self {
-            if predicate {
-                self.seqnum(seqnum)
-            } else {
-                self
-            }
+            if predicate { self.seqnum(seqnum) } else { self }
         }
 
         pub fn seqnum_if_some(self, seqnum: Option<gst::Seqnum>) -> Self {
@@ -216,11 +212,7 @@ impl<'a> DownstreamForceKeyUnitEventBuilder<'a> {
     }
 
     pub fn count_if(self, count: u32, predicate: bool) -> Self {
-        if predicate {
-            self.count(count)
-        } else {
-            self
-        }
+        if predicate { self.count(count) } else { self }
     }
 
     pub fn count_if_some(self, count: Option<u32>) -> Self {
@@ -356,11 +348,7 @@ impl<'a> UpstreamForceKeyUnitEventBuilder<'a> {
     }
 
     pub fn count_if(self, count: u32, predicate: bool) -> Self {
-        if predicate {
-            self.count(count)
-        } else {
-            self
-        }
+        if predicate { self.count(count) } else { self }
     }
 
     pub fn count_if_some(self, count: Option<u32>) -> Self {
@@ -1316,7 +1304,7 @@ impl NavigationEvent {
             },
 
             NavigationEventType::Invalid | NavigationEventType::__Unknown(_) => {
-                return Err(glib::bool_error!("Invalid navigation event"))
+                return Err(glib::bool_error!("Invalid navigation event"));
             }
         };
         Ok(event)

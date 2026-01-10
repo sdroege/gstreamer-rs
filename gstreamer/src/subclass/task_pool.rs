@@ -9,7 +9,7 @@ use std::{
 use glib::{ffi::gpointer, prelude::*, subclass::prelude::*, translate::*};
 
 use super::prelude::*;
-use crate::{ffi, TaskHandle, TaskPool};
+use crate::{TaskHandle, TaskPool, ffi};
 
 pub trait TaskPoolImpl: GstObjectImpl + ObjectSubclass<Type: IsA<TaskPool>> {
     // rustdoc-stripper-ignore-next
@@ -254,7 +254,7 @@ mod tests {
     use std::{
         sync::{
             atomic,
-            mpsc::{channel, TryRecvError},
+            mpsc::{TryRecvError, channel},
         },
         thread,
     };

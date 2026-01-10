@@ -16,18 +16,18 @@ use glib_sys as glib;
 use gobject_sys as gobject;
 use gstreamer_sys as gst;
 
+#[allow(unused_imports)]
+use libc::{FILE, intptr_t, off_t, size_t, ssize_t, time_t, uintptr_t};
 #[cfg(unix)]
 #[allow(unused_imports)]
 use libc::{dev_t, gid_t, pid_t, socklen_t, uid_t};
-#[allow(unused_imports)]
-use libc::{intptr_t, off_t, size_t, ssize_t, time_t, uintptr_t, FILE};
 #[allow(unused_imports)]
 use std::ffi::{
     c_char, c_double, c_float, c_int, c_long, c_short, c_uchar, c_uint, c_ulong, c_ushort, c_void,
 };
 
 #[allow(unused_imports)]
-use glib::{gboolean, gconstpointer, gpointer, GType};
+use glib::{GType, gboolean, gconstpointer, gpointer};
 
 // Enums
 pub type GstAggregatorStartTimeSelection = c_int;
@@ -1433,7 +1433,7 @@ unsafe extern "C" {
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_bit_writer_reset_and_get_buffer(bitwriter: *mut GstBitWriter)
-        -> *mut gst::GstBuffer;
+    -> *mut gst::GstBuffer;
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_bit_writer_reset_and_get_data(bitwriter: *mut GstBitWriter) -> *mut u8;
@@ -1853,7 +1853,7 @@ unsafe extern "C" {
     pub fn gst_adapter_push(adapter: *mut GstAdapter, buf: *mut gst::GstBuffer);
     pub fn gst_adapter_take(adapter: *mut GstAdapter, nbytes: size_t) -> gpointer;
     pub fn gst_adapter_take_buffer(adapter: *mut GstAdapter, nbytes: size_t)
-        -> *mut gst::GstBuffer;
+    -> *mut gst::GstBuffer;
     pub fn gst_adapter_take_buffer_fast(
         adapter: *mut GstAdapter,
         nbytes: size_t,

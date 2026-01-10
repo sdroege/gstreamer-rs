@@ -2,7 +2,7 @@
 
 use glib::{prelude::*, translate::*};
 
-use crate::{ffi, prelude::*, Plugin, PluginFlags, StructureRef};
+use crate::{Plugin, PluginFlags, StructureRef, ffi, prelude::*};
 
 impl Plugin {
     #[doc(alias = "get_cache_data")]

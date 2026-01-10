@@ -18,18 +18,18 @@ use gstreamer_audio_sys as gst_audio;
 use gstreamer_sys as gst;
 use gstreamer_video_sys as gst_video;
 
+#[allow(unused_imports)]
+use libc::{FILE, intptr_t, off_t, size_t, ssize_t, time_t, uintptr_t};
 #[cfg(unix)]
 #[allow(unused_imports)]
 use libc::{dev_t, gid_t, pid_t, socklen_t, uid_t};
-#[allow(unused_imports)]
-use libc::{intptr_t, off_t, size_t, ssize_t, time_t, uintptr_t, FILE};
 #[allow(unused_imports)]
 use std::ffi::{
     c_char, c_double, c_float, c_int, c_long, c_short, c_uchar, c_uint, c_ulong, c_ushort, c_void,
 };
 
 #[allow(unused_imports)]
-use glib::{gboolean, gconstpointer, gpointer, GType};
+use glib::{GType, gboolean, gconstpointer, gpointer};
 
 // Aliases
 pub type GstDiscovererAudioInfoClass = gobject::GObjectClass;
@@ -518,9 +518,9 @@ unsafe extern "C" {
         info: *const GstDiscovererAudioInfo,
     ) -> *const c_char;
     pub fn gst_discoverer_audio_info_get_max_bitrate(info: *const GstDiscovererAudioInfo)
-        -> c_uint;
+    -> c_uint;
     pub fn gst_discoverer_audio_info_get_sample_rate(info: *const GstDiscovererAudioInfo)
-        -> c_uint;
+    -> c_uint;
 
     //=========================================================================
     // GstDiscovererContainerInfo
@@ -540,7 +540,7 @@ unsafe extern "C" {
     //=========================================================================
     pub fn gst_discoverer_info_get_type() -> GType;
     pub fn gst_discoverer_info_from_variant(variant: *mut glib::GVariant)
-        -> *mut GstDiscovererInfo;
+    -> *mut GstDiscovererInfo;
     pub fn gst_discoverer_info_copy(ptr: *mut GstDiscovererInfo) -> *mut GstDiscovererInfo;
     pub fn gst_discoverer_info_get_audio_streams(info: *mut GstDiscovererInfo) -> *mut glib::GList;
     pub fn gst_discoverer_info_get_container_streams(
@@ -549,7 +549,7 @@ unsafe extern "C" {
     pub fn gst_discoverer_info_get_duration(info: *const GstDiscovererInfo) -> gst::GstClockTime;
     pub fn gst_discoverer_info_get_live(info: *const GstDiscovererInfo) -> gboolean;
     pub fn gst_discoverer_info_get_misc(info: *const GstDiscovererInfo)
-        -> *const gst::GstStructure;
+    -> *const gst::GstStructure;
     pub fn gst_discoverer_info_get_missing_elements_installer_details(
         info: *const GstDiscovererInfo,
     ) -> *mut *const c_char;
@@ -632,13 +632,13 @@ unsafe extern "C" {
     ) -> c_uint;
     pub fn gst_discoverer_video_info_get_height(info: *const GstDiscovererVideoInfo) -> c_uint;
     pub fn gst_discoverer_video_info_get_max_bitrate(info: *const GstDiscovererVideoInfo)
-        -> c_uint;
+    -> c_uint;
     pub fn gst_discoverer_video_info_get_par_denom(info: *const GstDiscovererVideoInfo) -> c_uint;
     pub fn gst_discoverer_video_info_get_par_num(info: *const GstDiscovererVideoInfo) -> c_uint;
     pub fn gst_discoverer_video_info_get_width(info: *const GstDiscovererVideoInfo) -> c_uint;
     pub fn gst_discoverer_video_info_is_image(info: *const GstDiscovererVideoInfo) -> gboolean;
     pub fn gst_discoverer_video_info_is_interlaced(info: *const GstDiscovererVideoInfo)
-        -> gboolean;
+    -> gboolean;
 
     //=========================================================================
     // GstEncodingAudioProfile

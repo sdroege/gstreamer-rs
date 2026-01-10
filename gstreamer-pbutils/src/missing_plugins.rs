@@ -1,7 +1,7 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 use glib::{translate::*, value::ToSendValue};
-use gst::{ffi as gst_ffi, prelude::*, Element, Message, Seqnum};
+use gst::{Element, Message, Seqnum, ffi as gst_ffi, prelude::*};
 
 use crate::ffi;
 
@@ -17,11 +17,7 @@ macro_rules! message_builder_generic_impl {
 
         #[allow(clippy::needless_update)]
         pub fn src_if<O: IsA<Element> + Cast + Clone>(self, src: &O, predicate: bool) -> Self {
-            if predicate {
-                self.src(src)
-            } else {
-                self
-            }
+            if predicate { self.src(src) } else { self }
         }
 
         #[allow(clippy::needless_update)]
@@ -45,11 +41,7 @@ macro_rules! message_builder_generic_impl {
         #[doc(alias = "gst_message_set_seqnum")]
         #[allow(clippy::needless_update)]
         pub fn seqnum_if(self, seqnum: Seqnum, predicate: bool) -> Self {
-            if predicate {
-                self.seqnum(seqnum)
-            } else {
-                self
-            }
+            if predicate { self.seqnum(seqnum) } else { self }
         }
 
         #[doc(alias = "gst_message_set_seqnum")]

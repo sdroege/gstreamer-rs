@@ -4,7 +4,7 @@ use std::{fmt, marker::PhantomData, mem};
 
 use glib::translate::*;
 
-use crate::{ffi, utils::HasStreamLock, VideoCodecFrameFlags};
+use crate::{VideoCodecFrameFlags, ffi, utils::HasStreamLock};
 
 pub struct VideoCodecFrame<'a> {
     frame: *mut ffi::GstVideoCodecFrame,

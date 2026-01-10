@@ -3,13 +3,13 @@
 use std::{fmt, marker::PhantomData, mem};
 
 use glib::{
+    GStr,
     prelude::*,
     translate::*,
     value::{FromValue, SendValue, ToSendValue, Value},
-    GStr,
 };
 
-use crate::{ffi, Sample, TagError, TagMergeMode, TagScope};
+use crate::{Sample, TagError, TagMergeMode, TagScope, ffi};
 
 pub trait Tag<'a> {
     type TagType: StaticType + FromValue<'a> + ToSendValue + Send + Sync;
@@ -1220,22 +1220,26 @@ mod tests {
         let mut tags = TagList::new();
         {
             let tags = tags.get_mut().unwrap();
-            assert!(tags
-                .add_generic(Title::TAG_NAME, "some title", TagMergeMode::Append)
-                .is_ok());
-            assert!(tags
-                .add_generic(Title::TAG_NAME, "second title", TagMergeMode::Append)
-                .is_ok());
-            assert!(tags
-                .add_generic(
+            assert!(
+                tags.add_generic(Title::TAG_NAME, "some title", TagMergeMode::Append)
+                    .is_ok()
+            );
+            assert!(
+                tags.add_generic(Title::TAG_NAME, "second title", TagMergeMode::Append)
+                    .is_ok()
+            );
+            assert!(
+                tags.add_generic(
                     Duration::TAG_NAME,
                     ClockTime::SECOND * 120,
                     TagMergeMode::Append
                 )
-                .is_ok());
-            assert!(tags
-                .add_generic(Title::TAG_NAME, "third title", TagMergeMode::Append)
-                .is_ok());
+                .is_ok()
+            );
+            assert!(
+                tags.add_generic(Title::TAG_NAME, "third title", TagMergeMode::Append)
+                    .is_ok()
+            );
 
             assert_eq!(
                 tags.add_generic(

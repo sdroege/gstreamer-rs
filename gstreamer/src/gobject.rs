@@ -2,9 +2,9 @@
 
 use std::marker::PhantomData;
 
-use glib::{object::IsClass, prelude::*, Type};
+use glib::{Type, object::IsClass, prelude::*};
 
-use crate::{value::GstValueExt, IdStr};
+use crate::{IdStr, value::GstValueExt};
 
 impl crate::Object {
     // rustdoc-stripper-ignore-next
@@ -215,7 +215,7 @@ impl<'a, O: IsA<crate::Object> + IsClass> GObjectBuilder<'a, O> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::{prelude::*, Bin, Element, ElementFactory, Object};
+    use crate::{Bin, Element, ElementFactory, Object, prelude::*};
 
     #[test]
     fn test_set_property_from_str() {

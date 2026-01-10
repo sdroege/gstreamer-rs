@@ -133,11 +133,7 @@ impl<T> AudioCapsBuilder<T> {
     }
 
     pub fn format_if(self, format: AudioFormat, predicate: bool) -> Self {
-        if predicate {
-            self.format(format)
-        } else {
-            self
-        }
+        if predicate { self.format(format) } else { self }
     }
 
     pub fn format_if_some(self, format: Option<AudioFormat>) -> Self {
@@ -196,11 +192,7 @@ impl<T> AudioCapsBuilder<T> {
     }
 
     pub fn rate_if(self, rate: i32, predicate: bool) -> Self {
-        if predicate {
-            self.rate(rate)
-        } else {
-            self
-        }
+        if predicate { self.rate(rate) } else { self }
     }
 
     pub fn rate_if_some(self, rate: Option<i32>) -> Self {
@@ -360,11 +352,7 @@ impl<T> AudioCapsBuilder<T> {
     }
 
     pub fn layout_if(self, layout: AudioLayout, predicate: bool) -> Self {
-        if predicate {
-            self.layout(layout)
-        } else {
-            self
-        }
+        if predicate { self.layout(layout) } else { self }
     }
 
     pub fn layout_if_some(self, layout: Option<AudioLayout>) -> Self {
@@ -552,14 +540,16 @@ mod tests {
         let caps_with_format = AudioCapsBuilder::for_encoding("audio/x-raw")
             .format_list(formats)
             .build();
-        assert!(caps_with_format
-            .structure(0)
-            .unwrap()
-            .get::<gst::List>("format")
-            .unwrap()
-            .iter()
-            .map(|f| f.get::<String>().unwrap())
-            .eq(formats.iter().map(|f| f.to_string())));
+        assert!(
+            caps_with_format
+                .structure(0)
+                .unwrap()
+                .get::<gst::List>("format")
+                .unwrap()
+                .iter()
+                .map(|f| f.get::<String>().unwrap())
+                .eq(formats.iter().map(|f| f.to_string()))
+        );
 
         let caps = AudioCapsBuilder::for_encoding("audio/x-raw")
             .format_list_if_some(Some(formats))

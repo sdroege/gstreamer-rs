@@ -4,11 +4,11 @@ use std::mem::transmute;
 #[cfg(feature = "v1_18")]
 use glib::object::Cast;
 #[cfg(feature = "v1_18")]
-use glib::signal::{connect_raw, SignalHandlerId};
+use glib::signal::{SignalHandlerId, connect_raw};
 use glib::translate::*;
 use gst::prelude::*;
 
-use crate::{ffi, AudioAggregator, AudioAggregatorPad};
+use crate::{AudioAggregator, AudioAggregatorPad, ffi};
 
 pub trait AudioAggregatorExtManual: IsA<AudioAggregator> + 'static {
     #[doc(alias = "gst_audio_aggregator_set_sink_caps")]

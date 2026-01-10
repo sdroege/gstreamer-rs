@@ -5,7 +5,7 @@ use std::{mem, ptr};
 use glib::translate::*;
 use gst::subclass::prelude::*;
 
-use crate::{ffi, prelude::*, AudioDecoder};
+use crate::{AudioDecoder, ffi, prelude::*};
 
 pub trait AudioDecoderImpl: ElementImpl + ObjectSubclass<Type: IsA<AudioDecoder>> {
     fn open(&self) -> Result<(), gst::ErrorMessage> {

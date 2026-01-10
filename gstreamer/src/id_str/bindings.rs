@@ -6,10 +6,10 @@
 //! See the higher level module documentation for details.
 
 use crate::ffi;
-use glib::{translate::*, GStr, GString};
+use glib::{GStr, GString, translate::*};
 use std::{
     cmp,
-    ffi::{c_char, CStr},
+    ffi::{CStr, c_char},
     fmt,
     hash::{Hash, Hasher},
     mem,

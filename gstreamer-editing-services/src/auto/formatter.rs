@@ -4,7 +4,7 @@
 // DO NOT EDIT
 #![allow(deprecated)]
 
-use crate::{ffi, Asset, Extractable, Timeline};
+use crate::{Asset, Extractable, Timeline, ffi};
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {

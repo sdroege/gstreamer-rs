@@ -3,7 +3,7 @@
 use glib::{prelude::*, translate::*};
 use gst::subclass::prelude::*;
 
-use crate::{ffi, Aggregator, AggregatorPad};
+use crate::{Aggregator, AggregatorPad, ffi};
 
 pub trait AggregatorPadImpl: PadImpl + ObjectSubclass<Type: IsA<AggregatorPad>> {
     fn flush(&self, aggregator: &Aggregator) -> Result<gst::FlowSuccess, gst::FlowError> {

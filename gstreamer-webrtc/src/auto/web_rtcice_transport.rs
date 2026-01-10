@@ -6,11 +6,11 @@
 #[cfg(feature = "v1_28")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
 use crate::WebRTCICECandidatePair;
-use crate::{ffi, WebRTCICEComponent, WebRTCICEConnectionState, WebRTCICEGatheringState};
+use crate::{WebRTCICEComponent, WebRTCICEConnectionState, WebRTCICEGatheringState, ffi};
 use glib::{
     object::ObjectType as _,
     prelude::*,
-    signal::{connect_raw, SignalHandlerId},
+    signal::{SignalHandlerId, connect_raw},
     translate::*,
 };
 use std::boxed::Box as Box_;

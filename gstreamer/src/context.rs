@@ -2,9 +2,9 @@
 
 use std::{ffi::CStr, fmt};
 
-use glib::translate::{from_glib, from_glib_full, IntoGlib, ToGlibPtr};
+use glib::translate::{IntoGlib, ToGlibPtr, from_glib, from_glib_full};
 
-use crate::{ffi, StructureRef};
+use crate::{StructureRef, ffi};
 
 mini_object_wrapper!(Context, ContextRef, ffi::GstContext, || {
     ffi::gst_context_get_type()

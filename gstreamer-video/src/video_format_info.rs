@@ -3,7 +3,7 @@
 use std::{cmp::Ordering, fmt, marker::PhantomData, str};
 
 use crate::ffi;
-use glib::translate::{from_glib, IntoGlib, ToGlibPtr};
+use glib::translate::{IntoGlib, ToGlibPtr, from_glib};
 
 #[doc(alias = "GstVideoFormatInfo")]
 #[derive(Copy, Clone)]

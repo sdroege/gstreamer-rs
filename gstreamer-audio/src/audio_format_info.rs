@@ -5,7 +5,7 @@ use std::{cmp::Ordering, fmt, marker::PhantomData, str};
 use crate::ffi;
 use glib::{
     prelude::*,
-    translate::{from_glib, from_glib_none, FromGlib, IntoGlib, ToGlibPtr, ToGlibPtrMut},
+    translate::{FromGlib, IntoGlib, ToGlibPtr, ToGlibPtrMut, from_glib, from_glib_none},
 };
 
 #[derive(PartialEq, Eq, Copy, Clone, Debug, Hash)]

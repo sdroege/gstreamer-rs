@@ -5,7 +5,7 @@ use std::{mem, ptr};
 use glib::{prelude::*, translate::*};
 use gst::prelude::*;
 
-use crate::{ffi, BaseTransform};
+use crate::{BaseTransform, ffi};
 
 pub trait BaseTransformExtManual: IsA<BaseTransform> + 'static {
     #[doc(alias = "get_allocator")]

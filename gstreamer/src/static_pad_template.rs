@@ -4,7 +4,7 @@ use std::{ffi::CStr, fmt, marker::PhantomData, ptr};
 
 use glib::{prelude::*, translate::*};
 
-use crate::{ffi, Caps, PadTemplate};
+use crate::{Caps, PadTemplate, ffi};
 
 #[doc(alias = "GstStaticPadTemplate")]
 #[derive(Clone, Copy)]

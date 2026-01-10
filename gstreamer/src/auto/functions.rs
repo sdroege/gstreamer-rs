@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{ffi, Bin, ClockTime, DebugGraphDetails, DebugLevel, Element, StackTraceFlags};
+use crate::{Bin, ClockTime, DebugGraphDetails, DebugLevel, Element, StackTraceFlags, ffi};
 use glib::{prelude::*, translate::*};
 #[cfg(feature = "v1_28")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]

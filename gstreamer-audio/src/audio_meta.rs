@@ -143,7 +143,14 @@ impl AudioMeta {
                             && !(other_offset + plane_size <= offset
                                 || offset + plane_size <= other_offset)
                         {
-                            return Err(glib::bool_error!("Overlapping audio channel offsets: offset {} for channel {} and offset {} for channel {} with a plane size of {}", offset, i, other_offset, j, plane_size));
+                            return Err(glib::bool_error!(
+                                "Overlapping audio channel offsets: offset {} for channel {} and offset {} for channel {} with a plane size of {}",
+                                offset,
+                                i,
+                                other_offset,
+                                j,
+                                plane_size
+                            ));
                         }
                     }
                 }
@@ -152,7 +159,12 @@ impl AudioMeta {
             };
 
             if max_offset + plane_size > buffer.size() {
-                return Err(glib::bool_error!("Audio channel offsets out of bounds: max offset {} with plane size {} and buffer size {}", max_offset, plane_size, buffer.size()));
+                return Err(glib::bool_error!(
+                    "Audio channel offsets out of bounds: max offset {} with plane size {} and buffer size {}",
+                    max_offset,
+                    plane_size,
+                    buffer.size()
+                ));
             }
         }
 

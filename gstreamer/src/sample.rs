@@ -2,11 +2,11 @@
 
 use std::{fmt, ptr};
 
-use glib::translate::{from_glib_full, from_glib_none, IntoGlibPtr, ToGlibPtr};
+use glib::translate::{IntoGlibPtr, ToGlibPtr, from_glib_full, from_glib_none};
 
 use crate::{
-    ffi, format::FormattedValueIntrinsic, Buffer, BufferList, BufferListRef, BufferRef, Caps,
-    CapsRef, FormattedSegment, Segment, Structure, StructureRef,
+    Buffer, BufferList, BufferListRef, BufferRef, Caps, CapsRef, FormattedSegment, Segment,
+    Structure, StructureRef, ffi, format::FormattedValueIntrinsic,
 };
 
 mini_object_wrapper!(Sample, SampleRef, ffi::GstSample, || {

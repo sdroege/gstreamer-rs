@@ -4,11 +4,11 @@
 // DO NOT EDIT
 #![allow(deprecated)]
 
-use crate::{ffi, Edge, EditMode, Extractable, Layer, MetaContainer, TimelineElement};
+use crate::{Edge, EditMode, Extractable, Layer, MetaContainer, TimelineElement, ffi};
 use glib::{
     object::ObjectType as _,
     prelude::*,
-    signal::{connect_raw, SignalHandlerId},
+    signal::{SignalHandlerId, connect_raw},
     translate::*,
 };
 use std::boxed::Box as Box_;

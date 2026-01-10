@@ -8,7 +8,7 @@ use libc::c_char;
 use log;
 use std::sync::LazyLock;
 
-use crate::{ffi, DebugLevel};
+use crate::{DebugLevel, ffi};
 
 // import and rename those so they are namespaced as log::*
 pub use crate::auto::functions::debug_add_ring_buffer_logger as add_ring_buffer_logger;
@@ -1371,7 +1371,7 @@ pub fn remove_log_function(log_fn: DebugLogFunction) {
 
 #[cfg(test)]
 mod tests {
-    use std::sync::{mpsc, Arc, Mutex};
+    use std::sync::{Arc, Mutex, mpsc};
 
     use super::*;
 
@@ -1389,9 +1389,11 @@ mod tests {
     fn all() {
         crate::init().unwrap();
 
-        assert!(DebugCategory::all_categories()
-            .iter()
-            .any(|c| c.name() == "GST_PERFORMANCE"));
+        assert!(
+            DebugCategory::all_categories()
+                .iter()
+                .any(|c| c.name() == "GST_PERFORMANCE")
+        );
     }
 
     #[test]

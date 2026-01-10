@@ -1,6 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::{ffi, RTSPClient, RTSPSession};
+use crate::{RTSPClient, RTSPSession, ffi};
 use glib::{prelude::*, source::SourceId, translate::*};
 use gst_rtsp::rtsp_message::RTSPMessage;
 

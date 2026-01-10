@@ -4,8 +4,8 @@
 // DO NOT EDIT
 
 use crate::{
-    ffi, BaseEffectClip, Clip, Container, Extractable, MetaContainer, OperationClip,
-    TimelineElement,
+    BaseEffectClip, Clip, Container, Extractable, MetaContainer, OperationClip, TimelineElement,
+    ffi,
 };
 use glib::{prelude::*, translate::*};
 

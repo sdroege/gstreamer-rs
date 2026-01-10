@@ -1,7 +1,7 @@
 use glib::{object::IsA, translate::*};
 use gst::prelude::*;
 
-use crate::{ffi, subclass::AggregateFramesToken, VideoAggregatorPad};
+use crate::{VideoAggregatorPad, ffi, subclass::AggregateFramesToken};
 
 pub trait VideoAggregatorPadExtManual: IsA<VideoAggregatorPad> + 'static {
     #[doc(alias = "gst_video_aggregator_pad_has_current_buffer")]

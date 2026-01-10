@@ -3,7 +3,7 @@ use std::{fmt, os::unix::prelude::RawFd};
 use glib::{prelude::*, translate::*};
 use gst::{Memory, MemoryRef};
 
-use crate::{ffi, FdAllocator, FdMemoryFlags};
+use crate::{FdAllocator, FdMemoryFlags, ffi};
 
 gst::memory_object_wrapper!(
     FdMemory,

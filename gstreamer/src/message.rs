@@ -9,11 +9,10 @@ use glib::{
 use smallvec::SmallVec;
 
 use crate::{
-    ffi,
+    GenericFormattedValue, GroupId, MessageType, Object, Seqnum, TagList, ffi,
     format::{CompatibleFormattedValue, FormattedValue},
     prelude::*,
     structure::*,
-    GenericFormattedValue, GroupId, MessageType, Object, Seqnum, TagList,
 };
 
 mini_object_wrapper!(Message, MessageRef, ffi::GstMessage, || {
@@ -533,13 +532,15 @@ impl Error {
     pub fn builder_from_error<'a>(error: glib::Error) -> ErrorBuilder<'a> {
         assert_initialized_main_thread!();
 
-        assert!([
-            crate::CoreError::domain(),
-            crate::ResourceError::domain(),
-            crate::StreamError::domain(),
-            crate::LibraryError::domain(),
-        ]
-        .contains(&error.domain()));
+        assert!(
+            [
+                crate::CoreError::domain(),
+                crate::ResourceError::domain(),
+                crate::StreamError::domain(),
+                crate::LibraryError::domain(),
+            ]
+            .contains(&error.domain())
+        );
         ErrorBuilder::new(error)
     }
 
@@ -638,13 +639,15 @@ impl Warning {
     pub fn builder_from_error<'a>(error: glib::Error) -> WarningBuilder<'a> {
         assert_initialized_main_thread!();
 
-        assert!([
-            crate::CoreError::domain(),
-            crate::ResourceError::domain(),
-            crate::StreamError::domain(),
-            crate::LibraryError::domain(),
-        ]
-        .contains(&error.domain()));
+        assert!(
+            [
+                crate::CoreError::domain(),
+                crate::ResourceError::domain(),
+                crate::StreamError::domain(),
+                crate::LibraryError::domain(),
+            ]
+            .contains(&error.domain())
+        );
         WarningBuilder::new(error)
     }
 
@@ -743,13 +746,15 @@ impl Info {
     pub fn builder_from_error<'a>(error: glib::Error) -> InfoBuilder<'a> {
         assert_initialized_main_thread!();
 
-        assert!([
-            crate::CoreError::domain(),
-            crate::ResourceError::domain(),
-            crate::StreamError::domain(),
-            crate::LibraryError::domain(),
-        ]
-        .contains(&error.domain()));
+        assert!(
+            [
+                crate::CoreError::domain(),
+                crate::ResourceError::domain(),
+                crate::StreamError::domain(),
+                crate::LibraryError::domain(),
+            ]
+            .contains(&error.domain())
+        );
         InfoBuilder::new(error)
     }
 
@@ -2834,11 +2839,7 @@ macro_rules! message_builder_generic_impl {
 
         #[allow(clippy::needless_update)]
         pub fn src_if<O: IsA<Object> + Cast + Clone>(self, src: &O, predicate: bool) -> Self {
-            if predicate {
-                self.src(src)
-            } else {
-                self
-            }
+            if predicate { self.src(src) } else { self }
         }
 
         #[allow(clippy::needless_update)]
@@ -2862,11 +2863,7 @@ macro_rules! message_builder_generic_impl {
         #[doc(alias = "gst_message_set_seqnum")]
         #[allow(clippy::needless_update)]
         pub fn seqnum_if(self, seqnum: Seqnum, predicate: bool) -> Self {
-            if predicate {
-                self.seqnum(seqnum)
-            } else {
-                self
-            }
+            if predicate { self.seqnum(seqnum) } else { self }
         }
 
         #[doc(alias = "gst_message_set_seqnum")]
@@ -3012,11 +3009,7 @@ impl<'a> ErrorBuilder<'a> {
     }
 
     pub fn debug_if(self, debug: &'a str, predicate: bool) -> Self {
-        if predicate {
-            self.debug(debug)
-        } else {
-            self
-        }
+        if predicate { self.debug(debug) } else { self }
     }
 
     pub fn debug_if_some(self, debug: Option<&'a str>) -> Self {
@@ -3096,11 +3089,7 @@ impl<'a> WarningBuilder<'a> {
     }
 
     pub fn debug_if(self, debug: &'a str, predicate: bool) -> Self {
-        if predicate {
-            self.debug(debug)
-        } else {
-            self
-        }
+        if predicate { self.debug(debug) } else { self }
     }
 
     pub fn debug_if_some(self, debug: Option<&'a str>) -> Self {
@@ -3180,11 +3169,7 @@ impl<'a> InfoBuilder<'a> {
     }
 
     pub fn debug_if(self, debug: &'a str, predicate: bool) -> Self {
-        if predicate {
-            self.debug(debug)
-        } else {
-            self
-        }
+        if predicate { self.debug(debug) } else { self }
     }
 
     pub fn debug_if_some(self, debug: Option<&'a str>) -> Self {
@@ -4157,11 +4142,7 @@ impl<'a> PropertyNotifyBuilder<'a> {
     }
 
     pub fn value_if(self, value: impl ToSendValue, predicate: bool) -> Self {
-        if predicate {
-            self.value(value)
-        } else {
-            self
-        }
+        if predicate { self.value(value) } else { self }
     }
 
     pub fn value_if_some(self, value: Option<impl ToSendValue>) -> Self {

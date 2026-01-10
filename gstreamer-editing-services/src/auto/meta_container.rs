@@ -6,11 +6,11 @@
 #[cfg(feature = "v1_18")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 use crate::MarkerList;
-use crate::{ffi, MetaFlag};
+use crate::{MetaFlag, ffi};
 use glib::{
     object::ObjectType as _,
     prelude::*,
-    signal::{connect_raw, SignalHandlerId},
+    signal::{SignalHandlerId, connect_raw},
     translate::*,
 };
 use std::boxed::Box as Box_;
@@ -153,11 +153,7 @@ pub trait MetaContainerExt: IsA<MetaContainer> + 'static {
                 meta_item.to_glib_none().0,
                 dest.as_mut_ptr(),
             ));
-            if ret {
-                Some(dest.assume_init())
-            } else {
-                None
-            }
+            if ret { Some(dest.assume_init()) } else { None }
         }
     }
 
@@ -171,11 +167,7 @@ pub trait MetaContainerExt: IsA<MetaContainer> + 'static {
                 meta_item.to_glib_none().0,
                 dest.as_mut_ptr(),
             ));
-            if ret {
-                Some(dest.assume_init())
-            } else {
-                None
-            }
+            if ret { Some(dest.assume_init()) } else { None }
         }
     }
 
@@ -189,11 +181,7 @@ pub trait MetaContainerExt: IsA<MetaContainer> + 'static {
                 meta_item.to_glib_none().0,
                 dest.as_mut_ptr(),
             ));
-            if ret {
-                Some(dest.assume_init())
-            } else {
-                None
-            }
+            if ret { Some(dest.assume_init()) } else { None }
         }
     }
 
@@ -207,11 +195,7 @@ pub trait MetaContainerExt: IsA<MetaContainer> + 'static {
                 meta_item.to_glib_none().0,
                 dest.as_mut_ptr(),
             ));
-            if ret {
-                Some(dest.assume_init())
-            } else {
-                None
-            }
+            if ret { Some(dest.assume_init()) } else { None }
         }
     }
 
@@ -260,11 +244,7 @@ pub trait MetaContainerExt: IsA<MetaContainer> + 'static {
                 meta_item.to_glib_none().0,
                 dest.as_mut_ptr(),
             ));
-            if ret {
-                Some(dest.assume_init())
-            } else {
-                None
-            }
+            if ret { Some(dest.assume_init()) } else { None }
         }
     }
 
@@ -278,11 +258,7 @@ pub trait MetaContainerExt: IsA<MetaContainer> + 'static {
                 meta_item.to_glib_none().0,
                 dest.as_mut_ptr(),
             ));
-            if ret {
-                Some(dest.assume_init())
-            } else {
-                None
-            }
+            if ret { Some(dest.assume_init()) } else { None }
         }
     }
 

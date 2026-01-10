@@ -4,7 +4,7 @@ use std::{cmp, fmt};
 
 use glib::translate::*;
 
-use crate::{ffi, DateTime};
+use crate::{DateTime, ffi};
 
 // Validate that the given values result in a valid DateTime
 fn validate(
@@ -100,7 +100,9 @@ fn validate(
 
     // If seconds or tzoffset are provided then also hours and minutes must be provided
     if (seconds.is_some() || tzoffset.is_some()) && (hour.is_none() || minute.is_none()) {
-        return Err(glib::bool_error!("Can't create DateTime: Need to provide hour and minute if providing seconds or timezone offset"));
+        return Err(glib::bool_error!(
+            "Can't create DateTime: Need to provide hour and minute if providing seconds or timezone offset"
+        ));
     }
 
     Ok(())
@@ -682,20 +684,26 @@ mod tests {
         // In the following cases, the partially defined `DateTime` is a range WRT
         // the fully defined `DateTime` and this range includes the fully defined `DateTime`,
         // but we can't tell if it's before or after and they are not equal (note 1)
-        assert!(DateTime::new(2f32, 2019, 8, 20, 19, 43, 44.123_456f64)
-            .unwrap()
-            .partial_cmp(&DateTime::from_ymd(2019, 8, 20).unwrap())
-            .is_none());
+        assert!(
+            DateTime::new(2f32, 2019, 8, 20, 19, 43, 44.123_456f64)
+                .unwrap()
+                .partial_cmp(&DateTime::from_ymd(2019, 8, 20).unwrap())
+                .is_none()
+        );
 
-        assert!(DateTime::from_ymd(2019, 8, 20)
-            .unwrap()
-            .partial_cmp(&DateTime::new(2f32, 2019, 8, 20, 19, 43, 44.123_456f64).unwrap())
-            .is_none());
+        assert!(
+            DateTime::from_ymd(2019, 8, 20)
+                .unwrap()
+                .partial_cmp(&DateTime::new(2f32, 2019, 8, 20, 19, 43, 44.123_456f64).unwrap())
+                .is_none()
+        );
 
-        assert!(DateTime::from_ym(2019, 1)
-            .unwrap()
-            .partial_cmp(&DateTime::from_y(2019).unwrap())
-            .is_none());
+        assert!(
+            DateTime::from_ym(2019, 1)
+                .unwrap()
+                .partial_cmp(&DateTime::from_y(2019).unwrap())
+                .is_none()
+        );
     }
 
     #[test]

@@ -4,11 +4,11 @@
 // DO NOT EDIT
 
 use crate::{
-    ffi, Clip, Container, Extractable, MetaContainer, SourceClip, TimelineElement, VideoTestPattern,
+    Clip, Container, Extractable, MetaContainer, SourceClip, TimelineElement, VideoTestPattern, ffi,
 };
 use glib::{
     prelude::*,
-    signal::{connect_raw, SignalHandlerId},
+    signal::{SignalHandlerId, connect_raw},
     translate::*,
 };
 use std::boxed::Box as Box_;

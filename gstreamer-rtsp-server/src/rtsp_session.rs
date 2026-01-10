@@ -4,7 +4,7 @@ use std::mem;
 
 use glib::{prelude::*, translate::*};
 
-use crate::{ffi, RTSPSession, RTSPSessionMedia};
+use crate::{RTSPSession, RTSPSessionMedia, ffi};
 
 pub trait RTSPSessionExtManual: IsA<super::RTSPSession> + 'static {
     #[doc(alias = "gst_rtsp_session_dup_media")]

@@ -4,7 +4,7 @@ use glib::{prelude::*, translate::*};
 use gst::prelude::*;
 use gst_base::prelude::*;
 
-use crate::{ffi, VideoFilter};
+use crate::{VideoFilter, ffi};
 
 pub trait VideoFilterExtManual: IsA<VideoFilter> + 'static {
     fn input_video_info(&self) -> Option<crate::VideoInfo> {

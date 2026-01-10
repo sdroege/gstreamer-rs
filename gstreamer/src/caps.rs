@@ -4,13 +4,13 @@ use std::{fmt, marker::PhantomData, ptr, str};
 
 use cfg_if::cfg_if;
 use glib::{
+    GStr,
     prelude::*,
     translate::*,
     value::{SendValue, ToSendValue},
-    GStr,
 };
 
-use crate::{caps_features::*, ffi, structure::*, CapsIntersectMode, IdStr};
+use crate::{CapsIntersectMode, IdStr, caps_features::*, ffi, structure::*};
 
 mini_object_wrapper!(Caps, CapsRef, ffi::GstCaps, || { ffi::gst_caps_get_type() });
 
@@ -1577,19 +1577,21 @@ mod tests {
             "foo/bar, int=(int)12, bool=(boolean)true, string=(string)bla, fraction=(fraction)1/2, array=(int)< 1, 2 >"
         );
 
-        assert!(caps
-            .features(0)
-            .unwrap()
-            .is_equal(crate::CAPS_FEATURES_MEMORY_SYSTEM_MEMORY.as_ref()));
+        assert!(
+            caps.features(0)
+                .unwrap()
+                .is_equal(crate::CAPS_FEATURES_MEMORY_SYSTEM_MEMORY.as_ref())
+        );
 
         {
             let caps = caps.get_mut().unwrap();
             caps.set_features(0, Some(CapsFeatures::new(["foo:bla"])));
         }
-        assert!(caps
-            .features(0)
-            .unwrap()
-            .is_equal(CapsFeatures::new(["foo:bla"]).as_ref()));
+        assert!(
+            caps.features(0)
+                .unwrap()
+                .is_equal(CapsFeatures::new(["foo:bla"]).as_ref())
+        );
 
         let caps = Caps::builder("foo/bar")
             .field("int", 12)
@@ -1778,7 +1780,10 @@ mod tests {
             )
             .build();
 
-        assert_eq!(format!("{caps:?}"), "Caps(audio/x-raw(foo:bla) { struct: Structure(nested { badger: (gboolean) TRUE }) }, video/x-raw(foo:bla) { width: (guint) 800 })");
+        assert_eq!(
+            format!("{caps:?}"),
+            "Caps(audio/x-raw(foo:bla) { struct: Structure(nested { badger: (gboolean) TRUE }) }, video/x-raw(foo:bla) { width: (guint) 800 })"
+        );
 
         let caps = Caps::builder_full()
             .structure(
@@ -1789,7 +1794,10 @@ mod tests {
             )
             .build();
 
-        assert_eq!(format!("{caps:?}"), "Caps(video/x-raw(memory:SystemMemory) { array: Array([(gchararray) \"a\", (gchararray) \"b\", (gchararray) \"c\"]), list: List([(gchararray) \"d\", (gchararray) \"e\", (gchararray) \"f\"]) })");
+        assert_eq!(
+            format!("{caps:?}"),
+            "Caps(video/x-raw(memory:SystemMemory) { array: Array([(gchararray) \"a\", (gchararray) \"b\", (gchararray) \"c\"]), list: List([(gchararray) \"d\", (gchararray) \"e\", (gchararray) \"f\"]) })"
+        );
     }
 
     #[cfg(feature = "v1_28")]

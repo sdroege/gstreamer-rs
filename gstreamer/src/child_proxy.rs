@@ -4,7 +4,7 @@ use std::ptr;
 
 use glib::{prelude::*, translate::*};
 
-use crate::{gobject::GObjectExtManualGst, ChildProxy};
+use crate::{ChildProxy, gobject::GObjectExtManualGst};
 
 pub trait ChildProxyExtManual: IsA<ChildProxy> + 'static {
     #[doc(alias = "gst_child_proxy_lookup")]

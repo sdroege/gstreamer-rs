@@ -6,10 +6,10 @@
 #[cfg(feature = "v1_18")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 use crate::SourceClipAsset;
-use crate::{ffi, Asset, ClipAsset, MetaContainer, UriSourceAsset};
+use crate::{Asset, ClipAsset, MetaContainer, UriSourceAsset, ffi};
 use glib::{
     prelude::*,
-    signal::{connect_raw, SignalHandlerId},
+    signal::{SignalHandlerId, connect_raw},
     translate::*,
 };
 use std::boxed::Box as Box_;

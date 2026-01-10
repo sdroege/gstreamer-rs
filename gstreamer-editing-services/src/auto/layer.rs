@@ -7,11 +7,11 @@
 #[cfg(feature = "v1_18")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 use crate::Track;
-use crate::{ffi, Asset, Clip, Extractable, MetaContainer, Timeline, TrackType};
+use crate::{Asset, Clip, Extractable, MetaContainer, Timeline, TrackType, ffi};
 use glib::{
     object::ObjectType as _,
     prelude::*,
-    signal::{connect_raw, SignalHandlerId},
+    signal::{SignalHandlerId, connect_raw},
     translate::*,
 };
 use std::boxed::Box as Box_;

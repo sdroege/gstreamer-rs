@@ -117,11 +117,13 @@ fn test_action_types() {
                     move || {
                         *async_called.0.lock().unwrap() = true;
 
-                        assert!(action
-                            .structure()
-                            .unwrap()
-                            .get::<bool>("running-async")
-                            .unwrap());
+                        assert!(
+                            action
+                                .structure()
+                                .unwrap()
+                                .get::<bool>("running-async")
+                                .unwrap()
+                        );
                         action.set_done();
                     }
                 ));

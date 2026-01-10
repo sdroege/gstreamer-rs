@@ -1,7 +1,7 @@
 use glib::translate::*;
 use gst::prelude::*;
 
-use crate::{ffi, VideoAggregator};
+use crate::{VideoAggregator, ffi};
 
 pub trait VideoAggregatorExtManual: IsA<VideoAggregator> + 'static {
     fn video_info(&self) -> Option<crate::VideoInfo> {

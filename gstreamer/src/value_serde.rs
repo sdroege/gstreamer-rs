@@ -4,7 +4,7 @@
 
 use std::{fmt, mem};
 
-use glib::{prelude::*, Date};
+use glib::{Date, prelude::*};
 use num_rational::Rational32;
 use serde::{
     de,
@@ -14,7 +14,7 @@ use serde::{
 };
 use std::sync::LazyLock;
 
-use crate::{date_time_serde, value::*, Buffer, DateTime, List, Sample, Structure};
+use crate::{Buffer, DateTime, List, Sample, Structure, date_time_serde, value::*};
 
 pub(crate) static ARRAY_OTHER_TYPE_ID: LazyLock<glib::Type> = LazyLock::new(Array::static_type);
 pub(crate) static BITMASK_OTHER_TYPE_ID: LazyLock<glib::Type> = LazyLock::new(Bitmask::static_type);
@@ -543,10 +543,12 @@ mod tests {
             slice[0].get::<String>().expect("slice[0]")
         );
 
-        assert!(slice[1]
-            .get::<Option<String>>()
-            .expect("slice[1]")
-            .is_none());
+        assert!(
+            slice[1]
+                .get::<Option<String>>()
+                .expect("slice[1]")
+                .is_none()
+        );
 
         // Array of dates
         let array_ron = r#"[
@@ -587,10 +589,12 @@ mod tests {
             slice[0].get::<String>().expect("slice[0]")
         );
 
-        assert!(slice[1]
-            .get::<Option<String>>()
-            .expect("slice[1]")
-            .is_none());
+        assert!(
+            slice[1]
+                .get::<Option<String>>()
+                .expect("slice[1]")
+                .is_none()
+        );
 
         // Array of dates
         let array_json = r#"[["Date",{"YMD":[2019,8,19]}],["Date",null]]"#;
@@ -629,10 +633,12 @@ mod tests {
             slice[0].get::<String>().expect("slice[0]")
         );
 
-        assert!(slice[1]
-            .get::<Option<String>>()
-            .expect("slice[1]")
-            .is_none());
+        assert!(
+            slice[1]
+                .get::<Option<String>>()
+                .expect("slice[1]")
+                .is_none()
+        );
 
         // List of date times
         let list_ron = r#"[
@@ -647,10 +653,12 @@ mod tests {
             slice[0].get::<DateTime>().expect("slice[0]")
         );
 
-        assert!(slice[1]
-            .get::<Option<DateTime>>()
-            .expect("slice[1]")
-            .is_none());
+        assert!(
+            slice[1]
+                .get::<Option<DateTime>>()
+                .expect("slice[1]")
+                .is_none()
+        );
     }
 
     #[test]

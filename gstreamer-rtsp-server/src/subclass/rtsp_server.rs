@@ -2,7 +2,7 @@
 
 use glib::{prelude::*, subclass::prelude::*, translate::*};
 
-use crate::{ffi, RTSPServer};
+use crate::{RTSPServer, ffi};
 
 pub trait RTSPServerImpl: ObjectImpl + ObjectSubclass<Type: IsA<RTSPServer>> + Send + Sync {
     fn create_client(&self) -> Option<crate::RTSPClient> {

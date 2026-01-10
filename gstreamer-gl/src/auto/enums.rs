@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{ffi, GLContext, GLSLProfile};
+use crate::{GLContext, GLSLProfile, ffi};
 use glib::{prelude::*, translate::*};
 
 #[cfg(feature = "v1_20")]

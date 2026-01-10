@@ -243,7 +243,7 @@ impl VideoOverlayComposition {
                 None => {
                     return Err(glib::bool_error!(
                         "Failed to create VideoOverlayComposition"
-                    ))
+                    ));
                 }
                 Some(first) => first,
             };

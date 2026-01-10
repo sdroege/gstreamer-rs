@@ -3,7 +3,7 @@
 use std::{fmt, marker::PhantomData, mem, ops, ptr, slice};
 
 use crate::ffi;
-use glib::translate::{from_glib, from_glib_none, Borrowed, ToGlibPtr};
+use glib::translate::{Borrowed, ToGlibPtr, from_glib, from_glib_none};
 
 pub enum Readable {}
 pub enum Writable {}

@@ -19,18 +19,18 @@ mod manual;
 
 pub use manual::*;
 
+#[allow(unused_imports)]
+use libc::{FILE, intptr_t, off_t, size_t, ssize_t, time_t, uintptr_t};
 #[cfg(unix)]
 #[allow(unused_imports)]
 use libc::{dev_t, gid_t, pid_t, socklen_t, uid_t};
-#[allow(unused_imports)]
-use libc::{intptr_t, off_t, size_t, ssize_t, time_t, uintptr_t, FILE};
 #[allow(unused_imports)]
 use std::ffi::{
     c_char, c_double, c_float, c_int, c_long, c_short, c_uchar, c_uint, c_ulong, c_ushort, c_void,
 };
 
 #[allow(unused_imports)]
-use glib::{gboolean, gconstpointer, gpointer, GType};
+use glib::{GType, gboolean, gconstpointer, gpointer};
 
 // Aliases
 pub type GstBufferMapInfo = GstMapInfo;
@@ -4865,7 +4865,7 @@ unsafe extern "C" {
     #[cfg(feature = "v1_28")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
     pub fn gst_buffer_take(old_buffer: *mut *mut GstBuffer, new_buffer: *mut GstBuffer)
-        -> gboolean;
+    -> gboolean;
 
     //=========================================================================
     // GstBufferList
@@ -5381,7 +5381,7 @@ unsafe extern "C" {
     ) -> *mut GstEvent;
     pub fn gst_event_new_caps(caps: *mut GstCaps) -> *mut GstEvent;
     pub fn gst_event_new_custom(type_: GstEventType, structure: *mut GstStructure)
-        -> *mut GstEvent;
+    -> *mut GstEvent;
     pub fn gst_event_new_eos() -> *mut GstEvent;
     pub fn gst_event_new_flush_start() -> *mut GstEvent;
     pub fn gst_event_new_flush_stop(reset_time: gboolean) -> *mut GstEvent;
@@ -5681,7 +5681,7 @@ unsafe extern "C" {
     ) -> GstIteratorResult;
     pub fn gst_iterator_free(it: *mut GstIterator);
     pub fn gst_iterator_next(it: *mut GstIterator, elem: *mut gobject::GValue)
-        -> GstIteratorResult;
+    -> GstIteratorResult;
     pub fn gst_iterator_push(it: *mut GstIterator, other: *mut GstIterator);
     pub fn gst_iterator_resync(it: *mut GstIterator);
 
@@ -5810,7 +5810,7 @@ unsafe extern "C" {
     #[cfg(feature = "v1_28")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
     pub fn gst_memory_take(old_memory: *mut *mut GstMemory, new_memory: *mut GstMemory)
-        -> gboolean;
+    -> gboolean;
 
     //=========================================================================
     // GstMessage
@@ -5827,7 +5827,7 @@ unsafe extern "C" {
     pub fn gst_message_new_async_start(src: *mut GstObject) -> *mut GstMessage;
     pub fn gst_message_new_buffering(src: *mut GstObject, percent: c_int) -> *mut GstMessage;
     pub fn gst_message_new_clock_lost(src: *mut GstObject, clock: *mut GstClock)
-        -> *mut GstMessage;
+    -> *mut GstMessage;
     pub fn gst_message_new_clock_provide(
         src: *mut GstObject,
         clock: *mut GstClock,
@@ -6021,7 +6021,7 @@ unsafe extern "C" {
     pub fn gst_message_get_num_redirect_entries(message: *mut GstMessage) -> size_t;
     pub fn gst_message_get_seqnum(message: *mut GstMessage) -> u32;
     pub fn gst_message_get_stream_status_object(message: *mut GstMessage)
-        -> *const gobject::GValue;
+    -> *const gobject::GValue;
     pub fn gst_message_get_structure(message: *mut GstMessage) -> *const GstStructure;
     pub fn gst_message_has_name(message: *mut GstMessage, name: *const c_char) -> gboolean;
     pub fn gst_message_is_writable(message: *const GstMessage) -> gboolean;
@@ -6290,7 +6290,7 @@ unsafe extern "C" {
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_meta_serialize_simple(meta: *const GstMeta, data: *mut glib::GByteArray)
-        -> gboolean;
+    -> gboolean;
     #[cfg(feature = "v1_26")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
     pub fn gst_meta_api_type_aggregate_params(
@@ -6390,7 +6390,7 @@ unsafe extern "C" {
         destroy: glib::GDestroyNotify,
     );
     pub fn gst_mini_object_steal_qdata(object: *mut GstMiniObject, quark: glib::GQuark)
-        -> gpointer;
+    -> gpointer;
     pub fn gst_mini_object_unlock(object: *mut GstMiniObject, flags: GstLockFlags);
     pub fn gst_mini_object_unref(mini_object: *mut GstMiniObject);
     pub fn gst_mini_object_weak_ref(
@@ -6473,7 +6473,7 @@ unsafe extern "C" {
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_poll_fd_ctl_pri(set: *mut GstPoll, fd: *mut GstPollFD, active: gboolean)
-        -> gboolean;
+    -> gboolean;
     pub fn gst_poll_fd_ctl_read(
         set: *mut GstPoll,
         fd: *mut GstPollFD,
@@ -6552,7 +6552,7 @@ unsafe extern "C" {
         dest_format: GstFormat,
     ) -> *mut GstQuery;
     pub fn gst_query_new_custom(type_: GstQueryType, structure: *mut GstStructure)
-        -> *mut GstQuery;
+    -> *mut GstQuery;
     pub fn gst_query_new_drain() -> *mut GstQuery;
     pub fn gst_query_new_duration(format: GstFormat) -> *mut GstQuery;
     pub fn gst_query_new_formats() -> *mut GstQuery;
@@ -7805,7 +7805,7 @@ unsafe extern "C" {
     pub fn gst_uri_set_host(uri: *mut GstUri, host: *const c_char) -> gboolean;
     pub fn gst_uri_set_path(uri: *mut GstUri, path: *const c_char) -> gboolean;
     pub fn gst_uri_set_path_segments(uri: *mut GstUri, path_segments: *mut glib::GList)
-        -> gboolean;
+    -> gboolean;
     pub fn gst_uri_set_path_string(uri: *mut GstUri, path: *const c_char) -> gboolean;
     pub fn gst_uri_set_port(uri: *mut GstUri, port: c_uint) -> gboolean;
     pub fn gst_uri_set_query_string(uri: *mut GstUri, query: *const c_char) -> gboolean;
@@ -7824,7 +7824,7 @@ unsafe extern "C" {
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_uri_to_string_with_keys(uri: *const GstUri, keys: *const glib::GList)
-        -> *mut c_char;
+    -> *mut c_char;
     #[cfg(feature = "v1_18_3")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18_3")))]
     pub fn gst_uri_unref(uri: *mut GstUri);
@@ -7970,7 +7970,7 @@ unsafe extern "C" {
     pub fn gst_bin_get_by_interface(bin: *mut GstBin, iface: GType) -> *mut GstElement;
     pub fn gst_bin_get_by_name(bin: *mut GstBin, name: *const c_char) -> *mut GstElement;
     pub fn gst_bin_get_by_name_recurse_up(bin: *mut GstBin, name: *const c_char)
-        -> *mut GstElement;
+    -> *mut GstElement;
     pub fn gst_bin_get_suppressed_flags(bin: *mut GstBin) -> GstElementFlags;
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
@@ -8197,7 +8197,7 @@ unsafe extern "C" {
     );
     pub fn gst_clock_set_master(clock: *mut GstClock, master: *mut GstClock) -> gboolean;
     pub fn gst_clock_set_resolution(clock: *mut GstClock, resolution: GstClockTime)
-        -> GstClockTime;
+    -> GstClockTime;
     pub fn gst_clock_set_synced(clock: *mut GstClock, synced: gboolean);
     pub fn gst_clock_set_timeout(clock: *mut GstClock, timeout: GstClockTime);
     pub fn gst_clock_single_shot_id_reinit(
@@ -8528,7 +8528,7 @@ unsafe extern "C" {
         timeout: GstClockTime,
     ) -> GstStateChangeReturn;
     pub fn gst_element_get_static_pad(element: *mut GstElement, name: *const c_char)
-        -> *mut GstPad;
+    -> *mut GstPad;
     pub fn gst_element_is_locked_state(element: *mut GstElement) -> gboolean;
     pub fn gst_element_iterate_pads(element: *mut GstElement) -> *mut GstIterator;
     pub fn gst_element_iterate_sink_pads(element: *mut GstElement) -> *mut GstIterator;
@@ -8590,7 +8590,7 @@ unsafe extern "C" {
     );
     pub fn gst_element_no_more_pads(element: *mut GstElement);
     pub fn gst_element_post_message(element: *mut GstElement, message: *mut GstMessage)
-        -> gboolean;
+    -> gboolean;
     pub fn gst_element_provide_clock(element: *mut GstElement) -> *mut GstClock;
     pub fn gst_element_query(element: *mut GstElement, query: *mut GstQuery) -> gboolean;
     pub fn gst_element_query_convert(
@@ -8652,7 +8652,7 @@ unsafe extern "C" {
     ) -> gboolean;
     pub fn gst_element_set_start_time(element: *mut GstElement, time: GstClockTime);
     pub fn gst_element_set_state(element: *mut GstElement, state: GstState)
-        -> GstStateChangeReturn;
+    -> GstStateChangeReturn;
     pub fn gst_element_sync_state_with_parent(element: *mut GstElement) -> gboolean;
     pub fn gst_element_unlink(src: *mut GstElement, dest: *mut GstElement);
     pub fn gst_element_unlink_many(element_1: *mut GstElement, element_2: *mut GstElement, ...);
@@ -8903,7 +8903,7 @@ unsafe extern "C" {
     pub fn gst_object_has_active_control_bindings(object: *mut GstObject) -> gboolean;
     pub fn gst_object_has_ancestor(object: *mut GstObject, ancestor: *mut GstObject) -> gboolean;
     pub fn gst_object_has_as_ancestor(object: *mut GstObject, ancestor: *mut GstObject)
-        -> gboolean;
+    -> gboolean;
     pub fn gst_object_has_as_parent(object: *mut GstObject, parent: *mut GstObject) -> gboolean;
     pub fn gst_object_ref(object: *mut GstObject) -> *mut GstObject;
     pub fn gst_object_remove_control_binding(

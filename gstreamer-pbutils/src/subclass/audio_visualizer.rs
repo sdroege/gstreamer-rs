@@ -1,9 +1,9 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 use glib::{prelude::*, translate::*};
-use gst::{result_from_gboolean, subclass::prelude::*, LoggableError, CAT_RUST};
+use gst::{CAT_RUST, LoggableError, result_from_gboolean, subclass::prelude::*};
 
-use crate::{ffi, AudioVisualizer};
+use crate::{AudioVisualizer, ffi};
 
 pub struct AudioVisualizerSetupToken<'a>(pub(crate) &'a AudioVisualizer);
 

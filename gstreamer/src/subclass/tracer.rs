@@ -7,9 +7,9 @@ use glib::{prelude::*, subclass::prelude::*, translate::*};
 
 use super::prelude::*;
 use crate::{
-    ffi, Bin, Buffer, BufferList, Element, Event, FlowError, FlowSuccess, Message, MiniObject,
-    Object, Pad, PadLinkError, PadLinkSuccess, QueryRef, StateChange, StateChangeError,
-    StateChangeSuccess, Tracer,
+    Bin, Buffer, BufferList, Element, Event, FlowError, FlowSuccess, Message, MiniObject, Object,
+    Pad, PadLinkError, PadLinkSuccess, QueryRef, StateChange, StateChangeError, StateChangeSuccess,
+    Tracer, ffi,
 };
 
 #[allow(unused_variables)]
@@ -208,7 +208,14 @@ unsafe impl<T: TracerImpl> IsSubclassable<T> for Tracer {
                                 match glib::Value::deserialize_with_pspec(&str_val, &pspec) {
                                     Ok(v) => v,
                                     Err(_) => {
-                                        emit_property_warning(&obj, &format!("Can't instantiate tracer: invalid property '{}' value: '{}'", field.as_str(), str_val));
+                                        emit_property_warning(
+                                            &obj,
+                                            &format!(
+                                                "Can't instantiate tracer: invalid property '{}' value: '{}'",
+                                                field.as_str(),
+                                                str_val
+                                            ),
+                                        );
                                         return;
                                     }
                                 }
@@ -218,18 +225,28 @@ unsafe impl<T: TracerImpl> IsSubclassable<T> for Tracer {
                                 match glib::Value::deserialize(&str_val, pspec.value_type()) {
                                     Ok(v) => v,
                                     Err(_) => {
-                                        emit_property_warning(&obj, &format!("Can't instantiate tracer: invalid property '{}' value: '{}'", field.as_str(), str_val));
+                                        emit_property_warning(
+                                            &obj,
+                                            &format!(
+                                                "Can't instantiate tracer: invalid property '{}' value: '{}'",
+                                                field.as_str(),
+                                                str_val
+                                            ),
+                                        );
                                         return;
                                     }
                                 }
                             }
                         } else {
-                            emit_property_warning(&obj, &format!(
-                                "Can't setup tracer: property '{}' type mismatch, expected {}, got {}",
-                                field.as_str(),
-                                pspec.value_type().name(),
-                                field_value.type_().name()
-                            ));
+                            emit_property_warning(
+                                &obj,
+                                &format!(
+                                    "Can't setup tracer: property '{}' type mismatch, expected {}, got {}",
+                                    field.as_str(),
+                                    pspec.value_type().name(),
+                                    field_value.type_().name()
+                                ),
+                            );
                             return;
                         };
 

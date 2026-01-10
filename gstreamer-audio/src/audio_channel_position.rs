@@ -3,7 +3,7 @@
 use std::{mem, slice};
 
 use crate::ffi;
-use glib::{prelude::*, translate::*, value::FromValue, Type};
+use glib::{Type, prelude::*, translate::*, value::FromValue};
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]

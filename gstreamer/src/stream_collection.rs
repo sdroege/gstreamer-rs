@@ -4,11 +4,11 @@ use std::{boxed::Box as Box_, fmt, mem::transmute};
 
 use glib::{
     object::ObjectType as ObjectType_,
-    signal::{connect_raw, SignalHandlerId},
+    signal::{SignalHandlerId, connect_raw},
     translate::*,
 };
 
-use crate::{ffi, Stream, StreamCollection};
+use crate::{Stream, StreamCollection, ffi};
 
 crate::utils::define_fixed_size_iter!(
     Iter,

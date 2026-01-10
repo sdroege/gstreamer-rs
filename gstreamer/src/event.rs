@@ -7,12 +7,11 @@ use std::{
 use glib::{translate::*, value::ToSendValue};
 
 use crate::{
-    ffi,
+    ClockTime, EventType, ffi,
     format::{
         CompatibleFormattedValue, FormattedValue, FormattedValueIntrinsic, GenericFormattedValue,
     },
     structure::*,
-    ClockTime, EventType,
 };
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -2227,11 +2226,7 @@ macro_rules! event_builder_generic_impl {
         #[doc(alias = "gst_event_set_seqnum")]
         #[allow(clippy::needless_update)]
         pub fn seqnum_if(self, seqnum: Seqnum, predicate: bool) -> Self {
-            if predicate {
-                self.seqnum(seqnum)
-            } else {
-                self
-            }
+            if predicate { self.seqnum(seqnum) } else { self }
         }
 
         #[doc(alias = "gst_event_set_seqnum")]
@@ -2380,11 +2375,7 @@ impl<'a> StreamStartBuilder<'a> {
     }
 
     pub fn flags_if(self, flags: crate::StreamFlags, predicate: bool) -> Self {
-        if predicate {
-            self.flags(flags)
-        } else {
-            self
-        }
+        if predicate { self.flags(flags) } else { self }
     }
 
     pub fn flags_if_some(self, flags: Option<crate::StreamFlags>) -> Self {
@@ -2426,11 +2417,7 @@ impl<'a> StreamStartBuilder<'a> {
     }
 
     pub fn stream_if(self, stream: crate::Stream, predicate: bool) -> Self {
-        if predicate {
-            self.stream(stream)
-        } else {
-            self
-        }
+        if predicate { self.stream(stream) } else { self }
     }
 
     pub fn stream_if_some(self, stream: Option<crate::Stream>) -> Self {
@@ -2710,11 +2697,7 @@ impl<'a> ProtectionBuilder<'a> {
     }
 
     pub fn origin_if(self, origin: &'a str, predicate: bool) -> Self {
-        if predicate {
-            self.origin(origin)
-        } else {
-            self
-        }
+        if predicate { self.origin(origin) } else { self }
     }
 
     pub fn origin_if_some(self, origin: Option<&'a str>) -> Self {

@@ -4,7 +4,7 @@ use std::{boxed::Box as Box_, pin::Pin};
 
 use glib::{prelude::*, translate::*};
 
-use crate::{ffi, Asset};
+use crate::{Asset, ffi};
 
 impl Asset {
     // rustdoc-stripper-ignore-next

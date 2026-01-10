@@ -4,7 +4,7 @@ use std::{ptr, slice};
 
 use glib::translate::*;
 
-use crate::{ffi, Caps, Plugin, Rank, TypeFindFactory, TypeFindProbability};
+use crate::{Caps, Plugin, Rank, TypeFindFactory, TypeFindProbability, ffi};
 
 #[repr(transparent)]
 #[derive(Debug)]
@@ -83,11 +83,7 @@ impl TypeFind {
     pub fn length(&mut self) -> Option<u64> {
         unsafe {
             let len = ffi::gst_type_find_get_length(&mut self.0);
-            if len == 0 {
-                None
-            } else {
-                Some(len)
-            }
+            if len == 0 { None } else { Some(len) }
         }
     }
 }

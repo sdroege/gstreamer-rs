@@ -11,11 +11,11 @@ use std::{
 use glib::{ffi::gpointer, prelude::*, translate::*};
 
 use crate::{
+    Buffer, BufferList, Event, FlowError, FlowReturn, FlowSuccess, Format, GenericFormattedValue,
+    LoggableError, Pad, PadFlags, PadProbeReturn, PadProbeType, Query, QueryRef, StaticPadTemplate,
     ffi,
     format::{FormattedValue, SpecificFormattedValueFullRange, SpecificFormattedValueIntrinsic},
     prelude::*,
-    Buffer, BufferList, Event, FlowError, FlowReturn, FlowSuccess, Format, GenericFormattedValue,
-    LoggableError, Pad, PadFlags, PadProbeReturn, PadProbeType, Query, QueryRef, StaticPadTemplate,
 };
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
@@ -213,11 +213,7 @@ pub trait PadExtManual: IsA<Pad> + 'static {
                 Some(destroy_closure::<F>),
             );
 
-            if id == 0 {
-                None
-            } else {
-                Some(from_glib(id))
-            }
+            if id == 0 { None } else { Some(from_glib(id)) }
         }
     }
 
@@ -2212,10 +2208,10 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
                         for templ_part in templ.name_template().split('_') {
                             let Some(name_part) = name_parts.next() else {
                                 crate::debug!(
-                                CAT_RUST,
-                                "Not using Pad name '{name}': not enough parts compared to template '{}'",
-                                templ.name_template(),
-                            );
+                                    CAT_RUST,
+                                    "Not using Pad name '{name}': not enough parts compared to template '{}'",
+                                    templ.name_template(),
+                                );
                                 can_assign_name = false;
                                 break;
                             };
@@ -2225,10 +2221,10 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
                                     && !name_part.starts_with(&templ_part[..conv_spec_start])
                                 {
                                     crate::debug!(
-                                    CAT_RUST,
-                                    "Not using Pad name '{name}': mismatch template '{}' prefix",
-                                    templ.name_template(),
-                                );
+                                        CAT_RUST,
+                                        "Not using Pad name '{name}': mismatch template '{}' prefix",
+                                        templ.name_template(),
+                                    );
                                     can_assign_name = false;
                                     break;
                                 }
@@ -2245,10 +2241,10 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
                                             .is_none_or(|s| s.parse::<u32>().is_err())
                                         {
                                             crate::debug!(
-                                            CAT_RUST,
-                                            "Not using Pad name '{name}': can't parse '%u' from '{name_part}' (template '{}')",
-                                            templ.name_template(),
-                                        );
+                                                CAT_RUST,
+                                                "Not using Pad name '{name}': can't parse '%u' from '{name_part}' (template '{}')",
+                                                templ.name_template(),
+                                            );
 
                                             can_assign_name = false;
                                             break;
@@ -2260,10 +2256,10 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
                                             .is_none_or(|s| s.parse::<i32>().is_err())
                                         {
                                             crate::debug!(
-                                            CAT_RUST,
-                                            "Not using target Pad name '{name}': can't parse '%i' from '{name_part}' (template '{}')",
-                                            templ.name_template(),
-                                        );
+                                                CAT_RUST,
+                                                "Not using target Pad name '{name}': can't parse '%i' from '{name_part}' (template '{}')",
+                                                templ.name_template(),
+                                            );
 
                                             can_assign_name = false;
                                             break;
@@ -2299,7 +2295,7 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
 
 #[cfg(test)]
 mod tests {
-    use std::sync::{atomic::AtomicUsize, mpsc::channel, Arc, Mutex};
+    use std::sync::{Arc, Mutex, atomic::AtomicUsize, mpsc::channel};
 
     use super::*;
 

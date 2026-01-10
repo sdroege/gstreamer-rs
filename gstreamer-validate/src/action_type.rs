@@ -2,7 +2,7 @@
 
 use std::{ffi::c_int, ptr};
 
-use crate::{ffi, Action};
+use crate::{Action, ffi};
 use glib::translate::*;
 
 #[derive(Debug)]

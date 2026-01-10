@@ -4,7 +4,7 @@ use std::{marker::PhantomData, mem};
 
 use glib::translate::*;
 
-use crate::{ffi, MemoryFlags};
+use crate::{MemoryFlags, ffi};
 
 #[derive(Debug, Clone, Copy)]
 #[doc(alias = "GstAllocationParams")]

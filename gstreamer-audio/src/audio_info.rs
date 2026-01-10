@@ -4,7 +4,7 @@ use std::{fmt, marker::PhantomData, mem, ptr, slice};
 
 use crate::ffi;
 use glib::translate::{
-    from_glib, from_glib_full, from_glib_none, IntoGlib, ToGlibPtr, ToGlibPtrMut,
+    IntoGlib, ToGlibPtr, ToGlibPtrMut, from_glib, from_glib_full, from_glib_none,
 };
 use gst::prelude::*;
 
@@ -128,11 +128,7 @@ impl<'a> AudioInfoBuilder<'a> {
     }
 
     pub fn flags_if(self, flags: crate::AudioFlags, predicate: bool) -> Self {
-        if predicate {
-            self.flags(flags)
-        } else {
-            self
-        }
+        if predicate { self.flags(flags) } else { self }
     }
 
     pub fn flags_if_some(self, flags: Option<crate::AudioFlags>) -> Self {
@@ -151,11 +147,7 @@ impl<'a> AudioInfoBuilder<'a> {
     }
 
     pub fn layout_if(self, layout: crate::AudioLayout, predicate: bool) -> Self {
-        if predicate {
-            self.layout(layout)
-        } else {
-            self
-        }
+        if predicate { self.layout(layout) } else { self }
     }
 
     pub fn layout_if_some(self, layout: Option<crate::AudioLayout>) -> Self {

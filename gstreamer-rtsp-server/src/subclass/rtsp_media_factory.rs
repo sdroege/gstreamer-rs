@@ -4,7 +4,7 @@ use std::mem::transmute;
 
 use glib::{prelude::*, subclass::prelude::*, translate::*};
 
-use crate::{ffi, RTSPMediaFactory};
+use crate::{RTSPMediaFactory, ffi};
 
 pub trait RTSPMediaFactoryImpl:
     ObjectImpl + ObjectSubclass<Type: IsA<RTSPMediaFactory>> + Send + Sync

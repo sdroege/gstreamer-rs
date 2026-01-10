@@ -1,7 +1,7 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 use std::fmt;
 
-use crate::{prelude::*, DiscovererContainerInfo};
+use crate::{DiscovererContainerInfo, prelude::*};
 
 pub struct Debug<'a>(&'a DiscovererContainerInfo);
 

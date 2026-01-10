@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{ffi, BaseSrc};
+use crate::{BaseSrc, ffi};
 
 glib::wrapper! {
     #[doc(alias = "GstPushSrc")]

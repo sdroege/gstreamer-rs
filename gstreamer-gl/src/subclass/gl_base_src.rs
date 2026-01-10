@@ -1,9 +1,9 @@
 use ffi::{GstGLBaseSrc, GstGLMemory};
 use glib::translate::*;
-use gst::{result_from_gboolean, LoggableError, CAT_RUST};
+use gst::{CAT_RUST, LoggableError, result_from_gboolean};
 use gst_base::subclass::prelude::*;
 
-use crate::{ffi, prelude::*, GLBaseSrc, GLMemory, GLAPI};
+use crate::{GLAPI, GLBaseSrc, GLMemory, ffi, prelude::*};
 
 pub trait GLBaseSrcImpl: PushSrcImpl + ObjectSubclass<Type: IsA<GLBaseSrc>> {
     const SUPPORTED_GL_API: GLAPI;

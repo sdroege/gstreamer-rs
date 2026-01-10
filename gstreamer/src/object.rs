@@ -5,7 +5,7 @@ use std::{future::Future, pin::Pin};
 
 use glib::{prelude::*, signal::SignalHandlerId, translate::*};
 
-use crate::{ffi, ClockTime, Object, ObjectFlags};
+use crate::{ClockTime, Object, ObjectFlags, ffi};
 
 pub trait GstObjectExtManual: IsA<Object> + 'static {
     #[doc(alias = "deep-notify")]

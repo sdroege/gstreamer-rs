@@ -58,12 +58,12 @@ pub mod log_context;
 #[cfg(feature = "log")]
 pub use crate::log::DebugCategoryLogger;
 pub use crate::log::{
-    DebugCategory, DebugLogFunction, DebugLogger, DebugMessage, LoggedObject, CAT_BUFFER,
-    CAT_BUFFER_LIST, CAT_BUS, CAT_CALL_TRACE, CAT_CAPS, CAT_CLOCK, CAT_CONTEXT, CAT_DEFAULT,
-    CAT_ELEMENT_PADS, CAT_ERROR_SYSTEM, CAT_EVENT, CAT_GST_INIT, CAT_LOCKING, CAT_MEMORY,
-    CAT_MESSAGE, CAT_META, CAT_NEGOTIATION, CAT_PADS, CAT_PARAMS, CAT_PARENTAGE, CAT_PERFORMANCE,
-    CAT_PIPELINE, CAT_PLUGIN_INFO, CAT_PLUGIN_LOADING, CAT_PROBE, CAT_PROPERTIES, CAT_QOS,
-    CAT_REFCOUNTING, CAT_REGISTRY, CAT_RUST, CAT_SCHEDULING, CAT_SIGNAL, CAT_STATES,
+    CAT_BUFFER, CAT_BUFFER_LIST, CAT_BUS, CAT_CALL_TRACE, CAT_CAPS, CAT_CLOCK, CAT_CONTEXT,
+    CAT_DEFAULT, CAT_ELEMENT_PADS, CAT_ERROR_SYSTEM, CAT_EVENT, CAT_GST_INIT, CAT_LOCKING,
+    CAT_MEMORY, CAT_MESSAGE, CAT_META, CAT_NEGOTIATION, CAT_PADS, CAT_PARAMS, CAT_PARENTAGE,
+    CAT_PERFORMANCE, CAT_PIPELINE, CAT_PLUGIN_INFO, CAT_PLUGIN_LOADING, CAT_PROBE, CAT_PROPERTIES,
+    CAT_QOS, CAT_REFCOUNTING, CAT_REGISTRY, CAT_RUST, CAT_SCHEDULING, CAT_SIGNAL, CAT_STATES,
+    DebugCategory, DebugLogFunction, DebugLogger, DebugMessage, LoggedObject,
 };
 
 #[cfg(feature = "v1_28")]
@@ -116,16 +116,16 @@ mod caps_features;
 #[cfg(feature = "serde")]
 mod caps_serde;
 pub use crate::caps_features::{
-    CapsFeatures, CapsFeaturesRef, CAPS_FEATURES_MEMORY_SYSTEM_MEMORY,
-    CAPS_FEATURE_MEMORY_SYSTEM_MEMORY,
+    CAPS_FEATURE_MEMORY_SYSTEM_MEMORY, CAPS_FEATURES_MEMORY_SYSTEM_MEMORY, CapsFeatures,
+    CapsFeaturesRef,
 };
 #[cfg(feature = "serde")]
 mod caps_features_serde;
 
 pub mod tags;
 pub use crate::tags::{
-    tag_exists, tag_get_description, tag_get_flag, tag_get_nick, tag_get_type, Tag, TagList,
-    TagListRef,
+    Tag, TagList, TagListRef, tag_exists, tag_get_description, tag_get_flag, tag_get_nick,
+    tag_get_type,
 };
 #[cfg(feature = "serde")]
 mod tags_serde;
@@ -141,7 +141,7 @@ pub use crate::meta::{
 };
 pub mod buffer;
 pub use crate::buffer::{
-    Buffer, BufferMap, BufferRef, MappedBuffer, BUFFER_COPY_ALL, BUFFER_COPY_METADATA,
+    BUFFER_COPY_ALL, BUFFER_COPY_METADATA, Buffer, BufferMap, BufferRef, MappedBuffer,
 };
 mod buffer_cursor;
 pub use crate::buffer_cursor::{BufferCursor, BufferRefCursor};
@@ -151,7 +151,7 @@ mod memory_wrapped;
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
 pub use crate::memory::MemoryRefTrace;
 pub use crate::memory::{MappedMemory, Memory, MemoryMap, MemoryRef};
-pub use crate::memory_wrapped::{rust_allocator, MemoryIntoInnerError};
+pub use crate::memory_wrapped::{MemoryIntoInnerError, rust_allocator};
 #[cfg(feature = "serde")]
 mod buffer_serde;
 pub mod slice;
@@ -243,9 +243,9 @@ pub use self::iterator::{Iterator, IteratorError, IteratorImpl, StdIterator};
 pub use crate::{
     device_monitor::DeviceMonitorFilterId,
     element::{
-        ElementMessageType, NotifyWatchId, ELEMENT_METADATA_AUTHOR, ELEMENT_METADATA_DESCRIPTION,
-        ELEMENT_METADATA_DOC_URI, ELEMENT_METADATA_ICON_NAME, ELEMENT_METADATA_KLASS,
-        ELEMENT_METADATA_LONGNAME,
+        ELEMENT_METADATA_AUTHOR, ELEMENT_METADATA_DESCRIPTION, ELEMENT_METADATA_DOC_URI,
+        ELEMENT_METADATA_ICON_NAME, ELEMENT_METADATA_KLASS, ELEMENT_METADATA_LONGNAME,
+        ElementMessageType, NotifyWatchId,
     },
     enums::{
         ClockError, ClockSuccess, FlowError, FlowReturn, FlowSuccess, MessageType, PadLinkError,

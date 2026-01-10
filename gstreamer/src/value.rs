@@ -1640,11 +1640,7 @@ impl GstValueExt for glib::Value {
                 self.to_glib_none().0,
                 other.to_glib_none().0,
             ));
-            if ret {
-                Some(value)
-            } else {
-                None
-            }
+            if ret { Some(value) } else { None }
         }
     }
 
@@ -1665,11 +1661,7 @@ impl GstValueExt for glib::Value {
                 self.to_glib_none().0,
                 other.to_glib_none().0,
             ));
-            if ret {
-                Some(value)
-            } else {
-                None
-            }
+            if ret { Some(value) } else { None }
         }
     }
 
@@ -1690,11 +1682,7 @@ impl GstValueExt for glib::Value {
                 self.to_glib_none().0,
                 other.to_glib_none().0,
             ));
-            if ret {
-                Some(value)
-            } else {
-                None
-            }
+            if ret { Some(value) } else { None }
         }
     }
 
@@ -1705,11 +1693,7 @@ impl GstValueExt for glib::Value {
                 value.to_glib_none_mut().0,
                 self.to_glib_none().0,
             ));
-            if ret {
-                Some(value)
-            } else {
-                None
-            }
+            if ret { Some(value) } else { None }
         }
     }
 

@@ -5,7 +5,7 @@ use std::ffi::CStr;
 use glib::prelude::*;
 use glib::translate::*;
 
-use crate::{ffi, ActionType, Scenario};
+use crate::{ActionType, Scenario, ffi};
 
 gst::mini_object_wrapper!(Action, ActionRef, ffi::GstValidateAction, || {
     ffi::gst_validate_action_get_type()

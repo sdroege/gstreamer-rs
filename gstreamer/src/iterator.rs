@@ -4,11 +4,11 @@ use std::{any::Any, fmt, iter, marker::PhantomData, mem, ptr, sync::Arc};
 
 use crate::ffi;
 use glib::{
+    Value,
     ffi::{gconstpointer, gpointer},
     prelude::*,
     translate::*,
     value::{FromValue, ToValue},
-    Value,
 };
 use thiserror::Error;
 
@@ -398,11 +398,7 @@ unsafe extern "C" fn filter_trampoline<
         let value = &*(value as *const glib::Value);
         let value = value.get::<T>().expect("Iterator filter_trampoline");
 
-        if func(value) {
-            0
-        } else {
-            -1
-        }
+        if func(value) { 0 } else { -1 }
     }
 }
 
@@ -470,11 +466,7 @@ where
         let value = &*(value as *const glib::Value);
         let value = value.get::<T>().expect("Iterator find_trampoline");
 
-        if (*func)(value) {
-            0
-        } else {
-            -1
-        }
+        if (*func)(value) { 0 } else { -1 }
     }
 }
 

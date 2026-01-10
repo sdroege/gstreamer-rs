@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{ffi, GLDisplay, GLPlatform, GLSLProfile, GLSLVersion, GLWindow, GLAPI};
+use crate::{GLAPI, GLDisplay, GLPlatform, GLSLProfile, GLSLVersion, GLWindow, ffi};
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {

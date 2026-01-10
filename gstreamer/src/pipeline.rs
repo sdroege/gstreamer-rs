@@ -2,7 +2,7 @@
 
 use glib::{prelude::*, translate::*};
 
-use crate::{ffi, prelude::*, Pipeline, PipelineFlags};
+use crate::{Pipeline, PipelineFlags, ffi, prelude::*};
 
 impl Pipeline {
     // rustdoc-stripper-ignore-next
@@ -121,11 +121,7 @@ impl<'a> PipelineBuilder<'a> {
     }
 
     pub fn delay_if(self, delay: u64, predicate: bool) -> Self {
-        if predicate {
-            self.delay(delay)
-        } else {
-            self
-        }
+        if predicate { self.delay(delay) } else { self }
     }
 
     pub fn delay_if_some(self, delay: Option<u64>) -> Self {

@@ -7,12 +7,12 @@
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
 use crate::FrameNumber;
 use crate::{
-    ffi, Asset, BaseEffect, Container, Extractable, Layer, MetaContainer, TimelineElement, Track,
-    TrackElement, TrackType,
+    Asset, BaseEffect, Container, Extractable, Layer, MetaContainer, TimelineElement, Track,
+    TrackElement, TrackType, ffi,
 };
 use glib::{
     prelude::*,
-    signal::{connect_raw, SignalHandlerId},
+    signal::{SignalHandlerId, connect_raw},
     translate::*,
 };
 use std::boxed::Box as Box_;

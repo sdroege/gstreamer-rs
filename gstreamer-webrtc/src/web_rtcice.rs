@@ -2,7 +2,7 @@
 
 use glib::{prelude::*, translate::*};
 
-use crate::{ffi, WebRTCICE, WebRTCICEStream};
+use crate::{WebRTCICE, WebRTCICEStream, ffi};
 
 pub trait WebRTCICEExtManual: IsA<WebRTCICE> + 'static {
     #[doc(alias = "gst_webrtc_ice_add_candidate")]

@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{ffi, Extractable, MetaContainer, TimelineElement, TrackElement};
+use crate::{Extractable, MetaContainer, TimelineElement, TrackElement, ffi};
 
 glib::wrapper! {
     #[doc(alias = "GESSource")]

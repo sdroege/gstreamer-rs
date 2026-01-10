@@ -2,7 +2,7 @@
 
 use glib::{prelude::*, source::SourceId, translate::*};
 
-use crate::{ffi, RTSPServer};
+use crate::{RTSPServer, ffi};
 
 pub trait RTSPServerExtManual: IsA<RTSPServer> + 'static {
     #[doc(alias = "gst_rtsp_server_attach")]

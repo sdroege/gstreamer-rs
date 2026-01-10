@@ -5,7 +5,7 @@ use std::mem;
 use glib::{prelude::*, translate::*};
 use gst::prelude::*;
 
-use crate::{ffi, BaseSink};
+use crate::{BaseSink, ffi};
 
 pub trait BaseSinkExtManual: IsA<BaseSink> + 'static {
     #[doc(alias = "get_segment")]

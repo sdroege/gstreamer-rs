@@ -3,7 +3,7 @@
 use glib::{prelude::*, subclass::prelude::*, translate::*};
 
 use super::prelude::*;
-use crate::{ffi, RTSPOnvifMediaFactory};
+use crate::{RTSPOnvifMediaFactory, ffi};
 
 pub trait RTSPOnvifMediaFactoryImpl:
     RTSPMediaFactoryImpl + ObjectSubclass<Type: IsA<RTSPOnvifMediaFactory>> + Send + Sync

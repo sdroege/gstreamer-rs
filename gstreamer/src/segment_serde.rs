@@ -7,8 +7,8 @@ use serde::{
 };
 
 use crate::{
-    format::{FormattedValue, FormattedValueIntrinsic, SpecificFormattedValueIntrinsic},
     Format, FormattedSegment, GenericFormattedValue, Segment, SegmentFlags,
+    format::{FormattedValue, FormattedValueIntrinsic, SpecificFormattedValueIntrinsic},
 };
 
 #[derive(serde::Serialize, serde::Deserialize)]
@@ -211,7 +211,7 @@ mod tests {
 
     #[test]
     fn test_deserialize_formatted() {
-        use crate::{format::Time, FormattedSegment};
+        use crate::{FormattedSegment, format::Time};
 
         crate::init().unwrap();
 

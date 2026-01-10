@@ -11,7 +11,7 @@ use crate::{WebRTCDTLSTransport, WebRTCPriorityType};
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 use glib::{
     prelude::*,
-    signal::{connect_raw, SignalHandlerId},
+    signal::{SignalHandlerId, connect_raw},
     translate::*,
 };
 #[cfg(feature = "v1_20")]

@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{ffi, PlayerAudioInfo, PlayerStreamInfo, PlayerSubtitleInfo, PlayerVideoInfo};
+use crate::{PlayerAudioInfo, PlayerStreamInfo, PlayerSubtitleInfo, PlayerVideoInfo, ffi};
 use glib::translate::*;
 
 glib::wrapper! {

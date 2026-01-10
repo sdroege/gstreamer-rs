@@ -4,7 +4,7 @@
 
 use std::fmt;
 
-use glib::{value::ToValue, Date};
+use glib::{Date, value::ToValue};
 use serde::{
     de,
     de::{Deserialize, DeserializeSeed, Deserializer, SeqAccess, Visitor},
@@ -13,7 +13,7 @@ use serde::{
 };
 
 use crate::{
-    date_time_serde, value::*, value_serde::*, Buffer, DateTime, Sample, Structure, StructureRef,
+    Buffer, DateTime, Sample, Structure, StructureRef, date_time_serde, value::*, value_serde::*,
 };
 
 struct FieldSe<'a>(&'a str, &'a glib::SendValue);

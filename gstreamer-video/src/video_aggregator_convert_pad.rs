@@ -2,11 +2,11 @@ use std::mem::transmute;
 
 use glib::{
     prelude::*,
-    signal::{connect_raw, SignalHandlerId},
+    signal::{SignalHandlerId, connect_raw},
     translate::*,
 };
 
-use crate::{ffi, VideoAggregatorConvertPad};
+use crate::{VideoAggregatorConvertPad, ffi};
 
 pub trait VideoAggregatorConvertPadExtManual: IsA<VideoAggregatorConvertPad> + 'static {
     #[doc(alias = "converter-config")]

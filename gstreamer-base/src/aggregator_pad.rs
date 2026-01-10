@@ -3,7 +3,7 @@
 use glib::{prelude::*, translate::*};
 use gst::prelude::*;
 
-use crate::{ffi, AggregatorPad};
+use crate::{AggregatorPad, ffi};
 
 pub trait AggregatorPadExtManual: IsA<AggregatorPad> + 'static {
     #[doc(alias = "get_segment")]

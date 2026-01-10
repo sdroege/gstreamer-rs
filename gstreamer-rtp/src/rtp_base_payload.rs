@@ -2,7 +2,7 @@ use std::ptr;
 
 use glib::{prelude::*, translate::*};
 
-use crate::{ffi, RTPBasePayload};
+use crate::{RTPBasePayload, ffi};
 
 pub trait RTPBasePayloadExtManual: IsA<RTPBasePayload> + 'static {
     #[cfg(feature = "v1_20")]

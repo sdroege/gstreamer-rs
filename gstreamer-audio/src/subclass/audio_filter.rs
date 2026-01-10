@@ -3,7 +3,7 @@
 use glib::translate::*;
 use gst_base::{prelude::*, subclass::prelude::*};
 
-use crate::{ffi, AudioFilter, AudioInfo};
+use crate::{AudioFilter, AudioInfo, ffi};
 
 pub trait AudioFilterImpl: BaseTransformImpl + ObjectSubclass<Type: IsA<AudioFilter>> {
     fn allowed_caps() -> &'static gst::Caps {

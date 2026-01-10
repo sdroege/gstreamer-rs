@@ -2,9 +2,9 @@ use std::{io, thread, time};
 
 use anyhow::Error;
 use gst::{
+    Element, SeekFlags, SeekType, State,
     event::{Seek, Step},
     prelude::*,
-    Element, SeekFlags, SeekType, State,
 };
 use termion::{event::Key, input::TermRead, raw::IntoRawMode};
 

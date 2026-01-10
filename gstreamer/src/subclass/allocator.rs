@@ -5,7 +5,7 @@ use std::ptr;
 use glib::{prelude::*, subclass::prelude::*, translate::*};
 
 use super::prelude::*;
-use crate::{ffi, AllocationParams, Allocator};
+use crate::{AllocationParams, Allocator, ffi};
 
 pub unsafe trait AllocatorImpl:
     GstObjectImpl + ObjectSubclass<Type: IsA<Allocator>>

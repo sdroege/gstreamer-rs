@@ -3,7 +3,7 @@
 use glib::{prelude::*, subclass::prelude::*, translate::*};
 
 use super::prelude::*;
-use crate::{ffi, ChildProxy};
+use crate::{ChildProxy, ffi};
 
 pub trait ChildProxyImpl: GstObjectImpl + ObjectSubclass<Type: IsA<ChildProxy>> {
     fn child_by_name(&self, name: &str) -> Option<glib::Object> {

@@ -5,7 +5,7 @@
 #![allow(deprecated)]
 
 use crate::{
-    ffi, Asset, Extractable, Group, Layer, MetaContainer, TimelineElement, Track, TrackElement,
+    Asset, Extractable, Group, Layer, MetaContainer, TimelineElement, Track, TrackElement, ffi,
 };
 #[cfg(feature = "v1_18")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
@@ -13,7 +13,7 @@ use crate::{Clip, FrameNumber};
 use glib::{
     object::ObjectType as _,
     prelude::*,
-    signal::{connect_raw, SignalHandlerId},
+    signal::{SignalHandlerId, connect_raw},
     translate::*,
 };
 use std::boxed::Box as Box_;

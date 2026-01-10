@@ -3,14 +3,14 @@
 use std::mem::transmute;
 
 use glib::{
+    ControlFlow,
     ffi::{gboolean, gpointer},
     prelude::*,
     source::Priority,
     translate::*,
-    ControlFlow,
 };
 
-use crate::{ffi, RTSPSessionPool};
+use crate::{RTSPSessionPool, ffi};
 
 unsafe extern "C" fn trampoline_watch<
     F: FnMut(&RTSPSessionPool) -> ControlFlow + Send + 'static,

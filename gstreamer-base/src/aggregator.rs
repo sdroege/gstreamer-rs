@@ -10,11 +10,11 @@ use std::{mem, ptr};
 
 #[cfg(feature = "v1_16")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
-use glib::signal::{connect_raw, SignalHandlerId};
+use glib::signal::{SignalHandlerId, connect_raw};
 use glib::{prelude::*, translate::*};
 use gst::{format::FormattedValue, prelude::*};
 
-use crate::{ffi, Aggregator, AggregatorPad};
+use crate::{Aggregator, AggregatorPad, ffi};
 
 pub trait AggregatorExtManual: IsA<Aggregator> + 'static {
     #[doc(alias = "get_allocator")]

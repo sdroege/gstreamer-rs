@@ -5,7 +5,7 @@ use std::fmt;
 use glib::translate::*;
 use gst::Caps;
 
-use crate::{ffi, AudioInfo, AudioRingBufferFormatType};
+use crate::{AudioInfo, AudioRingBufferFormatType, ffi};
 
 #[repr(transparent)]
 #[doc(alias = "GstAudioRingBufferSpec")]

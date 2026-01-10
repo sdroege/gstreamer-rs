@@ -9,7 +9,7 @@ use std::{
     ptr, str,
 };
 
-use crate::{ffi, IdStr};
+use crate::{IdStr, ffi};
 use cfg_if::cfg_if;
 use glib::{prelude::*, translate::*};
 use std::sync::LazyLock;

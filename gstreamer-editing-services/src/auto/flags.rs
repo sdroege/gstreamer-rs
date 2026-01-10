@@ -4,7 +4,7 @@
 // DO NOT EDIT
 
 use crate::ffi;
-use glib::{bitflags::bitflags, prelude::*, translate::*, GStr};
+use glib::{GStr, bitflags::bitflags, prelude::*, translate::*};
 
 #[cfg(feature = "v1_20")]
 bitflags! {

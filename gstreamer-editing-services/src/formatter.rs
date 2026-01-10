@@ -1,5 +1,5 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
-use crate::{ffi, prelude::*, Formatter};
+use crate::{Formatter, ffi, prelude::*};
 use gst::glib::translate::*;
 
 pub trait FormatterExtManual: IsA<Formatter> + 'static {

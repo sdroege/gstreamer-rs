@@ -3,7 +3,7 @@
 use glib::{prelude::*, subclass::prelude::*, translate::*};
 
 use super::prelude::*;
-use crate::{ffi, Clock, ClockError, ClockId, ClockReturn, ClockSuccess, ClockTime, ClockTimeDiff};
+use crate::{Clock, ClockError, ClockId, ClockReturn, ClockSuccess, ClockTime, ClockTimeDiff, ffi};
 
 pub trait ClockImpl: GstObjectImpl + ObjectSubclass<Type: IsA<Clock>> {
     fn change_resolution(&self, old_resolution: ClockTime, new_resolution: ClockTime) -> ClockTime {

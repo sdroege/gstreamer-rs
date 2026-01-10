@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{ffi, DeviceProvider, Object, PluginFeature};
+use crate::{DeviceProvider, Object, PluginFeature, ffi};
 use glib::translate::*;
 
 glib::wrapper! {

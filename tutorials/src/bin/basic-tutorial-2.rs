@@ -1,4 +1,4 @@
-use gst::{prelude::*, MessageType};
+use gst::{MessageType, prelude::*};
 
 #[path = "../tutorials-common.rs"]
 mod tutorials_common;

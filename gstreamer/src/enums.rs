@@ -3,14 +3,14 @@
 use std::{cmp, ops};
 
 use glib::{
+    Type,
     prelude::*,
     translate::*,
     value::{FromValue, ToValue, Value},
-    Type,
 };
 use thiserror::Error;
 
-use crate::{ffi, ClockReturn, State, StateChange, StateChangeReturn};
+use crate::{ClockReturn, State, StateChange, StateChangeReturn, ffi};
 
 macro_rules! impl_return_result_traits {
     ($ffi_type:ident, $ret_type:ident, $ok_type:ident, $err_type:ident) => {
@@ -302,7 +302,9 @@ pub enum FlowError {
     Eos = ffi::GST_FLOW_EOS,
     #[error("Pad is not negotiated")]
     NotNegotiated = ffi::GST_FLOW_NOT_NEGOTIATED,
-    #[error("Some (fatal) error occurred. Element generating this error should post an error message with more details")]
+    #[error(
+        "Some (fatal) error occurred. Element generating this error should post an error message with more details"
+    )]
     Error = ffi::GST_FLOW_ERROR,
     #[error("This operation is not supported")]
     NotSupported = ffi::GST_FLOW_NOT_SUPPORTED,

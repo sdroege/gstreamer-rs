@@ -5,7 +5,7 @@ use std::ptr;
 use glib::translate::*;
 use gst_base::{prelude::*, subclass::prelude::*};
 
-use crate::{ffi, AudioAggregatorPad};
+use crate::{AudioAggregatorPad, ffi};
 
 pub trait AudioAggregatorPadImpl:
     AggregatorPadImpl + ObjectSubclass<Type: IsA<AudioAggregatorPad>>

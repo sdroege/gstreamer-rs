@@ -2,7 +2,7 @@
 
 use glib::{prelude::*, translate::*};
 
-use crate::{ffi, tags::*, TagMergeMode, TagSetter};
+use crate::{TagMergeMode, TagSetter, ffi, tags::*};
 
 pub trait TagSetterExtManual: IsA<TagSetter> + 'static {
     #[doc(alias = "gst_tag_setter_add_tag_value")]

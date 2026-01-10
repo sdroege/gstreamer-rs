@@ -1,10 +1,10 @@
 use glib::prelude::*;
 use glib::translate::*;
 
-use crate::ffi;
 use crate::VulkanDevice;
 use crate::VulkanDisplay;
 use crate::VulkanInstance;
+use crate::ffi;
 
 #[doc(alias = "gst_vulkan_handle_context_query")]
 pub fn context_query(

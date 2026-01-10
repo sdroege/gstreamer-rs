@@ -4,7 +4,7 @@
 // DO NOT EDIT
 
 use crate::ffi;
-use glib::{prelude::*, translate::*, GStr};
+use glib::{GStr, prelude::*, translate::*};
 
 #[cfg(feature = "v1_16")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]

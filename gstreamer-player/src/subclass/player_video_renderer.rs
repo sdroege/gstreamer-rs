@@ -2,7 +2,7 @@
 
 use glib::{prelude::*, subclass::prelude::*, translate::*};
 
-use crate::{ffi, Player, PlayerVideoRenderer};
+use crate::{Player, PlayerVideoRenderer, ffi};
 
 pub trait PlayerVideoRendererImpl:
     ObjectImpl + ObjectSubclass<Type: IsA<PlayerVideoRenderer>>

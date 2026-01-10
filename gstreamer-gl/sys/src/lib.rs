@@ -22,18 +22,18 @@ mod manual;
 
 pub use manual::*;
 
+#[allow(unused_imports)]
+use libc::{FILE, intptr_t, off_t, size_t, ssize_t, time_t, uintptr_t};
 #[cfg(unix)]
 #[allow(unused_imports)]
 use libc::{dev_t, gid_t, pid_t, socklen_t, uid_t};
-#[allow(unused_imports)]
-use libc::{intptr_t, off_t, size_t, ssize_t, time_t, uintptr_t, FILE};
 #[allow(unused_imports)]
 use std::ffi::{
     c_char, c_double, c_float, c_int, c_long, c_short, c_uchar, c_uint, c_ulong, c_ushort, c_void,
 };
 
 #[allow(unused_imports)]
-use glib::{gboolean, gconstpointer, gpointer, GType};
+use glib::{GType, gboolean, gconstpointer, gpointer};
 
 // Enums
 pub type GstGLBaseMemoryError = c_int;
@@ -1775,7 +1775,7 @@ unsafe extern "C" {
     pub fn gst_gl_texture_target_from_gl(target: c_uint) -> GstGLTextureTarget;
     pub fn gst_gl_texture_target_from_string(str: *const c_char) -> GstGLTextureTarget;
     pub fn gst_gl_texture_target_to_buffer_pool_option(target: GstGLTextureTarget)
-        -> *const c_char;
+    -> *const c_char;
     pub fn gst_gl_texture_target_to_gl(target: GstGLTextureTarget) -> c_uint;
     pub fn gst_gl_texture_target_to_string(target: GstGLTextureTarget) -> *const c_char;
 
@@ -1980,7 +1980,7 @@ unsafe extern "C" {
         notify: glib::GDestroyNotify,
     );
     pub fn gst_gl_memory_read_pixels(gl_mem: *mut GstGLMemory, write_pointer: gpointer)
-        -> gboolean;
+    -> gboolean;
     pub fn gst_gl_memory_texsubimage(gl_mem: *mut GstGLMemory, read_pointer: gpointer);
     pub fn gst_gl_memory_init_once();
     pub fn gst_gl_memory_setup_buffer(
@@ -2243,7 +2243,7 @@ unsafe extern "C" {
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_gl_color_convert_yuv_to_rgb_shader_string(context: *mut GstGLContext)
-        -> *mut c_char;
+    -> *mut c_char;
     pub fn gst_gl_color_convert_decide_allocation(
         convert: *mut GstGLColorConvert,
         query: *mut gst::GstQuery,
@@ -2528,7 +2528,7 @@ unsafe extern "C" {
     //=========================================================================
     pub fn gst_gl_overlay_compositor_get_type() -> GType;
     pub fn gst_gl_overlay_compositor_new(context: *mut GstGLContext)
-        -> *mut GstGLOverlayCompositor;
+    -> *mut GstGLOverlayCompositor;
     pub fn gst_gl_overlay_compositor_add_caps(caps: *mut gst::GstCaps) -> *mut gst::GstCaps;
     pub fn gst_gl_overlay_compositor_draw_overlays(compositor: *mut GstGLOverlayCompositor);
     pub fn gst_gl_overlay_compositor_free_overlays(compositor: *mut GstGLOverlayCompositor);

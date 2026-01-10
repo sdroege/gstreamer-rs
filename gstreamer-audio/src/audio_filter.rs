@@ -3,7 +3,7 @@
 use glib::{prelude::*, translate::*};
 use gst_base::prelude::*;
 
-use crate::{ffi, AudioFilter, AudioInfo};
+use crate::{AudioFilter, AudioInfo, ffi};
 
 pub trait AudioFilterExtManual: IsA<AudioFilter> + 'static {
     fn audio_info(&self) -> Option<AudioInfo> {

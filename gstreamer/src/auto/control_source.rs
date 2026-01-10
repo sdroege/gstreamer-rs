@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{ffi, ClockTime, Object};
+use crate::{ClockTime, Object, ffi};
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
@@ -33,11 +33,7 @@ pub trait ControlSourceExt: IsA<ControlSource> + 'static {
                 timestamp.into_glib(),
                 value.as_mut_ptr(),
             ));
-            if ret {
-                Some(value.assume_init())
-            } else {
-                None
-            }
+            if ret { Some(value.assume_init()) } else { None }
         }
     }
 }

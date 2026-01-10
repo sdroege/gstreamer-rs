@@ -17,18 +17,18 @@ use gobject_sys as gobject;
 use gstreamer_base_sys as gst_base;
 use gstreamer_sys as gst;
 
+#[allow(unused_imports)]
+use libc::{FILE, intptr_t, off_t, size_t, ssize_t, time_t, uintptr_t};
 #[cfg(unix)]
 #[allow(unused_imports)]
 use libc::{dev_t, gid_t, pid_t, socklen_t, uid_t};
-#[allow(unused_imports)]
-use libc::{intptr_t, off_t, size_t, ssize_t, time_t, uintptr_t, FILE};
 #[allow(unused_imports)]
 use std::ffi::{
     c_char, c_double, c_float, c_int, c_long, c_short, c_uchar, c_uint, c_ulong, c_ushort, c_void,
 };
 
 #[allow(unused_imports)]
-use glib::{gboolean, gconstpointer, gpointer, GType};
+use glib::{GType, gboolean, gconstpointer, gpointer};
 
 // Enums
 pub type GstAudioBaseSinkDiscontReason = c_int;
@@ -1853,7 +1853,7 @@ unsafe extern "C" {
     );
     pub fn gst_audio_info_to_caps(info: *const GstAudioInfo) -> *mut gst::GstCaps;
     pub fn gst_audio_info_from_caps(info: *mut GstAudioInfo, caps: *const gst::GstCaps)
-        -> gboolean;
+    -> gboolean;
     pub fn gst_audio_info_init(info: *mut GstAudioInfo);
 
     //=========================================================================

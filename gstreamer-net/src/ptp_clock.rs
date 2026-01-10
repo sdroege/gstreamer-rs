@@ -4,7 +4,7 @@ use std::num::NonZeroU64;
 
 use glib::translate::*;
 
-use crate::{ffi, PtpClock};
+use crate::{PtpClock, ffi};
 
 impl PtpClock {
     // rustdoc-stripper-ignore-next

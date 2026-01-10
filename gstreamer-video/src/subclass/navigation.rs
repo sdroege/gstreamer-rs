@@ -2,7 +2,7 @@
 
 use glib::{prelude::*, subclass::prelude::*, translate::*};
 
-use crate::{ffi, Navigation};
+use crate::{Navigation, ffi};
 
 pub trait NavigationImpl: ObjectImpl + ObjectSubclass<Type: IsA<Navigation>> {
     fn send_event(&self, structure: gst::Structure);

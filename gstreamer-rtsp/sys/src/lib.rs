@@ -18,18 +18,18 @@ use gobject_sys as gobject;
 use gstreamer_sdp_sys as gst_sdp;
 use gstreamer_sys as gst;
 
+#[allow(unused_imports)]
+use libc::{FILE, intptr_t, off_t, size_t, ssize_t, time_t, uintptr_t};
 #[cfg(unix)]
 #[allow(unused_imports)]
 use libc::{dev_t, gid_t, pid_t, socklen_t, uid_t};
-#[allow(unused_imports)]
-use libc::{intptr_t, off_t, size_t, ssize_t, time_t, uintptr_t, FILE};
 #[allow(unused_imports)]
 use std::ffi::{
     c_char, c_double, c_float, c_int, c_long, c_short, c_uchar, c_uint, c_ulong, c_ushort, c_void,
 };
 
 #[allow(unused_imports)]
-use glib::{gboolean, gconstpointer, gpointer, GType};
+use glib::{GType, gboolean, gconstpointer, gpointer};
 
 // Enums
 pub type GstRTSPAuthMethod = c_int;
@@ -861,7 +861,7 @@ unsafe extern "C" {
     ) -> gboolean;
     pub fn gst_rtsp_connection_get_ip(conn: *const GstRTSPConnection) -> *const c_char;
     pub fn gst_rtsp_connection_get_read_socket(conn: *const GstRTSPConnection)
-        -> *mut gio::GSocket;
+    -> *mut gio::GSocket;
     pub fn gst_rtsp_connection_get_remember_session_id(conn: *mut GstRTSPConnection) -> gboolean;
     pub fn gst_rtsp_connection_get_tls(
         conn: *mut GstRTSPConnection,
@@ -1115,7 +1115,7 @@ unsafe extern "C" {
         field: GstRTSPHeaderField,
     ) -> *mut *mut GstRTSPAuthCredential;
     pub fn gst_rtsp_message_parse_data(msg: *mut GstRTSPMessage, channel: *mut u8)
-        -> GstRTSPResult;
+    -> GstRTSPResult;
     pub fn gst_rtsp_message_parse_request(
         msg: *mut GstRTSPMessage,
         method: *mut GstRTSPMethod,

@@ -4,13 +4,13 @@
 // DO NOT EDIT
 #![allow(deprecated)]
 
-use crate::ffi;
 #[cfg(feature = "v1_28")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
 use crate::AppLeakyType;
+use crate::ffi;
 use glib::{
     prelude::*,
-    signal::{connect_raw, SignalHandlerId},
+    signal::{SignalHandlerId, connect_raw},
     translate::*,
 };
 use std::boxed::Box as Box_;

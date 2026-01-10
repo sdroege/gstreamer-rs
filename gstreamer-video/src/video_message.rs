@@ -3,12 +3,12 @@
 use std::ptr;
 
 use glib::{
-    translate::{from_glib, from_glib_full, IntoGlib, ToGlibPtr},
+    translate::{IntoGlib, ToGlibPtr, from_glib, from_glib_full},
     value::ToSendValue,
 };
-use gst::{ffi as gst_ffi, prelude::*, Message, Object, Seqnum};
+use gst::{Message, Object, Seqnum, ffi as gst_ffi, prelude::*};
 
-use crate::{ffi, NavigationMessageType};
+use crate::{NavigationMessageType, ffi};
 
 macro_rules! message_builder_generic_impl {
     ($new_fn:expr_2021) => {
@@ -22,11 +22,7 @@ macro_rules! message_builder_generic_impl {
 
         #[allow(clippy::needless_update)]
         pub fn src_if<O: IsA<Object> + Cast + Clone>(self, src: &O, predicate: bool) -> Self {
-            if predicate {
-                self.src(src)
-            } else {
-                self
-            }
+            if predicate { self.src(src) } else { self }
         }
 
         #[allow(clippy::needless_update)]
@@ -50,11 +46,7 @@ macro_rules! message_builder_generic_impl {
         #[doc(alias = "gst_message_set_seqnum")]
         #[allow(clippy::needless_update)]
         pub fn seqnum_if(self, seqnum: Seqnum, predicate: bool) -> Self {
-            if predicate {
-                self.seqnum(seqnum)
-            } else {
-                self
-            }
+            if predicate { self.seqnum(seqnum) } else { self }
         }
 
         #[doc(alias = "gst_message_set_seqnum")]

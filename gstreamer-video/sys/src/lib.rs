@@ -17,18 +17,18 @@ use gobject_sys as gobject;
 use gstreamer_base_sys as gst_base;
 use gstreamer_sys as gst;
 
+#[allow(unused_imports)]
+use libc::{FILE, intptr_t, off_t, size_t, ssize_t, time_t, uintptr_t};
 #[cfg(unix)]
 #[allow(unused_imports)]
 use libc::{dev_t, gid_t, pid_t, socklen_t, uid_t};
-#[allow(unused_imports)]
-use libc::{intptr_t, off_t, size_t, ssize_t, time_t, uintptr_t, FILE};
 #[allow(unused_imports)]
 use std::ffi::{
     c_char, c_double, c_float, c_int, c_long, c_short, c_uchar, c_uint, c_ulong, c_ushort, c_void,
 };
 
 #[allow(unused_imports)]
-use glib::{gboolean, gconstpointer, gpointer, GType};
+use glib::{GType, gboolean, gconstpointer, gpointer};
 
 // Enums
 pub type GstAncillaryMetaField = c_int;
@@ -2814,7 +2814,7 @@ unsafe extern "C" {
     pub fn gst_video_format_from_string(format: *const c_char) -> GstVideoFormat;
     pub fn gst_video_format_get_info(format: GstVideoFormat) -> *const GstVideoFormatInfo;
     pub fn gst_video_format_get_palette(format: GstVideoFormat, size: *mut size_t)
-        -> gconstpointer;
+    -> gconstpointer;
     pub fn gst_video_format_to_fourcc(format: GstVideoFormat) -> u32;
     pub fn gst_video_format_to_string(format: GstVideoFormat) -> *const c_char;
 
@@ -3198,7 +3198,7 @@ unsafe extern "C" {
     #[cfg(feature = "v1_22")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_video_converter_get_out_info(convert: *mut GstVideoConverter)
-        -> *const GstVideoInfo;
+    -> *const GstVideoInfo;
     pub fn gst_video_converter_set_config(
         convert: *mut GstVideoConverter,
         config: *mut gst::GstStructure,
@@ -3308,7 +3308,7 @@ unsafe extern "C" {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_video_info_new_from_caps(caps: *const gst::GstCaps) -> *mut GstVideoInfo;
     pub fn gst_video_info_align(info: *mut GstVideoInfo, align: *mut GstVideoAlignment)
-        -> gboolean;
+    -> gboolean;
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_video_info_align_full(
@@ -3346,7 +3346,7 @@ unsafe extern "C" {
     ) -> gboolean;
     pub fn gst_video_info_to_caps(info: *const GstVideoInfo) -> *mut gst::GstCaps;
     pub fn gst_video_info_from_caps(info: *mut GstVideoInfo, caps: *const gst::GstCaps)
-        -> gboolean;
+    -> gboolean;
     pub fn gst_video_info_init(info: *mut GstVideoInfo);
 
     //=========================================================================
@@ -3369,7 +3369,7 @@ unsafe extern "C" {
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_video_info_dma_drm_to_caps(drm_info: *const GstVideoInfoDmaDrm)
-        -> *mut gst::GstCaps;
+    -> *mut gst::GstCaps;
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_video_info_dma_drm_to_video_info(
@@ -3936,7 +3936,7 @@ unsafe extern "C" {
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_video_aggregator_pad_has_current_buffer(pad: *mut GstVideoAggregatorPad)
-        -> gboolean;
+    -> gboolean;
     #[cfg(feature = "v1_16")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
     pub fn gst_video_aggregator_pad_set_needs_alpha(
@@ -4248,7 +4248,7 @@ unsafe extern "C" {
     //=========================================================================
     pub fn gst_color_balance_get_type() -> GType;
     pub fn gst_color_balance_get_balance_type(balance: *mut GstColorBalance)
-        -> GstColorBalanceType;
+    -> GstColorBalanceType;
     pub fn gst_color_balance_get_value(
         balance: *mut GstColorBalance,
         channel: *mut GstColorBalanceChannel,

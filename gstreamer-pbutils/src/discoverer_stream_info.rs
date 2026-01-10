@@ -1,7 +1,7 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 use std::fmt;
 
-use crate::{prelude::*, DiscovererStreamInfo};
+use crate::{DiscovererStreamInfo, prelude::*};
 
 #[must_use = "iterators are lazy and do nothing unless consumed"]
 #[derive(Debug)]

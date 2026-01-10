@@ -1,6 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use crate::{ffi, prelude::*, Formatter};
+use crate::{Formatter, ffi, prelude::*};
 use glib::{subclass::prelude::*, translate::*};
 
 pub trait FormatterImpl: ObjectImpl + ObjectSubclass<Type: IsA<Formatter>> + Send + Sync {

@@ -8,7 +8,7 @@ use gst::{
     prelude::*,
 };
 
-use crate::{ffi, BaseParse, BaseParseFrame};
+use crate::{BaseParse, BaseParseFrame, ffi};
 
 pub trait BaseParseExtManual: IsA<BaseParse> + 'static {
     #[doc(alias = "get_sink_pad")]

@@ -3,7 +3,7 @@
 use std::str;
 
 use crate::ffi;
-use glib::translate::{from_glib, IntoGlib};
+use glib::translate::{IntoGlib, from_glib};
 use std::sync::LazyLock;
 
 #[cfg(feature = "v1_18")]
@@ -424,7 +424,10 @@ mod tests {
             .into_audio_caps(crate::AudioLayout::Interleaved)
             .unwrap()
             .build();
-        assert_eq!(caps.to_string(), "audio/x-raw, rate=(int)[ 1, 2147483647 ], channels=(int)[ 1, 2147483647 ], layout=(string)interleaved, format=(string){ S16LE, S16BE }");
+        assert_eq!(
+            caps.to_string(),
+            "audio/x-raw, rate=(int)[ 1, 2147483647 ], channels=(int)[ 1, 2147483647 ], layout=(string)interleaved, format=(string){ S16LE, S16BE }"
+        );
     }
 
     #[test]

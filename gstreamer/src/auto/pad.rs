@@ -4,13 +4,13 @@
 // DO NOT EDIT
 
 use crate::{
-    ffi, Buffer, BufferList, Caps, Element, Event, FlowError, FlowSuccess, Object, PadDirection,
-    PadLinkCheck, PadLinkError, PadLinkSuccess, PadMode, PadTemplate, Stream, TaskState,
+    Buffer, BufferList, Caps, Element, Event, FlowError, FlowSuccess, Object, PadDirection,
+    PadLinkCheck, PadLinkError, PadLinkSuccess, PadMode, PadTemplate, Stream, TaskState, ffi,
 };
 use glib::{
     object::ObjectType as _,
     prelude::*,
-    signal::{connect_raw, SignalHandlerId},
+    signal::{SignalHandlerId, connect_raw},
     translate::*,
 };
 use std::boxed::Box as Box_;

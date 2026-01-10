@@ -5,7 +5,7 @@ use glib::{prelude::*, translate::*};
 #[cfg(feature = "v1_20")]
 use crate::ElementProperties;
 use crate::{
-    ffi, EncodingAudioProfile, EncodingContainerProfile, EncodingProfile, EncodingVideoProfile,
+    EncodingAudioProfile, EncodingContainerProfile, EncodingProfile, EncodingVideoProfile, ffi,
 };
 
 pub trait EncodingProfileExtManual: IsA<EncodingProfile> + 'static {

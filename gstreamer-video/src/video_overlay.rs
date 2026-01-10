@@ -3,7 +3,7 @@
 use glib::{prelude::*, translate::*};
 use libc::uintptr_t;
 
-use crate::{ffi, VideoOverlay};
+use crate::{VideoOverlay, ffi};
 
 pub trait VideoOverlayExtManual: IsA<VideoOverlay> + 'static {
     unsafe fn set_window_handle(&self, handle: uintptr_t) {

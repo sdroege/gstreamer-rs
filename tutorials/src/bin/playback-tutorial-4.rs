@@ -113,7 +113,7 @@ fn tutorial_main() -> Result<(), Error> {
 
     let pipeline_weak_ = pipeline.downgrade();
     let timeout_id = glib::timeout_add_seconds(1, move || {
-        use gst::{format::Percent, GenericFormattedValue as GFV};
+        use gst::{GenericFormattedValue as GFV, format::Percent};
 
         let Some(pipeline) = pipeline_weak_.upgrade() else {
             return glib::ControlFlow::Break;

@@ -2,7 +2,7 @@
 
 use glib::{prelude::*, translate::*};
 
-use crate::{ffi, RTSPContext, RTSPOnvifMediaFactory};
+use crate::{RTSPContext, RTSPOnvifMediaFactory, ffi};
 
 pub trait RTSPOnvifMediaFactoryExtManual: IsA<RTSPOnvifMediaFactory> + 'static {
     #[doc(alias = "gst_rtsp_onvif_media_factory_requires_backchannel")]

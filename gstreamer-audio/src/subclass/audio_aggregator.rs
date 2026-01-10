@@ -5,7 +5,7 @@ use std::ptr;
 use glib::translate::*;
 use gst_base::{prelude::*, subclass::prelude::*};
 
-use crate::{ffi, AudioAggregator, AudioAggregatorPad};
+use crate::{AudioAggregator, AudioAggregatorPad, ffi};
 
 pub trait AudioAggregatorImpl: AggregatorImpl + ObjectSubclass<Type: IsA<AudioAggregator>> {
     fn create_output_buffer(&self, num_frames: u32) -> Option<gst::Buffer> {

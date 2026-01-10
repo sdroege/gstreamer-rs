@@ -2,7 +2,7 @@
 
 use glib::translate::*;
 
-use crate::{ffi, Plugin, PluginFeature, Registry};
+use crate::{Plugin, PluginFeature, Registry, ffi};
 
 impl Registry {
     #[doc(alias = "gst_registry_update")]

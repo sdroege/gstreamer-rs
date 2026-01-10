@@ -3,8 +3,8 @@
 use glib::{prelude::*, subclass::prelude::*, translate::*};
 
 use super::prelude::*;
-use crate::ffi;
 use crate::RTPHeaderExtension;
+use crate::ffi;
 
 pub trait RTPHeaderExtensionImpl:
     ElementImpl + ObjectSubclass<Type: IsA<RTPHeaderExtension>>

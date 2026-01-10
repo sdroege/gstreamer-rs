@@ -4,7 +4,7 @@
 // DO NOT EDIT
 
 use crate::ffi;
-use glib::{prelude::*, translate::*, GStr};
+use glib::{GStr, prelude::*, translate::*};
 
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]

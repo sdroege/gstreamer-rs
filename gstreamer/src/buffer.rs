@@ -11,7 +11,7 @@ use std::{
 use glib::translate::*;
 
 use crate::{
-    ffi, meta::*, BufferCursor, BufferFlags, BufferRefCursor, ClockTime, Memory, MemoryRef,
+    BufferCursor, BufferFlags, BufferRefCursor, ClockTime, Memory, MemoryRef, ffi, meta::*,
 };
 
 pub enum Readable {}
@@ -452,11 +452,7 @@ impl BufferRef {
             )
         };
 
-        if copied == size {
-            Ok(())
-        } else {
-            Err(copied)
-        }
+        if copied == size { Ok(()) } else { Err(copied) }
     }
 
     #[doc(alias = "gst_buffer_extract")]
@@ -471,11 +467,7 @@ impl BufferRef {
             ffi::gst_buffer_extract(self.as_mut_ptr(), offset, dest as glib::ffi::gpointer, size)
         };
 
-        if copied == size {
-            Ok(())
-        } else {
-            Err(copied)
-        }
+        if copied == size { Ok(()) } else { Err(copied) }
     }
 
     #[doc(alias = "gst_buffer_copy_deep")]
@@ -570,11 +562,7 @@ impl BufferRef {
     #[inline]
     pub fn dts_or_pts(&self) -> Option<ClockTime> {
         let val = self.dts();
-        if val.is_none() {
-            self.pts()
-        } else {
-            val
-        }
+        if val.is_none() { self.pts() } else { val }
     }
 
     #[doc(alias = "get_duration")]

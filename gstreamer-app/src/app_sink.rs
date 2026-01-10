@@ -14,7 +14,7 @@ use std::sync::atomic::{AtomicBool, Ordering};
 use futures_core::Stream;
 use glib::{ffi::gpointer, prelude::*, translate::*};
 
-use crate::{ffi, AppSink};
+use crate::{AppSink, ffi};
 
 #[allow(clippy::type_complexity)]
 pub struct AppSinkCallbacks {
@@ -73,11 +73,7 @@ impl AppSinkCallbacksBuilder {
     }
 
     pub fn eos_if<F: FnMut(&AppSink) + Send + 'static>(self, eos: F, predicate: bool) -> Self {
-        if predicate {
-            self.eos(eos)
-        } else {
-            self
-        }
+        if predicate { self.eos(eos) } else { self }
     }
 
     pub fn eos_if_some<F: FnMut(&AppSink) + Send + 'static>(self, eos: Option<F>) -> Self {

@@ -5,7 +5,7 @@ use gst::LoggableError;
 use gst_base::subclass::prelude::*;
 
 use super::prelude::*;
-use crate::{ffi, AudioRingBufferSpec, AudioSink};
+use crate::{AudioRingBufferSpec, AudioSink, ffi};
 
 pub trait AudioSinkImpl: AudioBaseSinkImpl + ObjectSubclass<Type: IsA<AudioSink>> {
     fn close(&self) -> Result<(), LoggableError> {
@@ -111,7 +111,7 @@ pub trait AudioSinkImplExt: AudioSinkImpl {
                     return Err(gst::loggable_error!(
                         gst::CAT_RUST,
                         "Unprepare is not implemented!"
-                    ))
+                    ));
                 }
             };
             gst::result_from_gboolean!(

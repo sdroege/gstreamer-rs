@@ -4,7 +4,7 @@ use std::num::NonZeroU32;
 
 use glib::{prelude::*, translate::*};
 
-use crate::{ffi, Caps, DeviceMonitor};
+use crate::{Caps, DeviceMonitor, ffi};
 
 #[derive(Debug, PartialEq, Eq)]
 pub struct DeviceMonitorFilterId(NonZeroU32);

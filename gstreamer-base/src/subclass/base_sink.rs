@@ -5,7 +5,7 @@ use std::ptr;
 use glib::{prelude::*, translate::*};
 use gst::subclass::prelude::*;
 
-use crate::{ffi, BaseSink};
+use crate::{BaseSink, ffi};
 
 pub trait BaseSinkImpl: ElementImpl + ObjectSubclass<Type: IsA<BaseSink>> {
     fn start(&self) -> Result<(), gst::ErrorMessage> {

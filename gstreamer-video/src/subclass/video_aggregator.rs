@@ -5,7 +5,7 @@ use std::{mem, ptr};
 use glib::translate::*;
 use gst_base::{prelude::*, subclass::prelude::*};
 
-use crate::{ffi, VideoAggregator};
+use crate::{VideoAggregator, ffi};
 
 pub struct AggregateFramesToken<'a>(pub(crate) &'a VideoAggregator);
 

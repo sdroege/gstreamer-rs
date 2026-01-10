@@ -5,8 +5,8 @@
 #![allow(deprecated)]
 
 use crate::{
-    ffi, DiscovererAudioInfo, DiscovererContainerInfo, DiscovererResult, DiscovererSerializeFlags,
-    DiscovererStreamInfo, DiscovererSubtitleInfo, DiscovererVideoInfo,
+    DiscovererAudioInfo, DiscovererContainerInfo, DiscovererResult, DiscovererSerializeFlags,
+    DiscovererStreamInfo, DiscovererSubtitleInfo, DiscovererVideoInfo, ffi,
 };
 use glib::translate::*;
 

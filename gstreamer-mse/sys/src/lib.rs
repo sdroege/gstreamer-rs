@@ -15,18 +15,18 @@
 use glib_sys as glib;
 use gstreamer_sys as gst;
 
+#[allow(unused_imports)]
+use libc::{FILE, intptr_t, off_t, size_t, ssize_t, time_t, uintptr_t};
 #[cfg(unix)]
 #[allow(unused_imports)]
 use libc::{dev_t, gid_t, pid_t, socklen_t, uid_t};
-#[allow(unused_imports)]
-use libc::{intptr_t, off_t, size_t, ssize_t, time_t, uintptr_t, FILE};
 #[allow(unused_imports)]
 use std::ffi::{
     c_char, c_double, c_float, c_int, c_long, c_short, c_uchar, c_uint, c_ulong, c_ushort, c_void,
 };
 
 #[allow(unused_imports)]
-use glib::{gboolean, gconstpointer, gpointer, GType};
+use glib::{GType, gboolean, gconstpointer, gpointer};
 
 // Enums
 pub type GstMediaSourceEOSError = c_int;
@@ -289,7 +289,7 @@ unsafe extern "C" {
     );
     pub fn gst_media_source_get_position(self_: *mut GstMediaSource) -> gst::GstClockTime;
     pub fn gst_media_source_get_ready_state(self_: *mut GstMediaSource)
-        -> GstMediaSourceReadyState;
+    -> GstMediaSourceReadyState;
     pub fn gst_media_source_get_source_buffers(
         self_: *mut GstMediaSource,
     ) -> *mut GstSourceBufferList;
@@ -359,7 +359,7 @@ unsafe extern "C" {
     ) -> *mut glib::GArray;
     pub fn gst_source_buffer_get_content_type(self_: *mut GstSourceBuffer) -> *mut c_char;
     pub fn gst_source_buffer_get_timestamp_offset(self_: *mut GstSourceBuffer)
-        -> gst::GstClockTime;
+    -> gst::GstClockTime;
     pub fn gst_source_buffer_get_updating(self_: *mut GstSourceBuffer) -> gboolean;
     pub fn gst_source_buffer_remove(
         self_: *mut GstSourceBuffer,

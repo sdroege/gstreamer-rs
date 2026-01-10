@@ -2,10 +2,10 @@
 
 use glib::{
     prelude::*,
-    translate::{from_glib, FromGlibPtrFull, IntoGlib, ToGlibPtr},
+    translate::{FromGlibPtrFull, IntoGlib, ToGlibPtr, from_glib},
 };
 
-use crate::{ffi, PluginFeature, Rank};
+use crate::{PluginFeature, Rank, ffi};
 
 pub trait PluginFeatureExtManual: IsA<PluginFeature> + 'static {
     #[doc(alias = "get_rank")]

@@ -3,9 +3,9 @@
 use std::{marker::PhantomData, ptr};
 
 use glib::{prelude::*, translate::*};
-use gst_rtsp::{rtsp_message::RTSPMessage, RTSPUrl};
+use gst_rtsp::{RTSPUrl, rtsp_message::RTSPMessage};
 
-use crate::{ffi, RTSPClient, RTSPSession, RTSPToken};
+use crate::{RTSPClient, RTSPSession, RTSPToken, ffi};
 
 #[derive(Debug, PartialEq, Eq)]
 #[doc(alias = "GstRTSPContext")]

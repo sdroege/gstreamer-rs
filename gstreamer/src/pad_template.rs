@@ -4,7 +4,7 @@ use std::ffi::CStr;
 
 use glib::{prelude::*, translate::*};
 
-use crate::{ffi, Caps, PadDirection, PadPresence, PadTemplate, StaticPadTemplate};
+use crate::{Caps, PadDirection, PadPresence, PadTemplate, StaticPadTemplate, ffi};
 
 impl PadTemplate {
     #[doc(alias = "gst_pad_template_new_from_static_pad_template_with_gtype")]

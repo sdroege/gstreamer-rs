@@ -5,7 +5,7 @@ use std::{mem, ptr};
 use glib::translate::*;
 use gst_base::{prelude::*, subclass::prelude::*};
 
-use crate::{ffi, subclass::AggregateFramesToken, VideoAggregator, VideoAggregatorPad};
+use crate::{VideoAggregator, VideoAggregatorPad, ffi, subclass::AggregateFramesToken};
 
 pub trait VideoAggregatorPadImpl:
     AggregatorPadImpl + ObjectSubclass<Type: IsA<VideoAggregatorPad>>

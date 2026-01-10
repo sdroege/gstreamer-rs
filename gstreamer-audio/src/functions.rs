@@ -1,7 +1,7 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 use crate::ffi;
-use glib::translate::{from_glib_full, IntoGlibPtr, ToGlibPtr};
+use glib::translate::{IntoGlibPtr, ToGlibPtr, from_glib_full};
 
 #[doc(alias = "gst_audio_buffer_clip")]
 pub fn audio_buffer_clip(
@@ -77,7 +77,10 @@ mod tests {
             crate::AudioLayout::Interleaved,
         )
         .build();
-        assert_eq!(caps.to_string(), "audio/x-raw, rate=(int)[ 1, 2147483647 ], channels=(int)[ 1, 2147483647 ], layout=(string)interleaved, format=(string){ S16BE, S16LE }");
+        assert_eq!(
+            caps.to_string(),
+            "audio/x-raw, rate=(int)[ 1, 2147483647 ], channels=(int)[ 1, 2147483647 ], layout=(string)interleaved, format=(string){ S16BE, S16LE }"
+        );
 
         #[cfg(feature = "v1_18")]
         {

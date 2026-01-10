@@ -4,7 +4,7 @@ use std::{mem, ptr, sync::Arc};
 
 use glib::{prelude::*, translate::*};
 
-use crate::{ffi, Task};
+use crate::{Task, ffi};
 
 #[allow(clippy::type_complexity)]
 pub struct TaskBuilder<F: FnMut(&Task) + Send + 'static> {
@@ -91,11 +91,7 @@ impl<F: FnMut(&Task) + Send + 'static> TaskBuilder<F> {
 
     #[doc(alias = "gst_task_set_lock")]
     pub fn lock_if(self, lock: &TaskLock, predicate: bool) -> Self {
-        if predicate {
-            self.lock(lock)
-        } else {
-            self
-        }
+        if predicate { self.lock(lock) } else { self }
     }
 
     #[doc(alias = "gst_task_set_lock")]
@@ -157,7 +153,7 @@ impl<F: FnMut(&Task) + Send + 'static> TaskBuilder<F> {
             (*func_ptr).1 = task.to_glib_none().0;
 
             let lock = self.lock.unwrap_or_default();
-            ffi::gst_task_set_lock(task.to_glib_none().0, mut_override(&lock.0 .0));
+            ffi::gst_task_set_lock(task.to_glib_none().0, mut_override(&lock.0.0));
             task.set_data("gstreamer-rs-task-lock", Arc::clone(&lock.0));
 
             if let Some(enter_callback) = self.enter_callback {
@@ -220,7 +216,7 @@ impl TaskLock {
     pub fn new() -> Self {
         unsafe {
             let lock = TaskLock(Arc::new(RecMutex(mem::zeroed())));
-            glib::ffi::g_rec_mutex_init(mut_override(&lock.0 .0));
+            glib::ffi::g_rec_mutex_init(mut_override(&lock.0.0));
             lock
         }
     }
@@ -230,7 +226,7 @@ impl TaskLock {
     pub fn lock(&self) -> TaskLockGuard<'_> {
         unsafe {
             let guard = TaskLockGuard(&self.0);
-            glib::ffi::g_rec_mutex_lock(mut_override(&self.0 .0));
+            glib::ffi::g_rec_mutex_lock(mut_override(&self.0.0));
             guard
         }
     }
@@ -249,7 +245,7 @@ impl Drop for TaskLockGuard<'_> {
     #[inline]
     fn drop(&mut self) {
         unsafe {
-            glib::ffi::g_rec_mutex_unlock(mut_override(&self.0 .0));
+            glib::ffi::g_rec_mutex_unlock(mut_override(&self.0.0));
         }
     }
 }

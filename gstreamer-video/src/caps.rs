@@ -115,11 +115,7 @@ impl<T> VideoCapsBuilder<T> {
     }
 
     pub fn format_if(self, format: VideoFormat, predicate: bool) -> Self {
-        if predicate {
-            self.format(format)
-        } else {
-            self
-        }
+        if predicate { self.format(format) } else { self }
     }
 
     pub fn format_if_some(self, format: Option<VideoFormat>) -> Self {
@@ -178,11 +174,7 @@ impl<T> VideoCapsBuilder<T> {
     }
 
     pub fn width_if(self, width: i32, predicate: bool) -> Self {
-        if predicate {
-            self.width(width)
-        } else {
-            self
-        }
+        if predicate { self.width(width) } else { self }
     }
 
     pub fn width_if_some(self, width: Option<i32>) -> Self {
@@ -257,11 +249,7 @@ impl<T> VideoCapsBuilder<T> {
     }
 
     pub fn height_if(self, height: i32, predicate: bool) -> Self {
-        if predicate {
-            self.height(height)
-        } else {
-            self
-        }
+        if predicate { self.height(height) } else { self }
     }
 
     pub fn height_if_some(self, height: Option<i32>) -> Self {
@@ -641,11 +629,7 @@ fn xgcd(mut a: i64, mut b: i64) -> (i64, i64, i64) {
         (y0, y1) = (y1, y0 - q * y1);
         (x0, x1) = (x1, x0 - q * x1);
     }
-    if b >= 0 {
-        (b, x0, y0)
-    } else {
-        (-b, -x0, -y0)
-    }
+    if b >= 0 { (b, x0, y0) } else { (-b, -x0, -y0) }
 }
 
 /* Computes the neighbours of p/q in the Farey sequence of order n. */
@@ -697,7 +681,7 @@ fn next_fraction(fraction: gst::Fraction) -> gst::Fraction {
 
 #[cfg(test)]
 mod tests {
-    use super::{next_fraction, previous_fraction, VideoCapsBuilder};
+    use super::{VideoCapsBuilder, next_fraction, previous_fraction};
 
     #[test]
     fn default_encoding() {

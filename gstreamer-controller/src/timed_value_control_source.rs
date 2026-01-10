@@ -2,7 +2,7 @@
 
 use glib::{prelude::*, translate::*};
 
-use crate::{ffi, TimedValueControlSource};
+use crate::{TimedValueControlSource, ffi};
 
 pub trait TimedValueControlSourceExtManual: IsA<TimedValueControlSource> + 'static {
     #[doc(alias = "gst_timed_value_control_source_list_control_points")]

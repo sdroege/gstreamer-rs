@@ -4,7 +4,7 @@ use std::ptr;
 
 use glib::{prelude::*, subclass::prelude::*, translate::*};
 
-use crate::{ffi, URIHandler, URIType};
+use crate::{URIHandler, URIType, ffi};
 
 pub trait URIHandlerImpl:
     super::element::ElementImpl + ObjectSubclass<Type: IsA<URIHandler>>

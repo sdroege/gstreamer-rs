@@ -1,5 +1,5 @@
-use crate::ffi;
 use crate::VulkanCommandPool;
+use crate::ffi;
 
 use glib::{prelude::*, translate::*};
 

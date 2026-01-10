@@ -5,7 +5,7 @@ use std::{mem, ops, path, ptr};
 use glib::translate::*;
 use gst::prelude::*;
 
-use crate::{ffi, TestClock};
+use crate::{TestClock, ffi};
 
 #[derive(Debug)]
 #[doc(alias = "GstHarness")]

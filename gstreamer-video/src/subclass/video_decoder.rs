@@ -4,10 +4,9 @@ use glib::translate::*;
 use gst::subclass::prelude::*;
 
 use crate::{
-    ffi,
+    VideoCodecFrame, VideoDecoder, ffi,
     prelude::*,
     video_codec_state::{Readable, VideoCodecState},
-    VideoCodecFrame, VideoDecoder,
 };
 
 pub trait VideoDecoderImpl: ElementImpl + ObjectSubclass<Type: IsA<VideoDecoder>> {

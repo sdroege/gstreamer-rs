@@ -5,7 +5,7 @@ use std::{mem, ptr};
 use glib::translate::*;
 use gst::subclass::prelude::*;
 
-use crate::{ffi, prelude::*, BaseTransform};
+use crate::{BaseTransform, ffi, prelude::*};
 
 #[derive(Copy, Clone, Debug, PartialEq, Eq)]
 pub enum BaseTransformMode {
