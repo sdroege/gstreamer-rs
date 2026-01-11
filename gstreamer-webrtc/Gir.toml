@@ -53,6 +53,7 @@ manual = [
     "GObject.Object",
     "Gst.Caps",
     "Gst.Object",
+    "Gst.Promise",
     "Gst.Structure",
     "GstSdp.SDPMessage",
 ]
@@ -83,11 +84,6 @@ status = "generate"
     [[object.function]]
     name = "add_candidate"
     # ABI breakage in 1.24 needs working around
-    manual = true
-
-    [[object.function]]
-    name = "close"
-    # take promise by reference
     manual = true
 
 [[object]]
