@@ -1378,7 +1378,7 @@ mod video_meta_transform_matrix {
 
         fn to_raw<T: MetaAPI>(
             &self,
-            meta: &gst::MetaRef<T>,
+            _meta: &gst::MetaRef<T>,
         ) -> Result<Self::GLibType, glib::BoolError> {
             Ok(self.0)
         }
