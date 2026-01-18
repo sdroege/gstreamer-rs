@@ -26,9 +26,8 @@ pub use crate::auto::*;
 
 mod tags;
 pub use crate::tags::*;
-mod sample_ext;
-
 pub mod language_codes;
+mod sample_ext;
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst_tag::prelude::*" without getting conflicts

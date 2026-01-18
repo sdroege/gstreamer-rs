@@ -14,6 +14,10 @@ use crate::{Sample, TagError, TagMergeMode, TagScope, ffi};
 pub trait Tag<'a> {
     type TagType: StaticType + FromValue<'a> + ToSendValue + Send + Sync;
     const TAG_NAME: &'static glib::GStr;
+    // rustdoc-stripper-ignore-next
+    /// Ensures that the tag has been registered.
+    #[inline]
+    fn ensure() {}
 }
 
 macro_rules! impl_tag(
@@ -396,6 +400,7 @@ impl<T> TagValue<T> {
 impl TagListRef {
     #[doc(alias = "gst_tag_list_add")]
     pub fn add<'a, T: Tag<'a>>(&mut self, value: &T::TagType, mode: TagMergeMode) {
+        T::ensure();
         // result can be safely ignored here as `value`'s type is tied to `T::TAG_NAME`
         let v = <T::TagType as ToSendValue>::to_send_value(value);
         let _res = self.add_value(T::TAG_NAME, &v, mode);
@@ -438,6 +443,7 @@ impl TagListRef {
 
     #[doc(alias = "gst_tag_list_remove_tag")]
     pub fn remove<'a, T: Tag<'a>>(&mut self) {
+        T::ensure();
         self.remove_generic(T::TAG_NAME);
     }
 
@@ -452,6 +458,7 @@ impl TagListRef {
 
     #[doc(alias = "gst_tag_list_get")]
     pub fn get<'a, T: Tag<'a>>(&self) -> Option<TagValue<T::TagType>> {
+        T::ensure();
         self.generic(T::TAG_NAME).map(|value| {
             if !value.is::<T::TagType>() {
                 panic!(
@@ -507,6 +514,7 @@ impl TagListRef {
     #[doc(alias = "get_index")]
     #[doc(alias = "gst_tag_list_get_index")]
     pub fn index<'a, T: Tag<'a>>(&'a self, idx: usize) -> Option<&'a TagValue<T::TagType>> {
+        T::ensure();
         self.index_generic(T::TAG_NAME, idx).map(|value| {
             if !value.is::<T::TagType>() {
                 panic!(
@@ -539,6 +547,7 @@ impl TagListRef {
     #[doc(alias = "get_size")]
     #[doc(alias = "gst_tag_list_get_tag_size")]
     pub fn size<'a, T: Tag<'a>>(&self) -> usize {
+        T::ensure();
         self.size_by_name(T::TAG_NAME)
     }
 
@@ -553,6 +562,7 @@ impl TagListRef {
     }
 
     pub fn iter_tag<'a, T: Tag<'a>>(&'a self) -> TagIter<'a, T> {
+        T::ensure();
         TagIter::new(self)
     }
 
@@ -1404,6 +1414,41 @@ mod tests {
         assert_eq!(
             format!("{tags:?}"),
             "TagList { title: (gchararray) \"some title\", duration: (guint64) 120000000000 }"
+        );
+    }
+
+    #[test]
+    fn test_custom_tag_with_ensure_is_registered_automatically() {
+        enum MyCustomAutoRegisteringTag {}
+
+        impl<'a> Tag<'a> for MyCustomAutoRegisteringTag {
+            type TagType = &'a str;
+            const TAG_NAME: &'static glib::GStr = glib::gstr!("my-custom-auto-registering-tag");
+            fn ensure() {
+                static REGISTER: std::sync::Once = std::sync::Once::new();
+                REGISTER.call_once(|| {
+                    register::<MyCustomAutoRegisteringTag>();
+                });
+            }
+        }
+
+        impl CustomTag<'_> for MyCustomAutoRegisteringTag {
+            const FLAG: crate::TagFlag = crate::TagFlag::Meta;
+            const NICK: &'static glib::GStr = glib::gstr!("my custom auto registering tag");
+            const DESCRIPTION: &'static glib::GStr =
+                glib::gstr!("My own custom tag type for testing");
+        }
+
+        crate::init().unwrap();
+        let mut tags = TagList::new();
+
+        tags.get_mut()
+            .unwrap()
+            .add::<MyCustomAutoRegisteringTag>(&"my-value", TagMergeMode::Append);
+
+        assert_eq!(
+            "my-value",
+            tags.get::<MyCustomAutoRegisteringTag>().unwrap().get()
         );
     }
 }
