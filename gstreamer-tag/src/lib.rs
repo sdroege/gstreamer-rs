@@ -13,17 +13,27 @@ macro_rules! skip_assert_initialized {
     () => {};
 }
 
+macro_rules! assert_initialized_main_thread {
+    () => {
+        if !gst::INITIALIZED.load(std::sync::atomic::Ordering::SeqCst) {
+            gst::assert_initialized();
+        }
+    };
+}
+
 mod auto;
 pub use crate::auto::*;
 
 mod tags;
 pub use crate::tags::*;
+mod sample_ext;
 
 pub mod language_codes;
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst_tag::prelude::*" without getting conflicts
 pub mod prelude {
+    pub use crate::sample_ext::ImageSampleExt;
     #[doc(hidden)]
     pub use gst::prelude::*;
 }
