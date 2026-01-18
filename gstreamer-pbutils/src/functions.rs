@@ -19,6 +19,7 @@ pub fn pb_utils_add_codec_description_to_tag_list_for_tag<'a, T: CodecTag<'a>>(
     caps: &gst::CapsRef,
 ) -> Result<(), glib::BoolError> {
     assert_initialized_main_thread!();
+    T::ensure();
     let codec_tag = T::TAG_NAME;
     unsafe {
         glib::result_from_gboolean!(
