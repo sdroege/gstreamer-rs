@@ -1,10 +1,10 @@
-use crate::{callsite::GstCallsiteKind, state_desc, PadFlags};
-use gstreamer::{
+use crate::{PadFlags, callsite::GstCallsiteKind, state_desc};
+use gst::{
     ffi::{
-        gst_debug_add_log_function, gst_debug_category_get_name, gst_debug_message_get,
-        gst_debug_remove_log_function, gst_element_get_type, gst_object_get_type, gst_pad_get_type,
         GST_LEVEL_COUNT, GST_LEVEL_DEBUG, GST_LEVEL_ERROR, GST_LEVEL_FIXME, GST_LEVEL_INFO,
         GST_LEVEL_LOG, GST_LEVEL_MEMDUMP, GST_LEVEL_TRACE, GST_LEVEL_WARNING,
+        gst_debug_add_log_function, gst_debug_category_get_name, gst_debug_message_get,
+        gst_debug_remove_log_function, gst_element_get_type, gst_object_get_type, gst_pad_get_type,
     },
     glib::{
         gobject_ffi::{g_object_get_qdata, g_type_is_a, g_type_name},
@@ -18,13 +18,13 @@ use std::{convert::TryFrom, ffi::CStr};
 use tracing_core::{Callsite, Event, Level};
 
 unsafe extern "C" fn log_callback(
-    category: *mut gstreamer::ffi::GstDebugCategory,
-    level: gstreamer::ffi::GstDebugLevel,
+    category: *mut gst::ffi::GstDebugCategory,
+    level: gst::ffi::GstDebugLevel,
     file: *const c_char,
     module: *const c_char,
     line: c_int,
-    gobject: *mut gstreamer::glib::gobject_ffi::GObject,
-    message: *mut gstreamer::ffi::GstDebugMessage,
+    gobject: *mut gst::glib::gobject_ffi::GObject,
+    message: *mut gst::ffi::GstDebugMessage,
     _: *mut c_void,
 ) {
     // SAFETY: unwinding back into C land is UB. We abort if there was a panic inside.
@@ -130,7 +130,7 @@ unsafe extern "C" fn log_callback(
             let gstobject = gobject_with_ty.and_then(|(obj, ty)| unsafe {
                 // SAFETY: g_type_is_a is provided valid types.
                 if bool::from_glib(g_type_is_a(ty, gst_object_get_type())) {
-                    let gstobject = obj as *mut gstreamer::ffi::GstObject;
+                    let gstobject = obj as *mut gst::ffi::GstObject;
 
                     Some(gstobject)
                 } else {
@@ -164,16 +164,14 @@ unsafe extern "C" fn log_callback(
                     }
                 };
 
-                let span = span.cast::<tracing::Span>().as_ref();
-
-                span
+                span.cast::<tracing::Span>().as_ref()
             });
 
             let gstobject_name_value = gstobject_name.as_deref();
             let gstelement = gobject_with_ty.and_then(|(obj, ty)| unsafe {
                 // SAFETY: g_type_is_a is provided valid types.
                 if bool::from_glib(g_type_is_a(ty, gst_element_get_type())) {
-                    Some(obj as *mut gstreamer::ffi::GstElement)
+                    Some(obj as *mut gst::ffi::GstElement)
                 } else {
                     None
                 }
@@ -187,7 +185,7 @@ unsafe extern "C" fn log_callback(
             let gstpad = gobject_with_ty.and_then(|(obj, ty)| unsafe {
                 // SAFETY: g_type_is_a is provided valid types.
                 if bool::from_glib(g_type_is_a(ty, gst_pad_get_type())) {
-                    Some(obj as *mut gstreamer::ffi::GstPad)
+                    Some(obj as *mut gst::ffi::GstPad)
                 } else {
                     None
                 }
@@ -214,7 +212,7 @@ unsafe extern "C" fn log_callback(
             let gstpad_parent_states = gstpad_parent.and_then(|obj| unsafe {
                 let ty = (*obj).object.g_type_instance.g_class.as_ref()?.g_type;
                 if bool::from_glib(g_type_is_a(ty, gst_element_get_type())) {
-                    let e = obj as *mut gstreamer::ffi::GstElement;
+                    let e = obj as *mut gst::ffi::GstElement;
                     let (curr, pend) = ((*e).current_state, (*e).pending_state);
                     Some((state_desc(curr), state_desc(pend)))
                 } else {
@@ -265,7 +263,7 @@ pub(crate) fn debug_remove_log_function() {
 }
 
 #[inline]
-fn span_quark() -> &'static gstreamer::glib::Quark {
+fn span_quark() -> &'static gst::glib::Quark {
     // Generate a unique TypeId specifically for Span quark’s name. This gives some probabilistic
     // security against users of this library overwriting our span with their own types, making
     // attach_span unsound.
@@ -275,14 +273,14 @@ fn span_quark() -> &'static gstreamer::glib::Quark {
     #[allow(dead_code)]
     struct QDataTracingSpan(tracing::Span);
 
-    static ELEMENT_SPAN_QUARK: LazyLock<gstreamer::glib::Quark> = LazyLock::new(|| {
+    static ELEMENT_SPAN_QUARK: LazyLock<gst::glib::Quark> = LazyLock::new(|| {
         let type_id = std::any::TypeId::of::<QDataTracingSpan>();
         let mut hasher = std::collections::hash_map::DefaultHasher::new();
         std::hash::Hash::hash(&type_id, &mut hasher);
         let type_id_hash = std::hash::Hasher::finish(&hasher);
         let key = format!("tracing-gstreamer:{type_id_hash}\0");
-        let gstr = gstreamer::glib::GStr::from_utf8_with_nul(key.as_bytes()).unwrap();
-        gstreamer::glib::Quark::from_str(gstr)
+        let gstr = gst::glib::GStr::from_utf8_with_nul(key.as_bytes()).unwrap();
+        gst::glib::Quark::from_str(gstr)
     });
 
     &ELEMENT_SPAN_QUARK
@@ -302,9 +300,9 @@ fn span_quark() -> &'static gstreamer::glib::Quark {
 /// # Examples
 ///
 /// ```
-/// gstreamer::init().unwrap();
+/// gst::init().unwrap();
 ///
-/// let pipeline = gstreamer::Pipeline::new();
+/// let pipeline = gst::Pipeline::new();
 /// let gst_log_span = tracing::info_span!(
 ///     parent: None,
 ///     "gst log",
@@ -312,10 +310,10 @@ fn span_quark() -> &'static gstreamer::glib::Quark {
 ///     id = 42,
 /// );
 /// unsafe {
-///     tracing_gstreamer::attach_span(&pipeline, gst_log_span);
+///     gst_tracing::attach_span(&pipeline, gst_log_span);
 /// }
 /// ```
-pub unsafe fn attach_span<O: IsA<gstreamer::Object>>(object: &O, span: tracing::Span) {
+pub unsafe fn attach_span<O: IsA<gst::Object>>(object: &O, span: tracing::Span) {
     unsafe {
         // SAFETY:
         //

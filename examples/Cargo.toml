@@ -30,8 +30,11 @@ gst-d3d12 = { workspace = true, optional = true }
 gst-vulkan = { workspace = true, optional = true }
 gst-vulkan-wayland = { workspace = true, optional = true }
 gst-vulkan-xcb = { workspace = true, optional = true }
+gst-tracing = { workspace = true, optional = true }
 gio = { workspace = true, optional = true }
 anyhow = "1.0"
+tracing = { version = "0.1", optional = true }
+tracing-subscriber = { version = "0.3", optional = true }
 byte-slice-cast = "1"
 clap = { version = "4.0", features = ["derive"] }
 cairo-rs = { workspace = true, features=["use_glib"], optional = true }
@@ -93,6 +96,7 @@ d3d12 = ["dep:gst-d3d12", "windows"]
 vulkan = ["dep:gst-vulkan", "gst-vulkan/v1_26", "dep:naga"]
 gst-vulkan-xcb = ["vulkan", "dep:gst-vulkan-xcb"]
 gst-vulkan-wayland = ["vulkan", "dep:gst-vulkan-wayland"]
+gst-tracing = ["dep:gst-tracing", "dep:tracing", "dep:tracing-subscriber"]
 
 [[bin]]
 name = "appsink"
@@ -248,3 +252,7 @@ required-features = ["d3d12"]
 [[bin]]
 name = "vulkanfilter"
 required-features = ["vulkan", "gst-vulkan/v1_26_4"]
+
+[[bin]]
+name = "tracing_videoenc"
+required-features = ["gst-tracing"]

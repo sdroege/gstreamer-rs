@@ -1,13 +1,12 @@
-use std::sync::LazyLock;
 use std::{
     alloc::GlobalAlloc,
     sync::{
-        atomic::{AtomicUsize, Ordering},
         PoisonError,
+        atomic::{AtomicUsize, Ordering},
     },
 };
-use tracing::{field::FieldSet, Level};
-use tracing_core::{identify_callsite, Callsite, Interest, Kind, Metadata};
+use tracing::{Level, field::FieldSet};
+use tracing_core::{Callsite, Interest, Kind, Metadata, identify_callsite};
 
 #[derive(PartialEq, Eq, PartialOrd, Ord, Copy, Clone, Debug)]
 pub(crate) enum GstCallsiteKind {
@@ -27,6 +26,7 @@ const CALLSITE_INTEREST_ALWAYS: usize = 3;
 
 impl GstCallsite {
     fn make_static(key: &Key) -> &'static Self {
+        skip_assert_initialized!();
         let module = key.module.unwrap_or("");
         let file = key.file.unwrap_or("");
         let prefixed_target_len = crate::TARGET.len() + 2 + key.target.len();
@@ -165,9 +165,9 @@ impl Ord for Key<'_> {
 
 impl DynamicCallsites {
     pub(crate) fn get() -> &'static Self {
-        static MAP: LazyLock<DynamicCallsites> = LazyLock::new(|| DynamicCallsites {
+        static MAP: DynamicCallsites = DynamicCallsites {
             data: std::sync::Mutex::new(Map::new()),
-        });
+        };
 
         &MAP
     }

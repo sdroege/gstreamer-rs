@@ -1,20 +1,20 @@
+// Tests use a custom runner (run()) instead of #[test] attributes because GStreamer
+// requires specific initialization order. The compiler doesn't see these as used.
+#![allow(dead_code)]
+
 use crate::*;
-use g::{
-    glib::translate::ToGlibPtr,
-    prelude::{Cast, ElementExt, ObjectType},
-};
-use gstreamer as g;
+use gst::{glib::translate::*, prelude::*};
 use std::{
     collections::VecDeque,
     sync::atomic::{AtomicU64, Ordering},
     sync::{Arc, Mutex},
 };
-use tracing::{
+use tracing_core::{Level, Metadata};
+use tracing_core::{
+    Subscriber,
     field::Visit,
-    span::{Attributes, Record},
-    Id, Subscriber,
+    span::{Attributes, Id, Record},
 };
-use tracing::{Level, Metadata};
 use tracing_subscriber::layer::{Context, Layer, SubscriberExt};
 
 #[derive(Default, Debug)]
@@ -130,6 +130,7 @@ struct MockSubscriber {
 
 impl MockSubscriber {
     fn new(filter: fn(&Metadata<'_>) -> bool, name: &'static str, expected: Vec<Expect>) -> Self {
+        skip_assert_initialized!();
         let expected = Arc::new(Mutex::new(expected.into()));
         MockSubscriber {
             expected,
@@ -147,10 +148,11 @@ impl MockSubscriber {
     ) where
         F: FnOnce(),
     {
+        skip_assert_initialized!();
         let subscriber = Self::new(filter, name, expected);
         let expected = subscriber.expected.clone();
-        let dispatch = tracing::Dispatch::new(subscriber);
-        tracing::dispatcher::with_default(&dispatch, cb);
+        let dispatch = tracing_core::Dispatch::new(subscriber);
+        tracing_core::dispatcher::with_default(&dispatch, cb);
         let guard = expected.lock().expect("mutex lock");
         assert!(
             guard.is_empty(),
@@ -172,7 +174,7 @@ impl Subscriber for MockSubscriber {
             }
             Some(Expect::GstEvent(mut expected @ GstEvent { .. })) => {
                 let meta = e.metadata();
-                if meta.target() != format!("gstreamer::{}", expected.target) {
+                if meta.target() != format!("gst::{}", expected.target) {
                     panic!(
                         "[{}] event with target {} received, but expected {}",
                         self.name,
@@ -233,8 +235,9 @@ fn test_simple_error() {
         |_| true,
         "test_simple_error",
         || {
-            let cat = g::DebugCategory::new("test_error_cat", g::DebugColorFlags::empty(), None);
-            g::error!(cat, "simple error");
+            let cat =
+                gst::DebugCategory::new("test_error_cat", gst::DebugColorFlags::empty(), None);
+            gst::error!(cat, "simple error");
         },
         vec![Expect::GstEvent(GstEvent {
             message: "simple error",
@@ -251,8 +254,9 @@ fn test_simple_warning() {
         |_| true,
         "test_simple_warning",
         || {
-            let cat = g::DebugCategory::new("test_simple_cat", g::DebugColorFlags::empty(), None);
-            g::warning!(cat, "simple warning");
+            let cat =
+                gst::DebugCategory::new("test_simple_cat", gst::DebugColorFlags::empty(), None);
+            gst::warning!(cat, "simple warning");
         },
         vec![Expect::GstEvent(GstEvent {
             message: "simple warning",
@@ -269,11 +273,12 @@ fn test_simple_events() {
         |_| true,
         "test_simple_events",
         || {
-            let cat = g::DebugCategory::new("test_simple_cat", g::DebugColorFlags::empty(), None);
-            g::fixme!(cat, "simple fixme");
-            g::info!(cat, "simple info");
-            g::memdump!(cat, "simple memdump");
-            g::trace!(cat, "simple trace");
+            let cat =
+                gst::DebugCategory::new("test_simple_cat", gst::DebugColorFlags::empty(), None);
+            gst::fixme!(cat, "simple fixme");
+            gst::info!(cat, "simple info");
+            gst::memdump!(cat, "simple memdump");
+            gst::trace!(cat, "simple trace");
         },
         vec![
             Expect::GstEvent(GstEvent {
@@ -309,14 +314,15 @@ fn test_simple_events() {
 }
 
 fn test_with_object() {
-    let p = g::Pipeline::new();
+    let p = gst::Pipeline::new();
     let p_addr = p.as_object_ref().to_glib_none().0 as usize;
     MockSubscriber::with_expected(
-        |m| m.target() == "gstreamer::test_with_object",
+        |m| m.target() == "gst::test_with_object",
         "test_with_object",
         move || {
-            let cat = g::DebugCategory::new("test_with_object", g::DebugColorFlags::empty(), None);
-            g::error!(cat, obj = &p, "with object");
+            let cat =
+                gst::DebugCategory::new("test_with_object", gst::DebugColorFlags::empty(), None);
+            gst::error!(cat, obj = &p, "with object");
         },
         vec![Expect::GstEvent(GstEvent {
             message: "with object",
@@ -336,15 +342,18 @@ fn test_with_object() {
 }
 
 fn test_with_upcast_object() {
-    let obj: gstreamer::glib::Object = g::Bin::new().upcast();
+    let obj: gst::glib::Object = gst::Bin::new().upcast();
     let obj_addr = obj.as_object_ref().to_glib_none().0 as usize;
     MockSubscriber::with_expected(
-        |m| m.target() == "gstreamer::test_with_upcast_object",
+        |m| m.target() == "gst::test_with_upcast_object",
         "test_with_upcast_object",
         move || {
-            let cat =
-                g::DebugCategory::new("test_with_upcast_object", g::DebugColorFlags::empty(), None);
-            g::error!(cat, obj = &obj, "with upcast object");
+            let cat = gst::DebugCategory::new(
+                "test_with_upcast_object",
+                gst::DebugColorFlags::empty(),
+                None,
+            );
+            gst::error!(cat, obj = &obj, "with upcast object");
         },
         vec![Expect::GstEvent(GstEvent {
             message: "with upcast object",
@@ -364,18 +373,18 @@ fn test_with_upcast_object() {
 }
 
 fn test_with_pad() {
-    let pad = g::Pad::builder(gstreamer::PadDirection::Sink)
+    let pad = gst::Pad::builder(gst::PadDirection::Sink)
         .name("custom_pad_name")
         .build();
-    let parent = g::Bin::builder().name("custom_bin_name").build();
+    let parent = gst::Bin::builder().name("custom_bin_name").build();
     parent.add_pad(&pad).expect("add pad");
     let pad_addr = pad.as_object_ref().to_glib_none().0 as usize;
     MockSubscriber::with_expected(
-        |m| m.target() == "gstreamer::test_pad_cat",
+        |m| m.target() == "gst::test_pad_cat",
         "test_with_pad",
         move || {
-            let cat = g::DebugCategory::new("test_pad_cat", g::DebugColorFlags::empty(), None);
-            g::error!(cat, obj = &pad, "with pad object");
+            let cat = gst::DebugCategory::new("test_pad_cat", gst::DebugColorFlags::empty(), None);
+            gst::error!(cat, obj = &pad, "with pad object");
         },
         vec![Expect::GstEvent(GstEvent {
             message: "with pad object",
@@ -398,15 +407,16 @@ fn test_with_pad() {
 
 fn test_disintegration() {
     MockSubscriber::with_expected(
-        |m| m.target() == "gstreamer::disintegration",
+        |m| m.target() == "gst::disintegration",
         "test_disintegration",
         move || {
-            let cat = g::DebugCategory::new("disintegration", g::DebugColorFlags::empty(), None);
-            g::error!(cat, "apple");
-            disintegrate_events();
-            g::error!(cat, "banana");
+            let cat =
+                gst::DebugCategory::new("disintegration", gst::DebugColorFlags::empty(), None);
+            gst::error!(cat, "apple");
+            disable_events();
+            gst::error!(cat, "banana");
             integrate_events();
-            g::error!(cat, "chaenomeles");
+            gst::error!(cat, "chaenomeles");
         },
         vec![
             Expect::GstEvent(GstEvent {
@@ -432,8 +442,8 @@ fn test_formatting() {
         |_| true,
         "test_formatting",
         || {
-            let cat = g::DebugCategory::new("ANSWERS", g::DebugColorFlags::empty(), None);
-            g::warning!(cat, "the answer is believed to be {}.", 42);
+            let cat = gst::DebugCategory::new("ANSWERS", gst::DebugColorFlags::empty(), None);
+            gst::warning!(cat, "the answer is believed to be {}.", 42);
         },
         vec![Expect::GstEvent(GstEvent {
             message: "the answer is believed to be 42.",
@@ -468,16 +478,16 @@ fn test_interests() {
     );
     let expected = mock_subscriber.expected.clone();
     let subscriber = tracing_subscriber::registry().with(mock_subscriber).with(
-        tracing_subscriber::filter::LevelFilter::from(tracing::Level::WARN),
+        tracing_subscriber::filter::LevelFilter::from(tracing_core::Level::WARN),
     );
-    let dispatch = tracing::Dispatch::new(subscriber);
-    tracing::dispatcher::with_default(&dispatch, move || {
-        let cat = g::DebugCategory::new("INTERESTS", g::DebugColorFlags::empty(), None);
-        g::warning!(cat, "warnings should be visible");
-        g::error!(cat, "errors should be visible");
-        g::info!(cat, "infos should NOT be visible");
-        g::debug!(cat, "debugs should NOT be visible");
-        g::trace!(cat, "traces should NOT be visible");
+    let dispatch = tracing_core::Dispatch::new(subscriber);
+    tracing_core::dispatcher::with_default(&dispatch, move || {
+        let cat = gst::DebugCategory::new("INTERESTS", gst::DebugColorFlags::empty(), None);
+        gst::warning!(cat, "warnings should be visible");
+        gst::error!(cat, "errors should be visible");
+        gst::info!(cat, "infos should NOT be visible");
+        gst::debug!(cat, "debugs should NOT be visible");
+        gst::trace!(cat, "traces should NOT be visible");
     });
     let guard = expected.lock().expect("mutex lock");
     assert!(
@@ -488,21 +498,22 @@ fn test_interests() {
 }
 
 fn test_user_span() {
-    let p = g::Pipeline::new();
+    let p = gst::Pipeline::new();
     let p_addr = p.as_object_ref().to_glib_none().0 as usize;
 
     MockSubscriber::with_expected(
-        |m| m.target() == "gstreamer::test_user_span",
+        |m| m.target() == "gst::test_user_span",
         "test_user_span",
         move || {
             let span = tracing::error_span!(
-                target: "gstreamer::test_user_span", "pipeline span", pipeline = true
+                target: "gst::test_user_span", "pipeline span", pipeline = true
             );
             assert_eq!(span.id().unwrap().into_u64(), 99);
             unsafe { attach_span(&p, span) };
 
-            let cat = g::DebugCategory::new("test_user_span", g::DebugColorFlags::empty(), None);
-            g::error!(cat, obj = &p, "with object");
+            let cat =
+                gst::DebugCategory::new("test_user_span", gst::DebugColorFlags::empty(), None);
+            gst::error!(cat, obj = &p, "with object");
         },
         vec![Expect::GstEvent(GstEvent {
             message: "with object",
@@ -524,9 +535,9 @@ fn test_user_span() {
 // NB: we aren't using the test harness here to allow us for the necessary gstreamer setup more
 // straightforwardly.
 pub(crate) fn run() {
-    g::log::remove_default_log_function();
-    g::init().expect("gst init");
-    g::log::set_default_threshold(g::DebugLevel::Memdump);
+    gst::log::remove_default_log_function();
+    gst::init().expect("gst init");
+    gst::log::set_default_threshold(gst::DebugLevel::Memdump);
     integrate_events();
     test_simple_error();
     test_simple_warning();
@@ -538,5 +549,5 @@ pub(crate) fn run() {
     test_formatting();
     test_interests();
     test_user_span();
-    disintegrate_events();
+    disable_events();
 }

@@ -1,9 +1,9 @@
 use crate::callsite::GstCallsiteKind;
-use gstreamer::{
-    glib, prelude::*, subclass::prelude::*, Buffer, FlowError, FlowSuccess, Object, Pad, Tracer,
+use gst::{
+    Buffer, FlowError, FlowSuccess, Object, Pad, Tracer, glib, prelude::*, subclass::prelude::*,
 };
 use std::{cell::RefCell, str::FromStr};
-use tracing::{error, info, span::Attributes, Callsite, Dispatch, Id};
+use tracing::{Callsite, Dispatch, Id, error, info, span::Attributes};
 
 struct EnteredSpan {
     id: Id,
@@ -83,10 +83,10 @@ glib::wrapper! {
 
 #[glib::object_subclass]
 impl ObjectSubclass for TracingTracerPriv {
-    const NAME: &'static str = "TracingTracer";
+    const NAME: &'static str = "GstRsTracingTracer";
+    const ALLOW_NAME_CONFLICT: bool = true;
     type Type = TracingTracer;
     type ParentType = Tracer;
-    type Interfaces = ();
 
     fn new() -> Self {
         Self {
@@ -94,10 +94,15 @@ impl ObjectSubclass for TracingTracerPriv {
         }
     }
 }
-pub(crate) trait TracingTracerImpl: TracerImpl {}
+/// Trait for implementing custom tracers that extend `TracingTracer`.
+///
+/// Implement this trait to create tracers that build upon the GStreamer-tracing
+/// integration, such as tracers that use specific tracing subscribers.
+pub trait TracingTracerImpl: TracerImpl {}
 
 unsafe impl<T: TracingTracerImpl> IsSubclassable<T> for TracingTracer {
     fn class_init(class: &mut glib::Class<Self>) {
+        skip_assert_initialized!();
         Self::parent_class_init::<T>(class);
     }
 }
@@ -107,9 +112,9 @@ impl ObjectImpl for TracingTracerPriv {
         if let Some(params) = self.obj().property::<Option<String>>("params") {
             let tmp = format!("params,{params}");
             info!("{:?} params: {:?}", self.obj(), tmp);
-            let structure = gstreamer::Structure::from_str(&tmp).unwrap_or_else(|e| {
+            let structure = gst::Structure::from_str(&tmp).unwrap_or_else(|e| {
                 error!("Invalid params string: {:?}: {e:?}", tmp);
-                gstreamer::Structure::new_empty("params")
+                gst::Structure::new_empty("params")
             });
 
             if let Ok(gst_logs_level) = structure
@@ -119,8 +124,8 @@ impl ObjectImpl for TracingTracerPriv {
                 info!("Integrating `{gst_logs_level}` GStreamer logs as part of our tracing");
 
                 crate::integrate_events();
-                gstreamer::log::remove_default_log_function();
-                gstreamer::log::set_threshold_from_string(&gst_logs_level, true);
+                gst::log::remove_default_log_function();
+                gst::log::set_threshold_from_string(&gst_logs_level, true);
             }
         }
 
@@ -141,19 +146,21 @@ impl ObjectImpl for TracingTracerPriv {
 impl GstObjectImpl for TracingTracerPriv {}
 
 impl TracerImpl for TracingTracerPriv {
+    const USE_STRUCTURE_PARAMS: bool = true;
+
     fn pad_push_pre(&self, _: u64, pad: &Pad, _: &Buffer) {
         self.pad_pre("pad_push", pad);
     }
 
-    fn pad_push_list_pre(&self, _: u64, pad: &Pad, _: &gstreamer::BufferList) {
+    fn pad_push_list_pre(&self, _: u64, pad: &Pad, _: &gst::BufferList) {
         self.pad_pre("pad_push_list", pad);
     }
 
-    fn pad_query_pre(&self, _: u64, pad: &Pad, _: &gstreamer::QueryRef) {
+    fn pad_query_pre(&self, _: u64, pad: &Pad, _: &gst::QueryRef) {
         self.pad_pre("pad_query", pad);
     }
 
-    fn pad_push_event_pre(&self, _: u64, pad: &Pad, _: &gstreamer::Event) {
+    fn pad_push_event_pre(&self, _: u64, pad: &Pad, _: &gst::Event) {
         self.pad_pre("pad_event", pad);
     }
 
@@ -177,7 +184,7 @@ impl TracerImpl for TracingTracerPriv {
         self.pop_span();
     }
 
-    fn pad_query_post(&self, _: u64, _: &Pad, _: &gstreamer::QueryRef, _: bool) {
+    fn pad_query_post(&self, _: u64, _: &Pad, _: &gst::QueryRef, _: bool) {
         self.pop_span();
     }
 }

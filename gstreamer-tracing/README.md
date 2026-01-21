@@ -8,24 +8,26 @@ that otherwise use the [`tracing`] crate for their observability needs.
 ## Events
 
 To output `gstreamer` log messages as [`tracing`] events, call the [`integrate_events`]
-function. Calling it before the call to any other `gstreamer` call (especially before the
-`gstreamer::init`) is most likely to correctly forward all of the messages:
+function. Calling it before the call to any other `gstreamer` call (especially before
+`gst::init`) is most likely to correctly forward all of the messages:
 
 ```rust
+# use gst_tracing::gst;
 // Set up the tracing subscriber.
 //
 // e.g. tracing_subscriber::fmt::init();
 
-tracing_gstreamer::integrate_events();
-gstreamer::log::remove_default_log_function();
-gstreamer::init();
+gst_tracing::integrate_events();
+gst::log::remove_default_log_function();
+gst::init();
 ```
 
 Keep in mind that both `GST_DEBUG` and tracing filters are in effect. The `gstreamer` side of
 filters can be relaxed from code via:
 
-```
-gstreamer::log::set_default_threshold(gstreamer::DebugLevel::Memdump);
+```rust
+# use gst_tracing::gst;
+gst::log::set_default_threshold(gst::DebugLevel::Memdump);
 ```
 
 Similarly you can use `tracing` APIs to adjust the filters on the `tracing` side.
@@ -36,11 +38,12 @@ To provide `tracing` with more contextual information for some of the events, yo
 support for generating spans via `gstreamer`'s own [tracing infrastructure][gsttracing].
 
 This functionality can be enabled by calling the [`integrate_spans`] function. It must be called
-after `gstreamer::init`.
+after `gst::init`.
 
 ```rust
-gstreamer::init();
-tracing_gstreamer::integrate_spans();
+# use gst_tracing::gst;
+gst::init();
+gst_tracing::integrate_spans();
 ```
 
 ## Subscriber showcase
@@ -112,70 +115,14 @@ Similar results can be achieved with some other subscribers as well.
 [`tracing`]: tracing_core
 
 
-### The GStreamer tracers
+### GStreamer Tracers
 
-Several GStreamer tracers are also available so the integration of GStreamer
-tracing and logging into the Rust tracing system is possible without modifying
-the application that uses GStreamer.
+GStreamer tracers that leverage this library are available in the
+[gst-plugins-rs](https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs)
+repository under `utils/tracers/`. These include:
 
-For GStreamer to find the tracer you need to ensure that the
-`libtracing_gstreamer.so` is installed as GStreamer plugin (you can also set
-`GST_PLUGIN_PATH` for example with `export
-GST_PLUGIN_PATH=$PWD/target/debug/:$GST_PLUGIN_PATH`).
+* `rusttracing`: Integrates GStreamer tracing with the Rust tracing ecosystem
+* `chrometracing`: Outputs events in Chrome JSON tracing format for [perfetto](https://ui.perfetto.dev/)
+* `fmttracing`: Human-readable output using `tracing-subscriber::fmt`
 
-Currently 2 tracers are available:
-
-* `chrometracing`: This tracer will output the tracing events in the Chrome json
-  tracing format. This will create a `trace-XXX.json` in the current directory
-  that can be opened in [perfetto](https://ui.perfetto.dev/). This is useful to
-  analyze GStreamer performance in a graphical way.
-
-* `fmttracing`: Use the `tracing-subscriber::fmt` subscriber to format the
-  tracing events. This is useful to get a human readable output. To actually get
-  output you also need to set `RUST_LOG=<loglevel>`
-
-> Note that only *one* of those tracer can be used at a time, and the application
-> itself should never activate any other tracing_subscriber.
-
-#### Tracers parameters
-
-The tracer has the following parameters:
-
-* `log-level`: String in the same form as the GST_DEBUG environment variable
-  defining which GStreamer log level and category should be logged into the
-  tracing system. This implies that the usual GStreamer log system will be
-  disabled and the rust one will be used instead.
-
-#### Examples
-
-You can, for example, profile a GStreamer pipeline using [`gst-launch-1.0`]
-with the following command:
-
-##### Using the `chrometracing` tracer
-
-
-``` sh
-# Builds the tracer plugin and make sure GStreamer finds it.
-# Enable the tracer with the chrome tracing output and activating GStreamer info logs
-cargo build --features "tracing-chrome" && \
-  GST_PLUGIN_PATH=$PWD/target/debug/:$GST_PLUGIN_PATH \
-  GST_TRACERS="chrometracing(log-level=4)" \
-  gst-launch-1.0 playbin3 uri="https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_trailer-480p.webm"
-```
-
-A new `trace-XXX.json` file will be created in the current directory. You can
-then open it in [perfetto](https://ui.perfetto.dev/) to analyze them.
-
-
-##### Using the `fmttracing` tracer
-
-
-``` sh
-# Builds the tracer plugin and make sure GStreamer finds it.
-# Enable the tracer with the fmt tracing output and activating GStreamer info logs
-# Logs will be output on stderr in the `tracing-subscriber::fmt` format
-cargo build --features "tracing-subscriber" && \
-  GST_PLUGIN_PATH=$PWD/target/debug/:$GST_PLUGIN_PATH \
-  RUST_LOG=debug GST_TRACERS="fmttracing(log-level=4)" \
-  gst-launch-1.0 playbin3 uri="https://www.freedesktop.org/software/gstreamer-sdk/data/media/sintel_trailer-480p.webm"
-```
+See the gst-plugins-rs documentation for more details on using these tracers.

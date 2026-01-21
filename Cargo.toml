@@ -111,6 +111,7 @@ members = [
   "gstreamer-vulkan/xcb",
   "gstreamer-webrtc",
   "gstreamer-allocators",
+  "gstreamer-tracing",
   "gstreamer-utils",
   "examples",
   "tutorials",
@@ -189,3 +190,4 @@ gst-video = { package = "gstreamer-video", path = "./gstreamer-video", version =
 gst-vulkan = { package = "gstreamer-vulkan", path = "./gstreamer-vulkan", version = "0.26.0-alpha" }
 gst-vulkan-wayland = { package = "gstreamer-vulkan-wayland", path = "./gstreamer-vulkan/wayland", version = "0.26.0-alpha" }
 gst-vulkan-xcb = { package = "gstreamer-vulkan-xcb", path = "./gstreamer-vulkan/xcb", version = "0.26.0-alpha" }
+gst-tracing = { package = "gstreamer-tracing", path = "./gstreamer-tracing", version = "0.26.0-alpha" }
