@@ -57,9 +57,7 @@ impl TracingTracerPriv {
         if !dispatch.enabled(meta) {
             return;
         }
-        let gstpad_flags_value = Some(tracing_core::field::display(crate::PadFlags(
-            pad.pad_flags().bits(),
-        )));
+        let gstpad_flags_value = Some(tracing_core::field::display(pad.pad_flags()));
         let gstpad_parent = pad.parent_element();
         let gstpad_parent_name_value = gstpad_parent.map(|p| p.name());
         let gstpad_parent_name_value = gstpad_parent_name_value.as_ref().map(|n| n.as_str());

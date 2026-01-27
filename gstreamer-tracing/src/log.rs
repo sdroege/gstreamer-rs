@@ -1,4 +1,4 @@
-use crate::{PadFlags, callsite::GstCallsiteKind, state_desc};
+use crate::callsite::GstCallsiteKind;
 use gst::{
     ffi::{
         GST_LEVEL_COUNT, GST_LEVEL_DEBUG, GST_LEVEL_ERROR, GST_LEVEL_FIXME, GST_LEVEL_INFO,
@@ -8,7 +8,7 @@ use gst::{
     },
     glib::{
         gobject_ffi::{g_object_get_qdata, g_type_is_a, g_type_name},
-        translate::{FromGlib, IntoGlib},
+        translate::*,
     },
     prelude::{IsA, ObjectExt},
 };
@@ -177,8 +177,9 @@ unsafe extern "C" fn log_callback(
                 }
             });
             let gstelement_states = gstelement.map(|e| unsafe {
-                let (curr, pend) = ((*e).current_state, (*e).pending_state);
-                (state_desc(curr), state_desc(pend))
+                let curr: gst::State = from_glib((*e).current_state);
+                let pend: gst::State = from_glib((*e).pending_state);
+                (curr.name().as_str(), pend.name().as_str())
             });
             let gstelement_state_value = gstelement_states.map(|(c, _)| c);
             let gstelement_pending_state_value = gstelement_states.map(|(_, p)| p);
@@ -192,7 +193,8 @@ unsafe extern "C" fn log_callback(
             });
             let gstpad_flags = gstpad.map(|p| unsafe {
                 // SAFETY: `p` is a valid pointer.
-                tracing_core::field::display(PadFlags((*p).object.flags))
+                let flags = gst::PadFlags::from_bits_truncate((*p).object.flags);
+                tracing_core::field::display(flags)
             });
             let gstpad_parent = gstpad.and_then(|p| unsafe {
                 // SAFETY: `p` is a valid pointer.
@@ -213,8 +215,9 @@ unsafe extern "C" fn log_callback(
                 let ty = (*obj).object.g_type_instance.g_class.as_ref()?.g_type;
                 if bool::from_glib(g_type_is_a(ty, gst_element_get_type())) {
                     let e = obj as *mut gst::ffi::GstElement;
-                    let (curr, pend) = ((*e).current_state, (*e).pending_state);
-                    Some((state_desc(curr), state_desc(pend)))
+                    let curr: gst::State = from_glib((*e).current_state);
+                    let pend: gst::State = from_glib((*e).pending_state);
+                    Some((curr.name().as_str(), pend.name().as_str()))
                 } else {
                     None
                 }
