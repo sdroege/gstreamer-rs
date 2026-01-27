@@ -1,7 +1,5 @@
 use crate::callsite::GstCallsiteKind;
-use gst::{
-    Buffer, FlowError, FlowSuccess, Object, Pad, Tracer, glib, prelude::*, subclass::prelude::*,
-};
+use gst::{Buffer, FlowError, FlowSuccess, Pad, Tracer, glib, prelude::*, subclass::prelude::*};
 use std::{cell::RefCell, str::FromStr};
 use tracing::{Callsite, Dispatch, Id, error, info, span::Attributes};
 
@@ -10,11 +8,11 @@ struct EnteredSpan {
     dispatch: Dispatch,
 }
 
-pub struct TracingTracerPriv {
+pub struct TracingTracer {
     span_stack: thread_local::ThreadLocal<RefCell<Vec<EnteredSpan>>>,
 }
 
-impl TracingTracerPriv {
+impl TracingTracer {
     fn push_span(&self, dispatch: Dispatch, attributes: Attributes) {
         let span_id = dispatch.new_span(&attributes);
         dispatch.enter(&span_id);
@@ -74,16 +72,11 @@ impl TracingTracerPriv {
     }
 }
 
-glib::wrapper! {
-    pub struct TracingTracer(ObjectSubclass<TracingTracerPriv>)
-       @extends Tracer, Object;
-}
-
 #[glib::object_subclass]
-impl ObjectSubclass for TracingTracerPriv {
+impl ObjectSubclass for TracingTracer {
     const NAME: &'static str = "GstRsTracingTracer";
     const ALLOW_NAME_CONFLICT: bool = true;
-    type Type = TracingTracer;
+    type Type = super::TracingTracer;
     type ParentType = Tracer;
 
     fn new() -> Self {
@@ -92,20 +85,8 @@ impl ObjectSubclass for TracingTracerPriv {
         }
     }
 }
-/// Trait for implementing custom tracers that extend `TracingTracer`.
-///
-/// Implement this trait to create tracers that build upon the GStreamer-tracing
-/// integration, such as tracers that use specific tracing subscribers.
-pub trait TracingTracerImpl: TracerImpl {}
 
-unsafe impl<T: TracingTracerImpl> IsSubclassable<T> for TracingTracer {
-    fn class_init(class: &mut glib::Class<Self>) {
-        skip_assert_initialized!();
-        Self::parent_class_init::<T>(class);
-    }
-}
-
-impl ObjectImpl for TracingTracerPriv {
+impl ObjectImpl for TracingTracer {
     fn constructed(&self) {
         if let Some(params) = self.obj().property::<Option<String>>("params") {
             let tmp = format!("params,{params}");
@@ -141,9 +122,9 @@ impl ObjectImpl for TracingTracerPriv {
     }
 }
 
-impl GstObjectImpl for TracingTracerPriv {}
+impl GstObjectImpl for TracingTracer {}
 
-impl TracerImpl for TracingTracerPriv {
+impl TracerImpl for TracingTracer {
     const USE_STRUCTURE_PARAMS: bool = true;
 
     fn pad_push_pre(&self, _: u64, pad: &Pad, _: &Buffer) {
@@ -186,3 +167,5 @@ impl TracerImpl for TracingTracerPriv {
         self.pop_span();
     }
 }
+
+impl super::TracingTracerImpl for TracingTracer {}
