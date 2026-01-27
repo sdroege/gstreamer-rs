@@ -2293,6 +2293,44 @@ impl<T: IsA<Pad> + IsA<glib::Object> + glib::object::IsClass> PadBuilder<T> {
     }
 }
 
+impl std::fmt::Display for PadFlags {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let flags = [
+            (Self::BLOCKED, "BLOCKED"),
+            (Self::FLUSHING, "FLUSHING"),
+            (Self::EOS, "EOS"),
+            (Self::BLOCKING, "BLOCKING"),
+            (Self::NEED_PARENT, "NEED_PARENT"),
+            (Self::NEED_RECONFIGURE, "NEED_RECONFIGURE"),
+            (Self::PENDING_EVENTS, "PENDING_EVENTS"),
+            (Self::FIXED_CAPS, "FIXED_CAPS"),
+            (Self::PROXY_CAPS, "PROXY_CAPS"),
+            (Self::PROXY_ALLOCATION, "PROXY_ALLOCATION"),
+            (Self::PROXY_SCHEDULING, "PROXY_SCHEDULING"),
+            (Self::ACCEPT_INTERSECT, "ACCEPT_INTERSECT"),
+            (Self::ACCEPT_TEMPLATE, "ACCEPT_TEMPLATE"),
+        ];
+
+        let mut first = true;
+        for (flag, name) in flags {
+            if self.contains(flag) {
+                if !first {
+                    f.write_str(" | ")?;
+                }
+                f.write_str(name)?;
+                first = false;
+            }
+        }
+
+        if first {
+            // No flags set
+            f.write_str("(none)")?;
+        }
+
+        Ok(())
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use std::sync::{Arc, Mutex, atomic::AtomicUsize, mpsc::channel};
