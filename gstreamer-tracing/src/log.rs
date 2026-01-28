@@ -4,14 +4,10 @@ use gst::{
         GST_LEVEL_COUNT, GST_LEVEL_DEBUG, GST_LEVEL_ERROR, GST_LEVEL_FIXME, GST_LEVEL_INFO,
         GST_LEVEL_LOG, GST_LEVEL_MEMDUMP, GST_LEVEL_TRACE, GST_LEVEL_WARNING,
         gst_debug_add_log_function, gst_debug_category_get_name, gst_debug_message_get,
-        gst_debug_remove_log_function, gst_element_get_type, gst_object_get_type, gst_pad_get_type,
+        gst_debug_remove_log_function,
     },
-    glib::{
-        GStr,
-        gobject_ffi::{g_object_get_qdata, g_type_is_a, g_type_name},
-        translate::*,
-    },
-    prelude::{IsA, ObjectExt},
+    glib::{gobject_ffi::g_object_get_qdata, translate::*, GStr},
+    prelude::*,
 };
 use libc::{c_char, c_int, c_void};
 use std::convert::TryFrom;
@@ -115,22 +111,14 @@ unsafe extern "C" fn log_callback(
             };
             let gobject_address_value = gobject.map(|obj| obj as usize);
             let gobject_with_ty = gobject.and_then(|obj| unsafe {
-                Some((obj, obj.as_ref()?.g_type_instance.g_class.as_ref()?.g_type))
+                let ty: gst::glib::Type =
+                    from_glib(obj.as_ref()?.g_type_instance.g_class.as_ref()?.g_type);
+                Some((obj, ty))
             });
-            let gobject_type_value = gobject_with_ty.and_then(|(_, ty)| unsafe {
-                Some(
-                    // SAFETY: The returned type name may be nullptr, and we check for it with
-                    // `as_ref`. The returned string is guaranteed to be valid otherwise.
-                    gst::glib::GStr::from_ptr(g_type_name(ty).as_ref()?).as_str(),
-                )
-            });
-            let gobject_type_value = gobject_type_value.as_deref();
-            let gstobject = gobject_with_ty.and_then(|(obj, ty)| unsafe {
-                // SAFETY: g_type_is_a is provided valid types.
-                if bool::from_glib(g_type_is_a(ty, gst_object_get_type())) {
-                    let gstobject = obj as *mut gst::ffi::GstObject;
-
-                    Some(gstobject)
+            let gobject_type_value = gobject_with_ty.as_ref().map(|(_, ty)| ty.name());
+            let gstobject = gobject_with_ty.and_then(|(obj, ty)| {
+                if ty.is_a(gst::Object::static_type()) {
+                    Some(obj as *mut gst::ffi::GstObject)
                 } else {
                     None
                 }
@@ -166,10 +154,9 @@ unsafe extern "C" fn log_callback(
             });
 
             let gstobject_name_value = gstobject_name.as_deref();
-            let gstelement = gobject_with_ty.and_then(|(obj, ty)| unsafe {
-                // SAFETY: g_type_is_a is provided valid types.
-                if bool::from_glib(g_type_is_a(ty, gst_element_get_type())) {
-                    Some(obj as *mut gst::ffi::GstElement)
+            let gstelement = gobject_with_ty.as_ref().and_then(|(obj, ty)| {
+                if ty.is_a(gst::Element::static_type()) {
+                    Some(*obj as *mut gst::ffi::GstElement)
                 } else {
                     None
                 }
@@ -181,10 +168,9 @@ unsafe extern "C" fn log_callback(
             });
             let gstelement_state_value = gstelement_states.map(|(c, _)| c);
             let gstelement_pending_state_value = gstelement_states.map(|(_, p)| p);
-            let gstpad = gobject_with_ty.and_then(|(obj, ty)| unsafe {
-                // SAFETY: g_type_is_a is provided valid types.
-                if bool::from_glib(g_type_is_a(ty, gst_pad_get_type())) {
-                    Some(obj as *mut gst::ffi::GstPad)
+            let gstpad = gobject_with_ty.as_ref().and_then(|(obj, ty)| {
+                if ty.is_a(gst::Pad::static_type()) {
+                    Some(*obj as *mut gst::ffi::GstPad)
                 } else {
                     None
                 }
@@ -210,8 +196,9 @@ unsafe extern "C" fn log_callback(
             let gstpad_parent_name_value = gstpad_parent_name.as_deref();
 
             let gstpad_parent_states = gstpad_parent.and_then(|obj| unsafe {
-                let ty = (*obj).object.g_type_instance.g_class.as_ref()?.g_type;
-                if bool::from_glib(g_type_is_a(ty, gst_element_get_type())) {
+                let ty: gst::glib::Type =
+                    from_glib((*obj).object.g_type_instance.g_class.as_ref()?.g_type);
+                if ty.is_a(gst::Element::static_type()) {
                     let e = obj as *mut gst::ffi::GstElement;
                     let curr: gst::State = from_glib((*e).current_state);
                     let pend: gst::State = from_glib((*e).pending_state);
