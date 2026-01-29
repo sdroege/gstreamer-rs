@@ -6,7 +6,11 @@ use gst::{
         gst_debug_add_log_function, gst_debug_category_get_name, gst_debug_message_get,
         gst_debug_remove_log_function,
     },
-    glib::{gobject_ffi::g_object_get_qdata, translate::*, GStr},
+    glib::{
+        GStr,
+        ffi::{GTRUE, g_mutex_trylock, g_mutex_unlock},
+        translate::*,
+    },
     prelude::*,
 };
 use libc::{c_char, c_int, c_void};
@@ -132,25 +136,34 @@ unsafe extern "C" fn log_callback(
             });
 
             let user_span = gstobject.as_ref().and_then(|gstobject| unsafe {
-                let quark = span_quark().into_glib();
-                let mut obj = *gstobject;
+                let quark = *span_quark();
+                let mut obj: gst::Object = ref_gst_object(*gstobject);
 
-                let span = loop {
-                    // lookup object parents until one has a span associated
-                    let span = g_object_get_qdata(obj.cast(), quark);
-
-                    if span.is_null() {
-                        // do not call gst_object_get_parent() as it gets the OBJECT which could be already hold by the caller of the log
-                        obj = (*obj).parent;
-                        if obj.is_null() {
-                            break std::ptr::null();
-                        }
-                    } else {
-                        break span;
+                loop {
+                    if let Some(span) = obj.qdata::<tracing::Span>(quark) {
+                        break Some(span.as_ref());
                     }
-                };
 
-                span.cast::<tracing::Span>().as_ref()
+                    // Try-lock the object to safely read its parent pointer.
+                    // We cannot use gst_object_get_parent() because it takes
+                    // the object lock unconditionally, which would deadlock if
+                    // the log caller already holds it.
+                    let ptr = obj.as_ptr() as *mut gst::ffi::GstObject;
+                    let lock = &raw mut (*ptr).lock;
+                    if g_mutex_trylock(lock) != GTRUE {
+                        break None;
+                    }
+                    let parent = (*ptr).parent;
+                    let parent = if parent.is_null() {
+                        g_mutex_unlock(lock);
+                        break None;
+                    } else {
+                        ref_gst_object(parent)
+                    };
+                    g_mutex_unlock(lock);
+
+                    obj = parent;
+                }
             });
 
             let gstobject_name_value = gstobject_name.as_deref();
@@ -247,6 +260,17 @@ pub(crate) fn debug_remove_log_function() {
     unsafe {
         // SAFETY: this function has no soundness invariants.
         gst_debug_remove_log_function(Some(log_callback));
+    }
+}
+
+/// Like `from_glib_none` but uses `g_object_ref` instead of `g_object_ref_sink`,
+/// so it does not sink floating references. This is necessary because the log
+/// callback can fire during object construction when the object still has a
+/// floating ref — sinking it would cause finalization on drop.
+unsafe fn ref_gst_object(ptr: *mut gst::ffi::GstObject) -> gst::Object {
+    unsafe {
+        gst::glib::gobject_ffi::g_object_ref(ptr as *mut gst::glib::gobject_ffi::GObject);
+        from_glib_full(ptr)
     }
 }
 
