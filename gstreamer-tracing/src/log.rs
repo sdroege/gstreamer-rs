@@ -7,14 +7,15 @@ use gst::{
         gst_debug_remove_log_function, gst_element_get_type, gst_object_get_type, gst_pad_get_type,
     },
     glib::{
+        GStr,
         gobject_ffi::{g_object_get_qdata, g_type_is_a, g_type_name},
         translate::*,
     },
     prelude::{IsA, ObjectExt},
 };
 use libc::{c_char, c_int, c_void};
+use std::convert::TryFrom;
 use std::sync::LazyLock;
-use std::{convert::TryFrom, ffi::CStr};
 use tracing_core::{Callsite, Event, Level};
 
 unsafe extern "C" fn log_callback(
@@ -44,27 +45,24 @@ unsafe extern "C" fn log_callback(
         let file = unsafe {
             // SAFETY: Users of the GStreamer `gst_debug_log` API are required to pass in a
             // null terminated string.
-            CStr::from_ptr(file.as_ref().expect("`file` string is nullptr"))
-        }
-        .to_string_lossy();
+            GStr::from_ptr(file.as_ref().expect("`file` string is nullptr"))
+        };
         let module = unsafe {
             // SAFETY: Users of the GStreamer `gst_debug_log` API are required to pass in a
             // null terminated string.
-            CStr::from_ptr(module.as_ref().expect("`function` string is nullptr"))
-        }
-        .to_string_lossy();
+            GStr::from_ptr(module.as_ref().expect("`function` string is nullptr"))
+        };
         let line = u32::try_from(line).expect("`line` is not a valid u32");
         let category_name = unsafe {
             // SAFETY: Users of the GStreamer `gst_debug_log` API are required to pass in a
             // valid `GstDebugCategory`. `gst_debug_category_get_name` shall return a valid
             // null terminated string.
-            CStr::from_ptr(
+            GStr::from_ptr(
                 gst_debug_category_get_name(category)
                     .as_ref()
                     .expect("`category` has no name?"),
             )
-        }
-        .to_string_lossy();
+        };
         let callsite = crate::callsite::DynamicCallsites::get().callsite_for(
             level,
             "",
@@ -102,7 +100,7 @@ unsafe extern "C" fn log_callback(
                 // be returned.
                 gst_debug_message_get(message)
                     .as_ref()
-                    .map(|v| CStr::from_ptr(v).to_string_lossy())
+                    .map(|v| GStr::from_ptr(v).as_str())
             };
             let message_value = message.as_deref();
             let gobject = unsafe {
@@ -123,7 +121,7 @@ unsafe extern "C" fn log_callback(
                 Some(
                     // SAFETY: The returned type name may be nullptr, and we check for it with
                     // `as_ref`. The returned string is guaranteed to be valid otherwise.
-                    CStr::from_ptr(g_type_name(ty).as_ref()?).to_string_lossy(),
+                    gst::glib::GStr::from_ptr(g_type_name(ty).as_ref()?).as_str(),
                 )
             });
             let gobject_type_value = gobject_type_value.as_deref();
@@ -142,7 +140,7 @@ unsafe extern "C" fn log_callback(
                 // SAFETY: GstObject type has been verified above, `name` can be null and we
                 // check for it. It "should" be valid null-terminated string if not null,
                 // however.
-                Some(CStr::from_ptr((*(*gstobject)).name.as_ref()?).to_string_lossy())
+                Some(GStr::from_ptr((*(*gstobject)).name.as_ref()?).as_str())
             });
 
             let user_span = gstobject.as_ref().and_then(|gstobject| unsafe {
@@ -207,7 +205,7 @@ unsafe extern "C" fn log_callback(
             });
             let gstpad_parent_name = gstpad_parent.and_then(|obj| unsafe {
                 //SAFETY: same as for gstelement_name above.
-                Some(CStr::from_ptr((*obj).name.as_ref()?).to_string_lossy())
+                Some(GStr::from_ptr((*obj).name.as_ref()?).as_str())
             });
             let gstpad_parent_name_value = gstpad_parent_name.as_deref();
 
@@ -282,7 +280,7 @@ fn span_quark() -> &'static gst::glib::Quark {
         std::hash::Hash::hash(&type_id, &mut hasher);
         let type_id_hash = std::hash::Hasher::finish(&hasher);
         let key = format!("tracing-gstreamer:{type_id_hash}\0");
-        let gstr = gst::glib::GStr::from_utf8_with_nul(key.as_bytes()).unwrap();
+        let gstr = GStr::from_utf8_with_nul(key.as_bytes()).unwrap();
         gst::glib::Quark::from_str(gstr)
     });
 
