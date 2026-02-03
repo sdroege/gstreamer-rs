@@ -970,6 +970,20 @@ unsafe extern "C" {
         pre_skip: *mut u16,
         output_gain: *mut i16,
     ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_codec_utils_vp9_estimate_level_idc_from_caps(caps: *const gst::GstCaps) -> u8;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_codec_utils_vp9_get_level(level_idc: u8) -> *const c_char;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_codec_utils_vp9_get_level_idc(level: *const c_char) -> u8;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_codec_utils_vpx_create_vpcc_from_caps(
+        caps: *mut gst::GstCaps,
+    ) -> *mut gst::GstBuffer;
     pub fn gst_encoding_list_all_targets(categoryname: *const c_char) -> *mut glib::GList;
     pub fn gst_encoding_list_available_categories() -> *mut glib::GList;
     pub fn gst_install_plugins_async(

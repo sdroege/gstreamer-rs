@@ -236,6 +236,59 @@ impl PlaySignalAdapter {
         }
     }
 
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "tracks-selected")]
+    pub fn connect_tracks_selected<
+        F: Fn(&Self, Option<&str>, Option<&str>, Option<&str>) + Send + Sync + 'static,
+    >(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn tracks_selected_trampoline<
+            F: Fn(&PlaySignalAdapter, Option<&str>, Option<&str>, Option<&str>)
+                + Send
+                + Sync
+                + 'static,
+        >(
+            this: *mut ffi::GstPlaySignalAdapter,
+            audio_track_id: *mut std::ffi::c_char,
+            video_track_id: *mut std::ffi::c_char,
+            subtitle_track_id: *mut std::ffi::c_char,
+            f: glib::ffi::gpointer,
+        ) {
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    &from_glib_borrow(this),
+                    Option::<glib::GString>::from_glib_borrow(audio_track_id)
+                        .as_ref()
+                        .as_ref()
+                        .map(|s| s.as_str()),
+                    Option::<glib::GString>::from_glib_borrow(video_track_id)
+                        .as_ref()
+                        .as_ref()
+                        .map(|s| s.as_str()),
+                    Option::<glib::GString>::from_glib_borrow(subtitle_track_id)
+                        .as_ref()
+                        .as_ref()
+                        .map(|s| s.as_str()),
+                )
+            }
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"tracks-selected".as_ptr() as *const _,
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    tracks_selected_trampoline::<F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
     #[doc(alias = "uri-loaded")]
     pub fn connect_uri_loaded<F: Fn(&Self, &str) + Send + 'static>(&self, f: F) -> SignalHandlerId {
         unsafe extern "C" fn uri_loaded_trampoline<

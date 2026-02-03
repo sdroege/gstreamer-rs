@@ -277,6 +277,7 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_PLAY_MESSAGE_POSITION_UPDATED", "1"),
     ("(gint) GST_PLAY_MESSAGE_SEEK_DONE", "12"),
     ("(gint) GST_PLAY_MESSAGE_STATE_CHANGED", "3"),
+    ("(gint) GST_PLAY_MESSAGE_TRACKS_SELECTED", "13"),
     ("(gint) GST_PLAY_MESSAGE_URI_LOADED", "0"),
     ("(gint) GST_PLAY_MESSAGE_VIDEO_DIMENSIONS_CHANGED", "8"),
     ("(gint) GST_PLAY_MESSAGE_VOLUME_CHANGED", "10"),

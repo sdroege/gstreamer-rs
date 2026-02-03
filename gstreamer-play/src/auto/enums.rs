@@ -431,6 +431,10 @@ pub(crate) enum PlayMessage {
     MuteChanged,
     #[doc(alias = "GST_PLAY_MESSAGE_SEEK_DONE")]
     SeekDone,
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "GST_PLAY_MESSAGE_TRACKS_SELECTED")]
+    TracksSelected,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -569,6 +573,31 @@ impl PlayMessage {
         }
     }
 
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "gst_play_message_parse_tracks_selected")]
+    pub fn parse_tracks_selected(
+        msg: &gst::Message,
+    ) -> (glib::GString, glib::GString, glib::GString) {
+        assert_initialized_main_thread!();
+        unsafe {
+            let mut audio_track_id = std::ptr::null_mut();
+            let mut video_track_id = std::ptr::null_mut();
+            let mut subtitle_track_id = std::ptr::null_mut();
+            ffi::gst_play_message_parse_tracks_selected(
+                msg.to_glib_none().0,
+                &mut audio_track_id,
+                &mut video_track_id,
+                &mut subtitle_track_id,
+            );
+            (
+                from_glib_full(audio_track_id),
+                from_glib_full(video_track_id),
+                from_glib_full(subtitle_track_id),
+            )
+        }
+    }
+
     #[doc(alias = "gst_play_message_parse_type")]
     pub fn parse_type(msg: &gst::Message) -> PlayMessage {
         assert_initialized_main_thread!();
@@ -654,6 +683,8 @@ impl IntoGlib for PlayMessage {
             Self::VolumeChanged => ffi::GST_PLAY_MESSAGE_VOLUME_CHANGED,
             Self::MuteChanged => ffi::GST_PLAY_MESSAGE_MUTE_CHANGED,
             Self::SeekDone => ffi::GST_PLAY_MESSAGE_SEEK_DONE,
+            #[cfg(feature = "v1_30")]
+            Self::TracksSelected => ffi::GST_PLAY_MESSAGE_TRACKS_SELECTED,
             Self::__Unknown(value) => value,
         }
     }
@@ -678,6 +709,8 @@ impl FromGlib<ffi::GstPlayMessage> for PlayMessage {
             ffi::GST_PLAY_MESSAGE_VOLUME_CHANGED => Self::VolumeChanged,
             ffi::GST_PLAY_MESSAGE_MUTE_CHANGED => Self::MuteChanged,
             ffi::GST_PLAY_MESSAGE_SEEK_DONE => Self::SeekDone,
+            #[cfg(feature = "v1_30")]
+            ffi::GST_PLAY_MESSAGE_TRACKS_SELECTED => Self::TracksSelected,
             value => Self::__Unknown(value),
         }
     }

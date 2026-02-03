@@ -58,6 +58,9 @@ pub const GST_PLAY_MESSAGE_MEDIA_INFO_UPDATED: GstPlayMessage = 9;
 pub const GST_PLAY_MESSAGE_VOLUME_CHANGED: GstPlayMessage = 10;
 pub const GST_PLAY_MESSAGE_MUTE_CHANGED: GstPlayMessage = 11;
 pub const GST_PLAY_MESSAGE_SEEK_DONE: GstPlayMessage = 12;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub const GST_PLAY_MESSAGE_TRACKS_SELECTED: GstPlayMessage = 13;
 
 pub type GstPlaySnapshotFormat = c_int;
 pub const GST_PLAY_THUMBNAIL_RAW_NATIVE: GstPlaySnapshotFormat = 0;
@@ -388,6 +391,14 @@ unsafe extern "C" {
     pub fn gst_play_message_parse_state_changed(
         msg: *mut gst::GstMessage,
         state: *mut GstPlayState,
+    );
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_play_message_parse_tracks_selected(
+        msg: *mut gst::GstMessage,
+        audio_track_id: *mut *mut c_char,
+        video_track_id: *mut *mut c_char,
+        subtitle_track_id: *mut *mut c_char,
     );
     pub fn gst_play_message_parse_type(msg: *mut gst::GstMessage, type_: *mut GstPlayMessage);
     #[cfg(feature = "v1_26")]
