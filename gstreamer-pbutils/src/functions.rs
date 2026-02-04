@@ -497,3 +497,23 @@ pub fn codec_utils_h266_caps_set_level_tier_and_profile(
         }
     }
 }
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+#[doc(alias = "gst_codec_utils_vp9_estimate_level_idc_from_caps")]
+pub fn codec_utils_vp9_estimate_level_idc_from_caps(caps: &gst::CapsRef) -> u8 {
+    assert_initialized_main_thread!();
+    unsafe { ffi::gst_codec_utils_vp9_estimate_level_idc_from_caps(mut_override(caps.as_ptr())) }
+}
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+#[doc(alias = "gst_codec_utils_vpx_create_vpcc_from_caps")]
+pub fn codec_utils_vpx_create_vpcc_from_caps(caps: &gst::CapsRef) -> Option<gst::Buffer> {
+    assert_initialized_main_thread!();
+    unsafe {
+        from_glib_full(ffi::gst_codec_utils_vpx_create_vpcc_from_caps(
+            mut_override(caps.as_ptr()),
+        ))
+    }
+}

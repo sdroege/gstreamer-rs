@@ -257,14 +257,6 @@ pub fn codec_utils_mpeg4video_get_profile(
 
 #[cfg(feature = "v1_30")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
-#[doc(alias = "gst_codec_utils_vp9_estimate_level_idc_from_caps")]
-pub fn codec_utils_vp9_estimate_level_idc_from_caps(caps: &gst::Caps) -> u8 {
-    assert_initialized_main_thread!();
-    unsafe { ffi::gst_codec_utils_vp9_estimate_level_idc_from_caps(caps.to_glib_none().0) }
-}
-
-#[cfg(feature = "v1_30")]
-#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
 #[doc(alias = "gst_codec_utils_vp9_get_level")]
 pub fn codec_utils_vp9_get_level(level_idc: u8) -> Option<glib::GString> {
     assert_initialized_main_thread!();
@@ -277,18 +269,6 @@ pub fn codec_utils_vp9_get_level(level_idc: u8) -> Option<glib::GString> {
 pub fn codec_utils_vp9_get_level_idc(level: &str) -> u8 {
     assert_initialized_main_thread!();
     unsafe { ffi::gst_codec_utils_vp9_get_level_idc(level.to_glib_none().0) }
-}
-
-#[cfg(feature = "v1_30")]
-#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
-#[doc(alias = "gst_codec_utils_vpx_create_vpcc_from_caps")]
-pub fn codec_utils_vpx_create_vpcc_from_caps(caps: &gst::Caps) -> Option<gst::Buffer> {
-    assert_initialized_main_thread!();
-    unsafe {
-        from_glib_full(ffi::gst_codec_utils_vpx_create_vpcc_from_caps(
-            caps.to_glib_none().0,
-        ))
-    }
 }
 
 #[doc(alias = "gst_encoding_list_all_targets")]
