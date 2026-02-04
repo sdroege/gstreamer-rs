@@ -177,6 +177,10 @@ visibility = "crate"
     name = "get_stream_id"
     manual = true
 
+    [[object.function]]
+    name = "parse_tracks_selected"
+    manual = true
+
 [[object]]
 name = "GstPlay.PlaySignalAdapter"
 status = "generate"
