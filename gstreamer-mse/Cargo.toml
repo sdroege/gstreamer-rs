@@ -22,3 +22,7 @@ glib.workspace = true
 all-features = true
 rustdoc-args = ["--generate-link-to-definition"]
 
+[features]
+default = []
+v1_28 = ["gst/v1_28", "gstreamer-mse-sys/v1_28"]
+v1_30 = ["gst/v1_30", "gstreamer-mse-sys/v1_30", "v1_28"]

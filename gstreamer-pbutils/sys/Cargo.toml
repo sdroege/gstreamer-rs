@@ -31,7 +31,7 @@ v1_22 = ["v1_20"]
 v1_24 = ["v1_22"]
 v1_26 = ["v1_24"]
 v1_28 = ["v1_26"]
-v1_30 = ["v1_26"]
+v1_30 = ["v1_28"]
 
 [lib]
 name = "gstreamer_pbutils_sys"
@@ -94,4 +94,4 @@ version = "1.26"
 version = "1.28"
 
 [package.metadata.system-deps.gstreamer_pbutils_1_0.v1_30]
-version = "1.30"
+version = "1.29"

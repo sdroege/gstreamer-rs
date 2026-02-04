@@ -30,6 +30,7 @@ v1_22 = ["gst/v1_22", "gst-vulkan/v1_22", "gstreamer-vulkan-xcb-sys/v1_22", "v1_
 v1_24 = ["gst/v1_24", "gst-vulkan/v1_24", "gstreamer-vulkan-xcb-sys/v1_24", "v1_22"]
 v1_26 = ["gst/v1_26", "gst-vulkan/v1_26", "gstreamer-vulkan-xcb-sys/v1_26", "v1_24"]
 v1_28 = ["gst/v1_28", "gst-vulkan/v1_28", "gstreamer-vulkan-xcb-sys/v1_28", "v1_26"]
+v1_30 = ["gst/v1_30", "gst-vulkan/v1_30", "gstreamer-vulkan-xcb-sys/v1_30", "v1_28"]
 
 [package.metadata.docs.rs]
 all-features = true
