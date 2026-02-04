@@ -193,7 +193,7 @@ status = "generate"
     manual = true
 
     [[object.function]]
-    pattern = "(codec_utils_caps_get_mime_codec|pb_utils_get_caps_description_flags|pb_utils_get_file_extension_from_caps)"
+    pattern = "(codec_utils_caps_get_mime_codec|pb_utils_get_caps_description_flags|pb_utils_get_file_extension_from_caps|codec_utils_vp9_estimate_level_idc_from_caps|codec_utils_vpx_create_vpcc_from_caps)"
     # Use &CapsRef
     manual = true
 
