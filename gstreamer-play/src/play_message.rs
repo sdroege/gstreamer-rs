@@ -30,6 +30,10 @@ pub enum PlayMessage<'a> {
     MuteChanged(&'a MuteChanged),
     #[doc(alias = "GST_PLAY_MESSAGE_SEEK_DONE")]
     SeekDone(&'a SeekDone),
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "GST_PLAY_MESSAGE_TRACKS_SELECTED")]
+    TracksSelected(&'a TracksSelected),
     Other(&'a Other),
 }
 
@@ -609,6 +613,98 @@ impl std::fmt::Debug for SeekDone {
     }
 }
 
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+declare_concrete_message!(TracksSelected);
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+impl TracksSelected {
+    #[doc(alias = "gst_play_message_parse_tracks_selected")]
+    pub fn audio_track_id(&self) -> Option<glib::GString> {
+        use crate::ffi;
+        use glib::translate::*;
+        use std::ptr;
+
+        assert_initialized_main_thread!();
+        unsafe {
+            let mut id = ptr::null_mut();
+            ffi::gst_play_message_parse_tracks_selected(
+                mut_override(self.message().as_ptr()),
+                &mut id,
+                ptr::null_mut(),
+                ptr::null_mut(),
+            );
+
+            from_glib_full(id)
+        }
+    }
+
+    #[doc(alias = "gst_play_message_parse_tracks_selected")]
+    pub fn video_track_id(&self) -> Option<glib::GString> {
+        use crate::ffi;
+        use glib::translate::*;
+        use std::ptr;
+
+        assert_initialized_main_thread!();
+        unsafe {
+            let mut id = ptr::null_mut();
+            ffi::gst_play_message_parse_tracks_selected(
+                mut_override(self.message().as_ptr()),
+                ptr::null_mut(),
+                &mut id,
+                ptr::null_mut(),
+            );
+
+            from_glib_full(id)
+        }
+    }
+
+    #[doc(alias = "gst_play_message_parse_tracks_selected")]
+    pub fn subtitle_track_id(&self) -> Option<glib::GString> {
+        use crate::ffi;
+        use glib::translate::*;
+        use std::ptr;
+
+        assert_initialized_main_thread!();
+        unsafe {
+            let mut id = ptr::null_mut();
+            ffi::gst_play_message_parse_tracks_selected(
+                mut_override(self.message().as_ptr()),
+                ptr::null_mut(),
+                ptr::null_mut(),
+                &mut id,
+            );
+
+            from_glib_full(id)
+        }
+    }
+
+    #[doc(alias = "gst_play_message_get_uri")]
+    pub fn uri(&self) -> glib::GString {
+        use crate::ffi;
+        use glib::translate::*;
+
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib_none(ffi::gst_play_message_get_uri(mut_override(
+                self.message().as_ptr(),
+            )))
+        }
+    }
+}
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+impl std::fmt::Debug for TracksSelected {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("TracksSelected")
+            .field("structure", &self.message().structure())
+            .field("audio_track_id", &self.audio_track_id())
+            .field("video_track_id", &self.video_track_id())
+            .field("subtitle_track_id", &self.subtitle_track_id())
+            .finish()
+    }
+}
+
 declare_concrete_message!(Other);
 
 impl Other {
@@ -673,6 +769,8 @@ impl PlayMessage<'_> {
                 PlayMessageType::VolumeChanged => Ok(VolumeChanged::view(msg)),
                 PlayMessageType::MuteChanged => Ok(MuteChanged::view(msg)),
                 PlayMessageType::SeekDone => Ok(SeekDone::view(msg)),
+                #[cfg(feature = "v1_30")]
+                PlayMessageType::TracksSelected => Ok(TracksSelected::view(msg)),
                 _ => Ok(Other::view(msg)),
             }
         }

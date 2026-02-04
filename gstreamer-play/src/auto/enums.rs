@@ -573,31 +573,6 @@ impl PlayMessage {
         }
     }
 
-    #[cfg(feature = "v1_30")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
-    #[doc(alias = "gst_play_message_parse_tracks_selected")]
-    pub fn parse_tracks_selected(
-        msg: &gst::Message,
-    ) -> (glib::GString, glib::GString, glib::GString) {
-        assert_initialized_main_thread!();
-        unsafe {
-            let mut audio_track_id = std::ptr::null_mut();
-            let mut video_track_id = std::ptr::null_mut();
-            let mut subtitle_track_id = std::ptr::null_mut();
-            ffi::gst_play_message_parse_tracks_selected(
-                msg.to_glib_none().0,
-                &mut audio_track_id,
-                &mut video_track_id,
-                &mut subtitle_track_id,
-            );
-            (
-                from_glib_full(audio_track_id),
-                from_glib_full(video_track_id),
-                from_glib_full(subtitle_track_id),
-            )
-        }
-    }
-
     #[doc(alias = "gst_play_message_parse_type")]
     pub fn parse_type(msg: &gst::Message) -> PlayMessage {
         assert_initialized_main_thread!();
