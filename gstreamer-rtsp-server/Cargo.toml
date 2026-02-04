@@ -37,6 +37,7 @@ v1_22 = ["gst/v1_22", "gst-sdp/v1_22", "gst-rtsp/v1_22", "gst-net/v1_22", "gstre
 v1_24 = ["gst/v1_24", "gst-sdp/v1_24", "gst-rtsp/v1_24", "gst-net/v1_24", "gstreamer-rtsp-server-sys/v1_24", "v1_22"]
 v1_26 = ["gst/v1_26", "gst-sdp/v1_26", "gst-rtsp/v1_26", "gst-net/v1_26", "gstreamer-rtsp-server-sys/v1_26", "v1_24"]
 v1_28 = ["gst/v1_28", "gst-sdp/v1_28", "gst-rtsp/v1_28", "gst-net/v1_28", "gstreamer-rtsp-server-sys/v1_28", "v1_26"]
+v1_30 = ["gst/v1_30", "gst-sdp/v1_30", "gst-rtsp/v1_30", "gst-net/v1_30", "gstreamer-rtsp-server-sys/v1_30", "v1_28"]
 serde = ["dep:serde", "gst/serde", "gst-rtsp/serde"]
 
 [package.metadata.docs.rs]

@@ -21,7 +21,8 @@ shell-words = "1.0.0"
 tempfile = "3"
 
 [features]
-v1_28 = ["gstreamer-sys/v1_28", "gstreamer-video-sys/v1_28"]
+v1_28 = []
+v1_30 = ["v1_28"]
 
 [package]
 authors = ["Seungha Yang <seungha@centricular.com>"]
@@ -59,5 +60,8 @@ all-features = true
 name = "gstreamer-d3d12-1.0"
 version = "1.26"
 
-[package.metadata.system-deps.gstreamer_d3d12_1_0.v_1_28]
+[package.metadata.system-deps.gstreamer_d3d12_1_0.v1_28]
 version = "1.28"
+
+[package.metadata.system-deps.gstreamer_d3d12_1_0.v1_30]
+version = "1.29"
