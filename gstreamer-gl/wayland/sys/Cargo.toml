@@ -50,7 +50,7 @@ version = "1.24"
 version = "1.26"
 
 [package.metadata.system-deps.gstreamer_gl_wayland_1_0.v1_28]
-version = "1.27"
+version = "1.28"
 
 [package.metadata.docs.rs]
 all-features = true
