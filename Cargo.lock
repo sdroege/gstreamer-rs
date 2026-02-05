@@ -1797,7 +1797,6 @@ dependencies = [
  "gstreamer-video",
  "gstreamer-vulkan-sys",
  "libc",
- "once_cell",
  "serde",
  "serde_json",
 ]
