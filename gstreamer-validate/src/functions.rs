@@ -22,7 +22,7 @@ pub fn init_debug() {
 pub fn setup_test_file(test_file: &str, use_fakesinks: bool) -> gst::Structure {
     skip_assert_initialized!();
     unsafe {
-        from_glib_full(ffi::gst_validate_setup_test_file(
+        from_glib_none(ffi::gst_validate_setup_test_file(
             test_file.to_glib_none().0,
             use_fakesinks as i32,
         ))
