@@ -470,11 +470,75 @@ impl BufferRef {
         if copied == size { Ok(()) } else { Err(copied) }
     }
 
+    #[doc(alias = "gst_buffer_memset")]
+    pub fn memset(
+        &mut self,
+        range: impl RangeBounds<usize>,
+        val: u8,
+    ) -> Result<usize, glib::BoolError> {
+        let (offset, size) = self.byte_range_into_offset_len(range)?;
+
+        unsafe { Ok(ffi::gst_buffer_memset(self.as_mut_ptr(), offset, val, size)) }
+    }
+
+    #[doc(alias = "gst_buffer_memcmp")]
+    pub fn memcmp(
+        &mut self,
+        range: impl RangeBounds<usize>,
+        slice: &[u8],
+    ) -> Result<cmp::Ordering, glib::BoolError> {
+        let (offset, size) = self.byte_range_into_offset_len(range)?;
+
+        assert!(slice.len() >= size);
+
+        unsafe {
+            let res =
+                ffi::gst_buffer_memcmp(self.as_mut_ptr(), offset, slice.as_ptr() as *const _, size);
+
+            Ok(from_glib(res))
+        }
+    }
+
     #[doc(alias = "gst_buffer_copy_deep")]
     pub fn copy_deep(&self) -> Result<Buffer, glib::BoolError> {
         unsafe {
             Option::<_>::from_glib_full(ffi::gst_buffer_copy_deep(self.as_ptr()))
                 .ok_or_else(|| glib::bool_error!("Failed to deep copy buffer"))
+        }
+    }
+
+    #[doc(alias = "get_sizes")]
+    #[doc(alias = "gst_buffer_get_sizes")]
+    pub fn sizes(&self) -> (usize, usize, usize) {
+        unsafe {
+            let mut offset = 0;
+            let mut maxsize = 0;
+            let total_size =
+                ffi::gst_buffer_get_sizes(mut_override(self.as_ptr()), &mut offset, &mut maxsize);
+
+            (total_size, offset, maxsize)
+        }
+    }
+
+    #[doc(alias = "get_sizes_range")]
+    #[doc(alias = "gst_buffer_get_sizes_range")]
+    pub fn sizes_range(&self, range: impl RangeBounds<usize>) -> (usize, usize, usize) {
+        let (idx, len) = self
+            .memory_range_into_idx_len(range)
+            .expect("Invalid memory range");
+
+        unsafe {
+            let mut offset = 0;
+            let mut maxsize = 0;
+            let total_size = ffi::gst_buffer_get_sizes_range(
+                mut_override(self.as_ptr()),
+                idx,
+                len,
+                &mut offset,
+                &mut maxsize,
+            );
+
+            (total_size, offset, maxsize)
         }
     }
 
@@ -506,6 +570,42 @@ impl BufferRef {
 
         unsafe {
             ffi::gst_buffer_set_size(self.as_mut_ptr(), size as isize);
+        }
+    }
+
+    #[doc(alias = "gst_buffer_resize")]
+    pub fn resize(&mut self, range: impl RangeBounds<usize>) -> Result<(), glib::BoolError> {
+        let (offset, size) = self.byte_range_into_offset_len(range)?;
+
+        unsafe {
+            ffi::gst_buffer_resize(self.as_mut_ptr(), offset as isize, size as isize);
+        }
+
+        Ok(())
+    }
+
+    #[doc(alias = "gst_buffer_resize_range")]
+    pub fn resize_range(
+        &mut self,
+        mem_range: impl RangeBounds<usize>,
+        byte_range: impl RangeBounds<usize>,
+    ) -> Result<(), glib::BoolError> {
+        let (idx, len) = self
+            .memory_range_into_idx_len(mem_range)
+            .expect("Invalid memory range");
+        let (offset, size) = self.byte_range_into_offset_len(byte_range)?;
+
+        unsafe {
+            glib::result_from_gboolean!(
+                ffi::gst_buffer_resize_range(
+                    self.as_mut_ptr(),
+                    idx,
+                    len,
+                    offset as isize,
+                    size as isize,
+                ),
+                "Failed to resize buffer with ranges"
+            )
         }
     }
 

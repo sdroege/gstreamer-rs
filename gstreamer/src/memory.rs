@@ -186,6 +186,19 @@ impl MemoryRef {
         self.0.size
     }
 
+    #[doc(alias = "gst_memory_get_sizes")]
+    #[inline]
+    pub fn sizes(&self) -> (usize, usize, usize) {
+        unsafe {
+            let mut offset = 0;
+            let mut maxsize = 0;
+            let total_size =
+                ffi::gst_memory_get_sizes(mut_override(self.as_ptr()), &mut offset, &mut maxsize);
+
+            (total_size, offset, maxsize)
+        }
+    }
+
     #[doc(alias = "get_flags")]
     #[inline]
     pub fn flags(&self) -> MemoryFlags {
@@ -278,12 +291,14 @@ impl MemoryRef {
     }
 
     #[doc(alias = "gst_memory_is_type")]
-    pub fn is_type(&self, mem_type: &str) -> bool {
+    pub fn is_type(&self, mem_type: impl IntoGStr) -> bool {
         unsafe {
-            from_glib(ffi::gst_memory_is_type(
-                self.as_mut_ptr(),
-                mem_type.to_glib_none().0,
-            ))
+            mem_type.run_with_gstr(|mem_type| {
+                from_glib(ffi::gst_memory_is_type(
+                    self.as_mut_ptr(),
+                    mem_type.as_ptr(),
+                ))
+            })
         }
     }
 
@@ -1039,12 +1054,14 @@ impl MemoryRefTrace {
     }
 
     #[doc(alias = "gst_memory_is_type")]
-    pub fn is_type(&self, mem_type: &str) -> bool {
+    pub fn is_type(&self, mem_type: impl IntoGStr) -> bool {
         unsafe {
-            from_glib(ffi::gst_memory_is_type(
-                self as *const Self as *mut ffi::GstMemory,
-                mem_type.to_glib_none().0,
-            ))
+            mem_type.run_with_gstr(|mem_type| {
+                from_glib(ffi::gst_memory_is_type(
+                    self as *const Self as *mut ffi::GstMemory,
+                    mem_type.as_ptr(),
+                ))
+            })
         }
     }
 }
