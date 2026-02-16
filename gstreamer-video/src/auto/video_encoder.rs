@@ -192,7 +192,7 @@ pub trait VideoEncoderExt: IsA<VideoEncoder> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::min-force-key-unit-interval".as_ptr() as *const _,
+                c"notify::min-force-key-unit-interval".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_min_force_key_unit_interval_trampoline::<Self, F> as *const (),
                 )),
@@ -220,7 +220,7 @@ pub trait VideoEncoderExt: IsA<VideoEncoder> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::qos".as_ptr() as *const _,
+                c"notify::qos".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_qos_trampoline::<Self, F> as *const (),
                 )),

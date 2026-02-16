@@ -571,7 +571,7 @@ pub trait TimelineElementExt: IsA<TimelineElement> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"child-property-added".as_ptr() as *const _,
+                c"child-property-added".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     child_property_added_trampoline::<Self, F> as *const (),
                 )),
@@ -609,7 +609,7 @@ pub trait TimelineElementExt: IsA<TimelineElement> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"child-property-removed".as_ptr() as *const _,
+                c"child-property-removed".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     child_property_removed_trampoline::<Self, F> as *const (),
                 )),
@@ -645,12 +645,12 @@ pub trait TimelineElementExt: IsA<TimelineElement> + 'static {
         unsafe {
             let f: Box_<F> = Box_::new(f);
             let detailed_signal_name = detail.map(|name| format!("deep-notify::{name}\0"));
-            let signal_name: &[u8] = detailed_signal_name
-                .as_ref()
-                .map_or(c"deep-notify".to_bytes(), |n| n.as_bytes());
+            let signal_name = detailed_signal_name.as_ref().map_or(c"deep-notify", |n| {
+                std::ffi::CStr::from_bytes_with_nul_unchecked(n.as_bytes())
+            });
             connect_raw(
                 self.as_ptr() as *mut _,
-                signal_name.as_ptr() as *const _,
+                signal_name.as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     deep_notify_trampoline::<Self, F> as *const (),
                 )),
@@ -678,7 +678,7 @@ pub trait TimelineElementExt: IsA<TimelineElement> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::duration".as_ptr() as *const _,
+                c"notify::duration".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_duration_trampoline::<Self, F> as *const (),
                 )),
@@ -706,7 +706,7 @@ pub trait TimelineElementExt: IsA<TimelineElement> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::in-point".as_ptr() as *const _,
+                c"notify::in-point".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_in_point_trampoline::<Self, F> as *const (),
                 )),
@@ -734,7 +734,7 @@ pub trait TimelineElementExt: IsA<TimelineElement> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::max-duration".as_ptr() as *const _,
+                c"notify::max-duration".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_max_duration_trampoline::<Self, F> as *const (),
                 )),
@@ -762,7 +762,7 @@ pub trait TimelineElementExt: IsA<TimelineElement> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::name".as_ptr() as *const _,
+                c"notify::name".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_name_trampoline::<Self, F> as *const (),
                 )),
@@ -790,7 +790,7 @@ pub trait TimelineElementExt: IsA<TimelineElement> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::parent".as_ptr() as *const _,
+                c"notify::parent".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_parent_trampoline::<Self, F> as *const (),
                 )),
@@ -819,7 +819,7 @@ pub trait TimelineElementExt: IsA<TimelineElement> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::priority".as_ptr() as *const _,
+                c"notify::priority".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_priority_trampoline::<Self, F> as *const (),
                 )),
@@ -847,7 +847,7 @@ pub trait TimelineElementExt: IsA<TimelineElement> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::serialize".as_ptr() as *const _,
+                c"notify::serialize".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_serialize_trampoline::<Self, F> as *const (),
                 )),
@@ -875,7 +875,7 @@ pub trait TimelineElementExt: IsA<TimelineElement> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::start".as_ptr() as *const _,
+                c"notify::start".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_start_trampoline::<Self, F> as *const (),
                 )),
@@ -903,7 +903,7 @@ pub trait TimelineElementExt: IsA<TimelineElement> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::timeline".as_ptr() as *const _,
+                c"notify::timeline".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_timeline_trampoline::<Self, F> as *const (),
                 )),

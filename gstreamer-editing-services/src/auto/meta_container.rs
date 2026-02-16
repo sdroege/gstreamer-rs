@@ -590,12 +590,12 @@ pub trait MetaContainerExt: IsA<MetaContainer> + 'static {
         unsafe {
             let f: Box_<F> = Box_::new(f);
             let detailed_signal_name = detail.map(|name| format!("notify-meta::{name}\0"));
-            let signal_name: &[u8] = detailed_signal_name
-                .as_ref()
-                .map_or(c"notify-meta".to_bytes(), |n| n.as_bytes());
+            let signal_name = detailed_signal_name.as_ref().map_or(c"notify-meta", |n| {
+                std::ffi::CStr::from_bytes_with_nul_unchecked(n.as_bytes())
+            });
             connect_raw(
                 self.as_ptr() as *mut _,
-                signal_name.as_ptr() as *const _,
+                signal_name.as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_meta_trampoline::<Self, F> as *const (),
                 )),

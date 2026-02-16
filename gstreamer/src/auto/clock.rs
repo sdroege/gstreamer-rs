@@ -315,7 +315,7 @@ pub trait ClockExt: IsA<Clock> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"synced".as_ptr() as *const _,
+                c"synced".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     synced_trampoline::<Self, F> as *const (),
                 )),
@@ -346,7 +346,7 @@ pub trait ClockExt: IsA<Clock> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::timeout".as_ptr() as *const _,
+                c"notify::timeout".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_timeout_trampoline::<Self, F> as *const (),
                 )),
@@ -377,7 +377,7 @@ pub trait ClockExt: IsA<Clock> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::window-size".as_ptr() as *const _,
+                c"notify::window-size".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_window_size_trampoline::<Self, F> as *const (),
                 )),
@@ -408,7 +408,7 @@ pub trait ClockExt: IsA<Clock> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::window-threshold".as_ptr() as *const _,
+                c"notify::window-threshold".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_window_threshold_trampoline::<Self, F> as *const (),
                 )),

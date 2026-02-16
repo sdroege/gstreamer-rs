@@ -339,7 +339,7 @@ pub trait AudioDecoderExt: IsA<AudioDecoder> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::max-errors".as_ptr() as *const _,
+                c"notify::max-errors".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_max_errors_trampoline::<Self, F> as *const (),
                 )),
@@ -370,7 +370,7 @@ pub trait AudioDecoderExt: IsA<AudioDecoder> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::min-latency".as_ptr() as *const _,
+                c"notify::min-latency".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_min_latency_trampoline::<Self, F> as *const (),
                 )),
@@ -398,7 +398,7 @@ pub trait AudioDecoderExt: IsA<AudioDecoder> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::plc".as_ptr() as *const _,
+                c"notify::plc".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_plc_trampoline::<Self, F> as *const (),
                 )),
@@ -429,7 +429,7 @@ pub trait AudioDecoderExt: IsA<AudioDecoder> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::tolerance".as_ptr() as *const _,
+                c"notify::tolerance".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_tolerance_trampoline::<Self, F> as *const (),
                 )),

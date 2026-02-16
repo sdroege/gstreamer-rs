@@ -61,7 +61,7 @@ pub trait VideoSinkExt: IsA<VideoSink> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::show-preroll-frame".as_ptr() as *const _,
+                c"notify::show-preroll-frame".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_show_preroll_frame_trampoline::<Self, F> as *const (),
                 )),

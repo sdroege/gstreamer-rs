@@ -70,7 +70,7 @@ pub trait AudioAggregatorPadExt: IsA<AudioAggregatorPad> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::qos-messages".as_ptr() as *const _,
+                c"notify::qos-messages".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_qos_messages_trampoline::<Self, F> as *const (),
                 )),

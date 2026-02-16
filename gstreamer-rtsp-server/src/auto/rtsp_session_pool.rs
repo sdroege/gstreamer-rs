@@ -170,7 +170,7 @@ pub trait RTSPSessionPoolExt: IsA<RTSPSessionPool> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"session-removed".as_ptr() as *const _,
+                c"session-removed".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     session_removed_trampoline::<Self, F> as *const (),
                 )),
@@ -201,7 +201,7 @@ pub trait RTSPSessionPoolExt: IsA<RTSPSessionPool> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::max-sessions".as_ptr() as *const _,
+                c"notify::max-sessions".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_max_sessions_trampoline::<Self, F> as *const (),
                 )),

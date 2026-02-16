@@ -255,7 +255,7 @@ pub trait BaseSrcExt: IsA<BaseSrc> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::automatic-eos".as_ptr() as *const _,
+                c"notify::automatic-eos".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_automatic_eos_trampoline::<Self, F> as *const (),
                 )),
@@ -286,7 +286,7 @@ pub trait BaseSrcExt: IsA<BaseSrc> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::blocksize".as_ptr() as *const _,
+                c"notify::blocksize".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_blocksize_trampoline::<Self, F> as *const (),
                 )),
@@ -317,7 +317,7 @@ pub trait BaseSrcExt: IsA<BaseSrc> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::do-timestamp".as_ptr() as *const _,
+                c"notify::do-timestamp".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_do_timestamp_trampoline::<Self, F> as *const (),
                 )),
@@ -348,7 +348,7 @@ pub trait BaseSrcExt: IsA<BaseSrc> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::num-buffers".as_ptr() as *const _,
+                c"notify::num-buffers".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_num_buffers_trampoline::<Self, F> as *const (),
                 )),
@@ -379,7 +379,7 @@ pub trait BaseSrcExt: IsA<BaseSrc> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::typefind".as_ptr() as *const _,
+                c"notify::typefind".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_typefind_trampoline::<Self, F> as *const (),
                 )),

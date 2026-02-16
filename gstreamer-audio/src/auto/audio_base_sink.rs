@@ -196,7 +196,7 @@ pub trait AudioBaseSinkExt: IsA<AudioBaseSink> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::alignment-threshold".as_ptr() as *const _,
+                c"notify::alignment-threshold".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_alignment_threshold_trampoline::<Self, F> as *const (),
                 )),
@@ -227,7 +227,7 @@ pub trait AudioBaseSinkExt: IsA<AudioBaseSink> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::buffer-time".as_ptr() as *const _,
+                c"notify::buffer-time".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_buffer_time_trampoline::<Self, F> as *const (),
                 )),
@@ -258,7 +258,7 @@ pub trait AudioBaseSinkExt: IsA<AudioBaseSink> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::can-activate-pull".as_ptr() as *const _,
+                c"notify::can-activate-pull".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_can_activate_pull_trampoline::<Self, F> as *const (),
                 )),
@@ -289,7 +289,7 @@ pub trait AudioBaseSinkExt: IsA<AudioBaseSink> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::discont-wait".as_ptr() as *const _,
+                c"notify::discont-wait".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_discont_wait_trampoline::<Self, F> as *const (),
                 )),
@@ -320,7 +320,7 @@ pub trait AudioBaseSinkExt: IsA<AudioBaseSink> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::drift-tolerance".as_ptr() as *const _,
+                c"notify::drift-tolerance".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_drift_tolerance_trampoline::<Self, F> as *const (),
                 )),
@@ -351,7 +351,7 @@ pub trait AudioBaseSinkExt: IsA<AudioBaseSink> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::latency-time".as_ptr() as *const _,
+                c"notify::latency-time".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_latency_time_trampoline::<Self, F> as *const (),
                 )),
@@ -382,7 +382,7 @@ pub trait AudioBaseSinkExt: IsA<AudioBaseSink> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::provide-clock".as_ptr() as *const _,
+                c"notify::provide-clock".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_provide_clock_trampoline::<Self, F> as *const (),
                 )),
@@ -413,7 +413,7 @@ pub trait AudioBaseSinkExt: IsA<AudioBaseSink> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::slave-method".as_ptr() as *const _,
+                c"notify::slave-method".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_slave_method_trampoline::<Self, F> as *const (),
                 )),

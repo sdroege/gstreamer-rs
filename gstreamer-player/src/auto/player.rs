@@ -442,7 +442,7 @@ impl Player {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"buffering".as_ptr() as *const _,
+                c"buffering".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     buffering_trampoline::<F> as *const (),
                 )),
@@ -466,7 +466,7 @@ impl Player {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"end-of-stream".as_ptr() as *const _,
+                c"end-of-stream".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     end_of_stream_trampoline::<F> as *const (),
                 )),
@@ -494,7 +494,7 @@ impl Player {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"error".as_ptr() as *const _,
+                c"error".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     error_trampoline::<F> as *const (),
                 )),
@@ -524,7 +524,7 @@ impl Player {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"media-info-updated".as_ptr() as *const _,
+                c"media-info-updated".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     media_info_updated_trampoline::<F> as *const (),
                 )),
@@ -548,7 +548,7 @@ impl Player {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"mute-changed".as_ptr() as *const _,
+                c"mute-changed".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     mute_changed_trampoline::<F> as *const (),
                 )),
@@ -578,7 +578,7 @@ impl Player {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"state-changed".as_ptr() as *const _,
+                c"state-changed".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     state_changed_trampoline::<F> as *const (),
                 )),
@@ -606,7 +606,7 @@ impl Player {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"uri-loaded".as_ptr() as *const _,
+                c"uri-loaded".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     uri_loaded_trampoline::<F> as *const (),
                 )),
@@ -637,7 +637,7 @@ impl Player {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"video-dimensions-changed".as_ptr() as *const _,
+                c"video-dimensions-changed".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     video_dimensions_changed_trampoline::<F> as *const (),
                 )),
@@ -661,7 +661,7 @@ impl Player {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"volume-changed".as_ptr() as *const _,
+                c"volume-changed".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     volume_changed_trampoline::<F> as *const (),
                 )),
@@ -689,7 +689,7 @@ impl Player {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"warning".as_ptr() as *const _,
+                c"warning".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     warning_trampoline::<F> as *const (),
                 )),
@@ -719,7 +719,7 @@ impl Player {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::audio-video-offset".as_ptr() as *const _,
+                c"notify::audio-video-offset".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_audio_video_offset_trampoline::<F> as *const (),
                 )),
@@ -749,7 +749,7 @@ impl Player {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::current-audio-track".as_ptr() as *const _,
+                c"notify::current-audio-track".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_current_audio_track_trampoline::<F> as *const (),
                 )),
@@ -779,7 +779,7 @@ impl Player {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::current-subtitle-track".as_ptr() as *const _,
+                c"notify::current-subtitle-track".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_current_subtitle_track_trampoline::<F> as *const (),
                 )),
@@ -809,7 +809,7 @@ impl Player {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::current-video-track".as_ptr() as *const _,
+                c"notify::current-video-track".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_current_video_track_trampoline::<F> as *const (),
                 )),
@@ -837,7 +837,7 @@ impl Player {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::duration".as_ptr() as *const _,
+                c"notify::duration".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_duration_trampoline::<F> as *const (),
                 )),
@@ -867,7 +867,7 @@ impl Player {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::media-info".as_ptr() as *const _,
+                c"notify::media-info".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_media_info_trampoline::<F> as *const (),
                 )),
@@ -895,7 +895,7 @@ impl Player {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::mute".as_ptr() as *const _,
+                c"notify::mute".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_mute_trampoline::<F> as *const (),
                 )),
@@ -923,7 +923,7 @@ impl Player {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::pipeline".as_ptr() as *const _,
+                c"notify::pipeline".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_pipeline_trampoline::<F> as *const (),
                 )),
@@ -951,7 +951,7 @@ impl Player {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::position".as_ptr() as *const _,
+                c"notify::position".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_position_trampoline::<F> as *const (),
                 )),
@@ -979,7 +979,7 @@ impl Player {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::rate".as_ptr() as *const _,
+                c"notify::rate".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_rate_trampoline::<F> as *const (),
                 )),
@@ -1011,7 +1011,7 @@ impl Player {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::subtitle-video-offset".as_ptr() as *const _,
+                c"notify::subtitle-video-offset".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_subtitle_video_offset_trampoline::<F> as *const (),
                 )),
@@ -1039,7 +1039,7 @@ impl Player {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::suburi".as_ptr() as *const _,
+                c"notify::suburi".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_suburi_trampoline::<F> as *const (),
                 )),
@@ -1067,7 +1067,7 @@ impl Player {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::uri".as_ptr() as *const _,
+                c"notify::uri".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_uri_trampoline::<F> as *const (),
                 )),
@@ -1097,7 +1097,7 @@ impl Player {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::video-multiview-flags".as_ptr() as *const _,
+                c"notify::video-multiview-flags".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_video_multiview_flags_trampoline::<F> as *const (),
                 )),
@@ -1127,7 +1127,7 @@ impl Player {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::video-multiview-mode".as_ptr() as *const _,
+                c"notify::video-multiview-mode".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_video_multiview_mode_trampoline::<F> as *const (),
                 )),
@@ -1155,7 +1155,7 @@ impl Player {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::volume".as_ptr() as *const _,
+                c"notify::volume".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_volume_trampoline::<F> as *const (),
                 )),

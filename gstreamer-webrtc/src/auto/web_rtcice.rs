@@ -361,7 +361,7 @@ pub trait WebRTCICEExt: IsA<WebRTCICE> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"add-local-ip-address".as_ptr() as *const _,
+                c"add-local-ip-address".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     add_local_ip_address_trampoline::<Self, F> as *const (),
                 )),
@@ -398,7 +398,7 @@ pub trait WebRTCICEExt: IsA<WebRTCICE> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::max-rtp-port".as_ptr() as *const _,
+                c"notify::max-rtp-port".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_max_rtp_port_trampoline::<Self, F> as *const (),
                 )),
@@ -431,7 +431,7 @@ pub trait WebRTCICEExt: IsA<WebRTCICE> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::min-rtp-port".as_ptr() as *const _,
+                c"notify::min-rtp-port".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_min_rtp_port_trampoline::<Self, F> as *const (),
                 )),

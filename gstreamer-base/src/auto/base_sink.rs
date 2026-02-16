@@ -310,7 +310,7 @@ pub trait BaseSinkExt: IsA<BaseSink> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::async".as_ptr() as *const _,
+                c"notify::async".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_async_trampoline::<Self, F> as *const (),
                 )),
@@ -341,7 +341,7 @@ pub trait BaseSinkExt: IsA<BaseSink> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::blocksize".as_ptr() as *const _,
+                c"notify::blocksize".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_blocksize_trampoline::<Self, F> as *const (),
                 )),
@@ -372,7 +372,7 @@ pub trait BaseSinkExt: IsA<BaseSink> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::enable-last-sample".as_ptr() as *const _,
+                c"notify::enable-last-sample".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_enable_last_sample_trampoline::<Self, F> as *const (),
                 )),
@@ -403,7 +403,7 @@ pub trait BaseSinkExt: IsA<BaseSink> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::last-sample".as_ptr() as *const _,
+                c"notify::last-sample".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_last_sample_trampoline::<Self, F> as *const (),
                 )),
@@ -434,7 +434,7 @@ pub trait BaseSinkExt: IsA<BaseSink> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::max-bitrate".as_ptr() as *const _,
+                c"notify::max-bitrate".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_max_bitrate_trampoline::<Self, F> as *const (),
                 )),
@@ -465,7 +465,7 @@ pub trait BaseSinkExt: IsA<BaseSink> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::max-lateness".as_ptr() as *const _,
+                c"notify::max-lateness".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_max_lateness_trampoline::<Self, F> as *const (),
                 )),
@@ -498,7 +498,7 @@ pub trait BaseSinkExt: IsA<BaseSink> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::processing-deadline".as_ptr() as *const _,
+                c"notify::processing-deadline".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_processing_deadline_trampoline::<Self, F> as *const (),
                 )),
@@ -526,7 +526,7 @@ pub trait BaseSinkExt: IsA<BaseSink> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::qos".as_ptr() as *const _,
+                c"notify::qos".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_qos_trampoline::<Self, F> as *const (),
                 )),
@@ -557,7 +557,7 @@ pub trait BaseSinkExt: IsA<BaseSink> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::render-delay".as_ptr() as *const _,
+                c"notify::render-delay".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_render_delay_trampoline::<Self, F> as *const (),
                 )),
@@ -587,7 +587,7 @@ pub trait BaseSinkExt: IsA<BaseSink> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::stats".as_ptr() as *const _,
+                c"notify::stats".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_stats_trampoline::<Self, F> as *const (),
                 )),
@@ -615,7 +615,7 @@ pub trait BaseSinkExt: IsA<BaseSink> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::sync".as_ptr() as *const _,
+                c"notify::sync".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_sync_trampoline::<Self, F> as *const (),
                 )),
@@ -646,7 +646,7 @@ pub trait BaseSinkExt: IsA<BaseSink> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::throttle-time".as_ptr() as *const _,
+                c"notify::throttle-time".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_throttle_time_trampoline::<Self, F> as *const (),
                 )),
@@ -677,7 +677,7 @@ pub trait BaseSinkExt: IsA<BaseSink> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::ts-offset".as_ptr() as *const _,
+                c"notify::ts-offset".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_ts_offset_trampoline::<Self, F> as *const (),
                 )),

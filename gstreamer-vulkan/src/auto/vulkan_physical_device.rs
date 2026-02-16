@@ -94,6 +94,14 @@ pub trait VulkanPhysicalDeviceExt: IsA<VulkanPhysicalDevice> + 'static {
         }
     }
 
+    //#[cfg(feature = "v1_30")]
+    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    //#[doc(alias = "gst_vulkan_physical_device_get_features")]
+    //#[doc(alias = "get_features")]
+    //fn features(&self) -> /*Ignored*/Option<vulkan::PhysicalDeviceFeatures2> {
+    //    unsafe { TODO: call ffi:gst_vulkan_physical_device_get_features() }
+    //}
+
     //#[doc(alias = "gst_vulkan_physical_device_get_handle")]
     //#[doc(alias = "get_handle")]
     //fn handle(&self) -> /*Ignored*/vulkan::PhysicalDevice {
@@ -135,6 +143,14 @@ pub trait VulkanPhysicalDeviceExt: IsA<VulkanPhysicalDevice> + 'static {
             }
         }
     }
+
+    //#[cfg(feature = "v1_30")]
+    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    //#[doc(alias = "gst_vulkan_physical_device_get_properties")]
+    //#[doc(alias = "get_properties")]
+    //fn properties(&self) -> /*Ignored*/Option<vulkan::PhysicalDeviceProperties2> {
+    //    unsafe { TODO: call ffi:gst_vulkan_physical_device_get_properties() }
+    //}
 
     #[doc(alias = "device-index")]
     fn device_index(&self) -> u32 {

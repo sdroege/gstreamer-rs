@@ -246,7 +246,7 @@ pub trait VulkanDeviceExt: IsA<VulkanDevice> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::instance".as_ptr() as *const _,
+                c"notify::instance".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_instance_trampoline::<Self, F> as *const (),
                 )),

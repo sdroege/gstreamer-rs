@@ -344,7 +344,7 @@ pub trait VulkanInstanceExt: IsA<VulkanInstance> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"create-device".as_ptr() as *const _,
+                c"create-device".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     create_device_trampoline::<Self, F> as *const (),
                 )),
@@ -375,7 +375,7 @@ pub trait VulkanInstanceExt: IsA<VulkanInstance> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::requested-api-major".as_ptr() as *const _,
+                c"notify::requested-api-major".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_requested_api_major_trampoline::<Self, F> as *const (),
                 )),
@@ -406,7 +406,7 @@ pub trait VulkanInstanceExt: IsA<VulkanInstance> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::requested-api-minor".as_ptr() as *const _,
+                c"notify::requested-api-minor".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_requested_api_minor_trampoline::<Self, F> as *const (),
                 )),

@@ -113,7 +113,7 @@ impl WebRTCICETransport {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"on-new-candidate".as_ptr() as *const _,
+                c"on-new-candidate".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     on_new_candidate_trampoline::<F> as *const (),
                 )),
@@ -142,7 +142,7 @@ impl WebRTCICETransport {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"on-selected-candidate-pair-change".as_ptr() as *const _,
+                c"on-selected-candidate-pair-change".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     on_selected_candidate_pair_change_trampoline::<F> as *const (),
                 )),
@@ -172,7 +172,7 @@ impl WebRTCICETransport {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::gathering-state".as_ptr() as *const _,
+                c"notify::gathering-state".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_gathering_state_trampoline::<F> as *const (),
                 )),
@@ -202,7 +202,7 @@ impl WebRTCICETransport {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::state".as_ptr() as *const _,
+                c"notify::state".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_state_trampoline::<F> as *const (),
                 )),

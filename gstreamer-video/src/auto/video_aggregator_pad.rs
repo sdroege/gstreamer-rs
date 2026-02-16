@@ -92,7 +92,7 @@ pub trait VideoAggregatorPadExt: IsA<VideoAggregatorPad> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::max-last-buffer-repeat".as_ptr() as *const _,
+                c"notify::max-last-buffer-repeat".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_max_last_buffer_repeat_trampoline::<Self, F> as *const (),
                 )),
@@ -123,7 +123,7 @@ pub trait VideoAggregatorPadExt: IsA<VideoAggregatorPad> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::repeat-after-eos".as_ptr() as *const _,
+                c"notify::repeat-after-eos".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_repeat_after_eos_trampoline::<Self, F> as *const (),
                 )),
@@ -151,7 +151,7 @@ pub trait VideoAggregatorPadExt: IsA<VideoAggregatorPad> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::zorder".as_ptr() as *const _,
+                c"notify::zorder".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_zorder_trampoline::<Self, F> as *const (),
                 )),

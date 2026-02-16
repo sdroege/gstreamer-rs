@@ -168,7 +168,7 @@ impl Registry {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"feature-added".as_ptr() as *const _,
+                c"feature-added".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     feature_added_trampoline::<F> as *const (),
                 )),
@@ -198,7 +198,7 @@ impl Registry {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"plugin-added".as_ptr() as *const _,
+                c"plugin-added".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     plugin_added_trampoline::<F> as *const (),
                 )),

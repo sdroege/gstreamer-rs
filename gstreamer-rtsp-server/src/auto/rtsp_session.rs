@@ -226,7 +226,7 @@ pub trait RTSPSessionExt: IsA<RTSPSession> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::extra-timeout".as_ptr() as *const _,
+                c"notify::extra-timeout".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_extra_timeout_trampoline::<Self, F> as *const (),
                 )),
@@ -257,7 +257,7 @@ pub trait RTSPSessionExt: IsA<RTSPSession> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::timeout".as_ptr() as *const _,
+                c"notify::timeout".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_timeout_trampoline::<Self, F> as *const (),
                 )),
@@ -288,7 +288,7 @@ pub trait RTSPSessionExt: IsA<RTSPSession> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::timeout-always-visible".as_ptr() as *const _,
+                c"notify::timeout-always-visible".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_timeout_always_visible_trampoline::<Self, F> as *const (),
                 )),

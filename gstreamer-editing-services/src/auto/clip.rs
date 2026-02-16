@@ -436,7 +436,7 @@ pub trait ClipExt: IsA<Clip> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::duration-limit".as_ptr() as *const _,
+                c"notify::duration-limit".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_duration_limit_trampoline::<Self, F> as *const (),
                 )),
@@ -461,7 +461,7 @@ pub trait ClipExt: IsA<Clip> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::layer".as_ptr() as *const _,
+                c"notify::layer".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_layer_trampoline::<Self, F> as *const (),
                 )),
@@ -489,7 +489,7 @@ pub trait ClipExt: IsA<Clip> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::supported-formats".as_ptr() as *const _,
+                c"notify::supported-formats".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_supported_formats_trampoline::<Self, F> as *const (),
                 )),

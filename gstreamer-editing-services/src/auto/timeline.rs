@@ -436,7 +436,7 @@ pub trait TimelineExt: IsA<Timeline> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"commited".as_ptr() as *const _,
+                c"commited".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     commited_trampoline::<Self, F> as *const (),
                 )),
@@ -467,7 +467,7 @@ pub trait TimelineExt: IsA<Timeline> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"group-added".as_ptr() as *const _,
+                c"group-added".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     group_added_trampoline::<Self, F> as *const (),
                 )),
@@ -503,7 +503,7 @@ pub trait TimelineExt: IsA<Timeline> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"layer-added".as_ptr() as *const _,
+                c"layer-added".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     layer_added_trampoline::<Self, F> as *const (),
                 )),
@@ -534,7 +534,7 @@ pub trait TimelineExt: IsA<Timeline> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"layer-removed".as_ptr() as *const _,
+                c"layer-removed".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     layer_removed_trampoline::<Self, F> as *const (),
                 )),
@@ -575,7 +575,7 @@ pub trait TimelineExt: IsA<Timeline> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"select-element-track".as_ptr() as *const _,
+                c"select-element-track".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     select_element_track_trampoline::<Self, F> as *const (),
                 )),
@@ -618,7 +618,7 @@ pub trait TimelineExt: IsA<Timeline> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"snapping-ended".as_ptr() as *const _,
+                c"snapping-ended".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     snapping_ended_trampoline::<Self, F> as *const (),
                 )),
@@ -656,7 +656,7 @@ pub trait TimelineExt: IsA<Timeline> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"snapping-started".as_ptr() as *const _,
+                c"snapping-started".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     snapping_started_trampoline::<Self, F> as *const (),
                 )),
@@ -687,7 +687,7 @@ pub trait TimelineExt: IsA<Timeline> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"track-added".as_ptr() as *const _,
+                c"track-added".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     track_added_trampoline::<Self, F> as *const (),
                 )),
@@ -718,7 +718,7 @@ pub trait TimelineExt: IsA<Timeline> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"track-removed".as_ptr() as *const _,
+                c"track-removed".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     track_removed_trampoline::<Self, F> as *const (),
                 )),
@@ -746,7 +746,7 @@ pub trait TimelineExt: IsA<Timeline> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::auto-transition".as_ptr() as *const _,
+                c"notify::auto-transition".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_auto_transition_trampoline::<Self, F> as *const (),
                 )),
@@ -771,7 +771,7 @@ pub trait TimelineExt: IsA<Timeline> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::duration".as_ptr() as *const _,
+                c"notify::duration".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_duration_trampoline::<Self, F> as *const (),
                 )),
@@ -799,7 +799,7 @@ pub trait TimelineExt: IsA<Timeline> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::snapping-distance".as_ptr() as *const _,
+                c"notify::snapping-distance".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_snapping_distance_trampoline::<Self, F> as *const (),
                 )),

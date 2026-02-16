@@ -92,7 +92,7 @@ pub trait StreamVolumeExt: IsA<StreamVolume> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::mute".as_ptr() as *const _,
+                c"notify::mute".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_mute_trampoline::<Self, F> as *const (),
                 )),
@@ -120,7 +120,7 @@ pub trait StreamVolumeExt: IsA<StreamVolume> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::volume".as_ptr() as *const _,
+                c"notify::volume".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_volume_trampoline::<Self, F> as *const (),
                 )),

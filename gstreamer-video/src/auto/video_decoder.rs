@@ -439,7 +439,7 @@ pub trait VideoDecoderExt: IsA<VideoDecoder> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::automatic-request-sync-point-flags".as_ptr() as *const _,
+                c"notify::automatic-request-sync-point-flags".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_automatic_request_sync_point_flags_trampoline::<Self, F> as *const (),
                 )),
@@ -472,7 +472,7 @@ pub trait VideoDecoderExt: IsA<VideoDecoder> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::automatic-request-sync-points".as_ptr() as *const _,
+                c"notify::automatic-request-sync-points".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_automatic_request_sync_points_trampoline::<Self, F> as *const (),
                 )),
@@ -505,7 +505,7 @@ pub trait VideoDecoderExt: IsA<VideoDecoder> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::discard-corrupted-frames".as_ptr() as *const _,
+                c"notify::discard-corrupted-frames".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_discard_corrupted_frames_trampoline::<Self, F> as *const (),
                 )),
@@ -538,7 +538,7 @@ pub trait VideoDecoderExt: IsA<VideoDecoder> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::max-errors".as_ptr() as *const _,
+                c"notify::max-errors".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_max_errors_trampoline::<Self, F> as *const (),
                 )),
@@ -571,7 +571,7 @@ pub trait VideoDecoderExt: IsA<VideoDecoder> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::min-force-key-unit-interval".as_ptr() as *const _,
+                c"notify::min-force-key-unit-interval".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_min_force_key_unit_interval_trampoline::<Self, F> as *const (),
                 )),
@@ -601,7 +601,7 @@ pub trait VideoDecoderExt: IsA<VideoDecoder> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::qos".as_ptr() as *const _,
+                c"notify::qos".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_qos_trampoline::<Self, F> as *const (),
                 )),

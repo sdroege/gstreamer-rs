@@ -137,7 +137,7 @@ pub trait MonitorExt: IsA<Monitor> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::pipeline".as_ptr() as *const _,
+                c"notify::pipeline".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_pipeline_trampoline::<Self, F> as *const (),
                 )),
@@ -168,7 +168,7 @@ pub trait MonitorExt: IsA<Monitor> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::verbosity".as_ptr() as *const _,
+                c"notify::verbosity".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_verbosity_trampoline::<Self, F> as *const (),
                 )),

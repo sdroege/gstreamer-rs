@@ -60,7 +60,7 @@ impl WebRTCSCTPTransport {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::max-channels".as_ptr() as *const _,
+                c"notify::max-channels".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_max_channels_trampoline::<F> as *const (),
                 )),
@@ -90,7 +90,7 @@ impl WebRTCSCTPTransport {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::max-message-size".as_ptr() as *const _,
+                c"notify::max-message-size".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_max_message_size_trampoline::<F> as *const (),
                 )),
@@ -120,7 +120,7 @@ impl WebRTCSCTPTransport {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::state".as_ptr() as *const _,
+                c"notify::state".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_state_trampoline::<F> as *const (),
                 )),
@@ -150,7 +150,7 @@ impl WebRTCSCTPTransport {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::transport".as_ptr() as *const _,
+                c"notify::transport".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_transport_trampoline::<F> as *const (),
                 )),

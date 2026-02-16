@@ -74,7 +74,7 @@ impl PtpClock {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::grandmaster-clock-id".as_ptr() as *const _,
+                c"notify::grandmaster-clock-id".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_grandmaster_clock_id_trampoline::<F> as *const (),
                 )),
@@ -104,7 +104,7 @@ impl PtpClock {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::internal-clock".as_ptr() as *const _,
+                c"notify::internal-clock".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_internal_clock_trampoline::<F> as *const (),
                 )),
@@ -134,7 +134,7 @@ impl PtpClock {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::master-clock-id".as_ptr() as *const _,
+                c"notify::master-clock-id".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_master_clock_id_trampoline::<F> as *const (),
                 )),

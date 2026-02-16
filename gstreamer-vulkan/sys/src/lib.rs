@@ -2188,6 +2188,11 @@ unsafe extern "C" {
         name: *const c_char,
         spec_version: *mut u32,
     ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_physical_device_get_features(
+        device: *mut GstVulkanPhysicalDevice,
+    ) -> *const vulkan::VkPhysicalDeviceFeatures2;
     pub fn gst_vulkan_physical_device_get_handle(
         device: *mut GstVulkanPhysicalDevice,
     ) -> vulkan::VkPhysicalDevice;
@@ -2201,6 +2206,11 @@ unsafe extern "C" {
         spec_version: *mut u32,
         implementation_version: *mut u32,
     ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_physical_device_get_properties(
+        device: *mut GstVulkanPhysicalDevice,
+    ) -> *const vulkan::VkPhysicalDeviceProperties2;
 
     //=========================================================================
     // GstVulkanQueue

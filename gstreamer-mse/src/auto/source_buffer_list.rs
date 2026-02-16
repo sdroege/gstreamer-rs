@@ -58,7 +58,7 @@ impl SourceBufferList {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"on-sourcebuffer-added".as_ptr() as *const _,
+                c"on-sourcebuffer-added".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     on_sourcebuffer_added_trampoline::<F> as *const (),
                 )),
@@ -87,7 +87,7 @@ impl SourceBufferList {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"on-sourcebuffer-removed".as_ptr() as *const _,
+                c"on-sourcebuffer-removed".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     on_sourcebuffer_removed_trampoline::<F> as *const (),
                 )),
@@ -117,7 +117,7 @@ impl SourceBufferList {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::length".as_ptr() as *const _,
+                c"notify::length".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_length_trampoline::<F> as *const (),
                 )),

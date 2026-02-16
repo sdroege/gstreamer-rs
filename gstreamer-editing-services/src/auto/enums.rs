@@ -434,7 +434,7 @@ impl glib::error::ErrorDomain for Error {
 
         static QUARK: ::std::sync::OnceLock<glib::ffi::GQuark> = ::std::sync::OnceLock::new();
         let quark = *QUARK.get_or_init(|| unsafe {
-            glib::ffi::g_quark_from_static_string(b"GES_ERROR\0".as_ptr() as *const _)
+            glib::ffi::g_quark_from_static_string(c"GES_ERROR".as_ptr())
         });
         unsafe { from_glib(quark) }
     }

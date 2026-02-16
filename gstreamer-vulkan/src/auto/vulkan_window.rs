@@ -178,7 +178,7 @@ pub trait VulkanWindowExt: IsA<VulkanWindow> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"close".as_ptr() as *const _,
+                c"close".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     close_trampoline::<Self, F> as *const (),
                 )),
@@ -205,7 +205,7 @@ pub trait VulkanWindowExt: IsA<VulkanWindow> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"draw".as_ptr() as *const _,
+                c"draw".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     draw_trampoline::<Self, F> as *const (),
                 )),
@@ -241,7 +241,7 @@ pub trait VulkanWindowExt: IsA<VulkanWindow> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"key-event".as_ptr() as *const _,
+                c"key-event".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     key_event_trampoline::<Self, F> as *const (),
                 )),
@@ -281,7 +281,7 @@ pub trait VulkanWindowExt: IsA<VulkanWindow> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"mouse-event".as_ptr() as *const _,
+                c"mouse-event".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     mouse_event_trampoline::<Self, F> as *const (),
                 )),
@@ -317,7 +317,7 @@ pub trait VulkanWindowExt: IsA<VulkanWindow> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"resize".as_ptr() as *const _,
+                c"resize".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     resize_trampoline::<Self, F> as *const (),
                 )),
@@ -348,7 +348,7 @@ pub trait VulkanWindowExt: IsA<VulkanWindow> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::display".as_ptr() as *const _,
+                c"notify::display".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_display_trampoline::<Self, F> as *const (),
                 )),

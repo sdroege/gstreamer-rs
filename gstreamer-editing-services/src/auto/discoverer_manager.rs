@@ -116,7 +116,7 @@ impl DiscovererManager {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"discovered".as_ptr() as *const _,
+                c"discovered".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     discovered_trampoline::<F> as *const (),
                 )),
@@ -154,7 +154,7 @@ impl DiscovererManager {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"load-serialized-info".as_ptr() as *const _,
+                c"load-serialized-info".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     load_serialized_info_trampoline::<F> as *const (),
                 )),
@@ -186,7 +186,7 @@ impl DiscovererManager {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"source-setup".as_ptr() as *const _,
+                c"source-setup".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     source_setup_trampoline::<F> as *const (),
                 )),
@@ -213,7 +213,7 @@ impl DiscovererManager {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::timeout".as_ptr() as *const _,
+                c"notify::timeout".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_timeout_trampoline::<F> as *const (),
                 )),
@@ -238,7 +238,7 @@ impl DiscovererManager {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::use-cache".as_ptr() as *const _,
+                c"notify::use-cache".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_use_cache_trampoline::<F> as *const (),
                 )),

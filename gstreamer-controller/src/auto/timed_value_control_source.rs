@@ -99,7 +99,7 @@ pub trait TimedValueControlSourceExt: IsA<TimedValueControlSource> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"value-added".as_ptr() as *const _,
+                c"value-added".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     value_added_trampoline::<Self, F> as *const (),
                 )),
@@ -133,7 +133,7 @@ pub trait TimedValueControlSourceExt: IsA<TimedValueControlSource> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"value-changed".as_ptr() as *const _,
+                c"value-changed".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     value_changed_trampoline::<Self, F> as *const (),
                 )),
@@ -167,7 +167,7 @@ pub trait TimedValueControlSourceExt: IsA<TimedValueControlSource> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"value-removed".as_ptr() as *const _,
+                c"value-removed".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     value_removed_trampoline::<Self, F> as *const (),
                 )),

@@ -356,7 +356,7 @@ impl AppSrc {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::block".as_ptr() as *const _,
+                c"notify::block".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_block_trampoline::<F> as *const (),
                 )),
@@ -384,7 +384,7 @@ impl AppSrc {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::caps".as_ptr() as *const _,
+                c"notify::caps".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_caps_trampoline::<F> as *const (),
                 )),
@@ -416,7 +416,7 @@ impl AppSrc {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::current-level-buffers".as_ptr() as *const _,
+                c"notify::current-level-buffers".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_current_level_buffers_trampoline::<F> as *const (),
                 )),
@@ -446,7 +446,7 @@ impl AppSrc {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::current-level-bytes".as_ptr() as *const _,
+                c"notify::current-level-bytes".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_current_level_bytes_trampoline::<F> as *const (),
                 )),
@@ -478,7 +478,7 @@ impl AppSrc {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::current-level-time".as_ptr() as *const _,
+                c"notify::current-level-time".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_current_level_time_trampoline::<F> as *const (),
                 )),
@@ -508,7 +508,7 @@ impl AppSrc {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::dropped".as_ptr() as *const _,
+                c"notify::dropped".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_dropped_trampoline::<F> as *const (),
                 )),
@@ -536,7 +536,7 @@ impl AppSrc {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::duration".as_ptr() as *const _,
+                c"notify::duration".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_duration_trampoline::<F> as *const (),
                 )),
@@ -564,7 +564,7 @@ impl AppSrc {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::format".as_ptr() as *const _,
+                c"notify::format".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_format_trampoline::<F> as *const (),
                 )),
@@ -596,7 +596,7 @@ impl AppSrc {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::handle-segment-change".as_ptr() as *const _,
+                c"notify::handle-segment-change".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_handle_segment_change_trampoline::<F> as *const (),
                 )),
@@ -623,7 +623,7 @@ impl AppSrc {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::in".as_ptr() as *const _,
+                c"notify::in".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_in_trampoline::<F> as *const (),
                 )),
@@ -651,7 +651,7 @@ impl AppSrc {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::is-live".as_ptr() as *const _,
+                c"notify::is-live".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_is_live_trampoline::<F> as *const (),
                 )),
@@ -683,7 +683,7 @@ impl AppSrc {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::leaky-type".as_ptr() as *const _,
+                c"notify::leaky-type".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_leaky_type_trampoline::<F> as *const (),
                 )),
@@ -715,7 +715,7 @@ impl AppSrc {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::max-buffers".as_ptr() as *const _,
+                c"notify::max-buffers".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_max_buffers_trampoline::<F> as *const (),
                 )),
@@ -743,7 +743,7 @@ impl AppSrc {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::max-bytes".as_ptr() as *const _,
+                c"notify::max-bytes".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_max_bytes_trampoline::<F> as *const (),
                 )),
@@ -773,7 +773,7 @@ impl AppSrc {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::max-latency".as_ptr() as *const _,
+                c"notify::max-latency".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_max_latency_trampoline::<F> as *const (),
                 )),
@@ -803,7 +803,7 @@ impl AppSrc {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::max-time".as_ptr() as *const _,
+                c"notify::max-time".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_max_time_trampoline::<F> as *const (),
                 )),
@@ -833,7 +833,7 @@ impl AppSrc {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::min-latency".as_ptr() as *const _,
+                c"notify::min-latency".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_min_latency_trampoline::<F> as *const (),
                 )),
@@ -863,7 +863,7 @@ impl AppSrc {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::min-percent".as_ptr() as *const _,
+                c"notify::min-percent".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_min_percent_trampoline::<F> as *const (),
                 )),
@@ -893,7 +893,7 @@ impl AppSrc {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::out".as_ptr() as *const _,
+                c"notify::out".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_out_trampoline::<F> as *const (),
                 )),
@@ -923,7 +923,7 @@ impl AppSrc {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::silent".as_ptr() as *const _,
+                c"notify::silent".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_silent_trampoline::<F> as *const (),
                 )),
@@ -951,7 +951,7 @@ impl AppSrc {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::size".as_ptr() as *const _,
+                c"notify::size".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_size_trampoline::<F> as *const (),
                 )),
@@ -981,7 +981,7 @@ impl AppSrc {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::stream-type".as_ptr() as *const _,
+                c"notify::stream-type".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_stream_type_trampoline::<F> as *const (),
                 )),

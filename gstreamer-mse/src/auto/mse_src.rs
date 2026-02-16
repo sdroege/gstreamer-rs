@@ -84,7 +84,7 @@ impl MseSrc {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::duration".as_ptr() as *const _,
+                c"notify::duration".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_duration_trampoline::<F> as *const (),
                 )),
@@ -112,7 +112,7 @@ impl MseSrc {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::n-audio".as_ptr() as *const _,
+                c"notify::n-audio".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_n_audio_trampoline::<F> as *const (),
                 )),
@@ -140,7 +140,7 @@ impl MseSrc {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::n-text".as_ptr() as *const _,
+                c"notify::n-text".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_n_text_trampoline::<F> as *const (),
                 )),
@@ -168,7 +168,7 @@ impl MseSrc {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::n-video".as_ptr() as *const _,
+                c"notify::n-video".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_n_video_trampoline::<F> as *const (),
                 )),
@@ -196,7 +196,7 @@ impl MseSrc {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::position".as_ptr() as *const _,
+                c"notify::position".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_position_trampoline::<F> as *const (),
                 )),
@@ -226,7 +226,7 @@ impl MseSrc {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::ready-state".as_ptr() as *const _,
+                c"notify::ready-state".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_ready_state_trampoline::<F> as *const (),
                 )),

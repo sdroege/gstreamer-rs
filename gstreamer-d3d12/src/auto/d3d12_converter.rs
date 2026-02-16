@@ -217,7 +217,7 @@ pub trait D3D12ConverterExt: IsA<D3D12Converter> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::alpha".as_ptr() as *const _,
+                c"notify::alpha".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_alpha_trampoline::<Self, F> as *const (),
                 )),
@@ -248,7 +248,7 @@ pub trait D3D12ConverterExt: IsA<D3D12Converter> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::border-color".as_ptr() as *const _,
+                c"notify::border-color".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_border_color_trampoline::<Self, F> as *const (),
                 )),
@@ -279,7 +279,7 @@ pub trait D3D12ConverterExt: IsA<D3D12Converter> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::brightness".as_ptr() as *const _,
+                c"notify::brightness".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_brightness_trampoline::<Self, F> as *const (),
                 )),
@@ -310,7 +310,7 @@ pub trait D3D12ConverterExt: IsA<D3D12Converter> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::contrast".as_ptr() as *const _,
+                c"notify::contrast".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_contrast_trampoline::<Self, F> as *const (),
                 )),
@@ -341,7 +341,7 @@ pub trait D3D12ConverterExt: IsA<D3D12Converter> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::dest-height".as_ptr() as *const _,
+                c"notify::dest-height".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_dest_height_trampoline::<Self, F> as *const (),
                 )),
@@ -372,7 +372,7 @@ pub trait D3D12ConverterExt: IsA<D3D12Converter> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::dest-width".as_ptr() as *const _,
+                c"notify::dest-width".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_dest_width_trampoline::<Self, F> as *const (),
                 )),
@@ -400,7 +400,7 @@ pub trait D3D12ConverterExt: IsA<D3D12Converter> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::dest-x".as_ptr() as *const _,
+                c"notify::dest-x".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_dest_x_trampoline::<Self, F> as *const (),
                 )),
@@ -428,7 +428,7 @@ pub trait D3D12ConverterExt: IsA<D3D12Converter> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::dest-y".as_ptr() as *const _,
+                c"notify::dest-y".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_dest_y_trampoline::<Self, F> as *const (),
                 )),
@@ -459,7 +459,7 @@ pub trait D3D12ConverterExt: IsA<D3D12Converter> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::fill-border".as_ptr() as *const _,
+                c"notify::fill-border".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_fill_border_trampoline::<Self, F> as *const (),
                 )),
@@ -487,7 +487,7 @@ pub trait D3D12ConverterExt: IsA<D3D12Converter> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::hue".as_ptr() as *const _,
+                c"notify::hue".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_hue_trampoline::<Self, F> as *const (),
                 )),
@@ -518,7 +518,7 @@ pub trait D3D12ConverterExt: IsA<D3D12Converter> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::max-mip-levels".as_ptr() as *const _,
+                c"notify::max-mip-levels".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_max_mip_levels_trampoline::<Self, F> as *const (),
                 )),
@@ -549,7 +549,7 @@ pub trait D3D12ConverterExt: IsA<D3D12Converter> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::sampler-filter".as_ptr() as *const _,
+                c"notify::sampler-filter".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_sampler_filter_trampoline::<Self, F> as *const (),
                 )),
@@ -580,7 +580,7 @@ pub trait D3D12ConverterExt: IsA<D3D12Converter> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::saturation".as_ptr() as *const _,
+                c"notify::saturation".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_saturation_trampoline::<Self, F> as *const (),
                 )),
@@ -611,7 +611,7 @@ pub trait D3D12ConverterExt: IsA<D3D12Converter> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::src-height".as_ptr() as *const _,
+                c"notify::src-height".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_src_height_trampoline::<Self, F> as *const (),
                 )),
@@ -642,7 +642,7 @@ pub trait D3D12ConverterExt: IsA<D3D12Converter> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::src-width".as_ptr() as *const _,
+                c"notify::src-width".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_src_width_trampoline::<Self, F> as *const (),
                 )),
@@ -670,7 +670,7 @@ pub trait D3D12ConverterExt: IsA<D3D12Converter> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::src-x".as_ptr() as *const _,
+                c"notify::src-x".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_src_x_trampoline::<Self, F> as *const (),
                 )),
@@ -698,7 +698,7 @@ pub trait D3D12ConverterExt: IsA<D3D12Converter> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::src-y".as_ptr() as *const _,
+                c"notify::src-y".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_src_y_trampoline::<Self, F> as *const (),
                 )),
@@ -729,7 +729,7 @@ pub trait D3D12ConverterExt: IsA<D3D12Converter> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::video-direction".as_ptr() as *const _,
+                c"notify::video-direction".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_video_direction_trampoline::<Self, F> as *const (),
                 )),

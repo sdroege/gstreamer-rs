@@ -104,7 +104,7 @@ pub trait LFOControlSourceExt: IsA<LFOControlSource> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::amplitude".as_ptr() as *const _,
+                c"notify::amplitude".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_amplitude_trampoline::<Self, F> as *const (),
                 )),
@@ -135,7 +135,7 @@ pub trait LFOControlSourceExt: IsA<LFOControlSource> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::frequency".as_ptr() as *const _,
+                c"notify::frequency".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_frequency_trampoline::<Self, F> as *const (),
                 )),
@@ -163,7 +163,7 @@ pub trait LFOControlSourceExt: IsA<LFOControlSource> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::offset".as_ptr() as *const _,
+                c"notify::offset".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_offset_trampoline::<Self, F> as *const (),
                 )),
@@ -194,7 +194,7 @@ pub trait LFOControlSourceExt: IsA<LFOControlSource> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::timeshift".as_ptr() as *const _,
+                c"notify::timeshift".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_timeshift_trampoline::<Self, F> as *const (),
                 )),
@@ -225,7 +225,7 @@ pub trait LFOControlSourceExt: IsA<LFOControlSource> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::waveform".as_ptr() as *const _,
+                c"notify::waveform".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_waveform_trampoline::<Self, F> as *const (),
                 )),

@@ -242,7 +242,7 @@ impl MediaSource {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"on-source-close".as_ptr() as *const _,
+                c"on-source-close".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     on_source_close_trampoline::<F> as *const (),
                 )),
@@ -271,7 +271,7 @@ impl MediaSource {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"on-source-ended".as_ptr() as *const _,
+                c"on-source-ended".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     on_source_ended_trampoline::<F> as *const (),
                 )),
@@ -300,7 +300,7 @@ impl MediaSource {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"on-source-open".as_ptr() as *const _,
+                c"on-source-open".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     on_source_open_trampoline::<F> as *const (),
                 )),
@@ -330,7 +330,7 @@ impl MediaSource {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::active-source-buffers".as_ptr() as *const _,
+                c"notify::active-source-buffers".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_active_source_buffers_trampoline::<F> as *const (),
                 )),
@@ -360,7 +360,7 @@ impl MediaSource {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::duration".as_ptr() as *const _,
+                c"notify::duration".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_duration_trampoline::<F> as *const (),
                 )),
@@ -390,7 +390,7 @@ impl MediaSource {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::position".as_ptr() as *const _,
+                c"notify::position".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_position_trampoline::<F> as *const (),
                 )),
@@ -420,7 +420,7 @@ impl MediaSource {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::ready-state".as_ptr() as *const _,
+                c"notify::ready-state".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_ready_state_trampoline::<F> as *const (),
                 )),
@@ -450,7 +450,7 @@ impl MediaSource {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::source-buffers".as_ptr() as *const _,
+                c"notify::source-buffers".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_source_buffers_trampoline::<F> as *const (),
                 )),

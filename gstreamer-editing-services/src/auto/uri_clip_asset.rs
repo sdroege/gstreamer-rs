@@ -25,7 +25,7 @@ glib::wrapper! {
     }
 }
 
-#[cfg(not(any(feature = "v1_18")))]
+#[cfg(not(feature = "v1_18"))]
 glib::wrapper! {
     #[doc(alias = "GESUriClipAsset")]
     pub struct UriClipAsset(Object<ffi::GESUriClipAsset, ffi::GESUriClipAssetClass>) @extends ClipAsset, Asset, @implements MetaContainer;
@@ -150,7 +150,7 @@ pub trait UriClipAssetExt: IsA<UriClipAsset> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::duration".as_ptr() as *const _,
+                c"notify::duration".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_duration_trampoline::<Self, F> as *const (),
                 )),
@@ -183,7 +183,7 @@ pub trait UriClipAssetExt: IsA<UriClipAsset> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::is-nested-timeline".as_ptr() as *const _,
+                c"notify::is-nested-timeline".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_is_nested_timeline_trampoline::<Self, F> as *const (),
                 )),

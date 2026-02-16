@@ -89,7 +89,7 @@ impl NetTimeProvider {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::active".as_ptr() as *const _,
+                c"notify::active".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_active_trampoline::<F> as *const (),
                 )),
@@ -119,7 +119,7 @@ impl NetTimeProvider {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::qos-dscp".as_ptr() as *const _,
+                c"notify::qos-dscp".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_qos_dscp_trampoline::<F> as *const (),
                 )),

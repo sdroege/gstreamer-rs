@@ -182,7 +182,7 @@ pub trait GstBinExt: IsA<Bin> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"deep-element-added".as_ptr() as *const _,
+                c"deep-element-added".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     deep_element_added_trampoline::<Self, F> as *const (),
                 )),
@@ -218,7 +218,7 @@ pub trait GstBinExt: IsA<Bin> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"deep-element-removed".as_ptr() as *const _,
+                c"deep-element-removed".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     deep_element_removed_trampoline::<Self, F> as *const (),
                 )),
@@ -252,7 +252,7 @@ pub trait GstBinExt: IsA<Bin> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"element-added".as_ptr() as *const _,
+                c"element-added".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     element_added_trampoline::<Self, F> as *const (),
                 )),
@@ -286,7 +286,7 @@ pub trait GstBinExt: IsA<Bin> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"element-removed".as_ptr() as *const _,
+                c"element-removed".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     element_removed_trampoline::<Self, F> as *const (),
                 )),
@@ -317,7 +317,7 @@ pub trait GstBinExt: IsA<Bin> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::async-handling".as_ptr() as *const _,
+                c"notify::async-handling".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_async_handling_trampoline::<Self, F> as *const (),
                 )),
@@ -348,7 +348,7 @@ pub trait GstBinExt: IsA<Bin> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::message-forward".as_ptr() as *const _,
+                c"notify::message-forward".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_message_forward_trampoline::<Self, F> as *const (),
                 )),

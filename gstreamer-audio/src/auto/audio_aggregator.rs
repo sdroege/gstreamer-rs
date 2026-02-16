@@ -84,7 +84,7 @@ pub trait AudioAggregatorExt: IsA<AudioAggregator> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::alignment-threshold".as_ptr() as *const _,
+                c"notify::alignment-threshold".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_alignment_threshold_trampoline::<Self, F> as *const (),
                 )),
@@ -115,7 +115,7 @@ pub trait AudioAggregatorExt: IsA<AudioAggregator> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::discont-wait".as_ptr() as *const _,
+                c"notify::discont-wait".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_discont_wait_trampoline::<Self, F> as *const (),
                 )),
@@ -146,7 +146,7 @@ pub trait AudioAggregatorExt: IsA<AudioAggregator> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::output-buffer-duration".as_ptr() as *const _,
+                c"notify::output-buffer-duration".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_output_buffer_duration_trampoline::<Self, F> as *const (),
                 )),

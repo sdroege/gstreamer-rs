@@ -144,12 +144,12 @@ impl Bus {
         unsafe {
             let f: Box_<F> = Box_::new(f);
             let detailed_signal_name = detail.map(|name| format!("message::{name}\0"));
-            let signal_name: &[u8] = detailed_signal_name
-                .as_ref()
-                .map_or(c"message".to_bytes(), |n| n.as_bytes());
+            let signal_name = detailed_signal_name.as_ref().map_or(c"message", |n| {
+                std::ffi::CStr::from_bytes_with_nul_unchecked(n.as_bytes())
+            });
             connect_raw(
                 self.as_ptr() as *mut _,
-                signal_name.as_ptr() as *const _,
+                signal_name.as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     message_trampoline::<F> as *const (),
                 )),
@@ -179,12 +179,12 @@ impl Bus {
         unsafe {
             let f: Box_<F> = Box_::new(f);
             let detailed_signal_name = detail.map(|name| format!("sync-message::{name}\0"));
-            let signal_name: &[u8] = detailed_signal_name
-                .as_ref()
-                .map_or(c"sync-message".to_bytes(), |n| n.as_bytes());
+            let signal_name = detailed_signal_name.as_ref().map_or(c"sync-message", |n| {
+                std::ffi::CStr::from_bytes_with_nul_unchecked(n.as_bytes())
+            });
             connect_raw(
                 self.as_ptr() as *mut _,
-                signal_name.as_ptr() as *const _,
+                signal_name.as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     sync_message_trampoline::<F> as *const (),
                 )),

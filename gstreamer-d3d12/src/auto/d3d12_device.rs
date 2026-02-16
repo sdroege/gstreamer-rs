@@ -102,7 +102,7 @@ pub trait D3D12DeviceExt: IsA<D3D12Device> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::adapter-index".as_ptr() as *const _,
+                c"notify::adapter-index".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_adapter_index_trampoline::<Self, F> as *const (),
                 )),
@@ -133,7 +133,7 @@ pub trait D3D12DeviceExt: IsA<D3D12Device> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::adapter-luid".as_ptr() as *const _,
+                c"notify::adapter-luid".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_adapter_luid_trampoline::<Self, F> as *const (),
                 )),
@@ -164,7 +164,7 @@ pub trait D3D12DeviceExt: IsA<D3D12Device> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::description".as_ptr() as *const _,
+                c"notify::description".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_description_trampoline::<Self, F> as *const (),
                 )),
@@ -195,7 +195,7 @@ pub trait D3D12DeviceExt: IsA<D3D12Device> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::device-id".as_ptr() as *const _,
+                c"notify::device-id".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_device_id_trampoline::<Self, F> as *const (),
                 )),
@@ -226,7 +226,7 @@ pub trait D3D12DeviceExt: IsA<D3D12Device> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::device-removed-reason".as_ptr() as *const _,
+                c"notify::device-removed-reason".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_device_removed_reason_trampoline::<Self, F> as *const (),
                 )),
@@ -257,7 +257,7 @@ pub trait D3D12DeviceExt: IsA<D3D12Device> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::vendor-id".as_ptr() as *const _,
+                c"notify::vendor-id".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_vendor_id_trampoline::<Self, F> as *const (),
                 )),

@@ -113,7 +113,7 @@ pub trait ARGBControlBindingExt: IsA<ARGBControlBinding> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::control-source-a".as_ptr() as *const _,
+                c"notify::control-source-a".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_control_source_a_trampoline::<Self, F> as *const (),
                 )),
@@ -144,7 +144,7 @@ pub trait ARGBControlBindingExt: IsA<ARGBControlBinding> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::control-source-b".as_ptr() as *const _,
+                c"notify::control-source-b".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_control_source_b_trampoline::<Self, F> as *const (),
                 )),
@@ -175,7 +175,7 @@ pub trait ARGBControlBindingExt: IsA<ARGBControlBinding> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::control-source-g".as_ptr() as *const _,
+                c"notify::control-source-g".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_control_source_g_trampoline::<Self, F> as *const (),
                 )),
@@ -206,7 +206,7 @@ pub trait ARGBControlBindingExt: IsA<ARGBControlBinding> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::control-source-r".as_ptr() as *const _,
+                c"notify::control-source-r".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_control_source_r_trampoline::<Self, F> as *const (),
                 )),

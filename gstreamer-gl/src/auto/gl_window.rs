@@ -253,7 +253,7 @@ pub trait GLWindowExt: IsA<GLWindow> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"key-event".as_ptr() as *const _,
+                c"key-event".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     key_event_trampoline::<Self, F> as *const (),
                 )),
@@ -293,7 +293,7 @@ pub trait GLWindowExt: IsA<GLWindow> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"mouse-event".as_ptr() as *const _,
+                c"mouse-event".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     mouse_event_trampoline::<Self, F> as *const (),
                 )),
@@ -335,7 +335,7 @@ pub trait GLWindowExt: IsA<GLWindow> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"scroll-event".as_ptr() as *const _,
+                c"scroll-event".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     scroll_event_trampoline::<Self, F> as *const (),
                 )),
@@ -367,7 +367,7 @@ pub trait GLWindowExt: IsA<GLWindow> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"window-handle-changed".as_ptr() as *const _,
+                c"window-handle-changed".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     window_handle_changed_trampoline::<Self, F> as *const (),
                 )),

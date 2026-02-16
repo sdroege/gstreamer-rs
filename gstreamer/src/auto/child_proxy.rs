@@ -140,7 +140,7 @@ pub trait ChildProxyExt: IsA<ChildProxy> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"child-added".as_ptr() as *const _,
+                c"child-added".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     child_added_trampoline::<Self, F> as *const (),
                 )),
@@ -176,7 +176,7 @@ pub trait ChildProxyExt: IsA<ChildProxy> + 'static {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"child-removed".as_ptr() as *const _,
+                c"child-removed".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     child_removed_trampoline::<Self, F> as *const (),
                 )),

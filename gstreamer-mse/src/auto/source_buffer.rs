@@ -266,7 +266,7 @@ impl SourceBuffer {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"on-abort".as_ptr() as *const _,
+                c"on-abort".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     on_abort_trampoline::<F> as *const (),
                 )),
@@ -290,7 +290,7 @@ impl SourceBuffer {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"on-error".as_ptr() as *const _,
+                c"on-error".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     on_error_trampoline::<F> as *const (),
                 )),
@@ -314,7 +314,7 @@ impl SourceBuffer {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"on-update".as_ptr() as *const _,
+                c"on-update".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     on_update_trampoline::<F> as *const (),
                 )),
@@ -343,7 +343,7 @@ impl SourceBuffer {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"on-update-end".as_ptr() as *const _,
+                c"on-update-end".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     on_update_end_trampoline::<F> as *const (),
                 )),
@@ -372,7 +372,7 @@ impl SourceBuffer {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"on-update-start".as_ptr() as *const _,
+                c"on-update-start".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     on_update_start_trampoline::<F> as *const (),
                 )),
@@ -402,7 +402,7 @@ impl SourceBuffer {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::append-mode".as_ptr() as *const _,
+                c"notify::append-mode".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_append_mode_trampoline::<F> as *const (),
                 )),
@@ -432,7 +432,7 @@ impl SourceBuffer {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::append-window-end".as_ptr() as *const _,
+                c"notify::append-window-end".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_append_window_end_trampoline::<F> as *const (),
                 )),
@@ -462,7 +462,7 @@ impl SourceBuffer {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::append-window-start".as_ptr() as *const _,
+                c"notify::append-window-start".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_append_window_start_trampoline::<F> as *const (),
                 )),
@@ -492,7 +492,7 @@ impl SourceBuffer {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::buffered".as_ptr() as *const _,
+                c"notify::buffered".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_buffered_trampoline::<F> as *const (),
                 )),
@@ -522,7 +522,7 @@ impl SourceBuffer {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::content-type".as_ptr() as *const _,
+                c"notify::content-type".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_content_type_trampoline::<F> as *const (),
                 )),
@@ -552,7 +552,7 @@ impl SourceBuffer {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::timestamp-offset".as_ptr() as *const _,
+                c"notify::timestamp-offset".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_timestamp_offset_trampoline::<F> as *const (),
                 )),
@@ -582,7 +582,7 @@ impl SourceBuffer {
             let f: Box_<F> = Box_::new(f);
             connect_raw(
                 self.as_ptr() as *mut _,
-                c"notify::updating".as_ptr() as *const _,
+                c"notify::updating".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_updating_trampoline::<F> as *const (),
                 )),
