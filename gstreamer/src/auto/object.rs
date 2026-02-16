@@ -238,20 +238,6 @@ pub trait GstObjectExt: IsA<Object> + 'static {
         }
     }
 
-    #[doc(alias = "gst_object_set_parent")]
-    #[doc(alias = "parent")]
-    fn set_parent(&self, parent: &impl IsA<Object>) -> Result<(), glib::error::BoolError> {
-        unsafe {
-            glib::result_from_gboolean!(
-                ffi::gst_object_set_parent(
-                    self.as_ref().to_glib_none().0,
-                    parent.as_ref().to_glib_none().0
-                ),
-                "Failed to set parent object"
-            )
-        }
-    }
-
     #[doc(alias = "gst_object_suggest_next_sync")]
     fn suggest_next_sync(&self) -> Option<ClockTime> {
         unsafe {

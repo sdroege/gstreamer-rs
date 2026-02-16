@@ -1594,6 +1594,8 @@ trait_name = "GstObjectExt"
 
     [[object.function]]
     name = "set_parent"
+    # Needs unsafe implementation
+    manual = true
         [object.function.return]
         bool_return_is_error = "Failed to set parent object"
 
