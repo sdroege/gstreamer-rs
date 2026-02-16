@@ -1,16 +1,33 @@
 use crate::callsite::GstCallsiteKind;
 use crate::log::span_quark;
+use gst::glib::Properties;
 use gst::{Buffer, FlowError, FlowSuccess, Pad, Tracer, glib, prelude::*, subclass::prelude::*};
-use std::{cell::RefCell, str::FromStr};
-use tracing::{Callsite, Dispatch, Id, error, info, span::Attributes};
+use std::{cell::RefCell, sync::Mutex};
+use tracing::{Callsite, Dispatch, Id, info, span::Attributes};
 
 struct EnteredSpan {
     id: Id,
     dispatch: Dispatch,
 }
 
+#[derive(Default)]
+struct Settings {
+    log_level: Option<String>,
+}
+
+#[derive(Properties)]
+#[properties(wrapper_type = super::TracingTracer)]
 pub struct TracingTracer {
     span_stack: thread_local::ThreadLocal<RefCell<Vec<EnteredSpan>>>,
+    #[property(
+        name = "log-level",
+        get,
+        set = Self::set_log_level,
+        type = Option<String>,
+        member = log_level,
+        blurb = "GStreamer log level to integrate as tracing events",
+    )]
+    settings: Mutex<Settings>,
 }
 
 pub struct SpanPropagationTracer;
@@ -25,6 +42,17 @@ unsafe fn propagate_attached_span(parent: &gst::Object, child: &gst::Object) {
 }
 
 impl TracingTracer {
+    fn set_log_level(&self, log_level: Option<String>) {
+        let mut settings = self.settings.lock().unwrap();
+        settings.log_level = log_level.clone();
+        if let Some(ref level) = log_level {
+            info!("Integrating `{level}` GStreamer logs as part of our tracing");
+            crate::integrate_events();
+            gst::log::remove_default_log_function();
+            gst::log::set_threshold_from_string(level, true);
+        }
+    }
+
     fn push_span(&self, dispatch: Dispatch, attributes: Attributes) {
         let span_id = dispatch.new_span(&attributes);
         dispatch.enter(&span_id);
@@ -94,32 +122,14 @@ impl ObjectSubclass for TracingTracer {
     fn new() -> Self {
         Self {
             span_stack: thread_local::ThreadLocal::new(),
+            settings: Mutex::new(Settings::default()),
         }
     }
 }
 
+#[glib::derived_properties]
 impl ObjectImpl for TracingTracer {
     fn constructed(&self) {
-        if let Some(params) = self.obj().property::<Option<String>>("params") {
-            let tmp = format!("params,{params}");
-            info!("{:?} params: {:?}", self.obj(), tmp);
-            let structure = gst::Structure::from_str(&tmp).unwrap_or_else(|e| {
-                error!("Invalid params string: {:?}: {e:?}", tmp);
-                gst::Structure::new_empty("params")
-            });
-
-            if let Ok(gst_logs_level) = structure
-                .get::<String>("log-level")
-                .or_else(|_| structure.get::<i32>("log-level").map(|l| l.to_string()))
-            {
-                info!("Integrating `{gst_logs_level}` GStreamer logs as part of our tracing");
-
-                crate::integrate_events();
-                gst::log::remove_default_log_function();
-                gst::log::set_threshold_from_string(&gst_logs_level, true);
-            }
-        }
-
         self.parent_constructed();
         #[cfg(feature = "v1_30")]
         self.register_hook(TracerHook::ObjectParentSet);
