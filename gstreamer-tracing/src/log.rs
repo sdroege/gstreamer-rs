@@ -284,6 +284,7 @@ pub(crate) fn span_quark() -> &'static gst::glib::Quark {
 /// # Examples
 ///
 /// ```
+/// # use gstreamer_tracing as gst_tracing;
 /// gst::init().unwrap();
 ///
 /// let pipeline = gst::Pipeline::new();

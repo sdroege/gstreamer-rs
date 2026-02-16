@@ -12,6 +12,7 @@ function. Calling it before the call to any other `gstreamer` call (especially b
 `gst::init`) is most likely to correctly forward all of the messages:
 
 ```rust
+# use gstreamer_tracing as gst_tracing;
 # use gst_tracing::gst;
 // Set up the tracing subscriber.
 //
@@ -26,6 +27,7 @@ Keep in mind that both `GST_DEBUG` and tracing filters are in effect. The `gstre
 filters can be relaxed from code via:
 
 ```rust
+# use gstreamer_tracing as gst_tracing;
 # use gst_tracing::gst;
 gst::log::set_default_threshold(gst::DebugLevel::Memdump);
 ```
@@ -41,6 +43,7 @@ This functionality can be enabled by calling the [`integrate_spans`] function. I
 after `gst::init`.
 
 ```rust
+# use gstreamer_tracing as gst_tracing;
 # use gst_tracing::gst;
 gst::init();
 gst_tracing::integrate_spans();
