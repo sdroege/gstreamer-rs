@@ -299,6 +299,15 @@ pub(crate) fn span_quark() -> &'static gst::glib::Quark {
 /// }
 /// ```
 pub unsafe fn attach_span<O: IsA<gst::Object>>(object: &O, span: tracing::Span) {
+    if unsafe { gst::ffi::gst_is_initialized() == gst::glib::ffi::GTRUE } {
+        static INIT_PROPAGATION_TRACER: std::sync::Once = std::sync::Once::new();
+        INIT_PROPAGATION_TRACER.call_once(|| {
+            // Keep the propagation tracer alive for the rest of the process.
+            let tracer = gst::glib::Object::new::<crate::tracer::SpanPropagationTracer>();
+            std::mem::forget(tracer);
+        });
+    }
+
     unsafe {
         // SAFETY:
         //

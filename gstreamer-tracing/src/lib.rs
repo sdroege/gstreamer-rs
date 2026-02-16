@@ -76,7 +76,13 @@ pub fn integrate_events() {
 ///
 /// This function may only be called after `gst::init`.
 pub fn integrate_spans() {
-    gst::glib::Object::new::<tracer::TracingTracer>();
+    static INIT: std::sync::Once = std::sync::Once::new();
+    INIT.call_once(|| {
+        // Keep the tracer alive for the rest of the process lifetime so parent
+        // propagation hooks remain active.
+        let tracer = gst::glib::Object::new::<tracer::TracingTracer>();
+        std::mem::forget(tracer);
+    });
 }
 
 /// Disable the integration between GStreamer logging system and the `tracing` library.

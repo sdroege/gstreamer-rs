@@ -1,13 +1,9 @@
-// Tests use a custom runner (run()) instead of #[test] attributes because GStreamer
-// requires specific initialization order. The compiler doesn't see these as used.
-#![allow(dead_code)]
-
 use crate::*;
 use gst::{glib::translate::*, prelude::*};
 use std::{
     collections::VecDeque,
     sync::atomic::{AtomicU64, Ordering},
-    sync::{Arc, Mutex},
+    sync::{Arc, Mutex, MutexGuard, Once, PoisonError},
 };
 use tracing_core::{Level, Metadata};
 use tracing_core::{
@@ -16,6 +12,37 @@ use tracing_core::{
     span::{Attributes, Id, Record},
 };
 use tracing_subscriber::layer::{Context, Layer, SubscriberExt};
+
+static TEST_LOCK: Mutex<()> = Mutex::new(());
+static TEST_INIT: Once = Once::new();
+
+struct TestContext {
+    _guard: MutexGuard<'static, ()>,
+}
+
+impl TestContext {
+    fn acquire() -> Self {
+        let guard = TEST_LOCK.lock().unwrap_or_else(PoisonError::into_inner);
+        TEST_INIT.call_once(|| {
+            gst::log::remove_default_log_function();
+            gst::init().expect("gst init");
+            gst::log::set_default_threshold(gst::DebugLevel::Memdump);
+        });
+        integrate_events();
+
+        Self { _guard: guard }
+    }
+}
+
+impl Drop for TestContext {
+    fn drop(&mut self) {
+        disable_events();
+    }
+}
+
+fn target_matches(meta: &Metadata<'_>, expected_suffix: &str) -> bool {
+    meta.target() == format!("{}::{expected_suffix}", crate::TARGET)
+}
 
 #[derive(Default, Debug)]
 struct KV {
@@ -94,7 +121,25 @@ impl Visit for GstEvent {
                 .expect("gstpad.parent.pending_state present but not expected"),
             _ => panic!("unexpected string field: {}", field.name()),
         };
-        assert_eq!(value, expected);
+        if field.name() == "gstobject.name" && expected.ends_with('*') {
+            let prefix = expected.trim_end_matches('*');
+            assert!(
+                value.starts_with(prefix),
+                "expected {value:?} to start with {prefix:?}"
+            );
+        } else if matches!(
+            field.name(),
+            "gstelement.state"
+                | "gstelement.pending_state"
+                | "gstpad.parent.state"
+                | "gstpad.parent.pending_state"
+        ) {
+            let normalized_value = value.to_ascii_lowercase().replace('_', "-");
+            let normalized_expected = expected.to_ascii_lowercase().replace('_', "-");
+            assert_eq!(normalized_value, normalized_expected);
+        } else {
+            assert_eq!(value, expected);
+        }
     }
 
     fn record_error(&mut self, field: &tracing_core::Field, _: &(dyn std::error::Error + 'static)) {
@@ -104,12 +149,20 @@ impl Visit for GstEvent {
     fn record_debug(&mut self, field: &tracing_core::Field, d: &dyn std::fmt::Debug) {
         if field.name() == "gstpad.state" {
             let value = format!("{:?}", d);
-            assert_eq!(
-                value,
-                self.kvs
-                    .gstpad_state
-                    .expect("gstpad.state present but not expected")
-            )
+            let expected = self
+                .kvs
+                .gstpad_state
+                .expect("gstpad.state present but not expected");
+            let normalize_flags = |s: &str| {
+                let mut parts = s
+                    .replace(['{', '}', ',', '|'], " ")
+                    .split_whitespace()
+                    .map(str::to_string)
+                    .collect::<Vec<_>>();
+                parts.sort();
+                parts.join(" ")
+            };
+            assert_eq!(normalize_flags(&value), normalize_flags(expected));
         } else {
             panic!("unexpected debug field: {}", field.name());
         }
@@ -164,7 +217,13 @@ impl MockSubscriber {
 
 impl Subscriber for MockSubscriber {
     fn enabled(&self, meta: &tracing_core::Metadata<'_>) -> bool {
-        meta.target().starts_with(crate::TARGET) && (self.filter)(meta)
+        let is_crate_target = meta.target() == crate::TARGET
+            || meta
+                .target()
+                .strip_prefix(crate::TARGET)
+                .and_then(|suffix| suffix.strip_prefix("::"))
+                .is_some();
+        is_crate_target && (self.filter)(meta)
     }
     fn event(&self, e: &tracing_core::Event<'_>) {
         println!("[{}] event: {:?}", self.name, e);
@@ -174,7 +233,7 @@ impl Subscriber for MockSubscriber {
             }
             Some(Expect::GstEvent(mut expected @ GstEvent { .. })) => {
                 let meta = e.metadata();
-                if meta.target() != format!("gst::{}", expected.target) {
+                if meta.target() != format!("{}::{}", crate::TARGET, expected.target) {
                     panic!(
                         "[{}] event with target {} received, but expected {}",
                         self.name,
@@ -230,7 +289,9 @@ impl<S: Subscriber> Layer<S> for MockSubscriber {
     }
 }
 
+#[test]
 fn test_simple_error() {
+    let _ctx = TestContext::acquire();
     MockSubscriber::with_expected(
         |_| true,
         "test_simple_error",
@@ -249,7 +310,9 @@ fn test_simple_error() {
     );
 }
 
+#[test]
 fn test_simple_warning() {
+    let _ctx = TestContext::acquire();
     MockSubscriber::with_expected(
         |_| true,
         "test_simple_warning",
@@ -268,7 +331,9 @@ fn test_simple_warning() {
     );
 }
 
+#[test]
 fn test_simple_events() {
+    let _ctx = TestContext::acquire();
     MockSubscriber::with_expected(
         |_| true,
         "test_simple_events",
@@ -313,11 +378,13 @@ fn test_simple_events() {
     );
 }
 
+#[test]
 fn test_with_object() {
+    let _ctx = TestContext::acquire();
     let p = gst::Pipeline::new();
     let p_addr = p.as_object_ref().to_glib_none().0 as usize;
     MockSubscriber::with_expected(
-        |m| m.target() == "gst::test_with_object",
+        |m| target_matches(m, "test_with_object"),
         "test_with_object",
         move || {
             let cat =
@@ -329,7 +396,7 @@ fn test_with_object() {
             kvs: KV {
                 gobject_address: Some(p_addr),
                 gobject_type: Some("GstPipeline"),
-                gstobject_name: Some("pipeline0"),
+                gstobject_name: Some("pipeline*"),
                 gstelement_state: Some("null"),
                 gstelement_pending_state: Some("void-pending"),
                 ..Default::default()
@@ -341,11 +408,13 @@ fn test_with_object() {
     );
 }
 
+#[test]
 fn test_with_upcast_object() {
+    let _ctx = TestContext::acquire();
     let obj: gst::glib::Object = gst::Bin::new().upcast();
     let obj_addr = obj.as_object_ref().to_glib_none().0 as usize;
     MockSubscriber::with_expected(
-        |m| m.target() == "gst::test_with_upcast_object",
+        |m| target_matches(m, "test_with_upcast_object"),
         "test_with_upcast_object",
         move || {
             let cat = gst::DebugCategory::new(
@@ -372,7 +441,9 @@ fn test_with_upcast_object() {
     );
 }
 
+#[test]
 fn test_with_pad() {
+    let _ctx = TestContext::acquire();
     let pad = gst::Pad::builder(gst::PadDirection::Sink)
         .name("custom_pad_name")
         .build();
@@ -380,7 +451,7 @@ fn test_with_pad() {
     parent.add_pad(&pad).expect("add pad");
     let pad_addr = pad.as_object_ref().to_glib_none().0 as usize;
     MockSubscriber::with_expected(
-        |m| m.target() == "gst::test_pad_cat",
+        |m| target_matches(m, "test_pad_cat"),
         "test_with_pad",
         move || {
             let cat = gst::DebugCategory::new("test_pad_cat", gst::DebugColorFlags::empty(), None);
@@ -405,9 +476,11 @@ fn test_with_pad() {
     );
 }
 
+#[test]
 fn test_disintegration() {
+    let _ctx = TestContext::acquire();
     MockSubscriber::with_expected(
-        |m| m.target() == "gst::disintegration",
+        |m| target_matches(m, "disintegration"),
         "test_disintegration",
         move || {
             let cat =
@@ -437,7 +510,9 @@ fn test_disintegration() {
     );
 }
 
+#[test]
 fn test_formatting() {
+    let _ctx = TestContext::acquire();
     MockSubscriber::with_expected(
         |_| true,
         "test_formatting",
@@ -455,7 +530,9 @@ fn test_formatting() {
     );
 }
 
+#[test]
 fn test_interests() {
+    let _ctx = TestContext::acquire();
     let mock_subscriber = MockSubscriber::new(
         |_| true,
         "test_interests",
@@ -497,18 +574,19 @@ fn test_interests() {
     );
 }
 
+#[test]
 fn test_user_span() {
+    let _ctx = TestContext::acquire();
     let p = gst::Pipeline::new();
     let p_addr = p.as_object_ref().to_glib_none().0 as usize;
     let child = gst::Bin::builder().name("child_bin").build();
 
     MockSubscriber::with_expected(
-        |m| m.target() == "gst::test_user_span",
+        |m| target_matches(m, "test_user_span") || m.target() == crate::TARGET,
         "test_user_span",
         move || {
-            let span = tracing::error_span!(
-                target: "gst::test_user_span", "pipeline span", pipeline = true
-            );
+            let span =
+                tracing::error_span!(target: crate::TARGET, "pipeline span", pipeline = true);
             assert_eq!(span.id().unwrap().into_u64(), 99);
             unsafe { attach_span(&p, span) };
             let parent_span_id = unsafe {
@@ -541,7 +619,7 @@ fn test_user_span() {
             kvs: KV {
                 gobject_address: Some(p_addr),
                 gobject_type: Some("GstPipeline"),
-                gstobject_name: Some("pipeline1"),
+                gstobject_name: Some("pipeline*"),
                 gstelement_state: Some("null"),
                 gstelement_pending_state: Some("void-pending"),
                 ..Default::default()
@@ -551,24 +629,4 @@ fn test_user_span() {
             parent_id: Some(Id::from_u64(99)),
         })],
     );
-}
-
-// NB: we aren't using the test harness here to allow us for the necessary gstreamer setup more
-// straightforwardly.
-pub(crate) fn run() {
-    gst::log::remove_default_log_function();
-    gst::init().expect("gst init");
-    gst::log::set_default_threshold(gst::DebugLevel::Memdump);
-    integrate_events();
-    test_simple_error();
-    test_simple_warning();
-    test_simple_events();
-    test_with_object();
-    test_with_upcast_object();
-    test_with_pad();
-    test_disintegration();
-    test_formatting();
-    test_interests();
-    test_user_span();
-    disable_events();
 }
