@@ -29,4 +29,9 @@ pub mod vulkan {
     pub use ash::vk::SampleCountFlags as VkSampleCountFlags;
     pub use ash::vk::Semaphore as VkSemaphore;
     pub use ash::vk::SurfaceKHR as VkSurfaceKHR;
+
+    #[cfg(feature = "v1_30")]
+    pub type VkPhysicalDeviceFeatures2 = ash::vk::PhysicalDeviceFeatures2<'static>;
+    #[cfg(feature = "v1_30")]
+    pub type VkPhysicalDeviceProperties2 = ash::vk::PhysicalDeviceProperties2<'static>;
 }
