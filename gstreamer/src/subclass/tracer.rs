@@ -105,6 +105,9 @@ pub trait TracerImpl: GstObjectImpl + ObjectSubclass<Type: IsA<Tracer>> {
     #[cfg(feature = "v1_28")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
     fn pool_buffer_dequeued(&self, ts: u64, pool: &crate::BufferPool, buffer: &Buffer) {}
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    fn object_parent_set(&self, ts: u64, object: &crate::Object, parent: Option<&Object>) {}
 }
 
 #[cfg(not(feature = "v1_26"))]
@@ -408,6 +411,12 @@ define_tracer_hooks! {
     ObjectUnreffed("object-unreffed") = |this, ts, o: *mut ffi::GstObject, rc: libc::c_int| {
         let o = Object::from_glib_borrow(o);
         this.object_unreffed(ts, &o, rc)
+    };
+    #[cfg(feature = "v1_30")]
+    ObjectParentSet("object-parent-set") = |this, ts, o: *mut ffi::GstObject, p: *mut ffi::GstObject| {
+        let o = Object::from_glib_borrow(o);
+        let p = if p.is_null() { None } else { Some(Object::from_glib_borrow(p)) };
+        this.object_parent_set(ts, &o, p.as_deref())
     };
     PadLinkPost("pad-link-post") = |this, ts, src: *mut ffi::GstPad, sink: *mut ffi::GstPad, r: ffi::GstPadLinkReturn| {
         let src = Pad::from_glib_borrow(src);
