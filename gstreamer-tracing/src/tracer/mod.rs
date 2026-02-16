@@ -7,6 +7,12 @@ glib::wrapper! {
        @extends Tracer, Object;
 }
 
+glib::wrapper! {
+    #[doc(hidden)]
+    pub struct SpanPropagationTracer(ObjectSubclass<imp::SpanPropagationTracer>)
+       @extends Tracer, Object;
+}
+
 /// Trait for implementing custom tracers that extend `TracingTracer`.
 ///
 /// Implement this trait to create tracers that build upon the GStreamer-tracing

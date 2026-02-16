@@ -1,4 +1,5 @@
 use crate::callsite::GstCallsiteKind;
+use crate::log::span_quark;
 use gst::{Buffer, FlowError, FlowSuccess, Pad, Tracer, glib, prelude::*, subclass::prelude::*};
 use std::{cell::RefCell, str::FromStr};
 use tracing::{Callsite, Dispatch, Id, error, info, span::Attributes};
@@ -10,6 +11,17 @@ struct EnteredSpan {
 
 pub struct TracingTracer {
     span_stack: thread_local::ThreadLocal<RefCell<Vec<EnteredSpan>>>,
+}
+
+pub struct SpanPropagationTracer;
+
+unsafe fn propagate_attached_span(parent: &gst::Object, child: &gst::Object) {
+    let quark = *span_quark();
+    if let Some(span) = unsafe { parent.qdata::<tracing::Span>(quark) } {
+        unsafe {
+            child.set_qdata(quark, span.as_ref().clone());
+        }
+    }
 }
 
 impl TracingTracer {
@@ -109,6 +121,13 @@ impl ObjectImpl for TracingTracer {
         }
 
         self.parent_constructed();
+        #[cfg(feature = "v1_30")]
+        self.register_hook(TracerHook::ObjectParentSet);
+        #[cfg(not(feature = "v1_30"))]
+        {
+            self.register_hook(TracerHook::ElementAddPad);
+            self.register_hook(TracerHook::BinAddPost);
+        }
         self.register_hook(TracerHook::PadPushPost);
         self.register_hook(TracerHook::PadPushPre);
         self.register_hook(TracerHook::PadPushListPost);
@@ -126,6 +145,27 @@ impl GstObjectImpl for TracingTracer {}
 
 impl TracerImpl for TracingTracer {
     const USE_STRUCTURE_PARAMS: bool = true;
+
+    #[cfg(not(feature = "v1_30"))]
+    fn element_add_pad(&self, _ts: u64, element: &gst::Element, pad: &gst::Pad) {
+        unsafe {
+            propagate_attached_span(element.upcast_ref(), pad.upcast_ref());
+        }
+    }
+
+    #[cfg(not(feature = "v1_30"))]
+    fn bin_add_post(&self, _ts: u64, bin: &gst::Bin, element: &gst::Element, _success: bool) {
+        unsafe {
+            propagate_attached_span(bin.upcast_ref(), element.upcast_ref());
+        }
+    }
+
+    #[cfg(feature = "v1_30")]
+    fn object_parent_set(&self, _ts: u64, obj: &gst::Object, parent: Option<&gst::Object>) {
+        if let Some(parent) = parent {
+            unsafe { propagate_attached_span(parent, obj) }
+        }
+    }
 
     fn pad_push_pre(&self, _: u64, pad: &Pad, _: &Buffer) {
         self.pad_pre("pad_push", pad);
@@ -169,3 +209,53 @@ impl TracerImpl for TracingTracer {
 }
 
 impl super::TracingTracerImpl for TracingTracer {}
+
+#[glib::object_subclass]
+impl ObjectSubclass for SpanPropagationTracer {
+    const NAME: &'static str = "GstRsSpanPropagationTracer";
+    const ALLOW_NAME_CONFLICT: bool = true;
+    type Type = super::SpanPropagationTracer;
+    type ParentType = Tracer;
+
+    fn new() -> Self {
+        Self
+    }
+}
+
+impl ObjectImpl for SpanPropagationTracer {
+    fn constructed(&self) {
+        self.parent_constructed();
+        #[cfg(feature = "v1_30")]
+        self.register_hook(TracerHook::ObjectParentSet);
+        #[cfg(not(feature = "v1_30"))]
+        {
+            self.register_hook(TracerHook::ElementAddPad);
+            self.register_hook(TracerHook::BinAddPost);
+        }
+    }
+}
+
+impl GstObjectImpl for SpanPropagationTracer {}
+
+impl TracerImpl for SpanPropagationTracer {
+    #[cfg(not(feature = "v1_30"))]
+    fn element_add_pad(&self, _ts: u64, element: &gst::Element, pad: &gst::Pad) {
+        unsafe {
+            propagate_attached_span(element.upcast_ref(), pad.upcast_ref());
+        }
+    }
+
+    #[cfg(not(feature = "v1_30"))]
+    fn bin_add_post(&self, _ts: u64, bin: &gst::Bin, element: &gst::Element, _success: bool) {
+        unsafe {
+            propagate_attached_span(bin.upcast_ref(), element.upcast_ref());
+        }
+    }
+
+    #[cfg(feature = "v1_30")]
+    fn object_parent_set(&self, _ts: u64, obj: &gst::Object, parent: Option<&gst::Object>) {
+        if let Some(parent) = parent {
+            unsafe { propagate_attached_span(parent, obj) }
+        }
+    }
+}

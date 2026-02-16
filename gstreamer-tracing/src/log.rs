@@ -6,11 +6,7 @@ use gst::{
         gst_debug_add_log_function, gst_debug_category_get_name, gst_debug_message_get,
         gst_debug_remove_log_function,
     },
-    glib::{
-        GStr,
-        ffi::{GTRUE, g_mutex_trylock, g_mutex_unlock},
-        translate::*,
-    },
+    glib::{GStr, translate::*},
     prelude::*,
 };
 use libc::{c_char, c_int, c_void};
@@ -137,33 +133,9 @@ unsafe extern "C" fn log_callback(
 
             let user_span = gstobject.as_ref().and_then(|gstobject| unsafe {
                 let quark = *span_quark();
-                let mut obj: gst::Object = ref_gst_object(*gstobject);
-
-                loop {
-                    if let Some(span) = obj.qdata::<tracing::Span>(quark) {
-                        break Some(span.as_ref());
-                    }
-
-                    // Try-lock the object to safely read its parent pointer.
-                    // We cannot use gst_object_get_parent() because it takes
-                    // the object lock unconditionally, which would deadlock if
-                    // the log caller already holds it.
-                    let ptr = obj.as_ptr() as *mut gst::ffi::GstObject;
-                    let lock = &raw mut (*ptr).lock;
-                    if g_mutex_trylock(lock) != GTRUE {
-                        break None;
-                    }
-                    let parent = (*ptr).parent;
-                    let parent = if parent.is_null() {
-                        g_mutex_unlock(lock);
-                        break None;
-                    } else {
-                        ref_gst_object(parent)
-                    };
-                    g_mutex_unlock(lock);
-
-                    obj = parent;
-                }
+                let obj: gst::Object = ref_gst_object(*gstobject);
+                obj.qdata::<tracing::Span>(quark)
+                    .map(|s| s.as_ref().clone())
             });
 
             let gstobject_name_value = gstobject_name.as_deref();
@@ -275,7 +247,7 @@ unsafe fn ref_gst_object(ptr: *mut gst::ffi::GstObject) -> gst::Object {
 }
 
 #[inline]
-fn span_quark() -> &'static gst::glib::Quark {
+pub(crate) fn span_quark() -> &'static gst::glib::Quark {
     // Generate a unique TypeId specifically for Span quark’s name. This gives some probabilistic
     // security against users of this library overwriting our span with their own types, making
     // attach_span unsound.

@@ -500,6 +500,7 @@ fn test_interests() {
 fn test_user_span() {
     let p = gst::Pipeline::new();
     let p_addr = p.as_object_ref().to_glib_none().0 as usize;
+    let child = gst::Bin::builder().name("child_bin").build();
 
     MockSubscriber::with_expected(
         |m| m.target() == "gst::test_user_span",
@@ -510,13 +511,33 @@ fn test_user_span() {
             );
             assert_eq!(span.id().unwrap().into_u64(), 99);
             unsafe { attach_span(&p, span) };
+            let parent_span_id = unsafe {
+                p.qdata::<tracing::Span>(*crate::log::span_quark())
+                    .and_then(|span| span.as_ref().id())
+                    .map(|id| id.into_u64())
+            };
+            let child_span_id_before_add = unsafe {
+                child
+                    .qdata::<tracing::Span>(*crate::log::span_quark())
+                    .and_then(|span| span.as_ref().id())
+                    .map(|id| id.into_u64())
+            };
+            assert_eq!(child_span_id_before_add, None);
+            p.add(&child).expect("add child bin");
+            let child_span_id = unsafe {
+                child
+                    .qdata::<tracing::Span>(*crate::log::span_quark())
+                    .and_then(|span| span.as_ref().id())
+                    .map(|id| id.into_u64())
+            };
+            assert_eq!(child_span_id, parent_span_id);
 
             let cat =
                 gst::DebugCategory::new("test_user_span", gst::DebugColorFlags::empty(), None);
-            gst::error!(cat, obj = &p, "with object");
+            gst::error!(cat, obj = &p, "with pipeline object");
         },
         vec![Expect::GstEvent(GstEvent {
-            message: "with object",
+            message: "with pipeline object",
             kvs: KV {
                 gobject_address: Some(p_addr),
                 gobject_type: Some("GstPipeline"),
