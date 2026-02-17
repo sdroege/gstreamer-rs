@@ -489,14 +489,12 @@ docs:
       artifacts: false
   script:
     - git submodule update --checkout
-    - curl --proto '=https' --tlsv1.2 -sSf -o gir-rustdoc.py
-        https://gitlab.gnome.org/World/Rust/gir-rustdoc/-/raw/main/gir-rustdoc.py
-    - chmod +x gir-rustdoc.py
+    - git clone https://gitlab.gnome.org/World/Rust/gir-rustdoc.git
     - PATH=~/.cargo/bin/:$PATH ./generator.py --gir-files-directories gir-files gst-gir-files --embed-docs --no-fmt
     - |
       RUSTDOCFLAGS="$RUST_DOCS_FLAGS"
       DOCS_RS="1"
-      eval $(./gir-rustdoc.py pre-docs)
+      eval $(./gir-rustdoc/gir-rustdoc.py pre-docs)
       cargo +nightly doc --workspace --exclude examples --exclude tutorials --exclude gstreamer-d3d12 --exclude gstreamer-d3d12-sys --all-features --color=always --no-deps
     - mv target/doc docs
   artifacts:
@@ -513,15 +511,13 @@ pages:
   needs: [ 'docs' ]
   interruptible: false
   script:
-    - curl --proto '=https' --tlsv1.2 -sSf -o gir-rustdoc.py
-        https://gitlab.gnome.org/World/Rust/gir-rustdoc/-/raw/main/gir-rustdoc.py
-    - chmod +x gir-rustdoc.py
-    - ./gir-rustdoc.py --pages-url="https://gstreamer.freedesktop.org/documentation/rust/" html-index
+    - git clone https://gitlab.gnome.org/World/Rust/gir-rustdoc.git
+    - ./gir-rustdoc/gir-rustdoc.py --pages-url="https://gstreamer.freedesktop.org/documentation/rust/" html-index
     # development docs
     - mkdir public/git
     - mv docs public/git/docs
     # stable docs
-    - ./gir-rustdoc.py docs-from-artifacts
+    - ./gir-rustdoc/gir-rustdoc.py docs-from-artifacts
     - ls public/
   artifacts:
     paths:
