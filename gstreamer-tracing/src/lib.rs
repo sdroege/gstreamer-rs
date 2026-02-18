@@ -1,18 +1,8 @@
 #![doc = include_str!("../README.md")]
 #![deny(unreachable_pub)]
-// This crate interacts directly with the C API of glib, gobject and gstreamer libraries. As a
-// result implementation of this crate uses unsafe code quite liberally.
-//
-// Originally the motivation to introduce the unsafe code was to reduce the build times and avoid
-// the fairly heavy dependencies introduced by the `gstreamer` crate. However, since then we
-// introduced `gstreamer` back in order to implement some `GstElement`s to generate spans from
-// wrapped elements.
-//
-// We continue to use the unsafe code for hooking into the log subsystem however, for it avoids a
-// non-free layer of abstraction (allocations for the closure, for instance).
-//
-// Additionally, it makes it easier to cross-check for soundness issues in the upstream library,
-// such as https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/-/issues/352
+// This crate uses unsafe code for introspecting GObject fields (ref_count, type,
+// name, state, etc.) in the log handler, since the safe bindings don't expose
+// these details through `LoggedObject`.
 #![deny(unsafe_op_in_unsafe_fn)]
 
 macro_rules! skip_assert_initialized {

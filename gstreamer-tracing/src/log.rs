@@ -1,237 +1,196 @@
 use crate::callsite::GstCallsiteKind;
 use gst::{
-    ffi::{
-        GST_LEVEL_COUNT, GST_LEVEL_DEBUG, GST_LEVEL_ERROR, GST_LEVEL_FIXME, GST_LEVEL_INFO,
-        GST_LEVEL_LOG, GST_LEVEL_MEMDUMP, GST_LEVEL_TRACE, GST_LEVEL_WARNING,
-        gst_debug_add_log_function, gst_debug_category_get_name, gst_debug_message_get,
-        gst_debug_remove_log_function,
-    },
     glib::{GStr, translate::*},
     prelude::*,
 };
-use libc::{c_char, c_int, c_void};
-use std::convert::TryFrom;
-use std::sync::LazyLock;
+use std::sync::{LazyLock, Mutex};
 use tracing_core::{Callsite, Event, Level};
 
-unsafe extern "C" fn log_callback(
-    category: *mut gst::ffi::GstDebugCategory,
-    level: gst::ffi::GstDebugLevel,
-    file: *const c_char,
-    module: *const c_char,
-    line: c_int,
-    gobject: *mut gst::glib::gobject_ffi::GObject,
-    message: *mut gst::ffi::GstDebugMessage,
-    _: *mut c_void,
+fn log_handler(
+    category: gst::DebugCategory,
+    level: gst::DebugLevel,
+    file: &gst::glib::GStr,
+    module: &gst::glib::GStr,
+    line: u32,
+    object: Option<&gst::LoggedObject>,
+    message: &gst::DebugMessage,
 ) {
-    // SAFETY: unwinding back into C land is UB. We abort if there was a panic inside.
-    std::panic::catch_unwind(move || {
-        let level = match level {
-            GST_LEVEL_ERROR => Level::ERROR,
-            GST_LEVEL_WARNING | GST_LEVEL_FIXME => Level::WARN,
-            GST_LEVEL_INFO => Level::INFO,
-            GST_LEVEL_DEBUG | GST_LEVEL_LOG => Level::DEBUG,
-            GST_LEVEL_TRACE | GST_LEVEL_MEMDUMP | GST_LEVEL_COUNT => Level::TRACE,
-            _ => return,
-        };
-        // Take extra care to make sure nothing sketchy is going on.
-        if category.is_null() || message.is_null() {
+    let level = match level {
+        gst::DebugLevel::Error => Level::ERROR,
+        gst::DebugLevel::Warning | gst::DebugLevel::Fixme => Level::WARN,
+        gst::DebugLevel::Info => Level::INFO,
+        gst::DebugLevel::Debug | gst::DebugLevel::Log => Level::DEBUG,
+        gst::DebugLevel::Trace | gst::DebugLevel::Memdump => Level::TRACE,
+        _ => return,
+    };
+    let category_name = category.name();
+    let callsite = crate::callsite::DynamicCallsites::get().callsite_for(
+        level,
+        "",
+        category_name,
+        Some(file.as_str()),
+        Some(module.as_str()),
+        Some(line),
+        GstCallsiteKind::Event,
+        &[
+            "message",
+            "gobject.address",
+            "gobject.type",
+            "gstobject.name",
+            "gstelement.state",
+            "gstelement.pending_state",
+            "gstpad.state",
+            "gstpad.parent.name",
+            "gstpad.parent.state",
+            "gstpad.parent.pending_state",
+        ],
+    );
+    let interest = callsite.interest();
+    if interest.is_never() {
+        return;
+    }
+    let meta = callsite.metadata();
+    tracing_core::dispatcher::get_default(move |dispatcher| {
+        if !dispatcher.enabled(meta) {
             return;
         }
-        let file = unsafe {
-            // SAFETY: Users of the GStreamer `gst_debug_log` API are required to pass in a
-            // null terminated string.
-            GStr::from_ptr(file.as_ref().expect("`file` string is nullptr"))
+        let fields = meta.fields();
+        let message_str = message.get();
+        let message_value = message_str.as_deref().map(|g| g.as_str());
+
+        let gobject = object.map(|o| o.as_ptr());
+        let gobject = unsafe {
+            // SAFETY: we check for null pointer before we dereference it. While the object
+            // contents might not otherwise be super defined while ref_count is 0, reading the
+            // ref_count itself here should be good, still.
+            gobject.and_then(|ptr| {
+                if (*ptr).ref_count == 0 {
+                    None
+                } else {
+                    Some(ptr)
+                }
+            })
         };
-        let module = unsafe {
-            // SAFETY: Users of the GStreamer `gst_debug_log` API are required to pass in a
-            // null terminated string.
-            GStr::from_ptr(module.as_ref().expect("`function` string is nullptr"))
-        };
-        let line = u32::try_from(line).expect("`line` is not a valid u32");
-        let category_name = unsafe {
-            // SAFETY: Users of the GStreamer `gst_debug_log` API are required to pass in a
-            // valid `GstDebugCategory`. `gst_debug_category_get_name` shall return a valid
-            // null terminated string.
-            GStr::from_ptr(
-                gst_debug_category_get_name(category)
-                    .as_ref()
-                    .expect("`category` has no name?"),
-            )
-        };
-        let callsite = crate::callsite::DynamicCallsites::get().callsite_for(
-            level,
-            "",
-            &category_name,
-            Some(&file),
-            Some(&module),
-            Some(line),
-            GstCallsiteKind::Event,
-            &[
-                "message",
-                "gobject.address",
-                "gobject.type",
-                "gstobject.name",
-                "gstelement.state",
-                "gstelement.pending_state",
-                "gstpad.state",
-                "gstpad.parent.name",
-                "gstpad.parent.state",
-                "gstpad.parent.pending_state",
-            ],
-        );
-        let interest = callsite.interest();
-        if interest.is_never() {
-            return;
-        }
-        let meta = callsite.metadata();
-        tracing_core::dispatcher::get_default(move |dispatcher| {
-            if !dispatcher.enabled(meta) {
-                return;
+        let gobject_address_value = gobject.map(|obj| obj as usize);
+        let gobject_with_ty = gobject.and_then(|obj| unsafe {
+            let ty: gst::glib::Type =
+                from_glib(obj.as_ref()?.g_type_instance.g_class.as_ref()?.g_type);
+            Some((obj, ty))
+        });
+        let gobject_type_value = gobject_with_ty.as_ref().map(|(_, ty)| ty.name());
+        let gstobject = gobject_with_ty.and_then(|(obj, ty)| {
+            if ty.is_a(gst::Object::static_type()) {
+                Some(obj as *mut gst::ffi::GstObject)
+            } else {
+                None
             }
-            let fields = meta.fields();
-            let message = unsafe {
-                // SAFETY: This function has no soundness invariants. It can return a null pointer,
-                // which we handle by `as_ref`. A valid pointer to a null-terminated C string must
-                // be returned.
-                gst_debug_message_get(message)
-                    .as_ref()
-                    .map(|v| GStr::from_ptr(v).as_str())
-            };
-            let message_value = message.as_deref();
-            let gobject = unsafe {
-                // SAFETY: we check for null pointer before we dereference it. While the object
-                // contents might not otherwise be super defined while ref_count is 0, reading the
-                // ref_count itself here should be good, still.
-                if gobject.is_null() || (*gobject).ref_count == 0 {
-                    None
-                } else {
-                    Some(gobject)
-                }
-            };
-            let gobject_address_value = gobject.map(|obj| obj as usize);
-            let gobject_with_ty = gobject.and_then(|obj| unsafe {
-                let ty: gst::glib::Type =
-                    from_glib(obj.as_ref()?.g_type_instance.g_class.as_ref()?.g_type);
-                Some((obj, ty))
-            });
-            let gobject_type_value = gobject_with_ty.as_ref().map(|(_, ty)| ty.name());
-            let gstobject = gobject_with_ty.and_then(|(obj, ty)| {
-                if ty.is_a(gst::Object::static_type()) {
-                    Some(obj as *mut gst::ffi::GstObject)
-                } else {
-                    None
-                }
-            });
+        });
 
-            let gstobject_name = gstobject.as_ref().and_then(|gstobject| unsafe {
-                // SAFETY: GstObject type has been verified above, `name` can be null and we
-                // check for it. It "should" be valid null-terminated string if not null,
-                // however.
-                Some(GStr::from_ptr((*(*gstobject)).name.as_ref()?).as_str())
-            });
+        let gstobject_name = gstobject.as_ref().and_then(|gstobject| unsafe {
+            // SAFETY: GstObject type has been verified above, `name` can be null and we
+            // check for it. It "should" be valid null-terminated string if not null,
+            // however.
+            Some(GStr::from_ptr((*(*gstobject)).name.as_ref()?).as_str())
+        });
 
-            let user_span = gstobject.as_ref().and_then(|gstobject| unsafe {
-                let quark = *span_quark();
-                let obj: gst::Object = ref_gst_object(*gstobject);
-                obj.qdata::<tracing::Span>(quark)
-                    .map(|s| s.as_ref().clone())
-            });
+        let user_span = gstobject.as_ref().and_then(|gstobject| unsafe {
+            let quark = *span_quark();
+            let obj: gst::Object = ref_gst_object(*gstobject);
+            obj.qdata::<tracing::Span>(quark)
+                .map(|s| s.as_ref().clone())
+        });
 
-            let gstobject_name_value = gstobject_name.as_deref();
-            let gstelement = gobject_with_ty.as_ref().and_then(|(obj, ty)| {
-                if ty.is_a(gst::Element::static_type()) {
-                    Some(*obj as *mut gst::ffi::GstElement)
-                } else {
-                    None
-                }
-            });
-            let gstelement_states = gstelement.map(|e| unsafe {
+        let gstobject_name_value = gstobject_name;
+        let gstelement = gobject_with_ty.as_ref().and_then(|(obj, ty)| {
+            if ty.is_a(gst::Element::static_type()) {
+                Some(*obj as *mut gst::ffi::GstElement)
+            } else {
+                None
+            }
+        });
+        let gstelement_states = gstelement.map(|e| unsafe {
+            let curr: gst::State = from_glib((*e).current_state);
+            let pend: gst::State = from_glib((*e).pending_state);
+            (curr.name().as_str(), pend.name().as_str())
+        });
+        let gstelement_state_value = gstelement_states.map(|(c, _)| c);
+        let gstelement_pending_state_value = gstelement_states.map(|(_, p)| p);
+        let gstpad = gobject_with_ty.as_ref().and_then(|(obj, ty)| {
+            if ty.is_a(gst::Pad::static_type()) {
+                Some(*obj as *mut gst::ffi::GstPad)
+            } else {
+                None
+            }
+        });
+        let gstpad_flags = gstpad.map(|p| unsafe {
+            // SAFETY: `p` is a valid pointer.
+            let flags = gst::PadFlags::from_bits_truncate((*p).object.flags);
+            tracing_core::field::display(flags)
+        });
+        let gstpad_parent = gstpad.and_then(|p| unsafe {
+            // SAFETY: `p` is a valid pointer.
+            let parent = (*p).object.parent;
+            if parent.is_null() || (*parent).object.ref_count == 0 {
+                None
+            } else {
+                Some(parent)
+            }
+        });
+        let gstpad_parent_name = gstpad_parent.and_then(|obj| unsafe {
+            //SAFETY: same as for gstelement_name above.
+            Some(GStr::from_ptr((*obj).name.as_ref()?).as_str())
+        });
+        let gstpad_parent_name_value = gstpad_parent_name;
+
+        let gstpad_parent_states = gstpad_parent.and_then(|obj| unsafe {
+            let ty: gst::glib::Type =
+                from_glib((*obj).object.g_type_instance.g_class.as_ref()?.g_type);
+            if ty.is_a(gst::Element::static_type()) {
+                let e = obj as *mut gst::ffi::GstElement;
                 let curr: gst::State = from_glib((*e).current_state);
                 let pend: gst::State = from_glib((*e).pending_state);
-                (curr.name().as_str(), pend.name().as_str())
-            });
-            let gstelement_state_value = gstelement_states.map(|(c, _)| c);
-            let gstelement_pending_state_value = gstelement_states.map(|(_, p)| p);
-            let gstpad = gobject_with_ty.as_ref().and_then(|(obj, ty)| {
-                if ty.is_a(gst::Pad::static_type()) {
-                    Some(*obj as *mut gst::ffi::GstPad)
-                } else {
-                    None
-                }
-            });
-            let gstpad_flags = gstpad.map(|p| unsafe {
-                // SAFETY: `p` is a valid pointer.
-                let flags = gst::PadFlags::from_bits_truncate((*p).object.flags);
-                tracing_core::field::display(flags)
-            });
-            let gstpad_parent = gstpad.and_then(|p| unsafe {
-                // SAFETY: `p` is a valid pointer.
-                let parent = (*p).object.parent;
-                if parent.is_null() || (*parent).object.ref_count == 0 {
-                    None
-                } else {
-                    Some(parent)
-                }
-            });
-            let gstpad_parent_name = gstpad_parent.and_then(|obj| unsafe {
-                //SAFETY: same as for gstelement_name above.
-                Some(GStr::from_ptr((*obj).name.as_ref()?).as_str())
-            });
-            let gstpad_parent_name_value = gstpad_parent_name.as_deref();
-
-            let gstpad_parent_states = gstpad_parent.and_then(|obj| unsafe {
-                let ty: gst::glib::Type =
-                    from_glib((*obj).object.g_type_instance.g_class.as_ref()?.g_type);
-                if ty.is_a(gst::Element::static_type()) {
-                    let e = obj as *mut gst::ffi::GstElement;
-                    let curr: gst::State = from_glib((*e).current_state);
-                    let pend: gst::State = from_glib((*e).pending_state);
-                    Some((curr.name().as_str(), pend.name().as_str()))
-                } else {
-                    None
-                }
-            });
-            let gstpad_parent_state_value = gstpad_parent_states.map(|(c, _)| c);
-            let gstpad_parent_pending_state_value = gstpad_parent_states.map(|(_, p)| p);
-            let mut fields_iter = fields.into_iter();
-            let values = field_values![fields_iter =>
-                // /!\ /!\ /!\ Must be in the same order as the field list above /!\ /!\ /!\
-                "message" = message_value;
-                "gobject.address" = gobject_address_value;
-                "gobject.type" = gobject_type_value;
-                "gstobject.name" = gstobject_name_value;
-                "gstelement.state" = gstelement_state_value;
-                "gstelement.pending_state" = gstelement_pending_state_value;
-                "gstpad.flags" = gstpad_flags;
-                "gstpad.parent.name" = gstpad_parent_name_value;
-                "gstpad.parent.state" = gstpad_parent_state_value;
-                "gstpad.parent.pending_state" = gstpad_parent_pending_state_value;
-            ];
-            let valueset = fields.value_set(&values);
-
-            let event = match user_span {
-                Some(user_span) => Event::new_child_of(user_span, meta, &valueset),
-                None => Event::new(meta, &valueset),
-            };
-
-            dispatcher.event(&event);
+                Some((curr.name().as_str(), pend.name().as_str()))
+            } else {
+                None
+            }
         });
-    })
-    .unwrap_or_else(|_e| std::process::abort());
+        let gstpad_parent_state_value = gstpad_parent_states.map(|(c, _)| c);
+        let gstpad_parent_pending_state_value = gstpad_parent_states.map(|(_, p)| p);
+        let mut fields_iter = fields.into_iter();
+        let values = field_values![fields_iter =>
+            // /!\ /!\ /!\ Must be in the same order as the field list above /!\ /!\ /!\
+            "message" = message_value;
+            "gobject.address" = gobject_address_value;
+            "gobject.type" = gobject_type_value;
+            "gstobject.name" = gstobject_name_value;
+            "gstelement.state" = gstelement_state_value;
+            "gstelement.pending_state" = gstelement_pending_state_value;
+            "gstpad.flags" = gstpad_flags;
+            "gstpad.parent.name" = gstpad_parent_name_value;
+            "gstpad.parent.state" = gstpad_parent_state_value;
+            "gstpad.parent.pending_state" = gstpad_parent_pending_state_value;
+        ];
+        let valueset = fields.value_set(&values);
+
+        let event = match user_span {
+            Some(user_span) => Event::new_child_of(user_span, meta, &valueset),
+            None => Event::new(meta, &valueset),
+        };
+
+        dispatcher.event(&event);
+    });
 }
 
+static LOG_FUNCTION: Mutex<Option<gst::log::DebugLogFunction>> = Mutex::new(None);
+
 pub(crate) fn debug_add_log_function() {
-    unsafe {
-        // SAFETY: this function has no soundness invariants.
-        gst_debug_add_log_function(Some(log_callback), std::ptr::null_mut(), None);
-    }
+    let handle = gst::log::add_log_function(log_handler);
+    *LOG_FUNCTION.lock().unwrap() = Some(handle);
 }
 
 pub(crate) fn debug_remove_log_function() {
-    unsafe {
-        // SAFETY: this function has no soundness invariants.
-        gst_debug_remove_log_function(Some(log_callback));
+    if let Some(handle) = LOG_FUNCTION.lock().unwrap().take() {
+        gst::log::remove_log_function(handle);
     }
 }
 
@@ -248,11 +207,11 @@ unsafe fn ref_gst_object(ptr: *mut gst::ffi::GstObject) -> gst::Object {
 
 #[inline]
 pub(crate) fn span_quark() -> &'static gst::glib::Quark {
-    // Generate a unique TypeId specifically for Span quark’s name. This gives some probabilistic
+    // Generate a unique TypeId specifically for Span quark's name. This gives some probabilistic
     // security against users of this library overwriting our span with their own types, making
     // attach_span unsound.
     //
-    // We’re still going to be storing `tracing::Span` within the objects directly, because that’s
+    // We're still going to be storing `tracing::Span` within the objects directly, because that's
     // just more convenient.
     #[allow(dead_code)]
     struct QDataTracingSpan(tracing::Span);

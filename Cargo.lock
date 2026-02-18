@@ -1723,7 +1723,6 @@ name = "gstreamer-tracing"
 version = "0.26.0-alpha"
 dependencies = [
  "gstreamer",
- "libc",
  "thread_local",
  "tracing",
  "tracing-core",
