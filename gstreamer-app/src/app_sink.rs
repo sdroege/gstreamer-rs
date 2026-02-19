@@ -1245,9 +1245,7 @@ impl<'a> AppSinkBuilder<'a> {
 
     pub fn drop_out_of_segment(self, drop_out_of_segment: bool) -> Self {
         Self {
-            builder: self
-                .builder
-                .property("drop-out-of-segment", drop_out_of_segment),
+            drop_out_of_segment: Some(drop_out_of_segment),
             ..self
         }
     }
