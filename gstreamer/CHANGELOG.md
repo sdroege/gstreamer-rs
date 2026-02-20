@@ -5,6 +5,44 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.25.0] - 2026-02-20
+### Fixed
+- `gst_video::dma_drm_fourcc_to_string()` doesn't do a NULL pointer
+  dereference on invalid fourccs anymore.
+- `gst::Bus::timed_pop_filtered()` timeout semantics are consistent with the C
+  implementation now.
+- `gst_validate::setup_test_file()` return value ownership semantics.
+- Fix `gst::Object::set_parent()` behaviour and mark it as `unsafe`, and add a
+  corresponding unsafe `unset_parent()`.
+- Allow construction of `gst_app::AppSink` with `drop-out-of-segment`
+  property.
+
+### Added
+- Initial bindings for the gstreamer-vulkan library, including XCB and Wayland API support.
+- `gst_audio::AudioChannelPosition` implements `Display` now.
+- Support for wrapping e.g. a `Vec<u8>` in a `Memory` or `Buffer` and
+  retrieving it again later with its original type.
+- `gst::Memory::default_alignment()` for returning the default memory
+  alignment.
+- Implement `Allocator::alloc()` on the Rust wrapped memory allocator.
+- `gst::segtrap_is_enabled()` / `segtrap_set_enabled()`.
+- `gst::MiniObject::mark_may_be_leaked()`.
+- `gst_utils::StreamProducer` event types API for forwarding upstream events.
+- `gst_tag::image_data_to_image_sample()`.
+- `gst_tag` got implementations for all the tags provided by the library.
+- Various missing `gst::Memory` / `gst::Buffer` APIs that are rarely used.
+
+### Changed
+- Updated to gtk-rs-core 0.22 APIs.
+- Updated with final GStreamer 1.28.0 APIs and upcoming 1.30 APIs.
+- Updated minimum supported Rust version to 1.92.
+
+- Cleanup of `gst::Meta` transform APIs.
+- Change `gst_app::AppSrc` `max-time` configuration to be non-optional.
+- GES `Asset` APIs take generic type parameters now.
+- `gst_video::convert_sample()` timeout parameter is optional now.
+- `gst::Allocator` subclassing API was fixed to be actually usable.
+
 ## [0.24.3] - 2025-10-31
 ### Added
 - `gst_video::is_dma_drm_caps()` helper function.
@@ -1957,7 +1995,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.24.3...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.25.0...HEAD
+[0.25.0]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.24.3...0.25.0
 [0.24.3]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.24.2...0.24.3
 [0.24.2]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.24.1...0.24.2
 [0.24.1]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.24.0...0.24.1
