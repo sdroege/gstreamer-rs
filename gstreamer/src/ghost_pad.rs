@@ -721,8 +721,10 @@ impl<T: IsA<GhostPad> + IsA<Pad>> PadBuilder<T> {
         assert_eq!(self.pad.direction(), target.direction());
 
         self.pad.set_target(Some(target))?;
-        self.name =
-            crate::pad::PadBuilderName::CandidateForWildcardTemplate(target.name().to_string());
+        if !matches!(self.name, crate::pad::PadBuilderName::UserDefined(_)) {
+            self.name =
+                crate::pad::PadBuilderName::CandidateForWildcardTemplate(target.name().to_string());
+        }
 
         Ok(self)
     }
@@ -855,6 +857,37 @@ mod tests {
 
         let target = crate::Pad::from_template(&templ);
         let ghost_pad = GhostPad::builder_with_target(&target)
+            .unwrap()
+            .generated_name()
+            .build();
+        assert!(ghost_pad.name().starts_with("ghostpad"));
+
+        let target = crate::Pad::from_template(&templ);
+        let ghost_pad = GhostPad::builder_from_template(&templ)
+            .with_target(&target)
+            .unwrap()
+            .build();
+        assert_eq!(ghost_pad.name(), "test");
+
+        let target = crate::Pad::from_template(&templ);
+        let ghost_pad = GhostPad::builder_from_template(&templ)
+            .name("ghost_test")
+            .with_target(&target)
+            .unwrap()
+            .build();
+        assert_eq!(ghost_pad.name(), "ghost_test");
+
+        let target = crate::Pad::from_template(&templ);
+        let ghost_pad = GhostPad::builder_from_template(&templ)
+            .with_target(&target)
+            .unwrap()
+            .name("ghost_test")
+            .build();
+        assert_eq!(ghost_pad.name(), "ghost_test");
+
+        let target = crate::Pad::from_template(&templ);
+        let ghost_pad = GhostPad::builder_from_template(&templ)
+            .with_target(&target)
             .unwrap()
             .generated_name()
             .build();
