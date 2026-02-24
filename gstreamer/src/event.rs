@@ -339,12 +339,44 @@ impl fmt::Debug for Event {
 
 impl fmt::Debug for EventRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        f.debug_struct("Event")
-            .field("ptr", &self.as_ptr())
-            .field("type", &self.type_().name())
-            .field("seqnum", &self.seqnum())
-            .field("structure", &self.structure())
-            .finish()
+        let concrete: &dyn fmt::Debug = match self.view() {
+            EventView::FlushStart(concrete) => concrete,
+            EventView::FlushStop(concrete) => concrete,
+            EventView::StreamStart(concrete) => concrete,
+            EventView::Caps(concrete) => concrete,
+            EventView::Segment(concrete) => concrete,
+            EventView::StreamCollection(concrete) => concrete,
+            EventView::Tag(concrete) => concrete,
+            EventView::Buffersize(concrete) => concrete,
+            EventView::SinkMessage(concrete) => concrete,
+            EventView::StreamGroupDone(concrete) => concrete,
+            EventView::Eos(concrete) => concrete,
+            EventView::Toc(concrete) => concrete,
+            EventView::Protection(concrete) => concrete,
+            EventView::SegmentDone(concrete) => concrete,
+            EventView::Gap(concrete) => concrete,
+            #[cfg(feature = "v1_18")]
+            EventView::InstantRateChange(concrete) => concrete,
+            EventView::Qos(concrete) => concrete,
+            EventView::Seek(concrete) => concrete,
+            EventView::Navigation(concrete) => concrete,
+            EventView::Latency(concrete) => concrete,
+            EventView::Step(concrete) => concrete,
+            EventView::Reconfigure(concrete) => concrete,
+            EventView::TocSelect(concrete) => concrete,
+            EventView::SelectStreams(concrete) => concrete,
+            #[cfg(feature = "v1_18")]
+            EventView::InstantRateSyncTime(concrete) => concrete,
+            EventView::CustomUpstream(concrete) => concrete,
+            EventView::CustomDownstream(concrete) => concrete,
+            EventView::CustomDownstreamOob(concrete) => concrete,
+            EventView::CustomDownstreamSticky(concrete) => concrete,
+            EventView::CustomBoth(concrete) => concrete,
+            EventView::CustomBothOob(concrete) => concrete,
+            EventView::Other(concrete) => concrete,
+        };
+
+        concrete.fmt(f)
     }
 }
 
@@ -549,6 +581,107 @@ macro_rules! declare_concrete_event {
     };
 }
 
+/// Implements `Debug::fmt` for the concrete `Event` `$name`.
+///
+/// This implementation displays the generic `Event` attributes and adds
+/// specific concrete attributes declared by the caller with `$field: $accessor`.
+///
+/// The `reserved_fields` array indicates the name of the fields which are reserved
+/// for the concrete `Event`. This is used by the macro to distinguish fields which
+/// are handled by a Rust accessor (displayed first) from user-defined fields
+/// (displayed last). The names in the `reserved_fields` array must match the names
+/// as they appear in the internal `Structure`, which may be different from the
+/// name used by the Rust accessor or the `debug` field name.
+///
+/// ## Examples
+///
+/// The `SegmentDone` `Event` debug definition not only lists the `position` field,
+/// but also the `format` field because they are both part of the `Event`. The Rust
+/// bindings returns the `position` as a `GenericFormattedValue` which embeds the
+/// value and its format.
+///
+/// ```ignore
+/// impl_debug_concrete_event!(SegmentDone {
+///     reserved_fields: ["format", "position"],
+///     "position": position,
+/// });
+///
+/// ```
+///
+/// A field might only be available starting from a particular version.
+///
+/// ```ignore
+/// impl_debug_concrete_event!(Gap {
+///     reserved_fields: [
+///         "timestamp", "duration"
+///         #[cfg(feature = "v1_20")]
+///         "gap-flags",
+///     ],
+///     "timestamp": timestamp,
+///     "duration": duration,
+///     #[cfg(feature = "v1_20")]
+///     "flags": gap_flags,
+/// });
+/// ```
+///
+/// In the above example:
+///
+/// * if feature `v1_20` is used, `gap-flags` will be expected and displayed as `flags`.
+/// * if feature `v1_20` is not used, `gap-flags` will not be expected. However, if it
+///   is present in the `Event`, it will be displayed as a user-defined field.
+macro_rules! impl_debug_concrete_event {
+    (
+        $name:ident $({
+            reserved_fields: $reserved_fields:expr,
+            $(
+                $( #[$att:meta] )?
+                $field:literal $( : $accessor:ident )? $(,)?
+            )+
+        })?
+    ) => {
+        impl std::fmt::Debug for $name {
+            fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+                let mut ds = f.debug_struct("Event");
+                #[allow(unused_mut)]
+                let mut ds = ds
+                    .field("ptr", &self.as_ptr())
+                    .field("type", &self.type_())
+                    .field("seqnum", &self.event().seqnum())
+                    .field("running-time-offset", &self.event().running_time_offset());
+
+                #[allow(unused)]
+                let mut reserved_fields = [].as_slice();
+                $(
+                    reserved_fields = ($reserved_fields).as_slice();
+                    $(
+                        $( #[$att] )?
+                        {
+                            $( ds = ds.field($field, &self.$accessor()); )?
+                        }
+                    )+
+                )?
+
+                // only display user-defined fields
+                if let Some(ref structure) = self.structure() {
+                    for (field, value) in structure.iter()
+                        .filter(|(field, _value)| !reserved_fields.contains(&field.as_str()))
+                    {
+                        ds = ds.field(field, value);
+                    }
+                }
+
+                ds.finish()
+            }
+        }
+
+        impl std::fmt::Debug for $name<Event> {
+            fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> fmt::Result {
+                $name::<EventRef>::fmt(self, f)
+            }
+        }
+    };
+}
+
 declare_concrete_event!(FlushStart, T);
 impl FlushStart<Event> {
     #[doc(alias = "gst_event_new_flush_start")]
@@ -564,21 +697,7 @@ impl FlushStart<Event> {
     }
 }
 
-impl std::fmt::Debug for FlushStart {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("FlushStart")
-            .field("seqnum", &self.event().seqnum())
-            .field("running-time-offset", &self.event().running_time_offset())
-            .field("structure", &self.event().structure())
-            .finish()
-    }
-}
-
-impl std::fmt::Debug for FlushStart<Event> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        FlushStart::<EventRef>::fmt(self, f)
-    }
-}
+impl_debug_concrete_event!(FlushStart);
 
 declare_concrete_event!(FlushStop, T);
 impl FlushStop<Event> {
@@ -609,22 +728,10 @@ impl FlushStop {
     }
 }
 
-impl std::fmt::Debug for FlushStop {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("FlushStop")
-            .field("seqnum", &self.event().seqnum())
-            .field("running-time-offset", &self.event().running_time_offset())
-            .field("structure", &self.event().structure())
-            .field("resets-time", &self.resets_time())
-            .finish()
-    }
-}
-
-impl std::fmt::Debug for FlushStop<Event> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        FlushStop::<EventRef>::fmt(self, f)
-    }
-}
+impl_debug_concrete_event!(FlushStop {
+    reserved_fields: ["reset-time"],
+    "resets-time": resets_time,
+});
 
 declare_concrete_event!(@sticky StreamStart, T);
 impl StreamStart<Event> {
@@ -700,25 +807,13 @@ impl StreamStart {
     }
 }
 
-impl std::fmt::Debug for StreamStart {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("StreamStart")
-            .field("seqnum", &self.event().seqnum())
-            .field("running-time-offset", &self.event().running_time_offset())
-            .field("structure", &self.event().structure())
-            .field("stream-id", &self.stream_id())
-            .field("stream-flags", &self.stream_flags())
-            .field("group-id", &self.group_id())
-            .field("stream", &self.stream())
-            .finish()
-    }
-}
-
-impl std::fmt::Debug for StreamStart<Event> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        StreamStart::<EventRef>::fmt(self, f)
-    }
-}
+impl_debug_concrete_event!(StreamStart {
+    reserved_fields: ["stream-id", "flags", "stream", "group-id"],
+    "stream-id": stream_id,
+    "stream-flags": stream_flags,
+    "group-id": group_id,
+    "stream": stream,
+});
 
 declare_concrete_event!(@sticky Caps, T);
 impl Caps<Event> {
@@ -754,22 +849,10 @@ impl Caps {
     }
 }
 
-impl std::fmt::Debug for Caps {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("Caps")
-            .field("seqnum", &self.event().seqnum())
-            .field("running-time-offset", &self.event().running_time_offset())
-            .field("structure", &self.event().structure())
-            .field("caps", &self.caps())
-            .finish()
-    }
-}
-
-impl std::fmt::Debug for Caps<Event> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        Caps::<EventRef>::fmt(self, f)
-    }
-}
+impl_debug_concrete_event!(Caps {
+    reserved_fields: ["caps"],
+    "caps": caps,
+});
 
 declare_concrete_event!(@sticky Segment, T);
 impl Segment<Event> {
@@ -801,22 +884,10 @@ impl Segment {
     }
 }
 
-impl std::fmt::Debug for Segment {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("Segment")
-            .field("seqnum", &self.event().seqnum())
-            .field("running-time-offset", &self.event().running_time_offset())
-            .field("structure", &self.event().structure())
-            .field("segment", &self.segment())
-            .finish()
-    }
-}
-
-impl std::fmt::Debug for Segment<Event> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        Segment::<EventRef>::fmt(self, f)
-    }
-}
+impl_debug_concrete_event!(Segment {
+    reserved_fields: ["segment"],
+    "segment": segment,
+});
 
 declare_concrete_event!(@sticky StreamCollection, T);
 impl StreamCollection<Event> {
@@ -846,22 +917,10 @@ impl StreamCollection {
     }
 }
 
-impl std::fmt::Debug for StreamCollection {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("StreamCollection")
-            .field("seqnum", &self.event().seqnum())
-            .field("running-time-offset", &self.event().running_time_offset())
-            .field("structure", &self.event().structure())
-            .field("stream-collection", &self.stream_collection())
-            .finish()
-    }
-}
-
-impl std::fmt::Debug for StreamCollection<Event> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        StreamCollection::<EventRef>::fmt(self, f)
-    }
-}
+impl_debug_concrete_event!(StreamCollection {
+    reserved_fields: ["collection"],
+    "collection": stream_collection,
+});
 
 declare_concrete_event!(@sticky Tag, T);
 impl Tag<Event> {
@@ -897,22 +956,10 @@ impl Tag {
     }
 }
 
-impl std::fmt::Debug for Tag {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("Tag")
-            .field("seqnum", &self.event().seqnum())
-            .field("running-time-offset", &self.event().running_time_offset())
-            .field("structure", &self.event().structure())
-            .field("tag", &self.tag())
-            .finish()
-    }
-}
-
-impl std::fmt::Debug for Tag<Event> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        Tag::<EventRef>::fmt(self, f)
-    }
-}
+impl_debug_concrete_event!(Tag {
+    reserved_fields: ["taglist"],
+    "tag": tag,
+});
 
 declare_concrete_event!(@sticky Buffersize, T);
 impl Buffersize<Event> {
@@ -979,25 +1026,12 @@ impl Buffersize {
     }
 }
 
-impl std::fmt::Debug for Buffersize {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let (minsize, maxsize, async_) = self.get();
-        f.debug_struct("Buffersize")
-            .field("seqnum", &self.event().seqnum())
-            .field("running-time-offset", &self.event().running_time_offset())
-            .field("structure", &self.event().structure())
-            .field("min-size", &minsize)
-            .field("max-size", &maxsize)
-            .field("async", &async_)
-            .finish()
-    }
-}
-
-impl std::fmt::Debug for Buffersize<Event> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        Buffersize::<EventRef>::fmt(self, f)
-    }
-}
+impl_debug_concrete_event!(Buffersize {
+    reserved_fields: ["format", "minsize", "maxsize", "async"],
+    "min-size": min_size,
+    "max-size": max_size,
+    "async": async_,
+});
 
 declare_concrete_event!(@sticky SinkMessage, T);
 impl SinkMessage<Event> {
@@ -1027,22 +1061,10 @@ impl SinkMessage {
     }
 }
 
-impl std::fmt::Debug for SinkMessage {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("SinkMessage")
-            .field("seqnum", &self.event().seqnum())
-            .field("running-time-offset", &self.event().running_time_offset())
-            .field("structure", &self.event().structure())
-            .field("message", &self.message())
-            .finish()
-    }
-}
-
-impl std::fmt::Debug for SinkMessage<Event> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        SinkMessage::<EventRef>::fmt(self, f)
-    }
-}
+impl_debug_concrete_event!(SinkMessage {
+    reserved_fields: ["message"],
+    "message": message,
+});
 
 declare_concrete_event!(@sticky StreamGroupDone, T);
 impl StreamGroupDone<Event> {
@@ -1075,22 +1097,10 @@ impl StreamGroupDone {
     }
 }
 
-impl std::fmt::Debug for StreamGroupDone {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("StreamGroupDone")
-            .field("seqnum", &self.event().seqnum())
-            .field("running-time-offset", &self.event().running_time_offset())
-            .field("structure", &self.event().structure())
-            .field("group-id", &self.group_id())
-            .finish()
-    }
-}
-
-impl std::fmt::Debug for StreamGroupDone<Event> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        StreamGroupDone::<EventRef>::fmt(self, f)
-    }
-}
+impl_debug_concrete_event!(StreamGroupDone {
+    reserved_fields: ["group-id"],
+    "group-id": group_id,
+});
 
 declare_concrete_event!(@sticky Eos, T);
 impl Eos<Event> {
@@ -1107,21 +1117,7 @@ impl Eos<Event> {
     }
 }
 
-impl std::fmt::Debug for Eos {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("Eos")
-            .field("seqnum", &self.event().seqnum())
-            .field("running-time-offset", &self.event().running_time_offset())
-            .field("structure", &self.event().structure())
-            .finish()
-    }
-}
-
-impl std::fmt::Debug for Eos<Event> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        Eos::<EventRef>::fmt(self, f)
-    }
-}
+impl_debug_concrete_event!(Eos);
 
 declare_concrete_event!(@sticky Toc, T);
 impl Toc<Event> {
@@ -1178,22 +1174,11 @@ impl Toc {
     }
 }
 
-impl std::fmt::Debug for Toc {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("Toc")
-            .field("seqnum", &self.event().seqnum())
-            .field("running-time-offset", &self.event().running_time_offset())
-            .field("structure", &self.event().structure())
-            .field("toc", &self.toc())
-            .finish()
-    }
-}
-
-impl std::fmt::Debug for Toc<Event> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        Toc::<EventRef>::fmt(self, f)
-    }
-}
+impl_debug_concrete_event!(Toc {
+    reserved_fields: ["toc", "updated"],
+    "toc": toc_object,
+    "updated": updated,
+});
 
 declare_concrete_event!(@sticky Protection, T);
 impl Protection<Event> {
@@ -1261,25 +1246,12 @@ impl Protection {
     }
 }
 
-impl std::fmt::Debug for Protection {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let (system_id, buffer, origin) = self.get();
-        f.debug_struct("Protection")
-            .field("seqnum", &self.event().seqnum())
-            .field("running-time-offset", &self.event().running_time_offset())
-            .field("structure", &self.event().structure())
-            .field("system-id", &system_id)
-            .field("buffer", &buffer)
-            .field("origin", &origin)
-            .finish()
-    }
-}
-
-impl std::fmt::Debug for Protection<Event> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        Protection::<EventRef>::fmt(self, f)
-    }
-}
+impl_debug_concrete_event!(Protection {
+    reserved_fields: ["data", "system_id", "origin"],
+    "system-id": system_id,
+    "buffer": buffer,
+    "origin": origin,
+});
 
 declare_concrete_event!(SegmentDone, T);
 impl SegmentDone<Event> {
@@ -1312,24 +1284,17 @@ impl SegmentDone {
             GenericFormattedValue::new(from_glib(fmt.assume_init()), position.assume_init())
         }
     }
-}
 
-impl std::fmt::Debug for SegmentDone {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("SegmentDone")
-            .field("seqnum", &self.event().seqnum())
-            .field("running-time-offset", &self.event().running_time_offset())
-            .field("structure", &self.event().structure())
-            .field("segment", &self.get())
-            .finish()
+    #[doc(alias = "gst_event_parse_segment_done")]
+    pub fn position(&self) -> GenericFormattedValue {
+        self.get()
     }
 }
 
-impl std::fmt::Debug for SegmentDone<Event> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        SegmentDone::<EventRef>::fmt(self, f)
-    }
-}
+impl_debug_concrete_event!(SegmentDone {
+    reserved_fields: ["format", "position"],
+    "position": position,
+});
 
 declare_concrete_event!(Gap, T);
 impl Gap<Event> {
@@ -1388,26 +1353,17 @@ impl Gap {
     }
 }
 
-impl std::fmt::Debug for Gap {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let (timestamp, duration) = self.get();
-        let mut f = f.debug_struct("Gap");
-        f.field("seqnum", &self.event().seqnum())
-            .field("running-time-offset", &self.event().running_time_offset())
-            .field("structure", &self.event().structure())
-            .field("timestamp", &timestamp)
-            .field("duration", &duration);
+impl_debug_concrete_event!(Gap {
+    reserved_fields: [
+        "timestamp", "duration",
         #[cfg(feature = "v1_20")]
-        f.field("flags", &self.gap_flags());
-        f.finish()
-    }
-}
-
-impl std::fmt::Debug for Gap<Event> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        Gap::<EventRef>::fmt(self, f)
-    }
-}
+        "gap-flags",
+    ],
+    "timestamp": timestamp,
+    "duration": duration,
+    #[cfg(feature = "v1_20")]
+    "flags": gap_flags,
+});
 
 #[cfg(feature = "v1_18")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
@@ -1462,25 +1418,11 @@ impl InstantRateChange {
 }
 
 #[cfg(feature = "v1_18")]
-impl std::fmt::Debug for InstantRateChange {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let (multiplier, new_flags) = self.get();
-        f.debug_struct("InstantRateChange")
-            .field("seqnum", &self.event().seqnum())
-            .field("running-time-offset", &self.event().running_time_offset())
-            .field("structure", &self.event().structure())
-            .field("multiplier", &multiplier)
-            .field("new-flags", &new_flags)
-            .finish()
-    }
-}
-
-#[cfg(feature = "v1_18")]
-impl std::fmt::Debug for InstantRateChange<Event> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        InstantRateChange::<EventRef>::fmt(self, f)
-    }
-}
+impl_debug_concrete_event!(InstantRateChange {
+    reserved_fields: ["rate", "flags"],
+    "multiplier": multiplier,
+    "new-flags": new_flags,
+});
 
 declare_concrete_event!(Qos, T);
 impl Qos<Event> {
@@ -1551,26 +1493,13 @@ impl Qos {
     }
 }
 
-impl std::fmt::Debug for Qos {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let (type_, proportion, diff, timestamp) = self.get();
-        f.debug_struct("Qos")
-            .field("seqnum", &self.event().seqnum())
-            .field("running-time-offset", &self.event().running_time_offset())
-            .field("structure", &self.event().structure())
-            .field("type", &type_)
-            .field("proportion", &proportion)
-            .field("diff", &diff)
-            .field("timestamp", &timestamp)
-            .finish()
-    }
-}
-
-impl std::fmt::Debug for Qos<Event> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        Qos::<EventRef>::fmt(self, f)
-    }
-}
+impl_debug_concrete_event!(Qos {
+    reserved_fields: ["type", "proportion", "diff", "timestamp"],
+    "type": qos_type,
+    "proportion": proportion,
+    "diff": diff,
+    "timestamp": timestamp,
+});
 
 declare_concrete_event!(Seek, T);
 impl Seek<Event> {
@@ -1701,28 +1630,21 @@ impl Seek {
     }
 }
 
-impl std::fmt::Debug for Seek {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let (rate, flags, start_type, start, stop_type, stop) = self.get();
-        f.debug_struct("Seek")
-            .field("seqnum", &self.event().seqnum())
-            .field("running-time-offset", &self.event().running_time_offset())
-            .field("structure", &self.event().structure())
-            .field("rate", &rate)
-            .field("flags", &flags)
-            .field("start-type", &start_type)
-            .field("start", &start)
-            .field("stop-type", &stop_type)
-            .field("stop", &stop)
-            .finish()
-    }
-}
-
-impl std::fmt::Debug for Seek<Event> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        Seek::<EventRef>::fmt(self, f)
-    }
-}
+impl_debug_concrete_event!(Seek {
+    reserved_fields: [
+        "rate", "format", "flags", "cur-type", "cur", "stop-type", "stop",
+        #[cfg(feature = "v1_16")]
+        "trickmode-interval",
+    ],
+    "rate": rate,
+    "flags": flags,
+    "start-type": start_type,
+    "start": start,
+    "stop-type": stop_type,
+    "stop": stop,
+    #[cfg(feature = "v1_16")]
+    "trickmode-interval": trickmode_interval,
+});
 
 declare_concrete_event!(Navigation, T);
 impl Navigation<Event> {
@@ -1739,21 +1661,7 @@ impl Navigation<Event> {
     }
 }
 
-impl std::fmt::Debug for Navigation {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("Navigation")
-            .field("seqnum", &self.event().seqnum())
-            .field("running-time-offset", &self.event().running_time_offset())
-            .field("structure", &self.event().structure())
-            .finish()
-    }
-}
-
-impl std::fmt::Debug for Navigation<Event> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        Navigation::<EventRef>::fmt(self, f)
-    }
-}
+impl_debug_concrete_event!(Navigation);
 
 declare_concrete_event!(Latency, T);
 impl Latency<Event> {
@@ -1784,22 +1692,10 @@ impl Latency {
     }
 }
 
-impl std::fmt::Debug for Latency {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("Latency")
-            .field("seqnum", &self.event().seqnum())
-            .field("running-time-offset", &self.event().running_time_offset())
-            .field("structure", &self.event().structure())
-            .field("latency", &self.latency())
-            .finish()
-    }
-}
-
-impl std::fmt::Debug for Latency<Event> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        Latency::<EventRef>::fmt(self, f)
-    }
-}
+impl_debug_concrete_event!(Latency {
+    reserved_fields: ["latency"],
+    "latency": latency,
+});
 
 declare_concrete_event!(Step, T);
 impl Step<Event> {
@@ -1873,26 +1769,13 @@ impl Step {
     }
 }
 
-impl std::fmt::Debug for Step {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let (amount, rate, flush, intermediate) = self.get();
-        f.debug_struct("Step")
-            .field("seqnum", &self.event().seqnum())
-            .field("running-time-offset", &self.event().running_time_offset())
-            .field("structure", &self.event().structure())
-            .field("amount", &amount)
-            .field("rate", &rate)
-            .field("flush", &flush)
-            .field("intermediate", &intermediate)
-            .finish()
-    }
-}
-
-impl std::fmt::Debug for Step<Event> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        Step::<EventRef>::fmt(self, f)
-    }
-}
+impl_debug_concrete_event!(Step {
+    reserved_fields: ["format", "amount", "rate", "flush", "intermediate"],
+    "amount": amount,
+    "rate": rate,
+    "flush": flush,
+    "intermediate": intermediate,
+});
 
 declare_concrete_event!(Reconfigure, T);
 impl Reconfigure<Event> {
@@ -1909,21 +1792,7 @@ impl Reconfigure<Event> {
     }
 }
 
-impl std::fmt::Debug for Reconfigure {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("Reconfigure")
-            .field("seqnum", &self.event().seqnum())
-            .field("running-time-offset", &self.event().running_time_offset())
-            .field("structure", &self.event().structure())
-            .finish()
-    }
-}
-
-impl std::fmt::Debug for Reconfigure<Event> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        Reconfigure::<EventRef>::fmt(self, f)
-    }
-}
+impl_debug_concrete_event!(Reconfigure);
 
 declare_concrete_event!(TocSelect, T);
 impl TocSelect<Event> {
@@ -1953,22 +1822,10 @@ impl TocSelect {
     }
 }
 
-impl std::fmt::Debug for TocSelect {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("TocSelect")
-            .field("seqnum", &self.event().seqnum())
-            .field("running-time-offset", &self.event().running_time_offset())
-            .field("structure", &self.event().structure())
-            .field("uid", &self.uid())
-            .finish()
-    }
-}
-
-impl std::fmt::Debug for TocSelect<Event> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        TocSelect::<EventRef>::fmt(self, f)
-    }
-}
+impl_debug_concrete_event!(TocSelect {
+    reserved_fields: ["uid"],
+    "uid": uid,
+});
 
 declare_concrete_event!(SelectStreams, T);
 impl SelectStreams<Event> {
@@ -1997,32 +1854,23 @@ impl SelectStreams {
             glib::collections::List::from_glib_full(streams)
         }
     }
-}
 
-impl std::fmt::Debug for SelectStreams {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        struct StreamsDebug<'a>(&'a SelectStreams);
-
-        impl std::fmt::Debug for StreamsDebug<'_> {
-            fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-                f.debug_list().entries(self.0.streams()).finish()
-            }
-        }
-
-        f.debug_struct("SelectStreams")
-            .field("seqnum", &self.event().seqnum())
-            .field("running-time-offset", &self.event().running_time_offset())
-            .field("structure", &self.event().structure())
-            .field("streams", &StreamsDebug(self))
-            .finish()
+    fn as_streams_debug(&self) -> StreamsDebug<'_> {
+        StreamsDebug(self)
     }
 }
 
-impl std::fmt::Debug for SelectStreams<Event> {
+struct StreamsDebug<'a>(&'a SelectStreams);
+impl std::fmt::Debug for StreamsDebug<'_> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        SelectStreams::<EventRef>::fmt(self, f)
+        f.debug_list().entries(self.0.streams()).finish()
     }
 }
+
+impl_debug_concrete_event!(SelectStreams {
+    reserved_fields: ["streams"],
+    "streams": as_streams_debug,
+});
 
 #[cfg(feature = "v1_18")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
@@ -2097,26 +1945,12 @@ impl InstantRateSyncTime {
 }
 
 #[cfg(feature = "v1_18")]
-impl std::fmt::Debug for InstantRateSyncTime {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let (rate_multiplier, running_time, upstream_running_time) = self.get();
-        f.debug_struct("InstantRateSyncTime")
-            .field("seqnum", &self.event().seqnum())
-            .field("running-time-offset", &self.event().running_time_offset())
-            .field("structure", &self.event().structure())
-            .field("rate-multiplier", &rate_multiplier)
-            .field("running-time", &running_time)
-            .field("upstream-running-time", &upstream_running_time)
-            .finish()
-    }
-}
-
-#[cfg(feature = "v1_18")]
-impl std::fmt::Debug for InstantRateSyncTime<Event> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        InstantRateSyncTime::<EventRef>::fmt(self, f)
-    }
-}
+impl_debug_concrete_event!(InstantRateSyncTime {
+    reserved_fields: ["rate", "running-time", "upstream-running-time"],
+    "rate-multiplier": rate_multiplier,
+    "running_time": running_time,
+    "upstream_running_time": upstream_running_time,
+});
 
 declare_concrete_event!(CustomUpstream, T);
 impl CustomUpstream<Event> {
@@ -2133,21 +1967,7 @@ impl CustomUpstream<Event> {
     }
 }
 
-impl std::fmt::Debug for CustomUpstream {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("CustomUpstream")
-            .field("seqnum", &self.event().seqnum())
-            .field("running-time-offset", &self.event().running_time_offset())
-            .field("structure", &self.event().structure())
-            .finish()
-    }
-}
-
-impl std::fmt::Debug for CustomUpstream<Event> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        CustomUpstream::<EventRef>::fmt(self, f)
-    }
-}
+impl_debug_concrete_event!(CustomUpstream);
 
 declare_concrete_event!(CustomDownstream, T);
 impl CustomDownstream<Event> {
@@ -2164,21 +1984,7 @@ impl CustomDownstream<Event> {
     }
 }
 
-impl std::fmt::Debug for CustomDownstream {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("CustomDownstream")
-            .field("seqnum", &self.event().seqnum())
-            .field("running-time-offset", &self.event().running_time_offset())
-            .field("structure", &self.event().structure())
-            .finish()
-    }
-}
-
-impl std::fmt::Debug for CustomDownstream<Event> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        CustomDownstream::<EventRef>::fmt(self, f)
-    }
-}
+impl_debug_concrete_event!(CustomDownstream);
 
 declare_concrete_event!(CustomDownstreamOob, T);
 impl CustomDownstreamOob<Event> {
@@ -2195,21 +2001,7 @@ impl CustomDownstreamOob<Event> {
     }
 }
 
-impl std::fmt::Debug for CustomDownstreamOob {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("CustomDownstreamOob")
-            .field("seqnum", &self.event().seqnum())
-            .field("running-time-offset", &self.event().running_time_offset())
-            .field("structure", &self.event().structure())
-            .finish()
-    }
-}
-
-impl std::fmt::Debug for CustomDownstreamOob<Event> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        CustomDownstreamOob::<EventRef>::fmt(self, f)
-    }
-}
+impl_debug_concrete_event!(CustomDownstreamOob);
 
 declare_concrete_event!(@sticky CustomDownstreamSticky, T);
 impl CustomDownstreamSticky<Event> {
@@ -2226,21 +2018,7 @@ impl CustomDownstreamSticky<Event> {
     }
 }
 
-impl std::fmt::Debug for CustomDownstreamSticky {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("CustomDownstreamSticky")
-            .field("seqnum", &self.event().seqnum())
-            .field("running-time-offset", &self.event().running_time_offset())
-            .field("structure", &self.event().structure())
-            .finish()
-    }
-}
-
-impl std::fmt::Debug for CustomDownstreamSticky<Event> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        CustomDownstreamSticky::<EventRef>::fmt(self, f)
-    }
-}
+impl_debug_concrete_event!(CustomDownstreamSticky);
 
 declare_concrete_event!(CustomBoth, T);
 impl CustomBoth<Event> {
@@ -2257,21 +2035,7 @@ impl CustomBoth<Event> {
     }
 }
 
-impl std::fmt::Debug for CustomBoth {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("CustomBoth")
-            .field("seqnum", &self.event().seqnum())
-            .field("running-time-offset", &self.event().running_time_offset())
-            .field("structure", &self.event().structure())
-            .finish()
-    }
-}
-
-impl std::fmt::Debug for CustomBoth<Event> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        CustomBoth::<EventRef>::fmt(self, f)
-    }
-}
+impl_debug_concrete_event!(CustomBoth);
 
 declare_concrete_event!(CustomBothOob, T);
 impl CustomBothOob<Event> {
@@ -2288,39 +2052,10 @@ impl CustomBothOob<Event> {
     }
 }
 
-impl std::fmt::Debug for CustomBothOob {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("CustomBothOob")
-            .field("seqnum", &self.event().seqnum())
-            .field("running-time-offset", &self.event().running_time_offset())
-            .field("structure", &self.event().structure())
-            .finish()
-    }
-}
-
-impl std::fmt::Debug for CustomBothOob<Event> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        CustomBothOob::<EventRef>::fmt(self, f)
-    }
-}
+impl_debug_concrete_event!(CustomBothOob);
 
 declare_concrete_event!(Other, T);
-
-impl std::fmt::Debug for Other {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        f.debug_struct("Other")
-            .field("seqnum", &self.event().seqnum())
-            .field("running-time-offset", &self.event().running_time_offset())
-            .field("structure", &self.event().structure())
-            .finish()
-    }
-}
-
-impl std::fmt::Debug for Other<Event> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        Other::<EventRef>::fmt(self, f)
-    }
-}
+impl_debug_concrete_event!(Other);
 
 struct EventBuilder<'a> {
     seqnum: Option<Seqnum>,
@@ -3458,5 +3193,66 @@ mod tests {
             _ => unreachable!(),
         };
         assert_eq!(streams.iter().collect::<Vec<_>>(), s);
+    }
+
+    #[test]
+    fn debug_impl() {
+        use crate::format::{self, BytesFormatConstructor, ClockTime};
+
+        crate::init().unwrap();
+
+        // No formatted values as structure fields, caps inlined
+        let mut evt = Caps::new(&crate::Caps::new_empty_simple("text/utf-8"));
+        println!("{evt:?}");
+
+        {
+            let evt = evt.make_mut();
+            evt.structure_mut().set("user-defined", "my value");
+        }
+        let debug = format!("{evt:?}");
+        println!("{debug}");
+        assert!(debug.contains("my value"));
+
+        // No formatted values as structure fields, Segment is a structure field
+        let mut evt = Segment::new(&crate::FormattedSegment::<format::Time>::new());
+        println!("{evt:?}");
+
+        {
+            let evt = evt.make_mut();
+            evt.structure_mut().set("user-defined", "my value");
+        }
+        let debug = format!("{evt:?}");
+        println!("{debug}");
+        assert!(debug.contains("my value"));
+
+        // One formatted value as structure fields: position
+        let mut evt = SegmentDone::new(ClockTime::from_mseconds(90_000));
+        let debug = format!("{evt:?}");
+        println!("{debug}");
+        assert!(!debug.contains("format"));
+
+        {
+            let evt = evt.make_mut();
+            evt.structure_mut().set("user-defined", "my value");
+        }
+        let debug = format!("{evt:?}");
+        println!("{debug}");
+        assert!(debug.contains("my value"));
+        assert!(!debug.contains("format"));
+
+        // Two formatted values as structure fields with the same format: minsize, maxsize
+        let mut evt = Buffersize::new::<format::Bytes>(42.kibibytes(), 42.mebibytes(), false);
+        let debug = format!("{evt:?}");
+        println!("{debug}");
+        assert!(!debug.contains("format"));
+
+        {
+            let evt = evt.make_mut();
+            evt.structure_mut().set("user-defined", "my value");
+        }
+        let debug = format!("{evt:?}");
+        println!("{debug}");
+        assert!(debug.contains("my value"));
+        assert!(!debug.contains("format"));
     }
 }
