@@ -665,6 +665,15 @@ pub enum MessageType {
     StreamsSelected,
     #[doc(alias = "GST_MESSAGE_REDIRECT")]
     Redirect,
+    #[cfg(feature = "v1_16")]
+    #[doc(alias = "GST_MESSAGE_DEVICE_CHANGED")]
+    DeviceChanged,
+    #[cfg(feature = "v1_18")]
+    #[doc(alias = "GST_MESSAGE_INSTANT_RATE_REQUEST")]
+    InstantRateRequest,
+    #[cfg(feature = "v1_28")]
+    #[doc(alias = "GST_MESSAGE_DEVICE_MONITOR_STARTED")]
+    DeviceMonitorStarted,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -714,6 +723,12 @@ impl IntoGlib for MessageType {
             MessageType::StreamCollection => ffi::GST_MESSAGE_STREAM_COLLECTION,
             MessageType::StreamsSelected => ffi::GST_MESSAGE_STREAMS_SELECTED,
             MessageType::Redirect => ffi::GST_MESSAGE_REDIRECT,
+            #[cfg(feature = "v1_16")]
+            MessageType::DeviceChanged => ffi::GST_MESSAGE_DEVICE_CHANGED,
+            #[cfg(feature = "v1_18")]
+            MessageType::InstantRateRequest => ffi::GST_MESSAGE_INSTANT_RATE_REQUEST,
+            #[cfg(feature = "v1_28")]
+            MessageType::DeviceMonitorStarted => ffi::GST_MESSAGE_DEVICE_MONITOR_STARTED,
             MessageType::__Unknown(value) => value as u32,
         }
     }
@@ -764,6 +779,12 @@ impl FromGlib<ffi::GstMessageType> for MessageType {
             ffi::GST_MESSAGE_STREAM_COLLECTION => MessageType::StreamCollection,
             ffi::GST_MESSAGE_STREAMS_SELECTED => MessageType::StreamsSelected,
             ffi::GST_MESSAGE_REDIRECT => MessageType::Redirect,
+            #[cfg(feature = "v1_16")]
+            ffi::GST_MESSAGE_DEVICE_CHANGED => MessageType::DeviceChanged,
+            #[cfg(feature = "v1_18")]
+            ffi::GST_MESSAGE_INSTANT_RATE_REQUEST => MessageType::InstantRateRequest,
+            #[cfg(feature = "v1_28")]
+            ffi::GST_MESSAGE_DEVICE_MONITOR_STARTED => MessageType::DeviceMonitorStarted,
             value => MessageType::__Unknown(value as i32),
         }
     }
