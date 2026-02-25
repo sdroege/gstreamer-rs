@@ -15,6 +15,7 @@ fn log_handler(
     object: Option<&gst::LoggedObject>,
     message: &gst::DebugMessage,
 ) {
+    skip_assert_initialized!();
     let level = match level {
         gst::DebugLevel::Error => Level::ERROR,
         gst::DebugLevel::Warning | gst::DebugLevel::Fixme => Level::WARN,

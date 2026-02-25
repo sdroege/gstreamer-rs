@@ -41,6 +41,7 @@ impl Drop for TestContext {
 }
 
 fn target_matches(meta: &Metadata<'_>, expected_suffix: &str) -> bool {
+    skip_assert_initialized!();
     meta.target() == format!("{}::{expected_suffix}", crate::TARGET)
 }
 
