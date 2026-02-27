@@ -177,7 +177,7 @@ impl MessageRef {
                 ffi::GST_MESSAGE_INSTANT_RATE_REQUEST => InstantRateRequest::view(self),
                 #[cfg(feature = "v1_28")]
                 ffi::GST_MESSAGE_DEVICE_MONITOR_STARTED => DeviceMonitorStarted::view(self),
-                _ => MessageView::Other,
+                _ => Other::view(self),
             }
         }
     }
@@ -230,7 +230,7 @@ impl MessageRef {
                 ffi::GST_MESSAGE_INSTANT_RATE_REQUEST => InstantRateRequest::view_mut(self),
                 #[cfg(feature = "v1_28")]
                 ffi::GST_MESSAGE_DEVICE_MONITOR_STARTED => DeviceMonitorStarted::view_mut(self),
-                _ => MessageViewMut::Other,
+                _ => Other::view_mut(self),
             }
         }
     }
@@ -331,7 +331,7 @@ pub enum MessageView<'a> {
     #[cfg(feature = "v1_28")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
     DeviceMonitorStarted(&'a DeviceMonitorStarted),
-    Other,
+    Other(&'a Other),
 }
 
 #[derive(Debug)]
@@ -383,7 +383,7 @@ pub enum MessageViewMut<'a> {
     #[cfg(feature = "v1_28")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
     DeviceMonitorStarted(&'a mut DeviceMonitorStarted),
-    Other,
+    Other(&'a mut Other),
 }
 
 macro_rules! declare_concrete_message(
@@ -926,6 +926,30 @@ impl Buffering {
             )
         }
     }
+
+    #[doc(alias = "get_buffering_stats")]
+    #[doc(alias = "gst_message_parse_buffering_stats")]
+    pub fn mode(&self) -> crate::BufferingMode {
+        self.buffering_stats().0
+    }
+
+    #[doc(alias = "get_buffering_stats")]
+    #[doc(alias = "gst_message_parse_buffering_stats")]
+    pub fn avg_in(&self) -> i32 {
+        self.buffering_stats().1
+    }
+
+    #[doc(alias = "get_buffering_stats")]
+    #[doc(alias = "gst_message_parse_buffering_stats")]
+    pub fn avg_out(&self) -> i32 {
+        self.buffering_stats().2
+    }
+
+    #[doc(alias = "get_buffering_stats")]
+    #[doc(alias = "gst_message_parse_buffering_stats")]
+    pub fn buffering_left(&self) -> i64 {
+        self.buffering_stats().3
+    }
 }
 
 impl std::fmt::Debug for Buffering {
@@ -1142,6 +1166,36 @@ impl StepDone {
             )
         }
     }
+
+    #[doc(alias = "gst_message_parse_step_done")]
+    pub fn format(&self) -> GenericFormattedValue {
+        self.get().0
+    }
+
+    #[doc(alias = "gst_message_parse_step_done")]
+    pub fn rate(&self) -> f64 {
+        self.get().1
+    }
+
+    #[doc(alias = "gst_message_parse_step_done")]
+    pub fn flush(&self) -> bool {
+        self.get().2
+    }
+
+    #[doc(alias = "gst_message_parse_step_done")]
+    pub fn intermediate(&self) -> bool {
+        self.get().3
+    }
+
+    #[doc(alias = "gst_message_parse_step_done")]
+    pub fn duration(&self) -> Option<crate::ClockTime> {
+        self.get().4
+    }
+
+    #[doc(alias = "gst_message_parse_step_done")]
+    pub fn eos(&self) -> bool {
+        self.get().5
+    }
 }
 
 impl std::fmt::Debug for StepDone {
@@ -1351,6 +1405,21 @@ impl StructureChange {
             )
         }
     }
+
+    #[doc(alias = "gst_message_parse_structure_change")]
+    pub fn type_(&self) -> crate::StructureChangeType {
+        self.get().0
+    }
+
+    #[doc(alias = "gst_message_parse_structure_change")]
+    pub fn owner(&self) -> crate::Element {
+        self.get().1
+    }
+
+    #[doc(alias = "gst_message_parse_structure_change")]
+    pub fn busy(&self) -> bool {
+        self.get().2
+    }
 }
 
 impl std::fmt::Debug for StructureChange {
@@ -1400,6 +1469,16 @@ impl StreamStatus {
 
             (from_glib(type_.assume_init()), from_glib_none(owner))
         }
+    }
+
+    #[doc(alias = "gst_message_parse_stream_status")]
+    pub fn type_(&self) -> crate::StreamStatusType {
+        self.get().0
+    }
+
+    #[doc(alias = "gst_message_parse_stream_status")]
+    pub fn owner(&self) -> crate::Element {
+        self.get().1
     }
 
     #[doc(alias = "get_stream_status_object")]
@@ -1817,6 +1896,31 @@ impl StepStart {
             )
         }
     }
+
+    #[doc(alias = "gst_message_parse_step_start")]
+    pub fn active(&self) -> bool {
+        self.get().0
+    }
+
+    #[doc(alias = "gst_message_parse_step_start")]
+    pub fn amount(&self) -> GenericFormattedValue {
+        self.get().1
+    }
+
+    #[doc(alias = "gst_message_parse_step_start")]
+    pub fn rate(&self) -> f64 {
+        self.get().2
+    }
+
+    #[doc(alias = "gst_message_parse_step_start")]
+    pub fn flush(&self) -> bool {
+        self.get().3
+    }
+
+    #[doc(alias = "gst_message_parse_step_start")]
+    pub fn intermediate(&self) -> bool {
+        self.get().4
+    }
 }
 
 impl std::fmt::Debug for StepStart {
@@ -1901,6 +2005,31 @@ impl Qos {
         }
     }
 
+    #[doc(alias = "gst_message_parse_qos")]
+    pub fn live(&self) -> bool {
+        self.get().0
+    }
+
+    #[doc(alias = "gst_message_parse_qos")]
+    pub fn running_time(&self) -> Option<crate::ClockTime> {
+        self.get().1
+    }
+
+    #[doc(alias = "gst_message_parse_qos")]
+    pub fn stream_time(&self) -> Option<crate::ClockTime> {
+        self.get().2
+    }
+
+    #[doc(alias = "gst_message_parse_qos")]
+    pub fn timestamp(&self) -> Option<crate::ClockTime> {
+        self.get().3
+    }
+
+    #[doc(alias = "gst_message_parse_qos")]
+    pub fn duration(&self) -> Option<crate::ClockTime> {
+        self.get().4
+    }
+
     #[doc(alias = "get_values")]
     #[doc(alias = "gst_message_parse_qos_values")]
     pub fn values(&self) -> (i64, f64, i32) {
@@ -1922,6 +2051,24 @@ impl Qos {
                 quality.assume_init(),
             )
         }
+    }
+
+    #[doc(alias = "get_values")]
+    #[doc(alias = "gst_message_parse_qos_values")]
+    pub fn jitter(&self) -> i64 {
+        self.values().0
+    }
+
+    #[doc(alias = "get_values")]
+    #[doc(alias = "gst_message_parse_qos_values")]
+    pub fn proportion(&self) -> f64 {
+        self.values().1
+    }
+
+    #[doc(alias = "get_values")]
+    #[doc(alias = "gst_message_parse_qos_values")]
+    pub fn quality(&self) -> i32 {
+        self.values().2
     }
 
     #[doc(alias = "get_stats")]
@@ -1950,6 +2097,18 @@ impl Qos {
                 ),
             )
         }
+    }
+
+    #[doc(alias = "get_stats")]
+    #[doc(alias = "gst_message_parse_qos_stats")]
+    pub fn processed(&self) -> GenericFormattedValue {
+        self.stats().0
+    }
+
+    #[doc(alias = "get_stats")]
+    #[doc(alias = "gst_message_parse_qos_stats")]
+    pub fn dropped(&self) -> GenericFormattedValue {
+        self.stats().1
     }
 }
 
@@ -2020,6 +2179,21 @@ impl Progress {
             (from_glib(type_.assume_init()), code, text)
         }
     }
+
+    #[doc(alias = "gst_message_parse_progress")]
+    pub fn type_(&self) -> crate::ProgressType {
+        self.get().0
+    }
+
+    #[doc(alias = "gst_message_parse_progress")]
+    pub fn code(&self) -> &str {
+        self.get().1
+    }
+
+    #[doc(alias = "gst_message_parse_progress")]
+    pub fn text(&self) -> &str {
+        self.get().2
+    }
 }
 
 impl std::fmt::Debug for Progress {
@@ -2066,6 +2240,18 @@ impl Toc {
             ffi::gst_message_parse_toc(self.as_mut_ptr(), &mut toc, updated.as_mut_ptr());
             (from_glib_full(toc), from_glib(updated.assume_init()))
         }
+    }
+
+    #[doc(alias = "get_toc")]
+    #[doc(alias = "gst_message_parse_toc")]
+    pub fn toc_object(&self) -> crate::Toc {
+        self.toc().0
+    }
+
+    #[doc(alias = "get_toc")]
+    #[doc(alias = "gst_message_parse_toc")]
+    pub fn updated(&self) -> bool {
+        self.toc().1
     }
 }
 
@@ -2400,6 +2586,21 @@ impl PropertyNotify {
             )
         }
     }
+
+    #[doc(alias = "gst_message_parse_property_notify")]
+    pub fn object(&self) -> Object {
+        self.get().0
+    }
+
+    #[doc(alias = "gst_message_parse_property_notify")]
+    pub fn property_name(&self) -> &str {
+        self.get().1
+    }
+
+    #[doc(alias = "gst_message_parse_property_notify")]
+    pub fn value(&self) -> Option<&glib::Value> {
+        self.get().2
+    }
 }
 
 impl std::fmt::Debug for PropertyNotify {
@@ -2655,6 +2856,18 @@ impl DeviceChanged {
             (from_glib_full(device), from_glib_full(changed_device))
         }
     }
+
+    #[doc(alias = "get_device_changed")]
+    #[doc(alias = "gst_message_parse_device_changed")]
+    pub fn device(&self) -> crate::Device {
+        self.device_changed().0
+    }
+
+    #[doc(alias = "get_device_changed")]
+    #[doc(alias = "gst_message_parse_device_changed")]
+    pub fn device_changed_(&self) -> crate::Device {
+        self.device_changed().1
+    }
 }
 
 #[cfg(feature = "v1_16")]
@@ -2772,6 +2985,22 @@ impl std::fmt::Debug for DeviceMonitorStarted {
 impl std::fmt::Debug for DeviceMonitorStarted<Message> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         DeviceMonitorStarted::<MessageRef>::fmt(self, f)
+    }
+}
+
+declare_concrete_message!(Other, T);
+
+impl std::fmt::Debug for Other {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.debug_struct("Other")
+            .field("structure", &self.message().structure())
+            .finish()
+    }
+}
+
+impl std::fmt::Debug for Other<Message> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        Other::<MessageRef>::fmt(self, f)
     }
 }
 
