@@ -962,6 +962,21 @@ impl Buffersize {
             )
         }
     }
+
+    #[doc(alias = "gst_event_parse_buffer_size")]
+    pub fn min_size(&self) -> GenericFormattedValue {
+        self.get().0
+    }
+
+    #[doc(alias = "gst_event_parse_buffer_size")]
+    pub fn max_size(&self) -> GenericFormattedValue {
+        self.get().1
+    }
+
+    #[doc(alias = "gst_event_parse_buffer_size")]
+    pub fn async_(&self) -> bool {
+        self.get().2
+    }
 }
 
 impl std::fmt::Debug for Buffersize {
@@ -1149,6 +1164,18 @@ impl Toc {
             (from_glib_none(toc.as_ptr()), updated)
         }
     }
+
+    #[doc(alias = "get_toc")]
+    #[doc(alias = "gst_event_parse_toc")]
+    pub fn toc_object(&self) -> &crate::TocRef {
+        self.toc().0
+    }
+
+    #[doc(alias = "get_toc")]
+    #[doc(alias = "gst_event_parse_toc")]
+    pub fn updated(&self) -> bool {
+        self.toc().1
+    }
 }
 
 impl std::fmt::Debug for Toc {
@@ -1216,6 +1243,21 @@ impl Protection {
             let (system_id, buffer, origin) = self.get();
             (system_id, from_glib_none(buffer.as_ptr()), origin)
         }
+    }
+
+    #[doc(alias = "gst_event_parse_protection")]
+    pub fn system_id(&self) -> &str {
+        self.get().0
+    }
+
+    #[doc(alias = "gst_event_parse_protection")]
+    pub fn buffer(&self) -> &crate::BufferRef {
+        self.get().1
+    }
+
+    #[doc(alias = "gst_event_parse_protection")]
+    pub fn origin(&self) -> Option<&str> {
+        self.get().2
     }
 }
 
@@ -1324,6 +1366,16 @@ impl Gap {
         }
     }
 
+    #[doc(alias = "gst_event_parse_gap")]
+    pub fn timestamp(&self) -> ClockTime {
+        self.get().0
+    }
+
+    #[doc(alias = "gst_event_parse_gap")]
+    pub fn duration(&self) -> Option<ClockTime> {
+        self.get().1
+    }
+
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "gst_event_parse_gap_flags")]
@@ -1397,6 +1449,16 @@ impl InstantRateChange {
             (multiplier.assume_init(), from_glib(new_flags.assume_init()))
         }
     }
+
+    #[doc(alias = "gst_event_parse_instant_rate_change")]
+    pub fn multiplier(&self) -> f64 {
+        self.get().0
+    }
+
+    #[doc(alias = "gst_event_parse_instant_rate_change")]
+    pub fn new_flags(&self) -> crate::SegmentFlags {
+        self.get().1
+    }
 }
 
 #[cfg(feature = "v1_18")]
@@ -1466,6 +1528,26 @@ impl Qos {
                 from_glib(timestamp.assume_init()),
             )
         }
+    }
+
+    #[doc(alias = "gst_event_parse_qos")]
+    pub fn qos_type(&self) -> crate::QOSType {
+        self.get().0
+    }
+
+    #[doc(alias = "gst_event_parse_qos")]
+    pub fn proportion(&self) -> f64 {
+        self.get().1
+    }
+
+    #[doc(alias = "gst_event_parse_qos")]
+    pub fn diff(&self) -> i64 {
+        self.get().2
+    }
+
+    #[doc(alias = "gst_event_parse_qos")]
+    pub fn timestamp(&self) -> Option<ClockTime> {
+        self.get().3
     }
 }
 
@@ -1569,6 +1651,36 @@ impl Seek {
                 GenericFormattedValue::new(from_glib(fmt.assume_init()), stop.assume_init()),
             )
         }
+    }
+
+    #[doc(alias = "gst_event_parse_seek")]
+    pub fn rate(&self) -> f64 {
+        self.get().0
+    }
+
+    #[doc(alias = "gst_event_parse_seek")]
+    pub fn flags(&self) -> crate::SeekFlags {
+        self.get().1
+    }
+
+    #[doc(alias = "gst_event_parse_seek")]
+    pub fn start_type(&self) -> crate::SeekType {
+        self.get().2
+    }
+
+    #[doc(alias = "gst_event_parse_seek")]
+    pub fn start(&self) -> GenericFormattedValue {
+        self.get().3
+    }
+
+    #[doc(alias = "gst_event_parse_seek")]
+    pub fn stop_type(&self) -> crate::SeekType {
+        self.get().4
+    }
+
+    #[doc(alias = "gst_event_parse_seek")]
+    pub fn stop(&self) -> GenericFormattedValue {
+        self.get().5
     }
 
     #[cfg(feature = "v1_16")]
@@ -1738,6 +1850,26 @@ impl Step {
                 from_glib(intermediate.assume_init()),
             )
         }
+    }
+
+    #[doc(alias = "gst_event_parse_step")]
+    pub fn amount(&self) -> GenericFormattedValue {
+        self.get().0
+    }
+
+    #[doc(alias = "gst_event_parse_step")]
+    pub fn rate(&self) -> f64 {
+        self.get().1
+    }
+
+    #[doc(alias = "gst_event_parse_step")]
+    pub fn flush(&self) -> bool {
+        self.get().2
+    }
+
+    #[doc(alias = "gst_event_parse_step")]
+    pub fn intermediate(&self) -> bool {
+        self.get().3
     }
 }
 
@@ -1943,6 +2075,24 @@ impl InstantRateSyncTime {
                 try_from_glib(upstream_running_time.assume_init()).expect("undefined timestamp"),
             )
         }
+    }
+
+    #[doc(alias = "parse_instant_rate_sync_time")]
+    #[doc(alias = "gst_event_parse_instant_rate_sync_time")]
+    pub fn rate_multiplier(&self) -> f64 {
+        self.get().0
+    }
+
+    #[doc(alias = "parse_instant_rate_sync_time")]
+    #[doc(alias = "gst_event_parse_instant_rate_sync_time")]
+    pub fn running_time(&self) -> ClockTime {
+        self.get().1
+    }
+
+    #[doc(alias = "parse_instant_rate_sync_time")]
+    #[doc(alias = "gst_event_parse_instant_rate_sync_time")]
+    pub fn upstream_running_time(&self) -> ClockTime {
+        self.get().2
     }
 }
 
