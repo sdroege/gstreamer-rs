@@ -1,6 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use std::fmt;
+use std::fmt::{self, Write};
 
 use glib::translate::{FromGlib, GlibNoneError, IntoGlib, OptionIntoGlib, TryFromGlib};
 
@@ -101,7 +101,7 @@ impl OtherFormatConstructor for u64 {
     }
 }
 
-#[derive(PartialEq, Eq, Hash, Clone, Copy, Debug)]
+#[derive(PartialEq, Eq, Hash, Clone, Copy)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub enum GenericFormattedValue {
     Undefined(Undefined),
@@ -127,6 +127,42 @@ impl fmt::Display for GenericFormattedValue {
                 fmt::Write::write_char(f, ' ')?;
                 fmt::Display::fmt(&format, f)
             }
+        }
+    }
+}
+
+impl fmt::Debug for GenericFormattedValue {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let specific: Option<&dyn fmt::Debug> = match &self {
+            Self::Undefined(val) => {
+                f.write_str("Undefined(")?;
+                val.fmt(f)?;
+                return f.write_char(')');
+            }
+            Self::Other(format, val) => {
+                fmt::write(f, format_args!("{:?}(", format))?;
+                val.fmt(f)?;
+                return f.write_char(')');
+            }
+            Self::Time(val) => {
+                if let Some(inner) = val {
+                    f.write_str("Time(")?;
+                    inner.display().fmt(f)?;
+                    return f.write_char(')');
+                } else {
+                    return f.write_str("Time(None)");
+                }
+            }
+            Self::Default(val) => val.as_ref().map(|inner| inner as &dyn fmt::Debug),
+            Self::Bytes(val) => val.as_ref().map(|inner| inner as &dyn fmt::Debug),
+            Self::Buffers(val) => val.as_ref().map(|inner| inner as &dyn fmt::Debug),
+            Self::Percent(val) => val.as_ref().map(|inner| inner as &dyn fmt::Debug),
+        };
+
+        if let Some(inner) = specific {
+            inner.fmt(f)
+        } else {
+            fmt::write(f, format_args!("{:?}(None)", self.format()))
         }
     }
 }
