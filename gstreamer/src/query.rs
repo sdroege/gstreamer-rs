@@ -499,6 +499,14 @@ impl Latency {
         }
     }
 
+    #[doc(alias = "get_result")]
+    #[doc(alias = "gst_query_parse_latency")]
+    pub fn result_struct(&self) -> LatencyResult {
+        let (is_live, min, max) = self.result();
+
+        LatencyResult { is_live, min, max }
+    }
+
     #[doc(alias = "gst_query_set_latency")]
     pub fn set(
         &mut self,
@@ -515,6 +523,13 @@ impl Latency {
             );
         }
     }
+}
+
+#[derive(Debug)]
+pub struct LatencyResult {
+    pub is_live: bool,
+    pub min: crate::ClockTime,
+    pub max: Option<crate::ClockTime>,
 }
 
 impl std::fmt::Debug for Latency {
@@ -566,6 +581,18 @@ impl Seeking {
         }
     }
 
+    #[doc(alias = "get_result")]
+    #[doc(alias = "gst_query_parse_seeking")]
+    pub fn result_struct(&self) -> SeekingResult {
+        let (seekable, start, end) = self.result();
+
+        SeekingResult {
+            seekable,
+            start,
+            end,
+        }
+    }
+
     #[doc(alias = "get_format")]
     #[doc(alias = "gst_query_parse_seeking")]
     pub fn format(&self) -> crate::Format {
@@ -603,6 +630,13 @@ impl Seeking {
             );
         }
     }
+}
+
+#[derive(Debug)]
+pub struct SeekingResult {
+    pub seekable: bool,
+    pub start: GenericFormattedValue,
+    pub end: GenericFormattedValue,
 }
 
 impl std::fmt::Debug for Seeking {
@@ -655,6 +689,18 @@ impl Segment {
         }
     }
 
+    #[doc(alias = "get_result")]
+    #[doc(alias = "gst_query_parse_segment")]
+    pub fn result_struct(&self) -> SegmentResult {
+        let res = self.result();
+
+        SegmentResult {
+            rate: res.0,
+            start: res.1,
+            stop: res.2,
+        }
+    }
+
     #[doc(alias = "get_format")]
     #[doc(alias = "gst_query_parse_segment")]
     pub fn format(&self) -> crate::Format {
@@ -691,6 +737,13 @@ impl Segment {
             );
         }
     }
+}
+
+#[derive(Debug)]
+pub struct SegmentResult {
+    pub rate: f64,
+    pub start: GenericFormattedValue,
+    pub stop: GenericFormattedValue,
 }
 
 impl std::fmt::Debug for Segment {
@@ -748,6 +801,14 @@ impl Convert {
         }
     }
 
+    #[doc(alias = "get_result")]
+    #[doc(alias = "gst_query_parse_convert")]
+    pub fn result_struct(&self) -> ConvertResult {
+        let (src, dest) = self.result();
+
+        ConvertResult { src, dest }
+    }
+
     #[doc(alias = "gst_query_parse_convert")]
     pub fn get(&self) -> (GenericFormattedValue, crate::Format) {
         unsafe {
@@ -781,6 +842,12 @@ impl Convert {
             );
         }
     }
+}
+
+#[derive(Debug)]
+pub struct ConvertResult {
+    pub src: GenericFormattedValue,
+    pub dest: GenericFormattedValue,
 }
 
 impl std::fmt::Debug for Convert {
@@ -925,6 +992,17 @@ impl Buffering {
         }
     }
 
+    #[doc(alias = "get_percent")]
+    #[doc(alias = "gst_query_parse_buffering_percent")]
+    pub fn percent_struct(&self) -> BufferingPercent {
+        let (is_busy, percent) = self.percent();
+
+        BufferingPercent {
+            is_busy,
+            precent: unsafe { try_from_glib(percent as i64).ok() },
+        }
+    }
+
     #[doc(alias = "get_range")]
     #[doc(alias = "gst_query_parse_buffering_range")]
     pub fn range(&self) -> (GenericFormattedValue, GenericFormattedValue, i64) {
@@ -946,6 +1024,22 @@ impl Buffering {
                 GenericFormattedValue::new(from_glib(fmt.assume_init()), stop.assume_init()),
                 estimated_total.assume_init(),
             )
+        }
+    }
+
+    #[doc(alias = "get_range")]
+    #[doc(alias = "gst_query_parse_buffering_range")]
+    pub fn range_struct(&self) -> BufferingRange {
+        let (start, stop, estimated_total) = self.range();
+
+        BufferingRange {
+            start,
+            stop,
+            estimated_total: unsafe {
+                try_from_glib(estimated_total)
+                    .ok()
+                    .map(|ct: crate::ClockTime| *crate::ClockTime::MSECOND * ct)
+            },
         }
     }
 
@@ -972,6 +1066,23 @@ impl Buffering {
                 avg_out.assume_init(),
                 buffering_left.assume_init(),
             )
+        }
+    }
+
+    #[doc(alias = "get_stats")]
+    #[doc(alias = "gst_query_parse_buffering_stats")]
+    pub fn stats_struct(&self) -> BufferingStats {
+        let (mode, avg_in, avg_out, buffering_left) = self.stats();
+
+        BufferingStats {
+            mode,
+            avg_in,
+            avg_out,
+            buffering_left: unsafe {
+                try_from_glib(buffering_left)
+                    .ok()
+                    .map(|ct: crate::ClockTime| *crate::ClockTime::MSECOND * ct)
+            },
         }
     }
 
@@ -1049,6 +1160,27 @@ impl Buffering {
             }
         }
     }
+}
+
+#[derive(Debug)]
+pub struct BufferingPercent {
+    pub is_busy: bool,
+    pub precent: Option<crate::format::Percent>,
+}
+
+#[derive(Debug)]
+pub struct BufferingRange {
+    pub start: GenericFormattedValue,
+    pub stop: GenericFormattedValue,
+    pub estimated_total: Option<crate::ClockTime>,
+}
+
+#[derive(Debug)]
+pub struct BufferingStats {
+    pub mode: crate::BufferingMode,
+    pub avg_in: i32,
+    pub avg_out: i32,
+    pub buffering_left: Option<crate::ClockTime>,
 }
 
 impl std::fmt::Debug for Buffering {
@@ -1181,6 +1313,20 @@ impl Uri {
         }
     }
 
+    #[doc(alias = "get_redirection")]
+    #[doc(alias = "gst_query_parse_uri_redirection")]
+    #[doc(alias = "gst_query_parse_uri_redirection_permanent")]
+    pub fn uri_redirection(&self) -> Option<glib::GString> {
+        self.redirection().0
+    }
+
+    #[doc(alias = "get_redirection")]
+    #[doc(alias = "gst_query_parse_uri_redirection")]
+    #[doc(alias = "gst_query_parse_uri_redirection_permanent")]
+    pub fn uri_redirection_permanent(&self) -> bool {
+        self.redirection().1
+    }
+
     #[doc(alias = "gst_query_set_uri")]
     pub fn set_uri<'a, T>(&mut self, uri: impl Into<Option<&'a T>>)
     where
@@ -1263,6 +1409,16 @@ impl Allocation {
                 from_glib(need_pool.assume_init()),
             )
         }
+    }
+
+    #[doc(alias = "gst_query_parse_allocation")]
+    pub fn caps(&self) -> Option<&crate::CapsRef> {
+        self.get().0
+    }
+
+    #[doc(alias = "gst_query_parse_allocation")]
+    pub fn need_pool(&self) -> bool {
+        self.get().1
     }
 
     #[doc(alias = "gst_query_parse_allocation")]
@@ -1630,6 +1786,19 @@ impl Scheduling {
         }
     }
 
+    #[doc(alias = "get_result")]
+    #[doc(alias = "gst_query_parse_scheduling")]
+    pub fn result_struct(&self) -> SchedulingStruct {
+        let (flags, min_size, max_size, align) = self.result();
+
+        SchedulingStruct {
+            flags,
+            min_size,
+            max_size,
+            align,
+        }
+    }
+
     #[doc(alias = "gst_query_add_scheduling_mode")]
     pub fn add_scheduling_modes(&mut self, modes: impl IntoIterator<Item = crate::PadMode>) {
         unsafe {
@@ -1669,6 +1838,14 @@ impl std::fmt::Debug for Scheduling {
             .field("scheduling-modes", &PadModesDebug(self))
             .finish()
     }
+}
+
+#[derive(Debug)]
+pub struct SchedulingStruct {
+    pub flags: crate::SchedulingFlags,
+    pub min_size: i32,
+    pub max_size: i32,
+    pub align: i32,
 }
 
 impl std::fmt::Debug for Scheduling<Query> {
