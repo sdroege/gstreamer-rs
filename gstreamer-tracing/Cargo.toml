@@ -1,0 +1,38 @@
+[package]
+name = "tracing-gstreamer"
+version = "0.9.0"
+edition = "2018"
+authors = ["Simonas Kazlauskas <tracing-gstreamer@kazlauskas.me>"]
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/standard-ai/tracing-gstreamer"
+documentation = "https://docs.rs/tracing-gstreamer/"
+readme = "README.mkd"
+description = "Bridge between gstreamer and the tracing ecosystem"
+keywords = ["tracing", "logging", "gstreamer", "multimedia"]
+categories = ["development-tools::debugging", "development-tools::profiling"]
+rust-version = "1.83"
+
+[lib]
+harness = false
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+libc = "0.2.69"
+tracing = "0.1.0"
+tracing-core = "0.1.17"
+gstreamer = "0.24"
+thread_local = "1.1"
+tracing-chrome = { version = "0.7.0", optional = true }
+tracing-subscriber = { version = "0.3", optional = true }
+
+[dev-dependencies]
+tracing = "0.1.0"
+tracing-tracy = "0.11"
+tracing-subscriber = "0.3"
+
+[package.metadata.docs.rs]
+rustdoc-args = ["--cfg", "tracing_gstreamer_docs"]
+
+[features]
+tracing-chrome = ["dep:tracing-chrome"]
+tracing-subscriber = ["dep:tracing-subscriber"]
