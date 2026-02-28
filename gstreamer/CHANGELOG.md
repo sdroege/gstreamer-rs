@@ -5,6 +5,28 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.24.5] - 2026-02-28
+### Added
+- Add bindings for `gst::segtrap_is_enabled()` and `segtrap_set_enabled()`.
+- Add `gst::MiniObject::mark_may_be_leaked()`.
+- Add bindings for `gst::DynamicTypeFactory`.
+- Add bindings for `gst_tag::image_data_to_image_sample()`.
+- Add bindings for all tags from `gst_tag`.
+- Add various missing `gst::Memory` / `gst::Buffer` method bindings.
+- Add some missing message types to `gst::MessageType`.
+- Add some more acccessors to `gst::Query`, `Message` and `Event` types.
+
+### Fixed
+- Add assertions for invalid fourcc/modifiers in `gst_video::dma_drm_fourcc_to_string()`.
+- Fix `gst::Bus::timed_pop_filtered()` timeout semantics.
+- Fix return value ownership transfer in `gst_validate::setup_test_file()`.
+- Fix setting `out-of-segment` via the `gst_app::AppSink` builder.
+- Fix setting user-set pad name being overwritten in `gst::GhostPad` builder.
+
+### Changed
+- Update to latest 1.28 and upcoming 1.30 APIs.
+
+
 ## [0.24.4] - 2025-12-02
 ### Added
 - Add `Buffer::try_into_inner()` and `Memory::try_into_inner()` to extract a
@@ -1976,7 +1998,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.24.4...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.24.5...HEAD
+[0.24.5]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.24.4...0.24.5
 [0.24.4]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.24.3...0.24.4
 [0.24.3]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.24.2...0.24.3
 [0.24.2]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.24.1...0.24.2
