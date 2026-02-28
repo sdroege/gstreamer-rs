@@ -5,6 +5,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.25.1] - 2026-02-28
+### Fixed
+- Fix setting user-set pad name being overwritten in `gst::GhostPad` builder.
+
+### Added
+- Add some missing message types to `gst::MessageType`.
+- Add some more acccessors to `gst::Query`, `Message` and `Event` types.
+
 ## [0.25.0] - 2026-02-20
 ### Fixed
 - `gst_video::dma_drm_fourcc_to_string()` doesn't do a NULL pointer
@@ -2035,7 +2043,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.25.0...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.25.1...HEAD
+[0.25.1]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.25.0...0.25.1
 [0.25.0]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.24.4...0.25.0
 [0.24.5]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.24.4...0.24.5
 [0.24.4]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.24.3...0.24.4
