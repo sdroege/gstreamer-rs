@@ -16,6 +16,10 @@ pub trait BaseParseImpl: ElementImpl + ObjectSubclass<Type: IsA<BaseParse>> {
         self.parent_stop()
     }
 
+    fn sink_caps(&self, filter: Option<&gst::Caps>) -> gst::Caps {
+        self.parent_sink_caps(filter)
+    }
+
     fn set_sink_caps(&self, caps: &gst::Caps) -> Result<(), gst::LoggableError> {
         self.parent_set_sink_caps(caps)
     }
@@ -84,6 +88,26 @@ pub trait BaseParseImplExt: BaseParseImpl {
                     }
                 })
                 .unwrap_or(Ok(()))
+        }
+    }
+
+    fn parent_sink_caps(&self, filter: Option<&gst::Caps>) -> gst::Caps {
+        unsafe {
+            let data = Self::type_data();
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseParseClass;
+            if let Some(f) = (*parent_class).get_sink_caps {
+                from_glib_full(f(
+                    self.obj().unsafe_cast_ref::<BaseParse>().to_glib_none().0,
+                    filter.to_glib_none().0,
+                ))
+            } else {
+                let templ_caps = self.obj().sink_pad().pad_template_caps();
+                if let Some(filter) = filter {
+                    filter.intersect_with_mode(&templ_caps, gst::CapsIntersectMode::First)
+                } else {
+                    templ_caps
+                }
+            }
         }
     }
 
@@ -170,6 +194,7 @@ unsafe impl<T: BaseParseImpl> IsSubclassable<T> for BaseParse {
         klass.start = Some(base_parse_start::<T>);
         klass.stop = Some(base_parse_stop::<T>);
         klass.set_sink_caps = Some(base_parse_set_sink_caps::<T>);
+        klass.get_sink_caps = Some(base_parse_get_sink_caps::<T>);
         klass.handle_frame = Some(base_parse_handle_frame::<T>);
         klass.convert = Some(base_parse_convert::<T>);
     }
@@ -234,6 +259,22 @@ unsafe extern "C" fn base_parse_set_sink_caps<T: BaseParseImpl>(
             }
         })
         .into_glib()
+    }
+}
+
+unsafe extern "C" fn base_parse_get_sink_caps<T: BaseParseImpl>(
+    ptr: *mut ffi::GstBaseParse,
+    filter: *mut gst::ffi::GstCaps,
+) -> *mut gst::ffi::GstCaps {
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
+        let filter: Borrowed<Option<gst::Caps>> = from_glib_borrow(filter);
+
+        gst::panic_to_error!(imp, gst::Caps::new_empty(), {
+            imp.sink_caps(filter.as_ref().as_ref())
+        })
+        .into_glib_ptr()
     }
 }
 
