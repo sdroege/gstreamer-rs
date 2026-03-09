@@ -18,4 +18,40 @@ external_libraries = [
 
 generate = [
     "GstTag.TagImageType",
+    "GstTag.TagLicenseFlags",
 ]
+
+[[object]]
+name = "GstTag.*"
+status = "generate"
+    # Bound manually
+    [[object.constant]]
+    pattern = ".+"
+    ignore = true
+    [[object.function]]
+    pattern = "tag_get_language_.+"
+    manual = true
+    [[object.function]]
+    name = "tag_check_language_code"
+    manual = true
+    [[object.function]]
+    name = "tag_freeform_string_to_utf8"
+    manual = true
+    [[object.function]]
+    name = "tag_get_id3v2_tag_size"
+    manual = true
+    [[object.function]]
+    name = "tag_image_data_to_image_sample"
+    manual = true
+    [[object.function]]
+    pattern = "tag_list_.*"
+    manual = true
+    [[object.function]]
+    name = "tag_register_musicbrainz_tags"
+    manual = true
+    [[object.function]]
+    name = "tag_to_vorbis_comments"
+    manual = true
+    [[object.function]]
+    name = "vorbis_tag_add"
+    manual = true
