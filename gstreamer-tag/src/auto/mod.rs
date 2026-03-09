@@ -5,3 +5,8 @@
 
 mod enums;
 pub use self::enums::TagImageType;
+
+mod flags;
+pub use self::flags::TagLicenseFlags;
+
+pub(crate) mod functions;
