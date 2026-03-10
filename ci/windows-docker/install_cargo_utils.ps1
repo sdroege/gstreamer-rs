@@ -39,6 +39,7 @@ $libclang_url = 'https://gstreamer.freedesktop.org/data/src/mirror/libclang-20.1
 Invoke-WebRequest -Uri $libclang_url -Outfile "$env:TEMP\libclang-20.1.2.tar.xz" -UserAgent "curl/8.7.1 (gstreamer ci, https://gitlab.freedesktop.org/gstreamer/gstreamer-rs)"
 ouch decompress -d $env:TEMP "$env:TEMP\libclang-20.1.2.tar.xz"
 cp "$env:TEMP\libclang-20.1.2\x64\bin\libclang.dll" "$env:USERPROFILE\.cargo\bin"
+cp "$env:TEMP\libclang-20.1.2\x64\bin\libclang.dll" "C:\gst-install\bin"
 Remove-Item -Recurse "$env:TEMP\libclang-20.1.2"
 Remove-Item "$env:TEMP\libclang-20.1.2.tar.xz"
 
