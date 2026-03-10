@@ -23,3 +23,6 @@ RUN C:\install_dav1d.ps1
 RUN C:\install_vvdec.ps1
 RUN C:\install_rust.ps1
 RUN C:\install_cargo_utils.ps1
+
+# Export our libclang (not the Choco one) to downstream consumers
+ENV LIBCLANG_PATH="C:\gst-install\bin"
