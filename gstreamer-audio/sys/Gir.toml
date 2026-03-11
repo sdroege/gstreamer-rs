@@ -93,6 +93,16 @@ status = "generate"
     ignore = true
 
 [[object]]
+name = "GstAudio.DsdFormat"
+status = "generate"
+    [[object.member]]
+    name = "dsd_format_u16"
+    ignore = true
+    [[object.member]]
+    name = "dsd_format_u32"
+    ignore = true
+
+[[object]]
 name = "GstAudio.*"
 status = "generate"
     [[object.function]]
