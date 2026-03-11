@@ -206,8 +206,6 @@ pub const GST_DSD_FORMAT_U16BE: GstDsdFormat = 3;
 pub const GST_DSD_FORMAT_U32LE: GstDsdFormat = 4;
 pub const GST_DSD_FORMAT_U32BE: GstDsdFormat = 5;
 pub const GST_NUM_DSD_FORMATS: GstDsdFormat = 6;
-pub const GST_DSD_FORMAT_U16: GstDsdFormat = 2;
-pub const GST_DSD_FORMAT_U32: GstDsdFormat = 4;
 
 pub type GstStreamVolumeFormat = c_int;
 pub const GST_STREAM_VOLUME_FORMAT_LINEAR: GstStreamVolumeFormat = 0;
