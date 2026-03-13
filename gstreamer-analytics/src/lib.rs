@@ -63,6 +63,10 @@ pub use crate::batchmeta::*;
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
 mod model_info;
 
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+pub mod image_util;
+
 mod enums;
 
 // Re-export all the traits in a prelude module, so that applications
