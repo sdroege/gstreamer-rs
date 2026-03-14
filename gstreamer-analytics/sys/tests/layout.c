@@ -11,6 +11,10 @@ int main() {
     printf("%s;%zu;%zu\n", "GstAnalyticsBatchMeta", sizeof(GstAnalyticsBatchMeta), alignof(GstAnalyticsBatchMeta));
     printf("%s;%zu;%zu\n", "GstAnalyticsBatchStream", sizeof(GstAnalyticsBatchStream), alignof(GstAnalyticsBatchStream));
     printf("%s;%zu;%zu\n", "GstAnalyticsClsMtd", sizeof(GstAnalyticsClsMtd), alignof(GstAnalyticsClsMtd));
+    printf("%s;%zu;%zu\n", "GstAnalyticsGroupMtd", sizeof(GstAnalyticsGroupMtd), alignof(GstAnalyticsGroupMtd));
+    printf("%s;%zu;%zu\n", "GstAnalyticsKeypointDimensions", sizeof(GstAnalyticsKeypointDimensions), alignof(GstAnalyticsKeypointDimensions));
+    printf("%s;%zu;%zu\n", "GstAnalyticsKeypointMtd", sizeof(GstAnalyticsKeypointMtd), alignof(GstAnalyticsKeypointMtd));
+    printf("%s;%zu;%zu\n", "GstAnalyticsKeypointVisibility", sizeof(GstAnalyticsKeypointVisibility), alignof(GstAnalyticsKeypointVisibility));
     printf("%s;%zu;%zu\n", "GstAnalyticsModelInfoTensorDirection", sizeof(GstAnalyticsModelInfoTensorDirection), alignof(GstAnalyticsModelInfoTensorDirection));
     printf("%s;%zu;%zu\n", "GstAnalyticsMtd", sizeof(GstAnalyticsMtd), alignof(GstAnalyticsMtd));
     printf("%s;%zu;%zu\n", "GstAnalyticsMtdImpl", sizeof(GstAnalyticsMtdImpl), alignof(GstAnalyticsMtdImpl));

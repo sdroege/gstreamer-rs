@@ -36,6 +36,10 @@ use glib::{GType, gboolean, gconstpointer, gpointer};
 pub type GstAnalyticsMtdType = uintptr_t;
 
 // Enums
+pub type GstAnalyticsKeypointDimensions = c_int;
+pub const GST_ANALYTICS_KEYPOINT_DIMENSIONS_2D: GstAnalyticsKeypointDimensions = 2;
+pub const GST_ANALYTICS_KEYPOINT_DIMENSIONS_3D: GstAnalyticsKeypointDimensions = 3;
+
 pub type GstAnalyticsModelInfoTensorDirection = c_int;
 pub const MODELINFO_DIRECTION_UNKNOWN: GstAnalyticsModelInfoTensorDirection = 0;
 pub const MODELINFO_DIRECTION_INPUT: GstAnalyticsModelInfoTensorDirection = 1;
@@ -102,6 +106,12 @@ pub const GST_MODELINFO_VERSION_STR: &[u8] = b"1.0\0";
 pub const GST_ANALYTICS_MTD_TYPE_ANY: c_int = 0;
 
 // Flags
+pub type GstAnalyticsKeypointVisibility = c_uint;
+pub const GST_ANALYTICS_KEYPOINT_VISIBILITY_UNKNOWN: GstAnalyticsKeypointVisibility = 0;
+pub const GST_ANALYTICS_KEYPOINT_VISIBILITY_VISIBLE: GstAnalyticsKeypointVisibility = 1;
+pub const GST_ANALYTICS_KEYPOINT_VISIBILITY_OCCLUDED: GstAnalyticsKeypointVisibility = 4;
+pub const GST_ANALYTICS_KEYPOINT_VISIBILITY_PROJECTED: GstAnalyticsKeypointVisibility = 8;
+
 pub type GstAnalyticsRelTypes = c_uint;
 pub const GST_ANALYTICS_REL_TYPE_NONE: GstAnalyticsRelTypes = 0;
 pub const GST_ANALYTICS_REL_TYPE_IS_PART_OF: GstAnalyticsRelTypes = 2;
@@ -164,6 +174,38 @@ pub struct GstAnalyticsClsMtd {
 impl ::std::fmt::Debug for GstAnalyticsClsMtd {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstAnalyticsClsMtd @ {self:p}"))
+            .field("id", &self.id)
+            .field("meta", &self.meta)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstAnalyticsGroupMtd {
+    pub id: c_uint,
+    pub meta: *mut GstAnalyticsRelationMeta,
+}
+
+impl ::std::fmt::Debug for GstAnalyticsGroupMtd {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstAnalyticsGroupMtd @ {self:p}"))
+            .field("id", &self.id)
+            .field("meta", &self.meta)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstAnalyticsKeypointMtd {
+    pub id: c_uint,
+    pub meta: *mut GstAnalyticsRelationMeta,
+}
+
+impl ::std::fmt::Debug for GstAnalyticsKeypointMtd {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstAnalyticsKeypointMtd @ {self:p}"))
             .field("id", &self.id)
             .field("meta", &self.meta)
             .finish()
@@ -381,6 +423,83 @@ unsafe extern "C" {
     pub fn gst_analytics_cls_mtd_get_mtd_type() -> GstAnalyticsMtdType;
 
     //=========================================================================
+    // GstAnalyticsGroupMtd
+    //=========================================================================
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_group_mtd_add_member(
+        handle: *mut GstAnalyticsGroupMtd,
+        an_meta_id: c_uint,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_group_mtd_get_member(
+        handle: *const GstAnalyticsGroupMtd,
+        index: size_t,
+        member: *mut GstAnalyticsMtd,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_group_mtd_get_member_count(handle: *const GstAnalyticsGroupMtd) -> size_t;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_group_mtd_has_semantic_tag(
+        handle: *const GstAnalyticsGroupMtd,
+        tag: *const c_char,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_group_mtd_iterate(
+        handle: *const GstAnalyticsGroupMtd,
+        state: *mut gpointer,
+        type_: GstAnalyticsMtdType,
+        member: *mut GstAnalyticsMtd,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_group_mtd_semantic_tag_has_prefix(
+        handle: *const GstAnalyticsGroupMtd,
+        prefix: *const c_char,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_group_mtd_set_semantic_tag(
+        handle: *mut GstAnalyticsGroupMtd,
+        tag: *const c_char,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_group_mtd_get_mtd_type() -> GstAnalyticsMtdType;
+
+    //=========================================================================
+    // GstAnalyticsKeypointMtd
+    //=========================================================================
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_keypoint_mtd_get_confidence(
+        handle: *const GstAnalyticsKeypointMtd,
+        confidence: *mut c_float,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_keypoint_mtd_get_position(
+        handle: *const GstAnalyticsKeypointMtd,
+        x: *mut c_int,
+        y: *mut c_int,
+        z: *mut c_int,
+        dimension: *mut GstAnalyticsKeypointDimensions,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_keypoint_mtd_get_visibility_flags(
+        handle: *const GstAnalyticsKeypointMtd,
+        visibility_flags: *mut u8,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_keypoint_mtd_get_mtd_type() -> GstAnalyticsMtdType;
+
+    //=========================================================================
     // GstAnalyticsModelInfo
     //=========================================================================
     #[cfg(feature = "v1_28")]
@@ -507,6 +626,47 @@ unsafe extern "C" {
         class_quarks: *mut glib::GQuark,
         cls_mtd: *mut GstAnalyticsClsMtd,
     ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_relation_meta_add_group_mtd(
+        instance: *mut GstAnalyticsRelationMeta,
+        pre_alloc_size: size_t,
+        group_mtd: *mut GstAnalyticsGroupMtd,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_relation_meta_add_group_mtd_with_size(
+        instance: *mut GstAnalyticsRelationMeta,
+        group_size: size_t,
+        group_mtd: *mut GstAnalyticsGroupMtd,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_relation_meta_add_keypoint_mtd(
+        instance: *mut GstAnalyticsRelationMeta,
+        dimension: GstAnalyticsKeypointDimensions,
+        x: c_int,
+        y: c_int,
+        z: c_int,
+        visibility_flags: u8,
+        confidence: c_float,
+        keypoint_mtd: *mut GstAnalyticsKeypointMtd,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_relation_meta_add_keypoints_group(
+        instance: *mut GstAnalyticsRelationMeta,
+        semantic_tag: *const c_char,
+        dimension: GstAnalyticsKeypointDimensions,
+        positions_len: size_t,
+        positions: *const c_int,
+        keypoint_count: size_t,
+        confidences: *const c_float,
+        visibilities: *const u8,
+        skeleton_pairs_len: size_t,
+        skeleton_pairs: *const c_int,
+        group_mtd: *mut GstAnalyticsGroupMtd,
+    ) -> gboolean;
     pub fn gst_analytics_relation_meta_add_mtd(
         meta: *mut GstAnalyticsRelationMeta,
         impl_: *const GstAnalyticsMtdImpl,
@@ -601,6 +761,20 @@ unsafe extern "C" {
         type_: GstAnalyticsMtdType,
         state: *mut gpointer,
         rlt_mtd: *mut GstAnalyticsMtd,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_relation_meta_get_group_mtd(
+        meta: *mut GstAnalyticsRelationMeta,
+        an_meta_id: c_uint,
+        rlt: *mut GstAnalyticsGroupMtd,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_relation_meta_get_keypoint_mtd(
+        meta: *mut GstAnalyticsRelationMeta,
+        an_meta_id: c_uint,
+        rlt: *mut GstAnalyticsKeypointMtd,
     ) -> gboolean;
     pub fn gst_analytics_relation_meta_get_mtd(
         meta: *mut GstAnalyticsRelationMeta,
