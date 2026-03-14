@@ -224,6 +224,34 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "GstAnalyticsGroupMtd",
+        Layout {
+            size: size_of::<GstAnalyticsGroupMtd>(),
+            alignment: align_of::<GstAnalyticsGroupMtd>(),
+        },
+    ),
+    (
+        "GstAnalyticsKeypointDimensions",
+        Layout {
+            size: size_of::<GstAnalyticsKeypointDimensions>(),
+            alignment: align_of::<GstAnalyticsKeypointDimensions>(),
+        },
+    ),
+    (
+        "GstAnalyticsKeypointMtd",
+        Layout {
+            size: size_of::<GstAnalyticsKeypointMtd>(),
+            alignment: align_of::<GstAnalyticsKeypointMtd>(),
+        },
+    ),
+    (
+        "GstAnalyticsKeypointVisibility",
+        Layout {
+            size: size_of::<GstAnalyticsKeypointVisibility>(),
+            alignment: align_of::<GstAnalyticsKeypointVisibility>(),
+        },
+    ),
+    (
         "GstAnalyticsModelInfoTensorDirection",
         Layout {
             size: size_of::<GstAnalyticsModelInfoTensorDirection>(),
@@ -338,6 +366,12 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
 ];
 
 const RUST_CONSTANTS: &[(&str, &str)] = &[
+    ("(gint) GST_ANALYTICS_KEYPOINT_DIMENSIONS_2D", "2"),
+    ("(gint) GST_ANALYTICS_KEYPOINT_DIMENSIONS_3D", "3"),
+    ("(guint) GST_ANALYTICS_KEYPOINT_VISIBILITY_OCCLUDED", "4"),
+    ("(guint) GST_ANALYTICS_KEYPOINT_VISIBILITY_PROJECTED", "8"),
+    ("(guint) GST_ANALYTICS_KEYPOINT_VISIBILITY_UNKNOWN", "0"),
+    ("(guint) GST_ANALYTICS_KEYPOINT_VISIBILITY_VISIBLE", "1"),
     ("GST_ANALYTICS_MTD_TYPE_ANY", "0"),
     ("(guint) GST_ANALYTICS_REL_TYPE_ANY", "2147483647"),
     ("(guint) GST_ANALYTICS_REL_TYPE_CONTAIN", "4"),
