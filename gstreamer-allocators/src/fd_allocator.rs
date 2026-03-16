@@ -1,4 +1,4 @@
-use std::{fmt, os::unix::prelude::RawFd};
+use std::{fmt, os::fd::RawFd};
 
 use glib::{prelude::*, translate::*};
 use gst::{Memory, MemoryRef};
