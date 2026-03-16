@@ -49,5 +49,7 @@ if [ "$RUST_VERSION" = "nightly" ]; then
   cargo install --locked rustdoc-stripper
 fi
 
+./ci/install-librice.sh
+
 cargo install --locked bindgen-cli
 bindgen --version
