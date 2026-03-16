@@ -28,7 +28,11 @@ pub use crate::auto::*;
 mod caps_features;
 pub use crate::caps_features::CAPS_FEATURES_MEMORY_DMABUF;
 
+#[cfg(any(unix, docsrs))]
+#[cfg_attr(docsrs, doc(cfg(unix)))]
 mod fd_allocator;
+#[cfg(any(unix, docsrs))]
+#[cfg_attr(docsrs, doc(cfg(unix)))]
 pub use fd_allocator::*;
 
 #[cfg(any(target_os = "linux", docsrs))]
