@@ -10,7 +10,7 @@ SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPref
 ARG DEFAULT_BRANCH="invalid"
 ARG RUST_VERSION="invalid"
 
-RUN choco install -y pkgconfiglite nasm llvm
+RUN choco install -y pkgconfiglite nasm llvm protoc
 RUN choco install -y openssl --version=3.6.1
 
 # https://stackoverflow.com/a/50716450
