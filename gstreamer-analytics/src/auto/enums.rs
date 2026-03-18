@@ -8,6 +8,52 @@ use crate::ffi;
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
 use glib::translate::*;
 
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+#[doc(alias = "GstAnalyticsKeypointDimensions")]
+pub enum KeypointDimensions {
+    #[doc(alias = "GST_ANALYTICS_KEYPOINT_DIMENSIONS_2D")]
+    _2d,
+    #[doc(alias = "GST_ANALYTICS_KEYPOINT_DIMENSIONS_3D")]
+    _3d,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+#[doc(hidden)]
+impl IntoGlib for KeypointDimensions {
+    type GlibType = ffi::GstAnalyticsKeypointDimensions;
+
+    #[inline]
+    fn into_glib(self) -> ffi::GstAnalyticsKeypointDimensions {
+        match self {
+            Self::_2d => ffi::GST_ANALYTICS_KEYPOINT_DIMENSIONS_2D,
+            Self::_3d => ffi::GST_ANALYTICS_KEYPOINT_DIMENSIONS_3D,
+            Self::__Unknown(value) => value,
+        }
+    }
+}
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+#[doc(hidden)]
+impl FromGlib<ffi::GstAnalyticsKeypointDimensions> for KeypointDimensions {
+    #[inline]
+    unsafe fn from_glib(value: ffi::GstAnalyticsKeypointDimensions) -> Self {
+        skip_assert_initialized!();
+
+        match value {
+            ffi::GST_ANALYTICS_KEYPOINT_DIMENSIONS_2D => Self::_2d,
+            ffi::GST_ANALYTICS_KEYPOINT_DIMENSIONS_3D => Self::_3d,
+            value => Self::__Unknown(value),
+        }
+    }
+}
+
 #[cfg(feature = "v1_28")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]

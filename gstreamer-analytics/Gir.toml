@@ -17,6 +17,8 @@ external_libraries = [
 ]
 
 generate = [
+    "GstAnalytics.KeypointDimensions",
+    "GstAnalytics.KeypointVisibility",
     "GstAnalytics.ModelInfoTensorDirection",
     "GstAnalytics.RelTypes",
     "GstAnalytics.TensorDataType",

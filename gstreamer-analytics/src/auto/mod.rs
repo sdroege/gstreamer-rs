@@ -11,6 +11,9 @@ mod model_info;
 pub use self::model_info::ModelInfo;
 
 mod enums;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub use self::enums::KeypointDimensions;
 #[cfg(feature = "v1_28")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
 pub use self::enums::ModelInfoTensorDirection;
@@ -22,4 +25,7 @@ pub use self::enums::TensorDataType;
 pub use self::enums::TensorDimOrder;
 
 mod flags;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub use self::flags::KeypointVisibility;
 pub use self::flags::RelTypes;
