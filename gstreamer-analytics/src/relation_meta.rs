@@ -272,6 +272,11 @@ impl<'a, T: AnalyticsMtd> AnalyticsMtdRef<'a, T> {
         self.id
     }
 
+    #[cfg(feature = "v1_28")]
+    pub(crate) fn meta_ref(&self) -> &gst::MetaRef<'a, AnalyticsRelationMeta> {
+        &self.meta
+    }
+
     pub unsafe fn from_meta(meta: &gst::MetaRef<'a, AnalyticsRelationMeta>, id: u32) -> Self {
         skip_assert_initialized!();
         AnalyticsMtdRef {

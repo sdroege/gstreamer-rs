@@ -6,6 +6,46 @@
 use crate::ffi;
 use glib::{bitflags::bitflags, translate::*};
 
+#[cfg(feature = "v1_30")]
+bitflags! {
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+    #[doc(alias = "GstAnalyticsKeypointVisibility")]
+    pub struct KeypointVisibility: u32 {
+        #[doc(alias = "GST_ANALYTICS_KEYPOINT_VISIBILITY_UNKNOWN")]
+        const UNKNOWN = ffi::GST_ANALYTICS_KEYPOINT_VISIBILITY_UNKNOWN as _;
+        #[doc(alias = "GST_ANALYTICS_KEYPOINT_VISIBILITY_VISIBLE")]
+        const VISIBLE = ffi::GST_ANALYTICS_KEYPOINT_VISIBILITY_VISIBLE as _;
+        #[doc(alias = "GST_ANALYTICS_KEYPOINT_VISIBILITY_OCCLUDED")]
+        const OCCLUDED = ffi::GST_ANALYTICS_KEYPOINT_VISIBILITY_OCCLUDED as _;
+        #[doc(alias = "GST_ANALYTICS_KEYPOINT_VISIBILITY_PROJECTED")]
+        const PROJECTED = ffi::GST_ANALYTICS_KEYPOINT_VISIBILITY_PROJECTED as _;
+    }
+}
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+#[doc(hidden)]
+impl IntoGlib for KeypointVisibility {
+    type GlibType = ffi::GstAnalyticsKeypointVisibility;
+
+    #[inline]
+    fn into_glib(self) -> ffi::GstAnalyticsKeypointVisibility {
+        self.bits()
+    }
+}
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+#[doc(hidden)]
+impl FromGlib<ffi::GstAnalyticsKeypointVisibility> for KeypointVisibility {
+    #[inline]
+    unsafe fn from_glib(value: ffi::GstAnalyticsKeypointVisibility) -> Self {
+        skip_assert_initialized!();
+        Self::from_bits_truncate(value)
+    }
+}
+
 bitflags! {
     #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
     #[doc(alias = "GstAnalyticsRelTypes")]

@@ -49,6 +49,20 @@ pub use crate::object_detection::*;
 mod tracking;
 pub use crate::tracking::*;
 
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+mod keypoint;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub use crate::keypoint::*;
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+mod group;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub use crate::group::*;
+
 mod classification;
 pub use crate::classification::*;
 
@@ -73,6 +87,12 @@ mod enums;
 // can always "use gst_app::prelude::*" without getting conflicts
 pub mod prelude {
     pub use crate::classification::AnalyticsRelationMetaClassificationExt;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub use crate::group::AnalyticsRelationMetaGroupExt;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub use crate::keypoint::AnalyticsRelationMetaKeypointExt;
     pub use crate::object_detection::AnalyticsRelationMetaODExt;
     pub use crate::tracking::AnalyticsRelationMetaTrackingExt;
 }
