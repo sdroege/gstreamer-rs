@@ -137,16 +137,14 @@ unsafe impl AnalyticsMtd for AnalyticsODMtd {
     }
 }
 
-unsafe fn from(t: ffi::GstAnalyticsMtd) -> ffi::GstAnalyticsODMtd {
-    unsafe { std::mem::transmute(t) }
-}
-
 impl AnalyticsMtdRef<'_, AnalyticsODMtd> {
     #[doc(alias = "gst_analytics_od_mtd_get_obj_type")]
     pub fn obj_type(&self) -> Option<glib::Quark> {
         unsafe {
-            let mtd = from(ffi::GstAnalyticsMtd::unsafe_from(self));
-            let type_ = ffi::gst_analytics_od_mtd_get_obj_type(&mtd);
+            let mtd = ffi::GstAnalyticsMtd::unsafe_from(self);
+            let type_ = ffi::gst_analytics_od_mtd_get_obj_type(
+                &mtd as *const _ as *const ffi::GstAnalyticsODMtd,
+            );
             if type_ == 0 {
                 None
             } else {
@@ -160,9 +158,9 @@ impl AnalyticsMtdRef<'_, AnalyticsODMtd> {
         let mut loc = AnalyticsODLocation::default();
 
         let success = unsafe {
-            let mtd = from(ffi::GstAnalyticsMtd::unsafe_from(self));
+            let mtd = ffi::GstAnalyticsMtd::unsafe_from(self);
             ffi::gst_analytics_od_mtd_get_location(
-                &mtd,
+                &mtd as *const _ as *const ffi::GstAnalyticsODMtd,
                 &mut loc.x,
                 &mut loc.y,
                 &mut loc.w,
@@ -185,9 +183,9 @@ impl AnalyticsMtdRef<'_, AnalyticsODMtd> {
         let mut loc = AnalyticsODOrientedLocation::default();
 
         let success = unsafe {
-            let mtd = from(ffi::GstAnalyticsMtd::unsafe_from(self));
+            let mtd = ffi::GstAnalyticsMtd::unsafe_from(self);
             ffi::gst_analytics_od_mtd_get_oriented_location(
-                &mtd,
+                &mtd as *const _ as *const ffi::GstAnalyticsODMtd,
                 &mut loc.x,
                 &mut loc.y,
                 &mut loc.w,
@@ -207,9 +205,12 @@ impl AnalyticsMtdRef<'_, AnalyticsODMtd> {
     #[doc(alias = "gst_analytics_od_mtd_get_confidence_lvl")]
     pub fn confidence_level(&self) -> f32 {
         unsafe {
-            let mtd = from(ffi::GstAnalyticsMtd::unsafe_from(self));
+            let mtd = ffi::GstAnalyticsMtd::unsafe_from(self);
             let mut lvl: f32 = 0.0;
-            ffi::gst_analytics_od_mtd_get_confidence_lvl(&mtd, &mut lvl);
+            ffi::gst_analytics_od_mtd_get_confidence_lvl(
+                &mtd as *const _ as *const ffi::GstAnalyticsODMtd,
+                &mut lvl,
+            );
             lvl
         }
     }
