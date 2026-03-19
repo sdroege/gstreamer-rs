@@ -55,10 +55,6 @@ unsafe impl AnalyticsMtd for AnalyticsTrackingMtd {
     }
 }
 
-unsafe fn from(t: ffi::GstAnalyticsMtd) -> ffi::GstAnalyticsTrackingMtd {
-    unsafe { std::mem::transmute(t) }
-}
-
 impl AnalyticsMtdRef<'_, AnalyticsTrackingMtd> {
     #[doc(alias = "gst_analytics_tracking_mtd_get_info")]
     pub fn info(&self) -> (u64, gst::ClockTime, gst::ClockTime, bool) {
@@ -68,9 +64,9 @@ impl AnalyticsMtdRef<'_, AnalyticsTrackingMtd> {
         let mut tracking_lost: i32 = 0;
 
         unsafe {
-            let mtd = from(ffi::GstAnalyticsMtd::unsafe_from(self));
+            let mtd = ffi::GstAnalyticsMtd::unsafe_from(self);
             ffi::gst_analytics_tracking_mtd_get_info(
-                &mtd,
+                &mtd as *const _ as *const ffi::GstAnalyticsTrackingMtd,
                 &mut tracking_id,
                 &mut tracking_first_seen,
                 &mut tracking_last_seen,
@@ -91,9 +87,9 @@ impl AnalyticsMtdRefMut<'_, AnalyticsTrackingMtd> {
     #[doc(alias = "gst_analytics_tracking_mtd_update_last_seen")]
     pub fn update_last_seen(&mut self, last_seen: gst::ClockTime) -> Result<(), glib::BoolError> {
         let ret: bool = unsafe {
-            let mut mtd = from(ffi::GstAnalyticsMtd::unsafe_from(self));
+            let mut mtd = ffi::GstAnalyticsMtd::unsafe_from(self);
             from_glib(ffi::gst_analytics_tracking_mtd_update_last_seen(
-                &mut mtd,
+                &mut mtd as *mut _ as *mut ffi::GstAnalyticsTrackingMtd,
                 last_seen.into_glib(),
             ))
         };
@@ -104,8 +100,10 @@ impl AnalyticsMtdRefMut<'_, AnalyticsTrackingMtd> {
     #[doc(alias = "gst_analytics_tracking_mtd_set_lost")]
     pub fn set_lost(&mut self) -> Result<(), glib::BoolError> {
         let ret: bool = unsafe {
-            let mut mtd = from(ffi::GstAnalyticsMtd::unsafe_from(self));
-            from_glib(ffi::gst_analytics_tracking_mtd_set_lost(&mut mtd))
+            let mut mtd = ffi::GstAnalyticsMtd::unsafe_from(self);
+            from_glib(ffi::gst_analytics_tracking_mtd_set_lost(
+                &mut mtd as *mut _ as *mut ffi::GstAnalyticsTrackingMtd,
+            ))
         };
         assert!(ret);
         Ok(())

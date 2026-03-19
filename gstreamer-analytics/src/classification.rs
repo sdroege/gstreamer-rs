@@ -87,16 +87,14 @@ unsafe impl AnalyticsMtd for AnalyticsClassificationMtd {
     }
 }
 
-unsafe fn from(t: ffi::GstAnalyticsMtd) -> ffi::GstAnalyticsClsMtd {
-    unsafe { std::mem::transmute(t) }
-}
-
 impl AnalyticsMtdRef<'_, AnalyticsClassificationMtd> {
     #[doc(alias = "gst_analytics_cls_mtd_get_length")]
     pub fn len(&self) -> usize {
         unsafe {
-            let mtd = from(ffi::GstAnalyticsMtd::unsafe_from(self));
-            ffi::gst_analytics_cls_mtd_get_length(&mtd)
+            let mtd = ffi::GstAnalyticsMtd::unsafe_from(self);
+            ffi::gst_analytics_cls_mtd_get_length(
+                &mtd as *const _ as *const ffi::GstAnalyticsClsMtd,
+            )
         }
     }
 
@@ -109,8 +107,11 @@ impl AnalyticsMtdRef<'_, AnalyticsClassificationMtd> {
         assert!(index < self.len());
 
         unsafe {
-            let mtd = from(ffi::GstAnalyticsMtd::unsafe_from(self));
-            ffi::gst_analytics_cls_mtd_get_level(&mtd, index)
+            let mtd = ffi::GstAnalyticsMtd::unsafe_from(self);
+            ffi::gst_analytics_cls_mtd_get_level(
+                &mtd as *const _ as *const ffi::GstAnalyticsClsMtd,
+                index,
+            )
         }
     }
 
@@ -119,8 +120,11 @@ impl AnalyticsMtdRef<'_, AnalyticsClassificationMtd> {
         assert!(index < self.len());
 
         unsafe {
-            let mtd = from(ffi::GstAnalyticsMtd::unsafe_from(self));
-            from_glib(ffi::gst_analytics_cls_mtd_get_quark(&mtd, index))
+            let mtd = ffi::GstAnalyticsMtd::unsafe_from(self);
+            from_glib(ffi::gst_analytics_cls_mtd_get_quark(
+                &mtd as *const _ as *const ffi::GstAnalyticsClsMtd,
+                index,
+            ))
         }
     }
 
