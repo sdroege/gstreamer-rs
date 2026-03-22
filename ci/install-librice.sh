@@ -4,7 +4,7 @@ source ./ci/env.sh
 
 set -e
 
-RICE_PROTO_VERSION=v0.3.0
+RICE_PROTO_VERSION=v0.4.0
 
 git clone --depth=1 https://github.com/ystreet/librice -b $RICE_PROTO_VERSION
 cd librice
