@@ -44,6 +44,7 @@ conversion_type = "Option"
 [[object]]
 name = "GstController.TimedValueControlSource"
 status = "generate"
+manual_traits = ["TimedValueControlSourceExtManual"]
 
     [[object.function]]
     name = "get_all"

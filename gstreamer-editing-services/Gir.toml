@@ -66,7 +66,6 @@ generate = [
     "GES.EffectClip",
     "GES.Error",
     "GES.ExtractableCheckId",
-    "GES.Formatter",
     "GES.FrameNumber",
     "GES.Group",
     "GES.ImageSource",
@@ -220,6 +219,11 @@ status = "generate"
     name = "set_asset"
         [object.function.return]
         bool_return_is_error = "Failed to set asset"
+
+[[object]]
+name = "GES.Formatter"
+status = "generate"
+manual_traits = ["FormatterExtManual"]
 
 [[object]]
 name = "GES.Layer"

@@ -336,6 +336,7 @@ manual_traits = ["GLContextExtManual"]
 [[object]]
 name = "GstGL.GLDisplay"
 status = "generate"
+manual_traits = ["GLDisplayExtManual"]
 
     [[object.function]]
     name = "find_window"

@@ -81,6 +81,7 @@ final_type = true
 [[object]]
 name = "GstWebRTC.WebRTCICE"
 status = "generate"
+manual_traits = ["WebRTCICEExtManual"]
     [[object.function]]
     name = "add_candidate"
     # ABI breakage in 1.24 needs working around
