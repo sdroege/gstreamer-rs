@@ -25,7 +25,6 @@ generate = [
     "GstVulkan.VulkanCommandBuffer",
     #"GstVulkan.VulkanDecoder",
     "GstVulkan.VulkanDescriptorSet",
-    "GstVulkan.VulkanDevice",
     "GstVulkan.VulkanDisplay",
     "GstVulkan.VulkanDisplayType",
     #"GstVulkan.VulkanEncoder",
@@ -93,6 +92,7 @@ ref_mode = "ref"
 [[object]]
 name = "GstVulkan.VulkanCommandPool"
 status = "generate"
+manual_traits = ["VulkanCommandPoolExtManual"]
     [[object.function]]
     name = "lock"
     manual = true
@@ -115,8 +115,14 @@ status = "generate"
     ignore = true
 
 [[object]]
+name = "GstVulkan.VulkanDevice"
+status = "generate"
+manual_traits = ["VulkanDeviceExtManual"]
+
+[[object]]
 name = "GstVulkan.VulkanFullScreenQuad"
 status = "generate"
+manual_traits = ["VulkanFullScreenQuadExtManual"]
 version = "1.26.4"
 
 [[object]]
@@ -133,6 +139,7 @@ ref_mode = "ref"
 [[object]]
 name = "GstVulkan.VulkanOperation"
 status = "generate"
+manual_traits = ["VulkanOperationExtManual"]
     [[object.function]]
     name = "begin"
     manual = true
@@ -143,6 +150,7 @@ status = "generate"
 [[object]]
 name = "GstVulkan.VulkanQueue"
 status = "generate"
+manual_traits = ["VulkanQueueExtManual"]
     [[object.function]]
     name = "submit_lock"
     manual = true
@@ -153,6 +161,7 @@ status = "generate"
 [[object]]
 name = "GstVulkan.VulkanSwapper"
 status = "generate"
+manual_traits = ["VulkanSwapperExtManual"]
     [[object.property]]
     name = "pixel-aspect-ratio"
     # fraction

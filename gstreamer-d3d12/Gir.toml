@@ -95,6 +95,7 @@ status = "generate"
 [[object]]
 name = "GstD3D12.D3D12CmdQueue"
 status = "generate"
+manual_traits = ["D3D12CmdQueueExtManual"]
     [[object.function]]
     name = "new"
     manual = true
@@ -127,6 +128,7 @@ status = "generate"
 [[object]]
 name = "GstD3D12.D3D12Converter"
 status = "generate"
+manual_traits = ["D3D12ConverterExtManual"]
     [[object.function]]
     name = "new"
     manual = true
@@ -157,6 +159,7 @@ status = "generate"
 [[object]]
 name = "GstD3D12.D3D12Device"
 status = "generate"
+manual_traits = ["D3D12DeviceExtManual"]
     [[object.function]]
     name = "execute_command_lists"
     manual = true

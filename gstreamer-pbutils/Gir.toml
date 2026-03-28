@@ -17,7 +17,6 @@ external_libraries = [
 ]
 
 generate = [
-    "GstPbutils.AudioVisualizer",
     "GstPbutils.AudioVisualizerShader",
     "GstPbutils.DiscovererResult",
     "GstPbutils.InstallPluginsContext",
@@ -257,6 +256,11 @@ status = "generate"
 
 
 [[object]]
+name = "GstPbutils.AudioVisualizer"
+status = "generate"
+manual_traits = ["AudioVisualizerExtManual"]
+
+[[object]]
 name = "GstPbutils.Discoverer"
 status = "generate"
 final_type = true
@@ -313,6 +317,7 @@ status = "generate"
 name = "GstPbutils.DiscovererStreamInfo"
 status = "generate"
 final_type = false
+manual_traits = ["DiscovererStreamInfoExtManual"]
 
     # Not useful
     [[object.function]]
@@ -371,6 +376,7 @@ status = "generate"
 [[object]]
 name = "GstPbutils.EncodingProfile"
 status = "generate"
+manual_traits = ["EncodingProfileExtManual"]
 
     # Ignore all setters, making it immutable. A builder will be provided.
     [[object.function]]

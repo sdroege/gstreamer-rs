@@ -588,6 +588,7 @@ status = "generate"
 name = "Gst.Bus"
 status = "generate"
 final_type = true
+manual_traits = ["UnixBusExtManual", "WindowsBusExtManual"]
     [[object.function]]
     name = "set_sync_handler"
     # Into<Option<_>> makes this hard to use
@@ -1570,6 +1571,7 @@ name = "Gst.Object"
 # For renaming the trait...
 status = "generate"
 trait_name = "GstObjectExt"
+manual_traits = ["GstObjectExtManual"]
     [[object.function]]
     name = "set_name"
     # Don't allow changing the name at random times
@@ -1951,6 +1953,7 @@ status = "generate"
 [[object]]
 name = "Gst.Pipeline"
 status = "generate"
+manual_traits = ["GstPipelineExtManual"]
     [[object.function]]
     name = "new"
     # Remove the optional `name` argument in favor of using the builder

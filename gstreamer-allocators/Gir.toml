@@ -66,6 +66,7 @@ status = "generate"
 name = "GstAllocators.DmaBufAllocator"
 status = "generate"
 cfg_condition = "target_os = \"linux\""
+manual_traits = ["DmaBufAllocatorExtManual"]
     [[object.function]]
     name = "alloc"
     manual = true
@@ -77,6 +78,7 @@ cfg_condition = "target_os = \"linux\""
 name = "GstAllocators.DRMDumbAllocator"
 status = "generate"
 cfg_condition = "target_os = \"linux\""
+manual_traits = ["DRMDumbAllocatorExtManual"]
     [[object.function]]
     name = "alloc"
     manual = true
@@ -91,6 +93,7 @@ cfg_condition = "target_os = \"linux\""
 [[object]]
 name = "GstAllocators.FdAllocator"
 status = "generate"
+manual_traits = ["FdAllocatorExtManual"]
     [[object.function]]
     name = "alloc"
     manual = true

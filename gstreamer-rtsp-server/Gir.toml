@@ -238,7 +238,7 @@ status="generate"
 [[object]]
 name = "GstRtspServer.RTSPOnvifMediaFactory"
 status = "generate"
-manual_traits = ["RTSPMediaExtManual"]
+manual_traits = ["RTSPOnvifMediaFactoryExtManual"]
     [[object.function]]
     name = "requires_backchannel"
     # on extension trait
@@ -266,6 +266,7 @@ manual_traits = ["RTSPServerExtManual"]
 [[object]]
 name="GstRtspServer.RTSPSession"
 status="generate"
+manual_traits = ["RTSPSessionExtManual"]
     [[object.function]]
     name = "get_media"
     # Map to dup_media if new enough as get_media is not thread-safe
