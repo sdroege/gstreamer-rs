@@ -1,5 +1,6 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+use std::io::{Error, ErrorKind, Read, Seek, SeekFrom};
 use std::{ptr, slice};
 
 use glib::translate::*;
@@ -85,6 +86,114 @@ impl TypeFind {
             let len = ffi::gst_type_find_get_length(&mut self.0);
             if len == 0 { None } else { Some(len) }
         }
+    }
+
+    pub fn as_reader(&mut self) -> TypeFindReader<'_> {
+        TypeFindReader::from(self)
+    }
+}
+
+pub struct TypeFindReader<'a> {
+    buf: &'a mut TypeFind,
+    pos: u64,
+}
+
+impl<'a> TypeFindReader<'a> {
+    pub fn into_typefind(self) -> &'a mut TypeFind {
+        self.buf
+    }
+
+    pub fn as_typefind(&mut self) -> &mut TypeFind {
+        self.buf
+    }
+
+    fn len(&mut self) -> u64 {
+        self.buf.length().unwrap_or(0)
+    }
+}
+
+impl<'a> From<&'a mut TypeFind> for TypeFindReader<'a> {
+    fn from(buf: &'a mut TypeFind) -> Self {
+        skip_assert_initialized!();
+        Self { buf, pos: 0 }
+    }
+}
+
+impl Read for TypeFindReader<'_> {
+    fn read(&mut self, buf: &mut [u8]) -> std::io::Result<usize> {
+        // Negative positions are used for reading relative to the end
+        // of the buffer, which makes no sense in this context so consider
+        // this situation EOF.
+        if self.pos > i64::MAX as u64 {
+            return Ok(0);
+        }
+
+        // First do a unchecked peek as a fast path before calling into len()
+        let max_len = buf.len().min(u32::MAX as usize);
+        if let Some(v) = self.buf.peek(self.pos as i64, max_len as u32) {
+            buf[..max_len].copy_from_slice(v);
+            // pos < i64::MAX so can't possibly overflow
+            self.pos += max_len as u64;
+            return Ok(max_len);
+        }
+
+        // Read failed, less data might be available.
+        let remaining = match self.len().checked_sub(self.pos) {
+            Some(v) => v,
+            None => return Ok(0),
+        };
+
+        // Try reading the remaining data.
+        let remaining = remaining.min(u32::MAX as u64) as usize;
+        let max_len = remaining.min(buf.len());
+        if let Some(v) = self.buf.peek(self.pos as i64, max_len as u32) {
+            buf[..max_len].copy_from_slice(v);
+            // pos < i64::MAX so can't possibly overflow
+            self.pos += max_len as u64;
+            return Ok(max_len);
+        }
+
+        Ok(0)
+    }
+}
+
+impl Seek for TypeFindReader<'_> {
+    fn seek(&mut self, pos: SeekFrom) -> std::io::Result<u64> {
+        match pos {
+            SeekFrom::Start(v) => {
+                if v >= i64::MAX as u64 {
+                    return Err(Error::from(ErrorKind::FileTooLarge));
+                }
+
+                let len = self.len();
+                let v = len.min(v);
+                self.pos = v;
+            }
+            SeekFrom::End(v) => {
+                let Some(v) = self.len().checked_add_signed(v) else {
+                    return Err(Error::from(ErrorKind::InvalidInput));
+                };
+                if v >= i64::MAX as u64 {
+                    return Err(Error::from(ErrorKind::FileTooLarge));
+                }
+
+                self.pos = v;
+            }
+            SeekFrom::Current(v) => {
+                let Some(v) = self.pos.checked_add_signed(v) else {
+                    return Err(Error::from(ErrorKind::InvalidInput));
+                };
+                if v >= i64::MAX as u64 {
+                    return Err(Error::from(ErrorKind::FileTooLarge));
+                }
+
+                let len = self.len();
+                let v = len.min(v);
+                self.pos = v;
+            }
+        };
+
+        Ok(self.pos)
     }
 }
 
