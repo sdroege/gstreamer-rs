@@ -37,6 +37,17 @@ for crate in chain(rootdir.glob('gstreamer*'), [gl_dir / 'egl', gl_dir / 'waylan
     exec(['python3', 'doc_aliases.py', crate.absolute()], cwd=checker_dir)
 
     print(f'--> {crate.absolute()}')
-    exec(['./checker/check_init_asserts', crate.absolute()])
+    try:
+        exec(['./checker/check_init_asserts', crate.absolute()])
+    except Exception as e:
+        print(f'\n!!! check_init_asserts failed for {crate.absolute()}')
+        print(f'\nThis means some public functions are missing initialization assertions.')
+        print(f'Functions should call one of: assert_initialized_main_thread!, assert_not_initialized!, or skip_assert_initialized!')
+        print(f'\nCommon causes:')
+        print(f'    - The function doesn\'t call any of those functions')
+        print(f'    - The call isn\'t on the first line of the function')
+        print(f'\nRun manually to see affected functions:')
+        print(f'  ./checker/check_init_asserts {crate.absolute()}\n')
+        raise
 
 check_no_git_diff()
