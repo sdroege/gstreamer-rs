@@ -93,7 +93,7 @@ mod custom_meta {
                     c"MyCustomMetaAPI".as_ptr() as *const _,
                     // We provide no tags here as our meta is just a label and does
                     // not refer to any specific aspect of the buffer.
-                    [ptr::null::<std::os::raw::c_char>()].as_ptr() as *mut *const _,
+                    [ptr::null::<std::ffi::c_char>()].as_ptr() as *mut *const _,
                 ));
 
                 assert_ne!(t, glib::Type::INVALID);

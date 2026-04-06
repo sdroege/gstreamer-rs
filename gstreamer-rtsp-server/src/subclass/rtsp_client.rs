@@ -975,7 +975,7 @@ unsafe extern "C" fn client_params_get<T: RTSPClientImpl>(
 unsafe extern "C" fn client_make_path_from_uri<T: RTSPClientImpl>(
     ptr: *mut ffi::GstRTSPClient,
     url: *const gst_rtsp::ffi::GstRTSPUrl,
-) -> *mut std::os::raw::c_char {
+) -> *mut std::ffi::c_char {
     unsafe {
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
@@ -1165,8 +1165,8 @@ unsafe extern "C" fn client_handle_sdp<T: RTSPClientImpl>(
 unsafe extern "C" fn client_check_requirements<T: RTSPClientImpl>(
     ptr: *mut ffi::GstRTSPClient,
     ctx: *mut ffi::GstRTSPContext,
-    arr: *mut *mut std::os::raw::c_char,
-) -> *mut std::os::raw::c_char {
+    arr: *mut *mut std::ffi::c_char,
+) -> *mut std::ffi::c_char {
     unsafe {
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();

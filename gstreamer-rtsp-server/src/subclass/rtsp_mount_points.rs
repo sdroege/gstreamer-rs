@@ -45,7 +45,7 @@ unsafe impl<T: RTSPMountPointsImpl> IsSubclassable<T> for RTSPMountPoints {
 unsafe extern "C" fn mount_points_make_path<T: RTSPMountPointsImpl>(
     ptr: *mut ffi::GstRTSPMountPoints,
     url: *const GstRTSPUrl,
-) -> *mut std::os::raw::c_char {
+) -> *mut std::ffi::c_char {
     unsafe {
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();

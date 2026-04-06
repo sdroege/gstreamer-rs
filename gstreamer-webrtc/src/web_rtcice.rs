@@ -16,13 +16,13 @@ pub trait WebRTCICEExtManual: IsA<WebRTCICE> + 'static {
                     unsafe extern "C" fn(
                         *mut ffi::GstWebRTCICE,
                         *mut ffi::GstWebRTCICEStream,
-                        *const std::os::raw::c_char,
+                        *const std::ffi::c_char,
                         *mut gst::ffi::GstPromise,
                     ),
                     unsafe extern "C" fn(
                         *mut ffi::GstWebRTCICE,
                         *mut ffi::GstWebRTCICEStream,
-                        *const std::os::raw::c_char,
+                        *const std::ffi::c_char,
                     ),
                 >(ffi::gst_webrtc_ice_add_candidate);
                 func(
