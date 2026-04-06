@@ -1240,7 +1240,7 @@ unsafe extern "C" fn log_handler_data_free<T>(data: gpointer) {
 }
 
 #[derive(Debug)]
-pub struct DebugLogFunction(ptr::NonNull<std::os::raw::c_void>);
+pub struct DebugLogFunction(ptr::NonNull<std::ffi::c_void>);
 
 // The contained pointer is never dereferenced and has no thread affinity.
 // It may be convenient to send it or share it between threads to allow cleaning

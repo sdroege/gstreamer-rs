@@ -188,7 +188,7 @@ unsafe impl<T: RTSPMediaFactoryImpl> IsSubclassable<T> for RTSPMediaFactory {
 unsafe extern "C" fn factory_gen_key<T: RTSPMediaFactoryImpl>(
     ptr: *mut ffi::GstRTSPMediaFactory,
     url: *const gst_rtsp::ffi::GstRTSPUrl,
-) -> *mut std::os::raw::c_char {
+) -> *mut std::ffi::c_char {
     unsafe {
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
