@@ -16,7 +16,7 @@ pub fn freeform_string_to_utf8(data: &[u8], env_vars: &[&str]) -> Option<glib::G
     assert_initialized_main_thread!();
     unsafe {
         from_glib_none(ffi::gst_tag_freeform_string_to_utf8(
-            data.as_ptr() as *const i8,
+            data.as_ptr() as *const std::ffi::c_char,
             data.len() as i32,
             env_vars.to_glib_none().0,
         ))

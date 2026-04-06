@@ -9,7 +9,7 @@ pub trait VulkanDeviceExtManual: IsA<VulkanDevice> + 'static {
             let mut error = std::ptr::null_mut();
             let shader = crate::ffi::gst_vulkan_create_shader(
                 self.as_ref().to_glib_none().0,
-                code.as_ptr() as *const i8,
+                code.as_ptr() as *const std::ffi::c_char,
                 code.len(),
                 &mut error,
             );
