@@ -55,30 +55,15 @@ impl TypeFind {
     }
 
     #[doc(alias = "gst_type_find_peek")]
-    pub fn peek_var(&mut self, offset: i64, size: u32) -> Option<&[u8]> {
-        assert!(size > 0);
-
+    pub fn peek(&mut self, offset: i64, size: u32) -> Option<&[u8]> {
         unsafe {
             let data = ffi::gst_type_find_peek(&mut self.0, offset, size);
             if data.is_null() {
                 None
+            } else if size == 0 {
+                Some(&[])
             } else {
                 Some(slice::from_raw_parts(data, size as usize))
-            }
-        }
-    }
-
-    #[doc(alias = "gst_type_find_peek")]
-    pub fn peek<const S: usize>(&mut self, offset: i64) -> Option<&[u8; S]> {
-        assert!(S <= u32::MAX as usize);
-        assert!(S > 0);
-
-        unsafe {
-            let data = ffi::gst_type_find_peek(&mut self.0, offset, S as u32);
-            if data.is_null() {
-                None
-            } else {
-                Some(&*(data as *const [u8; S]))
             }
         }
     }
@@ -145,7 +130,7 @@ impl Read for TypeFindReader<'_> {
 
         // First do a unchecked peek as a fast path before calling into len()
         let max_len = buf.len().min(u32::MAX as usize);
-        if let Some(v) = self.buf.peek_var(self.pos as i64, max_len as u32) {
+        if let Some(v) = self.buf.peek(self.pos as i64, max_len as u32) {
             buf[..max_len].copy_from_slice(v);
             // pos < i64::MAX so can't possibly overflow
             self.pos += max_len as u64;
@@ -161,7 +146,7 @@ impl Read for TypeFindReader<'_> {
         // Try reading the remaining data.
         let remaining = remaining.min(u32::MAX as u64) as usize;
         let max_len = remaining.min(buf.len());
-        if let Some(v) = self.buf.peek_var(self.pos as i64, max_len as u32) {
+        if let Some(v) = self.buf.peek(self.pos as i64, max_len as u32) {
             buf[..max_len].copy_from_slice(v);
             // pos < i64::MAX so can't possibly overflow
             self.pos += max_len as u64;
@@ -513,7 +498,7 @@ mod tests {
             |typefind| {
                 assert_eq!(typefind.length(), Some(8));
                 let mut found = false;
-                if let Some(data) = typefind.peek::<8>(0)
+                if let Some(data) = typefind.peek(0, 8)
                     && data == b"abcdefgh"
                 {
                     found = true;
