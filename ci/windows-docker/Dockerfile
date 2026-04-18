@@ -11,7 +11,7 @@ ARG DEFAULT_BRANCH="invalid"
 ARG RUST_VERSION="invalid"
 
 RUN choco install -y pkgconfiglite nasm protoc
-RUN choco install -y openssl --version=3.6.1
+RUN choco install -y openssl --version=3.6.2
 ENV SSL_CERT_FILE="C:\Program Files\OpenSSL-Win64\ca-bundle.crt"
 RUN Invoke-WebRequest -Uri "https://curl.se/ca/cacert.pem" -OutFile $env:SSL_CERT_FILE
 ENV OPENSSL_DIR="C:\Program Files\OpenSSL-Win64"
