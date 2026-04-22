@@ -41,6 +41,18 @@ pub fn event_new_mpegts_section(section: &Section) -> gst::Event {
     }
 }
 
+#[cfg(feature = "v1_20")]
+#[doc(alias = "gst_message_new_mpegts_section")]
+pub fn message_new_mpegts_section(parent: &gst::Object, section: &Section) -> gst::Message {
+    assert_initialized_main_thread!();
+
+    unsafe {
+        let message =
+            ffi::gst_message_new_mpegts_section(parent.to_glib_none().0, section.to_glib_none().0);
+        glib::translate::from_glib_full(message)
+    }
+}
+
 // rustdoc-stripper-ignore-next
 /// Parses a #Section from a #Event.
 ///
@@ -58,6 +70,22 @@ pub fn event_parse_mpegts_section(event: &gst::Event) -> Option<Section> {
 
     unsafe {
         let section = ffi::gst_event_parse_mpegts_section(event.to_glib_none().0);
+        glib::translate::from_glib_full(section)
+    }
+}
+
+// rustdoc-stripper-ignore-next
+/// Parses a #Section from a #Message.
+///
+/// Returns a `Section` if the message contains MPEG-TS section data, else
+/// `None`
+#[cfg(feature = "v1_20")]
+#[doc(alias = "gst_message_parse_mpegts_section")]
+pub fn message_parse_mpegts_section(message: &gst::Message) -> Option<Section> {
+    assert_initialized_main_thread!();
+
+    unsafe {
+        let section = ffi::gst_message_parse_mpegts_section(message.to_glib_none().0);
         glib::translate::from_glib_full(section)
     }
 }
