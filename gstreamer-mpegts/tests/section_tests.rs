@@ -42,3 +42,23 @@ fn test_event_new_mpegts_section() {
         assert!(gstreamer_mpegts::event_parse_mpegts_section(&event).is_some());
     }
 }
+
+#[cfg(feature = "v1_20")]
+#[test]
+fn test_message_new_mpegts_section() {
+    gstreamer_mpegts::gst::init().expect("Failed to initialize GStreamer");
+    gstreamer_mpegts::init();
+
+    let data = &[
+        0x00, 0xB0, 0x11, 0x00, 0x00, 0xc1, 0x00, 0x00, 0x00, 0x00, 0xe0, 0x30, 0x00, 0x01, 0xe0,
+        0x31, 0x98, 0xdf, 0x37, 0xc4,
+    ];
+
+    let b = gst::Bin::new();
+    let section = Section::new(0, data);
+    if let Some(section) = section {
+        let message = gstreamer_mpegts::message_new_mpegts_section(&b.into(), &section);
+        // Now try to convert back to section
+        assert!(gstreamer_mpegts::message_parse_mpegts_section(&message).is_some());
+    }
+}
