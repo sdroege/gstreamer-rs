@@ -103,7 +103,6 @@ impl Section {
     /// # Returns
     ///
     /// A new `Section` if the data was valid, else `None`
-    /// ```
     #[doc(alias = "gst_mpegts_section_new")]
     pub fn new(pid: u16, data: &[u8]) -> Option<Section> {
         assert_initialized_main_thread!();
