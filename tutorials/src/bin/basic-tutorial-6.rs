@@ -145,16 +145,15 @@ fn tutorial_main() {
                 println!("End-Of-Stream reached.");
                 break;
             }
-            MessageView::StateChanged(state_changed) =>
             // We are only interested in state-changed messages from the pipeline
+            MessageView::StateChanged(state_changed)
+                if state_changed.src().map(|s| s == &pipeline).unwrap_or(false) =>
             {
-                if state_changed.src().map(|s| s == &pipeline).unwrap_or(false) {
-                    let new_state = state_changed.current();
-                    let old_state = state_changed.old();
+                let new_state = state_changed.current();
+                let old_state = state_changed.old();
 
-                    println!("Pipeline state changed from {old_state:?} to {new_state:?}");
-                    print_pad_capabilities(&sink, "sink");
-                }
+                println!("Pipeline state changed from {old_state:?} to {new_state:?}");
+                print_pad_capabilities(&sink, "sink");
             }
             _ => (),
         }

@@ -118,16 +118,14 @@ fn example_main() {
                 );
                 break;
             }
-            MessageView::StateChanged(state_changed) =>
             // We are only interested in state-changed messages from playbin
-            {
+            MessageView::StateChanged(state_changed)
                 if state_changed.src().map(|s| s == &playbin).unwrap_or(false)
-                    && state_changed.current() == gst::State::Playing
-                {
-                    // Generate a dot graph of the pipeline to GST_DEBUG_DUMP_DOT_DIR if defined
-                    let bin_ref = playbin.downcast_ref::<gst::Bin>().unwrap();
-                    bin_ref.debug_to_dot_file(gst::DebugGraphDetails::all(), "PLAYING");
-                }
+                    && state_changed.current() == gst::State::Playing =>
+            {
+                // Generate a dot graph of the pipeline to GST_DEBUG_DUMP_DOT_DIR if defined
+                let bin_ref = playbin.downcast_ref::<gst::Bin>().unwrap();
+                bin_ref.debug_to_dot_file(gst::DebugGraphDetails::all(), "PLAYING");
             }
 
             _ => (),
