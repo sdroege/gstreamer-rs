@@ -171,11 +171,9 @@ fn example_main() {
                     zoom(mixer_sink_pad, x as i32, y as i32, false);
                 }
             }
-            NavigationEvent::MouseButtonRelease { button, .. } => {
-                if button == 1 || button == 272 {
-                    let mut state = clicked.lock().unwrap();
-                    state.clicked = false;
-                }
+            NavigationEvent::MouseButtonRelease { button, .. } if button == 1 || button == 272 => {
+                let mut state = clicked.lock().unwrap();
+                state.clicked = false;
             }
             NavigationEvent::MouseScroll { x, y, delta_y, .. } => {
                 if delta_y > 0.0 {

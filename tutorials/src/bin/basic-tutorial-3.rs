@@ -104,14 +104,14 @@ fn tutorial_main() {
                 eprintln!("Debugging information: {:?}", err.debug());
                 break;
             }
-            MessageView::StateChanged(state_changed) => {
-                if state_changed.src().map(|s| s == &pipeline).unwrap_or(false) {
-                    println!(
-                        "Pipeline state changed from {:?} to {:?}",
-                        state_changed.old(),
-                        state_changed.current()
-                    );
-                }
+            MessageView::StateChanged(state_changed)
+                if state_changed.src().map(|s| s == &pipeline).unwrap_or(false) =>
+            {
+                println!(
+                    "Pipeline state changed from {:?} to {:?}",
+                    state_changed.old(),
+                    state_changed.current()
+                );
             }
             MessageView::Eos(..) => break,
             _ => (),
