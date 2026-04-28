@@ -791,7 +791,9 @@ pub struct GstAudioEncoderClass {
         Option<unsafe extern "C" fn(*mut GstAudioEncoder, *mut gst::GstQuery) -> gboolean>,
     pub src_query:
         Option<unsafe extern "C" fn(*mut GstAudioEncoder, *mut gst::GstQuery) -> gboolean>,
-    pub _gst_reserved: [gpointer; 17],
+    pub prepare_allocator:
+        Option<unsafe extern "C" fn(*mut GstAudioEncoder, *mut gst::GstCaps) -> gboolean>,
+    pub _gst_reserved: [gpointer; 16],
 }
 
 impl ::std::fmt::Debug for GstAudioEncoderClass {
@@ -815,6 +817,7 @@ impl ::std::fmt::Debug for GstAudioEncoderClass {
             .field("transform_meta", &self.transform_meta)
             .field("sink_query", &self.sink_query)
             .field("src_query", &self.src_query)
+            .field("prepare_allocator", &self.prepare_allocator)
             .finish()
     }
 }
@@ -2265,6 +2268,13 @@ unsafe extern "C" {
     pub fn gst_audio_encoder_set_allocation_caps(
         enc: *mut GstAudioEncoder,
         allocation_caps: *mut gst::GstCaps,
+    );
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_audio_encoder_set_allocator(
+        enc: *mut GstAudioEncoder,
+        allocator: *mut gst::GstAllocator,
+        params: *const gst::GstAllocationParams,
     );
     pub fn gst_audio_encoder_set_drainable(enc: *mut GstAudioEncoder, enabled: gboolean);
     pub fn gst_audio_encoder_set_frame_max(enc: *mut GstAudioEncoder, num: c_int);
