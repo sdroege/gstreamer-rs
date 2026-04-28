@@ -201,6 +201,23 @@ pub trait AudioEncoderExt: IsA<AudioEncoder> + 'static {
         }
     }
 
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "gst_audio_encoder_set_allocator")]
+    fn set_allocator(
+        &self,
+        allocator: Option<impl IsA<gst::Allocator>>,
+        params: Option<&gst::AllocationParams>,
+    ) {
+        unsafe {
+            ffi::gst_audio_encoder_set_allocator(
+                self.as_ref().to_glib_none().0,
+                allocator.map(|p| p.upcast()).into_glib_ptr(),
+                params.to_glib_none().0,
+            );
+        }
+    }
+
     #[doc(alias = "gst_audio_encoder_set_drainable")]
     fn set_drainable(&self, enabled: bool) {
         unsafe {

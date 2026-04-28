@@ -239,7 +239,9 @@ pub struct GstAggregatorClass {
     pub peek_next_sample: Option<
         unsafe extern "C" fn(*mut GstAggregator, *mut GstAggregatorPad) -> *mut gst::GstSample,
     >,
-    pub _gst_reserved: [gpointer; 15],
+    pub prepare_allocator:
+        Option<unsafe extern "C" fn(*mut GstAggregator, *mut gst::GstCaps) -> gboolean>,
+    pub _gst_reserved: [gpointer; 14],
 }
 
 impl ::std::fmt::Debug for GstAggregatorClass {
@@ -269,6 +271,7 @@ impl ::std::fmt::Debug for GstAggregatorClass {
             .field("sink_query_pre_queue", &self.sink_query_pre_queue)
             .field("finish_buffer_list", &self.finish_buffer_list)
             .field("peek_next_sample", &self.peek_next_sample)
+            .field("prepare_allocator", &self.prepare_allocator)
             .finish()
     }
 }
@@ -545,7 +548,9 @@ pub struct GstBaseSrcClass {
             *mut gst::GstBuffer,
         ) -> gst::GstFlowReturn,
     >,
-    pub _gst_reserved: [gpointer; 20],
+    pub prepare_allocator:
+        Option<unsafe extern "C" fn(*mut GstBaseSrc, *mut gst::GstCaps) -> gboolean>,
+    pub _gst_reserved: [gpointer; 19],
 }
 
 impl ::std::fmt::Debug for GstBaseSrcClass {
@@ -571,6 +576,7 @@ impl ::std::fmt::Debug for GstBaseSrcClass {
             .field("create", &self.create)
             .field("alloc", &self.alloc)
             .field("fill", &self.fill)
+            .field("prepare_allocator", &self.prepare_allocator)
             .finish()
     }
 }
@@ -706,7 +712,9 @@ pub struct GstBaseTransformClass {
     pub generate_output: Option<
         unsafe extern "C" fn(*mut GstBaseTransform, *mut *mut gst::GstBuffer) -> gst::GstFlowReturn,
     >,
-    pub _gst_reserved: [gpointer; 18],
+    pub prepare_allocator:
+        Option<unsafe extern "C" fn(*mut GstBaseTransform, *mut gst::GstCaps) -> gboolean>,
+    pub _gst_reserved: [gpointer; 17],
 }
 
 impl ::std::fmt::Debug for GstBaseTransformClass {
@@ -740,6 +748,7 @@ impl ::std::fmt::Debug for GstBaseTransformClass {
             .field("transform_ip", &self.transform_ip)
             .field("submit_input_buffer", &self.submit_input_buffer)
             .field("generate_output", &self.generate_output)
+            .field("prepare_allocator", &self.prepare_allocator)
             .finish()
     }
 }
@@ -1916,6 +1925,15 @@ unsafe extern "C" {
         duration: gst::GstClockTime,
         info: *mut gst::GstStructure,
     );
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_aggregator_set_allocator(
+        self_: *mut GstAggregator,
+        pool: *mut gst::GstBufferPool,
+        allocator: *mut gst::GstAllocator,
+        params: *const gst::GstAllocationParams,
+        query: *mut gst::GstQuery,
+    ) -> gboolean;
     #[cfg(feature = "v1_22")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_aggregator_set_force_live(self_: *mut GstAggregator, force_live: gboolean);
@@ -2123,6 +2141,14 @@ unsafe extern "C" {
         min_latency: *mut gst::GstClockTime,
         max_latency: *mut gst::GstClockTime,
     ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_base_src_set_allocator(
+        src: *mut GstBaseSrc,
+        pool: *mut gst::GstBufferPool,
+        allocator: *mut gst::GstAllocator,
+        params: *const gst::GstAllocationParams,
+    ) -> gboolean;
     pub fn gst_base_src_set_async(src: *mut GstBaseSrc, async_: gboolean);
     pub fn gst_base_src_set_automatic_eos(src: *mut GstBaseSrc, automatic_eos: gboolean);
     pub fn gst_base_src_set_blocksize(src: *mut GstBaseSrc, blocksize: c_uint);
@@ -2159,6 +2185,15 @@ unsafe extern "C" {
     pub fn gst_base_transform_reconfigure(trans: *mut GstBaseTransform) -> gboolean;
     pub fn gst_base_transform_reconfigure_sink(trans: *mut GstBaseTransform);
     pub fn gst_base_transform_reconfigure_src(trans: *mut GstBaseTransform);
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_base_transform_set_allocator(
+        trans: *mut GstBaseTransform,
+        pool: *mut gst::GstBufferPool,
+        allocator: *mut gst::GstAllocator,
+        params: *const gst::GstAllocationParams,
+        query: *mut gst::GstQuery,
+    ) -> gboolean;
     pub fn gst_base_transform_set_gap_aware(trans: *mut GstBaseTransform, gap_aware: gboolean);
     pub fn gst_base_transform_set_in_place(trans: *mut GstBaseTransform, in_place: gboolean);
     pub fn gst_base_transform_set_passthrough(trans: *mut GstBaseTransform, passthrough: gboolean);

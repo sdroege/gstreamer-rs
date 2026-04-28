@@ -1707,7 +1707,9 @@ pub struct GstVideoEncoderClass {
             *mut gst::GstMeta,
         ) -> gboolean,
     >,
-    pub _gst_reserved: [gpointer; 16],
+    pub prepare_allocator:
+        Option<unsafe extern "C" fn(*mut GstVideoEncoder, *mut gst::GstCaps) -> gboolean>,
+    pub _gst_reserved: [gpointer; 15],
 }
 
 impl ::std::fmt::Debug for GstVideoEncoderClass {
@@ -1732,6 +1734,7 @@ impl ::std::fmt::Debug for GstVideoEncoderClass {
             .field("sink_query", &self.sink_query)
             .field("src_query", &self.src_query)
             .field("transform_meta", &self.transform_meta)
+            .field("prepare_allocator", &self.prepare_allocator)
             .finish()
     }
 }
@@ -4381,6 +4384,13 @@ unsafe extern "C" {
     pub fn gst_video_encoder_release_frame(
         encoder: *mut GstVideoEncoder,
         frame: *mut GstVideoCodecFrame,
+    );
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_video_encoder_set_allocator(
+        encoder: *mut GstVideoEncoder,
+        allocator: *mut gst::GstAllocator,
+        params: *const gst::GstAllocationParams,
     );
     pub fn gst_video_encoder_set_headers(encoder: *mut GstVideoEncoder, headers: *mut glib::GList);
     pub fn gst_video_encoder_set_latency(
