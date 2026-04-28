@@ -293,6 +293,47 @@ impl<'a, T: AnalyticsMtd> AnalyticsMtdRef<'a, T> {
             ffi::gst_analytics_mtd_get_mtd_type(&mtd)
         }
     }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "gst_analytics_mtd_get_semantic_tag")]
+    pub fn semantic_tag(&self) -> Result<glib::GString, glib::BoolError> {
+        unsafe {
+            let mtd = ffi::GstAnalyticsMtd::unsafe_from(self);
+            let tag = ffi::gst_analytics_mtd_get_semantic_tag(&mtd);
+            if tag.is_null() {
+                Err(glib::bool_error!("Could not retrieve semantic tag"))
+            } else {
+                Ok(from_glib_full(tag))
+            }
+        }
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "gst_analytics_mtd_has_semantic_tag")]
+    pub fn has_semantic_tag(&self, tag: &str) -> bool {
+        unsafe {
+            let mtd = ffi::GstAnalyticsMtd::unsafe_from(self);
+            from_glib(ffi::gst_analytics_mtd_has_semantic_tag(
+                &mtd,
+                tag.to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "gst_analytics_mtd_semantic_tag_has_prefix")]
+    pub fn semantic_tag_has_prefix(&self, prefix: &str) -> bool {
+        unsafe {
+            let mtd = ffi::GstAnalyticsMtd::unsafe_from(self);
+            from_glib(ffi::gst_analytics_mtd_semantic_tag_has_prefix(
+                &mtd,
+                prefix.to_glib_none().0,
+            ))
+        }
+    }
 }
 impl<'a> AnalyticsMtdRef<'a, AnalyticsAnyMtd> {
     pub fn downcast<T: AnalyticsMtd>(
@@ -433,6 +474,25 @@ impl<'a, T: AnalyticsMtd> AnalyticsMtdRefMut<'a, T> {
             meta,
             id,
             mtd_type: PhantomData,
+        }
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "gst_analytics_mtd_set_semantic_tag")]
+    pub fn set_semantic_tag(&mut self, tag: &str) -> Result<(), glib::BoolError> {
+        let ret = unsafe {
+            let mut mtd = ffi::GstAnalyticsMtd::unsafe_from(self);
+            from_glib(ffi::gst_analytics_mtd_set_semantic_tag(
+                &mut mtd,
+                tag.to_glib_none().0,
+            ))
+        };
+
+        if ret {
+            Ok(())
+        } else {
+            Err(glib::bool_error!("Couldn't set semantic tag"))
         }
     }
 }

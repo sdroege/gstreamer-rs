@@ -209,30 +209,6 @@ impl AnalyticsRelationMetaGroupExt
 }
 
 impl AnalyticsMtdRef<'_, AnalyticsGroupMtd> {
-    #[doc(alias = "gst_analytics_group_mtd_has_semantic_tag")]
-    pub fn has_semantic_tag(&self, tag: &str) -> Result<bool, glib::BoolError> {
-        unsafe {
-            let mtd = ffi::GstAnalyticsMtd::unsafe_from(self);
-            Ok(from_glib(ffi::gst_analytics_group_mtd_has_semantic_tag(
-                &mtd as *const _ as *const ffi::GstAnalyticsGroupMtd,
-                tag.to_glib_none().0,
-            )))
-        }
-    }
-
-    #[doc(alias = "gst_analytics_group_mtd_semantic_tag_has_prefix")]
-    pub fn semantic_tag_has_prefix(&self, prefix: &str) -> Result<bool, glib::BoolError> {
-        unsafe {
-            let mtd = ffi::GstAnalyticsMtd::unsafe_from(self);
-            Ok(from_glib(
-                ffi::gst_analytics_group_mtd_semantic_tag_has_prefix(
-                    &mtd as *const _ as *const ffi::GstAnalyticsGroupMtd,
-                    prefix.to_glib_none().0,
-                ),
-            ))
-        }
-    }
-
     #[doc(alias = "gst_analytics_group_mtd_get_member_count")]
     pub fn member_count(&self) -> usize {
         unsafe {
@@ -346,23 +322,6 @@ impl AnalyticsMtdRefMut<'_, AnalyticsGroupMtd> {
             Err(glib::bool_error!("Couldn't add group member"))
         }
     }
-
-    #[doc(alias = "gst_analytics_group_mtd_set_semantic_tag")]
-    pub fn set_semantic_tag(&mut self, tag: &str) -> Result<(), glib::BoolError> {
-        let ret = unsafe {
-            let mut mtd = ffi::GstAnalyticsMtd::unsafe_from(self);
-            from_glib(ffi::gst_analytics_group_mtd_set_semantic_tag(
-                &mut mtd as *mut _ as *mut ffi::GstAnalyticsGroupMtd,
-                tag.to_glib_none().0,
-            ))
-        };
-
-        if ret {
-            Ok(())
-        } else {
-            Err(glib::bool_error!("Couldn't set semantic tag"))
-        }
-    }
 }
 
 #[cfg(test)]
@@ -403,8 +362,8 @@ mod tests {
         group_mut.add_member(keypoint_id).unwrap();
 
         let group = AnalyticsMtdRef::from(group_mut);
-        assert!(group.has_semantic_tag("pose").unwrap());
-        assert!(group.semantic_tag_has_prefix("po").unwrap());
+        assert!(group.has_semantic_tag("pose"));
+        assert!(group.semantic_tag_has_prefix("po"));
         assert_eq!(group.member_count(), 1);
 
         let member = group.member_typed::<AnalyticsKeypointMtd>(0).unwrap();
@@ -447,8 +406,8 @@ mod tests {
             )
             .unwrap();
 
-        assert!(group.has_semantic_tag("pose").unwrap());
-        assert!(group.semantic_tag_has_prefix("po").unwrap());
+        assert!(group.has_semantic_tag("pose"));
+        assert!(group.semantic_tag_has_prefix("po"));
         assert_eq!(group.member_count(), 2);
     }
 
