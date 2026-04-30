@@ -500,6 +500,63 @@ pub fn codec_utils_h266_caps_set_level_tier_and_profile(
 
 #[cfg(feature = "v1_30")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub type CodecUtilsVpxConfig = (i32, u8, u8, u8, u8, Option<bool>, u8, u8, u8);
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+#[doc(alias = "gst_codec_utils_vpx_caps_get_config")]
+pub fn codec_utils_vpx_caps_get_config(caps: &gst::CapsRef) -> Option<CodecUtilsVpxConfig> {
+    assert_initialized_main_thread!();
+    unsafe {
+        let mut vpx_version = std::mem::MaybeUninit::uninit();
+        let mut profile = std::mem::MaybeUninit::uninit();
+        let mut level = std::mem::MaybeUninit::uninit();
+        let mut bit_depth = std::mem::MaybeUninit::uninit();
+        let mut chroma_subsampling = std::mem::MaybeUninit::uninit();
+        let mut video_full_range = std::mem::MaybeUninit::uninit();
+        let mut colour_primaries = std::mem::MaybeUninit::uninit();
+        let mut transfer_characteristics = std::mem::MaybeUninit::uninit();
+        let mut matrix_coefficients = std::mem::MaybeUninit::uninit();
+
+        let ret: bool = from_glib(ffi::gst_codec_utils_vpx_caps_get_config(
+            mut_override(caps.as_ptr()),
+            vpx_version.as_mut_ptr(),
+            profile.as_mut_ptr(),
+            level.as_mut_ptr(),
+            bit_depth.as_mut_ptr(),
+            chroma_subsampling.as_mut_ptr(),
+            video_full_range.as_mut_ptr(),
+            colour_primaries.as_mut_ptr(),
+            transfer_characteristics.as_mut_ptr(),
+            matrix_coefficients.as_mut_ptr(),
+        ));
+
+        if ret {
+            let video_full_range = match video_full_range.assume_init() {
+                -1 => None,
+                0 => Some(false),
+                _ => Some(true),
+            };
+
+            Some((
+                vpx_version.assume_init(),
+                profile.assume_init(),
+                level.assume_init(),
+                bit_depth.assume_init(),
+                chroma_subsampling.assume_init(),
+                video_full_range,
+                colour_primaries.assume_init(),
+                transfer_characteristics.assume_init(),
+                matrix_coefficients.assume_init(),
+            ))
+        } else {
+            None
+        }
+    }
+}
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
 #[doc(alias = "gst_codec_utils_vp9_estimate_level_idc_from_caps")]
 pub fn codec_utils_vp9_estimate_level_idc_from_caps(caps: &gst::CapsRef) -> u8 {
     assert_initialized_main_thread!();
