@@ -11,6 +11,7 @@ int main() {
     printf("%s;%zu;%zu\n", "GstRTSPAuthCredential", sizeof(GstRTSPAuthCredential), alignof(GstRTSPAuthCredential));
     printf("%s;%zu;%zu\n", "GstRTSPAuthMethod", sizeof(GstRTSPAuthMethod), alignof(GstRTSPAuthMethod));
     printf("%s;%zu;%zu\n", "GstRTSPAuthParam", sizeof(GstRTSPAuthParam), alignof(GstRTSPAuthParam));
+    printf("%s;%zu;%zu\n", "GstRTSPBackchannelHttpMethod", sizeof(GstRTSPBackchannelHttpMethod), alignof(GstRTSPBackchannelHttpMethod));
     printf("%s;%zu;%zu\n", "GstRTSPEvent", sizeof(GstRTSPEvent), alignof(GstRTSPEvent));
     printf("%s;%zu;%zu\n", "GstRTSPExtensionInterface", sizeof(GstRTSPExtensionInterface), alignof(GstRTSPExtensionInterface));
     printf("%s;%zu;%zu\n", "GstRTSPFamily", sizeof(GstRTSPFamily), alignof(GstRTSPFamily));

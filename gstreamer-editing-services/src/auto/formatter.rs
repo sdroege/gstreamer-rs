@@ -49,12 +49,23 @@ impl Formatter {
         }
     }
 
+    #[cfg_attr(feature = "v1_30", deprecated = "Since 1.30")]
+    #[allow(deprecated)]
     #[doc(alias = "ges_formatter_get_default")]
     #[doc(alias = "get_default")]
     #[allow(clippy::should_implement_trait)]
     pub fn default() -> Asset {
         assert_initialized_main_thread!();
         unsafe { from_glib_none(ffi::ges_formatter_get_default()) }
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "ges_formatter_get_default_full")]
+    #[doc(alias = "get_default_full")]
+    pub fn default_full() -> Asset {
+        assert_initialized_main_thread!();
+        unsafe { from_glib_full(ffi::ges_formatter_get_default_full()) }
     }
 }
 

@@ -192,10 +192,24 @@ pub trait LayerExt: IsA<Layer> + 'static {
         unsafe { ffi::ges_layer_get_priority(self.as_ref().to_glib_none().0) }
     }
 
+    #[cfg_attr(feature = "v1_30", deprecated = "Since 1.30")]
+    #[allow(deprecated)]
     #[doc(alias = "ges_layer_get_timeline")]
     #[doc(alias = "get_timeline")]
     fn timeline(&self) -> Option<Timeline> {
         unsafe { from_glib_none(ffi::ges_layer_get_timeline(self.as_ref().to_glib_none().0)) }
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "ges_layer_get_timeline_full")]
+    #[doc(alias = "get_timeline_full")]
+    fn timeline_full(&self) -> Option<Timeline> {
+        unsafe {
+            from_glib_full(ffi::ges_layer_get_timeline_full(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
     }
 
     #[doc(alias = "ges_layer_is_empty")]

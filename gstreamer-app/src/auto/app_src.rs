@@ -155,7 +155,7 @@ impl AppSrc {
     }
 
     //#[doc(alias = "gst_app_src_set_callbacks")]
-    //pub fn set_callbacks(&self, callbacks: /*Ignored*/&mut AppSrcCallbacks, user_data: /*Unimplemented*/Option<Basic: Pointer>) {
+    //pub fn set_callbacks(&self, callbacks: /*Ignored*/Option<&mut AppSrcCallbacks>, user_data: /*Unimplemented*/Option<Basic: Pointer>) {
     //    unsafe { TODO: call ffi:gst_app_src_set_callbacks() }
     //}
 

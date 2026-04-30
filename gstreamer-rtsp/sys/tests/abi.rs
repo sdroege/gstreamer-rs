@@ -224,6 +224,13 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "GstRTSPBackchannelHttpMethod",
+        Layout {
+            size: size_of::<GstRTSPBackchannelHttpMethod>(),
+            alignment: align_of::<GstRTSPBackchannelHttpMethod>(),
+        },
+    ),
+    (
         "GstRTSPEvent",
         Layout {
             size: size_of::<GstRTSPEvent>(),
@@ -391,6 +398,8 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_RTSP_AUTH_BASIC", "1"),
     ("(gint) GST_RTSP_AUTH_DIGEST", "2"),
     ("(gint) GST_RTSP_AUTH_NONE", "0"),
+    ("(gint) GST_RTSP_BACKCHANNEL_HTTP_METHOD_GET", "1"),
+    ("(gint) GST_RTSP_BACKCHANNEL_HTTP_METHOD_POST", "0"),
     ("GST_RTSP_DEFAULT_PORT", "554"),
     ("(guint) GST_RTSP_DESCRIBE", "1"),
     ("(gint) GST_RTSP_EEOF", "-11"),

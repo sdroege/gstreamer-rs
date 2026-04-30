@@ -271,6 +271,28 @@ pub fn codec_utils_vp9_get_level_idc(level: &str) -> u8 {
     unsafe { ffi::gst_codec_utils_vp9_get_level_idc(level.to_glib_none().0) }
 }
 
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+#[doc(alias = "gst_codec_utils_vpx_caps_set_format_fields")]
+pub fn codec_utils_vpx_caps_set_format_fields(
+    caps: &gst::Caps,
+    profile: i32,
+    level: i32,
+    bit_depth: i32,
+    chroma_subsampling: i32,
+) -> bool {
+    assert_initialized_main_thread!();
+    unsafe {
+        from_glib(ffi::gst_codec_utils_vpx_caps_set_format_fields(
+            caps.to_glib_none().0,
+            profile,
+            level,
+            bit_depth,
+            chroma_subsampling,
+        ))
+    }
+}
+
 #[doc(alias = "gst_encoding_list_all_targets")]
 pub fn encoding_list_all_targets(categoryname: Option<&str>) -> Vec<EncodingTarget> {
     assert_initialized_main_thread!();

@@ -205,11 +205,25 @@ pub trait TimelineExt: IsA<Timeline> + 'static {
         }
     }
 
+    #[cfg_attr(feature = "v1_30", deprecated = "Since 1.30")]
+    #[allow(deprecated)]
     #[doc(alias = "ges_timeline_get_groups")]
     #[doc(alias = "get_groups")]
     fn groups(&self) -> Vec<Group> {
         unsafe {
             FromGlibPtrContainer::from_glib_none(ffi::ges_timeline_get_groups(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "ges_timeline_get_groups_full")]
+    #[doc(alias = "get_groups_full")]
+    fn groups_full(&self) -> Vec<Group> {
+        unsafe {
+            FromGlibPtrContainer::from_glib_full(ffi::ges_timeline_get_groups_full(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -258,11 +272,26 @@ pub trait TimelineExt: IsA<Timeline> + 'static {
         }
     }
 
+    #[cfg_attr(feature = "v1_30", deprecated = "Since 1.30")]
+    #[allow(deprecated)]
     #[doc(alias = "ges_timeline_get_track_for_pad")]
     #[doc(alias = "get_track_for_pad")]
     fn track_for_pad(&self, pad: &impl IsA<gst::Pad>) -> Option<Track> {
         unsafe {
             from_glib_none(ffi::ges_timeline_get_track_for_pad(
+                self.as_ref().to_glib_none().0,
+                pad.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "ges_timeline_get_track_for_pad_full")]
+    #[doc(alias = "get_track_for_pad_full")]
+    fn track_for_pad_full(&self, pad: &impl IsA<gst::Pad>) -> Option<Track> {
+        unsafe {
+            from_glib_full(ffi::ges_timeline_get_track_for_pad_full(
                 self.as_ref().to_glib_none().0,
                 pad.as_ref().to_glib_none().0,
             ))

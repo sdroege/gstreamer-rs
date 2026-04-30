@@ -4,7 +4,13 @@
 // DO NOT EDIT
 
 use crate::{Object, Plugin, ffi};
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+use glib::signal::{SignalHandlerId, connect_raw};
 use glib::{prelude::*, translate::*};
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "GstPluginFeature")]
@@ -52,6 +58,36 @@ pub trait PluginFeatureExt: IsA<PluginFeature> + 'static {
             from_glib_none(ffi::gst_plugin_feature_get_plugin_name(
                 self.as_ref().to_glib_none().0,
             ))
+        }
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "rank")]
+    fn connect_rank_notify<F: Fn(&Self) + Send + Sync + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_rank_trampoline<
+            P: IsA<PluginFeature>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstPluginFeature,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(PluginFeature::from_glib_borrow(this).unsafe_cast_ref())
+            }
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::rank".as_ptr(),
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_rank_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
         }
     }
 }

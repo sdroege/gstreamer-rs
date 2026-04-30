@@ -37,6 +37,14 @@ pub const GST_RTSP_AUTH_NONE: GstRTSPAuthMethod = 0;
 pub const GST_RTSP_AUTH_BASIC: GstRTSPAuthMethod = 1;
 pub const GST_RTSP_AUTH_DIGEST: GstRTSPAuthMethod = 2;
 
+pub type GstRTSPBackchannelHttpMethod = c_int;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub const GST_RTSP_BACKCHANNEL_HTTP_METHOD_POST: GstRTSPBackchannelHttpMethod = 0;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub const GST_RTSP_BACKCHANNEL_HTTP_METHOD_GET: GstRTSPBackchannelHttpMethod = 1;
+
 pub type GstRTSPFamily = c_int;
 pub const GST_RTSP_FAM_NONE: GstRTSPFamily = 0;
 pub const GST_RTSP_FAM_INET: GstRTSPFamily = 1;
@@ -728,6 +736,13 @@ unsafe extern "C" {
     pub fn gst_rtsp_auth_method_get_type() -> GType;
 
     //=========================================================================
+    // GstRTSPBackchannelHttpMethod
+    //=========================================================================
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_rtsp_backchannel_http_method_get_type() -> GType;
+
+    //=========================================================================
     // GstRTSPFamily
     //=========================================================================
     pub fn gst_rtsp_family_get_type() -> GType;
@@ -854,6 +869,11 @@ unsafe extern "C" {
         flush: gboolean,
     ) -> GstRTSPResult;
     pub fn gst_rtsp_connection_free(conn: *mut GstRTSPConnection) -> GstRTSPResult;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_rtsp_connection_get_backchannel_method(
+        conn: *const GstRTSPConnection,
+    ) -> GstRTSPBackchannelHttpMethod;
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_rtsp_connection_get_ignore_x_server_reply(
@@ -974,6 +994,12 @@ unsafe extern "C" {
         conn: *mut GstRTSPConnection,
         param: *const c_char,
         value: *const c_char,
+    );
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_rtsp_connection_set_backchannel_method(
+        conn: *mut GstRTSPConnection,
+        method: GstRTSPBackchannelHttpMethod,
     );
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]

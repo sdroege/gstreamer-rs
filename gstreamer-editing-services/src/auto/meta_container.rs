@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
+#![allow(deprecated)]
 
 #[cfg(feature = "v1_18")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
@@ -212,6 +213,8 @@ pub trait MetaContainerExt: IsA<MetaContainer> + 'static {
         }
     }
 
+    #[cfg_attr(feature = "v1_30", deprecated = "Since 1.30")]
+    #[allow(deprecated)]
     #[doc(alias = "ges_meta_container_get_meta")]
     #[doc(alias = "get_meta")]
     fn meta(&self, key: &str) -> Option<glib::Value> {
@@ -223,11 +226,42 @@ pub trait MetaContainerExt: IsA<MetaContainer> + 'static {
         }
     }
 
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "ges_meta_container_get_meta_full")]
+    #[doc(alias = "get_meta_full")]
+    fn meta_full(&self, key: &str) -> Option<glib::Value> {
+        unsafe {
+            let mut dest = glib::Value::uninitialized();
+            let ret = from_glib(ffi::ges_meta_container_get_meta_full(
+                self.as_ref().to_glib_none().0,
+                key.to_glib_none().0,
+                dest.to_glib_none_mut().0,
+            ));
+            if ret { Some(dest) } else { None }
+        }
+    }
+
+    #[cfg_attr(feature = "v1_30", deprecated = "Since 1.30")]
+    #[allow(deprecated)]
     #[doc(alias = "ges_meta_container_get_string")]
     #[doc(alias = "get_string")]
     fn string(&self, meta_item: &str) -> Option<glib::GString> {
         unsafe {
             from_glib_none(ffi::ges_meta_container_get_string(
+                self.as_ref().to_glib_none().0,
+                meta_item.to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "ges_meta_container_get_string_full")]
+    #[doc(alias = "get_string_full")]
+    fn string_full(&self, meta_item: &str) -> Option<glib::GString> {
+        unsafe {
+            from_glib_full(ffi::ges_meta_container_get_string_full(
                 self.as_ref().to_glib_none().0,
                 meta_item.to_glib_none().0,
             ))

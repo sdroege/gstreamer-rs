@@ -3001,11 +3001,23 @@ unsafe extern "C" {
         error: *mut *mut glib::GError,
     ) -> *mut GESExtractable;
     pub fn ges_asset_get_error(self_: *mut GESAsset) -> *mut glib::GError;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn ges_asset_get_error_full(self_: *mut GESAsset) -> *mut glib::GError;
     pub fn ges_asset_get_extractable_type(self_: *mut GESAsset) -> GType;
     pub fn ges_asset_get_id(self_: *mut GESAsset) -> *const c_char;
     pub fn ges_asset_get_proxy(asset: *mut GESAsset) -> *mut GESAsset;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn ges_asset_get_proxy_full(asset: *mut GESAsset) -> *mut GESAsset;
     pub fn ges_asset_get_proxy_target(proxy: *mut GESAsset) -> *mut GESAsset;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn ges_asset_get_proxy_target_full(proxy: *mut GESAsset) -> *mut GESAsset;
     pub fn ges_asset_list_proxies(asset: *mut GESAsset) -> *mut glib::GList;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn ges_asset_list_proxies_full(asset: *mut GESAsset) -> *mut glib::GList;
     pub fn ges_asset_set_proxy(asset: *mut GESAsset, proxy: *mut GESAsset) -> gboolean;
     pub fn ges_asset_unproxy(asset: *mut GESAsset, proxy: *mut GESAsset) -> gboolean;
 
@@ -3083,9 +3095,23 @@ unsafe extern "C" {
     //=========================================================================
     pub fn ges_clip_get_type() -> GType;
     pub fn ges_clip_add_asset(clip: *mut GESClip, asset: *mut GESAsset) -> *mut GESTrackElement;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn ges_clip_add_asset_full(
+        clip: *mut GESClip,
+        asset: *mut GESAsset,
+    ) -> *mut GESTrackElement;
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_clip_add_child_to_track(
+        clip: *mut GESClip,
+        child: *mut GESTrackElement,
+        track: *mut GESTrack,
+        error: *mut *mut glib::GError,
+    ) -> *mut GESTrackElement;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn ges_clip_add_child_to_track_full(
         clip: *mut GESClip,
         child: *mut GESTrackElement,
         track: *mut GESTrack,
@@ -3244,6 +3270,9 @@ unsafe extern "C" {
         container: *mut GESContainer,
         recursive: gboolean,
     ) -> *mut glib::GList;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn ges_container_get_height(container: *mut GESContainer) -> u32;
     pub fn ges_container_remove(
         container: *mut GESContainer,
         child: *mut GESTimelineElement,
@@ -3316,6 +3345,9 @@ unsafe extern "C" {
         error: *mut *mut glib::GError,
     ) -> gboolean;
     pub fn ges_formatter_get_default() -> *mut GESAsset;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn ges_formatter_get_default_full() -> *mut GESAsset;
     pub fn ges_formatter_load_from_uri(
         formatter: *mut GESFormatter,
         timeline: *mut GESTimeline,
@@ -3386,6 +3418,9 @@ unsafe extern "C" {
     pub fn ges_layer_get_duration(layer: *mut GESLayer) -> gst::GstClockTime;
     pub fn ges_layer_get_priority(layer: *mut GESLayer) -> c_uint;
     pub fn ges_layer_get_timeline(layer: *mut GESLayer) -> *mut GESTimeline;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn ges_layer_get_timeline_full(layer: *mut GESLayer) -> *mut GESTimeline;
     pub fn ges_layer_is_empty(layer: *mut GESLayer) -> gboolean;
     pub fn ges_layer_remove_clip(layer: *mut GESLayer, clip: *mut GESClip) -> gboolean;
     #[cfg(feature = "v1_18")]
@@ -3418,6 +3453,12 @@ unsafe extern "C" {
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_marker_list_add(
+        list: *mut GESMarkerList,
+        position: gst::GstClockTime,
+    ) -> *mut GESMarker;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn ges_marker_list_add_full(
         list: *mut GESMarkerList,
         position: gst::GstClockTime,
     ) -> *mut GESMarker;
@@ -3534,6 +3575,9 @@ unsafe extern "C" {
     pub fn ges_project_get_uri(project: *mut GESProject) -> *mut c_char;
     pub fn ges_project_list_assets(project: *mut GESProject, filter: GType) -> *mut glib::GList;
     pub fn ges_project_list_encoding_profiles(project: *mut GESProject) -> *const glib::GList;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn ges_project_list_encoding_profiles_full(project: *mut GESProject) -> *mut glib::GList;
     pub fn ges_project_load(
         project: *mut GESProject,
         timeline: *mut GESTimeline,
@@ -3670,6 +3714,9 @@ unsafe extern "C" {
         frame_number: GESFrameNumber,
     ) -> gst::GstClockTime;
     pub fn ges_timeline_get_groups(timeline: *mut GESTimeline) -> *mut glib::GList;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn ges_timeline_get_groups_full(timeline: *mut GESTimeline) -> *mut glib::GList;
     pub fn ges_timeline_get_layer(timeline: *mut GESTimeline, priority: c_uint) -> *mut GESLayer;
     pub fn ges_timeline_get_layers(timeline: *mut GESTimeline) -> *mut glib::GList;
     pub fn ges_timeline_get_pad_for_track(
@@ -3678,6 +3725,12 @@ unsafe extern "C" {
     ) -> *mut gst::GstPad;
     pub fn ges_timeline_get_snapping_distance(timeline: *mut GESTimeline) -> gst::GstClockTime;
     pub fn ges_timeline_get_track_for_pad(
+        timeline: *mut GESTimeline,
+        pad: *mut gst::GstPad,
+    ) -> *mut GESTrack;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn ges_timeline_get_track_for_pad_full(
         timeline: *mut GESTimeline,
         pad: *mut gst::GstPad,
     ) -> *mut GESTrack;
@@ -3947,12 +4000,18 @@ unsafe extern "C" {
     ) -> gboolean;
     pub fn ges_track_commit(track: *mut GESTrack) -> gboolean;
     pub fn ges_track_get_caps(track: *mut GESTrack) -> *const gst::GstCaps;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn ges_track_get_caps_full(track: *mut GESTrack) -> *mut gst::GstCaps;
     pub fn ges_track_get_elements(track: *mut GESTrack) -> *mut glib::GList;
     pub fn ges_track_get_mixing(track: *mut GESTrack) -> gboolean;
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_track_get_restriction_caps(track: *mut GESTrack) -> *mut gst::GstCaps;
     pub fn ges_track_get_timeline(track: *mut GESTrack) -> *const GESTimeline;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn ges_track_get_timeline_full(track: *mut GESTrack) -> *mut GESTimeline;
     pub fn ges_track_remove_element(track: *mut GESTrack, object: *mut GESTrackElement)
     -> gboolean;
     #[cfg(feature = "v1_18")]
@@ -3998,6 +4057,11 @@ unsafe extern "C" {
     pub fn ges_track_element_get_all_control_bindings(
         trackelement: *mut GESTrackElement,
     ) -> *mut glib::GHashTable;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn ges_track_element_get_all_control_bindings_full(
+        trackelement: *mut GESTrackElement,
+    ) -> *mut glib::GHashTable;
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_track_element_get_auto_clamp_control_sources(
@@ -4023,10 +4087,28 @@ unsafe extern "C" {
         object: *mut GESTrackElement,
         property_name: *const c_char,
     ) -> *mut gst::GstControlBinding;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn ges_track_element_get_control_binding_full(
+        object: *mut GESTrackElement,
+        property_name: *const c_char,
+    ) -> *mut gst::GstControlBinding;
     pub fn ges_track_element_get_element(object: *mut GESTrackElement) -> *mut gst::GstElement;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn ges_track_element_get_element_full(object: *mut GESTrackElement)
+    -> *mut gst::GstElement;
     pub fn ges_track_element_get_gnlobject(object: *mut GESTrackElement) -> *mut gst::GstElement;
     pub fn ges_track_element_get_nleobject(object: *mut GESTrackElement) -> *mut gst::GstElement;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn ges_track_element_get_nleobject_full(
+        object: *mut GESTrackElement,
+    ) -> *mut gst::GstElement;
     pub fn ges_track_element_get_track(object: *mut GESTrackElement) -> *mut GESTrack;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn ges_track_element_get_track_full(object: *mut GESTrackElement) -> *mut GESTrack;
     pub fn ges_track_element_get_track_type(object: *mut GESTrackElement) -> GESTrackType;
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
@@ -4238,6 +4320,9 @@ unsafe extern "C" {
     //=========================================================================
     pub fn ges_extractable_get_type() -> GType;
     pub fn ges_extractable_get_asset(self_: *mut GESExtractable) -> *mut GESAsset;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn ges_extractable_get_asset_full(self_: *mut GESExtractable) -> *mut GESAsset;
     pub fn ges_extractable_get_id(self_: *mut GESExtractable) -> *mut c_char;
     pub fn ges_extractable_set_asset(self_: *mut GESExtractable, asset: *mut GESAsset) -> gboolean;
 
@@ -4305,10 +4390,23 @@ unsafe extern "C" {
         container: *mut GESMetaContainer,
         key: *const c_char,
     ) -> *const gobject::GValue;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn ges_meta_container_get_meta_full(
+        container: *mut GESMetaContainer,
+        key: *const c_char,
+        dest: *mut gobject::GValue,
+    ) -> gboolean;
     pub fn ges_meta_container_get_string(
         container: *mut GESMetaContainer,
         meta_item: *const c_char,
     ) -> *const c_char;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn ges_meta_container_get_string_full(
+        container: *mut GESMetaContainer,
+        meta_item: *const c_char,
+    ) -> *mut c_char;
     pub fn ges_meta_container_get_uint(
         container: *mut GESMetaContainer,
         meta_item: *const c_char,
@@ -4473,6 +4571,9 @@ unsafe extern "C" {
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_find_formatter_for_uri(uri: *const c_char) -> *mut GESAsset;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn ges_find_formatter_for_uri_full(uri: *const c_char) -> *mut GESAsset;
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn ges_frame_composition_meta_api_get_type() -> GType;
