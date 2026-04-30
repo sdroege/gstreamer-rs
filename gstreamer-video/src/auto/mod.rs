@@ -104,6 +104,9 @@ pub use self::enums::VideoDitherMethod;
 pub use self::enums::VideoFieldOrder;
 pub use self::enums::VideoFormat;
 pub use self::enums::VideoGammaMode;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub use self::enums::VideoHDRFormat;
 pub use self::enums::VideoInterlaceMode;
 pub use self::enums::VideoMatrixMode;
 pub use self::enums::VideoMultiviewFramePacking;
