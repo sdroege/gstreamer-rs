@@ -3220,6 +3220,56 @@ impl From<VideoGammaMode> for glib::Value {
     }
 }
 
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+#[doc(alias = "GstVideoHDRFormat")]
+pub enum VideoHDRFormat {
+    #[doc(alias = "GST_VIDEO_HDR_FORMAT_NONE")]
+    None,
+    #[doc(alias = "GST_VIDEO_HDR_FORMAT_HDR10")]
+    Hdr10,
+    #[doc(alias = "GST_VIDEO_HDR_FORMAT_HDR10_PLUS")]
+    Hdr10Plus,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+#[doc(hidden)]
+impl IntoGlib for VideoHDRFormat {
+    type GlibType = ffi::GstVideoHDRFormat;
+
+    #[inline]
+    fn into_glib(self) -> ffi::GstVideoHDRFormat {
+        match self {
+            Self::None => ffi::GST_VIDEO_HDR_FORMAT_NONE,
+            Self::Hdr10 => ffi::GST_VIDEO_HDR_FORMAT_HDR10,
+            Self::Hdr10Plus => ffi::GST_VIDEO_HDR_FORMAT_HDR10_PLUS,
+            Self::__Unknown(value) => value,
+        }
+    }
+}
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+#[doc(hidden)]
+impl FromGlib<ffi::GstVideoHDRFormat> for VideoHDRFormat {
+    #[inline]
+    unsafe fn from_glib(value: ffi::GstVideoHDRFormat) -> Self {
+        skip_assert_initialized!();
+
+        match value {
+            ffi::GST_VIDEO_HDR_FORMAT_NONE => Self::None,
+            ffi::GST_VIDEO_HDR_FORMAT_HDR10 => Self::Hdr10,
+            ffi::GST_VIDEO_HDR_FORMAT_HDR10_PLUS => Self::Hdr10Plus,
+            value => Self::__Unknown(value),
+        }
+    }
+}
+
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstVideoInterlaceMode")]

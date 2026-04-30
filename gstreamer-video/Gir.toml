@@ -36,6 +36,7 @@ generate = [
     "GstVideo.VideoDitherMethod",
     "GstVideo.VideoFormatFlags",
     "GstVideo.VideoGammaMode",
+    "GstVideo.VideoHDRFormat",
     "GstVideo.VideoMatrixMode",
     "GstVideo.VideoMultiviewFramePacking",
     "GstVideo.VideoMultiviewMode",

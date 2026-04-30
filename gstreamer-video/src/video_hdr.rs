@@ -2,8 +2,12 @@
 
 use std::{fmt, mem, ptr, str};
 
+#[cfg(feature = "v1_30")]
+use crate::VideoHDRFormat;
 use crate::ffi;
 use glib::translate::*;
+#[cfg(feature = "v1_30")]
+use gst::{MetaAPI, MetaAPIExt};
 
 #[doc(alias = "GstVideoContentLightLevel")]
 #[derive(Copy, Clone)]
@@ -356,6 +360,160 @@ impl fmt::Debug for VideoMasteringDisplayInfoCoordinate {
         f.debug_struct("VideoMasteringDisplayInfoCoordinate")
             .field("x", &self.x())
             .field("y", &self.y())
+            .finish()
+    }
+}
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+impl fmt::Display for VideoHDRFormat {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        let s = unsafe {
+            glib::GString::from_glib_full(ffi::gst_video_hdr_format_to_string(self.into_glib()))
+        };
+        f.write_str(&s)
+    }
+}
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+impl str::FromStr for VideoHDRFormat {
+    type Err = glib::BoolError;
+
+    #[doc(alias = "gst_video_hdr_format_from_string")]
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        skip_assert_initialized!();
+
+        let format = unsafe { ffi::gst_video_hdr_format_from_string(s.to_glib_none().0) };
+
+        if format == ffi::GST_VIDEO_HDR_FORMAT_NONE && s != "none" {
+            Err(glib::bool_error!("Invalid HDR format: {}", s))
+        } else {
+            Ok(unsafe { from_glib(format) })
+        }
+    }
+}
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+#[doc(alias = "GstVideoHDR10Plus")]
+#[derive(Copy, Clone)]
+pub struct VideoHDR10Plus(ffi::GstVideoHDR10Plus);
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+impl VideoHDR10Plus {
+    #[doc(alias = "gst_video_hdr_parse_hdr10_plus")]
+    pub fn parse(data: &[u8]) -> Result<Self, glib::BoolError> {
+        skip_assert_initialized!();
+
+        let mut hdr10_plus = mem::MaybeUninit::uninit();
+        let ret: bool = unsafe {
+            from_glib(ffi::gst_video_hdr_parse_hdr10_plus(
+                data.as_ptr(),
+                data.len() as _,
+                hdr10_plus.as_mut_ptr(),
+            ))
+        };
+
+        if ret {
+            Ok(VideoHDR10Plus(unsafe { hdr10_plus.assume_init() }))
+        } else {
+            Err(glib::bool_error!("Failed to parse HDR10+ data"))
+        }
+    }
+
+    pub fn application_identifier(&self) -> u8 {
+        self.0.application_identifier
+    }
+
+    pub fn application_version(&self) -> u8 {
+        self.0.application_version
+    }
+
+    pub fn num_windows(&self) -> u8 {
+        self.0.num_windows
+    }
+}
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+impl fmt::Debug for VideoHDR10Plus {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("VideoHDR10Plus")
+            .field("application_identifier", &self.application_identifier())
+            .field("application_version", &self.application_version())
+            .field("num_windows", &self.num_windows())
+            .finish()
+    }
+}
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+#[repr(transparent)]
+#[doc(alias = "GstVideoHDRMeta")]
+pub struct VideoHDRMeta(ffi::GstVideoHDRMeta);
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+unsafe impl Send for VideoHDRMeta {}
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+unsafe impl Sync for VideoHDRMeta {}
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+impl VideoHDRMeta {
+    #[doc(alias = "gst_buffer_add_video_hdr_meta")]
+    pub fn add<'a>(
+        buffer: &'a mut gst::BufferRef,
+        format: VideoHDRFormat,
+        data: &[u8],
+    ) -> gst::MetaRefMut<'a, Self, gst::meta::Standalone> {
+        skip_assert_initialized!();
+
+        unsafe {
+            let meta_ptr = ffi::gst_buffer_add_video_hdr_meta(
+                buffer.as_mut_ptr(),
+                format.into_glib(),
+                data.as_ptr(),
+                data.len(),
+            );
+            Self::from_mut_ptr(buffer, meta_ptr)
+        }
+    }
+
+    #[doc(alias = "get_format")]
+    pub fn format(&self) -> VideoHDRFormat {
+        unsafe { from_glib(self.0.format) }
+    }
+
+    #[doc(alias = "get_data")]
+    pub fn data(&self) -> &[u8] {
+        unsafe { std::slice::from_raw_parts(self.0.data, self.0.size) }
+    }
+}
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+unsafe impl MetaAPI for VideoHDRMeta {
+    type GstType = ffi::GstVideoHDRMeta;
+
+    #[doc(alias = "gst_video_hdr_meta_api_get_type")]
+    #[inline]
+    fn meta_api() -> glib::Type {
+        unsafe { from_glib(ffi::gst_video_hdr_meta_api_get_type()) }
+    }
+}
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+impl fmt::Debug for VideoHDRMeta {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("VideoHDRMeta")
+            .field("format", &self.format())
+            .field("size", &self.0.size)
             .finish()
     }
 }
