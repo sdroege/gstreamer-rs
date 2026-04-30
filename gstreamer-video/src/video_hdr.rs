@@ -517,3 +517,201 @@ impl fmt::Debug for VideoHDRMeta {
             .finish()
     }
 }
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+#[doc(alias = "GstVideoColorVolumeTransformation")]
+#[derive(Copy, Clone)]
+pub struct VideoColorVolumeTransformation(ffi::GstVideoColorVolumeTransformation);
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+impl VideoColorVolumeTransformation {
+    pub fn window_upper_left_corner_x(&self) -> u16 {
+        self.0.window_upper_left_corner_x
+    }
+
+    pub fn window_upper_left_corner_y(&self) -> u16 {
+        self.0.window_upper_left_corner_y
+    }
+
+    pub fn window_lower_right_corner_x(&self) -> u16 {
+        self.0.window_lower_right_corner_x
+    }
+
+    pub fn window_lower_right_corner_y(&self) -> u16 {
+        self.0.window_lower_right_corner_y
+    }
+
+    pub fn center_of_ellipse_x(&self) -> u16 {
+        self.0.center_of_ellipse_x
+    }
+
+    pub fn center_of_ellipse_y(&self) -> u16 {
+        self.0.center_of_ellipse_y
+    }
+
+    pub fn rotation_angle(&self) -> u8 {
+        self.0.rotation_angle
+    }
+
+    pub fn semimajor_axis_internal_ellipse(&self) -> u16 {
+        self.0.semimajor_axis_internal_ellipse
+    }
+
+    pub fn semimajor_axis_external_ellipse(&self) -> u16 {
+        self.0.semimajor_axis_external_ellipse
+    }
+
+    pub fn semiminor_axis_external_ellipse(&self) -> u16 {
+        self.0.semiminor_axis_external_ellipse
+    }
+
+    pub fn overlap_process_option(&self) -> u8 {
+        self.0.overlap_process_option
+    }
+
+    pub fn maxscl(&self) -> &[u32; 3] {
+        &self.0.maxscl
+    }
+
+    pub fn average_maxrgb(&self) -> u32 {
+        self.0.average_maxrgb
+    }
+
+    pub fn num_distributions(&self) -> u8 {
+        self.0.num_distributions
+    }
+
+    pub fn distribution_index(&self) -> &[u8; 16] {
+        &self.0.distribution_index
+    }
+
+    pub fn distribution_values(&self) -> &[u32; 16] {
+        &self.0.distribution_values
+    }
+
+    pub fn fraction_bright_pixels(&self) -> u16 {
+        self.0.fraction_bright_pixels
+    }
+
+    pub fn tone_mapping_flag(&self) -> u8 {
+        self.0.tone_mapping_flag
+    }
+
+    pub fn knee_point_x(&self) -> u16 {
+        self.0.knee_point_x
+    }
+
+    pub fn knee_point_y(&self) -> u16 {
+        self.0.knee_point_y
+    }
+
+    pub fn num_bezier_curve_anchors(&self) -> u8 {
+        self.0.num_bezier_curve_anchors
+    }
+
+    pub fn bezier_curve_anchors(&self) -> &[u16; 16] {
+        &self.0.bezier_curve_anchors
+    }
+
+    pub fn color_saturation_mapping_flag(&self) -> u8 {
+        self.0.color_saturation_mapping_flag
+    }
+
+    pub fn color_saturation_weight(&self) -> u8 {
+        self.0.color_saturation_weight
+    }
+}
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+impl fmt::Debug for VideoColorVolumeTransformation {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        f.debug_struct("VideoColorVolumeTransformation")
+            .field(
+                "window_upper_left_corner_x",
+                &self.window_upper_left_corner_x(),
+            )
+            .field(
+                "window_upper_left_corner_y",
+                &self.window_upper_left_corner_y(),
+            )
+            .field(
+                "window_lower_right_corner_x",
+                &self.window_lower_right_corner_x(),
+            )
+            .field(
+                "window_lower_right_corner_y",
+                &self.window_lower_right_corner_y(),
+            )
+            .field("center_of_ellipse_x", &self.center_of_ellipse_x())
+            .field("center_of_ellipse_y", &self.center_of_ellipse_y())
+            .field("rotation_angle", &self.rotation_angle())
+            .field(
+                "semimajor_axis_internal_ellipse",
+                &self.semimajor_axis_internal_ellipse(),
+            )
+            .field(
+                "semimajor_axis_external_ellipse",
+                &self.semimajor_axis_external_ellipse(),
+            )
+            .field(
+                "semiminor_axis_external_ellipse",
+                &self.semiminor_axis_external_ellipse(),
+            )
+            .field("overlap_process_option", &self.overlap_process_option())
+            .field("maxscl", self.maxscl())
+            .field("average_maxrgb", &self.average_maxrgb())
+            .field("num_distributions", &self.num_distributions())
+            .field("distribution_index", self.distribution_index())
+            .field("distribution_values", self.distribution_values())
+            .field("fraction_bright_pixels", &self.fraction_bright_pixels())
+            .field("tone_mapping_flag", &self.tone_mapping_flag())
+            .field("knee_point_x", &self.knee_point_x())
+            .field("knee_point_y", &self.knee_point_y())
+            .field("num_bezier_curve_anchors", &self.num_bezier_curve_anchors())
+            .field("bezier_curve_anchors", self.bezier_curve_anchors())
+            .field(
+                "color_saturation_mapping_flag",
+                &self.color_saturation_mapping_flag(),
+            )
+            .field("color_saturation_weight", &self.color_saturation_weight())
+            .finish()
+    }
+}
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+impl PartialEq for VideoColorVolumeTransformation {
+    fn eq(&self, other: &Self) -> bool {
+        self.0.window_upper_left_corner_x == other.0.window_upper_left_corner_x
+            && self.0.window_upper_left_corner_y == other.0.window_upper_left_corner_y
+            && self.0.window_lower_right_corner_x == other.0.window_lower_right_corner_x
+            && self.0.window_lower_right_corner_y == other.0.window_lower_right_corner_y
+            && self.0.center_of_ellipse_x == other.0.center_of_ellipse_x
+            && self.0.center_of_ellipse_y == other.0.center_of_ellipse_y
+            && self.0.rotation_angle == other.0.rotation_angle
+            && self.0.semimajor_axis_internal_ellipse == other.0.semimajor_axis_internal_ellipse
+            && self.0.semimajor_axis_external_ellipse == other.0.semimajor_axis_external_ellipse
+            && self.0.semiminor_axis_external_ellipse == other.0.semiminor_axis_external_ellipse
+            && self.0.overlap_process_option == other.0.overlap_process_option
+            && self.0.maxscl == other.0.maxscl
+            && self.0.average_maxrgb == other.0.average_maxrgb
+            && self.0.num_distributions == other.0.num_distributions
+            && self.0.distribution_index == other.0.distribution_index
+            && self.0.distribution_values == other.0.distribution_values
+            && self.0.fraction_bright_pixels == other.0.fraction_bright_pixels
+            && self.0.tone_mapping_flag == other.0.tone_mapping_flag
+            && self.0.knee_point_x == other.0.knee_point_x
+            && self.0.knee_point_y == other.0.knee_point_y
+            && self.0.num_bezier_curve_anchors == other.0.num_bezier_curve_anchors
+            && self.0.bezier_curve_anchors == other.0.bezier_curve_anchors
+            && self.0.color_saturation_mapping_flag == other.0.color_saturation_mapping_flag
+            && self.0.color_saturation_weight == other.0.color_saturation_weight
+    }
+}
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+impl Eq for VideoColorVolumeTransformation {}
