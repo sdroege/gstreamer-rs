@@ -196,6 +196,11 @@ status = "generate"
     # Use &CapsRef
     manual = true
 
+    [[object.function]]
+    name = "codec_utils_vpx_caps_get_config"
+    # Manual conversion for `video_full_range` tri-state field
+    manual = true
+
     # Plugin installer API needs some manual impls
     [[object.function]]
     pattern = "install_plugins.*"
