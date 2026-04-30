@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
+#![allow(deprecated)]
 
 #[cfg(feature = "v1_18")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
@@ -144,10 +145,23 @@ pub trait ProjectExt: IsA<Project> + 'static {
         }
     }
 
+    #[cfg_attr(feature = "v1_30", deprecated = "Since 1.30")]
+    #[allow(deprecated)]
     #[doc(alias = "ges_project_list_encoding_profiles")]
     fn list_encoding_profiles(&self) -> Vec<gst_pbutils::EncodingProfile> {
         unsafe {
             FromGlibPtrContainer::from_glib_none(ffi::ges_project_list_encoding_profiles(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "ges_project_list_encoding_profiles_full")]
+    fn list_encoding_profiles_full(&self) -> Vec<gst_pbutils::EncodingProfile> {
+        unsafe {
+            FromGlibPtrContainer::from_glib_full(ffi::ges_project_list_encoding_profiles_full(
                 self.as_ref().to_glib_none().0,
             ))
         }

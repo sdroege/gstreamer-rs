@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
+#![allow(deprecated)]
 
 use crate::{Extractable, MetaContainer, ffi};
 use glib::{
@@ -148,10 +149,24 @@ pub trait AssetExt: IsA<Asset> + 'static {
         }
     }
 
+    #[cfg_attr(feature = "v1_30", deprecated = "Since 1.30")]
+    #[allow(deprecated)]
     #[doc(alias = "ges_asset_get_error")]
     #[doc(alias = "get_error")]
     fn error(&self) -> Option<glib::Error> {
         unsafe { from_glib_none(ffi::ges_asset_get_error(self.as_ref().to_glib_none().0)) }
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "ges_asset_get_error_full")]
+    #[doc(alias = "get_error_full")]
+    fn error_full(&self) -> Option<glib::Error> {
+        unsafe {
+            from_glib_full(ffi::ges_asset_get_error_full(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
     }
 
     #[doc(alias = "ges_asset_get_extractable_type")]
@@ -171,6 +186,8 @@ pub trait AssetExt: IsA<Asset> + 'static {
         unsafe { from_glib_none(ffi::ges_asset_get_id(self.as_ref().to_glib_none().0)) }
     }
 
+    #[cfg_attr(feature = "v1_30", deprecated = "Since 1.30")]
+    #[allow(deprecated)]
     #[doc(alias = "ges_asset_get_proxy")]
     #[doc(alias = "get_proxy")]
     #[must_use]
@@ -178,6 +195,21 @@ pub trait AssetExt: IsA<Asset> + 'static {
         unsafe { from_glib_none(ffi::ges_asset_get_proxy(self.as_ref().to_glib_none().0)) }
     }
 
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "ges_asset_get_proxy_full")]
+    #[doc(alias = "get_proxy_full")]
+    #[must_use]
+    fn proxy_full(&self) -> Option<Asset> {
+        unsafe {
+            from_glib_full(ffi::ges_asset_get_proxy_full(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg_attr(feature = "v1_30", deprecated = "Since 1.30")]
+    #[allow(deprecated)]
     #[doc(alias = "ges_asset_get_proxy_target")]
     #[doc(alias = "get_proxy_target")]
     #[doc(alias = "proxy-target")]
@@ -190,10 +222,36 @@ pub trait AssetExt: IsA<Asset> + 'static {
         }
     }
 
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "ges_asset_get_proxy_target_full")]
+    #[doc(alias = "get_proxy_target_full")]
+    #[must_use]
+    fn proxy_target_full(&self) -> Option<Asset> {
+        unsafe {
+            from_glib_full(ffi::ges_asset_get_proxy_target_full(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg_attr(feature = "v1_30", deprecated = "Since 1.30")]
+    #[allow(deprecated)]
     #[doc(alias = "ges_asset_list_proxies")]
     fn list_proxies(&self) -> Vec<Asset> {
         unsafe {
             FromGlibPtrContainer::from_glib_none(ffi::ges_asset_list_proxies(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "ges_asset_list_proxies_full")]
+    fn list_proxies_full(&self) -> Vec<Asset> {
+        unsafe {
+            FromGlibPtrContainer::from_glib_full(ffi::ges_asset_list_proxies_full(
                 self.as_ref().to_glib_none().0,
             ))
         }

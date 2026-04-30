@@ -443,29 +443,11 @@ unsafe extern "C" {
     pub fn gst_analytics_group_mtd_get_member_count(handle: *const GstAnalyticsGroupMtd) -> size_t;
     #[cfg(feature = "v1_30")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
-    pub fn gst_analytics_group_mtd_has_semantic_tag(
-        handle: *const GstAnalyticsGroupMtd,
-        tag: *const c_char,
-    ) -> gboolean;
-    #[cfg(feature = "v1_30")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
     pub fn gst_analytics_group_mtd_iterate(
         handle: *const GstAnalyticsGroupMtd,
         state: *mut gpointer,
         type_: GstAnalyticsMtdType,
         member: *mut GstAnalyticsMtd,
-    ) -> gboolean;
-    #[cfg(feature = "v1_30")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
-    pub fn gst_analytics_group_mtd_semantic_tag_has_prefix(
-        handle: *const GstAnalyticsGroupMtd,
-        prefix: *const c_char,
-    ) -> gboolean;
-    #[cfg(feature = "v1_30")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
-    pub fn gst_analytics_group_mtd_set_semantic_tag(
-        handle: *mut GstAnalyticsGroupMtd,
-        tag: *const c_char,
     ) -> gboolean;
     #[cfg(feature = "v1_30")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
@@ -584,7 +566,28 @@ unsafe extern "C" {
     //=========================================================================
     pub fn gst_analytics_mtd_get_id(instance: *const GstAnalyticsMtd) -> c_uint;
     pub fn gst_analytics_mtd_get_mtd_type(instance: *const GstAnalyticsMtd) -> GstAnalyticsMtdType;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_mtd_get_semantic_tag(instance: *const GstAnalyticsMtd) -> *mut c_char;
     pub fn gst_analytics_mtd_get_size(instance: *const GstAnalyticsMtd) -> size_t;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_mtd_has_semantic_tag(
+        instance: *const GstAnalyticsMtd,
+        tag: *const c_char,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_mtd_semantic_tag_has_prefix(
+        instance: *const GstAnalyticsMtd,
+        prefix: *const c_char,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_mtd_set_semantic_tag(
+        instance: *mut GstAnalyticsMtd,
+        tag: *const c_char,
+    ) -> gboolean;
     pub fn gst_analytics_mtd_type_get_name(type_: GstAnalyticsMtdType) -> *const c_char;
 
     //=========================================================================

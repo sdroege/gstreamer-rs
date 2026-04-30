@@ -84,10 +84,20 @@ pub trait TrackElementExt: IsA<TrackElement> + 'static {
         }
     }
 
+    //#[cfg_attr(feature = "v1_30", deprecated = "Since 1.30")]
+    //#[allow(deprecated)]
     //#[doc(alias = "ges_track_element_get_all_control_bindings")]
     //#[doc(alias = "get_all_control_bindings")]
     //fn all_control_bindings(&self) -> /*Unknown conversion*//*Unimplemented*/HashTable TypeId { ns_id: 0, id: 28 }/TypeId { ns_id: 6, id: 92 } {
     //    unsafe { TODO: call ffi:ges_track_element_get_all_control_bindings() }
+    //}
+
+    //#[cfg(feature = "v1_30")]
+    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    //#[doc(alias = "ges_track_element_get_all_control_bindings_full")]
+    //#[doc(alias = "get_all_control_bindings_full")]
+    //fn all_control_bindings_full(&self) -> /*Unknown conversion*//*Unimplemented*/HashTable TypeId { ns_id: 0, id: 28 }/TypeId { ns_id: 6, id: 92 } {
+    //    unsafe { TODO: call ffi:ges_track_element_get_all_control_bindings_full() }
     //}
 
     #[cfg(feature = "v1_18")]
@@ -143,6 +153,8 @@ pub trait TrackElementExt: IsA<TrackElement> + 'static {
     //    unsafe { TODO: call ffi:ges_track_element_get_child_property_valist() }
     //}
 
+    #[cfg_attr(feature = "v1_30", deprecated = "Since 1.30")]
+    #[allow(deprecated)]
     #[doc(alias = "ges_track_element_get_control_binding")]
     #[doc(alias = "get_control_binding")]
     fn control_binding(&self, property_name: &str) -> Option<gst::ControlBinding> {
@@ -154,11 +166,38 @@ pub trait TrackElementExt: IsA<TrackElement> + 'static {
         }
     }
 
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "ges_track_element_get_control_binding_full")]
+    #[doc(alias = "get_control_binding_full")]
+    fn control_binding_full(&self, property_name: &str) -> Option<gst::ControlBinding> {
+        unsafe {
+            from_glib_full(ffi::ges_track_element_get_control_binding_full(
+                self.as_ref().to_glib_none().0,
+                property_name.to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg_attr(feature = "v1_30", deprecated = "Since 1.30")]
+    #[allow(deprecated)]
     #[doc(alias = "ges_track_element_get_element")]
     #[doc(alias = "get_element")]
     fn element(&self) -> Option<gst::Element> {
         unsafe {
             from_glib_none(ffi::ges_track_element_get_element(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "ges_track_element_get_element_full")]
+    #[doc(alias = "get_element_full")]
+    fn element_full(&self) -> Option<gst::Element> {
+        unsafe {
+            from_glib_full(ffi::ges_track_element_get_element_full(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -174,6 +213,8 @@ pub trait TrackElementExt: IsA<TrackElement> + 'static {
         }
     }
 
+    #[cfg_attr(feature = "v1_30", deprecated = "Since 1.30")]
+    #[allow(deprecated)]
     #[doc(alias = "ges_track_element_get_nleobject")]
     #[doc(alias = "get_nleobject")]
     fn nleobject(&self) -> gst::Element {
@@ -184,11 +225,37 @@ pub trait TrackElementExt: IsA<TrackElement> + 'static {
         }
     }
 
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "ges_track_element_get_nleobject_full")]
+    #[doc(alias = "get_nleobject_full")]
+    fn nleobject_full(&self) -> Option<gst::Element> {
+        unsafe {
+            from_glib_full(ffi::ges_track_element_get_nleobject_full(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg_attr(feature = "v1_30", deprecated = "Since 1.30")]
+    #[allow(deprecated)]
     #[doc(alias = "ges_track_element_get_track")]
     #[doc(alias = "get_track")]
     fn track(&self) -> Option<Track> {
         unsafe {
             from_glib_none(ffi::ges_track_element_get_track(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "ges_track_element_get_track_full")]
+    #[doc(alias = "get_track_full")]
+    fn track_full(&self) -> Option<Track> {
+        unsafe {
+            from_glib_full(ffi::ges_track_element_get_track_full(
                 self.as_ref().to_glib_none().0,
             ))
         }

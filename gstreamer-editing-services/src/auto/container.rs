@@ -83,6 +83,14 @@ pub trait GESContainerExt: IsA<Container> + 'static {
         }
     }
 
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "ges_container_get_height")]
+    #[doc(alias = "get_height")]
+    fn height(&self) -> u32 {
+        unsafe { ffi::ges_container_get_height(self.as_ref().to_glib_none().0) }
+    }
+
     #[doc(alias = "ges_container_remove")]
     fn remove(&self, child: &impl IsA<TimelineElement>) -> Result<(), glib::error::BoolError> {
         unsafe {
@@ -106,6 +114,8 @@ pub trait GESContainerExt: IsA<Container> + 'static {
         }
     }
 
+    #[cfg(not(feature = "v1_30"))]
+    #[cfg_attr(docsrs, doc(cfg(not(feature = "v1_30"))))]
     fn height(&self) -> u32 {
         ObjectExt::property(self.as_ref(), "height")
     }

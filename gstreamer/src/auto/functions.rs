@@ -157,14 +157,14 @@ pub fn debug_bin_to_dot_data(bin: &impl IsA<Bin>, details: DebugGraphDetails) ->
 pub fn debug_bin_to_dot_file(
     bin: &impl IsA<Bin>,
     details: DebugGraphDetails,
-    file_name: impl AsRef<std::path::Path>,
+    file_name: Option<impl AsRef<std::path::Path>>,
 ) {
     skip_assert_initialized!();
     unsafe {
         ffi::gst_debug_bin_to_dot_file(
             bin.as_ref().to_glib_none().0,
             details.into_glib(),
-            file_name.as_ref().to_glib_none().0,
+            file_name.as_ref().map(|p| p.as_ref()).to_glib_none().0,
         );
     }
 }
@@ -173,14 +173,14 @@ pub fn debug_bin_to_dot_file(
 pub fn debug_bin_to_dot_file_with_ts(
     bin: &impl IsA<Bin>,
     details: DebugGraphDetails,
-    file_name: impl AsRef<std::path::Path>,
+    file_name: Option<impl AsRef<std::path::Path>>,
 ) {
     skip_assert_initialized!();
     unsafe {
         ffi::gst_debug_bin_to_dot_file_with_ts(
             bin.as_ref().to_glib_none().0,
             details.into_glib(),
-            file_name.as_ref().to_glib_none().0,
+            file_name.as_ref().map(|p| p.as_ref()).to_glib_none().0,
         );
     }
 }

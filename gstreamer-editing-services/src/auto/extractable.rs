@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
+#![allow(deprecated)]
 
 use crate::{Asset, ffi};
 use glib::{prelude::*, translate::*};
@@ -20,11 +21,25 @@ impl Extractable {
 }
 
 pub trait ExtractableExt: IsA<Extractable> + 'static {
+    #[cfg_attr(feature = "v1_30", deprecated = "Since 1.30")]
+    #[allow(deprecated)]
     #[doc(alias = "ges_extractable_get_asset")]
     #[doc(alias = "get_asset")]
     fn asset(&self) -> Option<Asset> {
         unsafe {
             from_glib_none(ffi::ges_extractable_get_asset(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "ges_extractable_get_asset_full")]
+    #[doc(alias = "get_asset_full")]
+    fn asset_full(&self) -> Option<Asset> {
+        unsafe {
+            from_glib_full(ffi::ges_extractable_get_asset_full(
                 self.as_ref().to_glib_none().0,
             ))
         }

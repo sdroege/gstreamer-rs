@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
+#![allow(deprecated)]
 
 use crate::{MetaContainer, Timeline, TrackElement, TrackType, ffi};
 use glib::{
@@ -70,10 +71,20 @@ pub trait GESTrackExt: IsA<Track> + 'static {
         unsafe { from_glib(ffi::ges_track_commit(self.as_ref().to_glib_none().0)) }
     }
 
+    #[cfg_attr(feature = "v1_30", deprecated = "Since 1.30")]
+    #[allow(deprecated)]
     #[doc(alias = "ges_track_get_caps")]
     #[doc(alias = "get_caps")]
     fn caps(&self) -> Option<gst::Caps> {
         unsafe { from_glib_none(ffi::ges_track_get_caps(self.as_ref().to_glib_none().0)) }
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "ges_track_get_caps_full")]
+    #[doc(alias = "get_caps_full")]
+    fn caps_full(&self) -> Option<gst::Caps> {
+        unsafe { from_glib_full(ffi::ges_track_get_caps_full(self.as_ref().to_glib_none().0)) }
     }
 
     #[doc(alias = "ges_track_get_elements")]
@@ -106,10 +117,24 @@ pub trait GESTrackExt: IsA<Track> + 'static {
         }
     }
 
+    #[cfg_attr(feature = "v1_30", deprecated = "Since 1.30")]
+    #[allow(deprecated)]
     #[doc(alias = "ges_track_get_timeline")]
     #[doc(alias = "get_timeline")]
     fn timeline(&self) -> Option<Timeline> {
         unsafe { from_glib_none(ffi::ges_track_get_timeline(self.as_ref().to_glib_none().0)) }
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "ges_track_get_timeline_full")]
+    #[doc(alias = "get_timeline_full")]
+    fn timeline_full(&self) -> Option<Timeline> {
+        unsafe {
+            from_glib_full(ffi::ges_track_get_timeline_full(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
     }
 
     #[doc(alias = "ges_track_remove_element")]

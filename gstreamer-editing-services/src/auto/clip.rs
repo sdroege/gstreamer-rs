@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
+#![allow(deprecated)]
 
 #[cfg(feature = "v1_18")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
@@ -31,6 +32,8 @@ impl Clip {
 }
 
 pub trait ClipExt: IsA<Clip> + 'static {
+    #[cfg_attr(feature = "v1_30", deprecated = "Since 1.30")]
+    #[allow(deprecated)]
     #[doc(alias = "ges_clip_add_asset")]
     fn add_asset(&self, asset: &impl IsA<Asset>) -> Result<TrackElement, glib::BoolError> {
         unsafe {
@@ -42,8 +45,22 @@ pub trait ClipExt: IsA<Clip> + 'static {
         }
     }
 
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "ges_clip_add_asset_full")]
+    fn add_asset_full(&self, asset: &impl IsA<Asset>) -> Option<TrackElement> {
+        unsafe {
+            from_glib_full(ffi::ges_clip_add_asset_full(
+                self.as_ref().to_glib_none().0,
+                asset.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg_attr(feature = "v1_30", deprecated = "Since 1.30")]
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
+    #[allow(deprecated)]
     #[doc(alias = "ges_clip_add_child_to_track")]
     fn add_child_to_track(
         &self,
@@ -60,6 +77,30 @@ pub trait ClipExt: IsA<Clip> + 'static {
             );
             if error.is_null() {
                 Ok(from_glib_none(ret))
+            } else {
+                Err(from_glib_full(error))
+            }
+        }
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "ges_clip_add_child_to_track_full")]
+    fn add_child_to_track_full(
+        &self,
+        child: &impl IsA<TrackElement>,
+        track: &impl IsA<Track>,
+    ) -> Result<TrackElement, glib::Error> {
+        unsafe {
+            let mut error = std::ptr::null_mut();
+            let ret = ffi::ges_clip_add_child_to_track_full(
+                self.as_ref().to_glib_none().0,
+                child.as_ref().to_glib_none().0,
+                track.as_ref().to_glib_none().0,
+                &mut error,
+            );
+            if error.is_null() {
+                Ok(from_glib_full(ret))
             } else {
                 Err(from_glib_full(error))
             }

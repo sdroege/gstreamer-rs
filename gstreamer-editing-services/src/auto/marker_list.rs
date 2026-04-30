@@ -2,6 +2,7 @@
 // from gir-files (https://github.com/gtk-rs/gir-files)
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
+#![allow(deprecated)]
 
 #[cfg(feature = "v1_20")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
@@ -31,10 +32,24 @@ impl MarkerList {
         unsafe { from_glib_full(ffi::ges_marker_list_new()) }
     }
 
+    #[cfg_attr(feature = "v1_30", deprecated = "Since 1.30")]
+    #[allow(deprecated)]
     #[doc(alias = "ges_marker_list_add")]
     pub fn add(&self, position: impl Into<Option<gst::ClockTime>>) -> Marker {
         unsafe {
             from_glib_none(ffi::ges_marker_list_add(
+                self.to_glib_none().0,
+                position.into().into_glib(),
+            ))
+        }
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "ges_marker_list_add_full")]
+    pub fn add_full(&self, position: impl Into<Option<gst::ClockTime>>) -> Marker {
+        unsafe {
+            from_glib_full(ffi::ges_marker_list_add_full(
                 self.to_glib_none().0,
                 position.into().into_glib(),
             ))

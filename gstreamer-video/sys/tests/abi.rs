@@ -532,6 +532,13 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "GstVideoColorVolumeTransformation",
+        Layout {
+            size: size_of::<GstVideoColorVolumeTransformation>(),
+            alignment: align_of::<GstVideoColorVolumeTransformation>(),
+        },
+    ),
+    (
         "GstVideoColorimetry",
         Layout {
             size: size_of::<GstVideoColorimetry>(),
@@ -711,6 +718,27 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         Layout {
             size: size_of::<GstVideoGammaMode>(),
             alignment: align_of::<GstVideoGammaMode>(),
+        },
+    ),
+    (
+        "GstVideoHDR10Plus",
+        Layout {
+            size: size_of::<GstVideoHDR10Plus>(),
+            alignment: align_of::<GstVideoHDR10Plus>(),
+        },
+    ),
+    (
+        "GstVideoHDRFormat",
+        Layout {
+            size: size_of::<GstVideoHDRFormat>(),
+            alignment: align_of::<GstVideoHDRFormat>(),
+        },
+    ),
+    (
+        "GstVideoHDRMeta",
+        Layout {
+            size: size_of::<GstVideoHDRMeta>(),
+            alignment: align_of::<GstVideoHDRMeta>(),
         },
     ),
     (
@@ -1506,6 +1534,13 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_VIDEO_GL_TEXTURE_TYPE_RGB", "3"),
     ("(gint) GST_VIDEO_GL_TEXTURE_TYPE_RGB16", "2"),
     ("(gint) GST_VIDEO_GL_TEXTURE_TYPE_RGBA", "4"),
+    ("GST_VIDEO_HDR10_PLUS_MAX_BYTES", "1024"),
+    ("GST_VIDEO_HDR10_PLUS_MAX_COLS_MD_APL", "25"),
+    ("GST_VIDEO_HDR10_PLUS_MAX_ROWS_TSD_APL", "25"),
+    ("GST_VIDEO_HDR10_PLUS_NUM_WINDOWS", "1"),
+    ("(gint) GST_VIDEO_HDR_FORMAT_HDR10", "1"),
+    ("(gint) GST_VIDEO_HDR_FORMAT_HDR10_PLUS", "2"),
+    ("(gint) GST_VIDEO_HDR_FORMAT_NONE", "0"),
     ("(gint) GST_VIDEO_INTERLACE_MODE_ALTERNATE", "4"),
     ("(gint) GST_VIDEO_INTERLACE_MODE_FIELDS", "3"),
     ("(gint) GST_VIDEO_INTERLACE_MODE_INTERLEAVED", "1"),
@@ -1628,6 +1663,7 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("GST_VIDEO_TILE_TYPE_SHIFT", "16"),
     ("GST_VIDEO_TILE_X_TILES_MASK", "65535"),
     ("GST_VIDEO_TILE_Y_TILES_SHIFT", "16"),
+    ("(guint) GST_VIDEO_TIME_CODE_FLAGS_DISCONT", "4"),
     ("(guint) GST_VIDEO_TIME_CODE_FLAGS_DROP_FRAME", "1"),
     ("(guint) GST_VIDEO_TIME_CODE_FLAGS_INTERLACED", "2"),
     ("(guint) GST_VIDEO_TIME_CODE_FLAGS_NONE", "0"),

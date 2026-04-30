@@ -452,6 +452,11 @@ pub type GstVideoGammaMode = c_int;
 pub const GST_VIDEO_GAMMA_MODE_NONE: GstVideoGammaMode = 0;
 pub const GST_VIDEO_GAMMA_MODE_REMAP: GstVideoGammaMode = 1;
 
+pub type GstVideoHDRFormat = c_int;
+pub const GST_VIDEO_HDR_FORMAT_NONE: GstVideoHDRFormat = 0;
+pub const GST_VIDEO_HDR_FORMAT_HDR10: GstVideoHDRFormat = 1;
+pub const GST_VIDEO_HDR_FORMAT_HDR10_PLUS: GstVideoHDRFormat = 2;
+
 pub type GstVideoInterlaceMode = c_int;
 pub const GST_VIDEO_INTERLACE_MODE_PROGRESSIVE: GstVideoInterlaceMode = 0;
 pub const GST_VIDEO_INTERLACE_MODE_INTERLEAVED: GstVideoInterlaceMode = 1;
@@ -621,6 +626,10 @@ pub const GST_VIDEO_ENCODER_SINK_NAME: &[u8] = b"sink\0";
 pub const GST_VIDEO_ENCODER_SRC_NAME: &[u8] = b"src\0";
 pub const GST_VIDEO_FORMAT_LAST: c_int = 142;
 pub const GST_VIDEO_FPS_RANGE: &[u8] = b"(fraction) [ 0, max ]\0";
+pub const GST_VIDEO_HDR10_PLUS_MAX_BYTES: c_int = 1024;
+pub const GST_VIDEO_HDR10_PLUS_MAX_COLS_MD_APL: c_int = 25;
+pub const GST_VIDEO_HDR10_PLUS_MAX_ROWS_TSD_APL: c_int = 25;
+pub const GST_VIDEO_HDR10_PLUS_NUM_WINDOWS: c_int = 1;
 pub const GST_VIDEO_MAX_COMPONENTS: c_int = 4;
 pub const GST_VIDEO_MAX_PLANES: c_int = 4;
 pub const GST_VIDEO_RESAMPLER_OPT_CUBIC_B: &[u8] = b"GstVideoResampler.cubic-b\0";
@@ -770,6 +779,9 @@ pub type GstVideoTimeCodeFlags = c_uint;
 pub const GST_VIDEO_TIME_CODE_FLAGS_NONE: GstVideoTimeCodeFlags = 0;
 pub const GST_VIDEO_TIME_CODE_FLAGS_DROP_FRAME: GstVideoTimeCodeFlags = 1;
 pub const GST_VIDEO_TIME_CODE_FLAGS_INTERLACED: GstVideoTimeCodeFlags = 2;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub const GST_VIDEO_TIME_CODE_FLAGS_DISCONT: GstVideoTimeCodeFlags = 4;
 
 // Unions
 #[derive(Copy, Clone)]
@@ -1370,6 +1382,90 @@ impl ::std::fmt::Debug for GstVideoColorPrimariesInfo {
 
 #[derive(Copy, Clone)]
 #[repr(C)]
+pub struct GstVideoColorVolumeTransformation {
+    pub window_upper_left_corner_x: u16,
+    pub window_upper_left_corner_y: u16,
+    pub window_lower_right_corner_x: u16,
+    pub window_lower_right_corner_y: u16,
+    pub center_of_ellipse_x: u16,
+    pub center_of_ellipse_y: u16,
+    pub rotation_angle: u8,
+    pub semimajor_axis_internal_ellipse: u16,
+    pub semimajor_axis_external_ellipse: u16,
+    pub semiminor_axis_external_ellipse: u16,
+    pub overlap_process_option: u8,
+    pub maxscl: [u32; 3],
+    pub average_maxrgb: u32,
+    pub num_distributions: u8,
+    pub distribution_index: [u8; 16],
+    pub distribution_values: [u32; 16],
+    pub fraction_bright_pixels: u16,
+    pub tone_mapping_flag: u8,
+    pub knee_point_x: u16,
+    pub knee_point_y: u16,
+    pub num_bezier_curve_anchors: u8,
+    pub bezier_curve_anchors: [u16; 16],
+    pub color_saturation_mapping_flag: u8,
+    pub color_saturation_weight: u8,
+}
+
+impl ::std::fmt::Debug for GstVideoColorVolumeTransformation {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstVideoColorVolumeTransformation @ {self:p}"))
+            .field(
+                "window_upper_left_corner_x",
+                &self.window_upper_left_corner_x,
+            )
+            .field(
+                "window_upper_left_corner_y",
+                &self.window_upper_left_corner_y,
+            )
+            .field(
+                "window_lower_right_corner_x",
+                &self.window_lower_right_corner_x,
+            )
+            .field(
+                "window_lower_right_corner_y",
+                &self.window_lower_right_corner_y,
+            )
+            .field("center_of_ellipse_x", &self.center_of_ellipse_x)
+            .field("center_of_ellipse_y", &self.center_of_ellipse_y)
+            .field("rotation_angle", &self.rotation_angle)
+            .field(
+                "semimajor_axis_internal_ellipse",
+                &self.semimajor_axis_internal_ellipse,
+            )
+            .field(
+                "semimajor_axis_external_ellipse",
+                &self.semimajor_axis_external_ellipse,
+            )
+            .field(
+                "semiminor_axis_external_ellipse",
+                &self.semiminor_axis_external_ellipse,
+            )
+            .field("overlap_process_option", &self.overlap_process_option)
+            .field("maxscl", &self.maxscl)
+            .field("average_maxrgb", &self.average_maxrgb)
+            .field("num_distributions", &self.num_distributions)
+            .field("distribution_index", &self.distribution_index)
+            .field("distribution_values", &self.distribution_values)
+            .field("fraction_bright_pixels", &self.fraction_bright_pixels)
+            .field("tone_mapping_flag", &self.tone_mapping_flag)
+            .field("knee_point_x", &self.knee_point_x)
+            .field("knee_point_y", &self.knee_point_y)
+            .field("num_bezier_curve_anchors", &self.num_bezier_curve_anchors)
+            .field("bezier_curve_anchors", &self.bezier_curve_anchors)
+            .field(
+                "color_saturation_mapping_flag",
+                &self.color_saturation_mapping_flag,
+            )
+            .field("color_saturation_weight", &self.color_saturation_weight)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
 pub struct GstVideoColorimetry {
     pub range: GstVideoColorRange,
     pub matrix: GstVideoColorMatrix,
@@ -1789,6 +1885,83 @@ impl ::std::fmt::Debug for GstVideoGLTextureUploadMeta {
             .field("texture_orientation", &self.texture_orientation)
             .field("n_textures", &self.n_textures)
             .field("texture_type", &self.texture_type)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstVideoHDR10Plus {
+    pub application_identifier: u8,
+    pub application_version: u8,
+    pub num_windows: u8,
+    pub processing_window: [GstVideoColorVolumeTransformation; 1],
+    pub targeted_system_display_maximum_luminance: u32,
+    pub targeted_system_display_actual_peak_luminance_flag: u8,
+    pub num_rows_targeted_system_display_actual_peak_luminance: u8,
+    pub num_cols_targeted_system_display_actual_peak_luminance: u8,
+    pub targeted_system_display_actual_peak_luminance: [u8; 625],
+    pub mastering_display_actual_peak_luminance_flag: u8,
+    pub num_rows_mastering_display_actual_peak_luminance: u8,
+    pub num_cols_mastering_display_actual_peak_luminance: u8,
+    pub mastering_display_actual_peak_luminance: [u8; 625],
+}
+
+impl ::std::fmt::Debug for GstVideoHDR10Plus {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstVideoHDR10Plus @ {self:p}"))
+            .field("application_identifier", &self.application_identifier)
+            .field("application_version", &self.application_version)
+            .field("num_windows", &self.num_windows)
+            .field("processing_window", &self.processing_window)
+            .field(
+                "targeted_system_display_maximum_luminance",
+                &self.targeted_system_display_maximum_luminance,
+            )
+            .field(
+                "targeted_system_display_actual_peak_luminance_flag",
+                &self.targeted_system_display_actual_peak_luminance_flag,
+            )
+            .field(
+                "num_rows_targeted_system_display_actual_peak_luminance",
+                &self.num_rows_targeted_system_display_actual_peak_luminance,
+            )
+            .field(
+                "num_cols_targeted_system_display_actual_peak_luminance",
+                &self.num_cols_targeted_system_display_actual_peak_luminance,
+            )
+            .field(
+                "mastering_display_actual_peak_luminance_flag",
+                &self.mastering_display_actual_peak_luminance_flag,
+            )
+            .field(
+                "num_rows_mastering_display_actual_peak_luminance",
+                &self.num_rows_mastering_display_actual_peak_luminance,
+            )
+            .field(
+                "num_cols_mastering_display_actual_peak_luminance",
+                &self.num_cols_mastering_display_actual_peak_luminance,
+            )
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstVideoHDRMeta {
+    pub meta: gst::GstMeta,
+    pub format: GstVideoHDRFormat,
+    pub data: *mut u8,
+    pub size: size_t,
+}
+
+impl ::std::fmt::Debug for GstVideoHDRMeta {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstVideoHDRMeta @ {self:p}"))
+            .field("meta", &self.meta)
+            .field("format", &self.format)
+            .field("data", &self.data)
+            .field("size", &self.size)
             .finish()
     }
 }
@@ -3300,6 +3473,13 @@ unsafe extern "C" {
     pub fn gst_video_gl_texture_upload_meta_get_info() -> *const gst::GstMetaInfo;
 
     //=========================================================================
+    // GstVideoHDRMeta
+    //=========================================================================
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_video_hdr_meta_get_info() -> *const gst::GstMetaInfo;
+
+    //=========================================================================
     // GstVideoInfo
     //=========================================================================
     pub fn gst_video_info_get_type() -> GType;
@@ -4648,6 +4828,14 @@ unsafe extern "C" {
         user_data_copy: gobject::GBoxedCopyFunc,
         user_data_free: gobject::GBoxedFreeFunc,
     ) -> *mut GstVideoGLTextureUploadMeta;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_buffer_add_video_hdr_meta(
+        buffer: *mut gst::GstBuffer,
+        format: GstVideoHDRFormat,
+        data: *const u8,
+        size: size_t,
+    ) -> *mut GstVideoHDRMeta;
     pub fn gst_buffer_add_video_meta(
         buffer: *mut gst::GstBuffer,
         flags: GstVideoFrameFlags,
@@ -4872,6 +5060,20 @@ unsafe extern "C" {
         duration: gst::GstClockTime,
         dest_n: *mut c_int,
         dest_d: *mut c_int,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_video_hdr_format_from_string(format: *const c_char) -> GstVideoHDRFormat;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_video_hdr_format_to_string(format: GstVideoHDRFormat) -> *const c_char;
+    pub fn gst_video_hdr_meta_api_get_type() -> GType;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_video_hdr_parse_hdr10_plus(
+        data: *const u8,
+        size: size_t,
+        hdr10_plus: *mut GstVideoHDR10Plus,
     ) -> gboolean;
     #[cfg(feature = "v1_22")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]

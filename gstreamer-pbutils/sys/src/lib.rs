@@ -981,6 +981,29 @@ unsafe extern "C" {
     pub fn gst_codec_utils_vp9_get_level_idc(level: *const c_char) -> u8;
     #[cfg(feature = "v1_30")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_codec_utils_vpx_caps_get_config(
+        caps: *mut gst::GstCaps,
+        vpx_version: *mut c_int,
+        profile: *mut u8,
+        level: *mut u8,
+        bit_depth: *mut u8,
+        chroma_subsampling: *mut u8,
+        video_full_range: *mut gboolean,
+        colour_primaries: *mut u8,
+        transfer_characteristics: *mut u8,
+        matrix_coefficients: *mut u8,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_codec_utils_vpx_caps_set_format_fields(
+        caps: *mut gst::GstCaps,
+        profile: c_int,
+        level: c_int,
+        bit_depth: c_int,
+        chroma_subsampling: c_int,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
     pub fn gst_codec_utils_vpx_create_vpcc_from_caps(
         caps: *mut gst::GstCaps,
     ) -> *mut gst::GstBuffer;

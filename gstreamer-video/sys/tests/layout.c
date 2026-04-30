@@ -55,6 +55,7 @@ int main() {
     printf("%s;%zu;%zu\n", "GstVideoColorPrimaries", sizeof(GstVideoColorPrimaries), alignof(GstVideoColorPrimaries));
     printf("%s;%zu;%zu\n", "GstVideoColorPrimariesInfo", sizeof(GstVideoColorPrimariesInfo), alignof(GstVideoColorPrimariesInfo));
     printf("%s;%zu;%zu\n", "GstVideoColorRange", sizeof(GstVideoColorRange), alignof(GstVideoColorRange));
+    printf("%s;%zu;%zu\n", "GstVideoColorVolumeTransformation", sizeof(GstVideoColorVolumeTransformation), alignof(GstVideoColorVolumeTransformation));
     printf("%s;%zu;%zu\n", "GstVideoColorimetry", sizeof(GstVideoColorimetry), alignof(GstVideoColorimetry));
     printf("%s;%zu;%zu\n", "GstVideoContentLightLevel", sizeof(GstVideoContentLightLevel), alignof(GstVideoContentLightLevel));
     printf("%s;%zu;%zu\n", "GstVideoCropMeta", sizeof(GstVideoCropMeta), alignof(GstVideoCropMeta));
@@ -81,6 +82,9 @@ int main() {
     printf("%s;%zu;%zu\n", "GstVideoGLTextureType", sizeof(GstVideoGLTextureType), alignof(GstVideoGLTextureType));
     printf("%s;%zu;%zu\n", "GstVideoGLTextureUploadMeta", sizeof(GstVideoGLTextureUploadMeta), alignof(GstVideoGLTextureUploadMeta));
     printf("%s;%zu;%zu\n", "GstVideoGammaMode", sizeof(GstVideoGammaMode), alignof(GstVideoGammaMode));
+    printf("%s;%zu;%zu\n", "GstVideoHDR10Plus", sizeof(GstVideoHDR10Plus), alignof(GstVideoHDR10Plus));
+    printf("%s;%zu;%zu\n", "GstVideoHDRFormat", sizeof(GstVideoHDRFormat), alignof(GstVideoHDRFormat));
+    printf("%s;%zu;%zu\n", "GstVideoHDRMeta", sizeof(GstVideoHDRMeta), alignof(GstVideoHDRMeta));
     printf("%s;%zu;%zu\n", "GstVideoInfo", sizeof(GstVideoInfo), alignof(GstVideoInfo));
     printf("%s;%zu;%zu\n", "GstVideoInfoDmaDrm", sizeof(GstVideoInfoDmaDrm), alignof(GstVideoInfoDmaDrm));
     printf("%s;%zu;%zu\n", "GstVideoInterlaceMode", sizeof(GstVideoInterlaceMode), alignof(GstVideoInterlaceMode));

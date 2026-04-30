@@ -1149,6 +1149,10 @@ bitflags! {
         const DROP_FRAME = ffi::GST_VIDEO_TIME_CODE_FLAGS_DROP_FRAME as _;
         #[doc(alias = "GST_VIDEO_TIME_CODE_FLAGS_INTERLACED")]
         const INTERLACED = ffi::GST_VIDEO_TIME_CODE_FLAGS_INTERLACED as _;
+        #[cfg(feature = "v1_30")]
+        #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+        #[doc(alias = "GST_VIDEO_TIME_CODE_FLAGS_DISCONT")]
+        const DISCONT = ffi::GST_VIDEO_TIME_CODE_FLAGS_DISCONT as _;
     }
 }
 
