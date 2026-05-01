@@ -11,7 +11,7 @@ pub trait AudioAggregatorPadExtManual: IsA<AudioAggregatorPad> + 'static {
 
             let info = &(*ptr).info;
 
-            if !info.finfo.is_null() && info.channels > 0 && info.rate > 0 && info.bpf > 0 {
+            if info.finfo.is_null() || info.channels <= 0 || info.rate <= 0 || info.bpf <= 0 {
                 return None;
             }
 
