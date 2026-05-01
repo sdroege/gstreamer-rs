@@ -37,6 +37,7 @@ manual = [
     "Gst.ClockTimeDiff",
     "Gst.Element",
     "Gst.Format",
+    "Gst.Pad",
     "Gst.TagList",
     "Gst.TagMergeMode",
     "GstAudio.AudioChannelPosition",
