@@ -13,7 +13,7 @@ use std::boxed::Box as Box_;
 
 glib::wrapper! {
     #[doc(alias = "GstAudioAggregatorConvertPad")]
-    pub struct AudioAggregatorConvertPad(Object<ffi::GstAudioAggregatorConvertPad, ffi::GstAudioAggregatorConvertPadClass>) @extends AudioAggregatorPad, gst_base::AggregatorPad, gst::Object;
+    pub struct AudioAggregatorConvertPad(Object<ffi::GstAudioAggregatorConvertPad, ffi::GstAudioAggregatorConvertPadClass>) @extends AudioAggregatorPad, gst_base::AggregatorPad, gst::Pad, gst::Object;
 
     match fn {
         type_ => || ffi::gst_audio_aggregator_convert_pad_get_type(),
