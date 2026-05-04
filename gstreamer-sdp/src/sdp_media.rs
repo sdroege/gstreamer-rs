@@ -85,23 +85,19 @@ pub struct SDPMediaRef(ffi::GstSDPMedia);
 
 impl fmt::Debug for SDPMediaRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        use std::cell::RefCell;
-
-        struct DebugIter<I>(RefCell<I>);
-        impl<I: Iterator> fmt::Debug for DebugIter<I>
-        where
-            I::Item: fmt::Debug,
-        {
-            fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                f.debug_list().entries(&mut *self.0.borrow_mut()).finish()
-            }
-        }
+        // Keep these as concrete collections: rustdoc on nightly can ICE on
+        // nested generic Debug impls over Iterator::Item in this context,
+        // see https://github.com/rust-lang/rust/issues/155327.
+        let formats: Vec<_> = self.formats().collect();
+        let connections: Vec<_> = self.connections().collect();
+        let bandwidths: Vec<_> = self.bandwidths().collect();
+        let attributes: Vec<_> = self.attributes().collect();
 
         f.debug_struct("SDPMedia")
-            .field("formats", &DebugIter(RefCell::new(self.formats())))
-            .field("connections", &DebugIter(RefCell::new(self.connections())))
-            .field("bandwidths", &DebugIter(RefCell::new(self.bandwidths())))
-            .field("attributes", &DebugIter(RefCell::new(self.attributes())))
+            .field("formats", &formats)
+            .field("connections", &connections)
+            .field("bandwidths", &bandwidths)
+            .field("attributes", &attributes)
             .field("information", &self.information())
             .field("key", &self.key())
             .field("media", &self.media())
