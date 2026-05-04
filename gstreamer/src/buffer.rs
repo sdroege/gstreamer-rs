@@ -1223,19 +1223,12 @@ impl PartialEq<Buffer> for BufferRef {
 
 impl fmt::Debug for BufferRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        use std::cell::RefCell;
-
         use crate::utils::Displayable;
 
-        struct DebugIter<I>(RefCell<I>);
-        impl<I: Iterator> fmt::Debug for DebugIter<I>
-        where
-            I::Item: fmt::Debug,
-        {
-            fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-                f.debug_list().entries(&mut *self.0.borrow_mut()).finish()
-            }
-        }
+        // Keep this as a concrete collection: rustdoc on nightly can ICE on
+        // nested generic Debug impls over Iterator::Item in this context,
+        // see https://github.com/rust-lang/rust/issues/155327.
+        let metas: Vec<_> = self.iter_meta::<crate::Meta>().map(|m| m.api()).collect();
 
         f.debug_struct("Buffer")
             .field("ptr", &self.as_ptr())
@@ -1246,12 +1239,7 @@ impl fmt::Debug for BufferRef {
             .field("offset", &self.offset())
             .field("offset_end", &self.offset_end())
             .field("flags", &self.flags())
-            .field(
-                "metas",
-                &DebugIter(RefCell::new(
-                    self.iter_meta::<crate::Meta>().map(|m| m.api()),
-                )),
-            )
+            .field("metas", &metas)
             .finish()
     }
 }
