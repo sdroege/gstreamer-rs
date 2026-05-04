@@ -105,10 +105,10 @@ mod tests {
             crate::VideoPackFlags::all(),
             "\"truncate-range+interlaced\""
         );
-        #[cfg(feature = "v1_18")]
+        #[cfg(feature = "v1_30")]
         check_serialize!(
             crate::VideoTimeCodeFlags::all(),
-            "\"drop-frame+interlaced\""
+            "\"drop-frame+interlaced+discont\""
         );
     }
 
@@ -185,11 +185,11 @@ mod tests {
             crate::VideoPackFlags::all(),
             "\"truncate-range+interlaced\""
         );
-        #[cfg(feature = "v1_18")]
+        #[cfg(feature = "v1_30")]
         check_deserialize!(
             crate::VideoTimeCodeFlags,
             crate::VideoTimeCodeFlags::all(),
-            "\"drop-frame+interlaced\""
+            "\"drop-frame+interlaced+discont\""
         );
     }
 
