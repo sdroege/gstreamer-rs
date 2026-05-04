@@ -172,7 +172,7 @@ pub trait GstBinExtManual: IsA<Bin> + 'static {
         details: crate::DebugGraphDetails,
         file_name: impl AsRef<path::Path>,
     ) {
-        crate::auto::functions::debug_bin_to_dot_file(self, details, file_name)
+        crate::auto::functions::debug_bin_to_dot_file(self, details, Some(file_name))
     }
 
     #[doc(alias = "GST_DEBUG_BIN_TO_DOT_FILE_WITH_TS")]
@@ -182,7 +182,7 @@ pub trait GstBinExtManual: IsA<Bin> + 'static {
         details: crate::DebugGraphDetails,
         file_name: impl AsRef<path::Path>,
     ) {
-        crate::auto::functions::debug_bin_to_dot_file_with_ts(self, details, file_name)
+        crate::auto::functions::debug_bin_to_dot_file_with_ts(self, details, Some(file_name))
     }
 
     fn set_bin_flags(&self, flags: BinFlags) {
