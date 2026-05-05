@@ -210,6 +210,11 @@ manual_traits = ["AggregatorExtManual"]
     manual = true
 
     [[object.function]]
+    name = "set_allocator"
+    # Use Result
+    manual = true
+
+    [[object.function]]
     name = "selected_samples"
     # Info parameter
     manual = true
@@ -393,6 +398,11 @@ manual_traits = ["BaseSrcExtManual"]
         [object.function.return]
         bool_return_is_error = "Failed to update segment"
 
+    [[object.function]]
+    name = "set_allocator"
+    # Use Result
+    manual = true
+
 [[object]]
 name = "GstBase.BaseTransform"
 status = "generate"
@@ -417,6 +427,11 @@ manual_traits = ["BaseTransformExtManual"]
     name = "is_qos_enabled"
     # Same as the qos property
     ignore = true
+
+    [[object.function]]
+    name = "set_allocator"
+    # Use Result
+    manual = true
 
     [[object.function]]
     name = "set_qos_enabled"
