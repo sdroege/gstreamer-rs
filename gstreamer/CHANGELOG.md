@@ -5,6 +5,22 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.25.2] - 2026-05-11
+### Fixed
+- Only enable `gst_allocators::FdAllocator` on UNIX platforms.
+- Add `gst::Pad` as parent class for `gst_audio::AudioAggregatorPad`.
+- Fix inverted logic in `gst_audio::AudioAggregatorPad::audio_info()`.
+
+### Changed
+- Various new Rust 1.94 / 1.95 clippy warnings.
+
+### Added
+- `gst_base::BaseParse::sink_caps()` vfunc.
+- Bindings for various new 1.30 APIs.
+- `Display` impl for `gst::PadFlags`.
+- Various new API to `gst-mpegts` and `gst-tag`.
+- `Read+Seek` impl for `gst::TypeFind`.
+
 ## [0.25.1] - 2026-02-28
 ### Fixed
 - Fix setting user-set pad name being overwritten in `gst::GhostPad` builder.
@@ -2043,7 +2059,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.25.1...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.25.2...HEAD
+[0.25.2]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.25.1...0.25.2
 [0.25.1]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.25.0...0.25.1
 [0.25.0]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.24.4...0.25.0
 [0.24.5]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.24.4...0.24.5
