@@ -23,6 +23,31 @@ pub trait BaseTransformExtManual: IsA<BaseTransform> + 'static {
         }
     }
 
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "gst_base_transform_set_allocator")]
+    fn set_allocator(
+        &self,
+        pool: Option<impl IsA<gst::BufferPool>>,
+        allocator: Option<impl IsA<gst::Allocator>>,
+        params: Option<&gst::AllocationParams>,
+        query: Option<gst::query::Allocation<gst::Query>>,
+    ) -> Result<(), gst::LoggableError> {
+        unsafe {
+            gst::result_from_gboolean!(
+                ffi::gst_base_transform_set_allocator(
+                    self.as_ref().to_glib_none().0,
+                    pool.map(|p| p.upcast()).into_glib_ptr(),
+                    allocator.map(|p| p.upcast()).into_glib_ptr(),
+                    params.to_glib_none().0,
+                    query.map(gst::Query::from).into_glib_ptr(),
+                ),
+                gst::CAT_RUST,
+                "Failed to set allocator"
+            )
+        }
+    }
+
     #[doc(alias = "get_segment")]
     fn segment(&self) -> gst::Segment {
         unsafe {

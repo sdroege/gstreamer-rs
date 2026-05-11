@@ -120,6 +120,12 @@ pub trait BaseTransformImpl: ElementImpl + ObjectSubclass<Type: IsA<BaseTransfor
         self.parent_decide_allocation(query)
     }
 
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    fn prepare_allocator(&self, caps: &gst::Caps) -> Result<(), gst::LoggableError> {
+        self.parent_prepare_allocator(caps)
+    }
+
     fn copy_metadata(
         &self,
         inbuf: &gst::BufferRef,
@@ -618,6 +624,31 @@ pub trait BaseTransformImplExt: BaseTransformImpl {
         }
     }
 
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    fn parent_prepare_allocator(&self, caps: &gst::Caps) -> Result<(), gst::LoggableError> {
+        unsafe {
+            let data = Self::type_data();
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseTransformClass;
+            (*parent_class)
+                .prepare_allocator
+                .map(|f| {
+                    gst::result_from_gboolean!(
+                        f(
+                            self.obj()
+                                .unsafe_cast_ref::<BaseTransform>()
+                                .to_glib_none()
+                                .0,
+                            caps.to_glib_none().0
+                        ),
+                        gst::CAT_RUST,
+                        "Parent function `prepare_allocator` failed",
+                    )
+                })
+                .unwrap_or(Ok(()))
+        }
+    }
+
     fn parent_copy_metadata(
         &self,
         inbuf: &gst::BufferRef,
@@ -813,6 +844,11 @@ unsafe impl<T: BaseTransformImpl> IsSubclassable<T> for BaseTransform {
                 klass.transform = Some(base_transform_transform::<T>);
                 klass.transform_ip = Some(base_transform_transform_ip::<T>);
             }
+        }
+
+        #[cfg(feature = "v1_30")]
+        {
+            klass.prepare_allocator = Some(base_transform_prepare_allocator::<T>);
         }
     }
 }
@@ -1309,6 +1345,30 @@ unsafe extern "C" fn base_transform_generate_output<T: BaseTransformImpl>(
                     gst::FlowReturn::Ok
                 }
                 Err(err) => err.into(),
+            }
+        })
+        .into_glib()
+    }
+}
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+unsafe extern "C" fn base_transform_prepare_allocator<T: BaseTransformImpl>(
+    ptr: *mut ffi::GstBaseTransform,
+    caps: *mut gst::ffi::GstCaps,
+) -> glib::ffi::gboolean {
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
+        let caps = from_glib_borrow(caps);
+
+        gst::panic_to_error!(imp, false, {
+            match imp.prepare_allocator(&caps) {
+                Ok(()) => true,
+                Err(err) => {
+                    err.log_with_imp(imp);
+                    false
+                }
             }
         })
         .into_glib()

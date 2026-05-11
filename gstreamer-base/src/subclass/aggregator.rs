@@ -122,6 +122,12 @@ pub trait AggregatorImpl: ElementImpl + ObjectSubclass<Type: IsA<Aggregator>> {
         self.parent_decide_allocation(query)
     }
 
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    fn prepare_allocator(&self, caps: &gst::Caps) -> Result<(), gst::LoggableError> {
+        self.parent_prepare_allocator(caps)
+    }
+
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn negotiate(&self) -> bool {
@@ -539,6 +545,28 @@ pub trait AggregatorImplExt: AggregatorImpl {
         }
     }
 
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    fn parent_prepare_allocator(&self, caps: &gst::Caps) -> Result<(), gst::LoggableError> {
+        unsafe {
+            let data = Self::type_data();
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstAggregatorClass;
+            (*parent_class)
+                .prepare_allocator
+                .map(|f| {
+                    gst::result_from_gboolean!(
+                        f(
+                            self.obj().unsafe_cast_ref::<Aggregator>().to_glib_none().0,
+                            caps.to_glib_none().0
+                        ),
+                        gst::CAT_RUST,
+                        "Parent function `prepare_allocator` failed",
+                    )
+                })
+                .unwrap_or(Ok(()))
+        }
+    }
+
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     fn parent_negotiate(&self) -> bool {
@@ -608,6 +636,10 @@ unsafe impl<T: AggregatorImpl> IsSubclassable<T> for Aggregator {
             klass.negotiate = Some(aggregator_negotiate::<T>);
             klass.peek_next_sample = Some(aggregator_peek_next_sample::<T>);
             klass.finish_buffer_list = Some(aggregator_finish_buffer_list::<T>);
+        }
+        #[cfg(feature = "v1_30")]
+        {
+            klass.prepare_allocator = Some(aggregator_prepare_allocator::<T>);
         }
     }
 }
@@ -1032,5 +1064,29 @@ unsafe extern "C" fn aggregator_peek_next_sample<T: AggregatorImpl>(
 
         gst::panic_to_error!(imp, None, { imp.peek_next_sample(&from_glib_borrow(pad)) })
             .into_glib_ptr()
+    }
+}
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+unsafe extern "C" fn aggregator_prepare_allocator<T: AggregatorImpl>(
+    ptr: *mut ffi::GstAggregator,
+    caps: *mut gst::ffi::GstCaps,
+) -> glib::ffi::gboolean {
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
+        let caps = from_glib_borrow(caps);
+
+        gst::panic_to_error!(imp, false, {
+            match imp.prepare_allocator(&caps) {
+                Ok(()) => true,
+                Err(err) => {
+                    err.log_with_imp(imp);
+                    false
+                }
+            }
+        })
+        .into_glib()
     }
 }
