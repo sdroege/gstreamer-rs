@@ -106,6 +106,12 @@ pub trait BaseSrcImpl: ElementImpl + ObjectSubclass<Type: IsA<BaseSrc>> {
     ) -> Result<(), gst::LoggableError> {
         self.parent_decide_allocation(query)
     }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    fn prepare_allocator(&self, caps: &gst::Caps) -> Result<(), gst::LoggableError> {
+        self.parent_prepare_allocator(caps)
+    }
 }
 
 pub trait BaseSrcImplExt: BaseSrcImpl {
@@ -551,6 +557,28 @@ pub trait BaseSrcImplExt: BaseSrcImpl {
                 .unwrap_or(Ok(()))
         }
     }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    fn parent_prepare_allocator(&self, caps: &gst::Caps) -> Result<(), gst::LoggableError> {
+        unsafe {
+            let data = Self::type_data();
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSrcClass;
+            (*parent_class)
+                .prepare_allocator
+                .map(|f| {
+                    gst::result_from_gboolean!(
+                        f(
+                            self.obj().unsafe_cast_ref::<BaseSrc>().to_glib_none().0,
+                            caps.to_glib_none().0
+                        ),
+                        gst::CAT_RUST,
+                        "Parent function `prepare_allocator` failed",
+                    )
+                })
+                .unwrap_or(Ok(()))
+        }
+    }
 }
 
 impl<T: BaseSrcImpl> BaseSrcImplExt for T {}
@@ -577,6 +605,10 @@ unsafe impl<T: BaseSrcImpl> IsSubclassable<T> for BaseSrc {
         klass.unlock = Some(base_src_unlock::<T>);
         klass.unlock_stop = Some(base_src_unlock_stop::<T>);
         klass.decide_allocation = Some(base_src_decide_allocation::<T>);
+        #[cfg(feature = "v1_30")]
+        {
+            klass.prepare_allocator = Some(base_src_prepare_allocator::<T>);
+        }
     }
 
     fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
@@ -1010,6 +1042,30 @@ unsafe extern "C" fn base_src_decide_allocation<T: BaseSrcImpl>(
 
         gst::panic_to_error!(imp, false, {
             match imp.decide_allocation(query) {
+                Ok(()) => true,
+                Err(err) => {
+                    err.log_with_imp(imp);
+                    false
+                }
+            }
+        })
+        .into_glib()
+    }
+}
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+unsafe extern "C" fn base_src_prepare_allocator<T: BaseSrcImpl>(
+    ptr: *mut ffi::GstBaseSrc,
+    caps: *mut gst::ffi::GstCaps,
+) -> glib::ffi::gboolean {
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
+        let caps = from_glib_borrow(caps);
+
+        gst::panic_to_error!(imp, false, {
+            match imp.prepare_allocator(&caps) {
                 Ok(()) => true,
                 Err(err) => {
                     err.log_with_imp(imp);

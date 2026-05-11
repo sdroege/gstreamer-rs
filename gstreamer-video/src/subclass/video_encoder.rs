@@ -82,6 +82,12 @@ pub trait VideoEncoderImpl: ElementImpl + ObjectSubclass<Type: IsA<VideoEncoder>
     ) -> Result<(), gst::LoggableError> {
         self.parent_decide_allocation(query)
     }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    fn prepare_allocator(&self, caps: &gst::Caps) -> Result<(), gst::LoggableError> {
+        self.parent_prepare_allocator(caps)
+    }
 }
 
 pub trait VideoEncoderImplExt: VideoEncoderImpl {
@@ -430,6 +436,31 @@ pub trait VideoEncoderImplExt: VideoEncoderImpl {
                 .unwrap_or(Ok(()))
         }
     }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    fn parent_prepare_allocator(&self, caps: &gst::Caps) -> Result<(), gst::LoggableError> {
+        unsafe {
+            let data = Self::type_data();
+            let parent_class = data.as_ref().parent_class() as *mut ffi::GstVideoEncoderClass;
+            (*parent_class)
+                .prepare_allocator
+                .map(|f| {
+                    gst::result_from_gboolean!(
+                        f(
+                            self.obj()
+                                .unsafe_cast_ref::<VideoEncoder>()
+                                .to_glib_none()
+                                .0,
+                            caps.to_glib_none().0
+                        ),
+                        gst::CAT_RUST,
+                        "Parent function `prepare_allocator` failed",
+                    )
+                })
+                .unwrap_or(Ok(()))
+        }
+    }
 }
 
 impl<T: VideoEncoderImpl> VideoEncoderImplExt for T {}
@@ -454,6 +485,10 @@ unsafe impl<T: VideoEncoderImpl> IsSubclassable<T> for VideoEncoder {
         klass.src_query = Some(video_encoder_src_query::<T>);
         klass.propose_allocation = Some(video_encoder_propose_allocation::<T>);
         klass.decide_allocation = Some(video_encoder_decide_allocation::<T>);
+        #[cfg(feature = "v1_30")]
+        {
+            klass.prepare_allocator = Some(video_encoder_prepare_allocator::<T>);
+        }
     }
 }
 
@@ -733,6 +768,30 @@ unsafe extern "C" fn video_encoder_decide_allocation<T: VideoEncoderImpl>(
 
         gst::panic_to_error!(imp, false, {
             match imp.decide_allocation(query) {
+                Ok(()) => true,
+                Err(err) => {
+                    err.log_with_imp(imp);
+                    false
+                }
+            }
+        })
+        .into_glib()
+    }
+}
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+unsafe extern "C" fn video_encoder_prepare_allocator<T: VideoEncoderImpl>(
+    ptr: *mut ffi::GstVideoEncoder,
+    caps: *mut gst::ffi::GstCaps,
+) -> glib::ffi::gboolean {
+    unsafe {
+        let instance = &*(ptr as *mut T::Instance);
+        let imp = instance.imp();
+        let caps = from_glib_borrow(caps);
+
+        gst::panic_to_error!(imp, false, {
+            match imp.prepare_allocator(&caps) {
                 Ok(()) => true,
                 Err(err) => {
                     err.log_with_imp(imp);

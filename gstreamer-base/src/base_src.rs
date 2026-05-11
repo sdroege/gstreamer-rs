@@ -69,6 +69,29 @@ pub trait BaseSrcExtManual: IsA<BaseSrc> + 'static {
             &*(&elt.srcpad as *const *mut gst::ffi::GstPad as *const gst::Pad)
         }
     }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "gst_base_src_set_allocator")]
+    fn set_allocator(
+        &self,
+        pool: Option<impl IsA<gst::BufferPool>>,
+        allocator: Option<impl IsA<gst::Allocator>>,
+        params: Option<&gst::AllocationParams>,
+    ) -> Result<(), gst::LoggableError> {
+        unsafe {
+            gst::result_from_gboolean!(
+                ffi::gst_base_src_set_allocator(
+                    self.as_ref().to_glib_none().0,
+                    pool.map(|p| p.upcast()).into_glib_ptr(),
+                    allocator.map(|p| p.upcast()).into_glib_ptr(),
+                    params.to_glib_none().0,
+                ),
+                gst::CAT_RUST,
+                "Failed to set allocator"
+            )
+        }
+    }
 }
 
 impl<O: IsA<BaseSrc>> BaseSrcExtManual for O {}
