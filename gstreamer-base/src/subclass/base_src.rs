@@ -109,7 +109,7 @@ pub trait BaseSrcImpl: ElementImpl + ObjectSubclass<Type: IsA<BaseSrc>> {
 
     #[cfg(feature = "v1_30")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
-    fn prepare_allocator(&self, caps: &gst::Caps) -> Result<(), gst::LoggableError> {
+    fn prepare_allocator(&self, caps: Option<&gst::Caps>) -> Result<(), gst::LoggableError> {
         self.parent_prepare_allocator(caps)
     }
 }
@@ -560,7 +560,7 @@ pub trait BaseSrcImplExt: BaseSrcImpl {
 
     #[cfg(feature = "v1_30")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
-    fn parent_prepare_allocator(&self, caps: &gst::Caps) -> Result<(), gst::LoggableError> {
+    fn parent_prepare_allocator(&self, caps: Option<&gst::Caps>) -> Result<(), gst::LoggableError> {
         unsafe {
             let data = Self::type_data();
             let parent_class = data.as_ref().parent_class() as *mut ffi::GstBaseSrcClass;
@@ -1062,10 +1062,10 @@ unsafe extern "C" fn base_src_prepare_allocator<T: BaseSrcImpl>(
     unsafe {
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
-        let caps = from_glib_borrow(caps);
+        let caps = Option::<gst::Caps>::from_glib_none(caps);
 
         gst::panic_to_error!(imp, false, {
-            match imp.prepare_allocator(&caps) {
+            match imp.prepare_allocator(caps.as_ref()) {
                 Ok(()) => true,
                 Err(err) => {
                     err.log_with_imp(imp);
