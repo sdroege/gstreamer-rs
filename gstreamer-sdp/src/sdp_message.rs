@@ -128,16 +128,17 @@ pub struct SDPMessageRef(ffi::GstSDPMessage);
 
 impl fmt::Debug for SDPMessageRef {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        // Keep these as concrete collections: rustdoc on nightly can ICE on
-        // nested generic Debug impls over Iterator::Item in this context,
-        // see https://github.com/rust-lang/rust/issues/155327.
-        let attributes: Vec<_> = self.attributes().collect();
-        let bandwidths: Vec<_> = self.bandwidths().collect();
-        let emails: Vec<_> = self.emails().collect();
-        let medias: Vec<_> = self.medias().collect();
-        let phones: Vec<_> = self.phones().collect();
-        let times: Vec<_> = self.times().collect();
-        let zones: Vec<_> = self.zones().collect();
+        use std::cell::RefCell;
+
+        struct DebugIter<I>(RefCell<I>);
+        impl<I: Iterator> fmt::Debug for DebugIter<I>
+        where
+            I::Item: fmt::Debug,
+        {
+            fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+                f.debug_list().entries(&mut *self.0.borrow_mut()).finish()
+            }
+        }
 
         f.debug_struct("SDPMessage")
             .field("connection", &self.connection())
@@ -147,13 +148,13 @@ impl fmt::Debug for SDPMessageRef {
             .field("session-name", &self.session_name())
             .field("uri", &self.uri())
             .field("version", &self.version())
-            .field("attributes", &attributes)
-            .field("bandwidths", &bandwidths)
-            .field("emails", &emails)
-            .field("medias", &medias)
-            .field("phones", &phones)
-            .field("times", &times)
-            .field("zones", &zones)
+            .field("attributes", &DebugIter(RefCell::new(self.attributes())))
+            .field("bandwidths", &DebugIter(RefCell::new(self.bandwidths())))
+            .field("emails", &DebugIter(RefCell::new(self.emails())))
+            .field("medias", &DebugIter(RefCell::new(self.medias())))
+            .field("phones", &DebugIter(RefCell::new(self.phones())))
+            .field("times", &DebugIter(RefCell::new(self.times())))
+            .field("zones", &DebugIter(RefCell::new(self.zones())))
             .finish()
     }
 }
