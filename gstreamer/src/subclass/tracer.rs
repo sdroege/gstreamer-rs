@@ -11,6 +11,8 @@ use crate::{
     Pad, PadLinkError, PadLinkSuccess, QueryRef, StateChange, StateChangeError, StateChangeSuccess,
     Tracer, ffi,
 };
+#[cfg(feature = "v1_30")]
+use crate::{TraceFormat, TraceSpanId, TraceValues};
 
 #[allow(unused_variables)]
 pub trait TracerImpl: GstObjectImpl + ObjectSubclass<Type: IsA<Tracer>> {
@@ -108,6 +110,12 @@ pub trait TracerImpl: GstObjectImpl + ObjectSubclass<Type: IsA<Tracer>> {
     #[cfg(feature = "v1_30")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
     fn object_parent_set(&self, ts: u64, object: &crate::Object, parent: Option<&Object>) {}
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    fn span_begin(&self, ts: u64, span_id: TraceSpanId, values: TraceValues<'_>) {}
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    fn span_end(&self, ts: u64, span_id: TraceSpanId) {}
 }
 
 #[cfg(not(feature = "v1_26"))]
@@ -417,6 +425,24 @@ define_tracer_hooks! {
         let o = Object::from_glib_borrow(o);
         let p = if p.is_null() { None } else { Some(Object::from_glib_borrow(p)) };
         this.object_parent_set(ts, &o, p.as_deref())
+    };
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    SpanBegin("span-begin") = |this, ts, span_id: ffi::GstTraceSpanId, format: *mut ffi::GstTraceFormat, values: *const ffi::GstTraceValue| {
+        let Some(span_id) = TraceSpanId::from_glib(span_id) else {
+            return;
+        };
+        let format = TraceFormat::from_glib_borrow(format);
+        let n_fields = format.n_fields();
+        this.span_begin(ts, span_id, TraceValues::from_glib(format, values, n_fields))
+    };
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    SpanEnd("span-end") = |this, ts, span_id: ffi::GstTraceSpanId| {
+        let Some(span_id) = TraceSpanId::from_glib(span_id) else {
+            return;
+        };
+        this.span_end(ts, span_id)
     };
     PadLinkPost("pad-link-post") = |this, ts, src: *mut ffi::GstPad, sink: *mut ffi::GstPad, r: ffi::GstPadLinkReturn| {
         let src = Pad::from_glib_borrow(src);

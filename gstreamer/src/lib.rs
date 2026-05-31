@@ -209,6 +209,9 @@ mod element_factory_type;
 pub use element_factory_type::*;
 
 mod tracer;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub use tracer::{TraceFormat, TraceFormatField, TraceSpanId, TraceValue, TraceValues};
 mod tracer_factory;
 
 // OS dependent Bus extensions (also import the other platform mod for doc)
