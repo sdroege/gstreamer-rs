@@ -294,7 +294,7 @@ pub trait ElementImplExt: ElementImpl {
     }
 
     fn catch_panic<R, F: FnOnce(&Self) -> R, G: FnOnce() -> R>(&self, fallback: G, f: F) -> R {
-        panic_to_error!(self, fallback(), { f(self) })
+        element_panic_to_error!(self, fallback(), { f(self) })
     }
 
     fn catch_panic_future<R, F: FnOnce() -> R, G: Future<Output = R>>(
@@ -317,7 +317,7 @@ pub trait ElementImplExt: ElementImpl {
         let element = parent.unwrap().dynamic_cast_ref::<Self::Type>().unwrap();
         let imp = element.imp();
 
-        panic_to_error!(imp, fallback(), { f(imp) })
+        element_panic_to_error!(imp, fallback(), { f(imp) })
     }
 
     fn post_error_message(&self, msg: crate::ErrorMessage) {
@@ -358,7 +358,7 @@ impl<R, T: ElementImpl, F: FnOnce() -> R, G: Future<Output = R>> Future for Catc
             ));
         };
 
-        panic_to_error!(
+        element_panic_to_error!(
             &*self_,
             std::task::Poll::Ready(this.fallback.take().expect("Future polled after resolving")()),
             {
@@ -434,7 +434,7 @@ unsafe extern "C" fn element_change_state<T: ElementImpl>(
             _ => StateChangeReturn::Failure,
         };
 
-        panic_to_error!(imp, fallback, {
+        element_panic_to_error!(imp, fallback, {
             StateChangeReturn::from(imp.change_state(transition))
         })
         .into_glib()
@@ -456,7 +456,7 @@ unsafe extern "C" fn element_request_new_pad<T: ElementImpl>(
 
         // XXX: This is effectively unsafe but the best we can do
         // See https://bugzilla.gnome.org/show_bug.cgi?id=791193
-        let pad = panic_to_error!(imp, None, {
+        let pad = element_panic_to_error!(imp, None, {
             imp.request_new_pad(
                 &from_glib_borrow(templ),
                 name.as_deref(),
@@ -494,7 +494,7 @@ unsafe extern "C" fn element_release_pad<T: ElementImpl>(
             return;
         }
 
-        panic_to_error!(imp, (), { imp.release_pad(&from_glib_none(pad)) })
+        element_panic_to_error!(imp, (), { imp.release_pad(&from_glib_none(pad)) })
     }
 }
 
@@ -506,7 +506,7 @@ unsafe extern "C" fn element_send_event<T: ElementImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        panic_to_error!(imp, false, { imp.send_event(from_glib_full(event)) }).into_glib()
+        element_panic_to_error!(imp, false, { imp.send_event(from_glib_full(event)) }).into_glib()
     }
 }
 
@@ -519,7 +519,7 @@ unsafe extern "C" fn element_query<T: ElementImpl>(
         let imp = instance.imp();
         let query = QueryRef::from_mut_ptr(query);
 
-        panic_to_error!(imp, false, { imp.query(query) }).into_glib()
+        element_panic_to_error!(imp, false, { imp.query(query) }).into_glib()
     }
 }
 
@@ -531,7 +531,7 @@ unsafe extern "C" fn element_set_context<T: ElementImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        panic_to_error!(imp, (), { imp.set_context(&from_glib_borrow(context)) })
+        element_panic_to_error!(imp, (), { imp.set_context(&from_glib_borrow(context)) })
     }
 }
 
@@ -545,7 +545,7 @@ unsafe extern "C" fn element_set_clock<T: ElementImpl>(
 
         let clock = Option::<crate::Clock>::from_glib_borrow(clock);
 
-        panic_to_error!(imp, false, { imp.set_clock(clock.as_ref().as_ref()) }).into_glib()
+        element_panic_to_error!(imp, false, { imp.set_clock(clock.as_ref().as_ref()) }).into_glib()
     }
 }
 
@@ -556,7 +556,7 @@ unsafe extern "C" fn element_provide_clock<T: ElementImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        panic_to_error!(imp, None, { imp.provide_clock() }).into_glib_ptr()
+        element_panic_to_error!(imp, None, { imp.provide_clock() }).into_glib_ptr()
     }
 }
 

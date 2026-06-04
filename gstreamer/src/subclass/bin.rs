@@ -119,7 +119,7 @@ unsafe extern "C" fn bin_add_element<T: BinImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        panic_to_error!(imp, false, {
+        element_panic_to_error!(imp, false, {
             match imp.add_element(&from_glib_none(element)) {
                 Ok(()) => true,
                 Err(err) => {
@@ -149,7 +149,7 @@ unsafe extern "C" fn bin_remove_element<T: BinImpl>(
             return glib::ffi::GFALSE;
         }
 
-        panic_to_error!(imp, false, {
+        element_panic_to_error!(imp, false, {
             match imp.remove_element(&from_glib_none(element)) {
                 Ok(()) => true,
                 Err(err) => {
@@ -167,7 +167,7 @@ unsafe extern "C" fn bin_do_latency<T: BinImpl>(ptr: *mut ffi::GstBin) -> glib::
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        panic_to_error!(imp, false, {
+        element_panic_to_error!(imp, false, {
             match imp.do_latency() {
                 Ok(()) => true,
                 Err(err) => {
@@ -188,6 +188,6 @@ unsafe extern "C" fn bin_handle_message<T: BinImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        panic_to_error!(imp, (), { imp.handle_message(from_glib_full(message)) });
+        element_panic_to_error!(imp, (), { imp.handle_message(from_glib_full(message)) });
     }
 }

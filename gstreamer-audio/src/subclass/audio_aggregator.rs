@@ -97,7 +97,7 @@ unsafe extern "C" fn audio_aggregator_create_output_buffer<T: AudioAggregatorImp
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::panic_to_error!(imp, None, { imp.create_output_buffer(num_frames) })
+        gst::element_panic_to_error!(imp, None, { imp.create_output_buffer(num_frames) })
             .map(|buffer| buffer.into_glib_ptr())
             .unwrap_or(ptr::null_mut())
     }
@@ -116,7 +116,7 @@ unsafe extern "C" fn audio_aggregator_aggregate_one_buffer<T: AudioAggregatorImp
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::panic_to_error!(imp, true, {
+        gst::element_panic_to_error!(imp, true, {
             imp.aggregate_one_buffer(
                 &from_glib_borrow(pad),
                 gst::BufferRef::from_ptr(inbuf),
