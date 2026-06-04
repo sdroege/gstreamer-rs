@@ -1,5 +1,7 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
+use std::sync::atomic;
+
 use glib::{prelude::*, subclass::prelude::*, translate::*};
 
 use super::prelude::*;
@@ -49,6 +51,20 @@ pub trait PadImplExt: PadImpl {
                 .unwrap_or(())
         }
     }
+
+    #[inline(never)]
+    fn panicked(&self) -> &atomic::AtomicBool {
+        #[cfg(panic = "abort")]
+        {
+            static DUMMY: atomic::AtomicBool = atomic::AtomicBool::new(false);
+            &DUMMY
+        }
+        #[cfg(not(panic = "abort"))]
+        {
+            self.instance_data::<atomic::AtomicBool>(crate::Pad::static_type())
+                .expect("instance not initialized correctly")
+        }
+    }
 }
 
 impl<T: PadImpl> PadImplExt for T {}
@@ -60,6 +76,13 @@ unsafe impl<T: PadImpl> IsSubclassable<T> for Pad {
         klass.linked = Some(pad_linked::<T>);
         klass.unlinked = Some(pad_unlinked::<T>);
     }
+
+    fn instance_init(instance: &mut glib::subclass::InitializingObject<T>) {
+        Self::parent_instance_init::<T>(instance);
+
+        #[cfg(not(panic = "abort"))]
+        instance.set_instance_data(Self::static_type(), atomic::AtomicBool::new(false));
+    }
 }
 
 unsafe extern "C" fn pad_linked<T: PadImpl>(ptr: *mut ffi::GstPad, peer: *mut ffi::GstPad) {
@@ -67,7 +90,7 @@ unsafe extern "C" fn pad_linked<T: PadImpl>(ptr: *mut ffi::GstPad, peer: *mut ff
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        imp.linked(&from_glib_borrow(peer))
+        pad_panic_to_error!(imp, (), { imp.linked(&from_glib_borrow(peer)) });
     }
 }
 
@@ -76,7 +99,7 @@ unsafe extern "C" fn pad_unlinked<T: PadImpl>(ptr: *mut ffi::GstPad, peer: *mut 
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        imp.unlinked(&from_glib_borrow(peer))
+        pad_panic_to_error!(imp, (), { imp.unlinked(&from_glib_borrow(peer)) });
     }
 }
 

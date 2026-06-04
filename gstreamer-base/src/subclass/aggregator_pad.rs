@@ -74,8 +74,11 @@ unsafe extern "C" fn aggregator_pad_flush<T: AggregatorPadImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        let res: gst::FlowReturn = imp.flush(&from_glib_borrow(aggregator)).into();
-        res.into_glib()
+        gst::pad_panic_to_error!(imp, gst::FlowReturn::Error, {
+            let res: gst::FlowReturn = imp.flush(&from_glib_borrow(aggregator)).into();
+            res
+        })
+        .into_glib()
     }
 }
 
@@ -88,7 +91,9 @@ unsafe extern "C" fn aggregator_pad_skip_buffer<T: AggregatorPadImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        imp.skip_buffer(&from_glib_borrow(aggregator), &from_glib_borrow(buffer))
-            .into_glib()
+        gst::pad_panic_to_error!(imp, false, {
+            imp.skip_buffer(&from_glib_borrow(aggregator), &from_glib_borrow(buffer))
+        })
+        .into_glib()
     }
 }

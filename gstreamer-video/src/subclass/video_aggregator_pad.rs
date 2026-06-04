@@ -152,14 +152,16 @@ unsafe extern "C" fn video_aggregator_pad_prepare_frame<T: VideoAggregatorPadImp
 
         let token = AggregateFramesToken(&aggregator);
 
-        match imp.prepare_frame(&aggregator, &token, &from_glib_borrow(buffer)) {
-            Some(frame) => {
-                *prepared_frame = frame.into_raw();
+        gst::pad_panic_to_error!(imp, (), {
+            match imp.prepare_frame(&aggregator, &token, &from_glib_borrow(buffer)) {
+                Some(frame) => {
+                    *prepared_frame = frame.into_raw();
+                }
+                None => {
+                    ptr::write(prepared_frame, mem::zeroed());
+                }
             }
-            None => {
-                ptr::write(prepared_frame, mem::zeroed());
-            }
-        }
+        });
 
         glib::ffi::GTRUE
     }
@@ -185,6 +187,6 @@ unsafe extern "C" fn video_aggregator_pad_clean_frame<T: VideoAggregatorPadImpl>
             Some(frame)
         };
 
-        imp.clean_frame(&aggregator, &token, frame);
+        gst::pad_panic_to_error!(imp, (), { imp.clean_frame(&aggregator, &token, frame) });
     }
 }
