@@ -78,6 +78,67 @@ macro_rules! panic_to_error(
     }};
 );
 
+#[macro_export]
+macro_rules! pad_panic_to_error(
+    ($imp:expr, $ret:expr, $code:block) => {{
+        #[allow(clippy::unused_unit)]
+        #[cfg(panic = "abort")]
+        {
+            if true {
+                #[allow(unused_mut)]
+                let mut closure = || { $code };
+                closure()
+            } else {
+                let _imp = $imp;
+                $ret
+            }
+        }
+        #[allow(unused_unsafe)]
+        #[cfg(not(panic = "abort"))]
+        {
+            let panicked = $imp.panicked();
+            let pad = $crate::glib::subclass::types::ObjectSubclassExt::obj($imp);
+            let pad = unsafe { $crate::glib::prelude::Cast::unsafe_cast_ref::<$crate::Pad>(pad.as_ref()) };
+            if panicked.load(std::sync::atomic::Ordering::Relaxed) {
+                if let Some(element) = $crate::prelude::PadExt::parent_element(pad) {
+                    $crate::subclass::post_panic_error_message(
+                        &element,
+                        $crate::glib::prelude::Cast::upcast_ref::<$crate::Object>(pad),
+                        None,
+                    );
+                } else {
+                    $crate::error!($crate::CAT_RUST, imp = $imp, "Pad has panicked");
+                }
+                $ret
+            } else {
+                let result = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| $code));
+
+                match result {
+                    Ok(result) => result,
+                    Err(err) => {
+                        panicked.store(true, std::sync::atomic::Ordering::Relaxed);
+                        if let Some(element) = $crate::prelude::PadExt::parent_element(pad) {
+                            $crate::subclass::post_panic_error_message(
+                                &element,
+                                $crate::glib::prelude::Cast::upcast_ref::<$crate::Object>(pad),
+                                Some(err),
+                            );
+                        } else if let Some(cause) = err.downcast_ref::<&str>()
+                                .copied()
+                                .or_else(|| err.downcast_ref::<String>().map(|s| s.as_str())) {
+                            $crate::error!($crate::CAT_RUST, imp = $imp, "Pad has panicked: {cause}");
+                        } else {
+                            $crate::error!($crate::CAT_RUST, imp = $imp, "Pad has panicked");
+                        }
+
+                        $ret
+                    }
+                }
+            }
+        }
+    }};
+);
+
 #[derive(Clone, Debug, PartialEq, Eq, Error)]
 pub enum FlowError {
     #[error("Flushing")]

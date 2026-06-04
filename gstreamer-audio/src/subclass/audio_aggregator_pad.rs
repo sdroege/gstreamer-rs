@@ -87,7 +87,7 @@ unsafe extern "C" fn audio_aggregator_pad_update_conversion_info<T: AudioAggrega
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        imp.update_conversion_info();
+        gst::pad_panic_to_error!(imp, (), { imp.update_conversion_info() });
     }
 }
 
@@ -101,11 +101,13 @@ unsafe extern "C" fn audio_aggregator_pad_convert_buffer<T: AudioAggregatorPadIm
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        imp.convert_buffer(
-            &from_glib_none(in_info),
-            &from_glib_none(out_info),
-            &from_glib_borrow(buffer),
-        )
+        gst::pad_panic_to_error!(imp, None, {
+            imp.convert_buffer(
+                &from_glib_none(in_info),
+                &from_glib_none(out_info),
+                &from_glib_borrow(buffer),
+            )
+        })
         .map(|buffer| buffer.into_glib_ptr())
         .unwrap_or(ptr::null_mut())
     }
