@@ -879,7 +879,7 @@ unsafe extern "C" fn base_transform_start<T: BaseTransformImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::panic_to_error!(imp, false, {
+        gst::element_panic_to_error!(imp, false, {
             match imp.start() {
                 Ok(()) => true,
                 Err(err) => {
@@ -899,7 +899,7 @@ unsafe extern "C" fn base_transform_stop<T: BaseTransformImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::panic_to_error!(imp, false, {
+        gst::element_panic_to_error!(imp, false, {
             match imp.stop() {
                 Ok(()) => true,
                 Err(err) => {
@@ -922,7 +922,7 @@ unsafe extern "C" fn base_transform_transform_caps<T: BaseTransformImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::panic_to_error!(imp, None, {
+        gst::element_panic_to_error!(imp, None, {
             let filter: Borrowed<Option<gst::Caps>> = from_glib_borrow(filter);
 
             imp.transform_caps(
@@ -946,7 +946,7 @@ unsafe extern "C" fn base_transform_fixate_caps<T: BaseTransformImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::panic_to_error!(imp, gst::Caps::new_empty(), {
+        gst::element_panic_to_error!(imp, gst::Caps::new_empty(), {
             imp.fixate_caps(
                 from_glib(direction),
                 &from_glib_borrow(caps),
@@ -966,7 +966,7 @@ unsafe extern "C" fn base_transform_set_caps<T: BaseTransformImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::panic_to_error!(imp, false, {
+        gst::element_panic_to_error!(imp, false, {
             match imp.set_caps(&from_glib_borrow(incaps), &from_glib_borrow(outcaps)) {
                 Ok(()) => true,
                 Err(err) => {
@@ -988,7 +988,7 @@ unsafe extern "C" fn base_transform_accept_caps<T: BaseTransformImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::panic_to_error!(imp, false, {
+        gst::element_panic_to_error!(imp, false, {
             imp.accept_caps(from_glib(direction), &from_glib_borrow(caps))
         })
         .into_glib()
@@ -1004,7 +1004,7 @@ unsafe extern "C" fn base_transform_query<T: BaseTransformImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::panic_to_error!(imp, false, {
+        gst::element_panic_to_error!(imp, false, {
             BaseTransformImpl::query(
                 imp,
                 from_glib(direction),
@@ -1027,7 +1027,7 @@ unsafe extern "C" fn base_transform_transform_size<T: BaseTransformImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::panic_to_error!(imp, false, {
+        gst::element_panic_to_error!(imp, false, {
             match imp.transform_size(
                 from_glib(direction),
                 &from_glib_borrow(caps),
@@ -1054,7 +1054,7 @@ unsafe extern "C" fn base_transform_get_unit_size<T: BaseTransformImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::panic_to_error!(imp, false, {
+        gst::element_panic_to_error!(imp, false, {
             match imp.unit_size(&from_glib_borrow(caps)) {
                 Some(s) => {
                     *size = s;
@@ -1090,7 +1090,7 @@ unsafe extern "C" fn base_transform_prepare_output_buffer<T: BaseTransformImpl>(
 
         *outbuf = ptr::null_mut();
 
-        gst::panic_to_error!(imp, gst::FlowReturn::Error, {
+        gst::element_panic_to_error!(imp, gst::FlowReturn::Error, {
             match imp.prepare_output_buffer(buffer) {
                 Ok(PrepareOutputBufferSuccess::InputBuffer) => {
                     assert!(
@@ -1123,7 +1123,8 @@ unsafe extern "C" fn base_transform_sink_event<T: BaseTransformImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::panic_to_error!(imp, false, { imp.sink_event(from_glib_full(event)) }).into_glib()
+        gst::element_panic_to_error!(imp, false, { imp.sink_event(from_glib_full(event)) })
+            .into_glib()
     }
 }
 
@@ -1135,7 +1136,8 @@ unsafe extern "C" fn base_transform_src_event<T: BaseTransformImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::panic_to_error!(imp, false, { imp.src_event(from_glib_full(event)) }).into_glib()
+        gst::element_panic_to_error!(imp, false, { imp.src_event(from_glib_full(event)) })
+            .into_glib()
     }
 }
 
@@ -1148,7 +1150,7 @@ unsafe extern "C" fn base_transform_transform<T: BaseTransformImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::panic_to_error!(imp, gst::FlowReturn::Error, {
+        gst::element_panic_to_error!(imp, gst::FlowReturn::Error, {
             imp.transform(
                 &from_glib_borrow(inbuf),
                 gst::BufferRef::from_mut_ptr(outbuf),
@@ -1170,7 +1172,7 @@ unsafe extern "C" fn base_transform_transform_ip<T: BaseTransformImpl>(
         // FIXME: Wrong signature in FFI
         let buf = buf as *mut gst::ffi::GstBuffer;
 
-        gst::panic_to_error!(imp, gst::FlowReturn::Error, {
+        gst::element_panic_to_error!(imp, gst::FlowReturn::Error, {
             if from_glib(ffi::gst_base_transform_is_passthrough(ptr)) {
                 imp.transform_ip_passthrough(&from_glib_borrow(buf)).into()
             } else {
@@ -1193,7 +1195,7 @@ unsafe extern "C" fn base_transform_transform_meta<T: BaseTransformImpl>(
 
         let inbuf = gst::BufferRef::from_ptr(inbuf);
 
-        gst::panic_to_error!(imp, false, {
+        gst::element_panic_to_error!(imp, false, {
             imp.transform_meta(
                 gst::BufferRef::from_mut_ptr(outbuf),
                 gst::Meta::from_ptr(inbuf, meta),
@@ -1225,7 +1227,7 @@ unsafe extern "C" fn base_transform_propose_allocation<T: BaseTransformImpl>(
             _ => unreachable!(),
         };
 
-        gst::panic_to_error!(imp, false, {
+        gst::element_panic_to_error!(imp, false, {
             match imp.propose_allocation(decide_query, query) {
                 Ok(()) => true,
                 Err(err) => {
@@ -1250,7 +1252,7 @@ unsafe extern "C" fn base_transform_decide_allocation<T: BaseTransformImpl>(
             _ => unreachable!(),
         };
 
-        gst::panic_to_error!(imp, false, {
+        gst::element_panic_to_error!(imp, false, {
             match imp.decide_allocation(query) {
                 Ok(()) => true,
                 Err(err) => {
@@ -1279,7 +1281,7 @@ unsafe extern "C" fn base_transform_copy_metadata<T: BaseTransformImpl>(
             return glib::ffi::GFALSE;
         }
 
-        gst::panic_to_error!(imp, true, {
+        gst::element_panic_to_error!(imp, true, {
             match imp.copy_metadata(
                 gst::BufferRef::from_ptr(inbuf),
                 gst::BufferRef::from_mut_ptr(outbuf),
@@ -1303,7 +1305,7 @@ unsafe extern "C" fn base_transform_before_transform<T: BaseTransformImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::panic_to_error!(imp, (), {
+        gst::element_panic_to_error!(imp, (), {
             imp.before_transform(gst::BufferRef::from_ptr(inbuf));
         })
     }
@@ -1318,7 +1320,7 @@ unsafe extern "C" fn base_transform_submit_input_buffer<T: BaseTransformImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::panic_to_error!(imp, gst::FlowReturn::Error, {
+        gst::element_panic_to_error!(imp, gst::FlowReturn::Error, {
             imp.submit_input_buffer(from_glib(is_discont), from_glib_full(buf))
                 .into()
         })
@@ -1336,7 +1338,7 @@ unsafe extern "C" fn base_transform_generate_output<T: BaseTransformImpl>(
 
         *buf = ptr::null_mut();
 
-        gst::panic_to_error!(imp, gst::FlowReturn::Error, {
+        gst::element_panic_to_error!(imp, gst::FlowReturn::Error, {
             match imp.generate_output() {
                 Ok(GenerateOutputSuccess::Dropped) => crate::BASE_TRANSFORM_FLOW_DROPPED.into(),
                 Ok(GenerateOutputSuccess::NoOutput) => gst::FlowReturn::Ok,
@@ -1362,7 +1364,7 @@ unsafe extern "C" fn base_transform_prepare_allocator<T: BaseTransformImpl>(
         let imp = instance.imp();
         let caps = Option::<gst::Caps>::from_glib_none(caps);
 
-        gst::panic_to_error!(imp, false, {
+        gst::element_panic_to_error!(imp, false, {
             match imp.prepare_allocator(caps.as_ref()) {
                 Ok(()) => true,
                 Err(err) => {

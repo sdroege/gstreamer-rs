@@ -499,7 +499,7 @@ unsafe extern "C" fn audio_encoder_open<T: AudioEncoderImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::panic_to_error!(imp, false, {
+        gst::element_panic_to_error!(imp, false, {
             match imp.open() {
                 Ok(()) => true,
                 Err(err) => {
@@ -519,7 +519,7 @@ unsafe extern "C" fn audio_encoder_close<T: AudioEncoderImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::panic_to_error!(imp, false, {
+        gst::element_panic_to_error!(imp, false, {
             match imp.close() {
                 Ok(()) => true,
                 Err(err) => {
@@ -539,7 +539,7 @@ unsafe extern "C" fn audio_encoder_start<T: AudioEncoderImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::panic_to_error!(imp, false, {
+        gst::element_panic_to_error!(imp, false, {
             match imp.start() {
                 Ok(()) => true,
                 Err(err) => {
@@ -559,7 +559,7 @@ unsafe extern "C" fn audio_encoder_stop<T: AudioEncoderImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::panic_to_error!(imp, false, {
+        gst::element_panic_to_error!(imp, false, {
             match imp.stop() {
                 Ok(()) => true,
                 Err(err) => {
@@ -580,7 +580,7 @@ unsafe extern "C" fn audio_encoder_set_format<T: AudioEncoderImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::panic_to_error!(imp, false, {
+        gst::element_panic_to_error!(imp, false, {
             match imp.set_format(&from_glib_none(info)) {
                 Ok(()) => true,
                 Err(err) => {
@@ -603,7 +603,7 @@ unsafe extern "C" fn audio_encoder_handle_frame<T: AudioEncoderImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::panic_to_error!(imp, gst::FlowReturn::Error, {
+        gst::element_panic_to_error!(imp, gst::FlowReturn::Error, {
             imp.handle_frame(Option::<gst::Buffer>::from_glib_none(buffer).as_ref())
                 .into()
         })
@@ -619,7 +619,7 @@ unsafe extern "C" fn audio_encoder_pre_push<T: AudioEncoderImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::panic_to_error!(imp, gst::FlowReturn::Error, {
+        gst::element_panic_to_error!(imp, gst::FlowReturn::Error, {
             match imp.pre_push(from_glib_full(*buffer)) {
                 Ok(Some(new_buffer)) => {
                     *buffer = new_buffer.into_glib_ptr();
@@ -642,7 +642,7 @@ unsafe extern "C" fn audio_encoder_flush<T: AudioEncoderImpl>(ptr: *mut ffi::Gst
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::panic_to_error!(imp, (), { AudioEncoderImpl::flush(imp,) })
+        gst::element_panic_to_error!(imp, (), { AudioEncoderImpl::flush(imp,) })
     }
 }
 
@@ -653,7 +653,7 @@ unsafe extern "C" fn audio_encoder_negotiate<T: AudioEncoderImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::panic_to_error!(imp, false, {
+        gst::element_panic_to_error!(imp, false, {
             match imp.negotiate() {
                 Ok(()) => true,
                 Err(err) => {
@@ -674,7 +674,7 @@ unsafe extern "C" fn audio_encoder_getcaps<T: AudioEncoderImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::panic_to_error!(imp, gst::Caps::new_empty(), {
+        gst::element_panic_to_error!(imp, gst::Caps::new_empty(), {
             AudioEncoderImpl::caps(
                 imp,
                 Option::<gst::Caps>::from_glib_borrow(filter)
@@ -694,7 +694,8 @@ unsafe extern "C" fn audio_encoder_sink_event<T: AudioEncoderImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::panic_to_error!(imp, false, { imp.sink_event(from_glib_full(event)) }).into_glib()
+        gst::element_panic_to_error!(imp, false, { imp.sink_event(from_glib_full(event)) })
+            .into_glib()
     }
 }
 
@@ -706,7 +707,7 @@ unsafe extern "C" fn audio_encoder_sink_query<T: AudioEncoderImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::panic_to_error!(imp, false, {
+        gst::element_panic_to_error!(imp, false, {
             imp.sink_query(gst::QueryRef::from_mut_ptr(query))
         })
         .into_glib()
@@ -721,7 +722,8 @@ unsafe extern "C" fn audio_encoder_src_event<T: AudioEncoderImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::panic_to_error!(imp, false, { imp.src_event(from_glib_full(event)) }).into_glib()
+        gst::element_panic_to_error!(imp, false, { imp.src_event(from_glib_full(event)) })
+            .into_glib()
     }
 }
 
@@ -733,7 +735,7 @@ unsafe extern "C" fn audio_encoder_src_query<T: AudioEncoderImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::panic_to_error!(imp, false, {
+        gst::element_panic_to_error!(imp, false, {
             imp.src_query(gst::QueryRef::from_mut_ptr(query))
         })
         .into_glib()
@@ -752,7 +754,7 @@ unsafe extern "C" fn audio_encoder_propose_allocation<T: AudioEncoderImpl>(
             _ => unreachable!(),
         };
 
-        gst::panic_to_error!(imp, false, {
+        gst::element_panic_to_error!(imp, false, {
             match imp.propose_allocation(query) {
                 Ok(()) => true,
                 Err(err) => {
@@ -777,7 +779,7 @@ unsafe extern "C" fn audio_encoder_decide_allocation<T: AudioEncoderImpl>(
             _ => unreachable!(),
         };
 
-        gst::panic_to_error!(imp, false, {
+        gst::element_panic_to_error!(imp, false, {
             match imp.decide_allocation(query) {
                 Ok(()) => true,
                 Err(err) => {
@@ -801,7 +803,7 @@ unsafe extern "C" fn audio_encoder_prepare_allocator<T: AudioEncoderImpl>(
         let imp = instance.imp();
         let caps = Option::<gst::Caps>::from_glib_none(caps);
 
-        gst::panic_to_error!(imp, false, {
+        gst::element_panic_to_error!(imp, false, {
             match imp.prepare_allocator(caps.as_ref()) {
                 Ok(()) => true,
                 Err(err) => {

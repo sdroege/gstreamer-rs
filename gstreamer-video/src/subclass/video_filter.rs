@@ -205,7 +205,7 @@ unsafe extern "C" fn video_filter_set_info<T: VideoFilterImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::panic_to_error!(imp, false, {
+        gst::element_panic_to_error!(imp, false, {
             match imp.set_info(
                 &from_glib_borrow(incaps),
                 &from_glib_none(in_info),
@@ -232,7 +232,7 @@ unsafe extern "C" fn video_filter_transform_frame<T: VideoFilterImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::panic_to_error!(imp, gst::FlowReturn::Error, {
+        gst::element_panic_to_error!(imp, gst::FlowReturn::Error, {
             imp.transform_frame(
                 &VideoFrameRef::from_glib_borrow(inframe),
                 &mut VideoFrameRef::from_glib_borrow_mut(outframe),
@@ -251,7 +251,7 @@ unsafe extern "C" fn video_filter_transform_frame_ip<T: VideoFilterImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::panic_to_error!(imp, gst::FlowReturn::Error, {
+        gst::element_panic_to_error!(imp, gst::FlowReturn::Error, {
             if from_glib(gst_base::ffi::gst_base_transform_is_passthrough(
                 ptr as *mut gst_base::ffi::GstBaseTransform,
             )) {

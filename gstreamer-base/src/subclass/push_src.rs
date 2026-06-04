@@ -196,7 +196,7 @@ unsafe extern "C" fn push_src_fill<T: PushSrcImpl>(
         let imp = instance.imp();
         let buffer = gst::BufferRef::from_mut_ptr(buffer);
 
-        gst::panic_to_error!(imp, gst::FlowReturn::Error, {
+        gst::element_panic_to_error!(imp, gst::FlowReturn::Error, {
             PushSrcImpl::fill(imp, buffer).into()
         })
         .into_glib()
@@ -214,7 +214,7 @@ unsafe extern "C" fn push_src_alloc<T: PushSrcImpl>(
         // https://gitlab.freedesktop.org/gstreamer/gstreamer-rs-sys/issues/3
         let buffer_ptr = buffer_ptr as *mut *mut gst::ffi::GstBuffer;
 
-        gst::panic_to_error!(imp, gst::FlowReturn::Error, {
+        gst::element_panic_to_error!(imp, gst::FlowReturn::Error, {
             match PushSrcImpl::alloc(imp) {
                 Ok(buffer) => {
                     *buffer_ptr = buffer.into_glib_ptr();
@@ -249,7 +249,7 @@ unsafe extern "C" fn push_src_create<T: PushSrcImpl>(
             .instance_data::<super::base_src::InstanceData>(crate::BaseSrc::static_type())
             .unwrap();
 
-        gst::panic_to_error!(imp, gst::FlowReturn::Error, {
+        gst::element_panic_to_error!(imp, gst::FlowReturn::Error, {
             match PushSrcImpl::create(imp, buffer.as_deref_mut()) {
                 Ok(CreateSuccess::NewBuffer(new_buffer)) => {
                     // Clear any pending buffer list

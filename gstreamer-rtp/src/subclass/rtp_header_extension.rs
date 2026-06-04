@@ -287,7 +287,7 @@ unsafe extern "C" fn get_supported_flags<T: RTPHeaderExtensionImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::panic_to_error!(imp, crate::RTPHeaderExtensionFlags::empty(), {
+        gst::element_panic_to_error!(imp, crate::RTPHeaderExtensionFlags::empty(), {
             imp.supported_flags()
         })
         .into_glib()
@@ -302,7 +302,7 @@ unsafe extern "C" fn get_max_size<T: RTPHeaderExtensionImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::panic_to_error!(imp, 0, { imp.max_size(gst::BufferRef::from_ptr(input)) })
+        gst::element_panic_to_error!(imp, 0, { imp.max_size(gst::BufferRef::from_ptr(input)) })
     }
 }
 
@@ -318,7 +318,7 @@ unsafe extern "C" fn write<T: RTPHeaderExtensionImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::panic_to_error!(imp, -1, {
+        gst::element_panic_to_error!(imp, -1, {
             match imp.write(
                 gst::BufferRef::from_ptr(input),
                 from_glib(write_flags),
@@ -350,7 +350,7 @@ unsafe extern "C" fn read<T: RTPHeaderExtensionImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::panic_to_error!(imp, false, {
+        gst::element_panic_to_error!(imp, false, {
             match imp.read(
                 from_glib(read_flags),
                 if input_data_len == 0 {
@@ -379,7 +379,7 @@ unsafe extern "C" fn set_non_rtp_sink_caps<T: RTPHeaderExtensionImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::panic_to_error!(imp, false, {
+        gst::element_panic_to_error!(imp, false, {
             match imp.set_non_rtp_sink_caps(&from_glib_borrow(caps)) {
                 Ok(_) => true,
                 Err(err) => {
@@ -400,7 +400,7 @@ unsafe extern "C" fn update_non_rtp_src_caps<T: RTPHeaderExtensionImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::panic_to_error!(imp, false, {
+        gst::element_panic_to_error!(imp, false, {
             match imp.update_non_rtp_src_caps(gst::CapsRef::from_mut_ptr(caps)) {
                 Ok(_) => true,
                 Err(err) => {
@@ -422,7 +422,7 @@ unsafe extern "C" fn set_attributes<T: RTPHeaderExtensionImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::panic_to_error!(imp, false, {
+        gst::element_panic_to_error!(imp, false, {
             match imp.set_attributes(
                 from_glib(direction),
                 &glib::GString::from_glib_borrow(attributes),
@@ -446,7 +446,7 @@ unsafe extern "C" fn set_caps_from_attributes<T: RTPHeaderExtensionImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::panic_to_error!(imp, false, {
+        gst::element_panic_to_error!(imp, false, {
             match imp.set_caps_from_attributes(gst::CapsRef::from_mut_ptr(caps)) {
                 Ok(_) => true,
                 Err(err) => {
