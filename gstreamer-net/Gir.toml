@@ -52,6 +52,11 @@ final_type = true
 name = "GstNet.NtpClock"
 status = "generate"
 final_type = true
+    [[object.function]]
+    name = "new"
+        [[object.function.parameter]]
+        name = "base_time"
+        mandatory = true
 
 [[object]]
 name = "GstNet.PtpClock"
