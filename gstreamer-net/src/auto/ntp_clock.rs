@@ -21,7 +21,7 @@ impl NtpClock {
         name: Option<&str>,
         remote_address: &str,
         remote_port: i32,
-        base_time: impl Into<Option<gst::ClockTime>>,
+        base_time: gst::ClockTime,
     ) -> NtpClock {
         assert_initialized_main_thread!();
         unsafe {
@@ -29,7 +29,7 @@ impl NtpClock {
                 name.to_glib_none().0,
                 remote_address.to_glib_none().0,
                 remote_port,
-                base_time.into().into_glib(),
+                base_time.into_glib(),
             ))
             .unsafe_cast()
         }
