@@ -104,7 +104,7 @@ unsafe extern "C" fn gl_set_caps<T: GLBaseFilterImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, false, {
+        gst::panic_to_error!(imp, false, {
             match imp.gl_set_caps(&from_glib_borrow(incaps), &from_glib_borrow(outcaps)) {
                 Ok(()) => true,
                 Err(err) => {
@@ -124,7 +124,7 @@ unsafe extern "C" fn gl_start<T: GLBaseFilterImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, false, {
+        gst::panic_to_error!(imp, false, {
             match imp.gl_start() {
                 Ok(()) => true,
                 Err(err) => {
@@ -142,6 +142,6 @@ unsafe extern "C" fn gl_stop<T: GLBaseFilterImpl>(ptr: *mut GstGLBaseFilter) {
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, (), { imp.gl_stop() })
+        gst::panic_to_error!(imp, (), { imp.gl_stop() })
     }
 }

@@ -181,7 +181,7 @@ unsafe extern "C" fn audiosink_close<T: AudioSinkImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, false, {
+        gst::panic_to_error!(imp, false, {
             match imp.close() {
                 Ok(()) => true,
                 Err(err) => {
@@ -199,7 +199,7 @@ unsafe extern "C" fn audiosink_delay<T: AudioSinkImpl>(ptr: *mut ffi::GstAudioSi
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, 0, { imp.delay() })
+        gst::panic_to_error!(imp, 0, { imp.delay() })
     }
 }
 
@@ -210,7 +210,7 @@ unsafe extern "C" fn audiosink_open<T: AudioSinkImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, false, {
+        gst::panic_to_error!(imp, false, {
             match imp.open() {
                 Ok(()) => true,
                 Err(err) => {
@@ -233,7 +233,7 @@ unsafe extern "C" fn audiosink_prepare<T: AudioSinkImpl>(
 
         let spec = &mut *(spec as *mut AudioRingBufferSpec);
 
-        gst::element_panic_to_error!(imp, false, {
+        gst::panic_to_error!(imp, false, {
             match AudioSinkImpl::prepare(imp, spec) {
                 Ok(()) => true,
                 Err(err) => {
@@ -253,7 +253,7 @@ unsafe extern "C" fn audiosink_unprepare<T: AudioSinkImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, false, {
+        gst::panic_to_error!(imp, false, {
             match imp.unprepare() {
                 Ok(()) => true,
                 Err(err) => {
@@ -280,7 +280,7 @@ unsafe extern "C" fn audiosink_write<T: AudioSinkImpl>(
             std::slice::from_raw_parts(data as *const u8, length as usize)
         };
 
-        gst::element_panic_to_error!(imp, -1, { imp.write(data_slice).unwrap_or(-1) })
+        gst::panic_to_error!(imp, -1, { imp.write(data_slice).unwrap_or(-1) })
     }
 }
 
@@ -289,7 +289,7 @@ unsafe extern "C" fn audiosink_reset<T: AudioSinkImpl>(ptr: *mut ffi::GstAudioSi
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, (), {
+        gst::panic_to_error!(imp, (), {
             imp.reset();
         });
     }

@@ -188,7 +188,7 @@ unsafe extern "C" fn audiosrc_close<T: AudioSrcImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, false, {
+        gst::panic_to_error!(imp, false, {
             match imp.close() {
                 Ok(()) => true,
                 Err(err) => {
@@ -206,7 +206,7 @@ unsafe extern "C" fn audiosrc_delay<T: AudioSrcImpl>(ptr: *mut ffi::GstAudioSrc)
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, 0, { imp.delay() })
+        gst::panic_to_error!(imp, 0, { imp.delay() })
     }
 }
 
@@ -217,7 +217,7 @@ unsafe extern "C" fn audiosrc_open<T: AudioSrcImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, false, {
+        gst::panic_to_error!(imp, false, {
             match imp.open() {
                 Ok(()) => true,
                 Err(err) => {
@@ -240,7 +240,7 @@ unsafe extern "C" fn audiosrc_prepare<T: AudioSrcImpl>(
 
         let spec = &mut *(spec as *mut AudioRingBufferSpec);
 
-        gst::element_panic_to_error!(imp, false, {
+        gst::panic_to_error!(imp, false, {
             match AudioSrcImpl::prepare(imp, spec) {
                 Ok(()) => true,
                 Err(err) => {
@@ -260,7 +260,7 @@ unsafe extern "C" fn audiosrc_unprepare<T: AudioSrcImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, false, {
+        gst::panic_to_error!(imp, false, {
             match imp.unprepare() {
                 Ok(()) => true,
                 Err(err) => {
@@ -288,7 +288,7 @@ unsafe extern "C" fn audiosrc_read<T: AudioSrcImpl>(
             std::slice::from_raw_parts_mut(data as *mut u8, length as usize)
         };
 
-        gst::element_panic_to_error!(imp, 0, {
+        gst::panic_to_error!(imp, 0, {
             let (res, timestamp_res) = imp.read(data_slice).unwrap_or((0, gst::ClockTime::NONE));
             *timestamp = timestamp_res.into_glib();
 
@@ -302,7 +302,7 @@ unsafe extern "C" fn audiosrc_reset<T: AudioSrcImpl>(ptr: *mut ffi::GstAudioSrc)
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, (), {
+        gst::panic_to_error!(imp, (), {
             imp.reset();
         });
     }

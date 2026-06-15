@@ -377,7 +377,7 @@ unsafe extern "C" fn base_sink_start<T: BaseSinkImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, false, {
+        gst::panic_to_error!(imp, false, {
             match imp.start() {
                 Ok(()) => true,
                 Err(err) => {
@@ -397,7 +397,7 @@ unsafe extern "C" fn base_sink_stop<T: BaseSinkImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, false, {
+        gst::panic_to_error!(imp, false, {
             match imp.stop() {
                 Ok(()) => true,
                 Err(err) => {
@@ -419,7 +419,7 @@ unsafe extern "C" fn base_sink_render<T: BaseSinkImpl>(
         let imp = instance.imp();
         let buffer = from_glib_borrow(buffer);
 
-        gst::element_panic_to_error!(imp, gst::FlowReturn::Error, { imp.render(&buffer).into() })
+        gst::panic_to_error!(imp, gst::FlowReturn::Error, { imp.render(&buffer).into() })
             .into_glib()
     }
 }
@@ -433,7 +433,7 @@ unsafe extern "C" fn base_sink_prepare<T: BaseSinkImpl>(
         let imp = instance.imp();
         let buffer = from_glib_borrow(buffer);
 
-        gst::element_panic_to_error!(imp, gst::FlowReturn::Error, { imp.prepare(&buffer).into() })
+        gst::panic_to_error!(imp, gst::FlowReturn::Error, { imp.prepare(&buffer).into() })
             .into_glib()
     }
 }
@@ -447,7 +447,7 @@ unsafe extern "C" fn base_sink_render_list<T: BaseSinkImpl>(
         let imp = instance.imp();
         let list = from_glib_borrow(list);
 
-        gst::element_panic_to_error!(imp, gst::FlowReturn::Error, {
+        gst::panic_to_error!(imp, gst::FlowReturn::Error, {
             imp.render_list(&list).into()
         })
         .into_glib()
@@ -463,7 +463,7 @@ unsafe extern "C" fn base_sink_prepare_list<T: BaseSinkImpl>(
         let imp = instance.imp();
         let list = from_glib_borrow(list);
 
-        gst::element_panic_to_error!(imp, gst::FlowReturn::Error, {
+        gst::panic_to_error!(imp, gst::FlowReturn::Error, {
             imp.prepare_list(&list).into()
         })
         .into_glib()
@@ -479,7 +479,7 @@ unsafe extern "C" fn base_sink_query<T: BaseSinkImpl>(
         let imp = instance.imp();
         let query = gst::QueryRef::from_mut_ptr(query_ptr);
 
-        gst::element_panic_to_error!(imp, false, { BaseSinkImpl::query(imp, query) }).into_glib()
+        gst::panic_to_error!(imp, false, { BaseSinkImpl::query(imp, query) }).into_glib()
     }
 }
 
@@ -491,8 +491,7 @@ unsafe extern "C" fn base_sink_event<T: BaseSinkImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, false, { imp.event(from_glib_full(event_ptr)) })
-            .into_glib()
+        gst::panic_to_error!(imp, false, { imp.event(from_glib_full(event_ptr)) }).into_glib()
     }
 }
 
@@ -505,7 +504,7 @@ unsafe extern "C" fn base_sink_get_caps<T: BaseSinkImpl>(
         let imp = instance.imp();
         let filter = Option::<gst::Caps>::from_glib_borrow(filter);
 
-        gst::element_panic_to_error!(imp, None, { imp.caps(filter.as_ref().as_ref()) })
+        gst::panic_to_error!(imp, None, { imp.caps(filter.as_ref().as_ref()) })
             .map(|caps| caps.into_glib_ptr())
             .unwrap_or(ptr::null_mut())
     }
@@ -520,7 +519,7 @@ unsafe extern "C" fn base_sink_set_caps<T: BaseSinkImpl>(
         let imp = instance.imp();
         let caps = from_glib_borrow(caps);
 
-        gst::element_panic_to_error!(imp, false, {
+        gst::panic_to_error!(imp, false, {
             match imp.set_caps(&caps) {
                 Ok(()) => true,
                 Err(err) => {
@@ -542,8 +541,7 @@ unsafe extern "C" fn base_sink_fixate<T: BaseSinkImpl>(
         let imp = instance.imp();
         let caps = from_glib_full(caps);
 
-        gst::element_panic_to_error!(imp, gst::Caps::new_empty(), { imp.fixate(caps) })
-            .into_glib_ptr()
+        gst::panic_to_error!(imp, gst::Caps::new_empty(), { imp.fixate(caps) }).into_glib_ptr()
     }
 }
 
@@ -554,7 +552,7 @@ unsafe extern "C" fn base_sink_unlock<T: BaseSinkImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, false, {
+        gst::panic_to_error!(imp, false, {
             match imp.unlock() {
                 Ok(()) => true,
                 Err(err) => {
@@ -574,7 +572,7 @@ unsafe extern "C" fn base_sink_unlock_stop<T: BaseSinkImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, false, {
+        gst::panic_to_error!(imp, false, {
             match imp.unlock_stop() {
                 Ok(()) => true,
                 Err(err) => {
@@ -599,7 +597,7 @@ unsafe extern "C" fn base_sink_propose_allocation<T: BaseSinkImpl>(
             _ => unreachable!(),
         };
 
-        gst::element_panic_to_error!(imp, false, {
+        gst::panic_to_error!(imp, false, {
             match imp.propose_allocation(query) {
                 Ok(()) => true,
                 Err(err) => {

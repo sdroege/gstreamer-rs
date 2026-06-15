@@ -651,8 +651,7 @@ unsafe extern "C" fn aggregator_flush<T: AggregatorImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, gst::FlowReturn::Error, { imp.flush().into() })
-            .into_glib()
+        gst::panic_to_error!(imp, gst::FlowReturn::Error, { imp.flush().into() }).into_glib()
     }
 }
 
@@ -665,7 +664,7 @@ unsafe extern "C" fn aggregator_clip<T: AggregatorImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        let ret = gst::element_panic_to_error!(imp, None, {
+        let ret = gst::panic_to_error!(imp, None, {
             imp.clip(&from_glib_borrow(aggregator_pad), from_glib_full(buffer))
         });
 
@@ -681,7 +680,7 @@ unsafe extern "C" fn aggregator_finish_buffer<T: AggregatorImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, gst::FlowReturn::Error, {
+        gst::panic_to_error!(imp, gst::FlowReturn::Error, {
             imp.finish_buffer(from_glib_full(buffer)).into()
         })
         .into_glib()
@@ -698,7 +697,7 @@ unsafe extern "C" fn aggregator_finish_buffer_list<T: AggregatorImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, gst::FlowReturn::Error, {
+        gst::panic_to_error!(imp, gst::FlowReturn::Error, {
             imp.finish_buffer_list(from_glib_full(buffer_list)).into()
         })
         .into_glib()
@@ -714,7 +713,7 @@ unsafe extern "C" fn aggregator_sink_event<T: AggregatorImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, false, {
+        gst::panic_to_error!(imp, false, {
             imp.sink_event(&from_glib_borrow(aggregator_pad), from_glib_full(event))
         })
         .into_glib()
@@ -732,7 +731,7 @@ unsafe extern "C" fn aggregator_sink_event_pre_queue<T: AggregatorImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, gst::FlowReturn::Error, {
+        gst::panic_to_error!(imp, gst::FlowReturn::Error, {
             imp.sink_event_pre_queue(&from_glib_borrow(aggregator_pad), from_glib_full(event))
                 .into()
         })
@@ -749,7 +748,7 @@ unsafe extern "C" fn aggregator_sink_query<T: AggregatorImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, false, {
+        gst::panic_to_error!(imp, false, {
             imp.sink_query(
                 &from_glib_borrow(aggregator_pad),
                 gst::QueryRef::from_mut_ptr(query),
@@ -770,7 +769,7 @@ unsafe extern "C" fn aggregator_sink_query_pre_queue<T: AggregatorImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, false, {
+        gst::panic_to_error!(imp, false, {
             imp.sink_query_pre_queue(
                 &from_glib_borrow(aggregator_pad),
                 gst::QueryRef::from_mut_ptr(query),
@@ -788,8 +787,7 @@ unsafe extern "C" fn aggregator_src_event<T: AggregatorImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, false, { imp.src_event(from_glib_full(event)) })
-            .into_glib()
+        gst::panic_to_error!(imp, false, { imp.src_event(from_glib_full(event)) }).into_glib()
     }
 }
 
@@ -801,7 +799,7 @@ unsafe extern "C" fn aggregator_src_query<T: AggregatorImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, false, {
+        gst::panic_to_error!(imp, false, {
             imp.src_query(gst::QueryRef::from_mut_ptr(query))
         })
         .into_glib()
@@ -817,7 +815,7 @@ unsafe extern "C" fn aggregator_src_activate<T: AggregatorImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, false, {
+        gst::panic_to_error!(imp, false, {
             match imp.src_activate(from_glib(mode), from_glib(active)) {
                 Ok(()) => true,
                 Err(err) => {
@@ -838,7 +836,7 @@ unsafe extern "C" fn aggregator_aggregate<T: AggregatorImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, gst::FlowReturn::Error, {
+        gst::panic_to_error!(imp, gst::FlowReturn::Error, {
             imp.aggregate(from_glib(timeout)).into()
         })
         .into_glib()
@@ -852,7 +850,7 @@ unsafe extern "C" fn aggregator_start<T: AggregatorImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, false, {
+        gst::panic_to_error!(imp, false, {
             match imp.start() {
                 Ok(()) => true,
                 Err(err) => {
@@ -872,7 +870,7 @@ unsafe extern "C" fn aggregator_stop<T: AggregatorImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, false, {
+        gst::panic_to_error!(imp, false, {
             match imp.stop() {
                 Ok(()) => true,
                 Err(err) => {
@@ -892,7 +890,7 @@ unsafe extern "C" fn aggregator_get_next_time<T: AggregatorImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, gst::ClockTime::NONE, { imp.next_time() }).into_glib()
+        gst::panic_to_error!(imp, gst::ClockTime::NONE, { imp.next_time() }).into_glib()
     }
 }
 
@@ -906,7 +904,7 @@ unsafe extern "C" fn aggregator_create_new_pad<T: AggregatorImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, None, {
+        gst::panic_to_error!(imp, None, {
             let req_name: Borrowed<Option<glib::GString>> = from_glib_borrow(req_name);
 
             imp.create_new_pad(
@@ -932,7 +930,7 @@ unsafe extern "C" fn aggregator_update_src_caps<T: AggregatorImpl>(
 
         *res = ptr::null_mut();
 
-        gst::element_panic_to_error!(imp, gst::FlowReturn::Error, {
+        gst::panic_to_error!(imp, gst::FlowReturn::Error, {
             match imp.update_src_caps(&from_glib_borrow(caps)) {
                 Ok(res_caps) => {
                     *res = res_caps.into_glib_ptr();
@@ -953,7 +951,7 @@ unsafe extern "C" fn aggregator_fixate_src_caps<T: AggregatorImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, gst::Caps::new_empty(), {
+        gst::panic_to_error!(imp, gst::Caps::new_empty(), {
             imp.fixate_src_caps(from_glib_full(caps))
         })
         .into_glib_ptr()
@@ -968,7 +966,7 @@ unsafe extern "C" fn aggregator_negotiated_src_caps<T: AggregatorImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, false, {
+        gst::panic_to_error!(imp, false, {
             match imp.negotiated_src_caps(&from_glib_borrow(caps)) {
                 Ok(()) => true,
                 Err(err) => {
@@ -1003,7 +1001,7 @@ unsafe extern "C" fn aggregator_propose_allocation<T: AggregatorImpl>(
             _ => unreachable!(),
         };
 
-        gst::element_panic_to_error!(imp, false, {
+        gst::panic_to_error!(imp, false, {
             match imp.propose_allocation(&from_glib_borrow(pad), decide_query, query) {
                 Ok(()) => true,
                 Err(err) => {
@@ -1028,7 +1026,7 @@ unsafe extern "C" fn aggregator_decide_allocation<T: AggregatorImpl>(
             _ => unreachable!(),
         };
 
-        gst::element_panic_to_error!(imp, false, {
+        gst::panic_to_error!(imp, false, {
             match imp.decide_allocation(query) {
                 Ok(()) => true,
                 Err(err) => {
@@ -1050,7 +1048,7 @@ unsafe extern "C" fn aggregator_negotiate<T: AggregatorImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, false, { imp.negotiate() }).into_glib()
+        gst::panic_to_error!(imp, false, { imp.negotiate() }).into_glib()
     }
 }
 
@@ -1064,7 +1062,7 @@ unsafe extern "C" fn aggregator_peek_next_sample<T: AggregatorImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, None, { imp.peek_next_sample(&from_glib_borrow(pad)) })
+        gst::panic_to_error!(imp, None, { imp.peek_next_sample(&from_glib_borrow(pad)) })
             .into_glib_ptr()
     }
 }
@@ -1080,7 +1078,7 @@ unsafe extern "C" fn aggregator_prepare_allocator<T: AggregatorImpl>(
         let imp = instance.imp();
         let caps = Option::<gst::Caps>::from_glib_none(caps);
 
-        gst::element_panic_to_error!(imp, false, {
+        gst::panic_to_error!(imp, false, {
             match imp.prepare_allocator(caps.as_ref()) {
                 Ok(()) => true,
                 Err(err) => {

@@ -207,7 +207,7 @@ unsafe extern "C" fn base_parse_start<T: BaseParseImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, false, {
+        gst::panic_to_error!(imp, false, {
             match imp.start() {
                 Ok(()) => true,
                 Err(err) => {
@@ -227,7 +227,7 @@ unsafe extern "C" fn base_parse_stop<T: BaseParseImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, false, {
+        gst::panic_to_error!(imp, false, {
             match imp.stop() {
                 Ok(()) => true,
                 Err(err) => {
@@ -249,7 +249,7 @@ unsafe extern "C" fn base_parse_set_sink_caps<T: BaseParseImpl>(
         let imp = instance.imp();
         let caps: Borrowed<gst::Caps> = from_glib_borrow(caps);
 
-        gst::element_panic_to_error!(imp, false, {
+        gst::panic_to_error!(imp, false, {
             match imp.set_sink_caps(&caps) {
                 Ok(()) => true,
                 Err(err) => {
@@ -271,7 +271,7 @@ unsafe extern "C" fn base_parse_get_sink_caps<T: BaseParseImpl>(
         let imp = instance.imp();
         let filter: Borrowed<Option<gst::Caps>> = from_glib_borrow(filter);
 
-        gst::element_panic_to_error!(imp, gst::Caps::new_empty(), {
+        gst::panic_to_error!(imp, gst::Caps::new_empty(), {
             imp.sink_caps(filter.as_ref().as_ref())
         })
         .into_glib_ptr()
@@ -290,7 +290,7 @@ unsafe extern "C" fn base_parse_handle_frame<T: BaseParseImpl>(
         let instance = instance.unsafe_cast_ref::<BaseParse>();
         let wrap_frame = BaseParseFrame::new(frame, instance);
 
-        let res = gst::element_panic_to_error!(imp, Err(gst::FlowError::Error), {
+        let res = gst::panic_to_error!(imp, Err(gst::FlowError::Error), {
             imp.handle_frame(wrap_frame)
         });
 
@@ -317,9 +317,7 @@ unsafe extern "C" fn base_parse_convert<T: BaseParseImpl>(
         let imp = instance.imp();
         let source = gst::GenericFormattedValue::new(from_glib(source_format), source_value);
 
-        let res = gst::element_panic_to_error!(imp, None, {
-            imp.convert(source, from_glib(dest_format))
-        });
+        let res = gst::panic_to_error!(imp, None, { imp.convert(source, from_glib(dest_format)) });
 
         match res {
             Some(dest) => {

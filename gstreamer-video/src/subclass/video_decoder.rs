@@ -562,7 +562,7 @@ unsafe extern "C" fn video_decoder_open<T: VideoDecoderImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, false, {
+        gst::panic_to_error!(imp, false, {
             match imp.open() {
                 Ok(()) => true,
                 Err(err) => {
@@ -582,7 +582,7 @@ unsafe extern "C" fn video_decoder_close<T: VideoDecoderImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, false, {
+        gst::panic_to_error!(imp, false, {
             match imp.close() {
                 Ok(()) => true,
                 Err(err) => {
@@ -602,7 +602,7 @@ unsafe extern "C" fn video_decoder_start<T: VideoDecoderImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, false, {
+        gst::panic_to_error!(imp, false, {
             match imp.start() {
                 Ok(()) => true,
                 Err(err) => {
@@ -622,7 +622,7 @@ unsafe extern "C" fn video_decoder_stop<T: VideoDecoderImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, false, {
+        gst::panic_to_error!(imp, false, {
             match imp.stop() {
                 Ok(()) => true,
                 Err(err) => {
@@ -642,8 +642,7 @@ unsafe extern "C" fn video_decoder_finish<T: VideoDecoderImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, gst::FlowReturn::Error, { imp.finish().into() })
-            .into_glib()
+        gst::panic_to_error!(imp, gst::FlowReturn::Error, { imp.finish().into() }).into_glib()
     }
 }
 
@@ -654,8 +653,7 @@ unsafe extern "C" fn video_decoder_drain<T: VideoDecoderImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, gst::FlowReturn::Error, { imp.drain().into() })
-            .into_glib()
+        gst::panic_to_error!(imp, gst::FlowReturn::Error, { imp.drain().into() }).into_glib()
     }
 }
 
@@ -669,7 +667,7 @@ unsafe extern "C" fn video_decoder_set_format<T: VideoDecoderImpl>(
         ffi::gst_video_codec_state_ref(state);
         let wrap_state = VideoCodecState::<Readable>::new(state);
 
-        gst::element_panic_to_error!(imp, false, {
+        gst::panic_to_error!(imp, false, {
             match imp.set_format(&wrap_state) {
                 Ok(()) => true,
                 Err(err) => {
@@ -698,7 +696,7 @@ unsafe extern "C" fn video_decoder_parse<T: VideoDecoderImpl>(
         let wrap_adapter: Borrowed<gst_base::Adapter> = from_glib_borrow(adapter);
         let at_eos: bool = from_glib(at_eos);
 
-        gst::element_panic_to_error!(imp, gst::FlowReturn::Error, {
+        gst::panic_to_error!(imp, gst::FlowReturn::Error, {
             imp.parse(&wrap_frame, &wrap_adapter, at_eos).into()
         })
         .into_glib()
@@ -716,7 +714,7 @@ unsafe extern "C" fn video_decoder_handle_frame<T: VideoDecoderImpl>(
         let instance = instance.unsafe_cast_ref::<VideoDecoder>();
         let wrap_frame = VideoCodecFrame::new(frame, instance);
 
-        gst::element_panic_to_error!(imp, gst::FlowReturn::Error, {
+        gst::panic_to_error!(imp, gst::FlowReturn::Error, {
             imp.handle_frame(wrap_frame).into()
         })
         .into_glib()
@@ -730,7 +728,7 @@ unsafe extern "C" fn video_decoder_flush<T: VideoDecoderImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, false, { VideoDecoderImpl::flush(imp) }).into_glib()
+        gst::panic_to_error!(imp, false, { VideoDecoderImpl::flush(imp) }).into_glib()
     }
 }
 
@@ -741,7 +739,7 @@ unsafe extern "C" fn video_decoder_negotiate<T: VideoDecoderImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, false, {
+        gst::panic_to_error!(imp, false, {
             match imp.negotiate() {
                 Ok(()) => true,
                 Err(err) => {
@@ -762,7 +760,7 @@ unsafe extern "C" fn video_decoder_getcaps<T: VideoDecoderImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, gst::Caps::new_empty(), {
+        gst::panic_to_error!(imp, gst::Caps::new_empty(), {
             VideoDecoderImpl::caps(
                 imp,
                 Option::<gst::Caps>::from_glib_borrow(filter)
@@ -782,8 +780,7 @@ unsafe extern "C" fn video_decoder_sink_event<T: VideoDecoderImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, false, { imp.sink_event(from_glib_full(event)) })
-            .into_glib()
+        gst::panic_to_error!(imp, false, { imp.sink_event(from_glib_full(event)) }).into_glib()
     }
 }
 
@@ -795,7 +792,7 @@ unsafe extern "C" fn video_decoder_sink_query<T: VideoDecoderImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, false, {
+        gst::panic_to_error!(imp, false, {
             imp.sink_query(gst::QueryRef::from_mut_ptr(query))
         })
         .into_glib()
@@ -810,8 +807,7 @@ unsafe extern "C" fn video_decoder_src_event<T: VideoDecoderImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, false, { imp.src_event(from_glib_full(event)) })
-            .into_glib()
+        gst::panic_to_error!(imp, false, { imp.src_event(from_glib_full(event)) }).into_glib()
     }
 }
 
@@ -823,7 +819,7 @@ unsafe extern "C" fn video_decoder_src_query<T: VideoDecoderImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, false, {
+        gst::panic_to_error!(imp, false, {
             imp.src_query(gst::QueryRef::from_mut_ptr(query))
         })
         .into_glib()
@@ -842,7 +838,7 @@ unsafe extern "C" fn video_decoder_propose_allocation<T: VideoDecoderImpl>(
             _ => unreachable!(),
         };
 
-        gst::element_panic_to_error!(imp, false, {
+        gst::panic_to_error!(imp, false, {
             match imp.propose_allocation(query) {
                 Ok(()) => true,
                 Err(err) => {
@@ -867,7 +863,7 @@ unsafe extern "C" fn video_decoder_decide_allocation<T: VideoDecoderImpl>(
             _ => unreachable!(),
         };
 
-        gst::element_panic_to_error!(imp, false, {
+        gst::panic_to_error!(imp, false, {
             match imp.decide_allocation(query) {
                 Ok(()) => true,
                 Err(err) => {
@@ -890,7 +886,7 @@ unsafe extern "C" fn video_decoder_handle_missing_data<T: VideoDecoderImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, true, {
+        gst::panic_to_error!(imp, true, {
             imp.handle_missing_data(
                 Option::<gst::ClockTime>::from_glib(timestamp).unwrap(),
                 from_glib(duration),

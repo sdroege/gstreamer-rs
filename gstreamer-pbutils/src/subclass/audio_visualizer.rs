@@ -129,7 +129,7 @@ unsafe extern "C" fn audio_visualizer_setup<T: AudioVisualizerImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, false, {
+        gst::panic_to_error!(imp, false, {
             let instance = imp.obj();
             let instance = instance.unsafe_cast_ref::<AudioVisualizer>();
             let token = AudioVisualizerSetupToken(instance);
@@ -156,7 +156,7 @@ unsafe extern "C" fn audio_visualizer_render<T: AudioVisualizerImpl>(
         let imp = instance.imp();
         let buffer = gst::BufferRef::from_ptr(audio_buffer);
 
-        gst::element_panic_to_error!(imp, false, {
+        gst::panic_to_error!(imp, false, {
             match imp.render(
                 buffer,
                 &mut gst_video::VideoFrameRef::from_glib_borrow_mut(video_frame),
@@ -184,7 +184,7 @@ unsafe extern "C" fn audio_visualizer_decide_allocation<T: AudioVisualizerImpl>(
             _ => unreachable!(),
         };
 
-        gst::element_panic_to_error!(imp, false, {
+        gst::panic_to_error!(imp, false, {
             match imp.decide_allocation(query) {
                 Ok(()) => true,
                 Err(err) => {

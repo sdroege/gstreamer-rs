@@ -31,7 +31,7 @@ pub fn post_panic_error_message(
 }
 
 #[macro_export]
-macro_rules! element_panic_to_error(
+macro_rules! panic_to_error(
     ($imp:expr, $ret:expr, $code:block) => {{
         #[allow(clippy::unused_unit)]
         #[cfg(panic = "abort")]

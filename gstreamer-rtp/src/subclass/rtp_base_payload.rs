@@ -184,7 +184,7 @@ unsafe extern "C" fn rtp_base_payload_get_caps<T: RTPBasePayloadImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, gst::Caps::new_empty(), {
+        gst::panic_to_error!(imp, gst::Caps::new_empty(), {
             RTPBasePayloadImpl::caps(
                 imp,
                 &from_glib_borrow(pad),
@@ -206,7 +206,7 @@ unsafe extern "C" fn rtp_base_payload_set_caps<T: RTPBasePayloadImpl>(
         let imp = instance.imp();
         let caps = from_glib_borrow(caps);
 
-        gst::element_panic_to_error!(imp, false, {
+        gst::panic_to_error!(imp, false, {
             match imp.set_caps(&caps) {
                 Ok(()) => true,
                 Err(err) => {
@@ -227,7 +227,7 @@ unsafe extern "C" fn rtp_base_payload_handle_buffer<T: RTPBasePayloadImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, gst::FlowReturn::Error, {
+        gst::panic_to_error!(imp, gst::FlowReturn::Error, {
             imp.handle_buffer(from_glib_full(buffer)).into()
         })
         .into_glib()
@@ -243,7 +243,7 @@ unsafe extern "C" fn rtp_base_payload_query<T: RTPBasePayloadImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, false, {
+        gst::panic_to_error!(imp, false, {
             RTPBasePayloadImpl::query(
                 imp,
                 &from_glib_borrow(pad),
@@ -262,8 +262,7 @@ unsafe extern "C" fn rtp_base_payload_sink_event<T: RTPBasePayloadImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, false, { imp.sink_event(from_glib_full(event)) })
-            .into_glib()
+        gst::panic_to_error!(imp, false, { imp.sink_event(from_glib_full(event)) }).into_glib()
     }
 }
 
@@ -275,7 +274,6 @@ unsafe extern "C" fn rtp_base_payload_src_event<T: RTPBasePayloadImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, false, { imp.src_event(from_glib_full(event)) })
-            .into_glib()
+        gst::panic_to_error!(imp, false, { imp.src_event(from_glib_full(event)) }).into_glib()
     }
 }
