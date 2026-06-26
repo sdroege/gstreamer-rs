@@ -67,6 +67,7 @@ pub mod prelude {
     pub use crate::dma_buf_allocator::DmaBufAllocatorExtManual;
     #[cfg(any(all(feature = "v1_24", target_os = "linux"), docsrs))]
     pub use crate::drm_dumb_allocator::DRMDumbAllocatorExtManual;
+    #[cfg(any(unix, docsrs))]
     pub use crate::fd_allocator::FdAllocatorExtManual;
 }
 
