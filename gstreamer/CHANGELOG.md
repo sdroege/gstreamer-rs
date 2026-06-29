@@ -5,6 +5,19 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.25.3] - 2026-06-29
+### Fixed
+- Add missing gating on `gst_allocators::FdAllocatorExtManual` in prelude.
+
+### Added
+- `prepare_allocator` virtual methods and `set_allocator` in `gst_base` and
+  `gst_video` base classes.
+- Panic-to-error handling for `gst::Pad` and element subclassing.
+
+### Changed
+- Update dependencies.
+- Regenerate bindings with latest gir / gir-files.
+
 ## [0.25.2] - 2026-05-11
 ### Fixed
 - Only enable `gst_allocators::FdAllocator` on UNIX platforms.
@@ -2059,7 +2072,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.25.2...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.25.3...HEAD
+[0.25.3]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.25.2...0.25.3
 [0.25.2]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.25.1...0.25.2
 [0.25.1]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.25.0...0.25.1
 [0.25.0]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.24.4...0.25.0
