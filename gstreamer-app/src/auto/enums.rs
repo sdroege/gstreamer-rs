@@ -8,11 +8,12 @@ use glib::{prelude::*, translate::*};
 
 #[cfg(feature = "v1_20")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy, Default)]
 #[non_exhaustive]
 #[doc(alias = "GstAppLeakyType")]
 pub enum AppLeakyType {
     #[doc(alias = "GST_APP_LEAKY_TYPE_NONE")]
+    #[default]
     None,
     #[doc(alias = "GST_APP_LEAKY_TYPE_UPSTREAM")]
     Upstream,
@@ -124,19 +125,12 @@ impl From<AppLeakyType> for glib::Value {
     }
 }
 
-#[cfg(feature = "v1_20")]
-#[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
-impl Default for AppLeakyType {
-    fn default() -> Self {
-        Self::None
-    }
-}
-
-#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy, Default)]
 #[non_exhaustive]
 #[doc(alias = "GstAppStreamType")]
 pub enum AppStreamType {
     #[doc(alias = "GST_APP_STREAM_TYPE_STREAM")]
+    #[default]
     Stream,
     #[doc(alias = "GST_APP_STREAM_TYPE_SEEKABLE")]
     Seekable,
@@ -229,11 +223,5 @@ impl From<AppStreamType> for glib::Value {
     fn from(v: AppStreamType) -> Self {
         skip_assert_initialized!();
         ToValue::to_value(&v)
-    }
-}
-
-impl Default for AppStreamType {
-    fn default() -> Self {
-        Self::Stream
     }
 }

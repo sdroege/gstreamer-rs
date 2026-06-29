@@ -278,7 +278,7 @@ pub trait LayerExt: IsA<Layer> + 'static {
     //#[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     //#[doc(alias = "active-changed")]
     //fn connect_active_changed<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
-    //    Empty ctype tracks: *.PtrArray TypeId { ns_id: 1, id: 17 }
+    //    Empty ctype tracks: *.PtrArray TypeId { ns_id: 1, id: 11 }
     //}
 
     #[doc(alias = "clip-added")]

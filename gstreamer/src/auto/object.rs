@@ -40,7 +40,7 @@ impl Object {
     //}
 
     //#[doc(alias = "gst_object_replace")]
-    //pub fn replace(oldobj: Option<impl IsA<Object>>, newobj: Option<&impl IsA<Object>>) -> bool {
+    //pub fn replace(oldobj: /*Unimplemented*/Option<Object>, newobj: Option<&impl IsA<Object>>) -> bool {
     //    unsafe { TODO: call ffi:gst_object_replace() }
     //}
 }

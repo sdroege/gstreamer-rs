@@ -62,7 +62,7 @@ impl VulkanDevice {
     }
 
     //#[doc(alias = "gst_vulkan_device_run_context_query")]
-    //pub fn run_context_query(element: &impl IsA<gst::Element>, device: impl IsA<VulkanDevice>) -> bool {
+    //pub fn run_context_query(element: &impl IsA<gst::Element>, device: /*Unimplemented*/VulkanDevice) -> bool {
     //    unsafe { TODO: call ffi:gst_vulkan_device_run_context_query() }
     //}
 }

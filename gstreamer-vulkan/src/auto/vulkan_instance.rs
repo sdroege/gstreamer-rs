@@ -49,7 +49,7 @@ impl VulkanInstance {
     }
 
     //#[doc(alias = "gst_vulkan_instance_run_context_query")]
-    //pub fn run_context_query(element: &impl IsA<gst::Element>, instance: impl IsA<VulkanInstance>) -> bool {
+    //pub fn run_context_query(element: &impl IsA<gst::Element>, instance: /*Unimplemented*/VulkanInstance) -> bool {
     //    unsafe { TODO: call ffi:gst_vulkan_instance_run_context_query() }
     //}
 }

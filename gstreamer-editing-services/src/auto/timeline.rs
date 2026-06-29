@@ -507,7 +507,7 @@ pub trait TimelineExt: IsA<Timeline> + 'static {
 
     //#[doc(alias = "group-removed")]
     //fn connect_group_removed<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
-    //    Empty ctype children: *.PtrArray TypeId { ns_id: 1, id: 54 }
+    //    Empty ctype children: *.PtrArray TypeId { ns_id: 1, id: 35 }
     //}
 
     #[doc(alias = "layer-added")]
@@ -615,7 +615,7 @@ pub trait TimelineExt: IsA<Timeline> + 'static {
 
     //#[doc(alias = "select-tracks-for-object")]
     //fn connect_select_tracks_for_object<Unsupported or ignored types>(&self, f: F) -> SignalHandlerId {
-    //    Empty ctype return value *.PtrArray TypeId { ns_id: 1, id: 17 }
+    //    Empty ctype return value *.PtrArray TypeId { ns_id: 1, id: 11 }
     //}
 
     #[doc(alias = "snapping-ended")]

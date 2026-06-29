@@ -40,7 +40,7 @@ impl VulkanQueue {
     }
 
     //#[doc(alias = "gst_vulkan_queue_run_context_query")]
-    //pub fn run_context_query(element: &impl IsA<gst::Element>, queue: impl IsA<VulkanQueue>) -> bool {
+    //pub fn run_context_query(element: &impl IsA<gst::Element>, queue: /*Unimplemented*/VulkanQueue) -> bool {
     //    unsafe { TODO: call ffi:gst_vulkan_queue_run_context_query() }
     //}
 }

@@ -70,7 +70,7 @@ impl VulkanDisplay {
     }
 
     //#[doc(alias = "gst_vulkan_display_run_context_query")]
-    //pub fn run_context_query(element: &impl IsA<gst::Element>, display: impl IsA<VulkanDisplay>) -> bool {
+    //pub fn run_context_query(element: &impl IsA<gst::Element>, display: /*Unimplemented*/VulkanDisplay) -> bool {
     //    unsafe { TODO: call ffi:gst_vulkan_display_run_context_query() }
     //}
 }
