@@ -2032,6 +2032,11 @@ unsafe extern "C" {
     // GstAudioAggregator
     //=========================================================================
     pub fn gst_audio_aggregator_get_type() -> GType;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_audio_aggregator_has_current_output_buffer(
+        self_: *mut GstAudioAggregator,
+    ) -> gboolean;
     pub fn gst_audio_aggregator_set_sink_caps(
         aagg: *mut GstAudioAggregator,
         pad: *mut GstAudioAggregatorPad,

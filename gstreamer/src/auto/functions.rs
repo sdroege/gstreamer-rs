@@ -3,6 +3,9 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+use crate::TraceSpanId;
 use crate::{Bin, ClockTime, DebugGraphDetails, DebugLevel, Element, StackTraceFlags, ffi};
 use glib::{prelude::*, translate::*};
 #[cfg(feature = "v1_28")]
@@ -52,6 +55,14 @@ pub fn cpuid_supports_arm_neon() -> bool {
 pub fn cpuid_supports_arm_neon64() -> bool {
     assert_initialized_main_thread!();
     unsafe { from_glib(ffi::gst_cpuid_supports_arm_neon64()) }
+}
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+#[doc(alias = "gst_cpuid_supports_riscv_v")]
+pub fn cpuid_supports_riscv_v() -> bool {
+    assert_initialized_main_thread!();
+    unsafe { from_glib(ffi::gst_cpuid_supports_riscv_v()) }
 }
 
 #[cfg(feature = "v1_28")]
@@ -338,6 +349,40 @@ pub fn parse_launchv(argv: &[&str]) -> Result<Element, glib::Error> {
         } else {
             Err(from_glib_full(error))
         }
+    }
+}
+
+//#[cfg(feature = "v1_30")]
+//#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+//#[doc(alias = "gst_trace_event")]
+//pub fn trace_event(format: /*Ignored*/&mut TraceFormat, values: /*Ignored*/&[&TraceValue]) {
+//    unsafe { TODO: call ffi:gst_trace_event() }
+//}
+
+//#[cfg(feature = "v1_30")]
+//#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+//#[doc(alias = "gst_trace_span_begin")]
+//pub fn trace_span_begin(format: /*Ignored*/&mut TraceFormat, values: /*Ignored*/&[&TraceValue]) -> TraceSpanId {
+//    unsafe { TODO: call ffi:gst_trace_span_begin() }
+//}
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+#[doc(alias = "gst_trace_span_end")]
+pub fn trace_span_end(span_id: TraceSpanId) {
+    assert_initialized_main_thread!();
+    unsafe {
+        ffi::gst_trace_span_end(span_id);
+    }
+}
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+#[doc(alias = "gst_trace_span_end_and_clear")]
+pub fn trace_span_end_and_clear(span_id: &mut TraceSpanId) {
+    assert_initialized_main_thread!();
+    unsafe {
+        ffi::gst_trace_span_end_and_clear(span_id);
     }
 }
 

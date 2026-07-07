@@ -245,6 +245,41 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "GstH274DigitallySignedContentInitialization",
+        Layout {
+            size: size_of::<GstH274DigitallySignedContentInitialization>(),
+            alignment: align_of::<GstH274DigitallySignedContentInitialization>(),
+        },
+    ),
+    (
+        "GstH274DigitallySignedContentSelection",
+        Layout {
+            size: size_of::<GstH274DigitallySignedContentSelection>(),
+            alignment: align_of::<GstH274DigitallySignedContentSelection>(),
+        },
+    ),
+    (
+        "GstH274DigitallySignedContentVerification",
+        Layout {
+            size: size_of::<GstH274DigitallySignedContentVerification>(),
+            alignment: align_of::<GstH274DigitallySignedContentVerification>(),
+        },
+    ),
+    (
+        "GstH274RegisteredUserData",
+        Layout {
+            size: size_of::<GstH274RegisteredUserData>(),
+            alignment: align_of::<GstH274RegisteredUserData>(),
+        },
+    ),
+    (
+        "GstH274UserDataUnregistered",
+        Layout {
+            size: size_of::<GstH274UserDataUnregistered>(),
+            alignment: align_of::<GstH274UserDataUnregistered>(),
+        },
+    ),
+    (
         "GstNavigationCommand",
         Layout {
             size: size_of::<GstNavigationCommand>(),
@@ -557,6 +592,27 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         Layout {
             size: size_of::<GstVideoCropMeta>(),
             alignment: align_of::<GstVideoCropMeta>(),
+        },
+    ),
+    (
+        "GstVideoDSCInitializationMeta",
+        Layout {
+            size: size_of::<GstVideoDSCInitializationMeta>(),
+            alignment: align_of::<GstVideoDSCInitializationMeta>(),
+        },
+    ),
+    (
+        "GstVideoDSCSelectionMeta",
+        Layout {
+            size: size_of::<GstVideoDSCSelectionMeta>(),
+            alignment: align_of::<GstVideoDSCSelectionMeta>(),
+        },
+    ),
+    (
+        "GstVideoDSCVerificationMeta",
+        Layout {
+            size: size_of::<GstVideoDSCVerificationMeta>(),
+            alignment: align_of::<GstVideoDSCVerificationMeta>(),
         },
     ),
     (
@@ -1371,6 +1427,7 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_VIDEO_FORMAT_ABGR", "14"),
     ("(gint) GST_VIDEO_FORMAT_ABGR64_BE", "109"),
     ("(gint) GST_VIDEO_FORMAT_ABGR64_LE", "108"),
+    ("(gint) GST_VIDEO_FORMAT_AHARDWARE_BUFFER", "142"),
     ("(gint) GST_VIDEO_FORMAT_ARGB", "13"),
     ("(gint) GST_VIDEO_FORMAT_ARGB64", "39"),
     ("(gint) GST_VIDEO_FORMAT_ARGB64_BE", "103"),
@@ -1428,7 +1485,7 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_VIDEO_FORMAT_I422_12LE", "75"),
     ("(gint) GST_VIDEO_FORMAT_IYU1", "38"),
     ("(gint) GST_VIDEO_FORMAT_IYU2", "63"),
-    ("GST_VIDEO_FORMAT_LAST", "142"),
+    ("GST_VIDEO_FORMAT_LAST", "143"),
     ("(gint) GST_VIDEO_FORMAT_MT2110R", "116"),
     ("(gint) GST_VIDEO_FORMAT_MT2110T", "115"),
     ("(gint) GST_VIDEO_FORMAT_NV12", "23"),

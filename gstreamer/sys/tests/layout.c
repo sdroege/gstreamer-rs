@@ -183,8 +183,11 @@ int main() {
     printf("%s;%zu;%zu\n", "GstTocLoopType", sizeof(GstTocLoopType), alignof(GstTocLoopType));
     printf("%s;%zu;%zu\n", "GstTocScope", sizeof(GstTocScope), alignof(GstTocScope));
     printf("%s;%zu;%zu\n", "GstTocSetterInterface", sizeof(GstTocSetterInterface), alignof(GstTocSetterInterface));
+    printf("%s;%zu;%zu\n", "GstTraceSpanId", sizeof(GstTraceSpanId), alignof(GstTraceSpanId));
+    printf("%s;%zu;%zu\n", "GstTraceValue", sizeof(GstTraceValue), alignof(GstTraceValue));
     printf("%s;%zu;%zu\n", "GstTracer", sizeof(GstTracer), alignof(GstTracer));
     printf("%s;%zu;%zu\n", "GstTracerClass", sizeof(GstTracerClass), alignof(GstTracerClass));
+    printf("%s;%zu;%zu\n", "GstTracerFieldType", sizeof(GstTracerFieldType), alignof(GstTracerFieldType));
     printf("%s;%zu;%zu\n", "GstTracerValueFlags", sizeof(GstTracerValueFlags), alignof(GstTracerValueFlags));
     printf("%s;%zu;%zu\n", "GstTracerValueScope", sizeof(GstTracerValueScope), alignof(GstTracerValueScope));
     printf("%s;%zu;%zu\n", "GstTypeFind", sizeof(GstTypeFind), alignof(GstTypeFind));

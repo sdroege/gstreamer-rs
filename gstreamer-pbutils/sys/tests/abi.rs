@@ -301,6 +301,13 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "GstH264LevelLimits",
+        Layout {
+            size: size_of::<GstH264LevelLimits>(),
+            alignment: align_of::<GstH264LevelLimits>(),
+        },
+    ),
+    (
         "GstInstallPluginsReturn",
         Layout {
             size: size_of::<GstInstallPluginsReturn>(),

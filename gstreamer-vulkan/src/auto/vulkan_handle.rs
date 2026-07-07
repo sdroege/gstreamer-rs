@@ -52,6 +52,13 @@ impl VulkanHandle {
     //    unsafe { TODO: call ffi:gst_vulkan_handle_free_sampler() }
     //}
 
+    //#[cfg(feature = "v1_30")]
+    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    //#[doc(alias = "gst_vulkan_handle_free_sampler_ycbcr_conversion")]
+    //pub fn free_sampler_ycbcr_conversion(&self, user_data: /*Unimplemented*/Option<Basic: Pointer>) {
+    //    unsafe { TODO: call ffi:gst_vulkan_handle_free_sampler_ycbcr_conversion() }
+    //}
+
     //#[doc(alias = "gst_vulkan_handle_free_shader")]
     //pub fn free_shader(&self, user_data: /*Unimplemented*/Option<Basic: Pointer>) {
     //    unsafe { TODO: call ffi:gst_vulkan_handle_free_shader() }

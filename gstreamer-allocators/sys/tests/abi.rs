@@ -203,6 +203,13 @@ fn get_c_output(name: &str) -> Result<String, Box<dyn Error>> {
 
 const RUST_LAYOUTS: &[(&str, Layout)] = &[
     (
+        "GstAHardwareBufferFormat",
+        Layout {
+            size: size_of::<GstAHardwareBufferFormat>(),
+            alignment: align_of::<GstAHardwareBufferFormat>(),
+        },
+    ),
+    (
         "GstDRMDumbAllocatorClass",
         Layout {
             size: size_of::<GstDRMDumbAllocatorClass>(),
@@ -275,10 +282,48 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
 ];
 
 const RUST_CONSTANTS: &[(&str, &str)] = &[
+    ("(gint) GST_AHARDWARE_BUFFER_FORMAT_B10G10R10A2_UNORM", "67"),
+    ("(gint) GST_AHARDWARE_BUFFER_FORMAT_B10G10R10X2_UNORM", "68"),
+    ("(gint) GST_AHARDWARE_BUFFER_FORMAT_BLOB", "33"),
+    ("(gint) GST_AHARDWARE_BUFFER_FORMAT_D16_UNORM", "48"),
+    ("(gint) GST_AHARDWARE_BUFFER_FORMAT_D24_UNORM", "49"),
+    ("(gint) GST_AHARDWARE_BUFFER_FORMAT_D24_UNORM_S8_UINT", "50"),
+    ("(gint) GST_AHARDWARE_BUFFER_FORMAT_D32_FLOAT", "51"),
+    ("(gint) GST_AHARDWARE_BUFFER_FORMAT_D32_FLOAT_S8_UINT", "52"),
+    (
+        "(gint) GST_AHARDWARE_BUFFER_FORMAT_R10G10B10A10_UNORM",
+        "59",
+    ),
+    ("(gint) GST_AHARDWARE_BUFFER_FORMAT_R10G10B10A2_UNORM", "43"),
+    ("(gint) GST_AHARDWARE_BUFFER_FORMAT_R12G12B12A12_UINT", "65"),
+    ("(gint) GST_AHARDWARE_BUFFER_FORMAT_R12G12_UINT", "63"),
+    ("(gint) GST_AHARDWARE_BUFFER_FORMAT_R12_UINT", "61"),
+    ("(gint) GST_AHARDWARE_BUFFER_FORMAT_R14G14B14A14_UINT", "66"),
+    ("(gint) GST_AHARDWARE_BUFFER_FORMAT_R14G14_UINT", "64"),
+    ("(gint) GST_AHARDWARE_BUFFER_FORMAT_R14_UINT", "62"),
+    (
+        "(gint) GST_AHARDWARE_BUFFER_FORMAT_R16G16B16A16_FLOAT",
+        "22",
+    ),
+    ("(gint) GST_AHARDWARE_BUFFER_FORMAT_R16G16_UINT", "58"),
+    ("(gint) GST_AHARDWARE_BUFFER_FORMAT_R16_UINT", "57"),
+    ("(gint) GST_AHARDWARE_BUFFER_FORMAT_R5G6B5_UNORM", "4"),
+    ("(gint) GST_AHARDWARE_BUFFER_FORMAT_R8G8B8A8_UNORM", "1"),
+    ("(gint) GST_AHARDWARE_BUFFER_FORMAT_R8G8B8X8_UNORM", "2"),
+    ("(gint) GST_AHARDWARE_BUFFER_FORMAT_R8G8B8_UNORM", "3"),
+    ("(gint) GST_AHARDWARE_BUFFER_FORMAT_R8_UNORM", "56"),
+    ("(gint) GST_AHARDWARE_BUFFER_FORMAT_S8_UINT", "53"),
+    ("(gint) GST_AHARDWARE_BUFFER_FORMAT_Y8Cb8Cr8_420", "35"),
+    ("(gint) GST_AHARDWARE_BUFFER_FORMAT_YCbCr_P010", "54"),
+    ("(gint) GST_AHARDWARE_BUFFER_FORMAT_YCbCr_P210", "60"),
     ("GST_ALLOCATOR_DMABUF", "dmabuf"),
     ("GST_ALLOCATOR_FD", "fd"),
     ("GST_ALLOCATOR_SHM", "shm"),
     ("GST_ALLOCATOR_UDMABUF", "udmabuf"),
+    (
+        "GST_CAPS_FEATURE_MEMORY_AHARDWAREBUFFER",
+        "memory:AHardwareBuffer",
+    ),
     ("GST_CAPS_FEATURE_MEMORY_DMABUF", "memory:DMABuf"),
     ("(guint) GST_FD_MEMORY_FLAG_DONT_CLOSE", "4"),
     ("(guint) GST_FD_MEMORY_FLAG_KEEP_MAPPED", "1"),
