@@ -14,6 +14,11 @@ int main() {
     printf("%s;%zu;%zu\n", "GstColorBalanceChannelClass", sizeof(GstColorBalanceChannelClass), alignof(GstColorBalanceChannelClass));
     printf("%s;%zu;%zu\n", "GstColorBalanceInterface", sizeof(GstColorBalanceInterface), alignof(GstColorBalanceInterface));
     printf("%s;%zu;%zu\n", "GstColorBalanceType", sizeof(GstColorBalanceType), alignof(GstColorBalanceType));
+    printf("%s;%zu;%zu\n", "GstH274DigitallySignedContentInitialization", sizeof(GstH274DigitallySignedContentInitialization), alignof(GstH274DigitallySignedContentInitialization));
+    printf("%s;%zu;%zu\n", "GstH274DigitallySignedContentSelection", sizeof(GstH274DigitallySignedContentSelection), alignof(GstH274DigitallySignedContentSelection));
+    printf("%s;%zu;%zu\n", "GstH274DigitallySignedContentVerification", sizeof(GstH274DigitallySignedContentVerification), alignof(GstH274DigitallySignedContentVerification));
+    printf("%s;%zu;%zu\n", "GstH274RegisteredUserData", sizeof(GstH274RegisteredUserData), alignof(GstH274RegisteredUserData));
+    printf("%s;%zu;%zu\n", "GstH274UserDataUnregistered", sizeof(GstH274UserDataUnregistered), alignof(GstH274UserDataUnregistered));
     printf("%s;%zu;%zu\n", "GstNavigationCommand", sizeof(GstNavigationCommand), alignof(GstNavigationCommand));
     printf("%s;%zu;%zu\n", "GstNavigationEventType", sizeof(GstNavigationEventType), alignof(GstNavigationEventType));
     printf("%s;%zu;%zu\n", "GstNavigationInterface", sizeof(GstNavigationInterface), alignof(GstNavigationInterface));
@@ -59,6 +64,9 @@ int main() {
     printf("%s;%zu;%zu\n", "GstVideoColorimetry", sizeof(GstVideoColorimetry), alignof(GstVideoColorimetry));
     printf("%s;%zu;%zu\n", "GstVideoContentLightLevel", sizeof(GstVideoContentLightLevel), alignof(GstVideoContentLightLevel));
     printf("%s;%zu;%zu\n", "GstVideoCropMeta", sizeof(GstVideoCropMeta), alignof(GstVideoCropMeta));
+    printf("%s;%zu;%zu\n", "GstVideoDSCInitializationMeta", sizeof(GstVideoDSCInitializationMeta), alignof(GstVideoDSCInitializationMeta));
+    printf("%s;%zu;%zu\n", "GstVideoDSCSelectionMeta", sizeof(GstVideoDSCSelectionMeta), alignof(GstVideoDSCSelectionMeta));
+    printf("%s;%zu;%zu\n", "GstVideoDSCVerificationMeta", sizeof(GstVideoDSCVerificationMeta), alignof(GstVideoDSCVerificationMeta));
     printf("%s;%zu;%zu\n", "GstVideoDecoder", sizeof(GstVideoDecoder), alignof(GstVideoDecoder));
     printf("%s;%zu;%zu\n", "GstVideoDecoderClass", sizeof(GstVideoDecoderClass), alignof(GstVideoDecoderClass));
     printf("%s;%zu;%zu\n", "GstVideoDecoderRequestSyncPointFlags", sizeof(GstVideoDecoderRequestSyncPointFlags), alignof(GstVideoDecoderRequestSyncPointFlags));

@@ -8,6 +8,7 @@
 #include <stdio.h>
 
 int main() {
+    printf("%s;%zu;%zu\n", "GstAHardwareBufferFormat", sizeof(GstAHardwareBufferFormat), alignof(GstAHardwareBufferFormat));
     printf("%s;%zu;%zu\n", "GstDRMDumbAllocatorClass", sizeof(GstDRMDumbAllocatorClass), alignof(GstDRMDumbAllocatorClass));
     printf("%s;%zu;%zu\n", "GstDmaBufAllocator", sizeof(GstDmaBufAllocator), alignof(GstDmaBufAllocator));
     printf("%s;%zu;%zu\n", "GstDmaBufAllocatorClass", sizeof(GstDmaBufAllocatorClass), alignof(GstDmaBufAllocatorClass));

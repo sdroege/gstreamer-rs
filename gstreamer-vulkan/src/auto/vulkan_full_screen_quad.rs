@@ -139,6 +139,18 @@ pub trait VulkanFullScreenQuadExt: IsA<VulkanFullScreenQuad> + 'static {
     //    unsafe { TODO: call ffi:gst_vulkan_full_screen_quad_set_blend_operation() }
     //}
 
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "gst_vulkan_full_screen_quad_set_immutable_sampler")]
+    fn set_immutable_sampler(&self, sampler: &VulkanHandle) -> bool {
+        unsafe {
+            from_glib(ffi::gst_vulkan_full_screen_quad_set_immutable_sampler(
+                self.as_ref().to_glib_none().0,
+                sampler.to_glib_none().0,
+            ))
+        }
+    }
+
     #[doc(alias = "gst_vulkan_full_screen_quad_set_index_buffer")]
     fn set_index_buffer(&self, indices: &gst::Memory, n_indices: usize) -> Result<(), glib::Error> {
         unsafe {
@@ -202,6 +214,18 @@ pub trait VulkanFullScreenQuadExt: IsA<VulkanFullScreenQuad> + 'static {
             } else {
                 Err(from_glib_full(error))
             }
+        }
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "gst_vulkan_full_screen_quad_set_sampler")]
+    fn set_sampler(&self, sampler: &VulkanHandle) -> bool {
+        unsafe {
+            from_glib(ffi::gst_vulkan_full_screen_quad_set_sampler(
+                self.as_ref().to_glib_none().0,
+                sampler.to_glib_none().0,
+            ))
         }
     }
 

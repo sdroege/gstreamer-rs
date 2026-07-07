@@ -83,8 +83,11 @@ pub const GST_VULKAN_WINDOW_ERROR_OLD_LIBS: GstVulkanWindowError = 1;
 pub const GST_VULKAN_WINDOW_ERROR_RESOURCE_UNAVAILABLE: GstVulkanWindowError = 2;
 
 // Constants
+pub const GST_BUFFER_POOL_OPTION_VULKAN_IMAGE_MULTIPLANAR_YUV: &[u8] =
+    b"GstBufferPoolOptionVulkanImageMultiplanarYUV\0";
 pub const GST_CAPS_FEATURE_MEMORY_VULKAN_BUFFER: &[u8] = b"memory:VulkanBuffer\0";
 pub const GST_CAPS_FEATURE_MEMORY_VULKAN_IMAGE: &[u8] = b"memory:VulkanImage\0";
+pub const GST_VULKAN_API_VERSION_FORMAT: &[u8] = b"u.%u.%u\0";
 pub const GST_VULKAN_BUFFER_MEMORY_ALLOCATOR_NAME: &[u8] = b"VulkanBuffer\0";
 pub const GST_VULKAN_DEVICE_CONTEXT_TYPE_STR: &[u8] = b"gst.vulkan.device\0";
 pub const GST_VULKAN_DISPLAY_CONTEXT_TYPE_STR: &[u8] = b"gst.vulkan.display\0";
@@ -93,7 +96,13 @@ pub const GST_VULKAN_INSTANCE_CONTEXT_TYPE_STR: &[u8] = b"gst.vulkan.instance\0"
 pub const GST_VULKAN_MAX_COMPONENTS: c_int = 4;
 pub const GST_VULKAN_MEMORY_ALLOCATOR_NAME: &[u8] = b"Vulkan\0";
 pub const GST_VULKAN_QUEUE_CONTEXT_TYPE_STR: &[u8] = b"gst.vulkan.queue\0";
+pub const GST_VULKAN_REQUESTED_DEVICE_EXTENSIONS_CONTEXT_TYPE_STR: &[u8] =
+    b"gst.vulkan.requested-device-extensions\0";
+pub const GST_VULKAN_REQUESTED_INSTANCE_EXTENSIONS_CONTEXT_TYPE_STR: &[u8] =
+    b"gst.vulkan.requested-instance-extensions\0";
 pub const GST_VULKAN_SWAPPER_VIDEO_FORMATS: &[u8] = b" { RGBA, BGRA, RGB, BGR } \0";
+pub const GST_VULKAN_UUID_FORMAT: &[u8] =
+    b"02x%02x%02x%02x-%02x%02x-%02x%02x-%02x%02x-%02x%02x%02x%02x%02x%02x\0";
 
 // Flags
 pub type GstVulkanDisplayType = c_uint;
@@ -1472,6 +1481,12 @@ unsafe extern "C" {
     );
     pub fn gst_vulkan_handle_free_render_pass(handle: *mut GstVulkanHandle, user_data: gpointer);
     pub fn gst_vulkan_handle_free_sampler(handle: *mut GstVulkanHandle, user_data: gpointer);
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_handle_free_sampler_ycbcr_conversion(
+        handle: *mut GstVulkanHandle,
+        user_data: gpointer,
+    );
     pub fn gst_vulkan_handle_free_shader(handle: *mut GstVulkanHandle, user_data: gpointer);
     pub fn gst_vulkan_handle_ref(handle: *mut GstVulkanHandle) -> *mut GstVulkanHandle;
     pub fn gst_vulkan_handle_context_query(
@@ -1540,6 +1555,15 @@ unsafe extern "C" {
         height: size_t,
         tiling: vulkan::VkImageTiling,
         usage: vulkan::VkImageUsageFlags,
+        user_data: gpointer,
+        notify: glib::GDestroyNotify,
+    ) -> *mut gst::GstMemory;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_image_memory_wrapped_with_image_info(
+        device: *mut GstVulkanDevice,
+        image: vulkan::VkImage,
+        image_info: *const vulkan::VkImageCreateInfo,
         user_data: gpointer,
         notify: glib::GDestroyNotify,
     ) -> *mut gst::GstMemory;
@@ -1841,6 +1865,12 @@ unsafe extern "C" {
         colour_blend_op: vulkan::VkBlendOp,
         alpha_blend_op: vulkan::VkBlendOp,
     );
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_full_screen_quad_set_immutable_sampler(
+        self_: *mut GstVulkanFullScreenQuad,
+        sampler: *mut GstVulkanHandle,
+    ) -> gboolean;
     pub fn gst_vulkan_full_screen_quad_set_index_buffer(
         self_: *mut GstVulkanFullScreenQuad,
         indices: *mut gst::GstMemory,
@@ -1861,6 +1891,12 @@ unsafe extern "C" {
         self_: *mut GstVulkanFullScreenQuad,
         buffer: *mut gst::GstBuffer,
         error: *mut *mut glib::GError,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_full_screen_quad_set_sampler(
+        self_: *mut GstVulkanFullScreenQuad,
+        sampler: *mut GstVulkanHandle,
     ) -> gboolean;
     pub fn gst_vulkan_full_screen_quad_set_shaders(
         self_: *mut GstVulkanFullScreenQuad,
@@ -2397,6 +2433,16 @@ unsafe extern "C" {
         size: size_t,
         error: *mut *mut glib::GError,
     ) -> *mut GstVulkanHandle;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_element_get_merged_requested_device_extensions_context(
+        element: *mut gst::GstElement,
+    ) -> *mut gst::GstContext;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_element_get_merged_requested_instance_extensions_context(
+        element: *mut gst::GstElement,
+    ) -> *mut gst::GstContext;
     pub fn gst_vulkan_ensure_element_data(
         element: *mut gst::GstElement,
         display_ptr: *mut *mut GstVulkanDisplay,
@@ -2462,6 +2508,67 @@ unsafe extern "C" {
     pub fn gst_vulkan_present_mode_to_string(
         present_mode: vulkan::VkPresentModeKHR,
     ) -> *const c_char;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_requested_device_extensions_context_new() -> *mut gst::GstContext;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_requested_extensions_context_add(
+        context: *mut gst::GstContext,
+        extension_name: *const c_char,
+    );
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_requested_extensions_context_dup_extensions(
+        context: *mut gst::GstContext,
+    ) -> *mut *mut c_char;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_requested_extensions_context_get_vulkan_instance(
+        context: *mut gst::GstContext,
+        instance: *mut *mut GstVulkanInstance,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_requested_extensions_context_set_vulkan_instance(
+        context: *mut gst::GstContext,
+        instance: *mut GstVulkanInstance,
+    );
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_requested_extensions_global_context_query(
+        element: *mut gst::GstElement,
+        context_type: *const c_char,
+    );
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_requested_extensions_handle_context_query(
+        element: *mut gst::GstElement,
+        query: *mut gst::GstQuery,
+        continue_direction: gst::GstPadDirection,
+        instance: *mut GstVulkanInstance,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_requested_extensions_local_context_query(
+        element: *mut gst::GstElement,
+        context_type: *const c_char,
+        instance: *mut GstVulkanInstance,
+    ) -> *mut gst::GstQuery;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_requested_extensions_merge_from_element(
+        element: *mut gst::GstElement,
+        dst: *mut gst::GstContext,
+    );
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_requested_instance_extensions_context_new() -> *mut gst::GstContext;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_resolve_mode_flags_to_string(
+        resolve_mode: vulkan::VkResolveModeFlags,
+    ) -> *mut c_char;
     #[cfg(feature = "v1_22")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_vulkan_result_to_string(result: vulkan::VkResult) -> *const c_char;
@@ -2472,6 +2579,16 @@ unsafe extern "C" {
     ) -> gboolean;
     pub fn gst_vulkan_sample_count_flags_to_string(
         sample_count_bits: vulkan::VkSampleCountFlags,
+    ) -> *mut c_char;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_shader_stage_flags_to_string(
+        shader_flags: vulkan::VkShaderStageFlags,
+    ) -> *mut c_char;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_subgroup_feature_flags_to_string(
+        subgroup_feature: vulkan::VkSubgroupFeatureFlags,
     ) -> *mut c_char;
 
 }

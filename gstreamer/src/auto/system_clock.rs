@@ -23,6 +23,20 @@ glib::wrapper! {
 impl SystemClock {
     pub const NONE: Option<&'static SystemClock> = None;
 
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "gst_system_clock_new")]
+    pub fn new(name: Option<&str>, clock_type: ClockType) -> SystemClock {
+        assert_initialized_main_thread!();
+        unsafe {
+            Clock::from_glib_full(ffi::gst_system_clock_new(
+                name.to_glib_none().0,
+                clock_type.into_glib(),
+            ))
+            .unsafe_cast()
+        }
+    }
+
     #[doc(alias = "gst_system_clock_obtain")]
     pub fn obtain() -> Clock {
         assert_initialized_main_thread!();

@@ -28,6 +28,17 @@ unsafe impl Send for AudioAggregator {}
 unsafe impl Sync for AudioAggregator {}
 
 pub trait AudioAggregatorExt: IsA<AudioAggregator> + 'static {
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "gst_audio_aggregator_has_current_output_buffer")]
+    fn has_current_output_buffer(&self) -> bool {
+        unsafe {
+            from_glib(ffi::gst_audio_aggregator_has_current_output_buffer(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
     #[doc(alias = "alignment-threshold")]
     fn alignment_threshold(&self) -> u64 {
         ObjectExt::property(self.as_ref(), "alignment-threshold")

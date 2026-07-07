@@ -432,6 +432,9 @@ pub const GST_VIDEO_FORMAT_BGR10x2_LE: GstVideoFormat = 140;
 #[cfg(feature = "v1_28")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
 pub const GST_VIDEO_FORMAT_RGB10x2_LE: GstVideoFormat = 141;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub const GST_VIDEO_FORMAT_AHARDWARE_BUFFER: GstVideoFormat = 142;
 
 pub type GstVideoGLTextureOrientation = c_int;
 pub const GST_VIDEO_GL_TEXTURE_ORIENTATION_X_NORMAL_Y_NORMAL: GstVideoGLTextureOrientation = 0;
@@ -624,7 +627,7 @@ pub const GST_VIDEO_DECODER_SINK_NAME: &[u8] = b"sink\0";
 pub const GST_VIDEO_DECODER_SRC_NAME: &[u8] = b"src\0";
 pub const GST_VIDEO_ENCODER_SINK_NAME: &[u8] = b"sink\0";
 pub const GST_VIDEO_ENCODER_SRC_NAME: &[u8] = b"src\0";
-pub const GST_VIDEO_FORMAT_LAST: c_int = 142;
+pub const GST_VIDEO_FORMAT_LAST: c_int = 143;
 pub const GST_VIDEO_FPS_RANGE: &[u8] = b"(fraction) [ 0, max ]\0";
 pub const GST_VIDEO_HDR10_PLUS_MAX_BYTES: c_int = 1024;
 pub const GST_VIDEO_HDR10_PLUS_MAX_COLS_MD_APL: c_int = 25;
@@ -921,6 +924,137 @@ impl ::std::fmt::Debug for GstColorBalanceInterface {
             .field("get_value", &self.get_value)
             .field("get_balance_type", &self.get_balance_type)
             .field("value_changed", &self.value_changed)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstH274DigitallySignedContentInitialization {
+    pub id: u8,
+    pub hash_method_type: u8,
+    pub key_retrieval_mode_idc: u32,
+    pub use_key_register_idx_flag: u8,
+    pub key_register_idx: u32,
+    pub content_uuid_present_flag: u8,
+    pub content_uuid: [u8; 16],
+    pub num_verification_substreams: u32,
+    pub ref_substream_flag: *mut u8,
+    pub ref_substream_flag_len: size_t,
+    pub vss_implicit_association_mode_flag: u8,
+    pub signed_content_start_flag: u8,
+    pub sei_signing_flag: u8,
+    pub key_source_uri: *mut c_char,
+}
+
+impl ::std::fmt::Debug for GstH274DigitallySignedContentInitialization {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!(
+            "GstH274DigitallySignedContentInitialization @ {self:p}"
+        ))
+        .field("id", &self.id)
+        .field("hash_method_type", &self.hash_method_type)
+        .field("key_retrieval_mode_idc", &self.key_retrieval_mode_idc)
+        .field("use_key_register_idx_flag", &self.use_key_register_idx_flag)
+        .field("key_register_idx", &self.key_register_idx)
+        .field("content_uuid_present_flag", &self.content_uuid_present_flag)
+        .field("content_uuid", &self.content_uuid)
+        .field(
+            "num_verification_substreams",
+            &self.num_verification_substreams,
+        )
+        .field("ref_substream_flag", &self.ref_substream_flag)
+        .field("ref_substream_flag_len", &self.ref_substream_flag_len)
+        .field(
+            "vss_implicit_association_mode_flag",
+            &self.vss_implicit_association_mode_flag,
+        )
+        .field("signed_content_start_flag", &self.signed_content_start_flag)
+        .field("sei_signing_flag", &self.sei_signing_flag)
+        .field("key_source_uri", &self.key_source_uri)
+        .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstH274DigitallySignedContentSelection {
+    pub id: u8,
+    pub verification_substream_id: u8,
+}
+
+impl ::std::fmt::Debug for GstH274DigitallySignedContentSelection {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!(
+            "GstH274DigitallySignedContentSelection @ {self:p}"
+        ))
+        .field("id", &self.id)
+        .field("verification_substream_id", &self.verification_substream_id)
+        .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstH274DigitallySignedContentVerification {
+    pub id: u8,
+    pub verification_substream_id: u8,
+    pub signature_length_in_octets_minus1: u32,
+    pub signature: *mut u8,
+    pub signed_content_end_flag: u8,
+}
+
+impl ::std::fmt::Debug for GstH274DigitallySignedContentVerification {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!(
+            "GstH274DigitallySignedContentVerification @ {self:p}"
+        ))
+        .field("id", &self.id)
+        .field("verification_substream_id", &self.verification_substream_id)
+        .field(
+            "signature_length_in_octets_minus1",
+            &self.signature_length_in_octets_minus1,
+        )
+        .field("signature", &self.signature)
+        .field("signed_content_end_flag", &self.signed_content_end_flag)
+        .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstH274RegisteredUserData {
+    pub country_code: u8,
+    pub country_code_extension: u8,
+    pub size: c_uint,
+    pub data: *const u8,
+}
+
+impl ::std::fmt::Debug for GstH274RegisteredUserData {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstH274RegisteredUserData @ {self:p}"))
+            .field("country_code", &self.country_code)
+            .field("country_code_extension", &self.country_code_extension)
+            .field("size", &self.size)
+            .field("data", &self.data)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstH274UserDataUnregistered {
+    pub uuid: [u8; 16],
+    pub data: *const u8,
+    pub size: c_uint,
+}
+
+impl ::std::fmt::Debug for GstH274UserDataUnregistered {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstH274UserDataUnregistered @ {self:p}"))
+            .field("uuid", &self.uuid)
+            .field("data", &self.data)
+            .field("size", &self.size)
             .finish()
     }
 }
@@ -1531,6 +1665,54 @@ impl ::std::fmt::Debug for GstVideoCropMeta {
             .field("y", &self.y)
             .field("width", &self.width)
             .field("height", &self.height)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstVideoDSCInitializationMeta {
+    pub meta: gst::GstMeta,
+    pub dsc_initialization: GstH274DigitallySignedContentInitialization,
+}
+
+impl ::std::fmt::Debug for GstVideoDSCInitializationMeta {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstVideoDSCInitializationMeta @ {self:p}"))
+            .field("meta", &self.meta)
+            .field("dsc_initialization", &self.dsc_initialization)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstVideoDSCSelectionMeta {
+    pub meta: gst::GstMeta,
+    pub dsc_selection: GstH274DigitallySignedContentSelection,
+}
+
+impl ::std::fmt::Debug for GstVideoDSCSelectionMeta {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstVideoDSCSelectionMeta @ {self:p}"))
+            .field("meta", &self.meta)
+            .field("dsc_selection", &self.dsc_selection)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstVideoDSCVerificationMeta {
+    pub meta: gst::GstMeta,
+    pub dsc_verification: GstH274DigitallySignedContentVerification,
+}
+
+impl ::std::fmt::Debug for GstVideoDSCVerificationMeta {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstVideoDSCVerificationMeta @ {self:p}"))
+            .field("meta", &self.meta)
+            .field("dsc_verification", &self.dsc_verification)
             .finish()
     }
 }
@@ -3213,6 +3395,50 @@ unsafe extern "C" {
     pub fn gst_ancillary_meta_get_info() -> *const gst::GstMetaInfo;
 
     //=========================================================================
+    // GstH274DigitallySignedContentInitialization
+    //=========================================================================
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_h274_digitally_signed_content_initialization_get_type() -> GType;
+
+    //=========================================================================
+    // GstH274DigitallySignedContentSelection
+    //=========================================================================
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_h274_digitally_signed_content_selection_get_type() -> GType;
+
+    //=========================================================================
+    // GstH274DigitallySignedContentVerification
+    //=========================================================================
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_h274_digitally_signed_content_verification_get_type() -> GType;
+
+    //=========================================================================
+    // GstH274RegisteredUserData
+    //=========================================================================
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_h274_registered_user_data_get_type() -> GType;
+
+    //=========================================================================
+    // GstH274UserDataUnregistered
+    //=========================================================================
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_h274_user_data_unregistered_get_type() -> GType;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_h274_user_data_unregistered_free(udu: *mut GstH274UserDataUnregistered);
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_h274_user_data_unregistered_copy(
+        dst_udu: *mut GstH274UserDataUnregistered,
+        src_udu: *const GstH274UserDataUnregistered,
+    );
+
+    //=========================================================================
     // GstVideoAFDMeta
     //=========================================================================
     #[cfg(feature = "v1_18")]
@@ -3404,6 +3630,27 @@ unsafe extern "C" {
     // GstVideoCropMeta
     //=========================================================================
     pub fn gst_video_crop_meta_get_info() -> *const gst::GstMetaInfo;
+
+    //=========================================================================
+    // GstVideoDSCInitializationMeta
+    //=========================================================================
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_video_dsc_initialization_meta_get_info() -> *const gst::GstMetaInfo;
+
+    //=========================================================================
+    // GstVideoDSCSelectionMeta
+    //=========================================================================
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_video_dsc_selection_meta_get_info() -> *const gst::GstMetaInfo;
+
+    //=========================================================================
+    // GstVideoDSCVerificationMeta
+    //=========================================================================
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_video_dsc_verification_meta_get_info() -> *const gst::GstMetaInfo;
 
     //=========================================================================
     // GstVideoDither
@@ -4828,6 +5075,24 @@ unsafe extern "C" {
         buffer: *mut gst::GstBuffer,
         alpha_buffer: *mut gst::GstBuffer,
     ) -> *mut GstVideoCodecAlphaMeta;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_buffer_add_video_dsc_initialization_meta(
+        buffer: *mut gst::GstBuffer,
+        dsc_initialization: *const GstH274DigitallySignedContentInitialization,
+    ) -> *mut GstVideoDSCInitializationMeta;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_buffer_add_video_dsc_selection_meta(
+        buffer: *mut gst::GstBuffer,
+        dsc_selection: *const GstH274DigitallySignedContentSelection,
+    ) -> *mut GstVideoDSCSelectionMeta;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_buffer_add_video_dsc_verification_meta(
+        buffer: *mut gst::GstBuffer,
+        dsc_verification: *const GstH274DigitallySignedContentVerification,
+    ) -> *mut GstVideoDSCVerificationMeta;
     pub fn gst_buffer_add_video_gl_texture_upload_meta(
         buffer: *mut gst::GstBuffer,
         texture_orientation: GstVideoGLTextureOrientation,
@@ -4924,6 +5189,42 @@ unsafe extern "C" {
         config: *mut gst::GstStructure,
         align: *const GstVideoAlignment,
     );
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_h274_dsc_initialization_copy(
+        dst_dsc_init: *mut GstH274DigitallySignedContentInitialization,
+        src_dsc_init: *const GstH274DigitallySignedContentInitialization,
+    );
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_h274_dsc_initialization_free(dsci: *mut GstH274DigitallySignedContentInitialization);
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_h274_dsc_selection_copy(
+        dst_dsc_sel: *mut GstH274DigitallySignedContentSelection,
+        src_dsc_sel: *const GstH274DigitallySignedContentSelection,
+    );
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_h274_dsc_selection_free(dscs: *mut GstH274DigitallySignedContentSelection);
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_h274_dsc_verification_copy(
+        dst_dsc_ver: *mut GstH274DigitallySignedContentVerification,
+        src_dsc_ver: *const GstH274DigitallySignedContentVerification,
+    );
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_h274_dsc_verification_free(dscv: *mut GstH274DigitallySignedContentVerification);
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_h274_user_data_registered_copy(
+        dst_rud: *mut GstH274RegisteredUserData,
+        src_rud: *const GstH274RegisteredUserData,
+    );
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_h274_user_data_registered_free(rud: *mut GstH274RegisteredUserData);
     pub fn gst_is_video_overlay_prepare_window_handle_message(
         msg: *mut gst::GstMessage,
     ) -> gboolean;
@@ -5027,6 +5328,15 @@ unsafe extern "C" {
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_video_dma_drm_fourcc_to_string(fourcc: u32, modifier: u64) -> *mut c_char;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_video_dsc_initialization_meta_api_get_type() -> GType;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_video_dsc_selection_meta_api_get_type() -> GType;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_video_dsc_verification_meta_api_get_type() -> GType;
     pub fn gst_video_event_is_force_key_unit(event: *mut gst::GstEvent) -> gboolean;
     pub fn gst_video_event_new_downstream_force_key_unit(
         timestamp: gst::GstClockTime,

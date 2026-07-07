@@ -148,6 +148,15 @@ pub struct _GstAudioVisualizerPrivate {
 
 pub type GstAudioVisualizerPrivate = _GstAudioVisualizerPrivate;
 
+#[repr(C)]
+#[allow(dead_code)]
+pub struct _GstDiscovererAudioInfoBuilder {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
+
+pub type GstDiscovererAudioInfoBuilder = _GstDiscovererAudioInfoBuilder;
+
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct GstDiscovererClass {
@@ -179,12 +188,48 @@ impl ::std::fmt::Debug for GstDiscovererClass {
 
 #[repr(C)]
 #[allow(dead_code)]
+pub struct _GstDiscovererContainerInfoBuilder {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
+
+pub type GstDiscovererContainerInfoBuilder = _GstDiscovererContainerInfoBuilder;
+
+#[repr(C)]
+#[allow(dead_code)]
+pub struct _GstDiscovererInfoBuilder {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
+
+pub type GstDiscovererInfoBuilder = _GstDiscovererInfoBuilder;
+
+#[repr(C)]
+#[allow(dead_code)]
 pub struct _GstDiscovererPrivate {
     _data: [u8; 0],
     _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
 }
 
 pub type GstDiscovererPrivate = _GstDiscovererPrivate;
+
+#[repr(C)]
+#[allow(dead_code)]
+pub struct _GstDiscovererSubtitleInfoBuilder {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
+
+pub type GstDiscovererSubtitleInfoBuilder = _GstDiscovererSubtitleInfoBuilder;
+
+#[repr(C)]
+#[allow(dead_code)]
+pub struct _GstDiscovererVideoInfoBuilder {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
+
+pub type GstDiscovererVideoInfoBuilder = _GstDiscovererVideoInfoBuilder;
 
 #[repr(C)]
 #[allow(dead_code)]
@@ -221,6 +266,34 @@ pub struct _GstEncodingVideoProfileClass {
 }
 
 pub type GstEncodingVideoProfileClass = _GstEncodingVideoProfileClass;
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstH264LevelLimits {
+    pub name: *const c_char,
+    pub level_idc: u8,
+    pub max_mbps: u32,
+    pub max_fs: u32,
+    pub max_dpb_mbs: u32,
+    pub max_br: u32,
+    pub max_cpb: u32,
+    pub min_cr: u32,
+}
+
+impl ::std::fmt::Debug for GstH264LevelLimits {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstH264LevelLimits @ {self:p}"))
+            .field("name", &self.name)
+            .field("level_idc", &self.level_idc)
+            .field("max_mbps", &self.max_mbps)
+            .field("max_fs", &self.max_fs)
+            .field("max_dpb_mbs", &self.max_dpb_mbs)
+            .field("max_br", &self.max_br)
+            .field("max_cpb", &self.max_cpb)
+            .field("min_cr", &self.min_cr)
+            .finish()
+    }
+}
 
 #[repr(C)]
 #[allow(dead_code)]
@@ -457,6 +530,207 @@ unsafe extern "C" {
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     pub fn gst_pb_utils_caps_description_flags_get_type() -> GType;
+
+    //=========================================================================
+    // GstDiscovererAudioInfoBuilder
+    //=========================================================================
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_discoverer_audio_info_builder_build(
+        builder: *mut GstDiscovererAudioInfoBuilder,
+    ) -> *mut GstDiscovererAudioInfo;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_discoverer_audio_info_builder_free(builder: *mut GstDiscovererAudioInfoBuilder);
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_discoverer_audio_info_builder_set_bitrate(
+        builder: *mut GstDiscovererAudioInfoBuilder,
+        bitrate: c_uint,
+    ) -> *mut GstDiscovererAudioInfoBuilder;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_discoverer_audio_info_builder_set_language(
+        builder: *mut GstDiscovererAudioInfoBuilder,
+        language: *const c_char,
+    ) -> *mut GstDiscovererAudioInfoBuilder;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_discoverer_audio_info_builder_set_max_bitrate(
+        builder: *mut GstDiscovererAudioInfoBuilder,
+        max_bitrate: c_uint,
+    ) -> *mut GstDiscovererAudioInfoBuilder;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_discoverer_audio_info_builder_set_tags(
+        builder: *mut GstDiscovererAudioInfoBuilder,
+        tags: *mut gst::GstTagList,
+    ) -> *mut GstDiscovererAudioInfoBuilder;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_discoverer_audio_info_builder_new(
+        stream_id: *const c_char,
+        caps: *mut gst::GstCaps,
+    ) -> *mut GstDiscovererAudioInfoBuilder;
+
+    //=========================================================================
+    // GstDiscovererContainerInfoBuilder
+    //=========================================================================
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_discoverer_container_info_builder_add_stream(
+        builder: *mut GstDiscovererContainerInfoBuilder,
+        stream_info: *mut GstDiscovererStreamInfo,
+    ) -> *mut GstDiscovererContainerInfoBuilder;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_discoverer_container_info_builder_build(
+        builder: *mut GstDiscovererContainerInfoBuilder,
+    ) -> *mut GstDiscovererContainerInfo;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_discoverer_container_info_builder_free(
+        builder: *mut GstDiscovererContainerInfoBuilder,
+    );
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_discoverer_container_info_builder_set_tags(
+        builder: *mut GstDiscovererContainerInfoBuilder,
+        tags: *mut gst::GstTagList,
+    ) -> *mut GstDiscovererContainerInfoBuilder;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_discoverer_container_info_builder_new(
+        caps: *mut gst::GstCaps,
+    ) -> *mut GstDiscovererContainerInfoBuilder;
+
+    //=========================================================================
+    // GstDiscovererInfoBuilder
+    //=========================================================================
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_discoverer_info_builder_build(
+        builder: *mut GstDiscovererInfoBuilder,
+    ) -> *mut GstDiscovererInfo;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_discoverer_info_builder_free(builder: *mut GstDiscovererInfoBuilder);
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_discoverer_info_builder_set_duration(
+        builder: *mut GstDiscovererInfoBuilder,
+        duration: gst::GstClockTime,
+    ) -> *mut GstDiscovererInfoBuilder;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_discoverer_info_builder_set_live(
+        builder: *mut GstDiscovererInfoBuilder,
+        live: gboolean,
+    ) -> *mut GstDiscovererInfoBuilder;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_discoverer_info_builder_set_result(
+        builder: *mut GstDiscovererInfoBuilder,
+        result: GstDiscovererResult,
+    ) -> *mut GstDiscovererInfoBuilder;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_discoverer_info_builder_set_seekable(
+        builder: *mut GstDiscovererInfoBuilder,
+        seekable: gboolean,
+    ) -> *mut GstDiscovererInfoBuilder;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_discoverer_info_builder_set_tags(
+        builder: *mut GstDiscovererInfoBuilder,
+        tags: *mut gst::GstTagList,
+    ) -> *mut GstDiscovererInfoBuilder;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_discoverer_info_builder_new(
+        uri: *const c_char,
+        stream_info: *mut GstDiscovererStreamInfo,
+    ) -> *mut GstDiscovererInfoBuilder;
+
+    //=========================================================================
+    // GstDiscovererSubtitleInfoBuilder
+    //=========================================================================
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_discoverer_subtitle_info_builder_build(
+        builder: *mut GstDiscovererSubtitleInfoBuilder,
+    ) -> *mut GstDiscovererSubtitleInfo;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_discoverer_subtitle_info_builder_free(
+        builder: *mut GstDiscovererSubtitleInfoBuilder,
+    );
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_discoverer_subtitle_info_builder_set_language(
+        builder: *mut GstDiscovererSubtitleInfoBuilder,
+        language: *const c_char,
+    ) -> *mut GstDiscovererSubtitleInfoBuilder;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_discoverer_subtitle_info_builder_set_tags(
+        builder: *mut GstDiscovererSubtitleInfoBuilder,
+        tags: *mut gst::GstTagList,
+    ) -> *mut GstDiscovererSubtitleInfoBuilder;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_discoverer_subtitle_info_builder_new(
+        stream_id: *const c_char,
+        caps: *mut gst::GstCaps,
+    ) -> *mut GstDiscovererSubtitleInfoBuilder;
+
+    //=========================================================================
+    // GstDiscovererVideoInfoBuilder
+    //=========================================================================
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_discoverer_video_info_builder_build(
+        builder: *mut GstDiscovererVideoInfoBuilder,
+    ) -> *mut GstDiscovererVideoInfo;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_discoverer_video_info_builder_free(builder: *mut GstDiscovererVideoInfoBuilder);
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_discoverer_video_info_builder_set_bitrate(
+        builder: *mut GstDiscovererVideoInfoBuilder,
+        bitrate: c_uint,
+    ) -> *mut GstDiscovererVideoInfoBuilder;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_discoverer_video_info_builder_set_interlaced(
+        builder: *mut GstDiscovererVideoInfoBuilder,
+        interlaced: gboolean,
+    ) -> *mut GstDiscovererVideoInfoBuilder;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_discoverer_video_info_builder_set_is_image(
+        builder: *mut GstDiscovererVideoInfoBuilder,
+        is_image: gboolean,
+    ) -> *mut GstDiscovererVideoInfoBuilder;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_discoverer_video_info_builder_set_max_bitrate(
+        builder: *mut GstDiscovererVideoInfoBuilder,
+        max_bitrate: c_uint,
+    ) -> *mut GstDiscovererVideoInfoBuilder;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_discoverer_video_info_builder_set_tags(
+        builder: *mut GstDiscovererVideoInfoBuilder,
+        tags: *mut gst::GstTagList,
+    ) -> *mut GstDiscovererVideoInfoBuilder;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_discoverer_video_info_builder_new(
+        stream_id: *const c_char,
+        caps: *mut gst::GstCaps,
+    ) -> *mut GstDiscovererVideoInfoBuilder;
 
     //=========================================================================
     // GstInstallPluginsContext
@@ -868,6 +1142,17 @@ unsafe extern "C" {
     ) -> gboolean;
     pub fn gst_codec_utils_h264_get_level(sps: *const u8, len: c_uint) -> *const c_char;
     pub fn gst_codec_utils_h264_get_level_idc(level: *const c_char) -> u8;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_codec_utils_h264_get_level_limits(
+        width: c_int,
+        height: c_int,
+        fps_n: c_int,
+        fps_d: c_int,
+        bitrate: c_uint,
+        max_dec_frame_buffering: c_uint,
+        profile_idc: u8,
+    ) -> *const GstH264LevelLimits;
     pub fn gst_codec_utils_h264_get_profile(sps: *const u8, len: c_uint) -> *const c_char;
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]

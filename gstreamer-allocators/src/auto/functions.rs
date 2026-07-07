@@ -3,4 +3,57 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+use crate::ffi;
 use glib::translate::*;
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+#[doc(alias = "gst_ahardware_buffer_format_from_caps_string")]
+pub fn ahardware_buffer_format_from_caps_string(value: &str) -> Option<u32> {
+    assert_initialized_main_thread!();
+    unsafe {
+        let mut format = std::mem::MaybeUninit::uninit();
+        let ret = from_glib(ffi::gst_ahardware_buffer_format_from_caps_string(
+            value.to_glib_none().0,
+            format.as_mut_ptr(),
+        ));
+        if ret {
+            Some(format.assume_init())
+        } else {
+            None
+        }
+    }
+}
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+#[doc(alias = "gst_ahardware_buffer_format_to_caps_string")]
+pub fn ahardware_buffer_format_to_caps_string(format: u32) -> glib::GString {
+    assert_initialized_main_thread!();
+    unsafe { from_glib_full(ffi::gst_ahardware_buffer_format_to_caps_string(format)) }
+}
+
+//#[cfg(feature = "v1_30")]
+//#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+//#[doc(alias = "gst_ahardware_buffer_memory_register_query_function")]
+//pub fn ahardware_buffer_memory_register_query_function<P: Fn(&gst::Memory) -> bool + Send + Sync + 'static>(allocator_type: glib::types::Type, query: P) {
+//    unsafe { TODO: call ffi:gst_ahardware_buffer_memory_register_query_function() }
+//}
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+#[doc(alias = "gst_is_ahardware_buffer_buffer")]
+pub fn is_ahardware_buffer_buffer(buffer: &gst::Buffer) -> bool {
+    assert_initialized_main_thread!();
+    unsafe { from_glib(ffi::gst_is_ahardware_buffer_buffer(buffer.to_glib_none().0)) }
+}
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+#[doc(alias = "gst_is_ahardware_buffer_memory")]
+pub fn is_ahardware_buffer_memory(mem: &gst::Memory) -> bool {
+    assert_initialized_main_thread!();
+    unsafe { from_glib(ffi::gst_is_ahardware_buffer_memory(mem.to_glib_none().0)) }
+}

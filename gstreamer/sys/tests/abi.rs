@@ -1428,6 +1428,20 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "GstTraceSpanId",
+        Layout {
+            size: size_of::<GstTraceSpanId>(),
+            alignment: align_of::<GstTraceSpanId>(),
+        },
+    ),
+    (
+        "GstTraceValue",
+        Layout {
+            size: size_of::<GstTraceValue>(),
+            alignment: align_of::<GstTraceValue>(),
+        },
+    ),
+    (
         "GstTracer",
         Layout {
             size: size_of::<GstTracer>(),
@@ -1439,6 +1453,13 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         Layout {
             size: size_of::<GstTracerClass>(),
             alignment: align_of::<GstTracerClass>(),
+        },
+    ),
+    (
+        "GstTracerFieldType",
+        Layout {
+            size: size_of::<GstTracerFieldType>(),
+            alignment: align_of::<GstTracerFieldType>(),
         },
     ),
     (
@@ -2265,6 +2286,16 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("GST_TOC_REPEAT_COUNT_INFINITE", "-1"),
     ("(gint) GST_TOC_SCOPE_CURRENT", "2"),
     ("(gint) GST_TOC_SCOPE_GLOBAL", "1"),
+    ("(gint) GST_TRACER_FIELD_TYPE_BOOLEAN", "0"),
+    ("(gint) GST_TRACER_FIELD_TYPE_CLOCK_TIME", "7"),
+    ("(gint) GST_TRACER_FIELD_TYPE_DOUBLE", "5"),
+    ("(gint) GST_TRACER_FIELD_TYPE_INT", "1"),
+    ("(gint) GST_TRACER_FIELD_TYPE_INT64", "3"),
+    ("(gint) GST_TRACER_FIELD_TYPE_OBJECT", "9"),
+    ("(gint) GST_TRACER_FIELD_TYPE_STRING", "6"),
+    ("(gint) GST_TRACER_FIELD_TYPE_STRUCTURE", "8"),
+    ("(gint) GST_TRACER_FIELD_TYPE_UINT", "2"),
+    ("(gint) GST_TRACER_FIELD_TYPE_UINT64", "4"),
     ("(guint) GST_TRACER_VALUE_FLAGS_AGGREGATED", "2"),
     ("(guint) GST_TRACER_VALUE_FLAGS_NONE", "0"),
     ("(guint) GST_TRACER_VALUE_FLAGS_OPTIONAL", "1"),
@@ -2272,6 +2303,7 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_TRACER_VALUE_SCOPE_PAD", "3"),
     ("(gint) GST_TRACER_VALUE_SCOPE_PROCESS", "0"),
     ("(gint) GST_TRACER_VALUE_SCOPE_THREAD", "1"),
+    ("GST_TRACE_SPAN_ID_NONE", "0"),
     ("(gint) GST_TYPE_FIND_LIKELY", "80"),
     ("(gint) GST_TYPE_FIND_MAXIMUM", "100"),
     ("(gint) GST_TYPE_FIND_MINIMUM", "1"),

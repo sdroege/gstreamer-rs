@@ -39,6 +39,7 @@ pub type GstClockTime = u64;
 pub type GstClockTimeDiff = i64;
 pub type GstElementFactoryListType = u64;
 pub type GstMemoryMapInfo = GstMapInfo;
+pub type GstTraceSpanId = u64;
 
 // Enums
 pub type GstBufferingMode = c_int;
@@ -409,6 +410,18 @@ pub type GstTocScope = c_int;
 pub const GST_TOC_SCOPE_GLOBAL: GstTocScope = 1;
 pub const GST_TOC_SCOPE_CURRENT: GstTocScope = 2;
 
+pub type GstTracerFieldType = c_int;
+pub const GST_TRACER_FIELD_TYPE_BOOLEAN: GstTracerFieldType = 0;
+pub const GST_TRACER_FIELD_TYPE_INT: GstTracerFieldType = 1;
+pub const GST_TRACER_FIELD_TYPE_UINT: GstTracerFieldType = 2;
+pub const GST_TRACER_FIELD_TYPE_INT64: GstTracerFieldType = 3;
+pub const GST_TRACER_FIELD_TYPE_UINT64: GstTracerFieldType = 4;
+pub const GST_TRACER_FIELD_TYPE_DOUBLE: GstTracerFieldType = 5;
+pub const GST_TRACER_FIELD_TYPE_STRING: GstTracerFieldType = 6;
+pub const GST_TRACER_FIELD_TYPE_CLOCK_TIME: GstTracerFieldType = 7;
+pub const GST_TRACER_FIELD_TYPE_STRUCTURE: GstTracerFieldType = 8;
+pub const GST_TRACER_FIELD_TYPE_OBJECT: GstTracerFieldType = 9;
+
 pub type GstTracerValueScope = c_int;
 pub const GST_TRACER_VALUE_SCOPE_PROCESS: GstTracerValueScope = 0;
 pub const GST_TRACER_VALUE_SCOPE_THREAD: GstTracerValueScope = 1;
@@ -612,6 +625,7 @@ pub const GST_TAG_VERSION: &[u8] = b"version\0";
 pub const GST_TAG_VIDEO_CODEC: &[u8] = b"video-codec\0";
 pub const GST_TASK_POOL_CONTEXT_TYPE: &[u8] = b"gst.task.pool\0";
 pub const GST_TOC_REPEAT_COUNT_INFINITE: c_int = -1;
+pub const GST_TRACE_SPAN_ID_NONE: GstTraceSpanId = 0;
 pub const GST_URI_NO_PORT: c_int = 0;
 pub const GST_USECOND: GstClockTimeDiff = 1000;
 pub const GST_VALUE_EQUAL: c_int = 0;
@@ -1035,6 +1049,37 @@ impl ::std::fmt::Debug for GstPad_ABI {
         f.debug_struct(&format!("GstPad_ABI @ {self:p}"))
             .field("_gst_reserved", unsafe { &self._gst_reserved })
             .field("abi", unsafe { &self.abi })
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub union GstTraceValue {
+    pub v_boolean: gboolean,
+    pub v_int: c_int,
+    pub v_uint: c_uint,
+    pub v_int64: i64,
+    pub v_uint64: u64,
+    pub v_double: c_double,
+    pub v_string: *const c_char,
+    pub v_structure: *mut GstStructure,
+    pub v_object: *mut gobject::GObject,
+    pub _gst_reserved: [gpointer; 4],
+}
+
+impl ::std::fmt::Debug for GstTraceValue {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstTraceValue @ {self:p}"))
+            .field("v_boolean", unsafe { &self.v_boolean })
+            .field("v_int", unsafe { &self.v_int })
+            .field("v_uint", unsafe { &self.v_uint })
+            .field("v_int64", unsafe { &self.v_int64 })
+            .field("v_uint64", unsafe { &self.v_uint64 })
+            .field("v_double", unsafe { &self.v_double })
+            .field("v_string", unsafe { &self.v_string })
+            .field("v_structure", unsafe { &self.v_structure })
+            .field("v_object", unsafe { &self.v_object })
             .finish()
     }
 }
@@ -2590,7 +2635,18 @@ pub struct GstPresetInterface {
             *mut *mut c_char,
         ) -> gboolean,
     >,
-    pub _gst_reserved: [gpointer; 4],
+    pub get_property: Option<
+        unsafe extern "C" fn(
+            *mut GstPreset,
+            *const c_char,
+            *const c_char,
+            *mut gobject::GValue,
+        ) -> gboolean,
+    >,
+    pub get_property_alternatives: Option<
+        unsafe extern "C" fn(*mut GstPreset, *const c_char, *const c_char) -> *mut *mut c_char,
+    >,
+    pub _gst_reserved: [gpointer; 2],
 }
 
 impl ::std::fmt::Debug for GstPresetInterface {
@@ -2605,6 +2661,8 @@ impl ::std::fmt::Debug for GstPresetInterface {
             .field("delete_preset", &self.delete_preset)
             .field("set_meta", &self.set_meta)
             .field("get_meta", &self.get_meta)
+            .field("get_property", &self.get_property)
+            .field("get_property_alternatives", &self.get_property_alternatives)
             .finish()
     }
 }
@@ -3064,6 +3122,33 @@ impl ::std::fmt::Debug for GstTocSetterInterface {
             .finish()
     }
 }
+
+#[repr(C)]
+#[allow(dead_code)]
+pub struct _GstTraceField {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
+
+pub type GstTraceField = _GstTraceField;
+
+#[repr(C)]
+#[allow(dead_code)]
+pub struct _GstTraceFormat {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
+
+pub type GstTraceFormat = _GstTraceFormat;
+
+#[repr(C)]
+#[allow(dead_code)]
+pub struct _GstTraceFormatBuilder {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
+
+pub type GstTraceFormatBuilder = _GstTraceFormatBuilder;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -4381,6 +4466,13 @@ unsafe extern "C" {
     // GstTocScope
     //=========================================================================
     pub fn gst_toc_scope_get_type() -> GType;
+
+    //=========================================================================
+    // GstTracerFieldType
+    //=========================================================================
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_tracer_field_type_get_type() -> GType;
 
     //=========================================================================
     // GstTracerValueScope
@@ -7698,6 +7790,114 @@ unsafe extern "C" {
     pub fn gst_toc_entry_set_tags(entry: *mut GstTocEntry, tags: *mut GstTagList);
 
     //=========================================================================
+    // GstTraceField
+    //=========================================================================
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_trace_field_free(field: *mut GstTraceField);
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_trace_field_set_description(
+        field: *mut GstTraceField,
+        description: *const c_char,
+    ) -> *mut GstTraceField;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_trace_field_set_flags(
+        field: *mut GstTraceField,
+        flags: GstTracerValueFlags,
+    ) -> *mut GstTraceField;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_trace_field_set_scope(
+        field: *mut GstTraceField,
+        scope: GstTracerValueScope,
+    ) -> *mut GstTraceField;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_trace_field_new(
+        name: *const c_char,
+        type_: GstTracerFieldType,
+    ) -> *mut GstTraceField;
+
+    //=========================================================================
+    // GstTraceFormat
+    //=========================================================================
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_trace_format_get_description(format: *mut GstTraceFormat) -> *const c_char;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_trace_format_get_field_description(
+        format: *mut GstTraceFormat,
+        index: c_uint,
+    ) -> *const c_char;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_trace_format_get_field_name(
+        format: *mut GstTraceFormat,
+        index: c_uint,
+    ) -> *const c_char;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_trace_format_get_field_structure(
+        format: *mut GstTraceFormat,
+        index: c_uint,
+    ) -> *const GstStructure;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_trace_format_get_field_type(
+        format: *mut GstTraceFormat,
+        index: c_uint,
+    ) -> GstTracerFieldType;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_trace_format_get_n_fields(format: *mut GstTraceFormat) -> c_uint;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_trace_format_get_name(format: *mut GstTraceFormat) -> *const c_char;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_trace_format_is_enabled(format: *mut GstTraceFormat) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_trace_format_register(name: *const c_char, ...) -> *mut GstTraceFormat;
+
+    //=========================================================================
+    // GstTraceFormatBuilder
+    //=========================================================================
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_trace_format_builder_add_field(
+        builder: *mut GstTraceFormatBuilder,
+        name: *const c_char,
+        type_: GstTracerFieldType,
+    ) -> *mut GstTraceFormatBuilder;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_trace_format_builder_add_field_full(
+        builder: *mut GstTraceFormatBuilder,
+        field: *mut GstTraceField,
+    ) -> *mut GstTraceFormatBuilder;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_trace_format_builder_free(builder: *mut GstTraceFormatBuilder);
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_trace_format_builder_register(
+        builder: *mut GstTraceFormatBuilder,
+    ) -> *mut GstTraceFormat;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_trace_format_builder_set_description(
+        builder: *mut GstTraceFormatBuilder,
+        description: *const c_char,
+    ) -> *mut GstTraceFormatBuilder;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_trace_format_builder_new(name: *const c_char) -> *mut GstTraceFormatBuilder;
+
+    //=========================================================================
     // GstTracerClass
     //=========================================================================
     #[cfg(feature = "v1_26")]
@@ -9475,6 +9675,9 @@ unsafe extern "C" {
     // GstSystemClock
     //=========================================================================
     pub fn gst_system_clock_get_type() -> GType;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_system_clock_new(name: *const c_char, clock_type: GstClockType) -> *mut GstClock;
     pub fn gst_system_clock_obtain() -> *mut GstClock;
     pub fn gst_system_clock_set_default(new_clock: *mut GstClock);
 
@@ -9745,6 +9948,21 @@ unsafe extern "C" {
         value: *mut *mut c_char,
     ) -> gboolean;
     pub fn gst_preset_get_preset_names(preset: *mut GstPreset) -> *mut *mut c_char;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_preset_get_property(
+        preset: *mut GstPreset,
+        name: *const c_char,
+        prop: *const c_char,
+        value: *mut gobject::GValue,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_preset_get_property_alternatives(
+        preset: *mut GstPreset,
+        name: *const c_char,
+        prop: *const c_char,
+    ) -> *mut *mut c_char;
     pub fn gst_preset_get_property_names(preset: *mut GstPreset) -> *mut *mut c_char;
     pub fn gst_preset_is_editable(preset: *mut GstPreset) -> gboolean;
     pub fn gst_preset_load_preset(preset: *mut GstPreset, name: *const c_char) -> gboolean;
@@ -9883,6 +10101,9 @@ unsafe extern "C" {
     #[cfg(feature = "v1_28")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
     pub fn gst_cpuid_supports_arm_neon64() -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_cpuid_supports_riscv_v() -> gboolean;
     #[cfg(feature = "v1_28")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
     pub fn gst_cpuid_supports_x86_3dnow() -> gboolean;
@@ -10196,6 +10417,21 @@ unsafe extern "C" {
         blurb: *const c_char,
         func: GstTagMergeFunc,
     );
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_trace_event(format: *mut GstTraceFormat, values: *const GstTraceValue);
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_trace_span_begin(
+        format: *mut GstTraceFormat,
+        values: *const GstTraceValue,
+    ) -> GstTraceSpanId;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_trace_span_end(span_id: GstTraceSpanId);
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_trace_span_end_and_clear(span_id: *mut GstTraceSpanId);
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_tracing_get_active_tracers() -> *mut glib::GList;
@@ -10420,6 +10656,9 @@ unsafe extern "C" {
         minuend: *const gobject::GValue,
         subtrahend: *const gobject::GValue,
     ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_value_take_structure(value: *mut gobject::GValue, structure: *mut GstStructure);
     pub fn gst_value_union(
         dest: *mut gobject::GValue,
         value1: *const gobject::GValue,

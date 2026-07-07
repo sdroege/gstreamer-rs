@@ -556,10 +556,15 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
 
 const RUST_CONSTANTS: &[(&str, &str)] = &[
     (
+        "GST_BUFFER_POOL_OPTION_VULKAN_IMAGE_MULTIPLANAR_YUV",
+        "GstBufferPoolOptionVulkanImageMultiplanarYUV",
+    ),
+    (
         "GST_CAPS_FEATURE_MEMORY_VULKAN_BUFFER",
         "memory:VulkanBuffer",
     ),
     ("GST_CAPS_FEATURE_MEMORY_VULKAN_IMAGE", "memory:VulkanImage"),
+    ("GST_VULKAN_API_VERSION_FORMAT", "u.%u.%u"),
     ("(gint) GST_VULKAN_BARRIER_FLAG_NONE", "0"),
     ("(gint) GST_VULKAN_BARRIER_NONE", "0"),
     ("(gint) GST_VULKAN_BARRIER_TYPE_BUFFER", "2"),
@@ -614,8 +619,20 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("GST_VULKAN_MEMORY_ALLOCATOR_NAME", "Vulkan"),
     ("GST_VULKAN_QUEUE_CONTEXT_TYPE_STR", "gst.vulkan.queue"),
     (
+        "GST_VULKAN_REQUESTED_DEVICE_EXTENSIONS_CONTEXT_TYPE_STR",
+        "gst.vulkan.requested-device-extensions",
+    ),
+    (
+        "GST_VULKAN_REQUESTED_INSTANCE_EXTENSIONS_CONTEXT_TYPE_STR",
+        "gst.vulkan.requested-instance-extensions",
+    ),
+    (
         "GST_VULKAN_SWAPPER_VIDEO_FORMATS",
         " { RGBA, BGRA, RGB, BGR } ",
+    ),
+    (
+        "GST_VULKAN_UUID_FORMAT",
+        "02x%02x%02x%02x-%02x%02x-%02x%02x-%02x%02x-%02x%02x%02x%02x%02x%02x",
     ),
     ("(gint) GST_VULKAN_WINDOW_ERROR_FAILED", "0"),
     ("(gint) GST_VULKAN_WINDOW_ERROR_OLD_LIBS", "1"),

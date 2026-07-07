@@ -22,6 +22,7 @@ int main() {
     printf("%s;%zu;%zu\n", "GstDiscovererSubtitleInfoClass", sizeof(GstDiscovererSubtitleInfoClass), alignof(GstDiscovererSubtitleInfoClass));
     printf("%s;%zu;%zu\n", "GstDiscovererVideoInfoClass", sizeof(GstDiscovererVideoInfoClass), alignof(GstDiscovererVideoInfoClass));
     printf("%s;%zu;%zu\n", "GstEncodingTargetClass", sizeof(GstEncodingTargetClass), alignof(GstEncodingTargetClass));
+    printf("%s;%zu;%zu\n", "GstH264LevelLimits", sizeof(GstH264LevelLimits), alignof(GstH264LevelLimits));
     printf("%s;%zu;%zu\n", "GstInstallPluginsReturn", sizeof(GstInstallPluginsReturn), alignof(GstInstallPluginsReturn));
     printf("%s;%zu;%zu\n", "GstPbUtilsCapsDescriptionFlags", sizeof(GstPbUtilsCapsDescriptionFlags), alignof(GstPbUtilsCapsDescriptionFlags));
     return 0;

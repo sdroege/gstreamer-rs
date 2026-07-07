@@ -29,11 +29,43 @@ use std::ffi::{
 #[allow(unused_imports)]
 use glib::{GType, gboolean, gconstpointer, gpointer};
 
+// Enums
+pub type GstAHardwareBufferFormat = c_int;
+pub const GST_AHARDWARE_BUFFER_FORMAT_R8G8B8A8_UNORM: GstAHardwareBufferFormat = 1;
+pub const GST_AHARDWARE_BUFFER_FORMAT_R8G8B8X8_UNORM: GstAHardwareBufferFormat = 2;
+pub const GST_AHARDWARE_BUFFER_FORMAT_R8G8B8_UNORM: GstAHardwareBufferFormat = 3;
+pub const GST_AHARDWARE_BUFFER_FORMAT_R5G6B5_UNORM: GstAHardwareBufferFormat = 4;
+pub const GST_AHARDWARE_BUFFER_FORMAT_R16G16B16A16_FLOAT: GstAHardwareBufferFormat = 22;
+pub const GST_AHARDWARE_BUFFER_FORMAT_BLOB: GstAHardwareBufferFormat = 33;
+pub const GST_AHARDWARE_BUFFER_FORMAT_Y8Cb8Cr8_420: GstAHardwareBufferFormat = 35;
+pub const GST_AHARDWARE_BUFFER_FORMAT_R10G10B10A2_UNORM: GstAHardwareBufferFormat = 43;
+pub const GST_AHARDWARE_BUFFER_FORMAT_D16_UNORM: GstAHardwareBufferFormat = 48;
+pub const GST_AHARDWARE_BUFFER_FORMAT_D24_UNORM: GstAHardwareBufferFormat = 49;
+pub const GST_AHARDWARE_BUFFER_FORMAT_D24_UNORM_S8_UINT: GstAHardwareBufferFormat = 50;
+pub const GST_AHARDWARE_BUFFER_FORMAT_D32_FLOAT: GstAHardwareBufferFormat = 51;
+pub const GST_AHARDWARE_BUFFER_FORMAT_D32_FLOAT_S8_UINT: GstAHardwareBufferFormat = 52;
+pub const GST_AHARDWARE_BUFFER_FORMAT_S8_UINT: GstAHardwareBufferFormat = 53;
+pub const GST_AHARDWARE_BUFFER_FORMAT_YCbCr_P010: GstAHardwareBufferFormat = 54;
+pub const GST_AHARDWARE_BUFFER_FORMAT_R8_UNORM: GstAHardwareBufferFormat = 56;
+pub const GST_AHARDWARE_BUFFER_FORMAT_R16_UINT: GstAHardwareBufferFormat = 57;
+pub const GST_AHARDWARE_BUFFER_FORMAT_R16G16_UINT: GstAHardwareBufferFormat = 58;
+pub const GST_AHARDWARE_BUFFER_FORMAT_R10G10B10A10_UNORM: GstAHardwareBufferFormat = 59;
+pub const GST_AHARDWARE_BUFFER_FORMAT_YCbCr_P210: GstAHardwareBufferFormat = 60;
+pub const GST_AHARDWARE_BUFFER_FORMAT_R12_UINT: GstAHardwareBufferFormat = 61;
+pub const GST_AHARDWARE_BUFFER_FORMAT_R14_UINT: GstAHardwareBufferFormat = 62;
+pub const GST_AHARDWARE_BUFFER_FORMAT_R12G12_UINT: GstAHardwareBufferFormat = 63;
+pub const GST_AHARDWARE_BUFFER_FORMAT_R14G14_UINT: GstAHardwareBufferFormat = 64;
+pub const GST_AHARDWARE_BUFFER_FORMAT_R12G12B12A12_UINT: GstAHardwareBufferFormat = 65;
+pub const GST_AHARDWARE_BUFFER_FORMAT_R14G14B14A14_UINT: GstAHardwareBufferFormat = 66;
+pub const GST_AHARDWARE_BUFFER_FORMAT_B10G10R10A2_UNORM: GstAHardwareBufferFormat = 67;
+pub const GST_AHARDWARE_BUFFER_FORMAT_B10G10R10X2_UNORM: GstAHardwareBufferFormat = 68;
+
 // Constants
 pub const GST_ALLOCATOR_DMABUF: &[u8] = b"dmabuf\0";
 pub const GST_ALLOCATOR_FD: &[u8] = b"fd\0";
 pub const GST_ALLOCATOR_SHM: &[u8] = b"shm\0";
 pub const GST_ALLOCATOR_UDMABUF: &[u8] = b"udmabuf\0";
+pub const GST_CAPS_FEATURE_MEMORY_AHARDWAREBUFFER: &[u8] = b"memory:AHardwareBuffer\0";
 pub const GST_CAPS_FEATURE_MEMORY_DMABUF: &[u8] = b"memory:DMABuf\0";
 
 // Flags
@@ -42,6 +74,10 @@ pub const GST_FD_MEMORY_FLAG_NONE: GstFdMemoryFlags = 0;
 pub const GST_FD_MEMORY_FLAG_KEEP_MAPPED: GstFdMemoryFlags = 1;
 pub const GST_FD_MEMORY_FLAG_MAP_PRIVATE: GstFdMemoryFlags = 2;
 pub const GST_FD_MEMORY_FLAG_DONT_CLOSE: GstFdMemoryFlags = 4;
+
+// Callbacks
+pub type GstAHardwareBufferMemoryQueryFunction =
+    Option<unsafe extern "C" fn(*mut gst::GstMemory, *mut gpointer) -> gboolean>;
 
 // Records
 #[derive(Copy, Clone)]
@@ -322,6 +358,21 @@ unsafe extern "C" {
     //=========================================================================
     // Other functions
     //=========================================================================
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_ahardware_buffer_format_from_caps_string(
+        value: *const c_char,
+        format: *mut u32,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_ahardware_buffer_format_to_caps_string(format: u32) -> *mut c_char;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_ahardware_buffer_memory_register_query_function(
+        allocator_type: GType,
+        query: GstAHardwareBufferMemoryQueryFunction,
+    );
     pub fn gst_dmabuf_memory_get_fd(mem: *mut gst::GstMemory) -> c_int;
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
@@ -330,6 +381,12 @@ unsafe extern "C" {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_drm_dumb_memory_get_handle(mem: *mut gst::GstMemory) -> u32;
     pub fn gst_fd_memory_get_fd(mem: *mut gst::GstMemory) -> c_int;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_is_ahardware_buffer_buffer(buffer: *mut gst::GstBuffer) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_is_ahardware_buffer_memory(mem: *mut gst::GstMemory) -> gboolean;
     pub fn gst_is_dmabuf_memory(mem: *mut gst::GstMemory) -> gboolean;
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
