@@ -423,6 +423,14 @@ status = "generate"
     # can be called before gst_init()
     assertion = "skip"
 
+    [[object.function]]
+    name = "trace_span_end"
+    ignore = true
+
+    [[object.function]]
+    name = "trace_span_end_and_clear"
+    ignore = true
+
 [[object]]
 name = "Gst.Allocator"
 status = "generate"
