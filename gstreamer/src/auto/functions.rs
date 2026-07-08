@@ -3,9 +3,6 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-#[cfg(feature = "v1_30")]
-#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
-use crate::TraceSpanId;
 use crate::{Bin, ClockTime, DebugGraphDetails, DebugLevel, Element, StackTraceFlags, ffi};
 use glib::{prelude::*, translate::*};
 #[cfg(feature = "v1_28")]
@@ -365,26 +362,6 @@ pub fn parse_launchv(argv: &[&str]) -> Result<Element, glib::Error> {
 //pub fn trace_span_begin(format: /*Ignored*/&mut TraceFormat, values: /*Ignored*/&[&TraceValue]) -> TraceSpanId {
 //    unsafe { TODO: call ffi:gst_trace_span_begin() }
 //}
-
-#[cfg(feature = "v1_30")]
-#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
-#[doc(alias = "gst_trace_span_end")]
-pub fn trace_span_end(span_id: TraceSpanId) {
-    assert_initialized_main_thread!();
-    unsafe {
-        ffi::gst_trace_span_end(span_id);
-    }
-}
-
-#[cfg(feature = "v1_30")]
-#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
-#[doc(alias = "gst_trace_span_end_and_clear")]
-pub fn trace_span_end_and_clear(span_id: &mut TraceSpanId) {
-    assert_initialized_main_thread!();
-    unsafe {
-        ffi::gst_trace_span_end_and_clear(span_id);
-    }
-}
 
 #[doc(alias = "gst_update_registry")]
 pub fn update_registry() -> Result<(), glib::error::BoolError> {
