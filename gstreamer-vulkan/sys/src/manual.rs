@@ -34,4 +34,8 @@ pub mod vulkan {
     pub type VkPhysicalDeviceFeatures2 = ash::vk::PhysicalDeviceFeatures2<'static>;
     #[cfg(feature = "v1_30")]
     pub type VkPhysicalDeviceProperties2 = ash::vk::PhysicalDeviceProperties2<'static>;
+
+    pub use ash::vk::ResolveModeFlags as VkResolveModeFlags;
+    pub use ash::vk::ShaderStageFlags as VkShaderStageFlags;
+    pub use ash::vk::SubgroupFeatureFlags as VkSubgroupFeatureFlags;
 }
