@@ -2,7 +2,7 @@ $env:ErrorActionPreference='Stop'
 
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12;
 
-git clone --depth=1 https://github.com/ystreet/librice -b v0.4.2
+git clone --depth=1 https://github.com/ystreet/librice -b v0.4.3
 if (!$?) {
   Write-Host "Failed to clone librice"
   Exit 1
