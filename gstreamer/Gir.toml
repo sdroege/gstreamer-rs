@@ -35,7 +35,6 @@ generate = [
     "Gst.StreamStatusType",
     "Gst.StreamType",
     "Gst.StructureChangeType",
-    "Gst.SystemClock",
     "Gst.TaskState",
     "Gst.TocSetter",
     "Gst.URIError",
@@ -2416,6 +2415,15 @@ ref_mode = "ref"
     [[object.function]]
     name = "set_parent_refcount"
     ignore = true
+
+[[object]]
+name = "Gst.SystemClock"
+status = "generate"
+    # Implemented manually around glib::Object::builder() so that it is
+    # also available with GStreamer versions older than 1.30
+    [[object.function]]
+    name = "new"
+    manual = true
 
 [[object]]
 name = "Gst.TagFlag"

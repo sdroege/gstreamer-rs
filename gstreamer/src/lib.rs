@@ -235,6 +235,7 @@ mod control_source;
 mod parse_context;
 mod proxy_pad;
 mod registry;
+mod system_clock;
 mod tag_setter;
 pub mod task;
 pub use task::{TaskLock, TaskLockGuard};
