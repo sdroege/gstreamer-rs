@@ -108,13 +108,6 @@ pub fn codec_utils_h264_get_level_idc(level: &str) -> u8 {
     unsafe { ffi::gst_codec_utils_h264_get_level_idc(level.to_glib_none().0) }
 }
 
-//#[cfg(feature = "v1_30")]
-//#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
-//#[doc(alias = "gst_codec_utils_h264_get_level_limits")]
-//pub fn codec_utils_h264_get_level_limits(width: i32, height: i32, fps_n: i32, fps_d: i32, bitrate: u32, max_dec_frame_buffering: u32, profile_idc: u8) -> /*Ignored*/Option<H264LevelLimits> {
-//    unsafe { TODO: call ffi:gst_codec_utils_h264_get_level_limits() }
-//}
-
 #[doc(alias = "gst_codec_utils_h264_get_profile")]
 pub fn codec_utils_h264_get_profile(sps: &[u8]) -> Result<glib::GString, glib::BoolError> {
     assert_initialized_main_thread!();

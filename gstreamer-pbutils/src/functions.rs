@@ -157,6 +157,59 @@ pub fn codec_utils_h264_get_profile_flags_level(
     }
 }
 
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+#[doc(alias = "GstH264LevelLimits")]
+#[derive(Debug, Clone, PartialEq, Eq)]
+pub struct H264LevelLimits {
+    pub name: &'static glib::GStr,
+    pub level_idc: u8,
+    pub max_mbps: u32,
+    pub max_fs: u32,
+    pub max_dpb_mbs: u32,
+    pub max_br: u32,
+    pub max_cpb: u32,
+    pub min_cr: u32,
+}
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+#[doc(alias = "gst_codec_utils_h264_get_level_limits")]
+pub fn codec_utils_h264_get_level_limits(
+    width: i32,
+    height: i32,
+    fps_n: i32,
+    fps_d: i32,
+    bitrate: u32,
+    max_dec_frame_buffering: u32,
+    profile_idc: u8,
+) -> Option<H264LevelLimits> {
+    assert_initialized_main_thread!();
+    unsafe {
+        let limits = ffi::gst_codec_utils_h264_get_level_limits(
+            width,
+            height,
+            fps_n,
+            fps_d,
+            bitrate,
+            max_dec_frame_buffering,
+            profile_idc,
+        )
+        .as_ref()?;
+
+        Some(H264LevelLimits {
+            name: glib::GStr::from_ptr(limits.name),
+            level_idc: limits.level_idc,
+            max_mbps: limits.max_mbps,
+            max_fs: limits.max_fs,
+            max_dpb_mbs: limits.max_dpb_mbs,
+            max_br: limits.max_br,
+            max_cpb: limits.max_cpb,
+            min_cr: limits.min_cr,
+        })
+    }
+}
+
 #[doc(alias = "gst_codec_utils_h265_caps_set_level_tier_and_profile")]
 pub fn codec_utils_h265_caps_set_level_tier_and_profile(
     caps: &mut gst::CapsRef,

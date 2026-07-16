@@ -117,6 +117,10 @@ status = "generate"
     manual = true
 
     [[object.function]]
+    name = "codec_utils_h264_get_level_limits"
+    manual = true
+
+    [[object.function]]
     name = "codec_utils_h265_get_level"
         [object.function.return]
         nullable_return_is_error = "Failed to get H265 level"
