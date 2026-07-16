@@ -369,6 +369,12 @@ unsafe extern "C" {
     pub fn gst_ahardware_buffer_format_to_caps_string(format: u32) -> *mut c_char;
     #[cfg(feature = "v1_30")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_ahardware_buffer_memory_peek_buffer(
+        mem: *mut gst::GstMemory,
+        buffer: *mut gpointer,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
     pub fn gst_ahardware_buffer_memory_register_query_function(
         allocator_type: GType,
         query: GstAHardwareBufferMemoryQueryFunction,
