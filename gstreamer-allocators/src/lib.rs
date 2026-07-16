@@ -28,6 +28,13 @@ pub use crate::auto::*;
 mod caps_features;
 pub use crate::caps_features::CAPS_FEATURES_MEMORY_DMABUF;
 
+#[cfg(any(all(feature = "v1_30", target_os = "android"), docsrs))]
+#[cfg_attr(docsrs, doc(cfg(all(feature = "v1_30", target_os = "android"))))]
+mod ahardware_buffer;
+#[cfg(any(all(feature = "v1_30", target_os = "android"), docsrs))]
+#[cfg_attr(docsrs, doc(cfg(all(feature = "v1_30", target_os = "android"))))]
+pub use ahardware_buffer::*;
+
 #[cfg(any(unix, docsrs))]
 #[cfg_attr(docsrs, doc(cfg(unix)))]
 mod fd_allocator;

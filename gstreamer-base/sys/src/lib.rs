@@ -2004,6 +2004,12 @@ unsafe extern "C" {
         parse: *mut GstBaseParse,
         frame: *mut GstBaseParseFrame,
     ) -> gst::GstFlowReturn;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_base_parse_set_allow_duplicated_pts(
+        parse: *mut GstBaseParse,
+        allow_duplicated_pts: gboolean,
+    );
     pub fn gst_base_parse_set_average_bitrate(parse: *mut GstBaseParse, bitrate: c_uint);
     pub fn gst_base_parse_set_duration(
         parse: *mut GstBaseParse,

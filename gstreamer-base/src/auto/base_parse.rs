@@ -59,6 +59,18 @@ pub trait BaseParseExt: IsA<BaseParse> + 'static {
         }
     }
 
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "gst_base_parse_set_allow_duplicated_pts")]
+    fn set_allow_duplicated_pts(&self, allow_duplicated_pts: bool) {
+        unsafe {
+            ffi::gst_base_parse_set_allow_duplicated_pts(
+                self.as_ref().to_glib_none().0,
+                allow_duplicated_pts.into_glib(),
+            );
+        }
+    }
+
     #[doc(alias = "gst_base_parse_set_average_bitrate")]
     fn set_average_bitrate(&self, bitrate: u32) {
         unsafe {

@@ -61,6 +61,29 @@ status = "generate"
     [[object.function]]
     name = "drm_dumb_memory_export_dmabuf"
     manual = true
+    [[object.function]]
+    name = "ahardware_buffer_format_to_caps_string"
+    manual = true
+    [[object.function]]
+    name = "is_ahardware_buffer_buffer"
+    manual = true
+    [[object.function]]
+    name = "is_ahardware_buffer_memory"
+    manual = true
+    [[object.function]]
+    name = "ahardware_buffer_format_from_caps_string"
+    manual = true
+    [[object.function]]
+    name = "ahardware_buffer_memory_register_query_function"
+    manual = true
+    [[object.function]]
+    name = "ahardware_buffer_memory_peek_buffer"
+    manual = true
+
+[[object]]
+name = "GstAllocators.AHardwareBufferFormat"
+status = "generate"
+cfg_condition = "target_os = \"android\""
 
 [[object]]
 name = "GstAllocators.DmaBufAllocator"

@@ -49,6 +49,13 @@ mod udmabuf_allocator;
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
 pub use self::udmabuf_allocator::UdmabufAllocator;
 
+mod enums;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+#[cfg(target_os = "android")]
+#[cfg_attr(docsrs, doc(cfg(target_os = "android")))]
+pub use self::enums::AHardwareBufferFormat;
+
 mod flags;
 pub use self::flags::FdMemoryFlags;
 
