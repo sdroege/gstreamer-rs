@@ -233,6 +233,7 @@ pub use pad::{
 mod control_binding;
 mod control_source;
 mod parse_context;
+mod preset;
 mod proxy_pad;
 mod registry;
 mod system_clock;
@@ -395,6 +396,7 @@ pub mod prelude {
         param_spec::GstParamSpecBuilderExt,
         pipeline::GstPipelineExtManual,
         plugin_feature::PluginFeatureExtManual,
+        preset::PresetExtManual,
         slice::ByteSliceExt,
         tag_setter::TagSetterExtManual,
         tags::{CustomTag, Tag},
