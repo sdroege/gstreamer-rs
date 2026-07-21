@@ -2067,6 +2067,7 @@ manual_traits = ["PluginFeatureExtManual"]
 [[object]]
 name = "Gst.Preset"
 status = "generate"
+manual_traits = ["PresetExtManual"]
 
     [[object.function]]
     name = "set_app_dir"
@@ -2097,6 +2098,14 @@ status = "generate"
     name = "set_meta"
         [object.function.return]
         bool_return_is_error = "Failed to set preset meta"
+
+    [[object.function]]
+    name = "get_property_alternatives"
+    manual = true
+
+    [[object.function]]
+    name = "get_property"
+    manual = true
 
 [[object]]
 name = "Gst.Promise"

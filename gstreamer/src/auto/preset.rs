@@ -83,35 +83,6 @@ pub trait PresetExt: IsA<Preset> + 'static {
         }
     }
 
-    #[cfg(feature = "v1_30")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
-    #[doc(alias = "gst_preset_get_property")]
-    #[doc(alias = "get_property")]
-    fn is_property(&self, name: &str, prop: &str, value: &mut glib::Value) -> bool {
-        unsafe {
-            from_glib(ffi::gst_preset_get_property(
-                self.as_ref().to_glib_none().0,
-                name.to_glib_none().0,
-                prop.to_glib_none().0,
-                value.to_glib_none_mut().0,
-            ))
-        }
-    }
-
-    #[cfg(feature = "v1_30")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
-    #[doc(alias = "gst_preset_get_property_alternatives")]
-    #[doc(alias = "get_property_alternatives")]
-    fn property_alternatives(&self, name: &str, prop: &str) -> Vec<glib::GString> {
-        unsafe {
-            FromGlibPtrContainer::from_glib_full(ffi::gst_preset_get_property_alternatives(
-                self.as_ref().to_glib_none().0,
-                name.to_glib_none().0,
-                prop.to_glib_none().0,
-            ))
-        }
-    }
-
     #[doc(alias = "gst_preset_get_property_names")]
     #[doc(alias = "get_property_names")]
     fn property_names(&self) -> Vec<glib::GString> {
