@@ -300,6 +300,10 @@ status = "generate"
 final_type = true
 
 [[object]]
+name = "GstPbutils.DiscovererAudioInfoBuilder"
+status = "manual"
+
+[[object]]
 name = "GstPbutils.DiscovererContainerInfo"
 status = "generate"
 final_type = true
