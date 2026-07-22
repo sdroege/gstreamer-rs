@@ -51,6 +51,8 @@ mod discoverer_container_info;
 pub mod discoverer_stream_info;
 mod discoverer_subtitle_info;
 mod discoverer_video_info;
+#[cfg(feature = "v1_30")]
+pub use crate::discoverer_video_info::DiscovererVideoInfoBuilder;
 pub mod missing_plugins;
 pub use missing_plugins::MissingPluginMessage;
 
