@@ -343,6 +343,10 @@ status = "generate"
 final_type = true
 
 [[object]]
+name = "GstPbutils.DiscovererSubtitleInfoBuilder"
+status = "manual"
+
+[[object]]
 name = "GstPbutils.DiscovererVideoInfo"
 status = "generate"
 final_type = true
