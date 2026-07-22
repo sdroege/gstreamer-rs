@@ -321,6 +321,10 @@ status = "generate"
         nullable_return_is_error = "Failed to create DiscovererInfo from Variant"
 
 [[object]]
+name = "GstPbutils.DiscovererInfoBuilder"
+status = "manual"
+
+[[object]]
 name = "GstPbutils.DiscovererSerializeFlags"
 status = "generate"
     [[object.member]]

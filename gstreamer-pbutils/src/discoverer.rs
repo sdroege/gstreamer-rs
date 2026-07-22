@@ -10,6 +10,9 @@ use glib::{
 
 use crate::{Discoverer, DiscovererInfo, ffi};
 
+#[cfg(feature = "v1_30")]
+use crate::{DiscovererResult, DiscovererStreamInfo};
+
 impl Discoverer {
     pub fn set_timeout(&self, timeout: gst::ClockTime) {
         self.set_property("timeout", timeout);
@@ -120,5 +123,140 @@ impl fmt::Debug for DebugInfo<'_> {
 impl DiscovererInfo {
     pub fn debug(&self) -> DebugInfo<'_> {
         DebugInfo(self)
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "gst_discoverer_info_builder_new")]
+    pub fn builder(
+        uri: &str,
+        stream_info: impl IsA<DiscovererStreamInfo>,
+    ) -> DiscovererInfoBuilder {
+        skip_assert_initialized!();
+
+        DiscovererInfoBuilder::new(uri, stream_info)
+    }
+}
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+#[derive(Debug)]
+#[doc(alias = "GstDiscovererInfoBuilder")]
+#[repr(transparent)]
+pub struct DiscovererInfoBuilder(std::ptr::NonNull<ffi::GstDiscovererInfoBuilder>);
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+impl DiscovererInfoBuilder {
+    #[doc(alias = "gst_discoverer_info_builder_new")]
+    pub fn new(uri: &str, stream_info: impl IsA<DiscovererStreamInfo>) -> Self {
+        skip_assert_initialized!();
+
+        unsafe {
+            let ptr = ffi::gst_discoverer_info_builder_new(
+                uri.to_glib_none().0,
+                stream_info.upcast().into_glib_ptr(),
+            );
+            DiscovererInfoBuilder(std::ptr::NonNull::new_unchecked(ptr))
+        }
+    }
+
+    #[doc(alias = "gst_discoverer_info_builder_set_duration")]
+    pub fn duration(self, duration: gst::ClockTime) -> Self {
+        unsafe {
+            ffi::gst_discoverer_info_builder_set_duration(self.0.as_ptr(), duration.into_glib());
+        }
+        self
+    }
+
+    #[doc(alias = "gst_discoverer_info_builder_set_live")]
+    pub fn live(self, live: bool) -> Self {
+        unsafe {
+            ffi::gst_discoverer_info_builder_set_live(self.0.as_ptr(), live.into_glib());
+        }
+        self
+    }
+
+    #[doc(alias = "gst_discoverer_info_builder_set_result")]
+    pub fn result(self, result: DiscovererResult) -> Self {
+        unsafe {
+            ffi::gst_discoverer_info_builder_set_result(self.0.as_ptr(), result.into_glib());
+        }
+        self
+    }
+
+    #[doc(alias = "gst_discoverer_info_builder_set_seekable")]
+    pub fn seekable(self, seekable: bool) -> Self {
+        unsafe {
+            ffi::gst_discoverer_info_builder_set_seekable(self.0.as_ptr(), seekable.into_glib());
+        }
+        self
+    }
+
+    #[doc(alias = "gst_discoverer_info_builder_set_tags")]
+    pub fn tags(self, tags: &gst::TagList) -> Self {
+        unsafe {
+            ffi::gst_discoverer_info_builder_set_tags(self.0.as_ptr(), tags.to_glib_none().0);
+        }
+        self
+    }
+
+    #[doc(alias = "gst_discoverer_info_builder_build")]
+    pub fn build(self) -> DiscovererInfo {
+        unsafe {
+            // gst_discoverer_info_builder_build frees the builder,
+            // so prevent it from being dropped at the end of this scope/function
+            let s = std::mem::ManuallyDrop::new(self);
+
+            from_glib_full(ffi::gst_discoverer_info_builder_build(s.0.as_ptr()))
+        }
+    }
+}
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+impl Drop for DiscovererInfoBuilder {
+    #[inline]
+    #[doc(alias = "gst_discoverer_info_builder_free")]
+    fn drop(&mut self) {
+        unsafe {
+            ffi::gst_discoverer_info_builder_free(self.0.as_ptr());
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    #[test]
+    #[cfg(feature = "v1_30")]
+    fn discoverer_info_builder_basic() {
+        use super::*;
+
+        gst::init().unwrap();
+
+        let audio_caps = gst::Caps::builder("audio/x-raw")
+            .field("format", "S16LE")
+            .build();
+        let audio_info =
+            crate::DiscovererAudioInfoBuilder::new("audio_stream", &audio_caps).build();
+
+        let mut tags = gst::TagList::new();
+        tags.get_mut()
+            .unwrap()
+            .add::<gst::tags::Title>(&"some title", gst::TagMergeMode::Append);
+
+        let info = DiscovererInfoBuilder::new("file:///tmp/test.wav", audio_info)
+            .duration(gst::ClockTime::from_seconds(5))
+            .live(false)
+            .seekable(true)
+            .result(DiscovererResult::Ok)
+            .tags(&tags)
+            .build();
+
+        assert_eq!(info.duration(), Some(gst::ClockTime::from_seconds(5)));
+        assert!(!info.is_live());
+        assert!(info.is_seekable());
+        assert_eq!(info.result(), DiscovererResult::Ok);
+        assert_eq!(info.uri(), glib::GString::from("file:///tmp/test.wav"));
     }
 }
