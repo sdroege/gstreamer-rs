@@ -362,6 +362,10 @@ final_type = true
     manual = true
 
 [[object]]
+name = "GstPbutils.DiscovererVideoInfoBuilder"
+status = "manual"
+
+[[object]]
 name = "GstPbutils.EncodingAudioProfile"
 status = "generate"
 final_type = true
