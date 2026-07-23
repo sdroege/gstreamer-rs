@@ -2160,6 +2160,10 @@ bitflags! {
         const CACHED = ffi::GST_PLUGIN_FLAG_CACHED as _;
         #[doc(alias = "GST_PLUGIN_FLAG_BLACKLISTED")]
         const BLACKLISTED = ffi::GST_PLUGIN_FLAG_BLACKLISTED as _;
+        #[cfg(feature = "v1_30")]
+        #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+        #[doc(alias = "GST_PLUGIN_FLAG_STATIC_FEATURES")]
+        const STATIC_FEATURES = ffi::GST_PLUGIN_FLAG_STATIC_FEATURES as _;
     }
 }
 

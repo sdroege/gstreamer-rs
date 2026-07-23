@@ -3,6 +3,9 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+use crate::Registry;
 use crate::{Object, PluginDependencyFlags, Structure, ffi};
 use glib::translate::*;
 
@@ -117,6 +120,14 @@ impl Plugin {
         unsafe { from_glib_none(ffi::gst_plugin_get_package(self.to_glib_none().0)) }
     }
 
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "gst_plugin_get_registry")]
+    #[doc(alias = "get_registry")]
+    pub fn registry(&self) -> Registry {
+        unsafe { from_glib_none(ffi::gst_plugin_get_registry(self.to_glib_none().0)) }
+    }
+
     #[doc(alias = "gst_plugin_get_release_date_string")]
     #[doc(alias = "get_release_date_string")]
     pub fn release_date_string(&self) -> Option<glib::GString> {
@@ -192,6 +203,15 @@ impl Plugin {
     pub fn set_cache_data(&self, cache_data: Structure) {
         unsafe {
             ffi::gst_plugin_set_cache_data(self.to_glib_none().0, cache_data.into_glib_ptr());
+        }
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "gst_plugin_set_static_features_flag")]
+    pub fn set_static_features_flag(&self) {
+        unsafe {
+            ffi::gst_plugin_set_static_features_flag(self.to_glib_none().0);
         }
     }
 

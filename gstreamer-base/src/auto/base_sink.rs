@@ -283,6 +283,24 @@ pub trait BaseSinkExt: IsA<BaseSink> + 'static {
         ObjectExt::set_property(self.as_ref(), "enable-last-sample", enable_last_sample)
     }
 
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "enable-last-sample-notify")]
+    fn enables_last_sample_notify(&self) -> bool {
+        ObjectExt::property(self.as_ref(), "enable-last-sample-notify")
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "enable-last-sample-notify")]
+    fn set_enable_last_sample_notify(&self, enable_last_sample_notify: bool) {
+        ObjectExt::set_property(
+            self.as_ref(),
+            "enable-last-sample-notify",
+            enable_last_sample_notify,
+        )
+    }
+
     fn is_qos(&self) -> bool {
         ObjectExt::property(self.as_ref(), "qos")
     }
@@ -375,6 +393,39 @@ pub trait BaseSinkExt: IsA<BaseSink> + 'static {
                 c"notify::enable-last-sample".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_enable_last_sample_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "enable-last-sample-notify")]
+    fn connect_enable_last_sample_notify_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_enable_last_sample_notify_trampoline<
+            P: IsA<BaseSink>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstBaseSink,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(BaseSink::from_glib_borrow(this).unsafe_cast_ref())
+            }
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::enable-last-sample-notify".as_ptr(),
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_enable_last_sample_notify_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
