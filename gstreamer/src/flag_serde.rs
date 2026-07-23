@@ -228,7 +228,13 @@ mod tests {
                 "+file-name-is-prefix+paths-are-relative-to-exe\""
             )
         );
-        check_serialize!(crate::PluginFlags::all(), "\"cached+blacklisted\"");
+        cfg_if::cfg_if! {
+            if #[cfg(feature = "v1_30")] {
+                check_serialize!(crate::PluginFlags::all(), "\"cached+blacklisted+static-features\"");
+            } else {
+                check_serialize!(crate::PluginFlags::all(), "\"cached+blacklisted\"");
+            }
+        }
         check_serialize!(
             crate::SchedulingFlags::all(),
             "\"seekable+sequential+bandwidth-limited\""
@@ -413,11 +419,21 @@ mod tests {
                 "+file-name-is-prefix+paths-are-relative-to-exe\""
             )
         );
-        check_deserialize!(
-            crate::PluginFlags,
-            crate::PluginFlags::all(),
-            "\"cached+blacklisted\""
-        );
+        cfg_if::cfg_if! {
+            if #[cfg(feature = "v1_30")] {
+                check_deserialize!(
+                    crate::PluginFlags,
+                    crate::PluginFlags::all(),
+                    "\"cached+blacklisted+static-features\""
+                );
+            } else {
+                check_deserialize!(
+                    crate::PluginFlags,
+                    crate::PluginFlags::all(),
+                    "\"cached+blacklisted\""
+                );
+            }
+        }
         check_deserialize!(
             crate::SchedulingFlags,
             crate::SchedulingFlags::all(),
