@@ -606,7 +606,7 @@ impl StreamProducer {
 
                     consumer.dropped.fetch_add(1, atomic::Ordering::SeqCst);
 
-                    gst::error!(
+                    gst::warning!(
                         CAT,
                         obj = appsink,
                         "Ignoring frame for {} while waiting for a keyframe",
