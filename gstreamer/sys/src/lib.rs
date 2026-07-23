@@ -920,6 +920,9 @@ pub const GST_PLUGIN_DEPENDENCY_FLAG_PATHS_ARE_RELATIVE_TO_EXE: GstPluginDepende
 pub type GstPluginFlags = c_uint;
 pub const GST_PLUGIN_FLAG_CACHED: GstPluginFlags = 16;
 pub const GST_PLUGIN_FLAG_BLACKLISTED: GstPluginFlags = 32;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub const GST_PLUGIN_FLAG_STATIC_FEATURES: GstPluginFlags = 64;
 
 pub type GstQueryTypeFlags = c_uint;
 pub const GST_QUERY_TYPE_UPSTREAM: GstQueryTypeFlags = 1;
@@ -9492,6 +9495,9 @@ unsafe extern "C" {
     pub fn gst_plugin_get_name(plugin: *mut GstPlugin) -> *const c_char;
     pub fn gst_plugin_get_origin(plugin: *mut GstPlugin) -> *const c_char;
     pub fn gst_plugin_get_package(plugin: *mut GstPlugin) -> *const c_char;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_plugin_get_registry(plugin: *mut GstPlugin) -> *mut GstRegistry;
     pub fn gst_plugin_get_release_date_string(plugin: *mut GstPlugin) -> *const c_char;
     pub fn gst_plugin_get_source(plugin: *mut GstPlugin) -> *const c_char;
     #[cfg(feature = "v1_24")]
@@ -9507,6 +9513,9 @@ unsafe extern "C" {
     pub fn gst_plugin_is_loaded(plugin: *mut GstPlugin) -> gboolean;
     pub fn gst_plugin_load(plugin: *mut GstPlugin) -> *mut GstPlugin;
     pub fn gst_plugin_set_cache_data(plugin: *mut GstPlugin, cache_data: *mut GstStructure);
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_plugin_set_static_features_flag(plugin: *mut GstPlugin);
 
     //=========================================================================
     // GstPluginFeature

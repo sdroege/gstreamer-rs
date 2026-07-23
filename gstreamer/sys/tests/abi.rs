@@ -1990,6 +1990,7 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_PLUGIN_ERROR_NAME_MISMATCH", "2"),
     ("(guint) GST_PLUGIN_FLAG_BLACKLISTED", "32"),
     ("(guint) GST_PLUGIN_FLAG_CACHED", "16"),
+    ("(guint) GST_PLUGIN_FLAG_STATIC_FEATURES", "64"),
     ("(gint) GST_PROGRESS_TYPE_CANCELED", "3"),
     ("(gint) GST_PROGRESS_TYPE_COMPLETE", "2"),
     ("(gint) GST_PROGRESS_TYPE_CONTINUE", "1"),

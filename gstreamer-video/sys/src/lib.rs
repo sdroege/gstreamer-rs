@@ -3430,7 +3430,7 @@ unsafe extern "C" {
     pub fn gst_h274_user_data_unregistered_get_type() -> GType;
     #[cfg(feature = "v1_30")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
-    pub fn gst_h274_user_data_unregistered_free(udu: *mut GstH274UserDataUnregistered);
+    pub fn gst_h274_user_data_unregistered_clear(udu: *mut GstH274UserDataUnregistered);
     #[cfg(feature = "v1_30")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
     pub fn gst_h274_user_data_unregistered_copy(
@@ -5191,13 +5191,18 @@ unsafe extern "C" {
     );
     #[cfg(feature = "v1_30")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_h274_dsc_initialization_clear(
+        dsci: *mut GstH274DigitallySignedContentInitialization,
+    );
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
     pub fn gst_h274_dsc_initialization_copy(
         dst_dsc_init: *mut GstH274DigitallySignedContentInitialization,
         src_dsc_init: *const GstH274DigitallySignedContentInitialization,
     );
     #[cfg(feature = "v1_30")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
-    pub fn gst_h274_dsc_initialization_free(dsci: *mut GstH274DigitallySignedContentInitialization);
+    pub fn gst_h274_dsc_selection_clear(dscs: *mut GstH274DigitallySignedContentSelection);
     #[cfg(feature = "v1_30")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
     pub fn gst_h274_dsc_selection_copy(
@@ -5206,7 +5211,7 @@ unsafe extern "C" {
     );
     #[cfg(feature = "v1_30")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
-    pub fn gst_h274_dsc_selection_free(dscs: *mut GstH274DigitallySignedContentSelection);
+    pub fn gst_h274_dsc_verification_clear(dscv: *mut GstH274DigitallySignedContentVerification);
     #[cfg(feature = "v1_30")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
     pub fn gst_h274_dsc_verification_copy(
@@ -5215,16 +5220,13 @@ unsafe extern "C" {
     );
     #[cfg(feature = "v1_30")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
-    pub fn gst_h274_dsc_verification_free(dscv: *mut GstH274DigitallySignedContentVerification);
+    pub fn gst_h274_user_data_registered_clear(rud: *mut GstH274RegisteredUserData);
     #[cfg(feature = "v1_30")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
     pub fn gst_h274_user_data_registered_copy(
         dst_rud: *mut GstH274RegisteredUserData,
         src_rud: *const GstH274RegisteredUserData,
     );
-    #[cfg(feature = "v1_30")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
-    pub fn gst_h274_user_data_registered_free(rud: *mut GstH274RegisteredUserData);
     pub fn gst_is_video_overlay_prepare_window_handle_message(
         msg: *mut gst::GstMessage,
     ) -> gboolean;
