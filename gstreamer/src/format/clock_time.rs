@@ -3,6 +3,7 @@
 use std::{
     fmt,
     io::{self, prelude::*},
+    sync::LazyLock,
     time::Duration,
 };
 
@@ -78,7 +79,39 @@ impl ClockTime {
     pub const NSECOND: ClockTime = ClockTime(1);
     // checker-ignore-item
     pub const MAX: ClockTime = ClockTime(ffi::GST_CLOCK_TIME_NONE - 1);
+}
 
+// The following constants are defined at module level because some of them are statics
+
+// rustdoc-stripper-ignore-next
+/// Offset to add to UNIX time to convert to NTP time.
+///
+/// See [`crate::UNIX_TO_NTP_TIME_OFFSET_SECONDS`].
+pub const UNIX_TO_NTP_TIME_OFFSET: ClockTime =
+    ClockTime::from_seconds(crate::UNIX_TO_NTP_TIME_OFFSET_SECONDS);
+
+// rustdoc-stripper-ignore-next
+/// Offset to subtract from NTP time to convert to PTP time.
+///
+/// See [`crate::NTP_TO_PTP_TIME_OFFSET_SECONDS`].
+pub static NTP_TO_PTP_TIME_OFFSET: LazyLock<ClockTime> =
+    LazyLock::new(|| ClockTime::from_seconds(*crate::NTP_TO_PTP_TIME_OFFSET_SECONDS));
+
+// rustdoc-stripper-ignore-next
+/// Number of current leap seconds applicable to UTC compared to TAI
+///
+/// See [`crate::UTC_TO_TAI_LEAP_SECONDS`].
+pub static UTC_TO_TAI_LEAP_SECONDS: LazyLock<ClockTime> =
+    LazyLock::new(|| ClockTime::from_seconds(*crate::UTC_TO_TAI_LEAP_SECONDS));
+
+// rustdoc-stripper-ignore-next
+/// Offset to add to UNIX time to convert to PTP time.
+///
+/// See [`crate::UNIX_TO_PTP_TIME_OFFSET_SECONDS`].
+pub static UNIX_TO_PTP_TIME_OFFSET: LazyLock<ClockTime> =
+    LazyLock::new(|| ClockTime::from_seconds(*crate::UNIX_TO_PTP_TIME_OFFSET_SECONDS));
+
+impl ClockTime {
     #[inline]
     pub const fn hours(self) -> u64 {
         self.0 / Self::SECOND.0 / 60 / 60

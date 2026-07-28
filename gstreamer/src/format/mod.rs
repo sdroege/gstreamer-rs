@@ -487,7 +487,7 @@ use thiserror::Error;
 #[macro_use]
 mod macros;
 
-mod clock_time;
+pub mod clock_time;
 pub use clock_time::*;
 #[cfg(feature = "serde")]
 mod clock_time_serde;

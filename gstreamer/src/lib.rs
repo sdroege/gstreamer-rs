@@ -265,7 +265,9 @@ pub use crate::typefind::*;
 mod typefind_factory;
 
 pub mod format;
-pub use crate::format::{ClockTime, GenericFormattedValue, GenericSignedFormattedValue, Signed};
+pub use crate::format::{
+    ClockTime, GenericFormattedValue, GenericSignedFormattedValue, Signed, clock_time,
+};
 
 mod segment;
 pub use crate::segment::*;
@@ -282,6 +284,9 @@ mod toc_serde;
 
 mod clock;
 pub use crate::clock::{AtomicClockReturn, ClockId, PeriodicClockId, SingleShotClockId};
+
+mod time_offsets;
+pub use time_offsets::*;
 
 mod buffer_pool;
 pub use crate::buffer_pool::{BufferPoolAcquireParams, BufferPoolConfig, BufferPoolConfigRef};
