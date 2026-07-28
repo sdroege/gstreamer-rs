@@ -113,6 +113,13 @@ mod model_info;
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
 pub mod image_util;
 
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+mod orientation;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub use crate::orientation::*;
+
 mod enums;
 
 // Re-export all the traits in a prelude module, so that applications
@@ -126,6 +133,9 @@ pub mod prelude {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
     pub use crate::keypoint::AnalyticsRelationMetaKeypointExt;
     pub use crate::object_detection::AnalyticsRelationMetaODExt;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub use crate::orientation::AnalyticsRelationMetaOrientationExt;
     pub use crate::relation_meta::{AnalyticsMetaRefExt, AnalyticsMetaRefMutExt, AnalyticsMtdExt};
     #[cfg(feature = "v1_26")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
