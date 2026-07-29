@@ -64,13 +64,7 @@ fn log_handler(
             // SAFETY: we check for null pointer before we dereference it. While the object
             // contents might not otherwise be super defined while ref_count is 0, reading the
             // ref_count itself here should be good, still.
-            gobject.and_then(|ptr| {
-                if (*ptr).ref_count == 0 {
-                    None
-                } else {
-                    Some(ptr)
-                }
-            })
+            gobject.filter(|&ptr| (*ptr).ref_count != 0)
         };
         let gobject_address_value = gobject.map(|obj| obj as usize);
         let gobject_with_ty = gobject.and_then(|obj| unsafe {
