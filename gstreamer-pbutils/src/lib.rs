@@ -48,6 +48,8 @@ mod discoverer_audio_info;
 #[cfg(feature = "v1_30")]
 pub use crate::discoverer_audio_info::DiscovererAudioInfoBuilder;
 mod discoverer_container_info;
+#[cfg(feature = "v1_30")]
+pub use crate::discoverer_container_info::DiscovererContainerInfoBuilder;
 pub mod discoverer_stream_info;
 mod discoverer_subtitle_info;
 #[cfg(feature = "v1_30")]

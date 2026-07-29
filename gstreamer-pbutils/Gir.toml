@@ -309,6 +309,10 @@ status = "generate"
 final_type = true
 
 [[object]]
+name = "GstPbutils.DiscovererContainerInfoBuilder"
+status = "manual"
+
+[[object]]
 name = "GstPbutils.DiscovererInfo"
 status = "generate"
     [[object.function]]
