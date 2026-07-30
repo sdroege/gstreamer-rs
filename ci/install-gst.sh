@@ -35,7 +35,7 @@ meson setup build \
     -Dtests=disabled \
     -Dgstreamer:tests=enabled \
     -Dintrospection=disabled \
-    -Dlibav=disabled \
+    -Dlibav=enabled \
     -Dpython=disabled \
     "${PLUGINS[@]}" "$@"
 meson compile -C build
