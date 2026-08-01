@@ -37,6 +37,7 @@ generate = [
     "Gst.StructureChangeType",
     "Gst.TaskState",
     "Gst.TocSetter",
+    "Gst.TracerFieldType",
     "Gst.URIError",
     "Gst.URIHandler",
 ]

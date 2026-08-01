@@ -151,6 +151,9 @@ pub use self::enums::TaskState;
 pub use self::enums::TocEntryType;
 pub use self::enums::TocLoopType;
 pub use self::enums::TocScope;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub use self::enums::TracerFieldType;
 pub use self::enums::TypeFindProbability;
 pub use self::enums::URIError;
 pub use self::enums::URIType;

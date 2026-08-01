@@ -4370,6 +4370,152 @@ impl From<TocScope> for glib::Value {
     }
 }
 
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
+#[doc(alias = "GstTracerFieldType")]
+pub enum TracerFieldType {
+    #[doc(alias = "GST_TRACER_FIELD_TYPE_BOOLEAN")]
+    Boolean,
+    #[doc(alias = "GST_TRACER_FIELD_TYPE_INT")]
+    Int,
+    #[doc(alias = "GST_TRACER_FIELD_TYPE_UINT")]
+    Uint,
+    #[doc(alias = "GST_TRACER_FIELD_TYPE_INT64")]
+    Int64,
+    #[doc(alias = "GST_TRACER_FIELD_TYPE_UINT64")]
+    Uint64,
+    #[doc(alias = "GST_TRACER_FIELD_TYPE_DOUBLE")]
+    Double,
+    #[doc(alias = "GST_TRACER_FIELD_TYPE_STRING")]
+    String,
+    #[doc(alias = "GST_TRACER_FIELD_TYPE_CLOCK_TIME")]
+    ClockTime,
+    #[doc(alias = "GST_TRACER_FIELD_TYPE_STRUCTURE")]
+    Structure,
+    #[doc(alias = "GST_TRACER_FIELD_TYPE_OBJECT")]
+    Object,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+#[doc(hidden)]
+impl IntoGlib for TracerFieldType {
+    type GlibType = ffi::GstTracerFieldType;
+
+    #[inline]
+    fn into_glib(self) -> ffi::GstTracerFieldType {
+        match self {
+            Self::Boolean => ffi::GST_TRACER_FIELD_TYPE_BOOLEAN,
+            Self::Int => ffi::GST_TRACER_FIELD_TYPE_INT,
+            Self::Uint => ffi::GST_TRACER_FIELD_TYPE_UINT,
+            Self::Int64 => ffi::GST_TRACER_FIELD_TYPE_INT64,
+            Self::Uint64 => ffi::GST_TRACER_FIELD_TYPE_UINT64,
+            Self::Double => ffi::GST_TRACER_FIELD_TYPE_DOUBLE,
+            Self::String => ffi::GST_TRACER_FIELD_TYPE_STRING,
+            Self::ClockTime => ffi::GST_TRACER_FIELD_TYPE_CLOCK_TIME,
+            Self::Structure => ffi::GST_TRACER_FIELD_TYPE_STRUCTURE,
+            Self::Object => ffi::GST_TRACER_FIELD_TYPE_OBJECT,
+            Self::__Unknown(value) => value,
+        }
+    }
+}
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+#[doc(hidden)]
+impl FromGlib<ffi::GstTracerFieldType> for TracerFieldType {
+    #[inline]
+    unsafe fn from_glib(value: ffi::GstTracerFieldType) -> Self {
+        skip_assert_initialized!();
+
+        match value {
+            ffi::GST_TRACER_FIELD_TYPE_BOOLEAN => Self::Boolean,
+            ffi::GST_TRACER_FIELD_TYPE_INT => Self::Int,
+            ffi::GST_TRACER_FIELD_TYPE_UINT => Self::Uint,
+            ffi::GST_TRACER_FIELD_TYPE_INT64 => Self::Int64,
+            ffi::GST_TRACER_FIELD_TYPE_UINT64 => Self::Uint64,
+            ffi::GST_TRACER_FIELD_TYPE_DOUBLE => Self::Double,
+            ffi::GST_TRACER_FIELD_TYPE_STRING => Self::String,
+            ffi::GST_TRACER_FIELD_TYPE_CLOCK_TIME => Self::ClockTime,
+            ffi::GST_TRACER_FIELD_TYPE_STRUCTURE => Self::Structure,
+            ffi::GST_TRACER_FIELD_TYPE_OBJECT => Self::Object,
+            value => Self::__Unknown(value),
+        }
+    }
+}
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+impl StaticType for TracerFieldType {
+    #[inline]
+    #[doc(alias = "gst_tracer_field_type_get_type")]
+    fn static_type() -> glib::Type {
+        unsafe { from_glib(ffi::gst_tracer_field_type_get_type()) }
+    }
+}
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+impl glib::HasParamSpec for TracerFieldType {
+    type ParamSpec = glib::ParamSpecEnum;
+    type SetValue = Self;
+    type BuilderFn = fn(&str, Self) -> glib::ParamSpecEnumBuilder<Self>;
+
+    fn param_spec_builder() -> Self::BuilderFn {
+        Self::ParamSpec::builder_with_default
+    }
+}
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+impl glib::value::ValueType for TracerFieldType {
+    type Type = Self;
+}
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+unsafe impl<'a> glib::value::FromValue<'a> for TracerFieldType {
+    type Checker = glib::value::GenericValueTypeChecker<Self>;
+
+    #[inline]
+    unsafe fn from_value(value: &'a glib::Value) -> Self {
+        skip_assert_initialized!();
+        unsafe { from_glib(glib::gobject_ffi::g_value_get_enum(value.to_glib_none().0)) }
+    }
+}
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+impl ToValue for TracerFieldType {
+    #[inline]
+    fn to_value(&self) -> glib::Value {
+        let mut value = glib::Value::for_value_type::<Self>();
+        unsafe {
+            glib::gobject_ffi::g_value_set_enum(value.to_glib_none_mut().0, self.into_glib());
+        }
+        value
+    }
+
+    #[inline]
+    fn value_type(&self) -> glib::Type {
+        Self::static_type()
+    }
+}
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+impl From<TracerFieldType> for glib::Value {
+    #[inline]
+    fn from(v: TracerFieldType) -> Self {
+        skip_assert_initialized!();
+        ToValue::to_value(&v)
+    }
+}
+
 #[derive(Debug, Clone, Copy)]
 #[non_exhaustive]
 #[doc(alias = "GstTypeFindProbability")]
