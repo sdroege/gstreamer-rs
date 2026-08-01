@@ -18,7 +18,7 @@ struct Settings {
 #[derive(Properties)]
 #[properties(wrapper_type = super::TracingTracer)]
 pub struct TracingTracer {
-    span_stack: thread_local::ThreadLocal<RefCell<Vec<EnteredSpan>>>,
+    span_stack: thread_local::ThreadLocal<RefCell<Vec<Option<EnteredSpan>>>>,
     #[property(
         name = "log-level",
         get,
@@ -53,26 +53,38 @@ impl TracingTracer {
         }
     }
 
+    // Every *_pre hook pushes exactly one stack entry and every *_post hook
+    // pops exactly one, so the stack stays balanced even when a callsite is
+    // disabled and no span is created (None is pushed). Without this, a
+    // disabled _pre followed by an unconditional _post would pop an unrelated
+    // (outer) span.
     fn push_span(&self, dispatch: Dispatch, attributes: Attributes) {
         let span_id = dispatch.new_span(&attributes);
         dispatch.enter(&span_id);
+        self.push_entry(Some(EnteredSpan {
+            id: span_id,
+            dispatch,
+        }));
+    }
+    fn push_no_span(&self) {
+        self.push_entry(None);
+    }
+    fn push_entry(&self, span: Option<EnteredSpan>) {
         self.span_stack
             .get_or(|| RefCell::new(Vec::new()))
             .borrow_mut()
-            .push(EnteredSpan {
-                id: span_id,
-                dispatch,
-            })
+            .push(span);
     }
-    fn pop_span(&self) -> Option<()> {
-        self.span_stack
+    fn pop_span(&self) {
+        if let Some(Some(span)) = self
+            .span_stack
             .get_or(|| RefCell::new(Vec::new()))
             .borrow_mut()
             .pop()
-            .map(|span| {
-                span.dispatch.exit(&span.id);
-                span.dispatch.try_close(span.id);
-            })
+        {
+            span.dispatch.exit(&span.id);
+            span.dispatch.try_close(span.id);
+        }
     }
 
     fn pad_pre(&self, name: &'static str, pad: &Pad) {
@@ -88,11 +100,13 @@ impl TracingTracer {
         );
         let interest = callsite.interest();
         if interest.is_never() {
+            self.push_no_span();
             return;
         }
         let meta = callsite.metadata();
         let dispatch = tracing_core::dispatcher::get_default(move |dispatch| dispatch.clone());
         if !dispatch.enabled(meta) {
+            self.push_no_span();
             return;
         }
         let gstpad_flags_value = Some(tracing_core::field::display(pad.pad_flags()));
