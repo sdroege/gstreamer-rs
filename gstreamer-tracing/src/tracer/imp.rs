@@ -14,6 +14,17 @@ struct EnteredSpan {
     dispatch: Dispatch,
 }
 
+/// The data a pad hook carries, used to enrich the pad span with operation
+/// specific fields (event type, query type, buffer info, ...).
+#[derive(Clone, Copy)]
+enum PadOp<'a> {
+    Buffer(&'a Buffer),
+    BufferList(&'a gst::BufferList),
+    Event(&'a gst::Event),
+    Query(&'a gst::QueryRef),
+    PullRange { offset: u64, size: u32 },
+}
+
 #[cfg(feature = "v1_30")]
 struct SpanFormat {
     callsite: &'static crate::callsite::GstCallsite,
@@ -219,16 +230,52 @@ impl TracingTracer {
         self.push_span(dispatch, attrs);
     }
 
-    fn pad_pre(&self, name: &'static str, pad: &Pad) {
+    fn pad_pre(&self, name: &'static str, pad: &Pad, op: PadOp) {
+        // The field list depends on the operation, but every pad span carries
+        // the pad and its parent so it can be identified in a trace.
+        let fields: &'static [&'static str] = match op {
+            PadOp::Buffer(_) => &[
+                "gstpad.name",
+                "gstpad.flags",
+                "gstpad.parent.name",
+                "gstbuffer.pts",
+                "gstbuffer.size",
+            ],
+            PadOp::BufferList(_) => &[
+                "gstpad.name",
+                "gstpad.flags",
+                "gstpad.parent.name",
+                "gstbuffer.count",
+            ],
+            PadOp::Event(_) => &[
+                "gstpad.name",
+                "gstpad.flags",
+                "gstpad.parent.name",
+                "gstevent.type",
+            ],
+            PadOp::Query(_) => &[
+                "gstpad.name",
+                "gstpad.flags",
+                "gstpad.parent.name",
+                "gstquery.type",
+            ],
+            PadOp::PullRange { .. } => &[
+                "gstpad.name",
+                "gstpad.flags",
+                "gstpad.parent.name",
+                "offset",
+                "size",
+            ],
+        };
         let callsite = crate::callsite::DynamicCallsites::get().callsite_for(
-            tracing::Level::ERROR,
+            tracing::Level::INFO,
             name,
             name,
             None,
             None,
             None,
             GstCallsiteKind::Span,
-            &["gstpad.state", "gstpad.parent.name"],
+            fields,
         );
         let interest = callsite.interest();
         if interest.is_never() {
@@ -241,20 +288,56 @@ impl TracingTracer {
             self.push_no_span();
             return;
         }
+        let pad_name = pad.property::<Option<glib::GString>>("name");
+        let pad_name_value = pad_name.as_ref().map(|n| n.as_str());
         let gstpad_flags_value = Some(tracing_core::field::display(pad.pad_flags()));
         let gstpad_parent = pad.parent_element();
-        let gstpad_parent_name_value = gstpad_parent.map(|p| p.name());
+        let gstpad_parent_name_value =
+            gstpad_parent.and_then(|p| p.property::<Option<glib::GString>>("name"));
         let gstpad_parent_name_value = gstpad_parent_name_value.as_ref().map(|n| n.as_str());
+
         let fields = meta.fields();
         let mut fields_iter = fields.into_iter();
-        let values = field_values![fields_iter =>
-            // /!\ /!\ /!\ Must be in the same order as the field list above /!\ /!\ /!\
-            "gstpad.flags" = gstpad_flags_value;
-            "gstpad.parent.name" = gstpad_parent_name_value;
-        ];
-        let valueset = fields.value_set(&values);
-        let attrs = tracing::span::Attributes::new_root(meta, &valueset);
-        self.push_span(dispatch, attrs);
+        // Emits the three common fields followed by the operation specific ones,
+        // in the same order as the field list selected above.
+        macro_rules! push_pad_span {
+            ($($field_value_name:literal = $field_value:expr;)*) => {{
+                let values = field_values![fields_iter =>
+                    "gstpad.name" = pad_name_value;
+                    "gstpad.flags" = gstpad_flags_value;
+                    "gstpad.parent.name" = gstpad_parent_name_value;
+                    $($field_value_name = $field_value;)*
+                ];
+                let valueset = fields.value_set(&values);
+                let attrs = tracing::span::Attributes::new_root(meta, &valueset);
+                self.push_span(dispatch, attrs);
+            }};
+        }
+
+        match op {
+            PadOp::Buffer(buffer) => {
+                let pts = buffer.pts().map(tracing_core::field::display);
+                let size = Some(buffer.size() as u64);
+                push_pad_span!("gstbuffer.pts" = pts; "gstbuffer.size" = size;);
+            }
+            PadOp::BufferList(list) => {
+                let count = Some(list.len() as u64);
+                push_pad_span!("gstbuffer.count" = count;);
+            }
+            PadOp::Event(event) => {
+                let event_type = Some(tracing_core::field::display(event.type_()));
+                push_pad_span!("gstevent.type" = event_type;);
+            }
+            PadOp::Query(query) => {
+                let query_type = Some(tracing_core::field::display(query.type_()));
+                push_pad_span!("gstquery.type" = query_type;);
+            }
+            PadOp::PullRange { offset, size } => {
+                let offset = Some(offset);
+                let size = Some(size as u64);
+                push_pad_span!("offset" = offset; "size" = size;);
+            }
+        }
     }
 }
 
@@ -392,24 +475,24 @@ impl TracerImpl for TracingTracer {
         }
     }
 
-    fn pad_push_pre(&self, _: u64, pad: &Pad, _: &Buffer) {
-        self.pad_pre("pad_push", pad);
+    fn pad_push_pre(&self, _: u64, pad: &Pad, buffer: &Buffer) {
+        self.pad_pre("pad_push", pad, PadOp::Buffer(buffer));
     }
 
-    fn pad_push_list_pre(&self, _: u64, pad: &Pad, _: &gst::BufferList) {
-        self.pad_pre("pad_push_list", pad);
+    fn pad_push_list_pre(&self, _: u64, pad: &Pad, list: &gst::BufferList) {
+        self.pad_pre("pad_push_list", pad, PadOp::BufferList(list));
     }
 
-    fn pad_query_pre(&self, _: u64, pad: &Pad, _: &gst::QueryRef) {
-        self.pad_pre("pad_query", pad);
+    fn pad_query_pre(&self, _: u64, pad: &Pad, query: &gst::QueryRef) {
+        self.pad_pre("pad_query", pad, PadOp::Query(query));
     }
 
-    fn pad_push_event_pre(&self, _: u64, pad: &Pad, _: &gst::Event) {
-        self.pad_pre("pad_event", pad);
+    fn pad_push_event_pre(&self, _: u64, pad: &Pad, event: &gst::Event) {
+        self.pad_pre("pad_event", pad, PadOp::Event(event));
     }
 
-    fn pad_pull_range_pre(&self, _: u64, pad: &Pad, _: u64, _: u32) {
-        self.pad_pre("pad_pull_range", pad);
+    fn pad_pull_range_pre(&self, _: u64, pad: &Pad, offset: u64, size: u32) {
+        self.pad_pre("pad_pull_range", pad, PadOp::PullRange { offset, size });
     }
 
     fn pad_pull_range_post(&self, _: u64, _: &Pad, _: Result<&Buffer, FlowError>) {
