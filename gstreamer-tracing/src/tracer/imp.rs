@@ -178,6 +178,47 @@ impl TracingTracer {
         SpanFormat { callsite }
     }
 
+    fn bin_add_pre(&self, bin: &gst::Bin, element: &gst::Element) {
+        let callsite = crate::callsite::DynamicCallsites::get().callsite_for(
+            tracing::Level::INFO,
+            "bin_add",
+            "bin_add",
+            None,
+            None,
+            None,
+            GstCallsiteKind::Span,
+            &["bin", "element"],
+        );
+        let interest = callsite.interest();
+        if interest.is_never() {
+            self.push_no_span();
+            return;
+        }
+        let meta = callsite.metadata();
+        let dispatch = tracing_core::dispatcher::get_default(move |dispatch| dispatch.clone());
+        if !dispatch.enabled(meta) {
+            self.push_no_span();
+            return;
+        }
+        // bin-add-pre can fire while the bin is still being constructed (e.g.
+        // a bin adding children from its _init), before it has a name, so read
+        // the name nullably rather than via name() which derefs a NULL.
+        let bin_name = bin.property::<Option<glib::GString>>("name");
+        let element_name = element.property::<Option<glib::GString>>("name");
+        let bin_value = bin_name.as_ref().map(|n| n.as_str());
+        let element_value = element_name.as_ref().map(|n| n.as_str());
+        let fields = meta.fields();
+        let mut fields_iter = fields.into_iter();
+        let values = field_values![fields_iter =>
+            // /!\ /!\ /!\ Must be in the same order as the field list above /!\ /!\ /!\
+            "bin" = bin_value;
+            "element" = element_value;
+        ];
+        let valueset = fields.value_set(&values);
+        let attrs = tracing::span::Attributes::new_root(meta, &valueset);
+        self.push_span(dispatch, attrs);
+    }
+
     fn pad_pre(&self, name: &'static str, pad: &Pad) {
         let callsite = crate::callsite::DynamicCallsites::get().callsite_for(
             tracing::Level::ERROR,
@@ -248,10 +289,9 @@ impl ObjectImpl for TracingTracer {
             self.register_hook(TracerHook::SpanEnd);
         }
         #[cfg(not(feature = "v1_30"))]
-        {
-            self.register_hook(TracerHook::ElementAddPad);
-            self.register_hook(TracerHook::BinAddPost);
-        }
+        self.register_hook(TracerHook::ElementAddPad);
+        self.register_hook(TracerHook::BinAddPre);
+        self.register_hook(TracerHook::BinAddPost);
         self.register_hook(TracerHook::PadPushPost);
         self.register_hook(TracerHook::PadPushPre);
         self.register_hook(TracerHook::PadPushListPost);
@@ -277,11 +317,20 @@ impl TracerImpl for TracingTracer {
         }
     }
 
-    #[cfg(not(feature = "v1_30"))]
-    fn bin_add_post(&self, _ts: u64, bin: &gst::Bin, element: &gst::Element, _success: bool) {
+    fn bin_add_pre(&self, _ts: u64, bin: &gst::Bin, element: &gst::Element) {
+        TracingTracer::bin_add_pre(self, bin, element);
+    }
+
+    fn bin_add_post(&self, _ts: u64, _bin: &gst::Bin, _element: &gst::Element, _success: bool) {
+        // The bin_add span is emitted on every version (like the pad spans), so
+        // this hook always runs to pop it. Only the span propagation is
+        // version-specific: before 1.30 it rides on bin-add/element-add-pad,
+        // from 1.30 on it is handled by object_parent_set.
+        #[cfg(not(feature = "v1_30"))]
         unsafe {
-            propagate_attached_span(bin.upcast_ref(), element.upcast_ref());
+            propagate_attached_span(_bin.upcast_ref(), _element.upcast_ref());
         }
+        self.pop_span();
     }
 
     #[cfg(feature = "v1_30")]
