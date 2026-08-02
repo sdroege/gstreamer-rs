@@ -27,6 +27,7 @@ const CALLSITE_INTEREST_ALWAYS: usize = 3;
 impl GstCallsite {
     fn make_static(key: &Key) -> &'static Self {
         skip_assert_initialized!();
+        let name = key.name;
         let module = key.module.unwrap_or("");
         let file = key.file.unwrap_or("");
         let prefixed_target_len = crate::TARGET.len() + 2 + key.target.len();
@@ -37,7 +38,7 @@ impl GstCallsite {
             // in our case) and the second one to store a dynamically sized tail of values, inline.
             // In this dynamic area we store various strings that `Metadata` then refers back to.
             let callsite_layout = std::alloc::Layout::new::<GstCallsite>();
-            let string_length = module.len() + file.len() + prefixed_target_len;
+            let string_length = name.len() + module.len() + file.len() + prefixed_target_len;
             let string_layout =
                 std::alloc::Layout::array::<u8>(string_length).expect("layout calculation");
             let (callsite_layout, string_offset) = callsite_layout
@@ -47,7 +48,9 @@ impl GstCallsite {
             let string = std::slice::from_raw_parts_mut(alloc.add(string_offset), string_length);
             let callsite = alloc as *mut GstCallsite;
 
-            let (module_alloc, rest) = string.split_at_mut(module.len());
+            let (name_alloc, rest) = string.split_at_mut(name.len());
+            name_alloc.copy_from_slice(name.as_bytes());
+            let (module_alloc, rest) = rest.split_at_mut(module.len());
             module_alloc.copy_from_slice(module.as_bytes());
             let (file_alloc, rest) = rest.split_at_mut(file.len());
             file_alloc.copy_from_slice(file.as_bytes());
@@ -57,7 +60,8 @@ impl GstCallsite {
             separator_alloc.copy_from_slice("::".as_bytes());
             let (target_alloc, _) = rest.split_at_mut(key.target.len());
             target_alloc.copy_from_slice(key.target.as_bytes());
-            let file_start = module.len();
+            let module_start = name.len();
+            let file_start = module_start + module.len();
             let prefixed_target_start = file_start + file.len();
             let unprefixed_target_start = prefixed_target_start + crate::TARGET.len() + 2;
             let string = std::str::from_utf8_unchecked(string);
@@ -66,12 +70,12 @@ impl GstCallsite {
                 interest: AtomicUsize::new(0),
                 unprefixed_target: &string[unprefixed_target_start..],
                 metadata: Metadata::new(
-                    key.name,
+                    &string[..name.len()],
                     &string[prefixed_target_start..],
                     key.level,
                     key.file.map(|_| &string[file_start..prefixed_target_start]),
                     key.line,
-                    key.module.map(|_| &string[..module.len()]),
+                    key.module.map(|_| &string[module_start..file_start]),
                     fieldset,
                     match key.kind {
                         GstCallsiteKind::Span => Kind::SPAN,
@@ -130,7 +134,7 @@ struct Key<'a> {
     module: Option<&'a str>,
     file: Option<&'a str>,
     target: &'a str,
-    name: &'static str,
+    name: &'a str,
     fields: &'static [&'static str],
     kind: GstCallsiteKind,
 }
@@ -176,7 +180,7 @@ impl DynamicCallsites {
     pub(crate) fn callsite_for(
         &'static self,
         level: Level,
-        name: &'static str,
+        name: &str,
         target: &str,
         file: Option<&str>,
         module: Option<&str>,
@@ -202,7 +206,7 @@ impl DynamicCallsites {
         let metadata = callsite.metadata();
         let key = Key::<'static> {
             level,
-            name,
+            name: metadata.name(),
             line,
             kind,
             fields,

@@ -2,12 +2,71 @@ use crate::callsite::GstCallsiteKind;
 use crate::log::span_quark;
 use gst::glib::Properties;
 use gst::{Buffer, FlowError, FlowSuccess, Pad, Tracer, glib, prelude::*, subclass::prelude::*};
-use std::{cell::RefCell, sync::Mutex};
+#[cfg(feature = "v1_30")]
+use smallvec::SmallVec;
+use std::{cell::RefCell, collections::HashMap, sync::Mutex};
 use tracing::{Callsite, Dispatch, Id, info, span::Attributes};
+#[cfg(feature = "v1_30")]
+use tracing_core::field::Value;
 
 struct EnteredSpan {
     id: Id,
     dispatch: Dispatch,
+}
+
+#[cfg(feature = "v1_30")]
+struct SpanFormat {
+    callsite: &'static crate::callsite::GstCallsite,
+}
+
+#[cfg(feature = "v1_30")]
+enum FieldValue<'a> {
+    Bool(bool),
+    I64(i64),
+    U64(u64),
+    F64(f64),
+    Str(&'a str),
+    Text(String),
+}
+
+#[cfg(feature = "v1_30")]
+impl FieldValue<'_> {
+    // `tracing::Value` is sealed, so we can't implement it for the enum; instead
+    // hand out a reference to the inner value, whose concrete type already is a
+    // `Value` (bool/i64/u64/f64/&str/String).
+    fn as_value(&self) -> &dyn Value {
+        match self {
+            FieldValue::Bool(v) => v,
+            FieldValue::I64(v) => v,
+            FieldValue::U64(v) => v,
+            FieldValue::F64(v) => v,
+            FieldValue::Str(v) => v,
+            FieldValue::Text(v) => v,
+        }
+    }
+}
+
+#[cfg(feature = "v1_30")]
+fn span_field_value(value: Option<gst::TraceValue<'_>>) -> FieldValue<'_> {
+    use gst::TraceValue::*;
+    match value {
+        Some(Boolean(v)) => FieldValue::Bool(v),
+        Some(Int(v)) => FieldValue::I64(i64::from(v)),
+        Some(Uint(v)) => FieldValue::U64(u64::from(v)),
+        Some(Int64(v)) => FieldValue::I64(v),
+        Some(Uint64(v)) => FieldValue::U64(v),
+        Some(Double(v)) => FieldValue::F64(v),
+        Some(String(v)) => FieldValue::Str(v.map(|s| s.as_str()).unwrap_or("<null>")),
+        Some(Structure(v)) => FieldValue::Text(
+            v.map(|s| s.to_string())
+                .unwrap_or_else(|| "<null>".to_string()),
+        ),
+        Some(Object(v)) => FieldValue::Text(
+            v.map(|o| format!("{o:?}"))
+                .unwrap_or_else(|| "<null>".to_string()),
+        ),
+        None => FieldValue::Str("<unknown>"),
+    }
 }
 
 #[derive(Default)]
@@ -19,6 +78,10 @@ struct Settings {
 #[properties(wrapper_type = super::TracingTracer)]
 pub struct TracingTracer {
     span_stack: thread_local::ThreadLocal<RefCell<Vec<Option<EnteredSpan>>>>,
+    #[cfg(feature = "v1_30")]
+    span_formats: Mutex<HashMap<usize, SpanFormat>>,
+    #[cfg(feature = "v1_30")]
+    spans: Mutex<HashMap<gst::TraceSpanId, EnteredSpan>>,
     #[property(
         name = "log-level",
         get,
@@ -87,6 +150,34 @@ impl TracingTracer {
         }
     }
 
+    #[cfg(feature = "v1_30")]
+    fn span_format(&self, format: gst::TraceFormat) -> SpanFormat {
+        let span_name = format.name();
+        let n_fields = format.n_fields();
+        let mut field_names = Vec::with_capacity(n_fields);
+
+        // The interned callsite needs a &'static [&'static str], so both the
+        // names and the slice are leaked. Bounded, not growing: memoised per
+        // format (see caller), and formats live until gst_deinit().
+        for field in format.fields() {
+            field_names.push(Box::leak(field.name().to_owned().into_boxed_str()) as &'static str);
+        }
+
+        let field_names = Box::leak(field_names.into_boxed_slice());
+        let callsite = crate::callsite::DynamicCallsites::get().callsite_for(
+            tracing::Level::INFO,
+            span_name,
+            span_name,
+            None,
+            None,
+            None,
+            GstCallsiteKind::Span,
+            field_names,
+        );
+
+        SpanFormat { callsite }
+    }
+
     fn pad_pre(&self, name: &'static str, pad: &Pad) {
         let callsite = crate::callsite::DynamicCallsites::get().callsite_for(
             tracing::Level::ERROR,
@@ -136,6 +227,10 @@ impl ObjectSubclass for TracingTracer {
     fn new() -> Self {
         Self {
             span_stack: thread_local::ThreadLocal::new(),
+            #[cfg(feature = "v1_30")]
+            span_formats: Mutex::new(HashMap::new()),
+            #[cfg(feature = "v1_30")]
+            spans: Mutex::new(HashMap::new()),
             settings: Mutex::new(Settings::default()),
         }
     }
@@ -147,6 +242,11 @@ impl ObjectImpl for TracingTracer {
         self.parent_constructed();
         #[cfg(feature = "v1_30")]
         self.register_hook(TracerHook::ObjectParentSet);
+        #[cfg(feature = "v1_30")]
+        {
+            self.register_hook(TracerHook::SpanBegin);
+            self.register_hook(TracerHook::SpanEnd);
+        }
         #[cfg(not(feature = "v1_30"))]
         {
             self.register_hook(TracerHook::ElementAddPad);
@@ -188,6 +288,58 @@ impl TracerImpl for TracingTracer {
     fn object_parent_set(&self, _ts: u64, obj: &gst::Object, parent: Option<&gst::Object>) {
         if let Some(parent) = parent {
             unsafe { propagate_attached_span(parent, obj) }
+        }
+    }
+
+    #[cfg(feature = "v1_30")]
+    fn span_begin(&self, _ts: u64, span_id: gst::TraceSpanId, values: gst::TraceValues<'_>) {
+        let format = values.format();
+        let format_key = format.as_ptr_id();
+        let mut formats = self.span_formats.lock().unwrap();
+        let custom_format = formats
+            .entry(format_key)
+            .or_insert_with(|| self.span_format(format));
+
+        let callsite = custom_format.callsite;
+        let interest = callsite.interest();
+        if interest.is_never() {
+            return;
+        }
+
+        let meta = callsite.metadata();
+        let dispatch = tracing_core::dispatcher::get_default(move |dispatch| dispatch.clone());
+        if !dispatch.enabled(meta) {
+            return;
+        }
+
+        let field_values = values
+            .iter()
+            .map(span_field_value)
+            .collect::<SmallVec<[FieldValue; 8]>>();
+        drop(formats);
+
+        // Positional values, one per field, matching the callsite's field set.
+        let values = field_values
+            .iter()
+            .map(|v| Some(v.as_value()))
+            .collect::<SmallVec<[Option<&dyn Value>; 8]>>();
+        let valueset = meta.fields().value_set_all(&values);
+        let attrs = tracing::span::Attributes::new_root(meta, &valueset);
+        // Custom spans may begin and end on different threads, so map them to
+        // the span lifetime (new_span/try_close) rather than the thread-local
+        // enter/exit scope. The perfetto layer (async flavor) emits the slice
+        // from new_span/close accordingly.
+        let span = EnteredSpan {
+            id: dispatch.new_span(&attrs),
+            dispatch,
+        };
+        self.spans.lock().unwrap().insert(span_id, span);
+    }
+
+    #[cfg(feature = "v1_30")]
+    fn span_end(&self, _ts: u64, span_id: gst::TraceSpanId) {
+        if let Some(span) = self.spans.lock().unwrap().remove(&span_id) {
+            span.dispatch.try_close(span.id);
         }
     }
 

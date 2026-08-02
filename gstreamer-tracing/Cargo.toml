@@ -18,6 +18,7 @@ gst = { workspace = true }
 tracing = "0.1"
 tracing-core = "0.1"
 thread_local = "1.1"
+smallvec = "1"
 
 [dev-dependencies]
 tracing-subscriber = "0.3"
@@ -26,8 +27,8 @@ tracing-subscriber = "0.3"
 default = []
 v1_22 = []
 v1_24 = ["v1_22"]
-v1_26 = ["v1_24"]
-v1_28 = ["v1_26"]
+v1_26 = ["gst/v1_26", "v1_24"]
+v1_28 = ["gst/v1_28", "v1_26"]
 v1_30 = ["gst/v1_30", "v1_28"]
 
 [package.metadata.docs.rs]

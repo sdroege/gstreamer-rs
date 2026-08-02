@@ -1725,6 +1725,7 @@ name = "gstreamer-tracing"
 version = "0.26.0-alpha"
 dependencies = [
  "gstreamer",
+ "smallvec",
  "thread_local",
  "tracing",
  "tracing-core",
