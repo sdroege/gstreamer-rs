@@ -27,6 +27,12 @@ multiple-versions = "deny"
 wildcards = "allow"
 highlight = "all"
 
+# futures-macro, glib-macros, and the windows-rs ecosystem
+# depend on this old version
+[[bans.skip]]
+name = "syn"
+version = "2.0"
+
 [sources]
 unknown-registry = "deny"
 unknown-git = "deny"

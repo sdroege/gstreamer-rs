@@ -411,7 +411,9 @@ outdated:
     - if: $CI_PIPELINE_SOURCE == "schedule"
   script:
     - cargo update --color=always
-    - cargo outdated --color=always --root-deps-only --exit-code 1 -v
+    # Ignore kstring, 2.0.3+ is MSRV 1.96 and we use 1.92
+    # Ignore system-deps until the gstreamer-rs crates have updated semvers
+    - cargo outdated --color=always --root-deps-only --exit-code 1 -v --ignore kstring --ignore system-deps
 
 coverage:
   allow_failure: true
