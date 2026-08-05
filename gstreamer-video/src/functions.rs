@@ -111,6 +111,7 @@ unsafe fn convert_sample_async_unsafe<F>(
     }
 }
 
+#[cfg(feature = "futures")]
 pub fn convert_sample_future(
     sample: &gst::Sample,
     caps: &gst::Caps,

@@ -183,9 +183,13 @@ mod static_pad_template;
 pub use crate::static_pad_template::*;
 
 pub mod promise;
+#[cfg(feature = "futures")]
+pub(crate) mod promise_futures;
 pub use promise::{Promise, PromiseError};
 
 pub mod bus;
+#[cfg(feature = "futures")]
+pub(crate) mod bus_futures;
 mod element;
 pub mod element_factory;
 

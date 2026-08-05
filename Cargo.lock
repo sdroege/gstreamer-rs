@@ -948,7 +948,6 @@ dependencies = [
  "futures-executor",
  "futures-task",
  "futures-util",
- "gio-sys",
  "glib-macros",
  "glib-sys",
  "gobject-sys",

@@ -2,6 +2,7 @@
 
 use std::ptr;
 #[cfg(feature = "v1_28")]
+#[cfg(feature = "futures")]
 use std::{future::Future, pin::Pin};
 
 use glib::{prelude::*, signal::SignalHandlerId, translate::*};
@@ -134,6 +135,7 @@ pub trait GstObjectExtManual: IsA<Object> + 'static {
     }
 
     #[cfg(feature = "v1_28")]
+    #[cfg(feature = "futures")]
     fn call_async_future<F, T>(&self, func: F) -> Pin<Box<dyn Future<Output = T> + Send + 'static>>
     where
         F: FnOnce(&Self) -> T + Send + 'static,

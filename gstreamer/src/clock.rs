@@ -1,14 +1,15 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
 use std::{
-    cmp,
-    marker::Unpin,
-    pin::Pin,
-    ptr,
+    cmp, ptr,
     sync::{atomic, atomic::AtomicI32},
 };
 
+#[cfg(feature = "futures")]
 use futures_core::{Future, Stream};
+#[cfg(feature = "futures")]
+use std::{marker::Unpin, pin::Pin};
+
 use glib::{
     ffi::{gboolean, gpointer},
     prelude::*,
@@ -193,6 +194,7 @@ impl SingleShotClockId {
     }
 
     #[allow(clippy::type_complexity)]
+    #[cfg(feature = "futures")]
     pub fn wait_async_future(
         &self,
     ) -> Result<
@@ -318,6 +320,7 @@ impl PeriodicClockId {
     }
 
     #[allow(clippy::type_complexity)]
+    #[cfg(feature = "futures")]
     pub fn wait_async_stream(
         &self,
     ) -> Result<

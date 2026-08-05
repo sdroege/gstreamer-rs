@@ -28,9 +28,13 @@ mod auto;
 pub use crate::auto::*;
 
 pub mod app_sink;
+#[cfg(feature = "futures")]
+pub(crate) mod app_sink_futures;
 pub use crate::app_sink::AppSinkCallbacks;
 
 pub mod app_src;
+#[cfg(feature = "futures")]
+pub(crate) mod app_src_futures;
 pub use crate::app_src::AppSrcCallbacks;
 
 // Re-export all the traits in a prelude module, so that applications
