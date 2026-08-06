@@ -1303,6 +1303,17 @@ mod video_meta_transform_matrix {
             unsafe { &*(&self.0.out_rectangle as *const _ as *const crate::VideoRectangle) }
         }
 
+        #[doc(alias = "get_matrix")]
+        #[inline]
+        pub fn matrix(&self) -> &[[f32; 3]; 3] {
+            unsafe { &*(&self.0.matrix as *const [f32; 9] as *const [[f32; 3]; 3]) }
+        }
+
+        #[inline]
+        pub fn matrix_mut(&mut self) -> &mut [[f32; 3]; 3] {
+            unsafe { &mut *(&mut self.0.matrix as *mut [f32; 9] as *mut [[f32; 3]; 3]) }
+        }
+
         #[doc(alias = "gst_video_meta_transform_matrix_point")]
         pub fn point(&self, x: i32, y: i32) -> Option<(i32, i32)> {
             unsafe {
@@ -1782,5 +1793,37 @@ mod tests {
         let meta2 = buffer2.meta::<VideoCropMeta>().unwrap();
 
         assert_eq!(meta2.rect(), (20, 20, 40, 40));
+    }
+
+    #[cfg(feature = "v1_28")]
+    #[test]
+    fn test_video_meta_transform_matrix_matrix_mut() {
+        gst::init().unwrap();
+
+        let in_video_info = crate::VideoInfo::builder(crate::VideoFormat::Rgba, 320, 240)
+            .build()
+            .unwrap();
+        let out_video_info = crate::VideoInfo::builder(crate::VideoFormat::Rgba, 640, 480)
+            .build()
+            .unwrap();
+        let in_rect = crate::VideoRectangle::new(0, 0, 320, 240);
+        let out_rect = crate::VideoRectangle::new(0, 0, 640, 480);
+
+        let mut trans =
+            VideoMetaTransformMatrix::new(&in_video_info, &in_rect, &out_video_info, &out_rect);
+
+        // gst_video_meta_transform_matrix_init() fills in a scale-only matrix.
+        assert_eq!(trans.matrix()[0][0], 2.0);
+        assert_eq!(trans.matrix()[1][1], 2.0);
+
+        // matrix_mut() allows overwriting it in place, e.g. with its inverse.
+        {
+            let m = trans.matrix_mut();
+            m[0][0] = 0.5;
+            m[1][1] = 0.5;
+        }
+
+        assert_eq!(trans.matrix()[0][0], 0.5);
+        assert_eq!(trans.matrix()[1][1], 0.5);
     }
 }
