@@ -1369,6 +1369,34 @@ pub fn remove_log_function(log_fn: DebugLogFunction) {
     }
 }
 
+#[doc(alias = "gst_debug_log_default")]
+pub fn log_default(
+    category: DebugCategory,
+    level: DebugLevel,
+    file: &glib::GStr,
+    function: &glib::GStr,
+    line: u32,
+    object: Option<&LoggedObject>,
+    message: &DebugMessage,
+) {
+    skip_assert_initialized!();
+
+    unsafe {
+        ffi::gst_debug_log_default(
+            category.as_ptr(),
+            level.into_glib(),
+            file.as_ptr(),
+            function.as_ptr(),
+            line as i32,
+            object
+                .map(|object| object.as_ptr())
+                .unwrap_or_else(std::ptr::null_mut),
+            message.as_ptr(),
+            std::ptr::null_mut(),
+        );
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use std::sync::{Arc, Mutex, mpsc};
