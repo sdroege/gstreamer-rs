@@ -114,7 +114,7 @@ fn create_pipeline() -> Result<gst::Pipeline, Error> {
                         .take(height)
                     {
                         // Iterate over each pixel of 4 bytes in that line
-                        for pixel in line[..(4 * width)].chunks_exact_mut(4) {
+                        for pixel in line[..(4 * width)].as_chunks_mut::<4>().0 {
                             pixel[0] = b;
                             pixel[1] = g;
                             pixel[2] = r;

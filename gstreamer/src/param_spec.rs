@@ -403,7 +403,6 @@ impl<'a, T: glib::prelude::ParamSpecBuilderExt<'a>> GstParamSpecBuilderExt<'a> f
 
 #[cfg(test)]
 mod tests {
-    use glib::prelude::*;
 
     use super::*;
 

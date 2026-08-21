@@ -418,7 +418,7 @@ mod video_filter {
                     let mfd = ManuallyDrop::new(memfd::Memfd::from_raw_fd(fd));
                     let mut mmap = MmapMut::map_mut(mfd.as_file())?;
 
-                    for pixel in mmap.chunks_exact_mut(4) {
+                    for pixel in mmap.as_chunks_mut::<4>().0 {
                         pixel[0] = (pixel[0] as f64 * factor).clamp(0.0, 255.0) as u8;
                         pixel[1] = (pixel[1] as f64 * factor).clamp(0.0, 255.0) as u8;
                         pixel[2] = (pixel[2] as f64 * factor).clamp(0.0, 255.0) as u8;

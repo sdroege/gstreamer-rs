@@ -102,7 +102,6 @@ mod tests {
     // memory struct for clarity.
 
     pub mod imp {
-        use glib::translate::*;
         use std::alloc;
 
         use super::*;
