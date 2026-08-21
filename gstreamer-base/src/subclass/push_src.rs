@@ -2,8 +2,8 @@
 
 use std::ptr;
 
-use glib::{prelude::*, subclass::prelude::*, translate::*};
-use gst::{prelude::*, subclass::prelude::*};
+use glib::{subclass::prelude::*, translate::*};
+use gst::subclass::prelude::*;
 
 use super::base_src::{BaseSrcImpl, CreateSuccess};
 use crate::{PushSrc, ffi, prelude::*};

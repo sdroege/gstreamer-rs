@@ -3,8 +3,8 @@
 use std::{mem, ptr};
 
 use atomic_refcell::AtomicRefCell;
-use glib::{prelude::*, translate::*};
-use gst::{prelude::*, subclass::prelude::*};
+use glib::translate::*;
+use gst::subclass::prelude::*;
 
 use crate::{BaseSrc, ffi, prelude::*};
 

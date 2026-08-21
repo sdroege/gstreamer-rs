@@ -337,14 +337,14 @@ fn run(
                     err.debug()
                 ));
             }
-            MessageView::StateChanged(state_changed) => {
-                if msg.src() == Some(pipeline.upcast_ref()) {
-                    println!(
-                        "Pipeline state changed from {:?} to {:?}",
-                        state_changed.old(),
-                        state_changed.current()
-                    );
-                }
+            MessageView::StateChanged(state_changed)
+                if msg.src() == Some(pipeline.upcast_ref()) =>
+            {
+                println!(
+                    "Pipeline state changed from {:?} to {:?}",
+                    state_changed.old(),
+                    state_changed.current()
+                );
             }
             _ => (),
         }

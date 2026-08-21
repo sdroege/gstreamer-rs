@@ -670,7 +670,7 @@ mod tests {
             320,
         );
 
-        for pixel in intermediate.chunks_exact(4) {
+        for pixel in intermediate.as_chunks::<4>().0 {
             assert_eq!(&[255, 0, 128, 128][..], pixel);
         }
 
