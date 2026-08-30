@@ -18,6 +18,7 @@ external_libraries = [
 
 generate = [
     "GstAudio.AudioBaseSrc",
+    "GstAudio.AudioCdSrcMode",
     "GstAudio.AudioDitherMethod",
     "GstAudio.AudioFormatFlags",
     "GstAudio.AudioLayout",
@@ -155,6 +156,14 @@ status = "manual"
     name = "map"
     # Readable and writable variant dealing with mutability
     rename = "from_buffer_readable"
+
+[[object]]
+name = "GstAudio.AudioCdSrc"
+status = "generate"
+    [[object.function]]
+    name = "add_track"
+    # AudioCdSrcTrack is just a plain struct with no _type or _copy functions.
+    manual = true
 
 [[object]]
 name = "GstAudio.AudioDecoder"

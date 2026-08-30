@@ -58,6 +58,7 @@ pub mod audio_buffer;
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_16")))]
 pub use audio_buffer::{AudioBuffer, AudioBufferRef};
 
+mod audio_cd_src;
 mod audio_decoder;
 mod audio_encoder;
 mod audio_filter;
@@ -75,8 +76,8 @@ pub mod prelude {
     pub use crate::{
         audio_aggregator::AudioAggregatorExtManual,
         audio_aggregator_convert_pad::AudioAggregatorConvertPadExtManual,
-        audio_aggregator_pad::AudioAggregatorPadExtManual, audio_filter::AudioFilterExtManual,
-        audio_format::AudioFormatIteratorExt, auto::traits::*,
+        audio_aggregator_pad::AudioAggregatorPadExtManual, audio_cd_src::AudioCdSrcExtManual,
+        audio_filter::AudioFilterExtManual, audio_format::AudioFormatIteratorExt, auto::traits::*,
     };
 }
 

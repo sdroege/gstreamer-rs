@@ -18,6 +18,9 @@ pub use self::audio_base_sink::AudioBaseSink;
 mod audio_base_src;
 pub use self::audio_base_src::AudioBaseSrc;
 
+mod audio_cd_src;
+pub use self::audio_cd_src::AudioCdSrc;
+
 mod audio_decoder;
 pub use self::audio_decoder::AudioDecoder;
 
@@ -40,6 +43,7 @@ mod audio_stream_align;
 pub use self::audio_stream_align::AudioStreamAlign;
 
 mod enums;
+pub use self::enums::AudioCdSrcMode;
 pub use self::enums::AudioDitherMethod;
 pub use self::enums::AudioFormat;
 pub use self::enums::AudioLayout;
@@ -59,6 +63,7 @@ pub(crate) mod traits {
     pub use super::audio_aggregator_pad::AudioAggregatorPadExt;
     pub use super::audio_base_sink::AudioBaseSinkExt;
     pub use super::audio_base_src::AudioBaseSrcExt;
+    pub use super::audio_cd_src::AudioCdSrcExt;
     pub use super::audio_decoder::AudioDecoderExt;
     pub use super::audio_encoder::AudioEncoderExt;
     pub use super::stream_volume::StreamVolumeExt;
