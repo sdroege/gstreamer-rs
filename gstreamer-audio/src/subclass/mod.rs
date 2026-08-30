@@ -7,6 +7,7 @@ mod audio_aggregator_convert_pad;
 mod audio_aggregator_pad;
 mod audio_base_sink;
 mod audio_base_src;
+mod audio_cd_src;
 mod audio_decoder;
 mod audio_encoder;
 mod audio_filter;
@@ -23,6 +24,7 @@ pub mod prelude {
         audio_aggregator_pad::{AudioAggregatorPadImpl, AudioAggregatorPadImplExt},
         audio_base_sink::AudioBaseSinkImpl,
         audio_base_src::AudioBaseSrcImpl,
+        audio_cd_src::{AudioCdSrcImpl, AudioCdSrcImplExt},
         audio_decoder::{AudioDecoderImpl, AudioDecoderImplExt},
         audio_encoder::{AudioEncoderImpl, AudioEncoderImplExt},
         audio_filter::{AudioFilterImpl, AudioFilterImplExt},
