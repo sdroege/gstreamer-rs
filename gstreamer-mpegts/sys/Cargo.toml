@@ -62,7 +62,7 @@ version = "1.29"
 name = "gstreamer_mpegts_sys"
 
 [build-dependencies]
-system-deps = "7"
+system-deps = "9"
 
 [dependencies]
 libc = "0.2"
