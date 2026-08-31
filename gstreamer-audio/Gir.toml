@@ -14,7 +14,6 @@ external_libraries = [
     "GLib",
     "GObject",
     "Gst",
-    "GstBase",
 ]
 
 generate = [
@@ -53,6 +52,9 @@ manual = [
     "GstBase.BaseSrc",
     "GstBase.BaseTransform",
 ]
+
+[external_libraries]
+GstBase = { min_version = "1.14" }
 
 [[object]]
 name = "Gst.Buffer"
