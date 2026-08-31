@@ -73,7 +73,7 @@ objc2-foundation = { version = "0.3.2", features = ["NSThread"] }
 dispatch = "0.2"
 
 [target.'cfg(target_os = "macos")'.build-dependencies]
-system-deps = "7"
+system-deps = "9"
 
 [package.metadata.system-deps]
 "gstreamer-1.0" = "1.14"
