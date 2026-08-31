@@ -14,7 +14,6 @@ external_libraries = [
     "GLib",
     "GObject",
     "Gst",
-    "GstBase",
 ]
 
 generate = [
@@ -84,6 +83,9 @@ manual = [
     "GstVideo.VideoVBIEncoder",
     "GstVideo.VideoVBIParser",
 ]
+
+[external_libraries]
+GstBase = { min_version = "1.14" }
 
 [[object]]
 name = "Gst.Caps"
