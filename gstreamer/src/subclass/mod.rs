@@ -29,6 +29,7 @@ mod system_clock;
 
 mod preset;
 mod tag_setter;
+mod toc_setter;
 mod uri_handler;
 
 pub use self::{
@@ -61,6 +62,7 @@ pub mod prelude {
         system_clock::SystemClockImpl,
         tag_setter::TagSetterImpl,
         task_pool::TaskPoolImpl,
+        toc_setter::TocSetterImpl,
         tracer::{TracerHook, TracerImpl, TracerImplExt},
         uri_handler::{URIHandlerImpl, URIHandlerImplExt},
     };
