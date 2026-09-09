@@ -94,5 +94,6 @@ pub mod prelude {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
     pub use crate::keypoint::AnalyticsRelationMetaKeypointExt;
     pub use crate::object_detection::AnalyticsRelationMetaODExt;
+    pub use crate::relation_meta::AnalyticsMetaRefExt;
     pub use crate::tracking::AnalyticsRelationMetaTrackingExt;
 }
