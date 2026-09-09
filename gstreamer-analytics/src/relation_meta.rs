@@ -245,9 +245,9 @@ impl<'a> AnalyticsMetaRefExt<'a> for gst::MetaRef<'a, AnalyticsRelationMeta> {
                 T::mtd_type(),
                 mtd.as_mut_ptr(),
             ));
-            let id = mtd.assume_init().id;
 
             if ret {
+                let id = mtd.assume_init().id;
                 Some(AnalyticsMtdRef::from_meta(self, id))
             } else {
                 None
@@ -412,9 +412,9 @@ impl<'a> AnalyticsMetaRefMutExt<'a>
                 T::mtd_type(),
                 mtd.as_mut_ptr(),
             ));
-            let id = mtd.assume_init().id;
 
             if ret {
+                let id = mtd.assume_init().id;
                 Some(AnalyticsMtdRefMut::from_meta(self, id))
             } else {
                 None

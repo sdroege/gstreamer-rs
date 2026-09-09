@@ -102,9 +102,9 @@ impl AnalyticsRelationMetaGroupExt
                 pre_alloc_size,
                 mtd.as_mut_ptr(),
             ));
-            let id = mtd.assume_init().id;
 
             if ret {
+                let id = mtd.assume_init().id;
                 Ok(AnalyticsMtdRef::from_meta(self.as_ref(), id))
             } else {
                 Err(glib::bool_error!("Couldn't add group metadata"))
@@ -124,9 +124,9 @@ impl AnalyticsRelationMetaGroupExt
                 group_size,
                 mtd.as_mut_ptr(),
             ));
-            let id = mtd.assume_init().id;
 
             if ret {
+                let id = mtd.assume_init().id;
                 Ok(AnalyticsMtdRef::from_meta(self.as_ref(), id))
             } else {
                 Err(glib::bool_error!("Couldn't add group metadata"))
@@ -197,9 +197,9 @@ impl AnalyticsRelationMetaGroupExt
                 skeleton_pairs.as_ptr(),
                 mtd.as_mut_ptr(),
             ));
-            let id = mtd.assume_init().id;
 
             if ret {
+                let id = mtd.assume_init().id;
                 Ok(AnalyticsMtdRef::from_meta(self.as_ref(), id))
             } else {
                 Err(glib::bool_error!("Couldn't add keypoints group metadata"))
