@@ -43,9 +43,9 @@ impl<'a> AnalyticsRelationMetaClassificationExt
                 class_quark.into_glib(),
                 mtd.as_mut_ptr(),
             ));
-            let id = mtd.assume_init().id;
 
             if ret {
+                let id = mtd.assume_init().id;
                 Ok(AnalyticsMtdRef::from_meta(self.as_ref(), id))
             } else {
                 Err(glib::bool_error!("Couldn't add more data"))
@@ -69,9 +69,9 @@ impl<'a> AnalyticsRelationMetaClassificationExt
                 class_quarks.as_ptr() as *mut _,
                 mtd.as_mut_ptr(),
             ));
-            let id = mtd.assume_init().id;
 
             if ret {
+                let id = mtd.assume_init().id;
                 Ok(AnalyticsMtdRef::from_meta(self.as_ref(), id))
             } else {
                 Err(glib::bool_error!("Couldn't add more data"))
