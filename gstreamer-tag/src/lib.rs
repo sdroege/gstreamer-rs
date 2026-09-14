@@ -43,3 +43,5 @@ pub mod prelude {
         taglist_ext::{TagListExt, TagListRefMutExt},
     };
 }
+
+pub mod subclass;

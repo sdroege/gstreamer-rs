@@ -17,6 +17,7 @@ external_libraries = [
 ]
 
 generate = [
+    "GstTag.TagDemux",
     "GstTag.TagImageType",
     "GstTag.TagLicenseFlags",
 ]
