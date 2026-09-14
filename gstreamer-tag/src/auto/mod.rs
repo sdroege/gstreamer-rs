@@ -3,6 +3,9 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
+mod tag_demux;
+pub use self::tag_demux::TagDemux;
+
 mod tag_xmp_writer;
 pub use self::tag_xmp_writer::TagXmpWriter;
 
