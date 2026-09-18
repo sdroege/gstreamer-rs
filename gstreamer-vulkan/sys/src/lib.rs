@@ -76,6 +76,9 @@ pub const GST_VULKAN_HANDLE_TYPE_VIDEO_SESSION_PARAMETERS: GstVulkanHandleType =
 #[cfg(feature = "v1_24")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
 pub const GST_VULKAN_HANDLE_TYPE_SAMPLER_YCBCR_CONVERSION: GstVulkanHandleType = 10;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub const GST_VULKAN_HANDLE_TYPE_SEMAPHORE: GstVulkanHandleType = 11;
 
 pub type GstVulkanWindowError = c_int;
 pub const GST_VULKAN_WINDOW_ERROR_FAILED: GstVulkanWindowError = 0;
@@ -123,6 +126,12 @@ pub const GST_VULKAN_FORMAT_FLAG_LE: GstVulkanFormatFlags = 8;
 pub const GST_VULKAN_FORMAT_FLAG_COMPLEX: GstVulkanFormatFlags = 16;
 
 // Callbacks
+pub type GstVulkanBarrierStateForEachBufferFunc =
+    Option<unsafe extern "C" fn(*mut GstVulkanBufferMemory, gpointer)>;
+pub type GstVulkanBarrierStateForEachImageFunc =
+    Option<unsafe extern "C" fn(*mut GstVulkanImageMemory, gpointer)>;
+pub type GstVulkanBarrierStateForEachTimelineSemaphoreFunc =
+    Option<unsafe extern "C" fn(*mut GstVulkanTimelineSemaphore, gpointer)>;
 pub type GstVulkanDeviceForEachQueueFunc =
     Option<unsafe extern "C" fn(*mut GstVulkanDevice, *mut GstVulkanQueue, gpointer) -> gboolean>;
 pub type GstVulkanHandleDestroyNotify =
@@ -140,13 +149,15 @@ pub type GstVulkanTrashNotify = Option<unsafe extern "C" fn(*mut GstVulkanDevice
 #[repr(C)]
 #[allow(dead_code)]
 pub struct GstVulkanBarrierBufferInfo {
+    pub parent: GstVulkanBarrierMemoryInfo,
     _truncated_record_marker: c_void,
-    // /*Ignored*/field parent has incomplete type
+    // /*Ignored*/field offset has incomplete type
 }
 
 impl ::std::fmt::Debug for GstVulkanBarrierBufferInfo {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstVulkanBarrierBufferInfo @ {self:p}"))
+            .field("parent", &self.parent)
             .finish()
     }
 }
@@ -154,27 +165,28 @@ impl ::std::fmt::Debug for GstVulkanBarrierBufferInfo {
 #[repr(C)]
 #[allow(dead_code)]
 pub struct GstVulkanBarrierImageInfo {
+    pub parent: GstVulkanBarrierMemoryInfo,
     _truncated_record_marker: c_void,
-    // /*Ignored*/field parent has incomplete type
+    // /*Ignored*/field image_layout has incomplete type
 }
 
 impl ::std::fmt::Debug for GstVulkanBarrierImageInfo {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstVulkanBarrierImageInfo @ {self:p}"))
+            .field("parent", &self.parent)
             .finish()
     }
 }
 
+#[derive(Copy, Clone)]
 #[repr(C)]
-#[allow(dead_code)]
 pub struct GstVulkanBarrierMemoryInfo {
     pub type_: GstVulkanBarrierType,
     pub flags: GstVulkanBarrierFlags,
     pub queue: *mut GstVulkanQueue,
     pub pipeline_stages: u64,
     pub access_flags: u64,
-    _truncated_record_marker: c_void,
-    // /*Ignored*/field semaphore has incomplete type
+    pub _reserved: [gpointer; 4],
 }
 
 impl ::std::fmt::Debug for GstVulkanBarrierMemoryInfo {
@@ -185,6 +197,21 @@ impl ::std::fmt::Debug for GstVulkanBarrierMemoryInfo {
             .field("queue", &self.queue)
             .field("pipeline_stages", &self.pipeline_stages)
             .field("access_flags", &self.access_flags)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstVulkanBarrierStateClass {
+    pub parent_class: gst::GstObjectClass,
+    pub _reserved: [gpointer; 4],
+}
+
+impl ::std::fmt::Debug for GstVulkanBarrierStateClass {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstVulkanBarrierStateClass @ {self:p}"))
+            .field("parent_class", &self.parent_class)
             .finish()
     }
 }
@@ -807,6 +834,25 @@ pub type GstVulkanSwapperPrivate = _GstVulkanSwapperPrivate;
 
 #[derive(Copy, Clone)]
 #[repr(C)]
+pub struct GstVulkanTimelineSemaphore {
+    pub parent: gst::GstMiniObject,
+    pub semaphore: *mut GstVulkanHandle,
+    pub lock: glib::GMutex,
+    pub value: u64,
+    pub _reserved: [gpointer; 4],
+}
+
+impl ::std::fmt::Debug for GstVulkanTimelineSemaphore {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstVulkanTimelineSemaphore @ {self:p}"))
+            .field("parent", &self.parent)
+            .field("semaphore", &self.semaphore)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
 pub struct GstVulkanTrash {
     pub parent: gst::GstMiniObject,
     pub cache: *mut GstVulkanTrashList,
@@ -922,6 +968,23 @@ pub struct _GstVulkanWindowPrivate {
 pub type GstVulkanWindowPrivate = _GstVulkanWindowPrivate;
 
 // Classes
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstVulkanBarrierState {
+    pub parent: gst::GstObject,
+    pub device: *mut GstVulkanDevice,
+    pub _reserved: [gpointer; 4],
+}
+
+impl ::std::fmt::Debug for GstVulkanBarrierState {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstVulkanBarrierState @ {self:p}"))
+            .field("parent", &self.parent)
+            .field("device", &self.device)
+            .finish()
+    }
+}
+
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct GstVulkanBufferMemoryAllocator {
@@ -1077,9 +1140,7 @@ pub struct GstVulkanFullScreenQuad {
     pub descriptor_set: *mut GstVulkanDescriptorSet,
     pub framebuffer: *mut GstVulkanHandle,
     pub sampler: *mut GstVulkanHandle,
-    pub cmd_pool: *mut GstVulkanCommandPool,
-    pub trash_list: *mut GstVulkanTrashList,
-    pub last_fence: *mut GstVulkanFence,
+    pub exec: *mut GstVulkanOperation,
     pub _reserved: [gpointer; 4],
 }
 
@@ -1098,9 +1159,7 @@ impl ::std::fmt::Debug for GstVulkanFullScreenQuad {
             .field("descriptor_set", &self.descriptor_set)
             .field("framebuffer", &self.framebuffer)
             .field("sampler", &self.sampler)
-            .field("cmd_pool", &self.cmd_pool)
-            .field("trash_list", &self.trash_list)
-            .field("last_fence", &self.last_fence)
+            .field("exec", &self.exec)
             .finish()
     }
 }
@@ -1250,8 +1309,7 @@ pub struct GstVulkanSwapper {
     pub parent: gst::GstObject,
     pub device: *mut GstVulkanDevice,
     pub window: *mut GstVulkanWindow,
-    pub queue: *mut GstVulkanQueue,
-    pub cmd_pool: *mut GstVulkanCommandPool,
+    pub exec: *mut GstVulkanOperation,
     pub _reserved: [gpointer; 4],
 }
 
@@ -1261,8 +1319,7 @@ impl ::std::fmt::Debug for GstVulkanSwapper {
             .field("parent", &self.parent)
             .field("device", &self.device)
             .field("window", &self.window)
-            .field("queue", &self.queue)
-            .field("cmd_pool", &self.cmd_pool)
+            .field("exec", &self.exec)
             .finish()
     }
 }
@@ -1394,8 +1451,84 @@ unsafe extern "C" {
     pub fn gst_vulkan_format_flags_get_type() -> GType;
 
     //=========================================================================
+    // GstVulkanBarrierBufferInfo
+    //=========================================================================
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_barrier_buffer_info_clear(info: *mut GstVulkanBarrierBufferInfo);
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_barrier_buffer_info_copy_into(
+        info: *mut GstVulkanBarrierBufferInfo,
+        other: *mut GstVulkanBarrierBufferInfo,
+    );
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_barrier_buffer_info_is_equal(
+        info: *mut GstVulkanBarrierBufferInfo,
+        other: *mut GstVulkanBarrierBufferInfo,
+    ) -> gboolean;
+
+    //=========================================================================
+    // GstVulkanBarrierImageInfo
+    //=========================================================================
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_barrier_image_info_clear(info: *mut GstVulkanBarrierImageInfo);
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_barrier_image_info_copy_into(
+        info: *mut GstVulkanBarrierImageInfo,
+        other: *mut GstVulkanBarrierImageInfo,
+    );
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_barrier_image_info_is_equal(
+        info: *mut GstVulkanBarrierImageInfo,
+        other: *mut GstVulkanBarrierImageInfo,
+    ) -> gboolean;
+
+    //=========================================================================
+    // GstVulkanBarrierMemoryInfo
+    //=========================================================================
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_barrier_memory_info_clear(info: *mut GstVulkanBarrierMemoryInfo);
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_barrier_memory_info_copy_into(
+        info: *mut GstVulkanBarrierMemoryInfo,
+        other: *mut GstVulkanBarrierMemoryInfo,
+    );
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_barrier_memory_info_is_equal(
+        info: *mut GstVulkanBarrierMemoryInfo,
+        other: *mut GstVulkanBarrierMemoryInfo,
+    ) -> gboolean;
+
+    //=========================================================================
     // GstVulkanBufferMemory
     //=========================================================================
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_buffer_memory_compare_exchange_barrier_unlocked(
+        buffer: *mut GstVulkanBufferMemory,
+        old_info: *mut GstVulkanBarrierBufferInfo,
+        new_info: *mut GstVulkanBarrierBufferInfo,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_buffer_memory_lock(buffer: *mut GstVulkanBufferMemory);
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_buffer_memory_peek_barrier_unlocked(
+        buffer: *mut GstVulkanBufferMemory,
+        info: *mut GstVulkanBarrierBufferInfo,
+    );
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_buffer_memory_unlock(buffer: *mut GstVulkanBufferMemory);
     pub fn gst_vulkan_buffer_memory_alloc(
         device: *mut GstVulkanDevice,
         size: size_t,
@@ -1487,6 +1620,9 @@ unsafe extern "C" {
         handle: *mut GstVulkanHandle,
         user_data: gpointer,
     );
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_handle_free_semaphore(handle: *mut GstVulkanHandle, user_data: gpointer);
     pub fn gst_vulkan_handle_free_shader(handle: *mut GstVulkanHandle, user_data: gpointer);
     pub fn gst_vulkan_handle_ref(handle: *mut GstVulkanHandle) -> *mut GstVulkanHandle;
     pub fn gst_vulkan_handle_context_query(
@@ -1496,6 +1632,13 @@ unsafe extern "C" {
         instance: *mut GstVulkanInstance,
         device: *mut GstVulkanDevice,
     ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_handle_create_sampler_ycbcr_conversion(
+        device: *mut GstVulkanDevice,
+        create_info: gpointer,
+        error: *mut *mut glib::GError,
+    ) -> *mut GstVulkanHandle;
     pub fn gst_vulkan_handle_set_context(
         element: *mut gst::GstElement,
         context: *mut gst::GstContext,
@@ -1510,6 +1653,13 @@ unsafe extern "C" {
         image: *mut GstVulkanImageMemory,
         view: *mut GstVulkanImageView,
     );
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_image_memory_compare_exchange_barrier_unlocked(
+        image: *mut GstVulkanImageMemory,
+        old_info: *mut GstVulkanBarrierImageInfo,
+        new_info: *mut GstVulkanBarrierImageInfo,
+    ) -> gboolean;
     pub fn gst_vulkan_image_memory_find_view(
         image: *mut GstVulkanImageMemory,
         find_func: GstVulkanImageMemoryFindViewFunc,
@@ -1530,6 +1680,18 @@ unsafe extern "C" {
         user_data: gpointer,
         notify: glib::GDestroyNotify,
     ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_image_memory_lock(image: *mut GstVulkanImageMemory);
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_image_memory_peek_barrier_unlocked(
+        image: *mut GstVulkanImageMemory,
+        info: *mut GstVulkanBarrierImageInfo,
+    );
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_image_memory_unlock(image: *mut GstVulkanImageMemory);
     pub fn gst_vulkan_image_memory_alloc(
         device: *mut GstVulkanDevice,
         format: vulkan::VkFormat,
@@ -1577,6 +1739,7 @@ unsafe extern "C" {
         create_info: *const vulkan::VkImageViewCreateInfo,
     ) -> *mut GstVulkanImageView;
     pub fn gst_vulkan_image_view_ref(trash: *mut GstVulkanImageView) -> *mut GstVulkanImageView;
+    pub fn gst_vulkan_image_view_unref(view: *mut GstVulkanImageView);
 
     //=========================================================================
     // GstVulkanMemory
@@ -1605,6 +1768,41 @@ unsafe extern "C" {
     ) -> *mut c_char;
 
     //=========================================================================
+    // GstVulkanTimelineSemaphore
+    //=========================================================================
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_timeline_semaphore_get_type() -> GType;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_timeline_semaphore_new(
+        device: *mut GstVulkanDevice,
+    ) -> *mut GstVulkanTimelineSemaphore;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_timeline_semaphore_compare_exchange_unlocked(
+        timeline: *mut GstVulkanTimelineSemaphore,
+        value: u64,
+        new_value: u64,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_timeline_semaphore_lock(timeline: *mut GstVulkanTimelineSemaphore);
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_timeline_semaphore_peek_unlocked(
+        timeline: *mut GstVulkanTimelineSemaphore,
+    ) -> u64;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_timeline_semaphore_ref(
+        timeline: *mut GstVulkanTimelineSemaphore,
+    ) -> *mut GstVulkanTimelineSemaphore;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_timeline_semaphore_unlock(timeline: *mut GstVulkanTimelineSemaphore);
+
+    //=========================================================================
     // GstVulkanTrash
     //=========================================================================
     pub fn gst_vulkan_trash_get_type() -> GType;
@@ -1620,6 +1818,121 @@ unsafe extern "C" {
     pub fn gst_vulkan_trash_ref(trash: *mut GstVulkanTrash) -> *mut GstVulkanTrash;
     pub fn gst_vulkan_trash_mini_object_unref(device: *mut GstVulkanDevice, user_data: gpointer);
     pub fn gst_vulkan_trash_object_unref(device: *mut GstVulkanDevice, user_data: gpointer);
+
+    //=========================================================================
+    // GstVulkanBarrierState
+    //=========================================================================
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_barrier_state_get_type() -> GType;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_barrier_state_new(device: *mut GstVulkanDevice)
+    -> *mut GstVulkanBarrierState;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_barrier_state_add_buffer_barrier(
+        self_: *mut GstVulkanBarrierState,
+        buffer: *mut GstVulkanBufferMemory,
+        src_stage: u64,
+        dst_stage: u64,
+        new_access: u64,
+        new_queue: *mut GstVulkanQueue,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_barrier_state_add_image_barrier(
+        self_: *mut GstVulkanBarrierState,
+        image: *mut GstVulkanImageMemory,
+        src_stage: u64,
+        dst_stage: u64,
+        new_access: u64,
+        new_layout: vulkan::VkImageLayout,
+        new_queue: *mut GstVulkanQueue,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_barrier_state_add_raw_barrier(
+        self_: *mut GstVulkanBarrierState,
+        barrier: gconstpointer,
+        src_stage: u64,
+        dst_stage: u64,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_barrier_state_commit(
+        self_: *mut GstVulkanBarrierState,
+        state: gpointer,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_barrier_state_foreach_buffer_unlocked(
+        self_: *mut GstVulkanBarrierState,
+        state: gpointer,
+        func: GstVulkanBarrierStateForEachBufferFunc,
+        user_data: gpointer,
+    );
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_barrier_state_foreach_image_unlocked(
+        self_: *mut GstVulkanBarrierState,
+        state: gpointer,
+        func: GstVulkanBarrierStateForEachImageFunc,
+        user_data: gpointer,
+    );
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_barrier_state_foreach_timeline_semaphore_unlocked(
+        self_: *mut GstVulkanBarrierState,
+        state: gpointer,
+        func: GstVulkanBarrierStateForEachTimelineSemaphoreFunc,
+        user_data: gpointer,
+    );
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_barrier_state_lock(self_: *mut GstVulkanBarrierState) -> gpointer;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_barrier_state_pipeline_barrier(
+        self_: *mut GstVulkanBarrierState,
+        cmd: *mut GstVulkanCommandBuffer,
+        dep_flags: vulkan::VkDependencyFlags,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_barrier_state_reset(self_: *mut GstVulkanBarrierState);
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_barrier_state_rollback(self_: *mut GstVulkanBarrierState, state: gpointer);
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_barrier_state_unlock(self_: *mut GstVulkanBarrierState, state: gpointer);
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_barrier_state_update_buffer_barrier(
+        self_: *mut GstVulkanBarrierState,
+        buffer: *mut GstVulkanBufferMemory,
+        dst_stage: u64,
+        new_access: u64,
+        new_queue: *mut GstVulkanQueue,
+    );
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_barrier_state_update_image_barrier(
+        self_: *mut GstVulkanBarrierState,
+        image: *mut GstVulkanImageMemory,
+        dst_stage: u64,
+        new_access: u64,
+        new_layout: vulkan::VkImageLayout,
+        new_queue: *mut GstVulkanQueue,
+    );
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_barrier_state_update_timeline_semaphore(
+        self_: *mut GstVulkanBarrierState,
+        timeline: *mut GstVulkanTimelineSemaphore,
+        new_value: u64,
+    ) -> gboolean;
 
     //=========================================================================
     // GstVulkanBufferMemoryAllocator
@@ -1833,22 +2146,29 @@ unsafe extern "C" {
     pub fn gst_vulkan_full_screen_quad_fill_command_buffer(
         self_: *mut GstVulkanFullScreenQuad,
         cmd: *mut GstVulkanCommandBuffer,
-        fence: *mut GstVulkanFence,
         error: *mut *mut glib::GError,
     ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
     pub fn gst_vulkan_full_screen_quad_get_last_fence(
         self_: *mut GstVulkanFullScreenQuad,
     ) -> *mut GstVulkanFence;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_full_screen_quad_get_operation(
+        self_: *mut GstVulkanFullScreenQuad,
+    ) -> *mut GstVulkanOperation;
     #[cfg(feature = "v1_26")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
     pub fn gst_vulkan_full_screen_quad_get_queue(
         self_: *mut GstVulkanFullScreenQuad,
     ) -> *mut GstVulkanQueue;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
     pub fn gst_vulkan_full_screen_quad_prepare_draw(
         self_: *mut GstVulkanFullScreenQuad,
-        fence: *mut GstVulkanFence,
         error: *mut *mut glib::GError,
-    ) -> gboolean;
+    ) -> *mut GstVulkanCommandBuffer;
     #[cfg(feature = "v1_22")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     pub fn gst_vulkan_full_screen_quad_set_blend_factors(
@@ -1913,10 +2233,10 @@ unsafe extern "C" {
         vertices: *mut gst::GstMemory,
         error: *mut *mut glib::GError,
     ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
     pub fn gst_vulkan_full_screen_quad_submit(
         self_: *mut GstVulkanFullScreenQuad,
-        cmd: *mut GstVulkanCommandBuffer,
-        fence: *mut GstVulkanFence,
         error: *mut *mut glib::GError,
     ) -> gboolean;
 
@@ -2100,12 +2420,6 @@ unsafe extern "C" {
     ) -> gboolean;
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
-    pub fn gst_vulkan_operation_add_extra_image_barriers(
-        self_: *mut GstVulkanOperation,
-        extra_barriers: *mut glib::GArray,
-    );
-    #[cfg(feature = "v1_24")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_vulkan_operation_add_frame_barrier(
         self_: *mut GstVulkanOperation,
         frame: *mut gst::GstBuffer,
@@ -2115,6 +2429,20 @@ unsafe extern "C" {
         new_layout: vulkan::VkImageLayout,
         new_queue: *mut GstVulkanQueue,
     ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_operation_add_signal_semaphore(
+        self_: *mut GstVulkanOperation,
+        semaphore: *mut GstVulkanHandle,
+        stage: u64,
+    );
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_operation_add_wait_semaphore(
+        self_: *mut GstVulkanOperation,
+        semaphore: *mut GstVulkanHandle,
+        stage: u64,
+    );
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_vulkan_operation_begin(
@@ -2149,6 +2477,21 @@ unsafe extern "C" {
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_vulkan_operation_end_query(self_: *mut GstVulkanOperation, id: u32) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_operation_get_barriers(
+        self_: *mut GstVulkanOperation,
+    ) -> *mut GstVulkanBarrierState;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_operation_get_command_pool(
+        self_: *mut GstVulkanOperation,
+    ) -> *mut GstVulkanCommandPool;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_operation_get_last_fence(
+        self_: *mut GstVulkanOperation,
+    ) -> *mut GstVulkanFence;
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_vulkan_operation_get_query(
@@ -2156,25 +2499,14 @@ unsafe extern "C" {
         data: *mut gpointer,
         error: *mut *mut glib::GError,
     ) -> gboolean;
-    #[cfg(feature = "v1_24")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
-    pub fn gst_vulkan_operation_new_extra_image_barriers(
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_operation_get_trash_list(
         self_: *mut GstVulkanOperation,
-    ) -> *mut glib::GArray;
-    #[cfg(feature = "v1_24")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
-    pub fn gst_vulkan_operation_pipeline_barrier2(
-        self_: *mut GstVulkanOperation,
-        dependency_info: gpointer,
-    ) -> gboolean;
+    ) -> *mut GstVulkanTrashList;
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_vulkan_operation_reset(self_: *mut GstVulkanOperation);
-    #[cfg(feature = "v1_24")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
-    pub fn gst_vulkan_operation_retrieve_image_barriers(
-        self_: *mut GstVulkanOperation,
-    ) -> *mut glib::GArray;
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_vulkan_operation_update_frame(

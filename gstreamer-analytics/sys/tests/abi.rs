@@ -315,6 +315,13 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "GstAnalyticsTextMtd",
+        Layout {
+            size: size_of::<GstAnalyticsTextMtd>(),
+            alignment: align_of::<GstAnalyticsTextMtd>(),
+        },
+    ),
+    (
         "GstAnalyticsTrackingMtd",
         Layout {
             size: size_of::<GstAnalyticsTrackingMtd>(),
@@ -386,8 +393,8 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("GST_INF_RELATION_SPAN", "-1"),
     ("GST_MODELINFO_SECTION_NAME", "modelinfo"),
     ("GST_MODELINFO_VERSION_MAJOR", "1"),
-    ("GST_MODELINFO_VERSION_MINOR", "0"),
-    ("GST_MODELINFO_VERSION_STR", "1.0"),
+    ("GST_MODELINFO_VERSION_MINOR", "1"),
+    ("GST_MODELINFO_VERSION_STR", "1.1"),
     ("(gint) GST_SEGMENTATION_TYPE_INSTANCE", "1"),
     ("(gint) GST_SEGMENTATION_TYPE_SEMANTIC", "0"),
     ("(gint) GST_TENSOR_DATA_TYPE_BFLOAT16", "13"),

@@ -101,8 +101,8 @@ pub const GST_CAPS_FEATURE_META_GST_ANALYTICS_BATCH_META: &[u8] = b"meta:GstAnal
 pub const GST_INF_RELATION_SPAN: c_int = -1;
 pub const GST_MODELINFO_SECTION_NAME: &[u8] = b"modelinfo\0";
 pub const GST_MODELINFO_VERSION_MAJOR: c_int = 1;
-pub const GST_MODELINFO_VERSION_MINOR: c_int = 0;
-pub const GST_MODELINFO_VERSION_STR: &[u8] = b"1.0\0";
+pub const GST_MODELINFO_VERSION_MINOR: c_int = 1;
+pub const GST_MODELINFO_VERSION_STR: &[u8] = b"1.1\0";
 pub const GST_ANALYTICS_MTD_TYPE_ANY: c_int = 0;
 
 // Flags
@@ -344,6 +344,22 @@ impl ::std::fmt::Debug for GstAnalyticsTensorMtd {
 
 #[derive(Copy, Clone)]
 #[repr(C)]
+pub struct GstAnalyticsTextMtd {
+    pub id: c_uint,
+    pub meta: *mut GstAnalyticsRelationMeta,
+}
+
+impl ::std::fmt::Debug for GstAnalyticsTextMtd {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstAnalyticsTextMtd @ {self:p}"))
+            .field("id", &self.id)
+            .field("meta", &self.meta)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
 pub struct GstAnalyticsTrackingMtd {
     pub id: c_uint,
     pub meta: *mut GstAnalyticsRelationMeta,
@@ -518,6 +534,12 @@ unsafe extern "C" {
         modelinfo: *mut GstAnalyticsModelInfo,
         tensor_name: *const c_char,
     ) -> *mut c_char;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_modelinfo_get_input_caps(
+        modelinfo: *mut GstAnalyticsModelInfo,
+        tensor_name: *const c_char,
+    ) -> *mut gst::GstCaps;
     #[cfg(feature = "v1_28")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
     pub fn gst_analytics_modelinfo_get_input_scales_offsets(
@@ -560,6 +582,19 @@ unsafe extern "C" {
     pub fn gst_analytics_modelinfo_load(
         model_filename: *const c_char,
     ) -> *mut GstAnalyticsModelInfo;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_modelinfo_validate_caps_datatype(
+        caps_structure: *const gst::GstStructure,
+        data_type: GstTensorDataType,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_modelinfo_validate_video_caps_resolution(
+        caps_structure: *const gst::GstStructure,
+        dims_width: c_int,
+        dims_height: c_int,
+    ) -> gboolean;
 
     //=========================================================================
     // GstAnalyticsMtd
@@ -738,6 +773,14 @@ unsafe extern "C" {
         dims: *mut size_t,
         tensor_mtd: *mut GstAnalyticsTensorMtd,
     ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_relation_meta_add_text_mtd(
+        meta: *mut GstAnalyticsRelationMeta,
+        text: *const c_char,
+        confidence: c_float,
+        text_mtd: *mut GstAnalyticsTextMtd,
+    ) -> gboolean;
     pub fn gst_analytics_relation_meta_add_tracking_mtd(
         instance: *mut GstAnalyticsRelationMeta,
         tracking_id: u64,
@@ -813,6 +856,13 @@ unsafe extern "C" {
         an_meta_id: c_uint,
         rlt: *mut GstAnalyticsTensorMtd,
     ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_relation_meta_get_text_mtd(
+        meta: *mut GstAnalyticsRelationMeta,
+        an_meta_id: c_uint,
+        rlt: *mut GstAnalyticsTextMtd,
+    ) -> gboolean;
     pub fn gst_analytics_relation_meta_get_tracking_mtd(
         meta: *mut GstAnalyticsRelationMeta,
         an_meta_id: c_uint,
@@ -879,6 +929,22 @@ unsafe extern "C" {
     pub fn gst_analytics_tensor_mtd_get_mtd_type() -> GstAnalyticsMtdType;
 
     //=========================================================================
+    // GstAnalyticsTextMtd
+    //=========================================================================
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_text_mtd_get_confidence(mtd: *const GstAnalyticsTextMtd) -> c_float;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_text_mtd_get_length(mtd: *const GstAnalyticsTextMtd) -> size_t;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_text_mtd_get_text(mtd: *const GstAnalyticsTextMtd) -> *const c_char;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_text_mtd_get_mtd_type() -> GstAnalyticsMtdType;
+
+    //=========================================================================
     // GstAnalyticsTrackingMtd
     //=========================================================================
     pub fn gst_analytics_tracking_mtd_get_info(
@@ -943,9 +1009,21 @@ unsafe extern "C" {
         num_dims: size_t,
         dims: *mut size_t,
     ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_tensor_data_type_from_name(
+        name: *const c_char,
+        data_type: *mut GstTensorDataType,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_tensor_data_type_get_bit_depth(data_type: GstTensorDataType) -> c_uint;
     #[cfg(feature = "v1_28")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
     pub fn gst_tensor_data_type_get_name(data_type: GstTensorDataType) -> *const c_char;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_tensor_data_type_is_float(data_type: GstTensorDataType) -> gboolean;
 
     //=========================================================================
     // GstTensorMeta

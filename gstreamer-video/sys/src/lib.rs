@@ -186,6 +186,9 @@ pub type GstVideoColorRange = c_int;
 pub const GST_VIDEO_COLOR_RANGE_UNKNOWN: GstVideoColorRange = 0;
 pub const GST_VIDEO_COLOR_RANGE_0_255: GstVideoColorRange = 1;
 pub const GST_VIDEO_COLOR_RANGE_16_235: GstVideoColorRange = 2;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub const GST_VIDEO_COLOR_RANGE_0_1: GstVideoColorRange = 3;
 
 pub type GstVideoDitherMethod = c_int;
 pub const GST_VIDEO_DITHER_NONE: GstVideoDitherMethod = 0;
@@ -435,6 +438,60 @@ pub const GST_VIDEO_FORMAT_RGB10x2_LE: GstVideoFormat = 141;
 #[cfg(feature = "v1_30")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
 pub const GST_VIDEO_FORMAT_AHARDWARE_BUFFER: GstVideoFormat = 142;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub const GST_VIDEO_FORMAT_RGBA_F16LE: GstVideoFormat = 143;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub const GST_VIDEO_FORMAT_RGBA_F16BE: GstVideoFormat = 144;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub const GST_VIDEO_FORMAT_RGBA_F32LE: GstVideoFormat = 145;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub const GST_VIDEO_FORMAT_RGBA_F32BE: GstVideoFormat = 146;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub const GST_VIDEO_FORMAT_ARGB_F32: GstVideoFormat = 147;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub const GST_VIDEO_FORMAT_RGBP_F16LE: GstVideoFormat = 148;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub const GST_VIDEO_FORMAT_RGBP_F16BE: GstVideoFormat = 149;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub const GST_VIDEO_FORMAT_RGBP_F32LE: GstVideoFormat = 150;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub const GST_VIDEO_FORMAT_RGBP_F32BE: GstVideoFormat = 151;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub const GST_VIDEO_FORMAT_RGB_F16LE: GstVideoFormat = 152;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub const GST_VIDEO_FORMAT_RGB_F16BE: GstVideoFormat = 153;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub const GST_VIDEO_FORMAT_RGB_F32LE: GstVideoFormat = 154;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub const GST_VIDEO_FORMAT_RGB_F32BE: GstVideoFormat = 155;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub const GST_VIDEO_FORMAT_AYUV_F32: GstVideoFormat = 156;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub const GST_VIDEO_FORMAT_GRAY_F16LE: GstVideoFormat = 157;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub const GST_VIDEO_FORMAT_GRAY_F16BE: GstVideoFormat = 158;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub const GST_VIDEO_FORMAT_GRAY_F32LE: GstVideoFormat = 159;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub const GST_VIDEO_FORMAT_GRAY_F32BE: GstVideoFormat = 160;
 
 pub type GstVideoGLTextureOrientation = c_int;
 pub const GST_VIDEO_GL_TEXTURE_ORIENTATION_X_NORMAL_Y_NORMAL: GstVideoGLTextureOrientation = 0;
@@ -627,7 +684,7 @@ pub const GST_VIDEO_DECODER_SINK_NAME: &[u8] = b"sink\0";
 pub const GST_VIDEO_DECODER_SRC_NAME: &[u8] = b"src\0";
 pub const GST_VIDEO_ENCODER_SINK_NAME: &[u8] = b"sink\0";
 pub const GST_VIDEO_ENCODER_SRC_NAME: &[u8] = b"src\0";
-pub const GST_VIDEO_FORMAT_LAST: c_int = 143;
+pub const GST_VIDEO_FORMAT_LAST: c_int = 161;
 pub const GST_VIDEO_FPS_RANGE: &[u8] = b"(fraction) [ 0, max ]\0";
 pub const GST_VIDEO_HDR10_PLUS_MAX_BYTES: c_int = 1024;
 pub const GST_VIDEO_HDR10_PLUS_MAX_COLS_MD_APL: c_int = 25;
@@ -734,6 +791,9 @@ pub const GST_VIDEO_FORMAT_FLAG_TILED: GstVideoFormatFlags = 256;
 #[cfg(feature = "v1_22")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
 pub const GST_VIDEO_FORMAT_FLAG_SUBTILES: GstVideoFormatFlags = 512;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub const GST_VIDEO_FORMAT_FLAG_FLOAT: GstVideoFormatFlags = 1024;
 
 pub type GstVideoFrameFlags = c_uint;
 pub const GST_VIDEO_FRAME_FLAG_NONE: GstVideoFrameFlags = 0;
@@ -3142,6 +3202,15 @@ unsafe extern "C" {
         offset: *mut [c_int; 4],
         scale: *mut [c_int; 4],
     );
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_video_color_range_offsets_full(
+        range: GstVideoColorRange,
+        info: *const GstVideoFormatInfo,
+        offset: *mut [c_double; 4],
+        scale: *mut [c_double; 4],
+        fullscale: *mut [c_double; 4],
+    );
 
     //=========================================================================
     // GstVideoDitherMethod
@@ -3679,7 +3748,7 @@ unsafe extern "C" {
     pub fn gst_video_format_info_component(
         info: *const GstVideoFormatInfo,
         plane: c_uint,
-        components: *mut c_int,
+        components: *mut [c_int; 4],
     );
     #[cfg(feature = "v1_22")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]

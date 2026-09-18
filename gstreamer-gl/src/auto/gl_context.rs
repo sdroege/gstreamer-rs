@@ -21,7 +21,7 @@ impl GLContext {
     #[doc(alias = "gst_gl_context_new")]
     pub fn new(display: &impl IsA<GLDisplay>) -> GLContext {
         skip_assert_initialized!();
-        unsafe { from_glib_none(ffi::gst_gl_context_new(display.as_ref().to_glib_none().0)) }
+        unsafe { from_glib_full(ffi::gst_gl_context_new(display.as_ref().to_glib_none().0)) }
     }
 
     #[doc(alias = "gst_gl_context_get_current")]

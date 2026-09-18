@@ -50,6 +50,14 @@ impl ModelInfo {
         }
     }
 
+    //#[cfg(feature = "v1_30")]
+    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    //#[doc(alias = "gst_analytics_modelinfo_get_input_caps")]
+    //#[doc(alias = "get_input_caps")]
+    //pub fn input_caps(&self, tensor_name: &str) -> /*Ignored*/Option<gst::Caps> {
+    //    unsafe { TODO: call ffi:gst_analytics_modelinfo_get_input_caps() }
+    //}
+
     #[doc(alias = "gst_analytics_modelinfo_get_quark_group_id")]
     #[doc(alias = "get_quark_group_id")]
     pub fn quark_group_id(&self) -> glib::Quark {
@@ -90,6 +98,20 @@ impl ModelInfo {
             ))
         }
     }
+
+    //#[cfg(feature = "v1_30")]
+    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    //#[doc(alias = "gst_analytics_modelinfo_validate_caps_datatype")]
+    //pub fn validate_caps_datatype(caps_structure: /*Ignored*/&gst::Structure, data_type: TensorDataType) -> bool {
+    //    unsafe { TODO: call ffi:gst_analytics_modelinfo_validate_caps_datatype() }
+    //}
+
+    //#[cfg(feature = "v1_30")]
+    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    //#[doc(alias = "gst_analytics_modelinfo_validate_video_caps_resolution")]
+    //pub fn validate_video_caps_resolution(caps_structure: /*Ignored*/&gst::Structure, dims_width: i32, dims_height: i32) -> bool {
+    //    unsafe { TODO: call ffi:gst_analytics_modelinfo_validate_video_caps_resolution() }
+    //}
 }
 
 unsafe impl Send for ModelInfo {}

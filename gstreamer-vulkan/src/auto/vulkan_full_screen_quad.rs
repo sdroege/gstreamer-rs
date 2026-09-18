@@ -3,7 +3,10 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{VulkanCommandBuffer, VulkanFence, VulkanHandle, VulkanQueue, ffi};
+use crate::{VulkanCommandBuffer, VulkanHandle, VulkanQueue, ffi};
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+use crate::{VulkanFence, VulkanOperation};
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
@@ -69,17 +72,12 @@ pub trait VulkanFullScreenQuadExt: IsA<VulkanFullScreenQuad> + 'static {
     }
 
     #[doc(alias = "gst_vulkan_full_screen_quad_fill_command_buffer")]
-    fn fill_command_buffer(
-        &self,
-        cmd: &mut VulkanCommandBuffer,
-        fence: &mut VulkanFence,
-    ) -> Result<(), glib::Error> {
+    fn fill_command_buffer(&self, cmd: &mut VulkanCommandBuffer) -> Result<(), glib::Error> {
         unsafe {
             let mut error = std::ptr::null_mut();
             let is_ok = ffi::gst_vulkan_full_screen_quad_fill_command_buffer(
                 self.as_ref().to_glib_none().0,
                 cmd.to_glib_none_mut().0,
-                fence.to_glib_none_mut().0,
                 &mut error,
             );
             debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
@@ -91,11 +89,25 @@ pub trait VulkanFullScreenQuadExt: IsA<VulkanFullScreenQuad> + 'static {
         }
     }
 
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
     #[doc(alias = "gst_vulkan_full_screen_quad_get_last_fence")]
     #[doc(alias = "get_last_fence")]
     fn last_fence(&self) -> VulkanFence {
         unsafe {
             from_glib_full(ffi::gst_vulkan_full_screen_quad_get_last_fence(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "gst_vulkan_full_screen_quad_get_operation")]
+    #[doc(alias = "get_operation")]
+    fn operation(&self) -> VulkanOperation {
+        unsafe {
+            from_glib_none(ffi::gst_vulkan_full_screen_quad_get_operation(
                 self.as_ref().to_glib_none().0,
             ))
         }
@@ -111,18 +123,18 @@ pub trait VulkanFullScreenQuadExt: IsA<VulkanFullScreenQuad> + 'static {
         }
     }
 
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
     #[doc(alias = "gst_vulkan_full_screen_quad_prepare_draw")]
-    fn prepare_draw(&self, fence: &mut VulkanFence) -> Result<(), glib::Error> {
+    fn prepare_draw(&self) -> Result<VulkanCommandBuffer, glib::Error> {
         unsafe {
             let mut error = std::ptr::null_mut();
-            let is_ok = ffi::gst_vulkan_full_screen_quad_prepare_draw(
+            let ret = ffi::gst_vulkan_full_screen_quad_prepare_draw(
                 self.as_ref().to_glib_none().0,
-                fence.to_glib_none_mut().0,
                 &mut error,
             );
-            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
-                Ok(())
+                Ok(from_glib_full(ret))
             } else {
                 Err(from_glib_full(error))
             }
@@ -276,16 +288,14 @@ pub trait VulkanFullScreenQuadExt: IsA<VulkanFullScreenQuad> + 'static {
         }
     }
 
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
     #[doc(alias = "gst_vulkan_full_screen_quad_submit")]
-    fn submit(&self, cmd: VulkanCommandBuffer, fence: &mut VulkanFence) -> Result<(), glib::Error> {
+    fn submit(&self) -> Result<(), glib::Error> {
         unsafe {
             let mut error = std::ptr::null_mut();
-            let is_ok = ffi::gst_vulkan_full_screen_quad_submit(
-                self.as_ref().to_glib_none().0,
-                cmd.into_glib_ptr(),
-                fence.to_glib_none_mut().0,
-                &mut error,
-            );
+            let is_ok =
+                ffi::gst_vulkan_full_screen_quad_submit(self.as_ref().to_glib_none().0, &mut error);
             debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
             if error.is_null() {
                 Ok(())

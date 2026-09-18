@@ -681,6 +681,10 @@ bitflags! {
         #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
         #[doc(alias = "GST_VIDEO_FORMAT_FLAG_SUBTILES")]
         const SUBTILES = ffi::GST_VIDEO_FORMAT_FLAG_SUBTILES as _;
+        #[cfg(feature = "v1_30")]
+        #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+        #[doc(alias = "GST_VIDEO_FORMAT_FLAG_FLOAT")]
+        const FLOAT = ffi::GST_VIDEO_FORMAT_FLAG_FLOAT as _;
     }
 }
 
