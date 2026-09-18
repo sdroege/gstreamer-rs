@@ -406,13 +406,35 @@ impl PartialOrd for VideoFormatInfo {
     }
 }
 
+// Value of GST_VIDEO_FORMAT_FLAG_FLOAT. Kept as a raw bit so ordering
+// also works when built without the v1_30 feature but linked against
+// a newer GStreamer that reports formats unknown to the compiled-in
+// enum.
+const VIDEO_FORMAT_FLAG_FLOAT: ffi::GstVideoFormatFlags = 1 << 10;
+
+// See GST_VIDEO_FORMATS_ALL and GStreamer scripts/sort_video_formats.py
+// for the sorting algorithm.
+fn effective_depth(info: &VideoFormatInfo) -> [u32; 4] {
+    // For floating point formats only the mantissa contributes to shade
+    // resolution: half floats resolve ~11 bits, single precision ~24 bits.
+    if info.0.flags & VIDEO_FORMAT_FLAG_FLOAT != 0 {
+        return info.0.depth.map(|d| match d {
+            16 => 11,
+            32 => 24,
+            d => d,
+        });
+    }
+
+    info.0.depth
+}
+
 impl Ord for VideoFormatInfo {
     // See GST_VIDEO_FORMATS_ALL for the sorting algorithm
     fn cmp(&self, other: &Self) -> Ordering {
         self.n_components()
             .cmp(&other.n_components())
             .reverse()
-            .then_with(|| self.depth().cmp(other.depth()).reverse())
+            .then_with(|| effective_depth(self).cmp(&effective_depth(other)).reverse())
             .then_with(|| self.w_sub().cmp(other.w_sub()))
             .then_with(|| self.h_sub().cmp(other.h_sub()))
             .then_with(|| self.n_planes().cmp(&other.n_planes()).reverse())
