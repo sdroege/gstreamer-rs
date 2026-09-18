@@ -54,5 +54,10 @@ status = "generate"
 boxed_inline = true
 
 [[object]]
+name = "GstAnalytics.TextMtd"
+status = "generate"
+boxed_inline = true
+
+[[object]]
 name = "GstAnalytics.Tensor"
 status = "manual"

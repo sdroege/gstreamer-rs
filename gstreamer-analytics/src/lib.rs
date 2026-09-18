@@ -63,6 +63,13 @@ mod group;
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
 pub use crate::group::*;
 
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+mod text;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub use crate::text::*;
+
 mod classification;
 pub use crate::classification::*;
 
@@ -91,5 +98,8 @@ pub mod prelude {
     pub use crate::keypoint::AnalyticsRelationMetaKeypointExt;
     pub use crate::object_detection::AnalyticsRelationMetaODExt;
     pub use crate::relation_meta::{AnalyticsMetaRefExt, AnalyticsMetaRefMutExt, AnalyticsMtdExt};
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub use crate::text::AnalyticsRelationMetaTextExt;
     pub use crate::tracking::AnalyticsRelationMetaTrackingExt;
 }
