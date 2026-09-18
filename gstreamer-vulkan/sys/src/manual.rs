@@ -7,6 +7,7 @@ pub mod vulkan {
     pub use ash::vk::BufferUsageFlags as VkBufferUsageFlags;
     pub use ash::vk::CommandBuffer as VkCommandBuffer;
     pub use ash::vk::CommandBufferLevel as VkCommandBufferLevel;
+    pub use ash::vk::DependencyFlags as VkDependencyFlags;
     pub use ash::vk::DescriptorPool as VkDescriptorPool;
     pub use ash::vk::DescriptorSet as VkDescriptorSet;
     pub use ash::vk::Format as VkFormat;
