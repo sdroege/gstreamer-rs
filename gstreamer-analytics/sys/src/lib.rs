@@ -101,8 +101,6 @@ pub const GST_CAPS_FEATURE_META_GST_ANALYTICS_BATCH_META: &[u8] = b"meta:GstAnal
 pub const GST_INF_RELATION_SPAN: c_int = -1;
 pub const GST_MODELINFO_SECTION_NAME: &[u8] = b"modelinfo\0";
 pub const GST_MODELINFO_VERSION_MAJOR: c_int = 1;
-pub const GST_MODELINFO_VERSION_MINOR: c_int = 1;
-pub const GST_MODELINFO_VERSION_STR: &[u8] = b"1.1\0";
 pub const GST_ANALYTICS_MTD_TYPE_ANY: c_int = 0;
 
 // Flags

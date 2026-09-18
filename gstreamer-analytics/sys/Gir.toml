@@ -23,6 +23,11 @@ manual = [
     "Gst.Object",
 ]
 
+ignore = [
+    "GstAnalytics.MODELINFO_VERSION_MINOR",
+    "GstAnalytics.MODELINFO_VERSION_STR",
+]
+
 [external_libraries]
 gstreamer="Gst"
 
