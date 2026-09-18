@@ -3,6 +3,9 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+use crate::TensorDataType;
 use crate::{TensorDimOrder, ffi};
 use glib::translate::*;
 
@@ -50,13 +53,18 @@ impl ModelInfo {
         }
     }
 
-    //#[cfg(feature = "v1_30")]
-    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
-    //#[doc(alias = "gst_analytics_modelinfo_get_input_caps")]
-    //#[doc(alias = "get_input_caps")]
-    //pub fn input_caps(&self, tensor_name: &str) -> /*Ignored*/Option<gst::Caps> {
-    //    unsafe { TODO: call ffi:gst_analytics_modelinfo_get_input_caps() }
-    //}
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "gst_analytics_modelinfo_get_input_caps")]
+    #[doc(alias = "get_input_caps")]
+    pub fn input_caps(&self, tensor_name: &str) -> Option<gst::Caps> {
+        unsafe {
+            from_glib_full(ffi::gst_analytics_modelinfo_get_input_caps(
+                mut_override(self.to_glib_none().0),
+                tensor_name.to_glib_none().0,
+            ))
+        }
+    }
 
     #[doc(alias = "gst_analytics_modelinfo_get_quark_group_id")]
     #[doc(alias = "get_quark_group_id")]
@@ -99,19 +107,39 @@ impl ModelInfo {
         }
     }
 
-    //#[cfg(feature = "v1_30")]
-    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
-    //#[doc(alias = "gst_analytics_modelinfo_validate_caps_datatype")]
-    //pub fn validate_caps_datatype(caps_structure: /*Ignored*/&gst::Structure, data_type: TensorDataType) -> bool {
-    //    unsafe { TODO: call ffi:gst_analytics_modelinfo_validate_caps_datatype() }
-    //}
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "gst_analytics_modelinfo_validate_caps_datatype")]
+    pub fn validate_caps_datatype(
+        caps_structure: &gst::Structure,
+        data_type: TensorDataType,
+    ) -> bool {
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib(ffi::gst_analytics_modelinfo_validate_caps_datatype(
+                caps_structure.to_glib_none().0,
+                data_type.into_glib(),
+            ))
+        }
+    }
 
-    //#[cfg(feature = "v1_30")]
-    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
-    //#[doc(alias = "gst_analytics_modelinfo_validate_video_caps_resolution")]
-    //pub fn validate_video_caps_resolution(caps_structure: /*Ignored*/&gst::Structure, dims_width: i32, dims_height: i32) -> bool {
-    //    unsafe { TODO: call ffi:gst_analytics_modelinfo_validate_video_caps_resolution() }
-    //}
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "gst_analytics_modelinfo_validate_video_caps_resolution")]
+    pub fn validate_video_caps_resolution(
+        caps_structure: &gst::Structure,
+        dims_width: i32,
+        dims_height: i32,
+    ) -> bool {
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib(ffi::gst_analytics_modelinfo_validate_video_caps_resolution(
+                caps_structure.to_glib_none().0,
+                dims_width,
+                dims_height,
+            ))
+        }
+    }
 }
 
 unsafe impl Send for ModelInfo {}
