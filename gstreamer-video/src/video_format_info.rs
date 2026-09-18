@@ -381,7 +381,7 @@ impl VideoFormatInfo {
 
         let mut comp = [-1i32; ffi::GST_VIDEO_MAX_COMPONENTS as usize];
         unsafe {
-            ffi::gst_video_format_info_component(self.to_glib_none().0, plane, comp.as_mut_ptr());
+            ffi::gst_video_format_info_component(self.to_glib_none().0, plane, &mut comp);
         }
         comp
     }
