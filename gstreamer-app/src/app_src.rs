@@ -680,8 +680,6 @@ impl<'a> AppSrcBuilder<'a> {
 
 #[cfg(test)]
 mod tests {
-    use gst::prelude::*;
-
     use super::*;
 
     #[test]
