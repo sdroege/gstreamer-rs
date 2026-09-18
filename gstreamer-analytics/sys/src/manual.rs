@@ -1,7 +1,18 @@
 use gstreamer_sys as gst_sys;
 use libc::size_t;
+use std::ffi::c_int;
 
 use crate::{GstTensorDataType, GstTensorDimOrder, GstTensorLayout};
+
+#[cfg(feature = "v1_30")]
+pub const GST_MODELINFO_VERSION_MINOR: c_int = 1;
+#[cfg(not(feature = "v1_30"))]
+pub const GST_MODELINFO_VERSION_MINOR: c_int = 0;
+
+#[cfg(feature = "v1_30")]
+pub const GST_MODELINFO_VERSION_STR: &[u8] = b"1.1\0";
+#[cfg(not(feature = "v1_30"))]
+pub const GST_MODELINFO_VERSION_STR: &[u8] = b"1.0\0";
 
 #[repr(C)]
 pub struct GstTensor {
