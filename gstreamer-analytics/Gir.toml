@@ -41,6 +41,16 @@ status = "manual"
 ref_mode = "ref"
 
 [[object]]
+name = "Gst.Caps"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.Structure"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
 name = "GstAnalytics.ModelInfo"
 status = "generate"
     [[object.function]]
