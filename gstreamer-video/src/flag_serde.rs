@@ -80,10 +80,15 @@ mod tests {
             crate::VideoFlags::all(),
             "\"variable-fps+premultiplied-alpha\""
         );
-        #[cfg(feature = "v1_22")]
+        #[cfg(all(feature = "v1_22", not(feature = "v1_30")))]
         check_serialize!(
             crate::VideoFormatFlags::all(),
             "\"yuv+rgb+gray+alpha+le+palette+complex+unpack+tiled+subtiles\""
+        );
+        #[cfg(feature = "v1_30")]
+        check_serialize!(
+            crate::VideoFormatFlags::all(),
+            "\"yuv+rgb+gray+alpha+le+palette+complex+unpack+tiled+subtiles+float\""
         );
         check_serialize!(
             crate::VideoFrameFlags::all(),
@@ -155,11 +160,17 @@ mod tests {
             crate::VideoFlags::all(),
             "\"variable-fps+premultiplied-alpha\""
         );
-        #[cfg(feature = "v1_22")]
+        #[cfg(all(feature = "v1_22", not(feature = "v1_30")))]
         check_deserialize!(
             crate::VideoFormatFlags,
             crate::VideoFormatFlags::all(),
             "\"yuv+rgb+gray+alpha+le+palette+complex+unpack+tiled+subtiles\""
+        );
+        #[cfg(feature = "v1_30")]
+        check_deserialize!(
+            crate::VideoFormatFlags,
+            crate::VideoFormatFlags::all(),
+            "\"yuv+rgb+gray+alpha+le+palette+complex+unpack+tiled+subtiles+float\""
         );
         check_deserialize!(
             crate::VideoFrameFlags,
