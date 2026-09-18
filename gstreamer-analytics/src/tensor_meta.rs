@@ -58,24 +58,9 @@ impl TensorMeta {
         order: crate::TensorDimOrder,
         dims: &[usize],
     ) -> Option<&crate::Tensor> {
-        unsafe {
-            let res = ffi::gst_tensor_meta_get_typed_tensor(
-                self.as_mut_ptr(),
-                id.into_glib(),
-                data_type.into_glib(),
-                order.into_glib(),
-                dims.len(),
-                dims.as_ptr(),
-            );
-            if res.is_null() {
-                None
-            } else {
-                // FIXME: This is not ideal but otherwise we can't return a reference safely
-                self.as_slice()
-                    .iter()
-                    .find(|t| std::ptr::eq(t.as_ptr(), res))
-            }
-        }
+        self.as_slice()
+            .iter()
+            .find(|t| t.id() == id && t.check_type(data_type, order, dims))
     }
 }
 
