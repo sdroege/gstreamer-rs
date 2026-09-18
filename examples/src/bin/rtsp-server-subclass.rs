@@ -128,7 +128,7 @@ mod media_factory {
                     .unwrap();
 
                 // The names of the payloaders must be payX
-                let pay = gst::ElementFactory::make("rtpvp8pay")
+                let pay = gst::ElementFactory::make("rtpvp8pay2")
                     .name("pay0")
                     .build()
                     .unwrap();

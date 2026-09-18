@@ -38,7 +38,7 @@ fn main_loop() -> Result<(), Error> {
     // Here we tell the media factory the media we want to serve.
     // This is done in the launch syntax. When the first client connects,
     // the factory will use this syntax to create a new pipeline instance.
-    factory.set_launch("( videotestsrc ! vp8enc ! rtpvp8pay name=pay0 )");
+    factory.set_launch("( videotestsrc ! vp8enc ! rtpvp8pay2 name=pay0 )");
     // This setting specifies whether each connecting client gets the output
     // of a new instance of the pipeline, or whether all connected clients share
     // the output of the same pipeline.

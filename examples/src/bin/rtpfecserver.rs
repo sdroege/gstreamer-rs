@@ -91,9 +91,9 @@ fn example_main() -> Result<(), Error> {
         .property_from_str("error-resilient", "default")
         .build()?;
     let q2 = gst::ElementFactory::make("queue").build()?;
-    let pay = gst::ElementFactory::make("rtpvp8pay").build()?;
+    let pay = gst::ElementFactory::make("rtpvp8pay2").build()?;
     let rtpbin = gst::ElementFactory::make("rtpbin").build()?;
-    let sink = gst::ElementFactory::make("udpsink")
+    let sink = gst::ElementFactory::make("udpsink2")
         .property("host", "127.0.0.1")
         .property("sync", true)
         .build()?;

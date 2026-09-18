@@ -96,9 +96,9 @@ fn example_main() -> Result<(), Error> {
         .height(1080)
         .build();
 
-    let src = gst::ElementFactory::make("udpsrc")
+    let src = gst::ElementFactory::make("udpsrc2")
         .property("address", "127.0.0.1")
-        .property("port", 5004i32)
+        .property("port", 5004u32)
         .property("caps", &rtp_caps)
         .build()?;
     let netsim = gst::ElementFactory::make("netsim")
@@ -107,7 +107,7 @@ fn example_main() -> Result<(), Error> {
     let rtpbin = gst::ElementFactory::make("rtpbin")
         .property("do-lost", true)
         .build()?;
-    let depay = gst::ElementFactory::make("rtpvp8depay").build()?;
+    let depay = gst::ElementFactory::make("rtpvp8depay2").build()?;
     let dec = gst::ElementFactory::make("vp8dec").build()?;
     let conv = gst::ElementFactory::make("videoconvert").build()?;
     let scale = gst::ElementFactory::make("videoscale").build()?;
