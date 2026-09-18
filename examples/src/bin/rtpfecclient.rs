@@ -98,6 +98,7 @@ fn example_main() -> Result<(), Error> {
 
     let src = gst::ElementFactory::make("udpsrc")
         .property("address", "127.0.0.1")
+        .property("port", 5004i32)
         .property("caps", &rtp_caps)
         .build()?;
     let netsim = gst::ElementFactory::make("netsim")

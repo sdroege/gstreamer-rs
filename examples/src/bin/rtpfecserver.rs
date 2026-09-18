@@ -77,7 +77,6 @@ fn example_main() -> Result<(), Error> {
 
     let pipeline = gst::Pipeline::default();
     let src = gst::ElementFactory::make("uridecodebin")
-        .property_from_str("pattern", "ball")
         .property("expose-all-streams", false)
         .property("caps", video_caps)
         .property("uri", uri)
