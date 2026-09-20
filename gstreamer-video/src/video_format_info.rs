@@ -350,6 +350,30 @@ impl VideoFormatInfo {
         (offset, scale)
     }
 
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "gst_video_color_range_offsets_full")]
+    pub fn range_offsets_full(
+        &self,
+        range: crate::VideoColorRange,
+    ) -> ([f64; 4], [f64; 4], [f64; 4]) {
+        let mut offset = [0f64; 4];
+        let mut scale = [0f64; 4];
+        let mut fullscale = [0f64; 4];
+
+        unsafe {
+            ffi::gst_video_color_range_offsets_full(
+                range.into_glib(),
+                self.to_glib_none().0,
+                &mut offset,
+                &mut scale,
+                &mut fullscale,
+            )
+        }
+
+        (offset, scale, fullscale)
+    }
+
     #[cfg(feature = "v1_22")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_22")))]
     #[doc(alias = "gst_video_format_info_extrapolate_stride")]

@@ -1094,6 +1094,17 @@ impl VideoInfo {
     pub fn range_offsets(&self, range: crate::VideoColorRange) -> ([i32; 4], [i32; 4]) {
         self.format_info().range_offsets(range)
     }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "gst_video_color_range_offsets_full")]
+    #[inline]
+    pub fn range_offsets_full(
+        &self,
+        range: crate::VideoColorRange,
+    ) -> ([f64; 4], [f64; 4], [f64; 4]) {
+        self.format_info().range_offsets_full(range)
+    }
 }
 
 impl PartialEq for VideoInfo {
