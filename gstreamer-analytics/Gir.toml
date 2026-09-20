@@ -70,3 +70,11 @@ status = "generate"
     [[object.function]]
     name = "get_target_ranges"
     manual = true
+
+    [[object.function]]
+    name = "validate_caps_datatype"
+    manual = true
+
+    [[object.function]]
+    name = "validate_video_caps_resolution"
+    manual = true

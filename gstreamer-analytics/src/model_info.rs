@@ -89,4 +89,38 @@ impl ModelInfo {
             }
         }
     }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "gst_analytics_modelinfo_validate_caps_datatype")]
+    pub fn validate_caps_datatype(
+        caps_structure: &gst::StructureRef,
+        data_type: TensorDataType,
+    ) -> bool {
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib(ffi::gst_analytics_modelinfo_validate_caps_datatype(
+                caps_structure.as_ptr(),
+                data_type.into_glib(),
+            ))
+        }
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "gst_analytics_modelinfo_validate_video_caps_resolution")]
+    pub fn validate_video_caps_resolution(
+        caps_structure: &gst::StructureRef,
+        dims_width: i32,
+        dims_height: i32,
+    ) -> bool {
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib(ffi::gst_analytics_modelinfo_validate_video_caps_resolution(
+                caps_structure.as_ptr(),
+                dims_width,
+                dims_height,
+            ))
+        }
+    }
 }

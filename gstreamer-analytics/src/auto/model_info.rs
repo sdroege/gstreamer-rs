@@ -3,9 +3,6 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-#[cfg(feature = "v1_30")]
-#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
-use crate::TensorDataType;
 use crate::{TensorDimOrder, ffi};
 use glib::translate::*;
 
@@ -103,40 +100,6 @@ impl ModelInfo {
         unsafe {
             from_glib_full(ffi::gst_analytics_modelinfo_load(
                 model_filename.as_ref().to_glib_none().0,
-            ))
-        }
-    }
-
-    #[cfg(feature = "v1_30")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
-    #[doc(alias = "gst_analytics_modelinfo_validate_caps_datatype")]
-    pub fn validate_caps_datatype(
-        caps_structure: &gst::Structure,
-        data_type: TensorDataType,
-    ) -> bool {
-        assert_initialized_main_thread!();
-        unsafe {
-            from_glib(ffi::gst_analytics_modelinfo_validate_caps_datatype(
-                caps_structure.to_glib_none().0,
-                data_type.into_glib(),
-            ))
-        }
-    }
-
-    #[cfg(feature = "v1_30")]
-    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
-    #[doc(alias = "gst_analytics_modelinfo_validate_video_caps_resolution")]
-    pub fn validate_video_caps_resolution(
-        caps_structure: &gst::Structure,
-        dims_width: i32,
-        dims_height: i32,
-    ) -> bool {
-        assert_initialized_main_thread!();
-        unsafe {
-            from_glib(ffi::gst_analytics_modelinfo_validate_video_caps_resolution(
-                caps_structure.to_glib_none().0,
-                dims_width,
-                dims_height,
             ))
         }
     }
