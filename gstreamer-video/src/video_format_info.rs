@@ -148,6 +148,13 @@ impl VideoFormatInfo {
         self.0.flags & ffi::GST_VIDEO_FORMAT_FLAG_COMPLEX != 0
     }
 
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[inline]
+    pub fn is_float(&self) -> bool {
+        self.0.flags & ffi::GST_VIDEO_FORMAT_FLAG_FLOAT != 0
+    }
+
     #[inline]
     pub fn is_gray(&self) -> bool {
         self.0.flags & ffi::GST_VIDEO_FORMAT_FLAG_GRAY != 0
