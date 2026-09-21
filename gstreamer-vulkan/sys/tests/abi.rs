@@ -210,6 +210,27 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "GstVulkanBarrierMemoryInfo",
+        Layout {
+            size: size_of::<GstVulkanBarrierMemoryInfo>(),
+            alignment: align_of::<GstVulkanBarrierMemoryInfo>(),
+        },
+    ),
+    (
+        "GstVulkanBarrierState",
+        Layout {
+            size: size_of::<GstVulkanBarrierState>(),
+            alignment: align_of::<GstVulkanBarrierState>(),
+        },
+    ),
+    (
+        "GstVulkanBarrierStateClass",
+        Layout {
+            size: size_of::<GstVulkanBarrierStateClass>(),
+            alignment: align_of::<GstVulkanBarrierStateClass>(),
+        },
+    ),
+    (
         "GstVulkanBarrierType",
         Layout {
             size: size_of::<GstVulkanBarrierType>(),
@@ -490,6 +511,13 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "GstVulkanTimelineSemaphore",
+        Layout {
+            size: size_of::<GstVulkanTimelineSemaphore>(),
+            alignment: align_of::<GstVulkanTimelineSemaphore>(),
+        },
+    ),
+    (
         "GstVulkanTrash",
         Layout {
             size: size_of::<GstVulkanTrash>(),
@@ -604,6 +632,7 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
         "(gint) GST_VULKAN_HANDLE_TYPE_SAMPLER_YCBCR_CONVERSION",
         "10",
     ),
+    ("(gint) GST_VULKAN_HANDLE_TYPE_SEMAPHORE", "11"),
     ("(gint) GST_VULKAN_HANDLE_TYPE_SHADER", "7"),
     ("(gint) GST_VULKAN_HANDLE_TYPE_VIDEO_SESSION", "8"),
     (

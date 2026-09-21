@@ -1773,6 +1773,10 @@ pub enum WebRTCKind {
     Audio,
     #[doc(alias = "GST_WEBRTC_KIND_VIDEO")]
     Video,
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "GST_WEBRTC_KIND_APPLICATION")]
+    Application,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -1789,6 +1793,8 @@ impl IntoGlib for WebRTCKind {
             Self::Unknown => ffi::GST_WEBRTC_KIND_UNKNOWN,
             Self::Audio => ffi::GST_WEBRTC_KIND_AUDIO,
             Self::Video => ffi::GST_WEBRTC_KIND_VIDEO,
+            #[cfg(feature = "v1_30")]
+            Self::Application => ffi::GST_WEBRTC_KIND_APPLICATION,
             Self::__Unknown(value) => value,
         }
     }
@@ -1806,6 +1812,8 @@ impl FromGlib<ffi::GstWebRTCKind> for WebRTCKind {
             ffi::GST_WEBRTC_KIND_UNKNOWN => Self::Unknown,
             ffi::GST_WEBRTC_KIND_AUDIO => Self::Audio,
             ffi::GST_WEBRTC_KIND_VIDEO => Self::Video,
+            #[cfg(feature = "v1_30")]
+            ffi::GST_WEBRTC_KIND_APPLICATION => Self::Application,
             value => Self::__Unknown(value),
         }
     }

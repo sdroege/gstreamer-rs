@@ -9,6 +9,9 @@
 
 int main() {
     printf("%s;%zu;%zu\n", "GstVulkanBarrierFlags", sizeof(GstVulkanBarrierFlags), alignof(GstVulkanBarrierFlags));
+    printf("%s;%zu;%zu\n", "GstVulkanBarrierMemoryInfo", sizeof(GstVulkanBarrierMemoryInfo), alignof(GstVulkanBarrierMemoryInfo));
+    printf("%s;%zu;%zu\n", "GstVulkanBarrierState", sizeof(GstVulkanBarrierState), alignof(GstVulkanBarrierState));
+    printf("%s;%zu;%zu\n", "GstVulkanBarrierStateClass", sizeof(GstVulkanBarrierStateClass), alignof(GstVulkanBarrierStateClass));
     printf("%s;%zu;%zu\n", "GstVulkanBarrierType", sizeof(GstVulkanBarrierType), alignof(GstVulkanBarrierType));
     printf("%s;%zu;%zu\n", "GstVulkanBufferMemoryAllocator", sizeof(GstVulkanBufferMemoryAllocator), alignof(GstVulkanBufferMemoryAllocator));
     printf("%s;%zu;%zu\n", "GstVulkanBufferMemoryAllocatorClass", sizeof(GstVulkanBufferMemoryAllocatorClass), alignof(GstVulkanBufferMemoryAllocatorClass));
@@ -49,6 +52,7 @@ int main() {
     printf("%s;%zu;%zu\n", "GstVulkanQueueFamilyOps", sizeof(GstVulkanQueueFamilyOps), alignof(GstVulkanQueueFamilyOps));
     printf("%s;%zu;%zu\n", "GstVulkanSwapper", sizeof(GstVulkanSwapper), alignof(GstVulkanSwapper));
     printf("%s;%zu;%zu\n", "GstVulkanSwapperClass", sizeof(GstVulkanSwapperClass), alignof(GstVulkanSwapperClass));
+    printf("%s;%zu;%zu\n", "GstVulkanTimelineSemaphore", sizeof(GstVulkanTimelineSemaphore), alignof(GstVulkanTimelineSemaphore));
     printf("%s;%zu;%zu\n", "GstVulkanTrash", sizeof(GstVulkanTrash), alignof(GstVulkanTrash));
     printf("%s;%zu;%zu\n", "GstVulkanTrashFenceListClass", sizeof(GstVulkanTrashFenceListClass), alignof(GstVulkanTrashFenceListClass));
     printf("%s;%zu;%zu\n", "GstVulkanTrashList", sizeof(GstVulkanTrashList), alignof(GstVulkanTrashList));

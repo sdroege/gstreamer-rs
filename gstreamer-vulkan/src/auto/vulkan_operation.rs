@@ -4,6 +4,9 @@
 // DO NOT EDIT
 
 use crate::{VulkanCommandPool, ffi};
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+use crate::{VulkanFence, VulkanHandle};
 use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
@@ -22,7 +25,7 @@ impl VulkanOperation {
     pub fn new(cmd_pool: &impl IsA<VulkanCommandPool>) -> VulkanOperation {
         skip_assert_initialized!();
         unsafe {
-            from_glib_full(ffi::gst_vulkan_operation_new(
+            from_glib_none(ffi::gst_vulkan_operation_new(
                 cmd_pool.as_ref().to_glib_none().0,
             ))
         }
@@ -50,15 +53,36 @@ pub trait VulkanOperationExt: IsA<VulkanOperation> + 'static {
         }
     }
 
-    //#[doc(alias = "gst_vulkan_operation_add_extra_image_barriers")]
-    //fn add_extra_image_barriers(&self, extra_barriers: /*Unknown conversion*//*Unimplemented*/Array TypeId { ns_id: 0, id: 25 }) {
-    //    unsafe { TODO: call ffi:gst_vulkan_operation_add_extra_image_barriers() }
-    //}
-
     //#[doc(alias = "gst_vulkan_operation_add_frame_barrier")]
     //fn add_frame_barrier(&self, frame: &gst::Buffer, src_stage: u64, dst_stage: u64, new_access: u64, new_layout: /*Ignored*/&vulkan::ImageLayout, new_queue: Option<&impl IsA<VulkanQueue>>) -> bool {
     //    unsafe { TODO: call ffi:gst_vulkan_operation_add_frame_barrier() }
     //}
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "gst_vulkan_operation_add_signal_semaphore")]
+    fn add_signal_semaphore(&self, semaphore: VulkanHandle, stage: u64) {
+        unsafe {
+            ffi::gst_vulkan_operation_add_signal_semaphore(
+                self.as_ref().to_glib_none().0,
+                semaphore.into_glib_ptr(),
+                stage,
+            );
+        }
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "gst_vulkan_operation_add_wait_semaphore")]
+    fn add_wait_semaphore(&self, semaphore: VulkanHandle, stage: u64) {
+        unsafe {
+            ffi::gst_vulkan_operation_add_wait_semaphore(
+                self.as_ref().to_glib_none().0,
+                semaphore.into_glib_ptr(),
+                stage,
+            );
+        }
+    }
 
     //#[cfg(feature = "v1_26")]
     //#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
@@ -89,20 +113,51 @@ pub trait VulkanOperationExt: IsA<VulkanOperation> + 'static {
         }
     }
 
+    //#[cfg(feature = "v1_30")]
+    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    //#[doc(alias = "gst_vulkan_operation_get_barriers")]
+    //#[doc(alias = "get_barriers")]
+    //fn barriers(&self) -> /*Ignored*/VulkanBarrierState {
+    //    unsafe { TODO: call ffi:gst_vulkan_operation_get_barriers() }
+    //}
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "gst_vulkan_operation_get_command_pool")]
+    #[doc(alias = "get_command_pool")]
+    #[doc(alias = "command-pool")]
+    fn command_pool(&self) -> VulkanCommandPool {
+        unsafe {
+            from_glib_none(ffi::gst_vulkan_operation_get_command_pool(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "gst_vulkan_operation_get_last_fence")]
+    #[doc(alias = "get_last_fence")]
+    fn last_fence(&self) -> VulkanFence {
+        unsafe {
+            from_glib_full(ffi::gst_vulkan_operation_get_last_fence(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
     //#[doc(alias = "gst_vulkan_operation_get_query")]
     //#[doc(alias = "get_query")]
     //fn query(&self, data: /*Unimplemented*/&mut Option<Basic: Pointer>) -> Result<(), glib::Error> {
     //    unsafe { TODO: call ffi:gst_vulkan_operation_get_query() }
     //}
 
-    //#[doc(alias = "gst_vulkan_operation_new_extra_image_barriers")]
-    //fn new_extra_image_barriers(&self) -> /*Unknown conversion*//*Unimplemented*/Array TypeId { ns_id: 0, id: 25 } {
-    //    unsafe { TODO: call ffi:gst_vulkan_operation_new_extra_image_barriers() }
-    //}
-
-    //#[doc(alias = "gst_vulkan_operation_pipeline_barrier2")]
-    //fn pipeline_barrier2(&self, dependency_info: /*Unimplemented*/Option<Basic: Pointer>) -> bool {
-    //    unsafe { TODO: call ffi:gst_vulkan_operation_pipeline_barrier2() }
+    //#[cfg(feature = "v1_30")]
+    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    //#[doc(alias = "gst_vulkan_operation_get_trash_list")]
+    //#[doc(alias = "get_trash_list")]
+    //fn trash_list(&self) -> /*Ignored*/VulkanTrashList {
+    //    unsafe { TODO: call ffi:gst_vulkan_operation_get_trash_list() }
     //}
 
     #[doc(alias = "gst_vulkan_operation_reset")]
@@ -111,11 +166,6 @@ pub trait VulkanOperationExt: IsA<VulkanOperation> + 'static {
             ffi::gst_vulkan_operation_reset(self.as_ref().to_glib_none().0);
         }
     }
-
-    //#[doc(alias = "gst_vulkan_operation_retrieve_image_barriers")]
-    //fn retrieve_image_barriers(&self) -> /*Unknown conversion*//*Unimplemented*/Array TypeId { ns_id: 0, id: 25 } {
-    //    unsafe { TODO: call ffi:gst_vulkan_operation_retrieve_image_barriers() }
-    //}
 
     //#[doc(alias = "gst_vulkan_operation_update_frame")]
     //fn update_frame(&self, frame: &gst::Buffer, dst_stage: u64, new_access: u64, new_layout: /*Ignored*/&vulkan::ImageLayout, new_queue: Option<&impl IsA<VulkanQueue>>) {
@@ -140,6 +190,8 @@ pub trait VulkanOperationExt: IsA<VulkanOperation> + 'static {
         }
     }
 
+    #[cfg(not(feature = "v1_30"))]
+    #[cfg_attr(docsrs, doc(cfg(not(feature = "v1_30"))))]
     #[doc(alias = "command-pool")]
     fn command_pool(&self) -> Option<VulkanCommandPool> {
         ObjectExt::property(self.as_ref(), "command-pool")

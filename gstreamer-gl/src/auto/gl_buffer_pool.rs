@@ -25,7 +25,7 @@ impl GLBufferPool {
     pub fn new(context: &impl IsA<GLContext>) -> GLBufferPool {
         skip_assert_initialized!();
         unsafe {
-            gst::BufferPool::from_glib_none(ffi::gst_gl_buffer_pool_new(
+            gst::BufferPool::from_glib_full(ffi::gst_gl_buffer_pool_new(
                 context.as_ref().to_glib_none().0,
             ))
             .unsafe_cast()

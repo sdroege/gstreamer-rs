@@ -4,14 +4,15 @@
 // DO NOT EDIT
 
 use crate::ffi;
+use glib::translate::*;
 
 glib::wrapper! {
     #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Hash)]
-    pub struct VulkanImageView(Boxed<ffi::GstVulkanImageView>);
+    pub struct VulkanImageView(Shared<ffi::GstVulkanImageView>);
 
     match fn {
-        copy => |ptr| glib::gobject_ffi::g_boxed_copy(ffi::gst_vulkan_image_view_get_type(), ptr as *mut _) as *mut ffi::GstVulkanImageView,
-        free => |ptr| glib::gobject_ffi::g_boxed_free(ffi::gst_vulkan_image_view_get_type(), ptr as *mut _),
+        ref => |ptr| ffi::gst_vulkan_image_view_ref(ptr),
+        unref => |ptr| ffi::gst_vulkan_image_view_unref(ptr),
         type_ => || ffi::gst_vulkan_image_view_get_type(),
     }
 }

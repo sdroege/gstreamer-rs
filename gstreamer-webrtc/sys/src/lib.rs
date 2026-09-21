@@ -127,6 +127,9 @@ pub type GstWebRTCKind = c_int;
 pub const GST_WEBRTC_KIND_UNKNOWN: GstWebRTCKind = 0;
 pub const GST_WEBRTC_KIND_AUDIO: GstWebRTCKind = 1;
 pub const GST_WEBRTC_KIND_VIDEO: GstWebRTCKind = 2;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub const GST_WEBRTC_KIND_APPLICATION: GstWebRTCKind = 3;
 
 pub type GstWebRTCPeerConnectionState = c_int;
 pub const GST_WEBRTC_PEER_CONNECTION_STATE_NEW: GstWebRTCPeerConnectionState = 0;

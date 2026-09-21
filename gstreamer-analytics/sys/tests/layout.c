@@ -24,6 +24,7 @@ int main() {
     printf("%s;%zu;%zu\n", "GstAnalyticsRelationMetaInitParams", sizeof(GstAnalyticsRelationMetaInitParams), alignof(GstAnalyticsRelationMetaInitParams));
     printf("%s;%zu;%zu\n", "GstAnalyticsSegmentationMtd", sizeof(GstAnalyticsSegmentationMtd), alignof(GstAnalyticsSegmentationMtd));
     printf("%s;%zu;%zu\n", "GstAnalyticsTensorMtd", sizeof(GstAnalyticsTensorMtd), alignof(GstAnalyticsTensorMtd));
+    printf("%s;%zu;%zu\n", "GstAnalyticsTextMtd", sizeof(GstAnalyticsTextMtd), alignof(GstAnalyticsTextMtd));
     printf("%s;%zu;%zu\n", "GstAnalyticsTrackingMtd", sizeof(GstAnalyticsTrackingMtd), alignof(GstAnalyticsTrackingMtd));
     printf("%s;%zu;%zu\n", "GstSegmentationType", sizeof(GstSegmentationType), alignof(GstSegmentationType));
     printf("%s;%zu;%zu\n", "GstTensor", sizeof(GstTensor), alignof(GstTensor));

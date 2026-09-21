@@ -59,9 +59,23 @@ impl VulkanHandle {
     //    unsafe { TODO: call ffi:gst_vulkan_handle_free_sampler_ycbcr_conversion() }
     //}
 
+    //#[cfg(feature = "v1_30")]
+    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    //#[doc(alias = "gst_vulkan_handle_free_semaphore")]
+    //pub fn free_semaphore(&self, user_data: /*Unimplemented*/Option<Basic: Pointer>) {
+    //    unsafe { TODO: call ffi:gst_vulkan_handle_free_semaphore() }
+    //}
+
     //#[doc(alias = "gst_vulkan_handle_free_shader")]
     //pub fn free_shader(&self, user_data: /*Unimplemented*/Option<Basic: Pointer>) {
     //    unsafe { TODO: call ffi:gst_vulkan_handle_free_shader() }
+    //}
+
+    //#[cfg(feature = "v1_30")]
+    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    //#[doc(alias = "gst_vulkan_handle_create_sampler_ycbcr_conversion")]
+    //pub fn create_sampler_ycbcr_conversion(device: &impl IsA<VulkanDevice>, create_info: /*Unimplemented*/Option<Basic: Pointer>) -> Result<Option<VulkanHandle>, glib::Error> {
+    //    unsafe { TODO: call ffi:gst_vulkan_handle_create_sampler_ycbcr_conversion() }
     //}
 }
 

@@ -498,6 +498,7 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GST_WEBRTC_ICE_TCP_CANDIDATE_TYPE_SO", "2"),
     ("(gint) GST_WEBRTC_ICE_TRANSPORT_POLICY_ALL", "0"),
     ("(gint) GST_WEBRTC_ICE_TRANSPORT_POLICY_RELAY", "1"),
+    ("(gint) GST_WEBRTC_KIND_APPLICATION", "3"),
     ("(gint) GST_WEBRTC_KIND_AUDIO", "1"),
     ("(gint) GST_WEBRTC_KIND_UNKNOWN", "0"),
     ("(gint) GST_WEBRTC_KIND_VIDEO", "2"),

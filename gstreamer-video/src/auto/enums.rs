@@ -2607,6 +2607,78 @@ pub enum VideoFormat {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
     #[doc(alias = "GST_VIDEO_FORMAT_AHARDWARE_BUFFER")]
     AhardwareBuffer,
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_RGBA_F16LE")]
+    RgbaF16le,
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_RGBA_F16BE")]
+    RgbaF16be,
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_RGBA_F32LE")]
+    RgbaF32le,
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_RGBA_F32BE")]
+    RgbaF32be,
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_ARGB_F32")]
+    ArgbF32,
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_RGBP_F16LE")]
+    RgbpF16le,
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_RGBP_F16BE")]
+    RgbpF16be,
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_RGBP_F32LE")]
+    RgbpF32le,
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_RGBP_F32BE")]
+    RgbpF32be,
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_RGB_F16LE")]
+    RgbF16le,
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_RGB_F16BE")]
+    RgbF16be,
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_RGB_F32LE")]
+    RgbF32le,
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_RGB_F32BE")]
+    RgbF32be,
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_AYUV_F32")]
+    AyuvF32,
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_GRAY_F16LE")]
+    GrayF16le,
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_GRAY_F16BE")]
+    GrayF16be,
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_GRAY_F32LE")]
+    GrayF32le,
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "GST_VIDEO_FORMAT_GRAY_F32BE")]
+    GrayF32be,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -2855,6 +2927,42 @@ impl IntoGlib for VideoFormat {
             Self::Rgb10x2Le => ffi::GST_VIDEO_FORMAT_RGB10x2_LE,
             #[cfg(feature = "v1_30")]
             Self::AhardwareBuffer => ffi::GST_VIDEO_FORMAT_AHARDWARE_BUFFER,
+            #[cfg(feature = "v1_30")]
+            Self::RgbaF16le => ffi::GST_VIDEO_FORMAT_RGBA_F16LE,
+            #[cfg(feature = "v1_30")]
+            Self::RgbaF16be => ffi::GST_VIDEO_FORMAT_RGBA_F16BE,
+            #[cfg(feature = "v1_30")]
+            Self::RgbaF32le => ffi::GST_VIDEO_FORMAT_RGBA_F32LE,
+            #[cfg(feature = "v1_30")]
+            Self::RgbaF32be => ffi::GST_VIDEO_FORMAT_RGBA_F32BE,
+            #[cfg(feature = "v1_30")]
+            Self::ArgbF32 => ffi::GST_VIDEO_FORMAT_ARGB_F32,
+            #[cfg(feature = "v1_30")]
+            Self::RgbpF16le => ffi::GST_VIDEO_FORMAT_RGBP_F16LE,
+            #[cfg(feature = "v1_30")]
+            Self::RgbpF16be => ffi::GST_VIDEO_FORMAT_RGBP_F16BE,
+            #[cfg(feature = "v1_30")]
+            Self::RgbpF32le => ffi::GST_VIDEO_FORMAT_RGBP_F32LE,
+            #[cfg(feature = "v1_30")]
+            Self::RgbpF32be => ffi::GST_VIDEO_FORMAT_RGBP_F32BE,
+            #[cfg(feature = "v1_30")]
+            Self::RgbF16le => ffi::GST_VIDEO_FORMAT_RGB_F16LE,
+            #[cfg(feature = "v1_30")]
+            Self::RgbF16be => ffi::GST_VIDEO_FORMAT_RGB_F16BE,
+            #[cfg(feature = "v1_30")]
+            Self::RgbF32le => ffi::GST_VIDEO_FORMAT_RGB_F32LE,
+            #[cfg(feature = "v1_30")]
+            Self::RgbF32be => ffi::GST_VIDEO_FORMAT_RGB_F32BE,
+            #[cfg(feature = "v1_30")]
+            Self::AyuvF32 => ffi::GST_VIDEO_FORMAT_AYUV_F32,
+            #[cfg(feature = "v1_30")]
+            Self::GrayF16le => ffi::GST_VIDEO_FORMAT_GRAY_F16LE,
+            #[cfg(feature = "v1_30")]
+            Self::GrayF16be => ffi::GST_VIDEO_FORMAT_GRAY_F16BE,
+            #[cfg(feature = "v1_30")]
+            Self::GrayF32le => ffi::GST_VIDEO_FORMAT_GRAY_F32LE,
+            #[cfg(feature = "v1_30")]
+            Self::GrayF32be => ffi::GST_VIDEO_FORMAT_GRAY_F32BE,
             Self::__Unknown(value) => value,
         }
     }
@@ -3071,6 +3179,42 @@ impl FromGlib<ffi::GstVideoFormat> for VideoFormat {
             ffi::GST_VIDEO_FORMAT_RGB10x2_LE => Self::Rgb10x2Le,
             #[cfg(feature = "v1_30")]
             ffi::GST_VIDEO_FORMAT_AHARDWARE_BUFFER => Self::AhardwareBuffer,
+            #[cfg(feature = "v1_30")]
+            ffi::GST_VIDEO_FORMAT_RGBA_F16LE => Self::RgbaF16le,
+            #[cfg(feature = "v1_30")]
+            ffi::GST_VIDEO_FORMAT_RGBA_F16BE => Self::RgbaF16be,
+            #[cfg(feature = "v1_30")]
+            ffi::GST_VIDEO_FORMAT_RGBA_F32LE => Self::RgbaF32le,
+            #[cfg(feature = "v1_30")]
+            ffi::GST_VIDEO_FORMAT_RGBA_F32BE => Self::RgbaF32be,
+            #[cfg(feature = "v1_30")]
+            ffi::GST_VIDEO_FORMAT_ARGB_F32 => Self::ArgbF32,
+            #[cfg(feature = "v1_30")]
+            ffi::GST_VIDEO_FORMAT_RGBP_F16LE => Self::RgbpF16le,
+            #[cfg(feature = "v1_30")]
+            ffi::GST_VIDEO_FORMAT_RGBP_F16BE => Self::RgbpF16be,
+            #[cfg(feature = "v1_30")]
+            ffi::GST_VIDEO_FORMAT_RGBP_F32LE => Self::RgbpF32le,
+            #[cfg(feature = "v1_30")]
+            ffi::GST_VIDEO_FORMAT_RGBP_F32BE => Self::RgbpF32be,
+            #[cfg(feature = "v1_30")]
+            ffi::GST_VIDEO_FORMAT_RGB_F16LE => Self::RgbF16le,
+            #[cfg(feature = "v1_30")]
+            ffi::GST_VIDEO_FORMAT_RGB_F16BE => Self::RgbF16be,
+            #[cfg(feature = "v1_30")]
+            ffi::GST_VIDEO_FORMAT_RGB_F32LE => Self::RgbF32le,
+            #[cfg(feature = "v1_30")]
+            ffi::GST_VIDEO_FORMAT_RGB_F32BE => Self::RgbF32be,
+            #[cfg(feature = "v1_30")]
+            ffi::GST_VIDEO_FORMAT_AYUV_F32 => Self::AyuvF32,
+            #[cfg(feature = "v1_30")]
+            ffi::GST_VIDEO_FORMAT_GRAY_F16LE => Self::GrayF16le,
+            #[cfg(feature = "v1_30")]
+            ffi::GST_VIDEO_FORMAT_GRAY_F16BE => Self::GrayF16be,
+            #[cfg(feature = "v1_30")]
+            ffi::GST_VIDEO_FORMAT_GRAY_F32LE => Self::GrayF32le,
+            #[cfg(feature = "v1_30")]
+            ffi::GST_VIDEO_FORMAT_GRAY_F32BE => Self::GrayF32be,
             value => Self::__Unknown(value),
         }
     }
