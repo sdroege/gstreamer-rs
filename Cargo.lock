@@ -255,7 +255,7 @@ source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=0.22#08a30b9cccafc821
 dependencies = [
  "glib-sys",
  "libc",
- "system-deps 9.0.0",
+ "system-deps",
 ]
 
 [[package]]
@@ -696,7 +696,7 @@ dependencies = [
  "pango",
  "pangocairo",
  "raw-window-handle",
- "system-deps 7.0.8",
+ "system-deps",
  "uds",
  "windows",
  "windows-numerics",
@@ -913,7 +913,7 @@ dependencies = [
  "glib-sys",
  "gobject-sys",
  "libc",
- "system-deps 9.0.0",
+ "system-deps",
  "windows-sys 0.61.2",
 ]
 
@@ -971,7 +971,7 @@ version = "0.22.10"
 source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=0.22#08a30b9cccafc82194cb24df13806a176f20b0ae"
 dependencies = [
  "libc",
- "system-deps 9.0.0",
+ "system-deps",
 ]
 
 [[package]]
@@ -1047,7 +1047,7 @@ source = "git+https://github.com/gtk-rs/gtk-rs-core?branch=0.22#08a30b9cccafc821
 dependencies = [
  "glib-sys",
  "libc",
- "system-deps 9.0.0",
+ "system-deps",
 ]
 
 [[package]]
@@ -1100,7 +1100,7 @@ dependencies = [
  "gstreamer-sys",
  "libc",
  "shell-words",
- "system-deps 7.0.8",
+ "system-deps",
  "tempfile",
 ]
 
@@ -1123,7 +1123,7 @@ dependencies = [
  "gstreamer-sys",
  "libc",
  "shell-words",
- "system-deps 7.0.8",
+ "system-deps",
  "tempfile",
 ]
 
@@ -1152,7 +1152,7 @@ dependencies = [
  "gstreamer-sys",
  "libc",
  "shell-words",
- "system-deps 7.0.8",
+ "system-deps",
  "tempfile",
 ]
 
@@ -1184,7 +1184,7 @@ dependencies = [
  "gstreamer-sys",
  "libc",
  "shell-words",
- "system-deps 7.0.8",
+ "system-deps",
  "tempfile",
 ]
 
@@ -1210,7 +1210,7 @@ dependencies = [
  "gstreamer-sys",
  "libc",
  "shell-words",
- "system-deps 7.0.8",
+ "system-deps",
  "tempfile",
 ]
 
@@ -1233,7 +1233,7 @@ dependencies = [
  "gstreamer-sys",
  "libc",
  "shell-words",
- "system-deps 7.0.8",
+ "system-deps",
  "tempfile",
 ]
 
@@ -1257,7 +1257,7 @@ dependencies = [
  "libc",
  "pkg-config",
  "shell-words",
- "system-deps 7.0.8",
+ "system-deps",
  "tempfile",
 ]
 
@@ -1282,7 +1282,7 @@ dependencies = [
  "gstreamer-video-sys",
  "libc",
  "shell-words",
- "system-deps 7.0.8",
+ "system-deps",
  "tempfile",
 ]
 
@@ -1313,7 +1313,7 @@ dependencies = [
  "gstreamer-sys",
  "libc",
  "shell-words",
- "system-deps 7.0.8",
+ "system-deps",
  "tempfile",
 ]
 
@@ -1352,7 +1352,7 @@ dependencies = [
  "gstreamer-gl-sys",
  "libc",
  "shell-words",
- "system-deps 7.0.8",
+ "system-deps",
  "tempfile",
 ]
 
@@ -1367,7 +1367,7 @@ dependencies = [
  "gstreamer-video-sys",
  "libc",
  "shell-words",
- "system-deps 7.0.8",
+ "system-deps",
  "tempfile",
 ]
 
@@ -1391,7 +1391,7 @@ dependencies = [
  "gstreamer-gl-sys",
  "libc",
  "shell-words",
- "system-deps 7.0.8",
+ "system-deps",
  "tempfile",
 ]
 
@@ -1415,7 +1415,7 @@ dependencies = [
  "gstreamer-gl-sys",
  "libc",
  "shell-words",
- "system-deps 7.0.8",
+ "system-deps",
  "tempfile",
 ]
 
@@ -1438,7 +1438,7 @@ dependencies = [
  "gstreamer-sys",
  "libc",
  "shell-words",
- "system-deps 7.0.8",
+ "system-deps",
  "tempfile",
 ]
 
@@ -1459,7 +1459,7 @@ dependencies = [
  "gstreamer-sys",
  "libc",
  "shell-words",
- "system-deps 7.0.8",
+ "system-deps",
  "tempfile",
 ]
 
@@ -1483,7 +1483,7 @@ dependencies = [
  "gstreamer-sys",
  "libc",
  "shell-words",
- "system-deps 7.0.8",
+ "system-deps",
  "tempfile",
 ]
 
@@ -1514,7 +1514,7 @@ dependencies = [
  "gstreamer-video-sys",
  "libc",
  "shell-words",
- "system-deps 7.0.8",
+ "system-deps",
  "tempfile",
 ]
 
@@ -1540,7 +1540,7 @@ dependencies = [
  "gstreamer-video-sys",
  "libc",
  "shell-words",
- "system-deps 7.0.8",
+ "system-deps",
  "tempfile",
 ]
 
@@ -1566,7 +1566,7 @@ dependencies = [
  "gstreamer-video-sys",
  "libc",
  "shell-words",
- "system-deps 7.0.8",
+ "system-deps",
  "tempfile",
 ]
 
@@ -1592,7 +1592,7 @@ dependencies = [
  "gstreamer-sys",
  "libc",
  "shell-words",
- "system-deps 7.0.8",
+ "system-deps",
  "tempfile",
 ]
 
@@ -1640,7 +1640,7 @@ dependencies = [
  "gstreamer-sys",
  "libc",
  "shell-words",
- "system-deps 7.0.8",
+ "system-deps",
  "tempfile",
 ]
 
@@ -1655,7 +1655,7 @@ dependencies = [
  "gstreamer-sys",
  "libc",
  "shell-words",
- "system-deps 7.0.8",
+ "system-deps",
  "tempfile",
 ]
 
@@ -1677,7 +1677,7 @@ dependencies = [
  "gstreamer-sys",
  "libc",
  "shell-words",
- "system-deps 7.0.8",
+ "system-deps",
  "tempfile",
 ]
 
@@ -1690,7 +1690,7 @@ dependencies = [
  "gobject-sys",
  "libc",
  "shell-words",
- "system-deps 7.0.8",
+ "system-deps",
  "tempfile",
 ]
 
@@ -1714,7 +1714,7 @@ dependencies = [
  "gstreamer-sys",
  "libc",
  "shell-words",
- "system-deps 7.0.8",
+ "system-deps",
  "tempfile",
 ]
 
@@ -1751,7 +1751,7 @@ dependencies = [
  "gstreamer-sys",
  "libc",
  "shell-words",
- "system-deps 7.0.8",
+ "system-deps",
  "tempfile",
 ]
 
@@ -1784,7 +1784,7 @@ dependencies = [
  "gstreamer-sys",
  "libc",
  "shell-words",
- "system-deps 7.0.8",
+ "system-deps",
  "tempfile",
 ]
 
@@ -1815,7 +1815,7 @@ dependencies = [
  "gstreamer-video-sys",
  "libc",
  "shell-words",
- "system-deps 7.0.8",
+ "system-deps",
  "tempfile",
 ]
 
@@ -1839,7 +1839,7 @@ dependencies = [
  "gstreamer-vulkan-sys",
  "libc",
  "shell-words",
- "system-deps 7.0.8",
+ "system-deps",
  "tempfile",
 ]
 
@@ -1863,7 +1863,7 @@ dependencies = [
  "gstreamer-vulkan-sys",
  "libc",
  "shell-words",
- "system-deps 7.0.8",
+ "system-deps",
  "tempfile",
 ]
 
@@ -1888,7 +1888,7 @@ dependencies = [
  "gstreamer-sys",
  "libc",
  "shell-words",
- "system-deps 7.0.8",
+ "system-deps",
  "tempfile",
 ]
 
@@ -2719,7 +2719,7 @@ dependencies = [
  "glib-sys",
  "gobject-sys",
  "libc",
- "system-deps 9.0.0",
+ "system-deps",
 ]
 
 [[package]]
@@ -2742,7 +2742,7 @@ dependencies = [
  "glib-sys",
  "libc",
  "pango-sys",
- "system-deps 9.0.0",
+ "system-deps",
 ]
 
 [[package]]
@@ -3175,19 +3175,6 @@ dependencies = [
 
 [[package]]
 name = "system-deps"
-version = "7.0.8"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "396a35feb67335377e0251fcbc1092fc85c484bd4e3a7a54319399da127796e7"
-dependencies = [
- "cfg-expr",
- "heck",
- "pkg-config",
- "toml",
- "version-compare",
-]
-
-[[package]]
-name = "system-deps"
 version = "9.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8a0dae2cbca1f0ff93795713cfe0a4c02f760e3c0b8ae2ab4ec4045808ff429f"
@@ -3351,7 +3338,7 @@ dependencies = [
  "gstreamer-pbutils",
  "gstreamer-video",
  "objc",
- "system-deps 7.0.8",
+ "system-deps",
  "termion",
 ]
 
