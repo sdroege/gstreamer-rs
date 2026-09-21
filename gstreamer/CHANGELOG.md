@@ -5,6 +5,29 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html),
 specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-version-field).
 
+## [0.25.4] - 2026-09-21
+### Fixed
+- Don't use potentially uninitialized data in `gst_analytics` when adding
+  metadata fails.
+- Put `gst::cpuid_supports_riscv_v()` behind the correct version feature flag.
+- Various video format related test failures.
+
+### Added
+- Bindings for various new 1.30 APIs.
+- Manual binding for `gst::debug_log_default()`.
+- Bindings for the missing `gst_base::BaseParse` virtual methods.
+- `gst::TocSetter` subclassing support.
+- New Vulkan type mappings in `gst_vulkan`.
+- `AnalyticsMetaRefExt`, `AnalyticsMetaRefMutExt` and `AnalyticsMtdExt` are now
+  part of the `gst_analytics` prelude.
+
+### Changed
+- Update dependencies, including an update to `system-deps` 9.
+- Regenerate bindings with latest gir / gir-files.
+- Fix various new Rust 1.97 / 1.98 clippy warnings.
+- Lower log level in `gst_utils::StreamProducer` when dropping frames while
+  waiting for a keyframe.
+
 ## [0.25.3] - 2026-06-29
 ### Fixed
 - Add missing gating on `gst_allocators::FdAllocatorExtManual` in prelude.
@@ -2072,7 +2095,8 @@ specifically the [variant used by Rust](http://doc.crates.io/manifest.html#the-v
   (< 0.8.0) of the bindings can be found [here](https://github.com/arturoc/gstreamer1.0-rs).
   The API of the two is incompatible.
 
-[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.25.3...HEAD
+[Unreleased]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.25.4...HEAD
+[0.25.4]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.25.3...0.25.4
 [0.25.3]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.25.2...0.25.3
 [0.25.2]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.25.1...0.25.2
 [0.25.1]: https://gitlab.freedesktop.org/gstreamer/gstreamer-rs/compare/0.25.0...0.25.1
