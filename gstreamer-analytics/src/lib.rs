@@ -49,6 +49,13 @@ pub use crate::object_detection::*;
 mod tracking;
 pub use crate::tracking::*;
 
+#[cfg(feature = "v1_26")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+mod segmentation;
+#[cfg(feature = "v1_26")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+pub use crate::segmentation::*;
+
 #[cfg(feature = "v1_30")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
 mod keypoint;
@@ -102,6 +109,9 @@ pub mod prelude {
     pub use crate::keypoint::AnalyticsRelationMetaKeypointExt;
     pub use crate::object_detection::AnalyticsRelationMetaODExt;
     pub use crate::relation_meta::{AnalyticsMetaRefExt, AnalyticsMetaRefMutExt, AnalyticsMtdExt};
+    #[cfg(feature = "v1_26")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+    pub use crate::segmentation::AnalyticsRelationMetaSegmentationExt;
     #[cfg(feature = "v1_30")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
     pub use crate::text::AnalyticsRelationMetaTextExt;

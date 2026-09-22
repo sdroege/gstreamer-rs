@@ -21,6 +21,7 @@ generate = [
     "GstAnalytics.KeypointVisibility",
     "GstAnalytics.ModelInfoTensorDirection",
     "GstAnalytics.RelTypes",
+    "GstAnalytics.SegmentationType",
     "GstAnalytics.TensorDataType",
     "GstAnalytics.TensorDimOrder"
 ]

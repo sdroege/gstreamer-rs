@@ -1114,6 +1114,7 @@ dependencies = [
  "glib",
  "gstreamer",
  "gstreamer-analytics-sys",
+ "gstreamer-video",
  "libc",
 ]
 

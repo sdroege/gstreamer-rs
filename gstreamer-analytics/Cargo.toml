@@ -21,12 +21,13 @@ gst.workspace = true
 
 [dev-dependencies]
 gir-format-check = "0.1"
+gst-video.workspace = true
 
 [features]
 default = []
-v1_26 = ["gst/v1_26", "gstreamer-analytics-sys/v1_26"]
-v1_28 = ["gst/v1_28", "gstreamer-analytics-sys/v1_28", "v1_26"]
-v1_30 = ["gst/v1_30", "gstreamer-analytics-sys/v1_30", "v1_28"]
+v1_26 = ["gst/v1_26", "gst-video/v1_26", "gstreamer-analytics-sys/v1_26"]
+v1_28 = ["gst/v1_28", "gst-video/v1_28", "gstreamer-analytics-sys/v1_28", "v1_26"]
+v1_30 = ["gst/v1_30", "gst-video/v1_30", "gstreamer-analytics-sys/v1_30", "v1_28"]
 
 [package.metadata.docs.rs]
 all-features = true

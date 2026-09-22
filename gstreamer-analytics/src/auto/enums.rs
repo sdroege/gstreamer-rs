@@ -108,6 +108,52 @@ impl FromGlib<ffi::GstAnalyticsModelInfoTensorDirection> for ModelInfoTensorDire
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
 #[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
 #[non_exhaustive]
+#[doc(alias = "GstSegmentationType")]
+pub enum SegmentationType {
+    #[doc(alias = "GST_SEGMENTATION_TYPE_SEMANTIC")]
+    Semantic,
+    #[doc(alias = "GST_SEGMENTATION_TYPE_INSTANCE")]
+    Instance,
+    #[doc(hidden)]
+    __Unknown(i32),
+}
+
+#[cfg(feature = "v1_26")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+#[doc(hidden)]
+impl IntoGlib for SegmentationType {
+    type GlibType = ffi::GstSegmentationType;
+
+    #[inline]
+    fn into_glib(self) -> ffi::GstSegmentationType {
+        match self {
+            Self::Semantic => ffi::GST_SEGMENTATION_TYPE_SEMANTIC,
+            Self::Instance => ffi::GST_SEGMENTATION_TYPE_INSTANCE,
+            Self::__Unknown(value) => value,
+        }
+    }
+}
+
+#[cfg(feature = "v1_26")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+#[doc(hidden)]
+impl FromGlib<ffi::GstSegmentationType> for SegmentationType {
+    #[inline]
+    unsafe fn from_glib(value: ffi::GstSegmentationType) -> Self {
+        skip_assert_initialized!();
+
+        match value {
+            ffi::GST_SEGMENTATION_TYPE_SEMANTIC => Self::Semantic,
+            ffi::GST_SEGMENTATION_TYPE_INSTANCE => Self::Instance,
+            value => Self::__Unknown(value),
+        }
+    }
+}
+
+#[cfg(feature = "v1_26")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+#[derive(Debug, Eq, PartialEq, Ord, PartialOrd, Hash, Clone, Copy)]
+#[non_exhaustive]
 #[doc(alias = "GstTensorDataType")]
 pub enum TensorDataType {
     #[doc(alias = "GST_TENSOR_DATA_TYPE_INT4")]
