@@ -19,6 +19,9 @@ pub use self::enums::KeypointDimensions;
 pub use self::enums::ModelInfoTensorDirection;
 #[cfg(feature = "v1_26")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
+pub use self::enums::SegmentationType;
+#[cfg(feature = "v1_26")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
 pub use self::enums::TensorDataType;
 #[cfg(feature = "v1_26")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
