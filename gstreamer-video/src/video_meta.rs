@@ -1826,4 +1826,68 @@ mod tests {
         assert_eq!(trans.matrix()[0][0], 0.5);
         assert_eq!(trans.matrix()[1][1], 0.5);
     }
+
+    // The point of handing a custom meta's transform function its data: a
+    // coordinate-aware meta can only rescale itself if it can reach the video
+    // transform describing the scaling. Core cannot depend on gstreamer-video,
+    // so this is where that path can be exercised end to end.
+    #[cfg(feature = "v1_20")]
+    #[test]
+    fn test_custom_meta_reaches_video_scale_transform() {
+        use std::sync::atomic::{AtomicI32, Ordering};
+
+        gst::init().unwrap();
+
+        static IN_WIDTH: AtomicI32 = AtomicI32::new(0);
+        static OUT_WIDTH: AtomicI32 = AtomicI32::new(0);
+
+        const NAME: &str = "TestCustomMetaVideoScaleTransform";
+
+        if !gst::meta::CustomMeta::is_registered(NAME) {
+            gst::meta::CustomMeta::register_with_transform(
+                NAME,
+                &[],
+                |dest, _meta, _src, transform| {
+                    let Some(scale) = transform.get::<VideoMetaTransformScale>() else {
+                        // Not a scale: do not carry the meta over.
+                        return false;
+                    };
+
+                    IN_WIDTH.store(scale.in_info().width() as i32, Ordering::SeqCst);
+                    OUT_WIDTH.store(scale.out_info().width() as i32, Ordering::SeqCst);
+
+                    gst::meta::CustomMeta::add(dest, NAME).is_ok()
+                },
+            );
+        }
+
+        let in_info = crate::VideoInfo::builder(crate::VideoFormat::Argb, 320, 240)
+            .build()
+            .unwrap();
+        let out_info = crate::VideoInfo::builder(crate::VideoFormat::Argb, 640, 480)
+            .build()
+            .unwrap();
+
+        let mut buffer = gst::Buffer::with_size(320 * 240 * 4).unwrap();
+        gst::meta::CustomMeta::add(buffer.get_mut().unwrap(), NAME).unwrap();
+
+        let mut dest = gst::Buffer::new();
+        {
+            let meta = gst::meta::CustomMeta::from_buffer(&buffer, NAME).unwrap();
+            // `CustomMeta` is not a `MetaAPI`, so go through the generic `Meta`.
+            meta.upcast_ref()
+                .transform(
+                    dest.get_mut().unwrap(),
+                    &VideoMetaTransformScale::new(&in_info, &out_info),
+                )
+                .unwrap();
+        }
+
+        assert!(
+            gst::meta::CustomMeta::from_buffer(&dest, NAME).is_ok(),
+            "the transform function should have carried the meta over"
+        );
+        assert_eq!(IN_WIDTH.load(Ordering::SeqCst), 320);
+        assert_eq!(OUT_WIDTH.load(Ordering::SeqCst), 640);
+    }
 }

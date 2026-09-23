@@ -920,9 +920,20 @@ impl CustomMeta {
         }
     }
 
+    // rustdoc-stripper-ignore-next
+    /// Register a custom meta with a transform function.
+    ///
+    /// The transform function is passed the transform being performed as a
+    /// [`MetaTransformRef`], which carries both the transform's quark and its
+    /// data. A transform whose data the function needs but does not understand
+    /// should not be handled: return `false` so the meta is dropped rather than
+    /// carried over with stale contents.
     #[doc(alias = "gst_meta_register_custom")]
     pub fn register_with_transform<
-        F: Fn(&mut BufferRef, &CustomMeta, &BufferRef, glib::Quark) -> bool + Send + Sync + 'static,
+        F: Fn(&mut BufferRef, &CustomMeta, &BufferRef, MetaTransformRef<'_>) -> bool
+            + Send
+            + Sync
+            + 'static,
     >(
         name: &str,
         tags: &[&str],
@@ -930,7 +941,7 @@ impl CustomMeta {
     ) {
         assert_initialized_main_thread!();
         unsafe extern "C" fn transform_func_trampoline<
-            F: Fn(&mut BufferRef, &CustomMeta, &BufferRef, glib::Quark) -> bool
+            F: Fn(&mut BufferRef, &CustomMeta, &BufferRef, MetaTransformRef<'_>) -> bool
                 + Send
                 + Sync
                 + 'static,
@@ -939,16 +950,19 @@ impl CustomMeta {
             meta: *mut ffi::GstCustomMeta,
             src: *mut ffi::GstBuffer,
             type_: glib::ffi::GQuark,
-            _data: glib::ffi::gpointer,
+            data: glib::ffi::gpointer,
             user_data: glib::ffi::gpointer,
         ) -> glib::ffi::gboolean {
             unsafe {
                 let func = &*(user_data as *const F);
+                // SAFETY: GStreamer passes the data belonging to `type_`, valid
+                // for the duration of this call, which bounds the borrow.
+                let transform = MetaTransformRef::new(from_glib(type_), data);
                 let res = func(
                     BufferRef::from_mut_ptr(dest),
                     &*(meta as *const CustomMeta),
                     BufferRef::from_ptr(src),
-                    from_glib(type_),
+                    transform,
                 );
                 res.into_glib()
             }
@@ -1111,10 +1125,92 @@ pub mod tags {
     );
 }
 
+/// A kind of meta transform, e.g. [`MetaTransformCopy`] or
+/// `VideoMetaTransformScale`.
+///
+/// # Safety
+///
+/// `Self` must be `#[repr(transparent)]` over `Self::GLibType`, and `quark()`
+/// must return the quark GStreamer uses to identify a transform whose
+/// accompanying data is a `Self::GLibType`. [`MetaTransformRef::get`] relies on
+/// both to hand out a `&Self` for a matching quark.
 pub unsafe trait MetaTransform {
     type GLibType;
     fn quark() -> glib::Quark;
     fn as_ptr(&self) -> *const Self::GLibType;
+}
+
+/// The transform a meta is asked to perform, as passed to a transform function.
+///
+/// A transform is identified by a [`glib::Quark`] and carries data whose type
+/// that quark determines. [`get`](Self::get) pairs the two: it hands back the
+/// data typed as the requested [`MetaTransform`], or `None` if this is a
+/// different transform.
+///
+/// ```ignore
+/// if let Some(scale) = transform.get::<gst_video::VideoMetaTransformScale>() {
+///     // rescale between scale.in_info() and scale.out_info()
+/// } else if transform.is::<gst::meta::MetaTransformCopy>() {
+///     // plain copy
+/// }
+/// ```
+#[derive(Debug, Clone, Copy)]
+pub struct MetaTransformRef<'a> {
+    quark: glib::Quark,
+    data: glib::ffi::gpointer,
+    phantom: PhantomData<&'a ()>,
+}
+
+impl<'a> MetaTransformRef<'a> {
+    /// # Safety
+    ///
+    /// `data` must be valid for `'a` and point to the type `quark` identifies.
+    /// It may be null only for a quark with no [`MetaTransform`] implementation.
+    #[cfg(feature = "v1_20")]
+    pub(crate) unsafe fn new(quark: glib::Quark, data: glib::ffi::gpointer) -> Self {
+        skip_assert_initialized!();
+        Self {
+            quark,
+            data,
+            phantom: PhantomData,
+        }
+    }
+
+    /// The quark identifying this transform.
+    #[inline]
+    pub fn quark(self) -> glib::Quark {
+        self.quark
+    }
+
+    /// Whether this is a `MT` transform.
+    #[inline]
+    pub fn is<MT: MetaTransform>(self) -> bool {
+        MT::quark() == self.quark
+    }
+
+    /// This transform's data as a `MT`, or `None` if this is a different
+    /// transform.
+    #[inline]
+    pub fn get<MT: MetaTransform>(self) -> Option<&'a MT> {
+        if !self.is::<MT>() {
+            return None;
+        }
+
+        debug_assert!(!self.data.is_null());
+        // SAFETY: the quark matches, so per `MetaTransform`'s contract the data
+        // is a `MT::GLibType` and `MT` is `#[repr(transparent)]` over it. Our
+        // constructor's contract gives it validity for `'a`.
+        Some(unsafe { &*(self.data as *const MT) })
+    }
+
+    /// This transform's raw data, for a transform with no [`MetaTransform`]
+    /// implementation yet. Null if it carries none.
+    ///
+    /// Prefer [`get`](Self::get); the caller must know what `quark()` means.
+    #[inline]
+    pub fn data(self) -> glib::ffi::gpointer {
+        self.data
+    }
 }
 
 #[repr(transparent)]
@@ -1393,5 +1489,88 @@ mod tests {
             Meta::deserialize(buffer_dest.get_mut().unwrap(), &[0, 1, 2], &mut consumed).is_err()
         );
         assert_eq!(consumed, 0);
+    }
+
+    // A `MetaTransform` whose quark nothing ever uses, so `get` can be shown to
+    // discriminate on the quark rather than hand back whatever data is there.
+    #[cfg(feature = "v1_20")]
+    #[repr(transparent)]
+    struct UnusedTransform(ffi::GstMetaTransformCopy);
+
+    #[cfg(feature = "v1_20")]
+    unsafe impl MetaTransform for UnusedTransform {
+        type GLibType = ffi::GstMetaTransformCopy;
+        fn quark() -> glib::Quark {
+            glib::Quark::from_str("test-not-a-real-meta-transform")
+        }
+        fn as_ptr(&self) -> *const ffi::GstMetaTransformCopy {
+            &self.0
+        }
+    }
+
+    // The transform data is what tells a coordinate-aware meta how to map its
+    // contents into the destination buffer, so a transform function has to be
+    // able to reach it, not just the quark naming the transform.
+    #[cfg(feature = "v1_20")]
+    #[test]
+    fn test_custom_meta_transform_gets_its_data() {
+        use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
+
+        crate::init().unwrap();
+
+        static SEEN_START: AtomicUsize = AtomicUsize::new(usize::MAX);
+        static TYPED_GET_WORKED: AtomicBool = AtomicBool::new(false);
+        static OTHER_QUARK_REJECTED: AtomicBool = AtomicBool::new(false);
+        static DATA_NON_NULL: AtomicBool = AtomicBool::new(false);
+
+        const NAME: &str = "TestCustomMetaTransformData";
+
+        if !CustomMeta::is_registered(NAME) {
+            CustomMeta::register_with_transform(NAME, &[], |dest, _meta, _src, transform| {
+                // A plain buffer copy is a copy transform carrying a range.
+                if let Some(copy) = transform.get::<MetaTransformCopy>() {
+                    TYPED_GET_WORKED.store(true, Ordering::SeqCst);
+                    if let Some((Bound::Included(start), _)) = copy.range() {
+                        SEEN_START.store(start, Ordering::SeqCst);
+                    }
+                }
+
+                OTHER_QUARK_REJECTED.store(
+                    transform.get::<UnusedTransform>().is_none(),
+                    Ordering::SeqCst,
+                );
+                DATA_NON_NULL.store(!transform.data().is_null(), Ordering::SeqCst);
+
+                CustomMeta::add(dest, NAME).is_ok()
+            });
+        }
+
+        let mut buffer = crate::Buffer::with_size(64).unwrap();
+        CustomMeta::add(buffer.get_mut().unwrap(), NAME).unwrap();
+
+        // Copy from byte 16 on, so 16 is what the transform's data carries.
+        let mut dest = crate::Buffer::new();
+        buffer
+            .copy_into(dest.get_mut().unwrap(), crate::BufferCopyFlags::META, 16..)
+            .unwrap();
+
+        assert!(
+            CustomMeta::from_buffer(&dest, NAME).is_ok(),
+            "the transform function should have run and added the meta"
+        );
+        assert!(
+            TYPED_GET_WORKED.load(Ordering::SeqCst),
+            "get::<MetaTransformCopy>() should hand back the copy transform's data"
+        );
+        assert_eq!(
+            SEEN_START.load(Ordering::SeqCst),
+            16,
+            "the data reaching the transform function should be the real copy range"
+        );
+        assert!(
+            OTHER_QUARK_REJECTED.load(Ordering::SeqCst),
+            "get() for a different quark should return None"
+        );
+        assert!(DATA_NON_NULL.load(Ordering::SeqCst));
     }
 }
