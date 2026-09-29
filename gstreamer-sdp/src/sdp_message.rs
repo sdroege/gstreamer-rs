@@ -676,6 +676,21 @@ impl SDPMessageRef {
         }
     }
 
+    #[cfg(feature = "v1_24")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
+    #[doc(alias = "gst_sdp_message_remove_media")]
+    pub fn remove_media(&mut self, idx: u32) -> Result<(), glib::BoolError> {
+        if idx >= self.medias_len() {
+            return Err(glib::bool_error!("Failed to remove media"));
+        }
+
+        let result = unsafe { ffi::gst_sdp_message_remove_media(&mut self.0, idx) };
+        match result {
+            ffi::GST_SDP_OK => Ok(()),
+            _ => Err(glib::bool_error!("Failed to remove media")),
+        }
+    }
+
     #[doc(alias = "gst_sdp_message_remove_phone")]
     pub fn remove_phone(&mut self, idx: u32) -> Result<(), glib::BoolError> {
         if idx >= self.phones_len() {
