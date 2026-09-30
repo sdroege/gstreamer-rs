@@ -294,6 +294,15 @@ impl<'a, T: AnalyticsMtd> AnalyticsMtdRef<'a, T> {
         }
     }
 
+    #[doc(alias = "gst_analytics_mtd_type_get_name")]
+    pub fn type_name(&self) -> &'static str {
+        let mtd_type = self.mtd_type();
+        unsafe {
+            let ptr = ffi::gst_analytics_mtd_type_get_name(mtd_type);
+            std::ffi::CStr::from_ptr(ptr).to_str().unwrap()
+        }
+    }
+
     #[cfg(feature = "v1_30")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
     #[doc(alias = "gst_analytics_mtd_get_semantic_tag")]
