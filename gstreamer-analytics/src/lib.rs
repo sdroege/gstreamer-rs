@@ -38,6 +38,13 @@ mod tensor_meta;
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
 pub use crate::tensor_meta::*;
 
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+mod tensor_mtd;
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+pub use crate::tensor_mtd::*;
+
 mod relation_meta;
 pub use crate::relation_meta::*;
 
@@ -110,6 +117,9 @@ pub mod prelude {
     #[cfg(feature = "v1_26")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
     pub use crate::segmentation::AnalyticsRelationMetaSegmentationExt;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub use crate::tensor_mtd::AnalyticsRelationMetaTensorExt;
     #[cfg(feature = "v1_30")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
     pub use crate::text::AnalyticsRelationMetaTextExt;
