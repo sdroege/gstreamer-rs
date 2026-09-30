@@ -32,6 +32,21 @@ impl RTSPMessage {
         }
     }
 
+    #[doc(alias = "get_header")]
+    #[doc(alias = "gst_rtsp_message_get_header")]
+    pub fn header(&self, header: RTSPHeaderField, idx: u32) -> Option<glib::GString> {
+        let idx = i32::try_from(idx).ok()?;
+        let ptr = self.to_glib_none().0;
+        unsafe {
+            let mut value = std::ptr::null_mut();
+            let res = ffi::gst_rtsp_message_get_header(ptr, header.into_glib(), &mut value, idx);
+            if res != ffi::GST_RTSP_OK {
+                return None;
+            }
+            from_glib_none(value)
+        }
+    }
+
     #[doc(alias = "gst_rtsp_message_init_response")]
     pub fn init_response(&self, code: RTSPStatusCode, request: Option<&RTSPMessage>) {
         let ptr = self.to_glib_none().0;
