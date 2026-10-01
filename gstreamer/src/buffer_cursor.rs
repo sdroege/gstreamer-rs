@@ -44,7 +44,7 @@ macro_rules! define_seek_impl(
                         io::Error::new(io::ErrorKind::InvalidInput, "Seek before start of buffer")
                     })?;
                 }
-                io::SeekFrom::Current(std::i64::MIN) => {
+                io::SeekFrom::Current(i64::MIN) => {
                     return Err(io::Error::new(
                         io::ErrorKind::InvalidInput,
                         "Seek before start of buffer",
