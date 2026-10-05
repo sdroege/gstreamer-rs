@@ -130,6 +130,20 @@ pub trait D3D12ConverterExt: IsA<D3D12Converter> + 'static {
         ObjectExt::set_property(self.as_ref(), "max-mip-levels", max_mip_levels)
     }
 
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "most-detailed-mip")]
+    fn most_detailed_mip(&self) -> u32 {
+        ObjectExt::property(self.as_ref(), "most-detailed-mip")
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "most-detailed-mip")]
+    fn set_most_detailed_mip(&self, most_detailed_mip: u32) {
+        ObjectExt::set_property(self.as_ref(), "most-detailed-mip", most_detailed_mip)
+    }
+
     #[doc(alias = "sampler-filter")]
     fn sampler_filter(&self) -> D3D12ConverterSamplerFilter {
         ObjectExt::property(self.as_ref(), "sampler-filter")
@@ -521,6 +535,39 @@ pub trait D3D12ConverterExt: IsA<D3D12Converter> + 'static {
                 c"notify::max-mip-levels".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_max_mip_levels_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "most-detailed-mip")]
+    fn connect_most_detailed_mip_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_most_detailed_mip_trampoline<
+            P: IsA<D3D12Converter>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstD3D12Converter,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(D3D12Converter::from_glib_borrow(this).unsafe_cast_ref())
+            }
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::most-detailed-mip".as_ptr(),
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_most_detailed_mip_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

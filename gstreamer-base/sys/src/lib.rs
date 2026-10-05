@@ -1808,6 +1808,9 @@ unsafe extern "C" {
     pub fn gst_adapter_new() -> *mut GstAdapter;
     pub fn gst_adapter_available(adapter: *mut GstAdapter) -> size_t;
     pub fn gst_adapter_available_fast(adapter: *mut GstAdapter) -> size_t;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_adapter_buffer_seq_at_offset(adapter: *mut GstAdapter, offset: size_t) -> u64;
     pub fn gst_adapter_clear(adapter: *mut GstAdapter);
     pub fn gst_adapter_copy(adapter: *mut GstAdapter, dest: gpointer, offset: size_t, size: size_t);
     pub fn gst_adapter_copy_bytes(
@@ -1817,6 +1820,13 @@ unsafe extern "C" {
     ) -> *mut glib::GBytes;
     pub fn gst_adapter_distance_from_discont(adapter: *mut GstAdapter) -> u64;
     pub fn gst_adapter_dts_at_discont(adapter: *mut GstAdapter) -> gst::GstClockTime;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_adapter_dts_at_offset(
+        adapter: *mut GstAdapter,
+        offset: size_t,
+        distance: *mut u64,
+    ) -> gst::GstClockTime;
     pub fn gst_adapter_flush(adapter: *mut GstAdapter, flush: size_t);
     pub fn gst_adapter_get_buffer(adapter: *mut GstAdapter, nbytes: size_t) -> *mut gst::GstBuffer;
     pub fn gst_adapter_get_buffer_fast(
@@ -1859,6 +1869,13 @@ unsafe extern "C" {
         distance: *mut u64,
     ) -> gst::GstClockTime;
     pub fn gst_adapter_pts_at_discont(adapter: *mut GstAdapter) -> gst::GstClockTime;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_adapter_pts_at_offset(
+        adapter: *mut GstAdapter,
+        offset: size_t,
+        distance: *mut u64,
+    ) -> gst::GstClockTime;
     pub fn gst_adapter_push(adapter: *mut GstAdapter, buf: *mut gst::GstBuffer);
     pub fn gst_adapter_take(adapter: *mut GstAdapter, nbytes: size_t) -> gpointer;
     pub fn gst_adapter_take_buffer(adapter: *mut GstAdapter, nbytes: size_t)

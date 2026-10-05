@@ -83,6 +83,7 @@ int main() {
     printf("%s;%zu;%zu\n", "GESSourceClipAsset", sizeof(GESSourceClipAsset), alignof(GESSourceClipAsset));
     printf("%s;%zu;%zu\n", "GESSourceClipAssetClass", sizeof(GESSourceClipAssetClass), alignof(GESSourceClipAssetClass));
     printf("%s;%zu;%zu\n", "GESSourceClipClass", sizeof(GESSourceClipClass), alignof(GESSourceClipClass));
+    printf("%s;%zu;%zu\n", "GESSourceTrackMapEntry", sizeof(GESSourceTrackMapEntry), alignof(GESSourceTrackMapEntry));
     printf("%s;%zu;%zu\n", "GESTestClip", sizeof(GESTestClip), alignof(GESTestClip));
     printf("%s;%zu;%zu\n", "GESTestClipClass", sizeof(GESTestClipClass), alignof(GESTestClipClass));
     printf("%s;%zu;%zu\n", "GESTextHAlign", sizeof(GESTextHAlign), alignof(GESTextHAlign));

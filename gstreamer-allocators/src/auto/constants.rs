@@ -30,3 +30,8 @@ pub static CAPS_FEATURE_MEMORY_AHARDWAREBUFFER: &GStr =
 #[doc(alias = "GST_CAPS_FEATURE_MEMORY_DMABUF")]
 pub static CAPS_FEATURE_MEMORY_DMABUF: &GStr =
     unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_CAPS_FEATURE_MEMORY_DMABUF) };
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+#[doc(alias = "GST_CAPS_FEATURE_MEMORY_IOSURFACE")]
+pub static CAPS_FEATURE_MEMORY_IOSURFACE: &GStr =
+    unsafe { GStr::from_utf8_with_nul_unchecked(ffi::GST_CAPS_FEATURE_MEMORY_IOSURFACE) };

@@ -633,12 +633,15 @@ impl ::std::fmt::Debug for GESClipClass {
 #[repr(C)]
 pub struct GESClipClass_ABI_abi {
     pub can_add_effects: gboolean,
+    pub select_element_tracks:
+        Option<unsafe extern "C" fn(*mut GESClip, *mut GESTrackElement) -> *mut glib::GPtrArray>,
 }
 
 impl ::std::fmt::Debug for GESClipClass_ABI_abi {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GESClipClass_ABI_abi @ {self:p}"))
             .field("can_add_effects", &self.can_add_effects)
+            .field("select_element_tracks", &self.select_element_tracks)
             .finish()
     }
 }
@@ -1281,6 +1284,50 @@ pub struct _GESSourcePrivate {
 }
 
 pub type GESSourcePrivate = _GESSourcePrivate;
+
+#[repr(C)]
+#[allow(dead_code)]
+pub struct GESSourceTrackMap {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
+
+impl ::std::fmt::Debug for GESSourceTrackMap {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GESSourceTrackMap @ {self:p}"))
+            .finish()
+    }
+}
+
+#[repr(C)]
+#[allow(dead_code)]
+pub struct GESSourceTrackMapBuilder {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
+
+impl ::std::fmt::Debug for GESSourceTrackMapBuilder {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GESSourceTrackMapBuilder @ {self:p}"))
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GESSourceTrackMapEntry {
+    pub source: *mut GESUriSourceAsset,
+    pub track: *mut GESTrack,
+}
+
+impl ::std::fmt::Debug for GESSourceTrackMapEntry {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GESSourceTrackMapEntry @ {self:p}"))
+            .field("source", &self.source)
+            .field("track", &self.track)
+            .finish()
+    }
+}
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -2968,6 +3015,72 @@ unsafe extern "C" {
     );
 
     //=========================================================================
+    // GESSourceTrackMap
+    //=========================================================================
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn ges_source_track_map_get_type() -> GType;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn ges_source_track_map_new_full(
+        entries: *const GESSourceTrackMapEntry,
+    ) -> *mut GESSourceTrackMap;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn ges_source_track_map_contains(
+        self_: *mut GESSourceTrackMap,
+        source: *mut GESUriSourceAsset,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn ges_source_track_map_get_size(self_: *mut GESSourceTrackMap) -> c_uint;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn ges_source_track_map_get_sources(self_: *mut GESSourceTrackMap) -> *mut glib::GList;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn ges_source_track_map_get_tracks(
+        self_: *mut GESSourceTrackMap,
+        source: *mut GESUriSourceAsset,
+    ) -> *mut glib::GList;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn ges_source_track_map_ref(self_: *mut GESSourceTrackMap) -> *mut GESSourceTrackMap;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn ges_source_track_map_unref(self_: *mut GESSourceTrackMap);
+
+    //=========================================================================
+    // GESSourceTrackMapBuilder
+    //=========================================================================
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn ges_source_track_map_builder_get_type() -> GType;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn ges_source_track_map_builder_new() -> *mut GESSourceTrackMapBuilder;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn ges_source_track_map_builder_add(
+        builder: *mut GESSourceTrackMapBuilder,
+        source: *mut GESUriSourceAsset,
+        track: *mut GESTrack,
+    ) -> *mut GESSourceTrackMapBuilder;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn ges_source_track_map_builder_build(
+        builder: *mut GESSourceTrackMapBuilder,
+    ) -> *mut GESSourceTrackMap;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn ges_source_track_map_builder_copy(
+        builder: *mut GESSourceTrackMapBuilder,
+    ) -> *mut GESSourceTrackMapBuilder;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn ges_source_track_map_builder_free(builder: *mut GESSourceTrackMapBuilder);
+
+    //=========================================================================
     // GESUriClipAssetClass
     //=========================================================================
     pub fn ges_uri_clip_asset_class_set_timeout(
@@ -3056,6 +3169,9 @@ unsafe extern "C" {
     // GESBaseEffect
     //=========================================================================
     pub fn ges_base_effect_get_type() -> GType;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn ges_base_effect_get_source(effect: *mut GESBaseEffect) -> *mut GESSource;
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn ges_base_effect_is_time_effect(effect: *mut GESBaseEffect) -> gboolean;
@@ -3597,6 +3713,14 @@ unsafe extern "C" {
     // GESSource
     //=========================================================================
     pub fn ges_source_get_type() -> GType;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn ges_source_add_effect(
+        source: *mut GESSource,
+        effect: *mut GESBaseEffect,
+        index: c_int,
+        error: *mut *mut glib::GError,
+    ) -> gboolean;
 
     //=========================================================================
     // GESSourceClip
@@ -4205,11 +4329,22 @@ unsafe extern "C" {
     //=========================================================================
     pub fn ges_uri_clip_get_type() -> GType;
     pub fn ges_uri_clip_new(uri: *const c_char) -> *mut GESUriClip;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn ges_uri_clip_get_source_track_map(self_: *mut GESUriClip) -> *mut GESSourceTrackMap;
     pub fn ges_uri_clip_get_uri(self_: *mut GESUriClip) -> *const c_char;
     pub fn ges_uri_clip_is_image(self_: *mut GESUriClip) -> gboolean;
     pub fn ges_uri_clip_is_muted(self_: *mut GESUriClip) -> gboolean;
     pub fn ges_uri_clip_set_is_image(self_: *mut GESUriClip, is_image: gboolean);
     pub fn ges_uri_clip_set_mute(self_: *mut GESUriClip, mute: gboolean);
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn ges_uri_clip_set_source_track_map(
+        self_: *mut GESUriClip,
+        map: *mut GESSourceTrackMap,
+        created: *mut *mut glib::GList,
+        error: *mut *mut glib::GError,
+    ) -> gboolean;
 
     //=========================================================================
     // GESUriClipAsset

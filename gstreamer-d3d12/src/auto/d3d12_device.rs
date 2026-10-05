@@ -3,6 +3,9 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+use crate::D3D12DecoderSessionReuse;
 use crate::ffi;
 use glib::{
     prelude::*,
@@ -73,6 +76,52 @@ pub trait D3D12DeviceExt: IsA<D3D12Device> + 'static {
     #[doc(alias = "device-removed-reason")]
     fn device_removed_reason(&self) -> i32 {
         ObjectExt::property(self.as_ref(), "device-removed-reason")
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "memory-budget")]
+    fn memory_budget(&self) -> u64 {
+        ObjectExt::property(self.as_ref(), "memory-budget")
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "over-budget-factor")]
+    fn over_budget_factor(&self) -> f64 {
+        ObjectExt::property(self.as_ref(), "over-budget-factor")
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "over-budget-factor")]
+    fn set_over_budget_factor(&self, over_budget_factor: f64) {
+        ObjectExt::set_property(self.as_ref(), "over-budget-factor", over_budget_factor)
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "resident-memory-size")]
+    fn resident_memory_size(&self) -> u64 {
+        ObjectExt::property(self.as_ref(), "resident-memory-size")
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "reuse-decoder-session")]
+    fn reuse_decoder_session(&self) -> D3D12DecoderSessionReuse {
+        ObjectExt::property(self.as_ref(), "reuse-decoder-session")
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "reuse-decoder-session")]
+    fn set_reuse_decoder_session(&self, reuse_decoder_session: D3D12DecoderSessionReuse) {
+        ObjectExt::set_property(
+            self.as_ref(),
+            "reuse-decoder-session",
+            reuse_decoder_session,
+        )
     }
 
     #[doc(alias = "vendor-id")]
@@ -229,6 +278,138 @@ pub trait D3D12DeviceExt: IsA<D3D12Device> + 'static {
                 c"notify::device-removed-reason".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_device_removed_reason_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "memory-budget")]
+    fn connect_memory_budget_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_memory_budget_trampoline<
+            P: IsA<D3D12Device>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstD3D12Device,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(D3D12Device::from_glib_borrow(this).unsafe_cast_ref())
+            }
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::memory-budget".as_ptr(),
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_memory_budget_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "over-budget-factor")]
+    fn connect_over_budget_factor_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_over_budget_factor_trampoline<
+            P: IsA<D3D12Device>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstD3D12Device,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(D3D12Device::from_glib_borrow(this).unsafe_cast_ref())
+            }
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::over-budget-factor".as_ptr(),
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_over_budget_factor_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "resident-memory-size")]
+    fn connect_resident_memory_size_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_resident_memory_size_trampoline<
+            P: IsA<D3D12Device>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstD3D12Device,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(D3D12Device::from_glib_borrow(this).unsafe_cast_ref())
+            }
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::resident-memory-size".as_ptr(),
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_resident_memory_size_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "reuse-decoder-session")]
+    fn connect_reuse_decoder_session_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_reuse_decoder_session_trampoline<
+            P: IsA<D3D12Device>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstD3D12Device,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(D3D12Device::from_glib_borrow(this).unsafe_cast_ref())
+            }
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::reuse-decoder-session".as_ptr(),
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_reuse_decoder_session_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

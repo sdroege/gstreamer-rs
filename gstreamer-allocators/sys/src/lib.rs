@@ -67,6 +67,7 @@ pub const GST_ALLOCATOR_SHM: &[u8] = b"shm\0";
 pub const GST_ALLOCATOR_UDMABUF: &[u8] = b"udmabuf\0";
 pub const GST_CAPS_FEATURE_MEMORY_AHARDWAREBUFFER: &[u8] = b"memory:AHardwareBuffer\0";
 pub const GST_CAPS_FEATURE_MEMORY_DMABUF: &[u8] = b"memory:DMABuf\0";
+pub const GST_CAPS_FEATURE_MEMORY_IOSURFACE: &[u8] = b"memory:IOSurface\0";
 
 // Flags
 pub type GstFdMemoryFlags = c_uint;
@@ -77,7 +78,10 @@ pub const GST_FD_MEMORY_FLAG_DONT_CLOSE: GstFdMemoryFlags = 4;
 
 // Callbacks
 pub type GstAHardwareBufferMemoryQueryFunction =
-    Option<unsafe extern "C" fn(*mut gst::GstMemory, *mut gpointer) -> gboolean>;
+    Option<unsafe extern "C" fn(*mut gst::GstMemory, *mut gpointer, gpointer) -> gboolean>;
+pub type GstIOSurfaceMemoryQueryFunction = Option<
+    unsafe extern "C" fn(*mut gst::GstMemory, *mut gpointer, *mut c_uint, gpointer) -> gboolean,
+>;
 
 // Records
 #[derive(Copy, Clone)]
@@ -362,11 +366,13 @@ unsafe extern "C" {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
     pub fn gst_ahardware_buffer_format_from_caps_string(
         value: *const c_char,
-        format: *mut u32,
+        format: *mut GstAHardwareBufferFormat,
     ) -> gboolean;
     #[cfg(feature = "v1_30")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
-    pub fn gst_ahardware_buffer_format_to_caps_string(format: u32) -> *mut c_char;
+    pub fn gst_ahardware_buffer_format_to_caps_string(
+        format: GstAHardwareBufferFormat,
+    ) -> *mut c_char;
     #[cfg(feature = "v1_30")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
     pub fn gst_ahardware_buffer_memory_peek_buffer(
@@ -378,6 +384,7 @@ unsafe extern "C" {
     pub fn gst_ahardware_buffer_memory_register_query_function(
         allocator_type: GType,
         query: GstAHardwareBufferMemoryQueryFunction,
+        user_data: gpointer,
     );
     pub fn gst_dmabuf_memory_get_fd(mem: *mut gst::GstMemory) -> c_int;
     #[cfg(feature = "v1_24")]
@@ -389,6 +396,20 @@ unsafe extern "C" {
     pub fn gst_fd_memory_get_fd(mem: *mut gst::GstMemory) -> c_int;
     #[cfg(feature = "v1_30")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_iosurface_memory_peek_surface(
+        mem: *mut gst::GstMemory,
+        surface: *mut gpointer,
+        plane: *mut c_uint,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_iosurface_memory_register_query_function(
+        allocator_type: GType,
+        query: GstIOSurfaceMemoryQueryFunction,
+        user_data: gpointer,
+    );
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
     pub fn gst_is_ahardware_buffer_buffer(buffer: *mut gst::GstBuffer) -> gboolean;
     #[cfg(feature = "v1_30")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
@@ -398,6 +419,12 @@ unsafe extern "C" {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_is_drm_dumb_memory(mem: *mut gst::GstMemory) -> gboolean;
     pub fn gst_is_fd_memory(mem: *mut gst::GstMemory) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_is_iosurface_buffer(buffer: *mut gst::GstBuffer) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_is_iosurface_memory(mem: *mut gst::GstMemory) -> gboolean;
     pub fn gst_is_phys_memory(mem: *mut gst::GstMemory) -> gboolean;
     pub fn gst_phys_memory_get_phys_addr(mem: *mut gst::GstMemory) -> uintptr_t;
 

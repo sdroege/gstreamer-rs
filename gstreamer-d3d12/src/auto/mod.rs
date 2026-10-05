@@ -48,6 +48,9 @@ pub use self::enums::D3D12ConverterAlphaMode;
 pub use self::enums::D3D12ConverterColorBalance;
 pub use self::enums::D3D12ConverterMipGen;
 pub use self::enums::D3D12ConverterSamplerFilter;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub use self::enums::D3D12DecoderSessionReuse;
 
 pub(crate) mod traits {
     pub use super::d3d12_allocator::D3D12AllocatorExt;

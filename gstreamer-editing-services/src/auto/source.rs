@@ -3,7 +3,14 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+use crate::BaseEffect;
 use crate::{Extractable, MetaContainer, TimelineElement, TrackElement, ffi};
+use glib::prelude::*;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+use glib::translate::*;
 
 glib::wrapper! {
     #[doc(alias = "GESSource")]
@@ -17,3 +24,28 @@ glib::wrapper! {
 impl Source {
     pub const NONE: Option<&'static Source> = None;
 }
+
+pub trait SourceExt: IsA<Source> + 'static {
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "ges_source_add_effect")]
+    fn add_effect(&self, effect: &impl IsA<BaseEffect>, index: i32) -> Result<(), glib::Error> {
+        unsafe {
+            let mut error = std::ptr::null_mut();
+            let is_ok = ffi::ges_source_add_effect(
+                self.as_ref().to_glib_none().0,
+                effect.as_ref().to_glib_none().0,
+                index,
+                &mut error,
+            );
+            debug_assert_eq!(is_ok == glib::ffi::GFALSE, !error.is_null());
+            if error.is_null() {
+                Ok(())
+            } else {
+                Err(from_glib_full(error))
+            }
+        }
+    }
+}
+
+impl<O: IsA<Source>> SourceExt for O {}

@@ -53,6 +53,11 @@ pub const D3D12_FILTER_MIN_MAG_LINEAR_MIP_POINT: GstD3D12ConverterSamplerFilter 
 pub const D3D12_FILTER_MIN_MAG_MIP_LINEAR: GstD3D12ConverterSamplerFilter = 21;
 pub const D3D12_FILTER_ANISOTROPIC: GstD3D12ConverterSamplerFilter = 85;
 
+pub type GstD3D12DecoderSessionReuse = c_int;
+pub const GST_D3D12_DECODER_SESSION_REUSE_DISABLED: GstD3D12DecoderSessionReuse = 0;
+pub const GST_D3D12_DECODER_SESSION_REUSE_ALL: GstD3D12DecoderSessionReuse = 1;
+pub const GST_D3D12_DECODER_SESSION_REUSE_WITHOUT_TEXTURES: GstD3D12DecoderSessionReuse = 2;
+
 // Constants
 pub const GST_CAPS_FEATURE_MEMORY_D3D12_MEMORY: &[u8] = b"memory:D3D12Memory\0";
 pub const GST_D3D12_CONVERTER_OPT_COLOR_BALANCE: &[u8] = b"GstD3D12Converter.color-balance\0";
@@ -68,6 +73,7 @@ pub const GST_D3D12_CONVERTER_OPT_SAMPLER_FILTER: &[u8] = b"GstD3D12Converter.sa
 pub const GST_D3D12_CONVERTER_OPT_SRC_ALPHA_MODE: &[u8] = b"GstD3D12Converter.src-alpha-mode\0";
 pub const GST_D3D12_DEVICE_HANDLE_CONTEXT_TYPE: &[u8] = b"gst.d3d12.device.handle\0";
 pub const GST_D3D12_MEMORY_NAME: &[u8] = b"D3D12Memory\0";
+pub const GST_D3D12_STAGING_MEMORY_NAME: &[u8] = b"D3D12StagingMemory\0";
 pub const GST_MAP_D3D12: gst::GstMapFlags = 131072;
 pub const GST_MAP_READ_D3D12: gst::GstMapFlags = 131073;
 pub const GST_MAP_WRITE_D3D12: gst::GstMapFlags = 131074;
@@ -433,6 +439,80 @@ pub struct _GstD3D12PoolAllocatorPrivate {
 
 pub type GstD3D12PoolAllocatorPrivate = _GstD3D12PoolAllocatorPrivate;
 
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstD3D12StagingAllocatorClass {
+    pub allocator_class: gst::GstAllocatorClass,
+    pub _gst_reserved: [gpointer; 20],
+}
+
+impl ::std::fmt::Debug for GstD3D12StagingAllocatorClass {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstD3D12StagingAllocatorClass @ {self:p}"))
+            .field("allocator_class", &self.allocator_class)
+            .finish()
+    }
+}
+
+#[repr(C)]
+#[allow(dead_code)]
+pub struct _GstD3D12StagingAllocatorPrivate {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
+
+pub type GstD3D12StagingAllocatorPrivate = _GstD3D12StagingAllocatorPrivate;
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstD3D12StagingBufferPoolClass {
+    pub parent_class: gst::GstBufferPoolClass,
+}
+
+impl ::std::fmt::Debug for GstD3D12StagingBufferPoolClass {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstD3D12StagingBufferPoolClass @ {self:p}"))
+            .field("parent_class", &self.parent_class)
+            .finish()
+    }
+}
+
+#[repr(C)]
+#[allow(dead_code)]
+pub struct _GstD3D12StagingBufferPoolPrivate {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
+
+pub type GstD3D12StagingBufferPoolPrivate = _GstD3D12StagingBufferPoolPrivate;
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstD3D12StagingMemory {
+    pub mem: gst::GstMemory,
+    pub device: *mut GstD3D12Device,
+    pub priv_: *mut GstD3D12StagingMemoryPrivate,
+    pub _gst_reserved: [gpointer; 4],
+}
+
+impl ::std::fmt::Debug for GstD3D12StagingMemory {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstD3D12StagingMemory @ {self:p}"))
+            .field("mem", &self.mem)
+            .field("device", &self.device)
+            .finish()
+    }
+}
+
+#[repr(C)]
+#[allow(dead_code)]
+pub struct _GstD3D12StagingMemoryPrivate {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
+
+pub type GstD3D12StagingMemoryPrivate = _GstD3D12StagingMemoryPrivate;
+
 // Classes
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -583,6 +663,39 @@ impl ::std::fmt::Debug for GstD3D12PoolAllocator {
     }
 }
 
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstD3D12StagingAllocator {
+    pub allocator: gst::GstAllocator,
+    pub priv_: *mut GstD3D12StagingAllocatorPrivate,
+    pub _gst_reserved: [gpointer; 4],
+}
+
+impl ::std::fmt::Debug for GstD3D12StagingAllocator {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstD3D12StagingAllocator @ {self:p}"))
+            .field("allocator", &self.allocator)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstD3D12StagingBufferPool {
+    pub parent: gst::GstBufferPool,
+    pub device: *mut GstD3D12Device,
+    pub priv_: *mut GstD3D12StagingBufferPoolPrivate,
+}
+
+impl ::std::fmt::Debug for GstD3D12StagingBufferPool {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstD3D12StagingBufferPool @ {self:p}"))
+            .field("parent", &self.parent)
+            .field("device", &self.device)
+            .finish()
+    }
+}
+
 unsafe extern "C" {
 
     //=========================================================================
@@ -604,6 +717,13 @@ unsafe extern "C" {
     // GstD3D12ConverterSamplerFilter
     //=========================================================================
     pub fn gst_d3d12_converter_sampler_filter_get_type() -> GType;
+
+    //=========================================================================
+    // GstD3D12DecoderSessionReuse
+    //=========================================================================
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_d3d12_decoder_session_reuse_get_type() -> GType;
 
     //=========================================================================
     // GstD3D12AllocationParams
@@ -677,6 +797,9 @@ unsafe extern "C" {
     // GstD3D12Memory
     //=========================================================================
     pub fn gst_d3d12_memory_get_type() -> GType;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_d3d12_memory_evict(mem: *mut GstD3D12Memory) -> gboolean;
     pub fn gst_d3d12_memory_get_d3d11_texture(
         mem: *mut GstD3D12Memory,
         device11: gpointer,
@@ -706,6 +829,9 @@ unsafe extern "C" {
     ) -> gboolean;
     pub fn gst_d3d12_memory_get_token_data(mem: *mut GstD3D12Memory, token: i64) -> gpointer;
     pub fn gst_d3d12_memory_get_unordered_access_view_heap(mem: *mut GstD3D12Memory) -> gpointer;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_d3d12_memory_make_resident(mem: *mut GstD3D12Memory) -> gboolean;
     pub fn gst_d3d12_memory_set_fence(
         mem: *mut GstD3D12Memory,
         fence: gpointer,
@@ -765,6 +891,9 @@ unsafe extern "C" {
         pool: *mut GstD3D12CmdAllocPool,
         ca: *mut *mut GstD3D12CmdAlloc,
     ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_d3d12_cmd_alloc_pool_get_cmd_list_type(pool: *mut GstD3D12CmdAllocPool) -> c_int;
 
     //=========================================================================
     // GstD3D12CmdQueue
@@ -854,6 +983,16 @@ unsafe extern "C" {
     pub fn gst_d3d12_device_get_type() -> GType;
     pub fn gst_d3d12_device_new(adapter_index: c_uint) -> *mut GstD3D12Device;
     pub fn gst_d3d12_device_new_for_adapter_luid(adapter_luid: i64) -> *mut GstD3D12Device;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_d3d12_device_enqueue_make_resident(
+        device: *mut GstD3D12Device,
+        flags: c_int,
+        num_objects: c_uint,
+        objects: *mut gpointer,
+        fence: *mut gpointer,
+        fence_value: *mut u64,
+    ) -> c_int;
     pub fn gst_d3d12_device_execute_command_lists(
         device: *mut GstD3D12Device,
         queue_type: c_int,
@@ -889,6 +1028,15 @@ unsafe extern "C" {
     pub fn gst_d3d12_device_is_equal(
         device1: *mut GstD3D12Device,
         device2: *mut GstD3D12Device,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_d3d12_device_prepare_graphics_cmd_list(
+        device: *mut GstD3D12Device,
+        cl: *mut gpointer,
+        ca_pool: *mut GstD3D12CmdAllocPool,
+        initial_state: gpointer,
+        fence_data: *mut GstD3D12FenceData,
     ) -> gboolean;
     pub fn gst_d3d12_device_set_fence_notify(
         device: *mut GstD3D12Device,
@@ -926,6 +1074,34 @@ unsafe extern "C" {
     ) -> gst::GstFlowReturn;
 
     //=========================================================================
+    // GstD3D12StagingAllocator
+    //=========================================================================
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_d3d12_staging_allocator_get_type() -> GType;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_d3d12_staging_allocator_alloc(
+        allocator: *mut GstD3D12StagingAllocator,
+        device: *mut GstD3D12Device,
+        num_layouts: c_uint,
+        layouts: gconstpointer,
+        total_bytes: size_t,
+    ) -> *mut gst::GstMemory;
+
+    //=========================================================================
+    // GstD3D12StagingBufferPool
+    //=========================================================================
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_d3d12_staging_buffer_pool_get_type() -> GType;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_d3d12_staging_buffer_pool_new(
+        device: *mut GstD3D12Device,
+    ) -> *mut gst::GstBufferPool;
+
+    //=========================================================================
     // Other functions
     //=========================================================================
     pub fn gst_buffer_pool_config_get_d3d12_allocation_params(
@@ -943,6 +1119,20 @@ unsafe extern "C" {
         src: *mut gst::GstBuffer,
         info: *const gst_video::GstVideoInfo,
     ) -> gboolean;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_d3d12_buffer_copy_into_full(
+        dest: *mut gst::GstBuffer,
+        src: *mut gst::GstBuffer,
+        info: *const gst_video::GstVideoInfo,
+        queue_type: c_int,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_d3d12_buffer_evict(buffer: *mut gst::GstBuffer) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_d3d12_buffer_make_resident(buffer: *mut gst::GstBuffer) -> gboolean;
     pub fn gst_d3d12_buffer_set_fence(
         buffer: *mut gst::GstBuffer,
         fence: gpointer,
@@ -987,6 +1177,34 @@ unsafe extern "C" {
         device: *mut *mut GstD3D12Device,
     ) -> gboolean;
     pub fn gst_d3d12_luid_to_int64(luid: gconstpointer) -> i64;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_d3d12_staging_memory_get_fence(
+        mem: *mut GstD3D12StagingMemory,
+        fence: *mut gpointer,
+        fence_value: *mut u64,
+    ) -> gboolean;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_d3d12_staging_memory_get_layout(
+        mem: *mut GstD3D12StagingMemory,
+        index: c_uint,
+        layout: gpointer,
+    ) -> gboolean;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_d3d12_staging_memory_set_fence(
+        mem: *mut GstD3D12StagingMemory,
+        fence: gpointer,
+        fence_value: u64,
+        wait: gboolean,
+    );
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_d3d12_staging_memory_sync(mem: *mut GstD3D12StagingMemory) -> gboolean;
     pub fn gst_is_d3d12_memory(mem: *mut gst::GstMemory) -> gboolean;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn gst_is_d3d12_staging_memory(mem: *mut gst::GstMemory) -> gboolean;
 
 }

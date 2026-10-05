@@ -26,6 +26,7 @@ generate = [
     "GstD3D12.D3D12ConverterColorBalance",
     "GstD3D12.D3D12ConverterMipGen",
     "GstD3D12.D3D12ConverterSamplerFilter",
+    "GstD3D12.D3D12DecoderSessionReuse",
     "GstD3D12.D3D12FenceDataPool",
 ]
 
@@ -88,6 +89,11 @@ status = "generate"
 [[object]]
 name = "GstD3D12.D3D12CmdAllocPool"
 status = "generate"
+manual_traits = ["D3D12CmdAllocPoolExtManual"]
+    [[object.function]]
+    name = "get_cmd_list_type"
+    manual = true
+
     [[object.function]]
     name = "new"
     manual = true
@@ -160,6 +166,14 @@ status = "generate"
 name = "GstD3D12.D3D12Device"
 status = "generate"
 manual_traits = ["D3D12DeviceExtManual"]
+    [[object.function]]
+    name = "prepare_graphics_cmd_list"
+    manual = true
+
+    [[object.function]]
+    name = "enqueue_make_resident"
+    manual = true
+
     [[object.function]]
     name = "execute_command_lists"
     manual = true

@@ -3,6 +3,9 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+use crate::Source;
 use crate::{Extractable, MetaContainer, Operation, TimelineElement, TrackElement, ffi};
 use glib::prelude::*;
 #[cfg(feature = "v1_18")]
@@ -23,6 +26,18 @@ impl BaseEffect {
 }
 
 pub trait BaseEffectExt: IsA<BaseEffect> + 'static {
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "ges_base_effect_get_source")]
+    #[doc(alias = "get_source")]
+    fn source(&self) -> Option<Source> {
+        unsafe {
+            from_glib_full(ffi::ges_base_effect_get_source(
+                self.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     #[doc(alias = "ges_base_effect_is_time_effect")]

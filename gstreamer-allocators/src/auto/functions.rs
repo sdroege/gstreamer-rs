@@ -3,4 +3,37 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+use crate::ffi;
 use glib::translate::*;
+
+//#[cfg(feature = "v1_30")]
+//#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+//#[doc(alias = "gst_iosurface_memory_peek_surface")]
+//pub fn iosurface_memory_peek_surface(mem: &gst::Memory, surface: /*Unimplemented*/&mut Basic: Pointer) -> Option<u32> {
+//    unsafe { TODO: call ffi:gst_iosurface_memory_peek_surface() }
+//}
+
+//#[cfg(feature = "v1_30")]
+//#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+//#[doc(alias = "gst_iosurface_memory_register_query_function")]
+//pub fn iosurface_memory_register_query_function(allocator_type: glib::types::Type, query: /*Unimplemented*/Fn(&gst::Memory, /*Unimplemented*/Basic: Pointer, u32) -> bool, user_data: /*Unimplemented*/Option<Basic: Pointer>) {
+//    unsafe { TODO: call ffi:gst_iosurface_memory_register_query_function() }
+//}
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+#[doc(alias = "gst_is_iosurface_buffer")]
+pub fn is_iosurface_buffer(buffer: &gst::Buffer) -> bool {
+    assert_initialized_main_thread!();
+    unsafe { from_glib(ffi::gst_is_iosurface_buffer(buffer.to_glib_none().0)) }
+}
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+#[doc(alias = "gst_is_iosurface_memory")]
+pub fn is_iosurface_memory(mem: &gst::Memory) -> bool {
+    assert_initialized_main_thread!();
+    unsafe { from_glib(ffi::gst_is_iosurface_memory(mem.to_glib_none().0)) }
+}
