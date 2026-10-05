@@ -44,6 +44,12 @@ mod tensor_mtd;
 #[cfg(feature = "v1_28")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
 pub use crate::tensor_mtd::*;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+mod tensor_list_meta;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub use crate::tensor_list_meta::*;
 
 mod relation_meta;
 pub use crate::relation_meta::*;
@@ -82,6 +88,13 @@ mod text;
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
 pub use crate::text::*;
 
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+mod tensor_provenance;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub use crate::tensor_provenance::*;
+
 mod classification;
 pub use crate::classification::*;
 
@@ -116,6 +129,9 @@ pub mod prelude {
     #[cfg(feature = "v1_28")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
     pub use crate::tensor_mtd::AnalyticsRelationMetaTensorExt;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub use crate::tensor_provenance::AnalyticsRelationMetaTensorProvenanceExt;
     #[cfg(feature = "v1_30")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
     pub use crate::text::AnalyticsRelationMetaTextExt;

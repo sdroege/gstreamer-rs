@@ -56,6 +56,29 @@ unsafe impl AnalyticsMtd for AnalyticsTextMtd {
 }
 
 impl AnalyticsMtdRef<'_, AnalyticsTextMtd> {
+    #[doc(alias = "gst_analytics_text_mtd_get_timestamp")]
+    pub fn timestamp(
+        &self,
+    ) -> Result<(Option<gst::ClockTime>, Option<gst::ClockTime>), glib::BoolError> {
+        unsafe {
+            let mtd = ffi::GstAnalyticsMtd::unsafe_from(self);
+            let mut timestamp = std::mem::MaybeUninit::uninit();
+            let mut duration = std::mem::MaybeUninit::uninit();
+            glib::result_from_gboolean!(
+                ffi::gst_analytics_text_mtd_get_timestamp(
+                    &mtd as *const _ as *const ffi::GstAnalyticsTextMtd,
+                    timestamp.as_mut_ptr(),
+                    duration.as_mut_ptr(),
+                ),
+                "Could not get timestamp"
+            )?;
+            Ok((
+                from_glib(timestamp.assume_init()),
+                from_glib(duration.assume_init()),
+            ))
+        }
+    }
+
     #[doc(alias = "gst_analytics_text_mtd_get_text")]
     pub fn text(&self) -> &str {
         unsafe {
@@ -84,6 +107,27 @@ impl AnalyticsMtdRef<'_, AnalyticsTextMtd> {
             let mtd = ffi::GstAnalyticsMtd::unsafe_from(self);
             ffi::gst_analytics_text_mtd_get_confidence(
                 &mtd as *const _ as *const ffi::GstAnalyticsTextMtd,
+            )
+        }
+    }
+}
+
+impl AnalyticsMtdRefMut<'_, AnalyticsTextMtd> {
+    #[doc(alias = "gst_analytics_text_mtd_set_timestamp")]
+    pub fn set_timestamp(
+        &mut self,
+        timestamp: impl Into<Option<gst::ClockTime>>,
+        duration: impl Into<Option<gst::ClockTime>>,
+    ) -> Result<(), glib::BoolError> {
+        unsafe {
+            let mut mtd = ffi::GstAnalyticsMtd::unsafe_from(self);
+            glib::result_from_gboolean!(
+                ffi::gst_analytics_text_mtd_set_timestamp(
+                    &mut mtd as *mut _ as *mut ffi::GstAnalyticsTextMtd,
+                    timestamp.into().into_glib(),
+                    duration.into().into_glib(),
+                ),
+                "Could not set timestamp"
             )
         }
     }
