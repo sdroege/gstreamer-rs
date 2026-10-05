@@ -24,6 +24,7 @@ int main() {
     printf("%s;%zu;%zu\n", "GstAnalyticsRelationMetaInitParams", sizeof(GstAnalyticsRelationMetaInitParams), alignof(GstAnalyticsRelationMetaInitParams));
     printf("%s;%zu;%zu\n", "GstAnalyticsSegmentationMtd", sizeof(GstAnalyticsSegmentationMtd), alignof(GstAnalyticsSegmentationMtd));
     printf("%s;%zu;%zu\n", "GstAnalyticsTensorMtd", sizeof(GstAnalyticsTensorMtd), alignof(GstAnalyticsTensorMtd));
+    printf("%s;%zu;%zu\n", "GstAnalyticsTensorProvenanceMtd", sizeof(GstAnalyticsTensorProvenanceMtd), alignof(GstAnalyticsTensorProvenanceMtd));
     printf("%s;%zu;%zu\n", "GstAnalyticsTextMtd", sizeof(GstAnalyticsTextMtd), alignof(GstAnalyticsTextMtd));
     printf("%s;%zu;%zu\n", "GstAnalyticsTrackingMtd", sizeof(GstAnalyticsTrackingMtd), alignof(GstAnalyticsTrackingMtd));
     printf("%s;%zu;%zu\n", "GstSegmentationType", sizeof(GstSegmentationType), alignof(GstSegmentationType));
@@ -31,6 +32,8 @@ int main() {
     printf("%s;%zu;%zu\n", "GstTensorDataType", sizeof(GstTensorDataType), alignof(GstTensorDataType));
     printf("%s;%zu;%zu\n", "GstTensorDimOrder", sizeof(GstTensorDimOrder), alignof(GstTensorDimOrder));
     printf("%s;%zu;%zu\n", "GstTensorLayout", sizeof(GstTensorLayout), alignof(GstTensorLayout));
+    printf("%s;%zu;%zu\n", "GstTensorListMeta", sizeof(GstTensorListMeta), alignof(GstTensorListMeta));
     printf("%s;%zu;%zu\n", "GstTensorMeta", sizeof(GstTensorMeta), alignof(GstTensorMeta));
+    printf("%s;%zu;%zu\n", "GstTensorProvenance", sizeof(GstTensorProvenance), alignof(GstTensorProvenance));
     return 0;
 }

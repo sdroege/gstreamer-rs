@@ -1058,6 +1058,7 @@ version = "0.26.0-alpha"
 dependencies = [
  "glib-sys",
  "gstreamer-sys",
+ "gstreamer-video-sys",
  "libc",
  "shell-words",
  "system-deps",

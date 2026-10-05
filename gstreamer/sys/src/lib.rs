@@ -536,6 +536,27 @@ pub const GST_PARAM_MUTABLE_PLAYING: c_int = 4096;
 pub const GST_PARAM_MUTABLE_READY: c_int = 1024;
 pub const GST_PARAM_UNTRUSTED_SENSITIVE: c_int = 32768;
 pub const GST_PARAM_USER_SHIFT: c_int = 65536;
+pub const GST_PROP_KIND_BITRATE: &[u8] = b"bitrate\0";
+pub const GST_PROP_KIND_COLOR: &[u8] = b"color\0";
+pub const GST_PROP_KIND_FIELD_EXTENSIONS: &[u8] = b"extensions\0";
+pub const GST_PROP_KIND_FIELD_MIMETYPES: &[u8] = b"mimetypes\0";
+pub const GST_PROP_KIND_FIELD_SUBTYPE: &[u8] = b"subtype\0";
+pub const GST_PROP_KIND_FIELD_UNIT: &[u8] = b"unit\0";
+pub const GST_PROP_KIND_FONT: &[u8] = b"font\0";
+pub const GST_PROP_KIND_LOCATION: &[u8] = b"location\0";
+pub const GST_PROP_KIND_NETWORK: &[u8] = b"network\0";
+pub const GST_PROP_KIND_SECURITY: &[u8] = b"security\0";
+pub const GST_PROP_KIND_SUBTYPE_ARGB: &[u8] = b"argb\0";
+pub const GST_PROP_KIND_SUBTYPE_DESC: &[u8] = b"desc\0";
+pub const GST_PROP_KIND_SUBTYPE_DIRECTORY: &[u8] = b"directory\0";
+pub const GST_PROP_KIND_SUBTYPE_HOSTNAME: &[u8] = b"hostname\0";
+pub const GST_PROP_KIND_SUBTYPE_PASSWORD: &[u8] = b"password\0";
+pub const GST_PROP_KIND_SUBTYPE_PATH: &[u8] = b"path\0";
+pub const GST_PROP_KIND_SUBTYPE_PATTERN: &[u8] = b"pattern\0";
+pub const GST_PROP_KIND_SUBTYPE_URI: &[u8] = b"uri\0";
+pub const GST_PROP_KIND_UNIT_BITS_PER_SEC: &[u8] = b"bits-per-sec\0";
+pub const GST_PROP_KIND_UNIT_BYTES_PER_SEC: &[u8] = b"bytes-per-sec\0";
+pub const GST_PROP_KIND_UNIT_KILOBITS_PER_SEC: &[u8] = b"kilobits-per-sec\0";
 pub const GST_PROTECTION_SYSTEM_ID_CAPS_FIELD: &[u8] = b"protection-system\0";
 pub const GST_PROTECTION_UNSPECIFIED_SYSTEM_ID: &[u8] = b"unspecified-system-id\0";
 pub const GST_QUERY_NUM_SHIFT: c_int = 8;
@@ -10379,6 +10400,12 @@ unsafe extern "C" {
         default_denom: c_int,
         flags: gobject::GParamFlags,
     ) -> *mut gobject::GParamSpec;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_param_spec_get_kind(pspec: *mut gobject::GParamSpec) -> *const GstStructure;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_param_spec_set_kind(pspec: *mut gobject::GParamSpec, kind: *mut GstStructure);
     pub fn gst_parent_buffer_meta_api_get_type() -> GType;
     pub fn gst_parse_bin_from_description(
         bin_description: *const c_char,

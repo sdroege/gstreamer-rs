@@ -14,6 +14,7 @@
 
 use glib_sys as glib;
 use gstreamer_sys as gst;
+use gstreamer_video_sys as gst_video;
 
 mod manual;
 
@@ -342,6 +343,22 @@ impl ::std::fmt::Debug for GstAnalyticsTensorMtd {
 
 #[derive(Copy, Clone)]
 #[repr(C)]
+pub struct GstAnalyticsTensorProvenanceMtd {
+    pub id: c_uint,
+    pub meta: *mut GstAnalyticsRelationMeta,
+}
+
+impl ::std::fmt::Debug for GstAnalyticsTensorProvenanceMtd {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstAnalyticsTensorProvenanceMtd @ {self:p}"))
+            .field("id", &self.id)
+            .field("meta", &self.meta)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
 pub struct GstAnalyticsTextMtd {
     pub id: c_uint,
     pub meta: *mut GstAnalyticsRelationMeta,
@@ -372,6 +389,35 @@ impl ::std::fmt::Debug for GstAnalyticsTrackingMtd {
     }
 }
 
+#[repr(C)]
+#[allow(dead_code)]
+pub struct _GstTensorListItem {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
+
+pub type GstTensorListItem = _GstTensorListItem;
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstTensorListMeta {
+    pub meta: gst::GstMeta,
+    pub group_id: glib::GQuark,
+    pub num_items: size_t,
+    pub items: *mut *mut GstTensorListItem,
+}
+
+impl ::std::fmt::Debug for GstTensorListMeta {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstTensorListMeta @ {self:p}"))
+            .field("meta", &self.meta)
+            .field("group_id", &self.group_id)
+            .field("num_items", &self.num_items)
+            .field("items", &self.items)
+            .finish()
+    }
+}
+
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct GstTensorMeta {
@@ -386,6 +432,24 @@ impl ::std::fmt::Debug for GstTensorMeta {
             .field("meta", &self.meta)
             .field("num_tensors", &self.num_tensors)
             .field("tensors", &self.tensors)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstTensorProvenance {
+    pub key: glib::GQuark,
+    pub num_correlation_ids: size_t,
+    pub correlation_ids: *const i64,
+}
+
+impl ::std::fmt::Debug for GstTensorProvenance {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstTensorProvenance @ {self:p}"))
+            .field("key", &self.key)
+            .field("num_correlation_ids", &self.num_correlation_ids)
+            .field("correlation_ids", &self.correlation_ids)
             .finish()
     }
 }
@@ -773,6 +837,14 @@ unsafe extern "C" {
     ) -> gboolean;
     #[cfg(feature = "v1_30")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_relation_meta_add_tensor_provenance_mtd(
+        meta: *mut GstAnalyticsRelationMeta,
+        group_id: glib::GQuark,
+        tensor: *const GstTensor,
+        tensor_provenance_mtd: *mut GstAnalyticsTensorProvenanceMtd,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
     pub fn gst_analytics_relation_meta_add_text_mtd(
         meta: *mut GstAnalyticsRelationMeta,
         text: *const c_char,
@@ -856,6 +928,13 @@ unsafe extern "C" {
     ) -> gboolean;
     #[cfg(feature = "v1_30")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_relation_meta_get_tensor_provenance_mtd(
+        meta: *mut GstAnalyticsRelationMeta,
+        an_meta_id: c_uint,
+        rlt: *mut GstAnalyticsTensorProvenanceMtd,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
     pub fn gst_analytics_relation_meta_get_text_mtd(
         meta: *mut GstAnalyticsRelationMeta,
         an_meta_id: c_uint,
@@ -927,6 +1006,82 @@ unsafe extern "C" {
     pub fn gst_analytics_tensor_mtd_get_mtd_type() -> GstAnalyticsMtdType;
 
     //=========================================================================
+    // GstAnalyticsTensorProvenanceMtd
+    //=========================================================================
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_tensor_provenance_mtd_get_correlation_id(
+        mtd: *const GstAnalyticsTensorProvenanceMtd,
+    ) -> i64;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_tensor_provenance_mtd_get_group_id(
+        mtd: *const GstAnalyticsTensorProvenanceMtd,
+    ) -> glib::GQuark;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_tensor_provenance_mtd_get_spatial_transform(
+        mtd: *const GstAnalyticsTensorProvenanceMtd,
+        transform: *mut [c_float; 9],
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_tensor_provenance_mtd_get_tensor_id(
+        mtd: *const GstAnalyticsTensorProvenanceMtd,
+    ) -> glib::GQuark;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_tensor_provenance_mtd_get_timestamp(
+        mtd: *const GstAnalyticsTensorProvenanceMtd,
+        timestamp: *mut gst::GstClockTime,
+        duration: *mut gst::GstClockTime,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_tensor_provenance_mtd_has_spatial_transform(
+        mtd: *const GstAnalyticsTensorProvenanceMtd,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_tensor_provenance_mtd_set_spatial_transform(
+        mtd: *mut GstAnalyticsTensorProvenanceMtd,
+        transform: *const [c_float; 9],
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_tensor_provenance_mtd_set_spatial_transform_from_rectangles(
+        mtd: *mut GstAnalyticsTensorProvenanceMtd,
+        tensor_rect: *const gst_video::GstVideoRectangle,
+        video_rect: *const gst_video::GstVideoRectangle,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_tensor_provenance_mtd_set_timestamp(
+        mtd: *mut GstAnalyticsTensorProvenanceMtd,
+        timestamp: gst::GstClockTime,
+        duration: gst::GstClockTime,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_tensor_provenance_mtd_transform_point(
+        mtd: *const GstAnalyticsTensorProvenanceMtd,
+        x: *mut c_float,
+        y: *mut c_float,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_tensor_provenance_mtd_transform_rectangle(
+        mtd: *const GstAnalyticsTensorProvenanceMtd,
+        x: *mut c_float,
+        y: *mut c_float,
+        width: *mut c_float,
+        height: *mut c_float,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_tensor_provenance_mtd_get_mtd_type() -> GstAnalyticsMtdType;
+
+    //=========================================================================
     // GstAnalyticsTextMtd
     //=========================================================================
     #[cfg(feature = "v1_30")]
@@ -938,6 +1093,20 @@ unsafe extern "C" {
     #[cfg(feature = "v1_30")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
     pub fn gst_analytics_text_mtd_get_text(mtd: *const GstAnalyticsTextMtd) -> *const c_char;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_text_mtd_get_timestamp(
+        mtd: *const GstAnalyticsTextMtd,
+        timestamp: *mut gst::GstClockTime,
+        duration: *mut gst::GstClockTime,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_text_mtd_set_timestamp(
+        mtd: *mut GstAnalyticsTextMtd,
+        timestamp: gst::GstClockTime,
+        duration: gst::GstClockTime,
+    ) -> gboolean;
     #[cfg(feature = "v1_30")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
     pub fn gst_analytics_text_mtd_get_mtd_type() -> GstAnalyticsMtdType;
@@ -1024,6 +1193,63 @@ unsafe extern "C" {
     pub fn gst_tensor_data_type_is_float(data_type: GstTensorDataType) -> gboolean;
 
     //=========================================================================
+    // GstTensorListMeta
+    //=========================================================================
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_tensor_list_meta_append_item(
+        meta: *mut GstTensorListMeta,
+        num_tensors: size_t,
+        tensors: *mut *mut GstTensor,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_tensor_list_meta_append_item_from(
+        meta: *mut GstTensorListMeta,
+        num_tensors: size_t,
+        tensors: *mut *mut GstTensor,
+        source: *const GstTensorListMeta,
+        source_item_index: size_t,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_tensor_list_meta_append_item_full(
+        meta: *mut GstTensorListMeta,
+        num_tensors: size_t,
+        tensors: *mut *mut GstTensor,
+        num_provenance: size_t,
+        provenance: *const GstTensorProvenance,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_tensor_list_meta_get_num_provenance(
+        meta: *mut GstTensorListMeta,
+        item_index: size_t,
+    ) -> size_t;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_tensor_list_meta_get_provenance(
+        meta: *mut GstTensorListMeta,
+        item_index: size_t,
+        provenance_index: size_t,
+        provenance: *mut GstTensorProvenance,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_tensor_list_meta_get_typed_tensor(
+        meta: *mut GstTensorListMeta,
+        item_index: size_t,
+        tensor_id: glib::GQuark,
+        data_type: GstTensorDataType,
+        order: GstTensorDimOrder,
+        num_dims: size_t,
+        dims: *const size_t,
+    ) -> *const GstTensor;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_tensor_list_meta_get_info() -> *const gst::GstMetaInfo;
+
+    //=========================================================================
     // GstTensorMeta
     //=========================================================================
     #[cfg(feature = "v1_26")]
@@ -1077,6 +1303,12 @@ unsafe extern "C" {
         buffer: *mut gst::GstBuffer,
         init_params: *mut GstAnalyticsRelationMetaInitParams,
     ) -> *mut GstAnalyticsRelationMeta;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_buffer_add_tensor_list_meta(
+        buffer: *mut gst::GstBuffer,
+        group_id: glib::GQuark,
+    ) -> *mut GstTensorListMeta;
     #[cfg(feature = "v1_26")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
     pub fn gst_buffer_add_tensor_meta(buffer: *mut gst::GstBuffer) -> *mut GstTensorMeta;
@@ -1088,6 +1320,9 @@ unsafe extern "C" {
     pub fn gst_buffer_get_analytics_relation_meta(
         buffer: *mut gst::GstBuffer,
     ) -> *mut GstAnalyticsRelationMeta;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_buffer_get_tensor_list_meta(buffer: *mut gst::GstBuffer) -> *mut GstTensorListMeta;
     #[cfg(feature = "v1_26")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
     pub fn gst_buffer_get_tensor_meta(buffer: *mut gst::GstBuffer) -> *mut GstTensorMeta;
@@ -1117,6 +1352,9 @@ unsafe extern "C" {
     ) -> c_float;
     pub fn gst_analytics_relation_get_length(instance: *const GstAnalyticsRelationMeta) -> size_t;
     pub fn gst_analytics_relation_meta_api_get_type() -> GType;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_tensor_list_meta_api_get_type() -> GType;
     #[cfg(feature = "v1_26")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
     pub fn gst_tensor_meta_api_get_type() -> GType;

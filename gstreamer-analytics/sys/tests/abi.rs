@@ -315,6 +315,13 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "GstAnalyticsTensorProvenanceMtd",
+        Layout {
+            size: size_of::<GstAnalyticsTensorProvenanceMtd>(),
+            alignment: align_of::<GstAnalyticsTensorProvenanceMtd>(),
+        },
+    ),
+    (
         "GstAnalyticsTextMtd",
         Layout {
             size: size_of::<GstAnalyticsTextMtd>(),
@@ -364,10 +371,24 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "GstTensorListMeta",
+        Layout {
+            size: size_of::<GstTensorListMeta>(),
+            alignment: align_of::<GstTensorListMeta>(),
+        },
+    ),
+    (
         "GstTensorMeta",
         Layout {
             size: size_of::<GstTensorMeta>(),
             alignment: align_of::<GstTensorMeta>(),
+        },
+    ),
+    (
+        "GstTensorProvenance",
+        Layout {
+            size: size_of::<GstTensorProvenance>(),
+            alignment: align_of::<GstTensorProvenance>(),
         },
     ),
 ];

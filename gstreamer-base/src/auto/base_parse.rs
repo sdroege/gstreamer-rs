@@ -175,6 +175,24 @@ pub trait BaseParseExt: IsA<BaseParse> + 'static {
         ObjectExt::set_property(self.as_ref(), "disable-passthrough", disable_passthrough)
     }
 
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "error-no-valid-frames")]
+    fn is_error_no_valid_frames(&self) -> bool {
+        ObjectExt::property(self.as_ref(), "error-no-valid-frames")
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "error-no-valid-frames")]
+    fn set_error_no_valid_frames(&self, error_no_valid_frames: bool) {
+        ObjectExt::set_property(
+            self.as_ref(),
+            "error-no-valid-frames",
+            error_no_valid_frames,
+        )
+    }
+
     #[cfg(feature = "v1_28")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
     #[doc(alias = "disable-clip")]
@@ -233,6 +251,39 @@ pub trait BaseParseExt: IsA<BaseParse> + 'static {
                 c"notify::disable-passthrough".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_disable_passthrough_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "error-no-valid-frames")]
+    fn connect_error_no_valid_frames_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_error_no_valid_frames_trampoline<
+            P: IsA<BaseParse>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstBaseParse,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(BaseParse::from_glib_borrow(this).unsafe_cast_ref())
+            }
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::error-no-valid-frames".as_ptr(),
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_error_no_valid_frames_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
