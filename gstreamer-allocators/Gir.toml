@@ -79,6 +79,12 @@ status = "generate"
     [[object.function]]
     name = "ahardware_buffer_memory_peek_buffer"
     manual = true
+    [[object.function]]
+    name = "is_iosurface_buffer"
+    manual = true
+    [[object.function]]
+    name = "is_iosurface_memory"
+    manual = true
 
 [[object]]
 name = "GstAllocators.AHardwareBufferFormat"
