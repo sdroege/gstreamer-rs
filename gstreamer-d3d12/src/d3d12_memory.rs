@@ -16,6 +16,10 @@ use windows::{
     core::Interface,
 };
 
+#[doc(alias = "GST_CAPS_FEATURE_MEMORY_D3D12_MEMORY")]
+pub static CAPS_FEATURE_MEMORY_D3D12_MEMORY: &glib::GStr =
+    unsafe { glib::GStr::from_utf8_with_nul_unchecked(ffi::GST_CAPS_FEATURE_MEMORY_D3D12_MEMORY) };
+
 gst::memory_object_wrapper!(
     D3D12Memory,
     D3D12MemoryRef,
@@ -29,6 +33,30 @@ pub enum Readable {}
 pub enum Writable {}
 
 impl D3D12MemoryRef {
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "gst_d3d12_memory_make_resident")]
+    pub fn make_resident(&self) -> Result<(), glib::BoolError> {
+        unsafe {
+            glib::result_from_gboolean!(
+                ffi::gst_d3d12_memory_make_resident(mut_override(&self.0)),
+                "Failed to make resident D3D12 memory"
+            )
+        }
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "gst_d3d12_memory_evict")]
+    pub fn evict(&mut self) -> Result<(), glib::BoolError> {
+        unsafe {
+            glib::result_from_gboolean!(
+                ffi::gst_d3d12_memory_evict(&mut self.0),
+                "Failed to evict D3D12 memory"
+            )
+        }
+    }
+
     #[doc(alias = "gst_d3d12_memory_get_d3d11_texture")]
     #[doc(alias = "get_d3d11_texture")]
     pub fn d3d11_texture(&self, device11: &ID3D11Device) -> Option<ID3D11Texture2D> {
