@@ -26,6 +26,13 @@ macro_rules! skip_assert_initialized {
 mod auto;
 pub use crate::auto::*;
 
+mod buffer;
+pub use crate::buffer::*;
+mod functions;
+pub use crate::functions::*;
+mod d3d12_device_state;
+pub use crate::d3d12_device_state::D3D12DeviceState;
+
 mod d3d12_allocation_params;
 mod d3d12_allocator;
 mod d3d12_buffer_pool;
@@ -47,7 +54,7 @@ pub mod prelude {
 
     pub use crate::{
         auto::traits::*, d3d12_buffer_pool::D3D12BufferPoolConfig,
-        d3d12_cmd_queue::D3D12CmdQueueExtManual, d3d12_converter::D3D12ConverterExtManual,
-        d3d12_device::D3D12DeviceExtManual,
+        d3d12_cmd_alloc_pool::D3D12CmdAllocPoolExtManual, d3d12_cmd_queue::D3D12CmdQueueExtManual,
+        d3d12_converter::D3D12ConverterExtManual, d3d12_device::D3D12DeviceExtManual,
     };
 }
