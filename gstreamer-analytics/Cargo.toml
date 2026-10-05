@@ -18,6 +18,7 @@ libc = "0.2"
 gstreamer-analytics-sys.workspace = true
 glib.workspace = true
 gst.workspace = true
+gst-video = { workspace = true, optional = true }
 
 [dev-dependencies]
 gir-format-check = "0.1"
