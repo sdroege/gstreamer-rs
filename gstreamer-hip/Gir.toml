@@ -217,6 +217,7 @@ status = "generate"
 [[object]]
 name = "GstHip.HipHostPoolAllocator"
 status = "generate"
+manual_traits = ["HipHostPoolAllocatorExtManual"]
     [[object.function]]
     name = "acquire_memory"
     manual = true
