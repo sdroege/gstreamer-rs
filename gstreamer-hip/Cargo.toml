@@ -1,0 +1,30 @@
+[package]
+name = "gstreamer-hip"
+authors = ["Seungha Yang <seungha@centricular.com>"]
+description = "Rust bindings for GStreamer HIP library"
+license = "MIT OR Apache-2.0"
+readme = "README.md"
+documentation = "https://gstreamer.pages.freedesktop.org/gstreamer-rs/stable/latest/docs/gstreamer_hip/"
+keywords = ["gstreamer", "multimedia", "audio", "video", "gnome"]
+version.workspace = true
+categories.workspace = true
+repository.workspace = true
+homepage.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+gstreamer-hip-sys.workspace = true
+glib.workspace = true
+gst = { workspace = true, features = ["v1_30"] }
+gst-video = { workspace = true, features = ["v1_30"] }
+
+[dev-dependencies]
+gir-format-check = "0.1"
+
+[features]
+default = []
+
+[package.metadata.docs.rs]
+all-features = true
+rustdoc-args = ["--generate-link-to-definition"]

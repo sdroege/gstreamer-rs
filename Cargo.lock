@@ -1423,6 +1423,30 @@ dependencies = [
 ]
 
 [[package]]
+name = "gstreamer-hip"
+version = "0.26.0-alpha"
+dependencies = [
+ "gir-format-check",
+ "glib",
+ "gstreamer",
+ "gstreamer-hip-sys",
+ "gstreamer-video",
+]
+
+[[package]]
+name = "gstreamer-hip-sys"
+version = "0.26.0-alpha"
+dependencies = [
+ "glib-sys",
+ "gstreamer-sys",
+ "gstreamer-video-sys",
+ "libc",
+ "shell-words",
+ "system-deps",
+ "tempfile",
+]
+
+[[package]]
 name = "gstreamer-mpegts"
 version = "0.26.0-alpha"
 dependencies = [

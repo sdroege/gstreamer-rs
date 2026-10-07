@@ -63,6 +63,7 @@ members = [
   "gstreamer-gl/egl/sys",
   "gstreamer-gl/wayland/sys",
   "gstreamer-gl/x11/sys",
+  "gstreamer-hip/sys",
   "gstreamer-mpegts/sys",
   "gstreamer-mse/sys",
   "gstreamer-net/sys",
@@ -93,6 +94,7 @@ members = [
   "gstreamer-gl/egl",
   "gstreamer-gl/wayland",
   "gstreamer-gl/x11",
+  "gstreamer-hip",
   "gstreamer-mpegts",
   "gstreamer-mse",
   "gstreamer-net",
@@ -149,6 +151,7 @@ gstreamer-gl-egl-sys = { path = "./gstreamer-gl/egl/sys", version = "0.26.0-alph
 gstreamer-gl-wayland-sys = { path = "./gstreamer-gl/wayland/sys", version = "0.26.0-alpha" }
 gstreamer-gl-x11-sys = { path = "./gstreamer-gl/x11/sys", version = "0.26.0-alpha" }
 gstreamer-gl-sys = { path = "./gstreamer-gl/sys", version = "0.26.0-alpha" }
+gstreamer-hip-sys = { path = "./gstreamer-hip/sys", version = "0.26.0-alpha" }
 gstreamer-mpegts-sys = { path = "./gstreamer-mpegts/sys", version = "0.26.0-alpha" }
 gstreamer-mse-sys = { path = "./gstreamer-mse/sys", version = "0.26.0-alpha" }
 gstreamer-net-sys = { path = "./gstreamer-net/sys", version = "0.26.0-alpha" }
@@ -178,6 +181,7 @@ gst-d3d12 = { package = "gstreamer-d3d12", path = "./gstreamer-d3d12", version =
 gst-gl = { package = "gstreamer-gl", path = "./gstreamer-gl", version = "0.26.0-alpha" }
 gst-gl-egl = { package = "gstreamer-gl-egl", path = "./gstreamer-gl/egl", version = "0.26.0-alpha" }
 gst-gl-x11 = { package = "gstreamer-gl-x11", path = "./gstreamer-gl/x11", version = "0.26.0-alpha" }
+gst-hip = { package = "gstreamer-hip", path = "./gstreamer-hip", version = "0.26.0-alpha" }
 gst-net = { package = "gstreamer-net", path = "./gstreamer-net", version = "0.26.0-alpha" }
 gst-mse = { package = "gstreamer-mse", path = "./gstreamer-mse", version = "0.26.0-alpha" }
 gst-pbutils = { package = "gstreamer-pbutils", path = "./gstreamer-pbutils", version = "0.26.0-alpha" }

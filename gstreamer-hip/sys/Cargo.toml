@@ -1,0 +1,59 @@
+[lib]
+name = "gstreamer_hip_sys"
+
+[dependencies]
+libc = "0.2"
+
+[dependencies.glib-sys]
+workspace = true
+
+[dependencies.gstreamer-sys]
+workspace = true
+
+[dependencies.gstreamer-video-sys]
+workspace = true
+
+[build-dependencies]
+system-deps = "9"
+
+[dev-dependencies]
+shell-words = "1.0.0"
+tempfile = "3"
+
+[package]
+authors = ["Seungha Yang <seungha@centricular.com>"]
+build = "build.rs"
+description = "FFI bindings to libgsthip-1.0"
+documentation = "https://gstreamer.freedesktop.org/documentation/rust/stable/latest/docs/gstreamer_hip_sys/"
+keywords = ["ffi", "gstreamer", "gnome", "multimedia"]
+license = "MIT"
+name = "gstreamer-hip-sys"
+readme = "README.md"
+
+[package.version]
+workspace = true
+
+[package.categories]
+workspace = true
+
+[package.repository]
+workspace = true
+
+[package.homepage]
+workspace = true
+
+[package.edition]
+workspace = true
+
+[package.rust-version]
+workspace = true
+
+[package.metadata.docs.rs]
+rustdoc-args = ["--generate-link-to-definition"]
+all-features = true
+
+[package.metadata.system-deps.gstreamer_hip_1_0]
+name = "gstreamer-hip-1.0"
+version = "1.29"
+
+[features]

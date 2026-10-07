@@ -1,0 +1,273 @@
+[options]
+girs_directories = ["../gir-files", "../gst-gir-files"]
+library = "GstHip"
+version = "1.0"
+min_cfg_version = "1.30"
+work_mode = "normal"
+target_path = "."
+concurrency = "send+sync"
+generate_safety_asserts = true
+single_version_file = true
+generate_display_trait = false
+deprecate_by_min_version = true
+trust_return_value_nullability = true
+external_libraries = ["GLib", "Gst", "GstBase", "GstVideo"]
+manual = [
+    "GLib.Error",
+    "GObject.Object",
+    "Gst.Allocator",
+    "Gst.Buffer",
+    "Gst.BufferPool",
+    "Gst.Context",
+    "Gst.Element",
+    "Gst.Memory",
+    "Gst.MiniObject",
+    "Gst.Object",
+    "Gst.Query",
+    "Gst.Structure",
+    "GstHip.HipHostMemory",
+    "GstHip.HipMemory",
+    "GstVideo.VideoFormat",
+    "GstVideo.VideoInfo",
+    "GstVideo.VideoOrientationMethod",
+]
+
+[[object]]
+name = "GstHip.*"
+status = "generate"
+    [[object.function]]
+    name = "buffer_pool_config_get_hip_host_alloc_flags"
+    manual = true
+
+    [[object.function]]
+    name = "buffer_pool_config_set_hip_host_alloc_flags"
+    manual = true
+
+    [[object.function]]
+    name = "clear_hip_event"
+    manual = true
+
+    [[object.function]]
+    name = "clear_hip_fence_data"
+    manual = true
+
+    [[object.function]]
+    name = "clear_hip_graphics_resource"
+    manual = true
+
+    [[object.function]]
+    name = "clear_hip_stream"
+    manual = true
+
+    [[object.function]]
+    name = "hip_check_format_support"
+    rename = "check_format_support"
+
+    [[object.function]]
+    name = "hip_load_library"
+    rename = "load_library"
+
+    [[object.function]]
+    name = "hip_rtc_load_library"
+    rename = "rtc_load_library"
+
+    [[object.function]]
+    name = "hip_buffer_copy_into"
+    manual = true
+
+    [[object.function]]
+    name = "hip_buffer_set_event"
+    manual = true
+
+    [[object.function]]
+    name = "hip_ensure_element_data"
+    manual = true
+
+    [[object.function]]
+    name = "hip_ensure_element_data_for_adapter_luid"
+    manual = true
+
+    [[object.function]]
+    name = "hip_ensure_element_data_for_pci_bus_id"
+    manual = true
+
+    [[object.function]]
+    name = "hip_handle_context_query"
+    manual = true
+
+    [[object.function]]
+    name = "hip_handle_set_context"
+    manual = true
+
+    [[object.function]]
+    name = "hip_handle_set_context_for_adapter_luid"
+    manual = true
+
+    [[object.function]]
+    name = "hip_handle_set_context_for_pci_bus_id"
+    manual = true
+
+    [[object.function]]
+    name = "hip_rtc_compile"
+    manual = true
+
+    [[object.function]]
+    name = "is_hip_host_memory"
+    manual = true
+
+    [[object.function]]
+    name = "is_hip_memory"
+    manual = true
+
+
+[[object]]
+name = "GstHip.HipAllocator"
+status = "generate"
+
+[[object]]
+name = "GstHip.HipBufferPool"
+status = "generate"
+
+[[object]]
+name = "GstHip.HipConverter"
+status = "generate"
+manual_traits = ["HipConverterExtManual"]
+    [[object.function]]
+    name = "new"
+    manual = true
+
+    [[object.function]]
+    name = "convert_frame"
+    manual = true
+
+
+[[object]]
+name = "GstHip.HipDevice"
+status = "generate"
+    [[object.function]]
+    name = "get_attribute"
+    manual = true
+
+
+[[object]]
+name = "GstHip.HipEvent"
+status = "generate"
+    [[object.function]]
+    name = "query"
+    manual = true
+
+    [[object.function]]
+    name = "record"
+    manual = true
+
+    [[object.function]]
+    name = "synchronize"
+    manual = true
+
+    [[object.function]]
+    name = "set_notify"
+    manual = true
+
+
+[[object]]
+name = "GstHip.HipEventPool"
+status = "generate"
+
+[[object]]
+name = "GstHip.HipFenceData"
+status = "generate"
+    [[object.function]]
+    name = "push"
+    manual = true
+
+
+[[object]]
+name = "GstHip.HipFenceDataPool"
+status = "generate"
+
+
+[[object]]
+name = "GstHip.HipFormatSupport"
+status = "generate"
+
+[[object]]
+name = "GstHip.HipGraphicsResource"
+status = "generate"
+    [[object.function]]
+    name = "get_mapped_pointer"
+    manual = true
+
+    [[object.function]]
+    name = "map"
+    manual = true
+
+    [[object.function]]
+    name = "unmap"
+    manual = true
+
+
+[[object]]
+name = "GstHip.HipHostAllocator"
+status = "generate"
+
+[[object]]
+name = "GstHip.HipHostBufferPool"
+status = "generate"
+
+[[object]]
+name = "GstHip.HipHostPoolAllocator"
+status = "generate"
+    [[object.function]]
+    name = "acquire_memory"
+    manual = true
+
+
+[[object]]
+name = "GstHip.HipKernelArgs"
+status = "generate"
+concurrency = "send"
+    [[object.function]]
+    name = "add_memory"
+    manual = true
+
+    [[object.function]]
+    name = "add_value"
+    manual = true
+
+
+[[object]]
+name = "GstHip.HipKernelModule"
+status = "generate"
+    [[object.function]]
+    name = "new_from_blob"
+    manual = true
+
+    [[object.function]]
+    name = "launch"
+    manual = true
+
+
+[[object]]
+name = "GstHip.HipMemoryTransfer"
+status = "generate"
+
+[[object]]
+name = "GstHip.HipPoolAllocator"
+status = "generate"
+manual_traits = ["HipPoolAllocatorExtManual"]
+    [[object.function]]
+    name = "acquire_memory"
+    manual = true
+
+
+[[object]]
+name = "GstHip.HipStream"
+status = "generate"
+    [[object.function]]
+    name = "get_handle"
+    manual = true
+
+
+[[object]]
+name = "GstHip.HipVendor"
+status = "generate"
