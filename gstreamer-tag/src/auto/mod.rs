@@ -3,6 +3,9 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
+mod tag_xmp_writer;
+pub use self::tag_xmp_writer::TagXmpWriter;
+
 mod enums;
 pub use self::enums::TagImageType;
 
@@ -10,3 +13,7 @@ mod flags;
 pub use self::flags::TagLicenseFlags;
 
 pub(crate) mod functions;
+
+pub(crate) mod traits {
+    pub use super::tag_xmp_writer::TagXmpWriterExt;
+}

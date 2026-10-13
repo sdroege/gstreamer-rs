@@ -21,6 +21,22 @@ generate = [
     "GstTag.TagLicenseFlags",
 ]
 
+manual = [
+    "GObject.Object",
+    "Gst.Element",
+    "Gst.Object",
+]
+
+[[object]]
+name = "Gst.Buffer"
+status = "manual"
+ref_mode = "ref"
+
+[[object]]
+name = "Gst.TagList"
+status = "manual"
+ref_mode = "ref"
+
 [[object]]
 name = "GstTag.*"
 status = "generate"
@@ -55,3 +71,12 @@ status = "generate"
     [[object.function]]
     name = "vorbis_tag_add"
     manual = true
+
+[[object]]
+name = "GstTag.TagXmpWriter"
+status = "generate"
+    [[object.function]]
+    name = "tag_list_to_xmp_buffer"
+        [object.function.return]
+        nullable = true
+        nullable_return_is_error = "Failed to serialize into XMP buffer"
