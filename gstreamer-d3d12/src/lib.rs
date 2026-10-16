@@ -47,6 +47,11 @@ mod d3d12_fence_data;
 mod d3d12_memory;
 pub use crate::d3d12_memory::*;
 mod d3d12_pool_allocator;
+#[cfg(feature = "v1_28")]
+mod d3d12_staging_memory;
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+pub use crate::d3d12_staging_memory::*;
 
 pub mod prelude {
     #[doc(hidden)]
