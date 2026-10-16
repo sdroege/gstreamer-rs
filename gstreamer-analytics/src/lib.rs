@@ -12,9 +12,7 @@ pub use gstreamer_analytics_sys as ffi;
 #[cfg(feature = "v1_28")]
 macro_rules! assert_initialized_main_thread {
     () => {
-        if !gst::INITIALIZED.load(std::sync::atomic::Ordering::SeqCst) {
-            gst::assert_initialized();
-        }
+        gst::assert_initialized_main_thread!();
     };
 }
 
