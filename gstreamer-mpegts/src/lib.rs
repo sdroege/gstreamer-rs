@@ -14,9 +14,7 @@ static MPEGTS_INIT: Once = Once::new();
 
 macro_rules! assert_initialized_main_thread {
     () => {
-        if !gst::INITIALIZED.load(std::sync::atomic::Ordering::SeqCst) {
-            gst::assert_initialized();
-        }
+        gst::assert_initialized_main_thread!();
         crate::MPEGTS_INIT.call_once(|| unsafe { crate::ffi::gst_mpegts_initialize() });
     };
 }

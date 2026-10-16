@@ -15,9 +15,7 @@ static PBUTILS_INIT: Once = Once::new();
 
 macro_rules! assert_initialized_main_thread {
     () => {
-        if !gst::INITIALIZED.load(std::sync::atomic::Ordering::SeqCst) {
-            gst::assert_initialized();
-        }
+        gst::assert_initialized_main_thread!();
         crate::PBUTILS_INIT.call_once(|| {
             unsafe { crate::ffi::gst_pb_utils_init() };
         });

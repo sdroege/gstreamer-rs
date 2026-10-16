@@ -15,9 +15,7 @@ macro_rules! skip_assert_initialized {
 
 macro_rules! assert_initialized_main_thread {
     () => {
-        if !gst::INITIALIZED.load(std::sync::atomic::Ordering::SeqCst) {
-            gst::assert_initialized();
-        }
+        gst::assert_initialized_main_thread!();
     };
 }
 

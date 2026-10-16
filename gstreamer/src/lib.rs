@@ -17,20 +17,22 @@ pub use pastey;
 pub static INITIALIZED: std::sync::atomic::AtomicBool = std::sync::atomic::AtomicBool::new(false);
 
 #[cold]
+#[doc(hidden)]
 #[inline(never)]
 #[track_caller]
 pub fn assert_initialized() {
     #[allow(unused_unsafe)]
-    if unsafe { ffi::gst_is_initialized() } != glib::ffi::GTRUE {
-        panic!("GStreamer has not been initialized. Call `gst::init` first.");
-    } else {
+    if unsafe { ffi::gst_is_initialized() } == glib::ffi::GTRUE {
         crate::INITIALIZED.store(true, std::sync::atomic::Ordering::SeqCst);
+    } else {
+        panic!("GStreamer has not been initialized. Call `gst::init` first.");
     }
 }
 
+#[macro_export]
 macro_rules! assert_initialized_main_thread {
     () => {
-        if !crate::INITIALIZED.load(std::sync::atomic::Ordering::SeqCst) {
+        if !$crate::INITIALIZED.load(std::sync::atomic::Ordering::SeqCst) {
             $crate::assert_initialized();
         }
     };

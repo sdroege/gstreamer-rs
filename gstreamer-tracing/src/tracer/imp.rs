@@ -4,7 +4,9 @@ use gst::glib::Properties;
 use gst::{Buffer, FlowError, FlowSuccess, Pad, Tracer, glib, prelude::*, subclass::prelude::*};
 #[cfg(feature = "v1_30")]
 use smallvec::SmallVec;
-use std::{cell::RefCell, collections::HashMap, sync::Mutex};
+#[cfg(feature = "v1_30")]
+use std::collections::HashMap;
+use std::{cell::RefCell, sync::Mutex};
 use tracing::{Callsite, Dispatch, Id, info, span::Attributes};
 #[cfg(feature = "v1_30")]
 use tracing_core::field::Value;
