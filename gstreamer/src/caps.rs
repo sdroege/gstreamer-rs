@@ -65,13 +65,11 @@ impl Caps {
 
     #[doc(alias = "gst_caps_new_empty_simple")]
     pub fn new_empty_simple(name: impl IntoGStr) -> Self {
-        skip_assert_initialized!();
-        let mut caps = Caps::new_empty();
-
-        let structure = Structure::new_empty(name);
-        caps.get_mut().unwrap().append_structure(structure);
-
-        caps
+        assert_initialized_main_thread!();
+        unsafe {
+            let ptr = name.run_with_gstr(|name| ffi::gst_caps_new_empty_simple(name.as_ptr()));
+            from_glib_full(ptr)
+        }
     }
 
     #[doc(alias = "gst_caps_new_static_str_empty_simple")]
