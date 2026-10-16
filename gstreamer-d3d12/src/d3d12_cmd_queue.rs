@@ -55,6 +55,39 @@ pub trait D3D12CmdQueueExtManual: IsA<D3D12CmdQueue> + 'static {
         }
     }
 
+    #[doc(alias = "gst_d3d12_cmd_queue_execute_command_lists_full")]
+    fn execute_command_lists_full(
+        &self,
+        waits: &[(&ID3D12Fence, u64)],
+        cmd_lists: &[Option<ID3D12CommandList>],
+    ) -> Result<u64> {
+        let (mut fences_to_wait, fence_values_to_wait): (Vec<_>, Vec<_>) = waits
+            .iter()
+            .map(|(fence, value)| (fence.as_raw(), *value))
+            .unzip();
+
+        unsafe {
+            let mut fence_val = mem::MaybeUninit::uninit();
+            let hr = HRESULT(ffi::gst_d3d12_cmd_queue_execute_command_lists_full(
+                self.as_ref().to_glib_none().0,
+                fences_to_wait.len() as u32,
+                fences_to_wait.as_mut_ptr(),
+                fence_values_to_wait.as_ptr(),
+                cmd_lists.len() as u32,
+                core::mem::transmute::<*const Option<ID3D12CommandList>, *mut *mut std::ffi::c_void>(
+                    cmd_lists.as_ptr(),
+                ),
+                fence_val.as_mut_ptr(),
+            ));
+
+            if hr.is_ok() {
+                Ok(fence_val.assume_init())
+            } else {
+                Err(hr.into())
+            }
+        }
+    }
+
     #[doc(alias = "gst_d3d12_cmd_queue_execute_wait")]
     fn execute_wait(&self, fence: &ID3D12Fence, fence_value: u64) -> Result<()> {
         unsafe {
