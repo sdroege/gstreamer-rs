@@ -57,3 +57,4 @@ name = "gstreamer-hip-1.0"
 version = "1.29"
 
 [features]
+v1_30 = []
