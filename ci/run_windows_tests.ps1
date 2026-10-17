@@ -19,6 +19,7 @@ $env:ErrorActionPreference='Stop'
     # 'gstreamer-gl/egl',
     # 'gstreamer-gl/wayland',
     # 'gstreamer-gl/x11',
+    'gstreamer-hip',
     'gstreamer-mpegts',
     'gstreamer-mpegts/sys',
     'gstreamer-net',

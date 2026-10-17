@@ -36,6 +36,7 @@ for crate in gstreamer/sys \
              gstreamer-gl/egl/sys \
              gstreamer-gl/wayland/sys \
              gstreamer-gl/x11/sys \
+             gstreamer-hip/sys \
              gstreamer-mpegts/sys \
              gstreamer-net/sys \
              gstreamer-pbutils/sys \
