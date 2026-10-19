@@ -8,7 +8,7 @@ use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
     #[doc(alias = "GstFdAllocator")]
-    pub struct FdAllocator(Object<ffi::GstFdAllocator, ffi::GstFdAllocatorClass>) @extends gst::Allocator;
+    pub struct FdAllocator(Object<ffi::GstFdAllocator, ffi::GstFdAllocatorClass>) @extends gst::Allocator, gst::Object;
 
     match fn {
         type_ => || ffi::gst_fd_allocator_get_type(),
