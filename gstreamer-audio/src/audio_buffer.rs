@@ -141,7 +141,7 @@ impl<T> AudioBuffer<T> {
         let mut planes = SmallVec::default();
 
         for plane in 0..self.n_planes() {
-            planes[plane as usize] = self.plane_data(plane).unwrap();
+            planes.push(self.plane_data(plane).unwrap());
         }
 
         planes
@@ -432,7 +432,7 @@ impl<T> AudioBufferRef<T> {
         let mut planes = SmallVec::default();
 
         for plane in 0..self.n_planes() {
-            planes[plane as usize] = self.plane_data(plane).unwrap();
+            planes.push(self.plane_data(plane).unwrap());
         }
 
         planes
