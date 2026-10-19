@@ -7,7 +7,7 @@ use crate::{FdAllocator, ffi};
 
 glib::wrapper! {
     #[doc(alias = "GstShmAllocator")]
-    pub struct ShmAllocator(Object<ffi::GstShmAllocator, ffi::GstShmAllocatorClass>) @extends FdAllocator, gst::Allocator;
+    pub struct ShmAllocator(Object<ffi::GstShmAllocator, ffi::GstShmAllocatorClass>) @extends FdAllocator, gst::Allocator, gst::Object;
 
     match fn {
         type_ => || ffi::gst_shm_allocator_get_type(),

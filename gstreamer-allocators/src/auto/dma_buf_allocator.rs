@@ -8,7 +8,7 @@ use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
     #[doc(alias = "GstDmaBufAllocator")]
-    pub struct DmaBufAllocator(Object<ffi::GstDmaBufAllocator, ffi::GstDmaBufAllocatorClass>) @extends FdAllocator, gst::Allocator;
+    pub struct DmaBufAllocator(Object<ffi::GstDmaBufAllocator, ffi::GstDmaBufAllocatorClass>) @extends FdAllocator, gst::Allocator, gst::Object;
 
     match fn {
         type_ => || ffi::gst_dmabuf_allocator_get_type(),

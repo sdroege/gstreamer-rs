@@ -8,7 +8,7 @@ use glib::prelude::*;
 
 glib::wrapper! {
     #[doc(alias = "GstPhysMemoryAllocator")]
-    pub struct PhysMemoryAllocator(Interface<ffi::GstPhysMemoryAllocator, ffi::GstPhysMemoryAllocatorInterface>) @requires gst::Allocator;
+    pub struct PhysMemoryAllocator(Interface<ffi::GstPhysMemoryAllocator, ffi::GstPhysMemoryAllocatorInterface>) @requires gst::Allocator, gst::Object;
 
     match fn {
         type_ => || ffi::gst_phys_memory_allocator_get_type(),

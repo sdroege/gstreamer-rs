@@ -8,7 +8,7 @@ use glib::{prelude::*, translate::*};
 
 glib::wrapper! {
     #[doc(alias = "GstDRMDumbAllocator")]
-    pub struct DRMDumbAllocator(Object<ffi::GstDRMDumbAllocator, ffi::GstDRMDumbAllocatorClass>) @extends gst::Allocator;
+    pub struct DRMDumbAllocator(Object<ffi::GstDRMDumbAllocator, ffi::GstDRMDumbAllocatorClass>) @extends gst::Allocator, gst::Object;
 
     match fn {
         type_ => || ffi::gst_drm_dumb_allocator_get_type(),
