@@ -36,8 +36,12 @@ pub use crate::taglist_ext::ExifEndian;
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst_tag::prelude::*" without getting conflicts
 pub mod prelude {
-    pub use crate::sample_ext::ImageSampleExt;
-    pub use crate::taglist_ext::{TagListExt, TagListRefMutExt};
     #[doc(hidden)]
     pub use gst::prelude::*;
+
+    pub use crate::{
+        auto::traits::*,
+        sample_ext::ImageSampleExt,
+        taglist_ext::{TagListExt, TagListRefMutExt},
+    };
 }

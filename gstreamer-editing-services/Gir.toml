@@ -379,6 +379,7 @@ manual_traits = ["TimelineElementExtManual"]
         name = "paste_position"
         mandatory = true
         [object.function.return]
+        nullable = true
         nullable_return_is_error = "Failed to paste timeline element"
 
     [[object.function]]
