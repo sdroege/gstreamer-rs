@@ -44,8 +44,8 @@ fn main() -> Result<()> {
         }
         "#,
         &[],
-    )?
-    .ok_or_else(|| anyhow!("Couldn't compile HIP kernel; check HIPRTC/NVRTC"))?;
+    )
+    .context("Couldn't compile HIP kernel; check HIPRTC/NVRTC")?;
 
     let size = COUNT as usize * std::mem::size_of::<u32>();
     let allocator = gst_hip::HipAllocator::new();
