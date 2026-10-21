@@ -1796,6 +1796,10 @@ bitflags! {
         const NO_SINGLE_ELEMENT_BINS = ffi::GST_PARSE_FLAG_NO_SINGLE_ELEMENT_BINS as _;
         #[doc(alias = "GST_PARSE_FLAG_PLACE_IN_BIN")]
         const PLACE_IN_BIN = ffi::GST_PARSE_FLAG_PLACE_IN_BIN as _;
+        #[cfg(feature = "v1_30")]
+        #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+        #[doc(alias = "GST_PARSE_FLAG_NO_UNTRUSTED")]
+        const NO_UNTRUSTED = ffi::GST_PARSE_FLAG_NO_UNTRUSTED as _;
     }
 }
 

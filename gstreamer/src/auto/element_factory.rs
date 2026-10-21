@@ -80,6 +80,17 @@ impl ElementFactory {
         }
     }
 
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "gst_element_factory_is_untrusted_aware")]
+    pub fn is_untrusted_aware(&self) -> bool {
+        unsafe {
+            from_glib(ffi::gst_element_factory_is_untrusted_aware(
+                self.to_glib_none().0,
+            ))
+        }
+    }
+
     #[doc(alias = "gst_element_factory_find")]
     pub fn find(name: &str) -> Option<ElementFactory> {
         assert_initialized_main_thread!();

@@ -24,7 +24,7 @@ impl HipKernelModule {
         device: &impl IsA<HipDevice>,
         source: &str,
         options: &[&str],
-    ) -> Result<Option<HipKernelModule>, glib::Error> {
+    ) -> Result<HipKernelModule, glib::Error> {
         skip_assert_initialized!();
         let num_options = options.len() as _;
         unsafe {

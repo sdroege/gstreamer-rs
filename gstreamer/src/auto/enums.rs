@@ -1880,6 +1880,14 @@ pub enum ParseError {
     Empty,
     #[doc(alias = "GST_PARSE_ERROR_DELAYED_LINK")]
     DelayedLink,
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "GST_PARSE_ERROR_SENSITIVE_PROPERTY")]
+    SensitiveProperty,
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "GST_PARSE_ERROR_UNTRUSTED_ELEMENT")]
+    UntrustedElement,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -1899,6 +1907,10 @@ impl IntoGlib for ParseError {
             Self::EmptyBin => ffi::GST_PARSE_ERROR_EMPTY_BIN,
             Self::Empty => ffi::GST_PARSE_ERROR_EMPTY,
             Self::DelayedLink => ffi::GST_PARSE_ERROR_DELAYED_LINK,
+            #[cfg(feature = "v1_30")]
+            Self::SensitiveProperty => ffi::GST_PARSE_ERROR_SENSITIVE_PROPERTY,
+            #[cfg(feature = "v1_30")]
+            Self::UntrustedElement => ffi::GST_PARSE_ERROR_UNTRUSTED_ELEMENT,
             Self::__Unknown(value) => value,
         }
     }
@@ -1919,6 +1931,10 @@ impl FromGlib<ffi::GstParseError> for ParseError {
             ffi::GST_PARSE_ERROR_EMPTY_BIN => Self::EmptyBin,
             ffi::GST_PARSE_ERROR_EMPTY => Self::Empty,
             ffi::GST_PARSE_ERROR_DELAYED_LINK => Self::DelayedLink,
+            #[cfg(feature = "v1_30")]
+            ffi::GST_PARSE_ERROR_SENSITIVE_PROPERTY => Self::SensitiveProperty,
+            #[cfg(feature = "v1_30")]
+            ffi::GST_PARSE_ERROR_UNTRUSTED_ELEMENT => Self::UntrustedElement,
             value => Self::__Unknown(value),
         }
     }
