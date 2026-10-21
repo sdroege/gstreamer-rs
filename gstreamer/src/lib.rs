@@ -263,6 +263,9 @@ pub use crate::{
     parse_context::ParseContext,
     task_pool::{TaskHandle, TaskPoolTaskHandle},
 };
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub use element::ELEMENT_METADATA_UNTRUSTED_AWARE;
 mod plugin_feature;
 
 mod plugin;
@@ -364,6 +367,10 @@ pub const PARAM_FLAG_MUTABLE_PLAYING: glib::ParamFlags = glib::ParamFlags::USER_
 pub const PARAM_FLAG_DOC_SHOW_DEFAULT: glib::ParamFlags = glib::ParamFlags::USER_5;
 #[cfg(feature = "v1_18")]
 pub const PARAM_FLAG_CONDITIONALLY_AVAILABLE: glib::ParamFlags = glib::ParamFlags::USER_6;
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub const PARAM_FLAG_UNTRUSTED_SENSITIVE: glib::ParamFlags = glib::ParamFlags::USER_7;
 
 // Re-export all the traits in a prelude module, so that applications
 // can always "use gst::prelude::*" without getting conflicts

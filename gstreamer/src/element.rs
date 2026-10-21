@@ -919,6 +919,28 @@ pub unsafe trait ElementClassExt {
             ))
         }
     }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "gst_element_class_is_untrusted_aware")]
+    fn is_untrusted_aware(&self) -> bool {
+        unsafe {
+            let klass = self as *const _ as *const ffi::GstElementClass;
+
+            from_glib(ffi::gst_element_class_is_untrusted_aware(klass as *mut _))
+        }
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "gst_element_class_mark_as_untrusted_aware")]
+    fn mark_as_untrusted_aware(&mut self) {
+        unsafe {
+            let klass = self as *mut _ as *mut ffi::GstElementClass;
+
+            ffi::gst_element_class_mark_as_untrusted_aware(klass);
+        }
+    }
 }
 
 unsafe impl<T: IsA<Element> + glib::object::IsClass> ElementClassExt for glib::object::Class<T> {}
@@ -941,6 +963,12 @@ pub static ELEMENT_METADATA_KLASS: &glib::GStr =
 #[doc(alias = "GST_ELEMENT_METADATA_LONGNAME")]
 pub static ELEMENT_METADATA_LONGNAME: &glib::GStr =
     unsafe { glib::GStr::from_utf8_with_nul_unchecked(ffi::GST_ELEMENT_METADATA_LONGNAME) };
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+#[doc(alias = "GST_ELEMENT_METADATA_UNTRUSTED_AWARE")]
+pub static ELEMENT_METADATA_UNTRUSTED_AWARE: &glib::GStr =
+    unsafe { glib::GStr::from_utf8_with_nul_unchecked(ffi::GST_ELEMENT_METADATA_UNTRUSTED_AWARE) };
 
 #[doc(alias = "GST_ELEMENT_ERROR")]
 #[doc(alias = "GST_ELEMENT_ERROR_WITH_DETAILS")]

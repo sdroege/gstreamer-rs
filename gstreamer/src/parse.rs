@@ -9,6 +9,9 @@ use crate::{Bin, Element, Object, ParseContext, ParseFlags, ffi};
 pub use crate::auto::functions::parse_bin_from_description as bin_from_description;
 pub use crate::auto::functions::parse_launch as launch;
 pub use crate::auto::functions::parse_launchv as launchv;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub use crate::auto::functions::parse_untrusted_report as untrusted_report;
 
 #[doc(alias = "gst_parse_bin_from_description_full")]
 pub fn bin_from_description_with_name(
