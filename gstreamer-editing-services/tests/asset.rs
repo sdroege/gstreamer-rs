@@ -59,3 +59,49 @@ fn test_asset_request_async() {
 
     main_loop.run();
 }
+
+#[cfg(feature = "v1_30")]
+#[test]
+fn test_asset_request_full_untrusted_bin_description() {
+    init();
+
+    let asset = ges::Asset::request_full::<ges::Effect>(
+        Some("volume"),
+        ges::AssetRequestFlags::NO_UNTRUSTED_BIN_DESCRIPTION,
+    )
+    .unwrap()
+    .unwrap();
+    assert_eq!(asset.extractable_type(), ges::Effect::static_type());
+
+    let err = ges::Asset::request_full::<ges::Effect>(
+        Some("fdsink"),
+        ges::AssetRequestFlags::NO_UNTRUSTED_BIN_DESCRIPTION,
+    )
+    .unwrap_err();
+    assert_eq!(err.kind::<ges::Error>(), Some(ges::Error::UntrustedElement));
+}
+
+#[cfg(feature = "v1_30")]
+#[test]
+fn test_asset_request_full_future_untrusted_bin_description() {
+    init();
+
+    let main_context = glib::MainContext::new();
+    main_context.block_on(async {
+        let asset = ges::Asset::request_full_future::<ges::Effect>(
+            Some("volume"),
+            ges::AssetRequestFlags::NO_UNTRUSTED_BIN_DESCRIPTION,
+        )
+        .await
+        .unwrap();
+        assert_eq!(asset.extractable_type(), ges::Effect::static_type());
+
+        let err = ges::Asset::request_full_future::<ges::Effect>(
+            Some("fdsink"),
+            ges::AssetRequestFlags::NO_UNTRUSTED_BIN_DESCRIPTION,
+        )
+        .await
+        .unwrap_err();
+        assert_eq!(err.kind::<ges::Error>(), Some(ges::Error::UntrustedElement));
+    });
+}

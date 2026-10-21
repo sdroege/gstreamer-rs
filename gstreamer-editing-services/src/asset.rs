@@ -4,6 +4,8 @@ use std::{boxed::Box as Box_, pin::Pin};
 
 use glib::{prelude::*, translate::*};
 
+#[cfg(feature = "v1_30")]
+use crate::AssetRequestFlags;
 use crate::{Asset, ffi};
 
 impl Asset {
@@ -131,6 +133,64 @@ impl Asset {
                 },
             );
         }))
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Request an asset for a specific extractable type using generics, with `flags`.
+    ///
+    /// # Example
+    /// ```ignore
+    /// let asset = ges::Asset::request_full::<ges::Effect>(
+    ///     Some(bin_description),
+    ///     ges::AssetRequestFlags::NO_UNTRUSTED_BIN_DESCRIPTION,
+    /// )?;
+    /// ```
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "ges_asset_request_full")]
+    pub fn request_full<T>(
+        id: Option<&str>,
+        flags: AssetRequestFlags,
+    ) -> Result<Option<Asset>, glib::Error>
+    where
+        T: StaticType + IsA<crate::Extractable>,
+    {
+        assert_initialized_main_thread!();
+        Self::request_full_with_type(T::static_type(), id, flags)
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Request an asset asynchronously for a specific extractable type using generics, with
+    /// `flags`.
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "ges_asset_request_async_full")]
+    pub fn request_async_full<T, P>(
+        id: Option<&str>,
+        flags: AssetRequestFlags,
+        cancellable: Option<&impl IsA<gio::Cancellable>>,
+        callback: P,
+    ) where
+        T: StaticType + IsA<crate::Extractable>,
+        P: FnOnce(Result<Asset, glib::Error>) + 'static,
+    {
+        assert_initialized_main_thread!();
+        Self::request_async_full_with_type(T::static_type(), id, flags, cancellable, callback)
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Request an asset as a future for a specific extractable type, with `flags`.
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn request_full_future<T>(
+        id: Option<&str>,
+        flags: AssetRequestFlags,
+    ) -> Pin<Box_<dyn std::future::Future<Output = Result<Asset, glib::Error>> + 'static>>
+    where
+        T: StaticType + IsA<crate::Extractable> + 'static,
+    {
+        skip_assert_initialized!();
+        Self::request_async_full_with_type_future(T::static_type(), id, flags)
     }
 
     // rustdoc-stripper-ignore-next
