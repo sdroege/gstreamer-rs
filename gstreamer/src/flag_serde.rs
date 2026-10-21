@@ -215,10 +215,19 @@ mod tests {
                 "+push+pull\""
             )
         );
-        check_serialize!(
-            crate::ParseFlags::all(),
-            "\"fatal-errors+no-single-element-bins+place-in-bin\""
-        );
+        cfg_if::cfg_if! {
+            if #[cfg(feature = "v1_30")] {
+                check_serialize!(
+                    crate::ParseFlags::all(),
+                    "\"fatal-errors+no-single-element-bins+place-in-bin+no-untrusted\""
+                );
+            } else {
+                check_serialize!(
+                    crate::ParseFlags::all(),
+                    "\"fatal-errors+no-single-element-bins+place-in-bin\""
+                );
+            }
+        }
         #[cfg(feature = "v1_18")]
         check_serialize!(crate::PluginAPIFlags::all(), "\"members\"");
         check_serialize!(
@@ -400,11 +409,21 @@ mod tests {
                 "+push+pull\""
             )
         );
-        check_deserialize!(
-            crate::ParseFlags,
-            crate::ParseFlags::all(),
-            "\"fatal-errors+no-single-element-bins+place-in-bin\""
-        );
+        cfg_if::cfg_if! {
+            if #[cfg(feature = "v1_30")] {
+                check_deserialize!(
+                    crate::ParseFlags,
+                    crate::ParseFlags::all(),
+                    "\"fatal-errors+no-single-element-bins+place-in-bin+no-untrusted\""
+                );
+            } else {
+                check_deserialize!(
+                    crate::ParseFlags,
+                    crate::ParseFlags::all(),
+                    "\"fatal-errors+no-single-element-bins+place-in-bin\""
+                );
+            }
+        }
         #[cfg(feature = "v1_18")]
         check_deserialize!(
             crate::PluginAPIFlags,
