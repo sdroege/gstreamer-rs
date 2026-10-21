@@ -1,6 +1,11 @@
 // Take a look at the license at the top of the repository in the LICENSE file.
 
-use std::{cmp, fmt, ops, slice};
+use std::{
+    cmp,
+    collections::HashSet,
+    fmt, ops, slice,
+    sync::{LazyLock, Mutex},
+};
 
 use crate::ffi;
 use glib::{prelude::*, translate::*};
@@ -1772,6 +1777,195 @@ impl GstValueExt for glib::Value {
     }
 }
 
+// rustdoc-stripper-ignore-next
+/// How GStreamer serializes, deserializes, compares and hashes values of a type.
+///
+/// After [`value_register()`], [`GstValueExt`] works for values of this
+/// type, so for example properties of this type can be set from a string in
+/// `gst-launch-1.0` or a pipeline description.
+pub trait ValueTableImpl: StaticType + Into<glib::Value> + Send + Sync + 'static {
+    // rustdoc-stripper-ignore-next
+    /// Returns the string representation of `self`.
+    fn serialize(&self) -> Result<glib::GString, glib::BoolError>;
+
+    // rustdoc-stripper-ignore-next
+    /// Creates a value from its string representation.
+    ///
+    /// `pspec` is the property the value is deserialized for, if any.
+    fn deserialize(s: &str, pspec: Option<&glib::ParamSpec>) -> Result<Self, glib::BoolError>;
+
+    // rustdoc-stripper-ignore-next
+    /// Compares `self` with `other`, returning `None` if they are not comparable.
+    ///
+    /// The default considers values not comparable.
+    fn compare(&self, _other: &Self) -> Option<cmp::Ordering> {
+        None
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Returns a hash of `self`, consistent with [`compare()`](Self::compare),
+    /// or `None` if the value can't be hashed, which is the default.
+    fn hash(&self) -> Option<u32> {
+        None
+    }
+}
+
+// rustdoc-stripper-ignore-next
+/// Registers the [`ValueTableImpl`] of `T` with GStreamer.
+///
+/// Registering the same type again has no effect.
+#[doc(alias = "gst_value_register")]
+pub fn value_register<T: ValueTableImpl>()
+where
+    for<'a> &'a T: glib::value::FromValue<'a>,
+{
+    assert_initialized_main_thread!();
+
+    static REGISTERED: LazyLock<Mutex<HashSet<glib::Type>>> =
+        LazyLock::new(|| Mutex::new(HashSet::new()));
+
+    unsafe extern "C" fn serialize<T: ValueTableImpl>(
+        value: *const glib::gobject_ffi::GValue,
+    ) -> *mut std::ffi::c_char
+    where
+        for<'a> &'a T: glib::value::FromValue<'a>,
+    {
+        unsafe {
+            let value = glib::Value::from_glib_ptr_borrow(value);
+            match value
+                .get::<&T>()
+                .map_err(|err| glib::bool_error!("{err}"))
+                .and_then(|v| v.serialize())
+            {
+                Ok(s) => s.into_glib_ptr(),
+                Err(err) => {
+                    crate::debug!(crate::CAT_RUST, "Failed to serialize {value:?}: {err}");
+                    std::ptr::null_mut()
+                }
+            }
+        }
+    }
+
+    unsafe extern "C" fn compare<T: ValueTableImpl>(
+        value1: *const glib::gobject_ffi::GValue,
+        value2: *const glib::gobject_ffi::GValue,
+    ) -> std::ffi::c_int
+    where
+        for<'a> &'a T: glib::value::FromValue<'a>,
+    {
+        unsafe {
+            let value1 = glib::Value::from_glib_ptr_borrow(value1);
+            let value2 = glib::Value::from_glib_ptr_borrow(value2);
+            let (Ok(v1), Ok(v2)) = (value1.get::<&T>(), value2.get::<&T>()) else {
+                return ffi::GST_VALUE_UNORDERED;
+            };
+
+            match v1.compare(v2) {
+                Some(cmp::Ordering::Less) => ffi::GST_VALUE_LESS_THAN,
+                Some(cmp::Ordering::Equal) => ffi::GST_VALUE_EQUAL,
+                Some(cmp::Ordering::Greater) => ffi::GST_VALUE_GREATER_THAN,
+                None => ffi::GST_VALUE_UNORDERED,
+            }
+        }
+    }
+
+    unsafe extern "C" fn hash<T: ValueTableImpl>(
+        value: *const glib::gobject_ffi::GValue,
+        res: *mut std::ffi::c_uint,
+    ) -> glib::ffi::gboolean
+    where
+        for<'a> &'a T: glib::value::FromValue<'a>,
+    {
+        unsafe {
+            let value = glib::Value::from_glib_ptr_borrow(value);
+            match value.get::<&T>().ok().and_then(|v| v.hash()) {
+                Some(h) => {
+                    *res = h;
+                    glib::ffi::GTRUE
+                }
+                None => glib::ffi::GFALSE,
+            }
+        }
+    }
+
+    unsafe extern "C" fn deserialize_with_pspec<T: ValueTableImpl>(
+        value: *mut glib::gobject_ffi::GValue,
+        s: *const std::ffi::c_char,
+        pspec: *mut glib::gobject_ffi::GParamSpec,
+    ) -> glib::ffi::gboolean {
+        unsafe {
+            let value = glib::Value::from_glib_ptr_borrow_mut(value);
+            let Some(s) = glib::GStr::from_ptr_checked(s) else {
+                return glib::ffi::GFALSE;
+            };
+            let s = s.as_str();
+            let pspec = (!pspec.is_null()).then(|| glib::ParamSpec::from_glib_borrow(pspec));
+
+            match T::deserialize(s, pspec.as_deref()) {
+                Ok(v) => {
+                    let v = v.into();
+                    if !v.type_().is_a(value.type_()) {
+                        crate::debug!(
+                            crate::CAT_RUST,
+                            "Can't store a {} in a {} value",
+                            v.type_(),
+                            value.type_()
+                        );
+                        return glib::ffi::GFALSE;
+                    }
+                    if v.type_() == value.type_() {
+                        *value = v;
+                    } else {
+                        // The value can be a subtype of the destination, e.g. a GstPipeline
+                        // for a GstBin destination. Copy it so the declared GType is kept.
+                        glib::gobject_ffi::g_value_copy(
+                            v.to_glib_none().0,
+                            value.to_glib_none_mut().0,
+                        );
+                    }
+                    glib::ffi::GTRUE
+                }
+                Err(err) => {
+                    crate::debug!(
+                        crate::CAT_RUST,
+                        "Failed to deserialize {s:?} as {}: {err}",
+                        T::static_type()
+                    );
+                    glib::ffi::GFALSE
+                }
+            }
+        }
+    }
+
+    unsafe extern "C" fn deserialize<T: ValueTableImpl>(
+        value: *mut glib::gobject_ffi::GValue,
+        s: *const std::ffi::c_char,
+    ) -> glib::ffi::gboolean {
+        unsafe { deserialize_with_pspec::<T>(value, s, std::ptr::null_mut()) }
+    }
+
+    let type_ = T::static_type();
+    let mut registered = REGISTERED.lock().unwrap();
+    if !registered.insert(type_) {
+        return;
+    }
+
+    // gst_value_register() keeps a pointer to the table and never frees it, so it
+    // must live for the rest of the process.
+    let table = Box::leak(Box::new(ffi::GstValueTable {
+        type_: type_.into_glib(),
+        compare: Some(compare::<T>),
+        serialize: Some(serialize::<T>),
+        deserialize: Some(deserialize::<T>),
+        deserialize_with_pspec: Some(deserialize_with_pspec::<T>),
+        hash: Some(hash::<T>),
+        _gst_reserved: [std::ptr::null_mut(); 2],
+    }));
+    unsafe {
+        ffi::gst_value_register(table);
+    }
+}
+
 #[doc(hidden)]
 #[macro_export]
 macro_rules! impl_builder_gvalue_extra_setters (
@@ -2281,5 +2475,194 @@ mod tests {
 
         let v = glib::Value::deserialize("123", i32::static_type()).unwrap();
         assert_eq!(v.get::<i32>(), Ok(123));
+    }
+
+    mod value_table {
+        use std::sync::{
+            Arc,
+            atomic::{AtomicUsize, Ordering},
+        };
+
+        use glib::subclass::prelude::*;
+
+        #[derive(Debug, glib::Boxed)]
+        #[boxed_type(name = "GstRsValueTableUnordered")]
+        pub struct Unordered {
+            pub copies: Arc<AtomicUsize>,
+        }
+
+        impl Clone for Unordered {
+            fn clone(&self) -> Self {
+                self.copies.fetch_add(1, Ordering::SeqCst);
+                Self {
+                    copies: self.copies.clone(),
+                }
+            }
+        }
+
+        impl crate::ValueTableImpl for Unordered {
+            fn serialize(&self) -> Result<glib::GString, glib::BoolError> {
+                Ok("unordered".into())
+            }
+
+            fn deserialize(
+                _s: &str,
+                _pspec: Option<&glib::ParamSpec>,
+            ) -> Result<Self, glib::BoolError> {
+                skip_assert_initialized!();
+                Ok(Self {
+                    copies: Arc::new(AtomicUsize::new(0)),
+                })
+            }
+        }
+
+        mod imp {
+            use super::*;
+
+            #[derive(Default)]
+            pub struct Named(pub std::sync::Mutex<String>);
+
+            #[glib::object_subclass]
+            impl ObjectSubclass for Named {
+                const NAME: &'static str = "GstRsValueTableNamed";
+                type Type = super::Named;
+            }
+
+            impl ObjectImpl for Named {}
+        }
+
+        glib::wrapper! {
+            pub struct Named(ObjectSubclass<imp::Named>);
+        }
+
+        impl Named {
+            pub fn new(name: &str) -> Self {
+                skip_assert_initialized!();
+                let obj: Self = glib::Object::new();
+                *obj.imp().0.lock().unwrap() = name.to_string();
+                obj
+            }
+
+            pub fn name(&self) -> String {
+                self.imp().0.lock().unwrap().clone()
+            }
+        }
+
+        impl crate::ValueTableImpl for Named {
+            fn serialize(&self) -> Result<glib::GString, glib::BoolError> {
+                Ok(self.name().into())
+            }
+
+            fn deserialize(
+                s: &str,
+                _pspec: Option<&glib::ParamSpec>,
+            ) -> Result<Self, glib::BoolError> {
+                skip_assert_initialized!();
+                if s == "invalid" {
+                    return Err(glib::bool_error!("invalid name"));
+                }
+                Ok(Self::new(s))
+            }
+
+            fn compare(&self, other: &Self) -> Option<std::cmp::Ordering> {
+                Some(self.name().cmp(&other.name()))
+            }
+
+            fn hash(&self) -> Option<u32> {
+                Some(self.name().len() as u32)
+            }
+        }
+    }
+
+    #[test]
+    fn test_value_table() {
+        use value_table::Named;
+
+        crate::init().unwrap();
+
+        crate::value_register::<Named>();
+        // A second registration is ignored.
+        crate::value_register::<Named>();
+
+        let v = glib::Value::deserialize("foo", Named::static_type()).unwrap();
+        assert_eq!(v.get::<Named>().unwrap().name(), "foo");
+        assert_eq!(v.serialize().unwrap(), "foo");
+
+        assert!(glib::Value::deserialize("invalid", Named::static_type()).is_err());
+
+        let s = "test, named=(GstRsValueTableNamed)bar"
+            .parse::<crate::Structure>()
+            .unwrap();
+        assert_eq!(s.get::<Named>("named").unwrap().name(), "bar");
+        assert_eq!(s.to_string(), "test, named=(GstRsValueTableNamed)bar;");
+
+        // Different instances compare by value.
+        let a = glib::Value::deserialize("a", Named::static_type()).unwrap();
+        let a2 = glib::Value::deserialize("a", Named::static_type()).unwrap();
+        let b = glib::Value::deserialize("b", Named::static_type()).unwrap();
+        assert!(a.eq(&a2));
+        assert_eq!(a.compare(&b), Some(std::cmp::Ordering::Less));
+        assert_eq!(b.compare(&a), Some(std::cmp::Ordering::Greater));
+        assert_eq!(a.compare(&a), Some(std::cmp::Ordering::Equal));
+        assert_eq!(a.compare(&42i32.to_value()), None);
+
+        let null = glib::Value::from_type(Named::static_type());
+        assert!(null.serialize().is_err());
+        assert_eq!(null.compare(&a), None);
+        assert_eq!(a.compare(&null), None);
+        assert_eq!(null.compare(&null), None);
+
+        assert_eq!(
+            s,
+            "test, named=(GstRsValueTableNamed)bar"
+                .parse::<crate::Structure>()
+                .unwrap()
+        );
+
+        #[cfg(feature = "v1_28")]
+        assert_eq!(
+            GstValueExt::hash(&a).unwrap(),
+            GstValueExt::hash(&a2).unwrap()
+        );
+    }
+
+    #[test]
+    fn test_value_table_unordered() {
+        use value_table::Unordered;
+
+        crate::init().unwrap();
+        crate::value_register::<Unordered>();
+
+        let a = glib::Value::deserialize("unordered", Unordered::static_type()).unwrap();
+        let b = glib::Value::deserialize("unordered", Unordered::static_type()).unwrap();
+        assert_eq!(a.compare(&a), None);
+        assert_eq!(a.compare(&b), None);
+
+        #[cfg(feature = "v1_28")]
+        assert!(GstValueExt::hash(&a).is_err());
+    }
+
+    #[test]
+    fn test_value_table_no_copies() {
+        use std::sync::atomic::Ordering;
+
+        use value_table::Unordered;
+
+        crate::init().unwrap();
+        crate::value_register::<Unordered>();
+
+        let a = glib::Value::deserialize("unordered", Unordered::static_type()).unwrap();
+        let b = glib::Value::deserialize("unordered", Unordered::static_type()).unwrap();
+        assert_eq!(a.serialize().unwrap(), "unordered");
+        assert_eq!(a.compare(&b), None);
+
+        assert_eq!(
+            a.get::<&Unordered>().unwrap().copies.load(Ordering::SeqCst),
+            0
+        );
+        assert_eq!(
+            b.get::<&Unordered>().unwrap().copies.load(Ordering::SeqCst),
+            0
+        );
     }
 }

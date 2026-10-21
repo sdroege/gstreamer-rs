@@ -88,7 +88,8 @@ pub use miniobject::{MiniObject, MiniObjectRef};
 #[macro_use]
 mod value;
 pub use crate::value::{
-    Array, ArrayRef, Bitmask, Fraction, FractionRange, IntRange, List, ListRef,
+    Array, ArrayRef, Bitmask, Fraction, FractionRange, IntRange, List, ListRef, ValueTableImpl,
+    value_register,
 };
 #[cfg(feature = "v1_28")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
