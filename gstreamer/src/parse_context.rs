@@ -33,6 +33,18 @@ impl ParseContext {
             ))
         }
     }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "gst_parse_context_get_untrusted_report")]
+    #[doc(alias = "get_untrusted_report")]
+    pub fn untrusted_report(&self) -> Option<crate::Structure> {
+        unsafe {
+            from_glib_full(ffi::gst_parse_context_get_untrusted_report(mut_override(
+                self.to_glib_none().0,
+            )))
+        }
+    }
 }
 
 impl Default for ParseContext {

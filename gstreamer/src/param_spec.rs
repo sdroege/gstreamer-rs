@@ -397,6 +397,13 @@ pub trait GstParamSpecBuilderExt<'a>: glib::prelude::ParamSpecBuilderExt<'a> {
         let flags = self.current_flags() | crate::PARAM_FLAG_CONDITIONALLY_AVAILABLE;
         self.flags(flags)
     }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    fn untrusted_sensitive(self) -> Self {
+        let flags = self.current_flags() | crate::PARAM_FLAG_UNTRUSTED_SENSITIVE;
+        self.flags(flags)
+    }
 }
 
 impl<'a, T: glib::prelude::ParamSpecBuilderExt<'a>> GstParamSpecBuilderExt<'a> for T {}
