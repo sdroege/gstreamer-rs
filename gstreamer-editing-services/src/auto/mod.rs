@@ -203,6 +203,9 @@ pub use self::enums::VideoStandardTransitionType;
 pub use self::enums::VideoTestPattern;
 
 mod flags;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub use self::flags::AssetRequestFlags;
 #[cfg(feature = "v1_20")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub use self::flags::MarkerFlags;

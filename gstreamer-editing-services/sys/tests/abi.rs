@@ -224,6 +224,13 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "GESAssetRequestFlags",
+        Layout {
+            size: size_of::<GESAssetRequestFlags>(),
+            alignment: align_of::<GESAssetRequestFlags>(),
+        },
+    ),
+    (
         "GESAudioSource",
         Layout {
             size: size_of::<GESAudioSource>(),
@@ -1069,6 +1076,11 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GES_ASSET_LOADING_ASYNC", "1"),
     ("(gint) GES_ASSET_LOADING_ERROR", "0"),
     ("(gint) GES_ASSET_LOADING_OK", "2"),
+    ("(guint) GES_ASSET_REQUEST_FLAG_NONE", "0"),
+    (
+        "(guint) GES_ASSET_REQUEST_FLAG_NO_UNTRUSTED_BIN_DESCRIPTION",
+        "1",
+    ),
     ("(gint) GES_CHILDREN_IGNORE_NOTIFIES", "1"),
     ("(gint) GES_CHILDREN_LAST", "4"),
     ("(gint) GES_CHILDREN_UPDATE", "0"),
@@ -1091,6 +1103,8 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(gint) GES_ERROR_NEGATIVE_LAYER", "4"),
     ("(gint) GES_ERROR_NEGATIVE_TIME", "5"),
     ("(gint) GES_ERROR_NOT_ENOUGH_INTERNAL_CONTENT", "6"),
+    ("(gint) GES_ERROR_SENSITIVE_PROPERTY", "9"),
+    ("(gint) GES_ERROR_UNTRUSTED_ELEMENT", "10"),
     ("GES_FRAME_NUMBER_NONE", "9223372036854775807"),
     ("(guint) GES_MARKER_FLAG_NONE", "0"),
     ("(guint) GES_MARKER_FLAG_SNAPPABLE", "1"),

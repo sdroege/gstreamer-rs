@@ -4,6 +4,9 @@
 // DO NOT EDIT
 #![allow(deprecated)]
 
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+use crate::AssetRequestFlags;
 use crate::{Extractable, MetaContainer, ffi};
 use glib::{
     prelude::*,
@@ -129,6 +132,113 @@ impl Asset {
                 },
             );
         }))
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "ges_asset_request_async_full")]
+    #[doc(alias = "request_async_full")]
+    pub fn request_async_full_with_type<P: FnOnce(Result<Asset, glib::Error>) + 'static>(
+        extractable_type: glib::types::Type,
+        id: Option<&str>,
+        flags: AssetRequestFlags,
+        cancellable: Option<&impl IsA<gio::Cancellable>>,
+        callback: P,
+    ) {
+        assert_initialized_main_thread!();
+
+        let main_context = glib::MainContext::ref_thread_default();
+        let is_main_context_owner = main_context.is_owner();
+        let has_acquired_main_context = (!is_main_context_owner)
+            .then(|| main_context.acquire().ok())
+            .flatten();
+        assert!(
+            is_main_context_owner || has_acquired_main_context.is_some(),
+            "Async operations only allowed if the thread is owning the MainContext"
+        );
+
+        let user_data: Box_<glib::thread_guard::ThreadGuard<P>> =
+            Box_::new(glib::thread_guard::ThreadGuard::new(callback));
+        unsafe extern "C" fn request_async_full_with_type_trampoline<
+            P: FnOnce(Result<Asset, glib::Error>) + 'static,
+        >(
+            _source_object: *mut glib::gobject_ffi::GObject,
+            res: *mut gio::ffi::GAsyncResult,
+            user_data: glib::ffi::gpointer,
+        ) {
+            unsafe {
+                let mut error = std::ptr::null_mut();
+                let ret = ffi::ges_asset_request_finish(res, &mut error);
+                let result = if error.is_null() {
+                    Ok(from_glib_full(ret))
+                } else {
+                    Err(from_glib_full(error))
+                };
+                let callback: Box_<glib::thread_guard::ThreadGuard<P>> =
+                    Box_::from_raw(user_data as *mut _);
+                let callback: P = callback.into_inner();
+                callback(result);
+            }
+        }
+        let callback = request_async_full_with_type_trampoline::<P>;
+        unsafe {
+            ffi::ges_asset_request_async_full(
+                extractable_type.into_glib(),
+                id.to_glib_none().0,
+                flags.into_glib(),
+                cancellable.map(|p| p.as_ref()).to_glib_none().0,
+                Some(callback),
+                Box_::into_raw(user_data) as *mut _,
+            );
+        }
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn request_async_full_with_type_future(
+        extractable_type: glib::types::Type,
+        id: Option<&str>,
+        flags: AssetRequestFlags,
+    ) -> Pin<Box_<dyn std::future::Future<Output = Result<Asset, glib::Error>> + 'static>> {
+        skip_assert_initialized!();
+        let id = id.map(ToOwned::to_owned);
+        Box_::pin(gio::GioFuture::new(&(), move |_obj, cancellable, send| {
+            Self::request_async_full_with_type(
+                extractable_type,
+                id.as_ref().map(::std::borrow::Borrow::borrow),
+                flags,
+                Some(cancellable),
+                move |res| {
+                    send.resolve(res);
+                },
+            );
+        }))
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "ges_asset_request_full")]
+    #[doc(alias = "request_full")]
+    pub fn request_full_with_type(
+        extractable_type: glib::types::Type,
+        id: Option<&str>,
+        flags: AssetRequestFlags,
+    ) -> Result<Option<Asset>, glib::Error> {
+        assert_initialized_main_thread!();
+        unsafe {
+            let mut error = std::ptr::null_mut();
+            let ret = ffi::ges_asset_request_full(
+                extractable_type.into_glib(),
+                id.to_glib_none().0,
+                flags.into_glib(),
+                &mut error,
+            );
+            if error.is_null() {
+                Ok(from_glib_full(ret))
+            } else {
+                Err(from_glib_full(error))
+            }
+        }
     }
 }
 

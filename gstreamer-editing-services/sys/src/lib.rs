@@ -69,6 +69,12 @@ pub const GES_ERROR_NEGATIVE_TIME: GESError = 5;
 pub const GES_ERROR_NOT_ENOUGH_INTERNAL_CONTENT: GESError = 6;
 pub const GES_ERROR_INVALID_OVERLAP_IN_TRACK: GESError = 7;
 pub const GES_ERROR_INVALID_EFFECT_BIN_DESCRIPTION: GESError = 8;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub const GES_ERROR_SENSITIVE_PROPERTY: GESError = 9;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub const GES_ERROR_UNTRUSTED_ELEMENT: GESError = 10;
 
 pub type GESTextHAlign = c_int;
 pub const GES_TEXT_HALIGN_LEFT: GESTextHAlign = 0;
@@ -200,6 +206,10 @@ pub const GES_PADDING_LARGE: c_int = 20;
 pub const GES_TIMELINE_ELEMENT_NO_LAYER_PRIORITY: u32 = 4294967295;
 
 // Flags
+pub type GESAssetRequestFlags = c_uint;
+pub const GES_ASSET_REQUEST_FLAG_NONE: GESAssetRequestFlags = 0;
+pub const GES_ASSET_REQUEST_FLAG_NO_UNTRUSTED_BIN_DESCRIPTION: GESAssetRequestFlags = 1;
+
 pub type GESMarkerFlags = c_uint;
 pub const GES_MARKER_FLAG_NONE: GESMarkerFlags = 0;
 pub const GES_MARKER_FLAG_SNAPPABLE: GESMarkerFlags = 1;
@@ -843,7 +853,15 @@ pub struct GESExtractableInterface {
             *mut GESAsset,
         ) -> gboolean,
     >,
-    pub _ges_reserved: [gpointer; 4],
+    pub check_id_full: Option<
+        unsafe extern "C" fn(
+            GType,
+            *const c_char,
+            GESAssetRequestFlags,
+            *mut *mut glib::GError,
+        ) -> *mut c_char,
+    >,
+    pub _ges_reserved: [gpointer; 3],
 }
 
 impl ::std::fmt::Debug for GESExtractableInterface {
@@ -859,6 +877,7 @@ impl ::std::fmt::Debug for GESExtractableInterface {
             .field("get_id", &self.get_id)
             .field("get_real_extractable_type", &self.get_real_extractable_type)
             .field("register_metas", &self.register_metas)
+            .field("check_id_full", &self.check_id_full)
             .field("_ges_reserved", &self._ges_reserved)
             .finish()
     }
@@ -2970,6 +2989,13 @@ unsafe extern "C" {
     pub fn ges_video_test_pattern_get_type() -> GType;
 
     //=========================================================================
+    // GESAssetRequestFlags
+    //=========================================================================
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn ges_asset_request_flags_get_type() -> GType;
+
+    //=========================================================================
     // GESMarkerFlags
     //=========================================================================
     #[cfg(feature = "v1_20")]
@@ -3105,8 +3131,26 @@ unsafe extern "C" {
         callback: gio::GAsyncReadyCallback,
         user_data: gpointer,
     );
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn ges_asset_request_async_full(
+        extractable_type: GType,
+        id: *const c_char,
+        flags: GESAssetRequestFlags,
+        cancellable: *mut gio::GCancellable,
+        callback: gio::GAsyncReadyCallback,
+        user_data: gpointer,
+    );
     pub fn ges_asset_request_finish(
         res: *mut gio::GAsyncResult,
+        error: *mut *mut glib::GError,
+    ) -> *mut GESAsset;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn ges_asset_request_full(
+        extractable_type: GType,
+        id: *const c_char,
+        flags: GESAssetRequestFlags,
         error: *mut *mut glib::GError,
     ) -> *mut GESAsset;
     pub fn ges_asset_extract(

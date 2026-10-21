@@ -381,6 +381,14 @@ pub enum Error {
     InvalidOverlapInTrack,
     #[doc(alias = "GES_ERROR_INVALID_EFFECT_BIN_DESCRIPTION")]
     InvalidEffectBinDescription,
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "GES_ERROR_SENSITIVE_PROPERTY")]
+    SensitiveProperty,
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "GES_ERROR_UNTRUSTED_ELEMENT")]
+    UntrustedElement,
     #[doc(hidden)]
     __Unknown(i32),
 }
@@ -401,6 +409,10 @@ impl IntoGlib for Error {
             Self::NotEnoughInternalContent => ffi::GES_ERROR_NOT_ENOUGH_INTERNAL_CONTENT,
             Self::InvalidOverlapInTrack => ffi::GES_ERROR_INVALID_OVERLAP_IN_TRACK,
             Self::InvalidEffectBinDescription => ffi::GES_ERROR_INVALID_EFFECT_BIN_DESCRIPTION,
+            #[cfg(feature = "v1_30")]
+            Self::SensitiveProperty => ffi::GES_ERROR_SENSITIVE_PROPERTY,
+            #[cfg(feature = "v1_30")]
+            Self::UntrustedElement => ffi::GES_ERROR_UNTRUSTED_ELEMENT,
             Self::__Unknown(value) => value,
         }
     }
@@ -422,6 +434,10 @@ impl FromGlib<ffi::GESError> for Error {
             ffi::GES_ERROR_NOT_ENOUGH_INTERNAL_CONTENT => Self::NotEnoughInternalContent,
             ffi::GES_ERROR_INVALID_OVERLAP_IN_TRACK => Self::InvalidOverlapInTrack,
             ffi::GES_ERROR_INVALID_EFFECT_BIN_DESCRIPTION => Self::InvalidEffectBinDescription,
+            #[cfg(feature = "v1_30")]
+            ffi::GES_ERROR_SENSITIVE_PROPERTY => Self::SensitiveProperty,
+            #[cfg(feature = "v1_30")]
+            ffi::GES_ERROR_UNTRUSTED_ELEMENT => Self::UntrustedElement,
             value => Self::__Unknown(value),
         }
     }

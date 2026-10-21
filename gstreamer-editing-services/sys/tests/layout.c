@@ -11,6 +11,7 @@ int main() {
     printf("%s;%zu;%zu\n", "GESAsset", sizeof(GESAsset), alignof(GESAsset));
     printf("%s;%zu;%zu\n", "GESAssetClass", sizeof(GESAssetClass), alignof(GESAssetClass));
     printf("%s;%zu;%zu\n", "GESAssetLoadingReturn", sizeof(GESAssetLoadingReturn), alignof(GESAssetLoadingReturn));
+    printf("%s;%zu;%zu\n", "GESAssetRequestFlags", sizeof(GESAssetRequestFlags), alignof(GESAssetRequestFlags));
     printf("%s;%zu;%zu\n", "GESAudioSource", sizeof(GESAudioSource), alignof(GESAudioSource));
     printf("%s;%zu;%zu\n", "GESAudioSourceClass", sizeof(GESAudioSourceClass), alignof(GESAudioSourceClass));
     printf("%s;%zu;%zu\n", "GESAudioTestSource", sizeof(GESAudioTestSource), alignof(GESAudioTestSource));

@@ -51,6 +51,7 @@ manual = [
 
 generate = [
     "GES.AssetLoadingReturn",
+    "GES.AssetRequestFlags",
     "GES.AudioSource",
     "GES.AudioTestSource",
     "GES.AudioTrack",
@@ -119,6 +120,14 @@ concurrency = "send+sync"
     [[object.function]]
     name = "request_future"
     rename = "request_future_with_type"
+
+    [[object.function]]
+    name = "request_full"
+    rename = "request_full_with_type"
+
+    [[object.function]]
+    name = "request_async_full"
+    rename = "request_async_full_with_type"
 
     [[object.function]]
     name = "set_proxy"
