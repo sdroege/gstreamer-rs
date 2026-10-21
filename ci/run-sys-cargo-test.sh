@@ -23,6 +23,8 @@ for crate in gstreamer*/sys gstreamer-gl/*/sys gstreamer-vulkan/*/sys; do
     fi
 done
 
+# Do not add gstreamer-hip/sys here: its ABI tests require HIP SDK headers,
+# which are not installed in the CI image
 for crate in gstreamer/sys \
              gstreamer-allocators/sys \
              gstreamer-analytics/sys \
@@ -36,7 +38,6 @@ for crate in gstreamer/sys \
              gstreamer-gl/egl/sys \
              gstreamer-gl/wayland/sys \
              gstreamer-gl/x11/sys \
-             gstreamer-hip/sys \
              gstreamer-mpegts/sys \
              gstreamer-net/sys \
              gstreamer-pbutils/sys \
