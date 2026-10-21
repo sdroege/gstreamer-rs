@@ -676,6 +676,7 @@ dependencies = [
  "gstreamer-gl",
  "gstreamer-gl-egl",
  "gstreamer-gl-x11",
+ "gstreamer-hip",
  "gstreamer-pbutils",
  "gstreamer-play",
  "gstreamer-player",
