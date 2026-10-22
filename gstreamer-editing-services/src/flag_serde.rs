@@ -7,6 +7,7 @@ use glib::{
 };
 use gst::bitflags_serde_impl;
 
+bitflags_serde_impl!(crate::AssetRequestFlags, "v1_30");
 bitflags_serde_impl!(crate::MarkerFlags, "v1_20");
 bitflags_serde_impl!(crate::MetaFlag);
 bitflags_serde_impl!(crate::PipelineFlags);
@@ -40,6 +41,11 @@ mod tests {
     fn test_serialize() {
         gst::init().unwrap();
 
+        #[cfg(feature = "v1_30")]
+        check_serialize!(
+            crate::AssetRequestFlags::all(),
+            "\"no-untrusted-bin-description\""
+        );
         #[cfg(feature = "v1_20")]
         check_serialize!(crate::MarkerFlags::all(), "\"snappable\"");
         check_serialize!(crate::MetaFlag::all(), "\"readable+writable\"");
@@ -57,6 +63,12 @@ mod tests {
     fn test_deserialize() {
         gst::init().unwrap();
 
+        #[cfg(feature = "v1_30")]
+        check_deserialize!(
+            crate::AssetRequestFlags,
+            crate::AssetRequestFlags::all(),
+            "\"no-untrusted-bin-description\""
+        );
         #[cfg(feature = "v1_20")]
         check_deserialize!(
             crate::MarkerFlags,
@@ -84,6 +96,8 @@ mod tests {
     fn test_serde_roundtrip() {
         gst::init().unwrap();
 
+        #[cfg(feature = "v1_30")]
+        check_roundtrip!(crate::AssetRequestFlags, crate::AssetRequestFlags::all());
         #[cfg(feature = "v1_20")]
         check_roundtrip!(crate::MarkerFlags, crate::MarkerFlags::all());
         check_roundtrip!(crate::MetaFlag, crate::MetaFlag::all());
