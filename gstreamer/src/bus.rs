@@ -312,8 +312,9 @@ impl Bus {
         loop {
             let elapsed = crate::ClockTime::from_nseconds(start.elapsed().as_nanos() as u64);
 
-            // If timeout budget is exhausted, return None
-            let remaining = total.checked_sub(elapsed)?;
+            // Once the timeout budget is exhausted, keep checking queued messages
+            // without blocking, just like pop_filtered().
+            let remaining = total.saturating_sub(elapsed);
 
             let msg = self.timed_pop(Some(remaining))?;
 
@@ -389,6 +390,40 @@ mod tests {
     use std::sync::{Arc, Mutex};
 
     use super::*;
+
+    #[test]
+    fn test_timed_pop_filtered_zero_timeout() {
+        crate::init().unwrap();
+
+        let bus = Bus::new();
+        for _ in 0..5 {
+            bus.post(crate::message::Application::new(
+                crate::Structure::new_empty("noise"),
+            ))
+            .unwrap();
+        }
+        bus.post(crate::message::Eos::new()).unwrap();
+        let trailing = crate::message::Application::new(crate::Structure::new_empty("trailing"));
+        bus.post(trailing.clone()).unwrap();
+
+        let msg = bus
+            .timed_pop_filtered(crate::ClockTime::ZERO, &[crate::MessageType::Eos])
+            .expect("queued EOS behind non-matching messages");
+        assert_eq!(msg.type_(), crate::MessageType::Eos);
+        assert_eq!(bus.pop().unwrap().seqnum(), trailing.seqnum());
+        assert!(bus.pop().is_none());
+
+        // Without a match, all pending messages must be discarded.
+        bus.post(crate::message::Application::new(
+            crate::Structure::new_empty("noise"),
+        ))
+        .unwrap();
+        assert!(
+            bus.timed_pop_filtered(crate::ClockTime::ZERO, &[crate::MessageType::Eos])
+                .is_none()
+        );
+        assert!(bus.pop().is_none());
+    }
 
     #[test]
     fn test_sync_handler() {
