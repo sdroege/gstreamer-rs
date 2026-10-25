@@ -10,7 +10,7 @@ use itertools::Itertools;
 
 use crate::{
     ClockTime, Element, ElementFlags, Event, Format, GenericFormattedValue, Pad, PadTemplate,
-    Plugin, QueryRef, Rank, State, ffi,
+    Plugin, QueryRef, Rank, State, StaticPadTemplate, ffi,
     format::{
         CompatibleFormattedValue, FormattedValue, SpecificFormattedValueFullRange,
         SpecificFormattedValueIntrinsic,
@@ -939,6 +939,108 @@ pub unsafe trait ElementClassExt {
             let klass = self as *mut _ as *mut ffi::GstElementClass;
 
             ffi::gst_element_class_mark_as_untrusted_aware(klass);
+        }
+    }
+
+    #[doc(alias = "gst_element_class_set_metadata")]
+    fn set_metadata(
+        &mut self,
+        long_name: &str,
+        classification: &str,
+        description: &str,
+        author: &str,
+    ) {
+        unsafe {
+            let klass = self as *mut _ as *mut ffi::GstElementClass;
+
+            ffi::gst_element_class_set_metadata(
+                klass,
+                long_name.to_glib_none().0,
+                classification.to_glib_none().0,
+                description.to_glib_none().0,
+                author.to_glib_none().0,
+            );
+        }
+    }
+
+    #[doc(alias = "gst_element_class_add_pad_template")]
+    fn add_pad_template(&mut self, pad_template: &PadTemplate) {
+        unsafe {
+            let klass = self as *mut _ as *mut ffi::GstElementClass;
+
+            ffi::gst_element_class_add_pad_template(klass, pad_template.to_glib_none().0);
+        }
+    }
+
+    #[doc(alias = "gst_element_class_add_metadata")]
+    fn add_metadata(&mut self, key: &str, value: &str) {
+        unsafe {
+            let klass = self as *mut _ as *mut ffi::GstElementClass;
+
+            ffi::gst_element_class_add_metadata(
+                klass,
+                key.to_glib_none().0,
+                value.to_glib_none().0,
+            );
+        }
+    }
+
+    #[doc(alias = "gst_element_class_set_static_metadata")]
+    fn set_static_metadata(
+        &mut self,
+        long_name: &'static glib::GStr,
+        classification: &'static glib::GStr,
+        description: &'static glib::GStr,
+        author: &'static glib::GStr,
+    ) {
+        unsafe {
+            let klass = self as *mut _ as *mut ffi::GstElementClass;
+
+            ffi::gst_element_class_set_static_metadata(
+                klass,
+                long_name.as_ptr(),
+                classification.as_ptr(),
+                description.as_ptr(),
+                author.as_ptr(),
+            );
+        }
+    }
+
+    #[doc(alias = "gst_element_class_add_static_metadata")]
+    fn add_static_metadata(&mut self, key: &str, value: &'static glib::GStr) {
+        unsafe {
+            let klass = self as *mut _ as *mut ffi::GstElementClass;
+
+            ffi::gst_element_class_add_static_metadata(klass, key.to_glib_none().0, value.as_ptr());
+        }
+    }
+
+    #[doc(alias = "gst_element_class_add_static_pad_template")]
+    fn add_static_pad_template(&mut self, pad_template: &StaticPadTemplate) {
+        unsafe {
+            let klass = self as *mut _ as *mut ffi::GstElementClass;
+
+            ffi::gst_element_class_add_static_pad_template(
+                klass,
+                mut_override(pad_template.to_glib_none().0),
+            );
+        }
+    }
+
+    #[doc(alias = "gst_element_class_add_static_pad_template_with_gtype")]
+    fn add_static_pad_template_with_gtype(
+        &mut self,
+        pad_template: &StaticPadTemplate,
+        pad_type: glib::Type,
+    ) {
+        unsafe {
+            let klass = self as *mut _ as *mut ffi::GstElementClass;
+
+            ffi::gst_element_class_add_static_pad_template_with_gtype(
+                klass,
+                mut_override(pad_template.to_glib_none().0),
+                pad_type.into_glib(),
+            );
         }
     }
 }
