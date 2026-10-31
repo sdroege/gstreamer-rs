@@ -17,11 +17,13 @@ where
 {
     skip_assert_initialized!();
     unsafe extern "C" fn trampoline<T, F: FnOnce() -> T + Send>(user_data: glib::ffi::gpointer) {
-        let data = &mut *(user_data as *mut (Option<F>, Option<T>));
-        let func = data.0.take().unwrap();
-        let res = func();
+        unsafe {
+            let data = &mut *(user_data as *mut (Option<F>, Option<T>));
+            let func = data.0.take().unwrap();
+            let res = func();
 
-        data.1 = Some(res);
+            data.1 = Some(res);
+        }
     }
 
     let mut func: (Option<F>, Option<T>) = (Some(func), None);
