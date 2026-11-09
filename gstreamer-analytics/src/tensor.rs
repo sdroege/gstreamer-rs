@@ -102,7 +102,7 @@ impl ToOwned for TensorRef {
     type Owned = Tensor;
 
     fn to_owned(&self) -> Tensor {
-        unsafe { Tensor::from_glib_full(self.as_ptr()) }
+        unsafe { Tensor::from_glib_none(self.as_ptr()) }
     }
 }
 
@@ -296,5 +296,24 @@ mod tests {
 
         tensor.data();
         tensor.data_mut();
+    }
+
+    #[test]
+    fn tensor_ref_to_owned() {
+        gst::init().unwrap();
+
+        let tensor = Tensor::new_simple(
+            glib::Quark::from_str("me"),
+            TensorDataType::Uint8,
+            gst::Buffer::from_slice([1u8, 2, 3]),
+            TensorDimOrder::RowMajor,
+            &[3],
+        );
+
+        let copy = tensor.as_ref().to_owned();
+        drop(tensor);
+
+        assert_eq!(copy.dims(), &[3]);
+        assert_eq!(copy.data().map_readable().unwrap().as_slice(), &[1, 2, 3]);
     }
 }
