@@ -203,6 +203,27 @@ fn get_c_output(name: &str) -> Result<String, Box<dyn Error>> {
 
 const RUST_LAYOUTS: &[(&str, Layout)] = &[
     (
+        "GstAlphaDecodeBin",
+        Layout {
+            size: size_of::<GstAlphaDecodeBin>(),
+            alignment: align_of::<GstAlphaDecodeBin>(),
+        },
+    ),
+    (
+        "GstAlphaDecodeBinClass",
+        Layout {
+            size: size_of::<GstAlphaDecodeBinClass>(),
+            alignment: align_of::<GstAlphaDecodeBinClass>(),
+        },
+    ),
+    (
+        "GstAlphaDecodeBinRole",
+        Layout {
+            size: size_of::<GstAlphaDecodeBinRole>(),
+            alignment: align_of::<GstAlphaDecodeBinRole>(),
+        },
+    ),
+    (
         "GstAncillaryMeta",
         Layout {
             size: size_of::<GstAncillaryMeta>(),
@@ -665,6 +686,13 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "GstVideoDmabufSyncHandlerClass",
+        Layout {
+            size: size_of::<GstVideoDmabufSyncHandlerClass>(),
+            alignment: align_of::<GstVideoDmabufSyncHandlerClass>(),
+        },
+    ),
+    (
         "GstVideoEncoder",
         Layout {
             size: size_of::<GstVideoEncoder>(),
@@ -1066,6 +1094,12 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
 ];
 
 const RUST_CONSTANTS: &[(&str, &str)] = &[
+    ("GST_ALPHA_DECODE_BIN_RANK_OFFSET", "10"),
+    ("(gint) GST_ALPHA_DECODE_BIN_ROLE_ALPHA_DECODER", "2"),
+    ("(gint) GST_ALPHA_DECODE_BIN_ROLE_COLOR_DECODER", "1"),
+    ("(gint) GST_ALPHA_DECODE_BIN_ROLE_COMBINE", "3"),
+    ("(gint) GST_ALPHA_DECODE_BIN_ROLE_COUNT", "4"),
+    ("(gint) GST_ALPHA_DECODE_BIN_ROLE_DEMUX", "0"),
     ("(gint) GST_ANCILLARY_META_FIELD_INTERLACED_FIRST", "16"),
     ("(gint) GST_ANCILLARY_META_FIELD_INTERLACED_SECOND", "17"),
     ("(gint) GST_ANCILLARY_META_FIELD_PROGRESSIVE", "0"),

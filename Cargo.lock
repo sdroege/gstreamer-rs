@@ -1055,6 +1055,7 @@ version = "0.25.4"
 dependencies = [
  "glib-sys",
  "gstreamer-sys",
+ "gstreamer-video-sys",
  "libc",
  "shell-words",
  "system-deps",

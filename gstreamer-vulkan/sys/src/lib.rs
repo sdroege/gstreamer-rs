@@ -1682,6 +1682,22 @@ unsafe extern "C" {
     ) -> gboolean;
     #[cfg(feature = "v1_30")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_image_memory_init_with_external_semaphore(
+        mem: *mut GstVulkanImageMemory,
+        allocator: *mut gst::GstAllocator,
+        parent: *mut gst::GstMemory,
+        device: *mut GstVulkanDevice,
+        format: vulkan::VkFormat,
+        usage: vulkan::VkImageUsageFlags,
+        initial_layout: vulkan::VkImageLayout,
+        params: *mut gst::GstAllocationParams,
+        size: size_t,
+        user_data: gpointer,
+        notify: glib::GDestroyNotify,
+        ext_flags: vulkan::VkExternalSemaphoreHandleTypeFlags,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
     pub fn gst_vulkan_image_memory_lock(image: *mut GstVulkanImageMemory);
     #[cfg(feature = "v1_30")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
@@ -1707,6 +1723,14 @@ unsafe extern "C" {
         device: *mut GstVulkanDevice,
         image_info: *mut vulkan::VkImageCreateInfo,
         mem_prop_flags: vulkan::VkMemoryPropertyFlags,
+    ) -> *mut gst::GstMemory;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_image_memory_alloc_with_image_info2(
+        device: *mut GstVulkanDevice,
+        image_info: *mut vulkan::VkImageCreateInfo,
+        mem_prop_flags: vulkan::VkMemoryPropertyFlags,
+        ext_sem_handle_types: vulkan::VkExternalSemaphoreHandleTypeFlags,
     ) -> *mut gst::GstMemory;
     pub fn gst_vulkan_image_memory_init_once();
     pub fn gst_vulkan_image_memory_wrapped(
@@ -1751,6 +1775,16 @@ unsafe extern "C" {
         size: size_t,
         mem_prop_flags: vulkan::VkMemoryPropertyFlags,
     ) -> *mut gst::GstMemory;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_memory_alloc_with_pnext(
+        device: *mut GstVulkanDevice,
+        memory_type_index: u32,
+        params: *mut gst::GstAllocationParams,
+        size: size_t,
+        mem_prop_flags: vulkan::VkMemoryPropertyFlags,
+        alloc_pnext: gconstpointer,
+    ) -> *mut gst::GstMemory;
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_vulkan_memory_find_memory_type_index_with_requirements(
@@ -1777,6 +1811,12 @@ unsafe extern "C" {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
     pub fn gst_vulkan_timeline_semaphore_new(
         device: *mut GstVulkanDevice,
+    ) -> *mut GstVulkanTimelineSemaphore;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_timeline_semaphore_new_with_exportable(
+        device: *mut GstVulkanDevice,
+        ext_flags: vulkan::VkExternalSemaphoreHandleTypeFlags,
     ) -> *mut GstVulkanTimelineSemaphore;
     #[cfg(feature = "v1_30")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
@@ -2270,6 +2310,13 @@ unsafe extern "C" {
         initial_layout: *mut vulkan::VkImageLayout,
         initial_access: *mut u64,
     );
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_image_buffer_pool_config_get_export_handle_types(
+        config: *mut gst::GstStructure,
+        mem_handle_types: *mut vulkan::VkExternalMemoryHandleTypeFlags,
+        sem_handle_types: *mut vulkan::VkExternalSemaphoreHandleTypeFlags,
+    );
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_vulkan_image_buffer_pool_config_set_allocation_params(
@@ -2290,6 +2337,13 @@ unsafe extern "C" {
     pub fn gst_vulkan_image_buffer_pool_config_set_encode_caps(
         config: *mut gst::GstStructure,
         caps: *mut gst::GstCaps,
+    );
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_image_buffer_pool_config_set_export_handle_types(
+        config: *mut gst::GstStructure,
+        mem_handle_types: vulkan::VkExternalMemoryHandleTypeFlags,
+        sem_handle_types: vulkan::VkExternalSemaphoreHandleTypeFlags,
     );
 
     //=========================================================================

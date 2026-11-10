@@ -228,6 +228,12 @@ pub const GST_PARSE_ERROR_COULD_NOT_SET_PROPERTY: GstParseError = 4;
 pub const GST_PARSE_ERROR_EMPTY_BIN: GstParseError = 5;
 pub const GST_PARSE_ERROR_EMPTY: GstParseError = 6;
 pub const GST_PARSE_ERROR_DELAYED_LINK: GstParseError = 7;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub const GST_PARSE_ERROR_SENSITIVE_PROPERTY: GstParseError = 8;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub const GST_PARSE_ERROR_UNTRUSTED_ELEMENT: GstParseError = 9;
 
 pub type GstPluginError = c_int;
 pub const GST_PLUGIN_ERROR_MODULE: GstPluginError = 0;
@@ -508,6 +514,7 @@ pub const GST_ELEMENT_METADATA_DOC_URI: &[u8] = b"doc-uri\0";
 pub const GST_ELEMENT_METADATA_ICON_NAME: &[u8] = b"icon-name\0";
 pub const GST_ELEMENT_METADATA_KLASS: &[u8] = b"klass\0";
 pub const GST_ELEMENT_METADATA_LONGNAME: &[u8] = b"long-name\0";
+pub const GST_ELEMENT_METADATA_UNTRUSTED_AWARE: &[u8] = b"untrusted-aware\0";
 pub const GST_EVENT_NUM_SHIFT: c_int = 8;
 pub const GST_EVENT_TYPE_BOTH: GstEventTypeFlags = 3;
 pub const GST_FLAG_SET_MASK_EXACT: c_uint = 4294967295;
@@ -527,7 +534,29 @@ pub const GST_PARAM_DOC_SHOW_DEFAULT: c_int = 8192;
 pub const GST_PARAM_MUTABLE_PAUSED: c_int = 2048;
 pub const GST_PARAM_MUTABLE_PLAYING: c_int = 4096;
 pub const GST_PARAM_MUTABLE_READY: c_int = 1024;
+pub const GST_PARAM_UNTRUSTED_SENSITIVE: c_int = 32768;
 pub const GST_PARAM_USER_SHIFT: c_int = 65536;
+pub const GST_PROP_KIND_BITRATE: &[u8] = b"bitrate\0";
+pub const GST_PROP_KIND_COLOR: &[u8] = b"color\0";
+pub const GST_PROP_KIND_FIELD_EXTENSIONS: &[u8] = b"extensions\0";
+pub const GST_PROP_KIND_FIELD_MIMETYPES: &[u8] = b"mimetypes\0";
+pub const GST_PROP_KIND_FIELD_SUBTYPE: &[u8] = b"subtype\0";
+pub const GST_PROP_KIND_FIELD_UNIT: &[u8] = b"unit\0";
+pub const GST_PROP_KIND_FONT: &[u8] = b"font\0";
+pub const GST_PROP_KIND_LOCATION: &[u8] = b"location\0";
+pub const GST_PROP_KIND_NETWORK: &[u8] = b"network\0";
+pub const GST_PROP_KIND_SECURITY: &[u8] = b"security\0";
+pub const GST_PROP_KIND_SUBTYPE_ARGB: &[u8] = b"argb\0";
+pub const GST_PROP_KIND_SUBTYPE_DESC: &[u8] = b"desc\0";
+pub const GST_PROP_KIND_SUBTYPE_DIRECTORY: &[u8] = b"directory\0";
+pub const GST_PROP_KIND_SUBTYPE_HOSTNAME: &[u8] = b"hostname\0";
+pub const GST_PROP_KIND_SUBTYPE_PASSWORD: &[u8] = b"password\0";
+pub const GST_PROP_KIND_SUBTYPE_PATH: &[u8] = b"path\0";
+pub const GST_PROP_KIND_SUBTYPE_PATTERN: &[u8] = b"pattern\0";
+pub const GST_PROP_KIND_SUBTYPE_URI: &[u8] = b"uri\0";
+pub const GST_PROP_KIND_UNIT_BITS_PER_SEC: &[u8] = b"bits-per-sec\0";
+pub const GST_PROP_KIND_UNIT_BYTES_PER_SEC: &[u8] = b"bytes-per-sec\0";
+pub const GST_PROP_KIND_UNIT_KILOBITS_PER_SEC: &[u8] = b"kilobits-per-sec\0";
 pub const GST_PROTECTION_SYSTEM_ID_CAPS_FIELD: &[u8] = b"protection-system\0";
 pub const GST_PROTECTION_UNSPECIFIED_SYSTEM_ID: &[u8] = b"unspecified-system-id\0";
 pub const GST_QUERY_NUM_SHIFT: c_int = 8;
@@ -739,6 +768,9 @@ pub const GST_EVENT_TYPE_DOWNSTREAM: GstEventTypeFlags = 2;
 pub const GST_EVENT_TYPE_SERIALIZED: GstEventTypeFlags = 4;
 pub const GST_EVENT_TYPE_STICKY: GstEventTypeFlags = 8;
 pub const GST_EVENT_TYPE_STICKY_MULTI: GstEventTypeFlags = 16;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub const GST_EVENT_TYPE_STICKY_FLUSHED: GstEventTypeFlags = 1073741824;
 
 pub type GstGapFlags = c_uint;
 pub const GST_GAP_FLAG_MISSING_DATA: GstGapFlags = 1;
@@ -901,6 +933,9 @@ pub const GST_PARSE_FLAG_NONE: GstParseFlags = 0;
 pub const GST_PARSE_FLAG_FATAL_ERRORS: GstParseFlags = 1;
 pub const GST_PARSE_FLAG_NO_SINGLE_ELEMENT_BINS: GstParseFlags = 2;
 pub const GST_PARSE_FLAG_PLACE_IN_BIN: GstParseFlags = 4;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub const GST_PARSE_FLAG_NO_UNTRUSTED: GstParseFlags = 8;
 
 pub type GstPipelineFlags = c_uint;
 pub const GST_PIPELINE_FLAG_FIXED_CLOCK: GstPipelineFlags = 524288;
@@ -2440,48 +2475,6 @@ impl ::std::fmt::Debug for GstPad_ABI_abi {
 
 #[derive(Copy, Clone)]
 #[repr(C)]
-pub struct GstParamSpecArray {
-    pub parent_instance: gobject::GParamSpec,
-    pub element_spec: *mut gobject::GParamSpec,
-}
-
-impl ::std::fmt::Debug for GstParamSpecArray {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstParamSpecArray @ {self:p}"))
-            .field("parent_instance", &self.parent_instance)
-            .field("element_spec", &self.element_spec)
-            .finish()
-    }
-}
-
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct GstParamSpecFraction {
-    pub parent_instance: gobject::GParamSpec,
-    pub min_num: c_int,
-    pub min_den: c_int,
-    pub max_num: c_int,
-    pub max_den: c_int,
-    pub def_num: c_int,
-    pub def_den: c_int,
-}
-
-impl ::std::fmt::Debug for GstParamSpecFraction {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstParamSpecFraction @ {self:p}"))
-            .field("parent_instance", &self.parent_instance)
-            .field("min_num", &self.min_num)
-            .field("min_den", &self.min_den)
-            .field("max_num", &self.max_num)
-            .field("max_den", &self.max_den)
-            .field("def_num", &self.def_num)
-            .field("def_den", &self.def_den)
-            .finish()
-    }
-}
-
-#[derive(Copy, Clone)]
-#[repr(C)]
 pub struct GstParentBufferMeta {
     pub parent: GstMeta,
     pub buffer: *mut GstBuffer,
@@ -3838,30 +3831,44 @@ impl ::std::fmt::Debug for GstPadTemplate {
     }
 }
 
+#[derive(Copy, Clone)]
 #[repr(C)]
-#[allow(dead_code)]
-pub struct GstParamArray {
-    _data: [u8; 0],
-    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+pub struct GstParamSpecArray {
+    pub parent_instance: gobject::GParamSpec,
+    pub element_spec: *mut gobject::GParamSpec,
 }
 
-impl ::std::fmt::Debug for GstParamArray {
+impl ::std::fmt::Debug for GstParamSpecArray {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstParamArray @ {self:p}"))
+        f.debug_struct(&format!("GstParamSpecArray @ {self:p}"))
+            .field("parent_instance", &self.parent_instance)
+            .field("element_spec", &self.element_spec)
             .finish()
     }
 }
 
+#[derive(Copy, Clone)]
 #[repr(C)]
-#[allow(dead_code)]
-pub struct GstParamFraction {
-    _data: [u8; 0],
-    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+pub struct GstParamSpecFraction {
+    pub parent_instance: gobject::GParamSpec,
+    pub min_num: c_int,
+    pub min_den: c_int,
+    pub max_num: c_int,
+    pub max_den: c_int,
+    pub def_num: c_int,
+    pub def_den: c_int,
 }
 
-impl ::std::fmt::Debug for GstParamFraction {
+impl ::std::fmt::Debug for GstParamSpecFraction {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstParamFraction @ {self:p}"))
+        f.debug_struct(&format!("GstParamSpecFraction @ {self:p}"))
+            .field("parent_instance", &self.parent_instance)
+            .field("min_num", &self.min_num)
+            .field("min_den", &self.min_den)
+            .field("max_num", &self.max_num)
+            .field("max_den", &self.max_den)
+            .field("def_num", &self.def_num)
+            .field("def_den", &self.def_den)
             .finish()
     }
 }
@@ -5449,6 +5456,12 @@ unsafe extern "C" {
     pub fn gst_element_class_get_pad_template_list(
         element_class: *mut GstElementClass,
     ) -> *mut glib::GList;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_element_class_is_untrusted_aware(klass: *mut GstElementClass) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_element_class_mark_as_untrusted_aware(klass: *mut GstElementClass);
     pub fn gst_element_class_set_metadata(
         klass: *mut GstElementClass,
         longname: *const c_char,
@@ -6558,6 +6571,11 @@ unsafe extern "C" {
     pub fn gst_parse_context_get_missing_elements(
         context: *mut GstParseContext,
     ) -> *mut *mut c_char;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_parse_context_get_untrusted_report(
+        context: *mut GstParseContext,
+    ) -> *mut GstStructure;
 
     //=========================================================================
     // GstPoll
@@ -8964,6 +8982,9 @@ unsafe extern "C" {
         factory: *mut GstElementFactory,
         interfacename: *const c_char,
     ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_element_factory_is_untrusted_aware(factory: *mut GstElementFactory) -> gboolean;
     pub fn gst_element_factory_list_is_type(
         factory: *mut GstElementFactory,
         type_: GstElementFactoryListType,
@@ -9397,12 +9418,12 @@ unsafe extern "C" {
     pub fn gst_pad_template_set_documentation_caps(templ: *mut GstPadTemplate, caps: *mut GstCaps);
 
     //=========================================================================
-    // GstParamArray
+    // GstParamSpecArray
     //=========================================================================
     pub fn gst_param_spec_array_get_type() -> GType;
 
     //=========================================================================
-    // GstParamFraction
+    // GstParamSpecFraction
     //=========================================================================
     pub fn gst_param_spec_fraction_get_type() -> GType;
 
@@ -10354,6 +10375,12 @@ unsafe extern "C" {
         default_denom: c_int,
         flags: gobject::GParamFlags,
     ) -> *mut gobject::GParamSpec;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_param_spec_get_kind(pspec: *mut gobject::GParamSpec) -> *const GstStructure;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_param_spec_set_kind(pspec: *mut gobject::GParamSpec, kind: *mut GstStructure);
     pub fn gst_parent_buffer_meta_api_get_type() -> GType;
     pub fn gst_parse_bin_from_description(
         bin_description: *const c_char,
@@ -10387,6 +10414,14 @@ unsafe extern "C" {
         flags: GstParseFlags,
         error: *mut *mut glib::GError,
     ) -> *mut GstElement;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_parse_untrusted_report(
+        report: *const GstStructure,
+        elements: *mut *mut *mut c_char,
+        properties: *mut *mut GstStructure,
+        unresolved_properties: *mut *mut GstStructure,
+    ) -> gboolean;
     pub fn gst_print(format: *const c_char, ...);
     pub fn gst_printerr(format: *const c_char, ...);
     pub fn gst_printerrln(format: *const c_char, ...);

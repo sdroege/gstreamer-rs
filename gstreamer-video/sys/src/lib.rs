@@ -31,6 +31,13 @@ use std::ffi::{
 use glib::{GType, gboolean, gconstpointer, gpointer};
 
 // Enums
+pub type GstAlphaDecodeBinRole = c_int;
+pub const GST_ALPHA_DECODE_BIN_ROLE_DEMUX: GstAlphaDecodeBinRole = 0;
+pub const GST_ALPHA_DECODE_BIN_ROLE_COLOR_DECODER: GstAlphaDecodeBinRole = 1;
+pub const GST_ALPHA_DECODE_BIN_ROLE_ALPHA_DECODER: GstAlphaDecodeBinRole = 2;
+pub const GST_ALPHA_DECODE_BIN_ROLE_COMBINE: GstAlphaDecodeBinRole = 3;
+pub const GST_ALPHA_DECODE_BIN_ROLE_COUNT: GstAlphaDecodeBinRole = 4;
+
 pub type GstAncillaryMetaField = c_int;
 pub const GST_ANCILLARY_META_FIELD_PROGRESSIVE: GstAncillaryMetaField = 0;
 pub const GST_ANCILLARY_META_FIELD_INTERLACED_FIRST: GstAncillaryMetaField = 16;
@@ -619,6 +626,7 @@ pub const GST_VIDEO_VBI_PARSER_RESULT_OK: GstVideoVBIParserResult = 1;
 pub const GST_VIDEO_VBI_PARSER_RESULT_ERROR: GstVideoVBIParserResult = 2;
 
 // Constants
+pub const GST_ALPHA_DECODE_BIN_RANK_OFFSET: c_int = 10;
 pub const GST_BUFFER_POOL_OPTION_VIDEO_AFFINE_TRANSFORMATION_META: &[u8] =
     b"GstBufferPoolOptionVideoAffineTransformation\0";
 pub const GST_BUFFER_POOL_OPTION_VIDEO_ALIGNMENT: &[u8] = b"GstBufferPoolOptionVideoAlignment\0";
@@ -882,6 +890,7 @@ pub type GstVideoAffineTransformationGetMatrix =
     Option<unsafe extern "C" fn(*mut GstVideoAffineTransformationMeta, *mut c_float) -> gboolean>;
 pub type GstVideoConvertSampleCallback =
     Option<unsafe extern "C" fn(*mut gst::GstSample, *mut glib::GError, gpointer)>;
+pub type GstVideoDmabufSyncHandlerReleaseBuffer = Option<unsafe extern "C" fn(gpointer, gpointer)>;
 pub type GstVideoFormatPack = Option<
     unsafe extern "C" fn(
         *const GstVideoFormatInfo,
@@ -911,6 +920,30 @@ pub type GstVideoGLTextureUpload =
     Option<unsafe extern "C" fn(*mut GstVideoGLTextureUploadMeta, *mut c_uint) -> gboolean>;
 
 // Records
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstAlphaDecodeBinClass {
+    pub parent_class: gst::GstBinClass,
+    pub create_role_element: Option<
+        unsafe extern "C" fn(
+            *mut GstAlphaDecodeBin,
+            GstAlphaDecodeBinRole,
+            *const gst::GstCaps,
+            *mut *mut glib::GError,
+        ) -> *mut gst::GstElement,
+    >,
+    pub _gst_reserved: [gpointer; 4],
+}
+
+impl ::std::fmt::Debug for GstAlphaDecodeBinClass {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstAlphaDecodeBinClass @ {self:p}"))
+            .field("parent_class", &self.parent_class)
+            .field("create_role_element", &self.create_role_element)
+            .finish()
+    }
+}
+
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct GstAncillaryMeta {
@@ -1910,6 +1943,20 @@ impl ::std::fmt::Debug for GstVideoDmabufPoolClass {
 
 #[derive(Copy, Clone)]
 #[repr(C)]
+pub struct GstVideoDmabufSyncHandlerClass {
+    pub parent_class: gst::GstObjectClass,
+}
+
+impl ::std::fmt::Debug for GstVideoDmabufSyncHandlerClass {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstVideoDmabufSyncHandlerClass @ {self:p}"))
+            .field("parent_class", &self.parent_class)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
 pub struct GstVideoEncoderClass {
     pub element_class: gst::GstElementClass,
     pub open: Option<unsafe extern "C" fn(*mut GstVideoEncoder) -> gboolean>,
@@ -2791,6 +2838,20 @@ impl ::std::fmt::Debug for GstVideoVBIParser {
 // Classes
 #[derive(Copy, Clone)]
 #[repr(C)]
+pub struct GstAlphaDecodeBin {
+    pub parent_instance: gst::GstBin,
+}
+
+impl ::std::fmt::Debug for GstAlphaDecodeBin {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstAlphaDecodeBin @ {self:p}"))
+            .field("parent_instance", &self.parent_instance)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
 pub struct GstColorBalanceChannel {
     pub parent: gobject::GObject,
     pub label: *mut c_char,
@@ -2921,6 +2982,20 @@ pub struct GstVideoDmabufPool {
 impl ::std::fmt::Debug for GstVideoDmabufPool {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstVideoDmabufPool @ {self:p}"))
+            .finish()
+    }
+}
+
+#[repr(C)]
+#[allow(dead_code)]
+pub struct GstVideoDmabufSyncHandler {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
+
+impl ::std::fmt::Debug for GstVideoDmabufSyncHandler {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstVideoDmabufSyncHandler @ {self:p}"))
             .finish()
     }
 }
@@ -3067,6 +3142,13 @@ impl ::std::fmt::Debug for GstVideoOverlay {
 }
 
 unsafe extern "C" {
+
+    //=========================================================================
+    // GstAlphaDecodeBinRole
+    //=========================================================================
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_alpha_decode_bin_role_get_type() -> GType;
 
     //=========================================================================
     // GstAncillaryMetaField
@@ -3455,6 +3537,17 @@ unsafe extern "C" {
     #[cfg(feature = "v1_18")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_18")))]
     pub fn gst_video_time_code_flags_get_type() -> GType;
+
+    //=========================================================================
+    // GstAlphaDecodeBinClass
+    //=========================================================================
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_alpha_decode_bin_class_set_role_factory_name(
+        klass: *mut GstAlphaDecodeBinClass,
+        role: GstAlphaDecodeBinRole,
+        factory_name: *const c_char,
+    );
 
     //=========================================================================
     // GstAncillaryMeta
@@ -4388,6 +4481,13 @@ unsafe extern "C" {
     ) -> GstVideoVBIParserResult;
 
     //=========================================================================
+    // GstAlphaDecodeBin
+    //=========================================================================
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_alpha_decode_bin_get_type() -> GType;
+
+    //=========================================================================
     // GstColorBalanceChannel
     //=========================================================================
     pub fn gst_color_balance_channel_get_type() -> GType;
@@ -4623,6 +4723,37 @@ unsafe extern "C" {
     #[cfg(feature = "v1_28")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
     pub fn gst_video_dmabuf_pool_new() -> *mut gst::GstBufferPool;
+
+    //=========================================================================
+    // GstVideoDmabufSyncHandler
+    //=========================================================================
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_video_dmabuf_sync_handler_get_type() -> GType;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_video_dmabuf_sync_handler_new(
+        release_buffer: GstVideoDmabufSyncHandlerReleaseBuffer,
+        user_data: gpointer,
+    ) -> *mut GstVideoDmabufSyncHandler;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_video_dmabuf_sync_handler_release_buffer(
+        sync_handler: *mut GstVideoDmabufSyncHandler,
+        buffer: gpointer,
+        memories: *mut *mut gst::GstMemory,
+        n_memories: c_uint,
+    );
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_video_dmabuf_sync_handler_start(
+        sync_handler: *mut GstVideoDmabufSyncHandler,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_video_dmabuf_sync_handler_stop(
+        sync_handler: *mut GstVideoDmabufSyncHandler,
+    ) -> gboolean;
 
     //=========================================================================
     // GstVideoEncoder

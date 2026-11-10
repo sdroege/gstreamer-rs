@@ -492,6 +492,54 @@ pub trait ProjectExt: IsA<Project> + 'static {
             )
         }
     }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "untrusted-content")]
+    fn connect_untrusted_content<
+        F: Fn(&Self, &str, glib::types::Type, Option<&gst::Structure>, &glib::Error) -> bool + 'static,
+    >(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn untrusted_content_trampoline<
+            P: IsA<Project>,
+            F: Fn(&P, &str, glib::types::Type, Option<&gst::Structure>, &glib::Error) -> bool
+                + 'static,
+        >(
+            this: *mut ffi::GESProject,
+            id: *mut std::ffi::c_char,
+            extractable_type: glib::ffi::GType,
+            report: *mut gst::ffi::GstStructure,
+            error: *mut glib::ffi::GError,
+            f: glib::ffi::gpointer,
+        ) -> glib::ffi::gboolean {
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(
+                    Project::from_glib_borrow(this).unsafe_cast_ref(),
+                    &glib::GString::from_glib_borrow(id),
+                    from_glib(extractable_type),
+                    Option::<gst::Structure>::from_glib_borrow(report)
+                        .as_ref()
+                        .as_ref(),
+                    &from_glib_borrow(error),
+                )
+                .into_glib()
+            }
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"untrusted-content".as_ptr(),
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    untrusted_content_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
 }
 
 impl<O: IsA<Project>> ProjectExt for O {}

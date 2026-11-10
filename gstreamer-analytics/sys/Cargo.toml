@@ -10,6 +10,9 @@ workspace = true
 [dependencies.gstreamer-sys]
 workspace = true
 
+[dependencies.gstreamer-video-sys]
+workspace = true
+
 [dev-dependencies]
 shell-words = "1.0.0"
 tempfile = "3"

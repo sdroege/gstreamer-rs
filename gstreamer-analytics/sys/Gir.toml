@@ -30,6 +30,7 @@ ignore = [
 
 [external_libraries]
 gstreamer="Gst"
+gstreamer-video="GstVideo"
 
 [[object]]
 name = "GstAnalytics.RelationMeta"

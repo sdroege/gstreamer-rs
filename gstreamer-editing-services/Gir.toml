@@ -51,6 +51,7 @@ manual = [
 
 generate = [
     "GES.AssetLoadingReturn",
+    "GES.AssetRequestFlags",
     "GES.AudioSource",
     "GES.AudioTestSource",
     "GES.AudioTrack",

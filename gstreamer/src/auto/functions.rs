@@ -3,6 +3,9 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+use crate::Structure;
 use crate::{Bin, ClockTime, DebugGraphDetails, DebugLevel, Element, StackTraceFlags, ffi};
 use glib::{prelude::*, translate::*};
 #[cfg(feature = "v1_28")]
@@ -345,6 +348,35 @@ pub fn parse_launchv(argv: &[&str]) -> Result<Element, glib::Error> {
             Ok(from_glib_none(ret))
         } else {
             Err(from_glib_full(error))
+        }
+    }
+}
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+#[doc(alias = "gst_parse_untrusted_report")]
+pub fn parse_untrusted_report(
+    report: &Structure,
+) -> Option<(Vec<glib::GString>, Option<Structure>, Option<Structure>)> {
+    assert_initialized_main_thread!();
+    unsafe {
+        let mut elements = std::ptr::null_mut();
+        let mut properties = std::ptr::null_mut();
+        let mut unresolved_properties = std::ptr::null_mut();
+        let ret = from_glib(ffi::gst_parse_untrusted_report(
+            report.to_glib_none().0,
+            &mut elements,
+            &mut properties,
+            &mut unresolved_properties,
+        ));
+        if ret {
+            Some((
+                FromGlibPtrContainer::from_glib_full(elements),
+                from_glib_full(properties),
+                from_glib_full(unresolved_properties),
+            ))
+        } else {
+            None
         }
     }
 }

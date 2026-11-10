@@ -287,6 +287,13 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "GstAnalyticsOrientationMtd",
+        Layout {
+            size: size_of::<GstAnalyticsOrientationMtd>(),
+            alignment: align_of::<GstAnalyticsOrientationMtd>(),
+        },
+    ),
+    (
         "GstAnalyticsRelTypes",
         Layout {
             size: size_of::<GstAnalyticsRelTypes>(),
@@ -312,6 +319,13 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         Layout {
             size: size_of::<GstAnalyticsTensorMtd>(),
             alignment: align_of::<GstAnalyticsTensorMtd>(),
+        },
+    ),
+    (
+        "GstAnalyticsTensorProvenanceMtd",
+        Layout {
+            size: size_of::<GstAnalyticsTensorProvenanceMtd>(),
+            alignment: align_of::<GstAnalyticsTensorProvenanceMtd>(),
         },
     ),
     (
@@ -364,10 +378,24 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "GstTensorListMeta",
+        Layout {
+            size: size_of::<GstTensorListMeta>(),
+            alignment: align_of::<GstTensorListMeta>(),
+        },
+    ),
+    (
         "GstTensorMeta",
         Layout {
             size: size_of::<GstTensorMeta>(),
             alignment: align_of::<GstTensorMeta>(),
+        },
+    ),
+    (
+        "GstTensorProvenance",
+        Layout {
+            size: size_of::<GstTensorProvenance>(),
+            alignment: align_of::<GstTensorProvenance>(),
         },
     ),
 ];
