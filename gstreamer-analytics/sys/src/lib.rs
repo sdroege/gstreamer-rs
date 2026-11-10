@@ -284,6 +284,22 @@ impl ::std::fmt::Debug for GstAnalyticsODMtd {
     }
 }
 
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstAnalyticsOrientationMtd {
+    pub id: c_uint,
+    pub meta: *mut GstAnalyticsRelationMeta,
+}
+
+impl ::std::fmt::Debug for GstAnalyticsOrientationMtd {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstAnalyticsOrientationMtd @ {self:p}"))
+            .field("id", &self.id)
+            .field("meta", &self.meta)
+            .finish()
+    }
+}
+
 #[repr(C)]
 #[allow(dead_code)]
 pub struct _GstAnalyticsRelationMeta {
@@ -717,6 +733,26 @@ unsafe extern "C" {
     pub fn gst_analytics_od_mtd_get_mtd_type() -> GstAnalyticsMtdType;
 
     //=========================================================================
+    // GstAnalyticsOrientationMtd
+    //=========================================================================
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_orientation_mtd_get_angles(
+        handle: *const GstAnalyticsOrientationMtd,
+        yaw: *mut c_float,
+        pitch: *mut c_float,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_orientation_mtd_get_confidence(
+        handle: *const GstAnalyticsOrientationMtd,
+        confidence: *mut c_float,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_orientation_mtd_get_mtd_type() -> GstAnalyticsMtdType;
+
+    //=========================================================================
     // GstAnalyticsRelationMeta
     //=========================================================================
     pub fn gst_analytics_relation_meta_add_cls_mtd(
@@ -788,6 +824,15 @@ unsafe extern "C" {
         confidence_level: c_float,
         class_quark: glib::GQuark,
         cls_mtd: *mut GstAnalyticsClsMtd,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_relation_meta_add_orientation_mtd(
+        instance: *mut GstAnalyticsRelationMeta,
+        yaw: c_float,
+        pitch: c_float,
+        confidence: c_float,
+        orientation_mtd: *mut GstAnalyticsOrientationMtd,
     ) -> gboolean;
     #[cfg(feature = "v1_26")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
@@ -906,6 +951,13 @@ unsafe extern "C" {
         meta: *mut GstAnalyticsRelationMeta,
         an_meta_id: c_uint,
         rlt: *mut GstAnalyticsODMtd,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_relation_meta_get_orientation_mtd(
+        meta: *mut GstAnalyticsRelationMeta,
+        an_meta_id: c_uint,
+        rlt: *mut GstAnalyticsOrientationMtd,
     ) -> gboolean;
     pub fn gst_analytics_relation_meta_get_relation(
         meta: *const GstAnalyticsRelationMeta,

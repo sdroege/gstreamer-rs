@@ -287,6 +287,13 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "GstAnalyticsOrientationMtd",
+        Layout {
+            size: size_of::<GstAnalyticsOrientationMtd>(),
+            alignment: align_of::<GstAnalyticsOrientationMtd>(),
+        },
+    ),
+    (
         "GstAnalyticsRelTypes",
         Layout {
             size: size_of::<GstAnalyticsRelTypes>(),

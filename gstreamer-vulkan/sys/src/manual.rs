@@ -10,6 +10,8 @@ pub mod vulkan {
     pub use ash::vk::DependencyFlags as VkDependencyFlags;
     pub use ash::vk::DescriptorPool as VkDescriptorPool;
     pub use ash::vk::DescriptorSet as VkDescriptorSet;
+    pub use ash::vk::ExternalMemoryHandleTypeFlags as VkExternalMemoryHandleTypeFlags;
+    pub use ash::vk::ExternalSemaphoreHandleTypeFlags as VkExternalSemaphoreHandleTypeFlags;
     pub use ash::vk::Format as VkFormat;
     pub use ash::vk::Image as VkImage;
     pub use ash::vk::ImageCreateInfo as VkImageCreateInfo;

@@ -36,6 +36,13 @@ impl VulkanImageBufferPool {
     //    unsafe { TODO: call ffi:gst_vulkan_image_buffer_pool_config_get_allocation_params() }
     //}
 
+    //#[cfg(feature = "v1_30")]
+    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    //#[doc(alias = "gst_vulkan_image_buffer_pool_config_get_export_handle_types")]
+    //pub fn config_get_export_handle_types(config: &gst::Structure, mem_handle_types: /*Ignored*/vulkan::ExternalMemoryHandleTypeFlags, sem_handle_types: /*Ignored*/vulkan::ExternalSemaphoreHandleTypeFlags) {
+    //    unsafe { TODO: call ffi:gst_vulkan_image_buffer_pool_config_get_export_handle_types() }
+    //}
+
     //#[cfg(feature = "v1_24")]
     //#[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     //#[doc(alias = "gst_vulkan_image_buffer_pool_config_set_allocation_params")]
@@ -68,6 +75,13 @@ impl VulkanImageBufferPool {
             );
         }
     }
+
+    //#[cfg(feature = "v1_30")]
+    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    //#[doc(alias = "gst_vulkan_image_buffer_pool_config_set_export_handle_types")]
+    //pub fn config_set_export_handle_types(config: &gst::Structure, mem_handle_types: /*Ignored*/&vulkan::ExternalMemoryHandleTypeFlags, sem_handle_types: /*Ignored*/&vulkan::ExternalSemaphoreHandleTypeFlags) {
+    //    unsafe { TODO: call ffi:gst_vulkan_image_buffer_pool_config_set_export_handle_types() }
+    //}
 }
 
 unsafe impl Send for VulkanImageBufferPool {}

@@ -800,6 +800,10 @@ bitflags! {
         const STICKY = ffi::GST_EVENT_TYPE_STICKY as _;
         #[doc(alias = "GST_EVENT_TYPE_STICKY_MULTI")]
         const STICKY_MULTI = ffi::GST_EVENT_TYPE_STICKY_MULTI as _;
+        #[cfg(feature = "v1_30")]
+        #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+        #[doc(alias = "GST_EVENT_TYPE_STICKY_FLUSHED")]
+        const STICKY_FLUSHED = ffi::GST_EVENT_TYPE_STICKY_FLUSHED as _;
     }
 }
 

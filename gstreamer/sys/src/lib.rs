@@ -768,6 +768,9 @@ pub const GST_EVENT_TYPE_DOWNSTREAM: GstEventTypeFlags = 2;
 pub const GST_EVENT_TYPE_SERIALIZED: GstEventTypeFlags = 4;
 pub const GST_EVENT_TYPE_STICKY: GstEventTypeFlags = 8;
 pub const GST_EVENT_TYPE_STICKY_MULTI: GstEventTypeFlags = 16;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub const GST_EVENT_TYPE_STICKY_FLUSHED: GstEventTypeFlags = 1073741824;
 
 pub type GstGapFlags = c_uint;
 pub const GST_GAP_FLAG_MISSING_DATA: GstGapFlags = 1;
@@ -2472,48 +2475,6 @@ impl ::std::fmt::Debug for GstPad_ABI_abi {
 
 #[derive(Copy, Clone)]
 #[repr(C)]
-pub struct GstParamSpecArray {
-    pub parent_instance: gobject::GParamSpec,
-    pub element_spec: *mut gobject::GParamSpec,
-}
-
-impl ::std::fmt::Debug for GstParamSpecArray {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstParamSpecArray @ {self:p}"))
-            .field("parent_instance", &self.parent_instance)
-            .field("element_spec", &self.element_spec)
-            .finish()
-    }
-}
-
-#[derive(Copy, Clone)]
-#[repr(C)]
-pub struct GstParamSpecFraction {
-    pub parent_instance: gobject::GParamSpec,
-    pub min_num: c_int,
-    pub min_den: c_int,
-    pub max_num: c_int,
-    pub max_den: c_int,
-    pub def_num: c_int,
-    pub def_den: c_int,
-}
-
-impl ::std::fmt::Debug for GstParamSpecFraction {
-    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstParamSpecFraction @ {self:p}"))
-            .field("parent_instance", &self.parent_instance)
-            .field("min_num", &self.min_num)
-            .field("min_den", &self.min_den)
-            .field("max_num", &self.max_num)
-            .field("max_den", &self.max_den)
-            .field("def_num", &self.def_num)
-            .field("def_den", &self.def_den)
-            .finish()
-    }
-}
-
-#[derive(Copy, Clone)]
-#[repr(C)]
 pub struct GstParentBufferMeta {
     pub parent: GstMeta,
     pub buffer: *mut GstBuffer,
@@ -3870,30 +3831,44 @@ impl ::std::fmt::Debug for GstPadTemplate {
     }
 }
 
+#[derive(Copy, Clone)]
 #[repr(C)]
-#[allow(dead_code)]
-pub struct GstParamArray {
-    _data: [u8; 0],
-    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+pub struct GstParamSpecArray {
+    pub parent_instance: gobject::GParamSpec,
+    pub element_spec: *mut gobject::GParamSpec,
 }
 
-impl ::std::fmt::Debug for GstParamArray {
+impl ::std::fmt::Debug for GstParamSpecArray {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstParamArray @ {self:p}"))
+        f.debug_struct(&format!("GstParamSpecArray @ {self:p}"))
+            .field("parent_instance", &self.parent_instance)
+            .field("element_spec", &self.element_spec)
             .finish()
     }
 }
 
+#[derive(Copy, Clone)]
 #[repr(C)]
-#[allow(dead_code)]
-pub struct GstParamFraction {
-    _data: [u8; 0],
-    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+pub struct GstParamSpecFraction {
+    pub parent_instance: gobject::GParamSpec,
+    pub min_num: c_int,
+    pub min_den: c_int,
+    pub max_num: c_int,
+    pub max_den: c_int,
+    pub def_num: c_int,
+    pub def_den: c_int,
 }
 
-impl ::std::fmt::Debug for GstParamFraction {
+impl ::std::fmt::Debug for GstParamSpecFraction {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
-        f.debug_struct(&format!("GstParamFraction @ {self:p}"))
+        f.debug_struct(&format!("GstParamSpecFraction @ {self:p}"))
+            .field("parent_instance", &self.parent_instance)
+            .field("min_num", &self.min_num)
+            .field("min_den", &self.min_den)
+            .field("max_num", &self.max_num)
+            .field("max_den", &self.max_den)
+            .field("def_num", &self.def_num)
+            .field("def_den", &self.def_den)
             .finish()
     }
 }
@@ -9443,12 +9418,12 @@ unsafe extern "C" {
     pub fn gst_pad_template_set_documentation_caps(templ: *mut GstPadTemplate, caps: *mut GstCaps);
 
     //=========================================================================
-    // GstParamArray
+    // GstParamSpecArray
     //=========================================================================
     pub fn gst_param_spec_array_get_type() -> GType;
 
     //=========================================================================
-    // GstParamFraction
+    // GstParamSpecFraction
     //=========================================================================
     pub fn gst_param_spec_fraction_get_type() -> GType;
 

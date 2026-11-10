@@ -930,6 +930,7 @@ pub struct GESFrameCompositionMeta {
     pub width: c_double,
     pub zorder: c_uint,
     pub operator: c_int,
+    pub extra_properties: *mut gst::GstStructure,
 }
 
 impl ::std::fmt::Debug for GESFrameCompositionMeta {
@@ -943,6 +944,7 @@ impl ::std::fmt::Debug for GESFrameCompositionMeta {
             .field("width", &self.width)
             .field("zorder", &self.zorder)
             .field("operator", &self.operator)
+            .field("extra_properties", &self.extra_properties)
             .finish()
     }
 }

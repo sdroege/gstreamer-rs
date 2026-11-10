@@ -1746,6 +1746,7 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(guint) GST_EVENT_TYPE_DOWNSTREAM", "2"),
     ("(guint) GST_EVENT_TYPE_SERIALIZED", "4"),
     ("(guint) GST_EVENT_TYPE_STICKY", "8"),
+    ("(guint) GST_EVENT_TYPE_STICKY_FLUSHED", "1073741824"),
     ("(guint) GST_EVENT_TYPE_STICKY_MULTI", "16"),
     ("(guint) GST_EVENT_TYPE_UPSTREAM", "1"),
     ("(gint) GST_EVENT_UNKNOWN", "0"),

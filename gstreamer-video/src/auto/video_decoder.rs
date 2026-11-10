@@ -433,6 +433,20 @@ pub trait VideoDecoderExt: IsA<VideoDecoder> + 'static {
         ObjectExt::set_property(self.as_ref(), "qos", qos)
     }
 
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "qos-max-skip")]
+    fn qos_max_skip(&self) -> u64 {
+        ObjectExt::property(self.as_ref(), "qos-max-skip")
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "qos-max-skip")]
+    fn set_qos_max_skip(&self, qos_max_skip: u64) {
+        ObjectExt::set_property(self.as_ref(), "qos-max-skip", qos_max_skip)
+    }
+
     #[cfg(feature = "v1_20")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
     #[doc(alias = "automatic-request-sync-point-flags")]
@@ -655,6 +669,39 @@ pub trait VideoDecoderExt: IsA<VideoDecoder> + 'static {
                 c"notify::qos".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_qos_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "qos-max-skip")]
+    fn connect_qos_max_skip_notify<F: Fn(&Self) + Send + Sync + 'static>(
+        &self,
+        f: F,
+    ) -> SignalHandlerId {
+        unsafe extern "C" fn notify_qos_max_skip_trampoline<
+            P: IsA<VideoDecoder>,
+            F: Fn(&P) + Send + Sync + 'static,
+        >(
+            this: *mut ffi::GstVideoDecoder,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(VideoDecoder::from_glib_borrow(this).unsafe_cast_ref())
+            }
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::qos-max-skip".as_ptr(),
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_qos_max_skip_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )
