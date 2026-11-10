@@ -34,6 +34,14 @@ pub trait D3D12CmdAllocPoolExt: IsA<D3D12CmdAllocPool> + 'static {
             if ret { Some(from_glib_full(ca)) } else { None }
         }
     }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "gst_d3d12_cmd_alloc_pool_get_cmd_list_type")]
+    #[doc(alias = "get_cmd_list_type")]
+    fn cmd_list_type(&self) -> i32 {
+        unsafe { ffi::gst_d3d12_cmd_alloc_pool_get_cmd_list_type(self.as_ref().to_glib_none().0) }
+    }
 }
 
 impl<O: IsA<D3D12CmdAllocPool>> D3D12CmdAllocPoolExt for O {}

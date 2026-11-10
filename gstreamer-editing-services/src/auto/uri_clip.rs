@@ -34,6 +34,15 @@ impl UriClip {
 }
 
 pub trait UriClipExt: IsA<UriClip> + 'static {
+    //#[cfg(feature = "v1_30")]
+    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    //#[doc(alias = "ges_uri_clip_get_source_track_map")]
+    //#[doc(alias = "get_source_track_map")]
+    //#[doc(alias = "source-track-map")]
+    //fn source_track_map(&self) -> /*Ignored*/Option<SourceTrackMap> {
+    //    unsafe { TODO: call ffi:ges_uri_clip_get_source_track_map() }
+    //}
+
     #[doc(alias = "ges_uri_clip_get_uri")]
     #[doc(alias = "get_uri")]
     fn uri(&self) -> glib::GString {
@@ -65,6 +74,14 @@ pub trait UriClipExt: IsA<UriClip> + 'static {
             ffi::ges_uri_clip_set_mute(self.as_ref().to_glib_none().0, mute.into_glib());
         }
     }
+
+    //#[cfg(feature = "v1_30")]
+    //#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    //#[doc(alias = "ges_uri_clip_set_source_track_map")]
+    //#[doc(alias = "source-track-map")]
+    //fn set_source_track_map(&self, map: /*Ignored*/Option<SourceTrackMap>, created: /*Unimplemented*/Vec<TrackElement>) -> Result<(), glib::Error> {
+    //    unsafe { TODO: call ffi:ges_uri_clip_set_source_track_map() }
+    //}
 
     #[doc(alias = "is-image")]
     fn connect_is_image_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
@@ -110,6 +127,36 @@ pub trait UriClipExt: IsA<UriClip> + 'static {
                 c"notify::mute".as_ptr(),
                 Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
                     notify_mute_trampoline::<Self, F> as *const (),
+                )),
+                Box_::into_raw(f),
+            )
+        }
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "source-track-map")]
+    fn connect_source_track_map_notify<F: Fn(&Self) + 'static>(&self, f: F) -> SignalHandlerId {
+        unsafe extern "C" fn notify_source_track_map_trampoline<
+            P: IsA<UriClip>,
+            F: Fn(&P) + 'static,
+        >(
+            this: *mut ffi::GESUriClip,
+            _param_spec: glib::ffi::gpointer,
+            f: glib::ffi::gpointer,
+        ) {
+            unsafe {
+                let f: &F = &*(f as *const F);
+                f(UriClip::from_glib_borrow(this).unsafe_cast_ref())
+            }
+        }
+        unsafe {
+            let f: Box_<F> = Box_::new(f);
+            connect_raw(
+                self.as_ptr() as *mut _,
+                c"notify::source-track-map".as_ptr(),
+                Some(std::mem::transmute::<*const (), unsafe extern "C" fn()>(
+                    notify_source_track_map_trampoline::<Self, F> as *const (),
                 )),
                 Box_::into_raw(f),
             )

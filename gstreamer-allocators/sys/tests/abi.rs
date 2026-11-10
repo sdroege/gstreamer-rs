@@ -325,6 +325,7 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
         "memory:AHardwareBuffer",
     ),
     ("GST_CAPS_FEATURE_MEMORY_DMABUF", "memory:DMABuf"),
+    ("GST_CAPS_FEATURE_MEMORY_IOSURFACE", "memory:IOSurface"),
     ("(guint) GST_FD_MEMORY_FLAG_DONT_CLOSE", "4"),
     ("(guint) GST_FD_MEMORY_FLAG_KEEP_MAPPED", "1"),
     ("(guint) GST_FD_MEMORY_FLAG_MAP_PRIVATE", "2"),

@@ -308,6 +308,13 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "GstD3D12DecoderSessionReuse",
+        Layout {
+            size: size_of::<GstD3D12DecoderSessionReuse>(),
+            alignment: align_of::<GstD3D12DecoderSessionReuse>(),
+        },
+    ),
+    (
         "GstD3D12DescHeapPool",
         Layout {
             size: size_of::<GstD3D12DescHeapPool>(),
@@ -405,6 +412,41 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
             alignment: align_of::<GstD3D12PoolAllocatorClass>(),
         },
     ),
+    (
+        "GstD3D12StagingAllocator",
+        Layout {
+            size: size_of::<GstD3D12StagingAllocator>(),
+            alignment: align_of::<GstD3D12StagingAllocator>(),
+        },
+    ),
+    (
+        "GstD3D12StagingAllocatorClass",
+        Layout {
+            size: size_of::<GstD3D12StagingAllocatorClass>(),
+            alignment: align_of::<GstD3D12StagingAllocatorClass>(),
+        },
+    ),
+    (
+        "GstD3D12StagingBufferPool",
+        Layout {
+            size: size_of::<GstD3D12StagingBufferPool>(),
+            alignment: align_of::<GstD3D12StagingBufferPool>(),
+        },
+    ),
+    (
+        "GstD3D12StagingBufferPoolClass",
+        Layout {
+            size: size_of::<GstD3D12StagingBufferPoolClass>(),
+            alignment: align_of::<GstD3D12StagingBufferPoolClass>(),
+        },
+    ),
+    (
+        "GstD3D12StagingMemory",
+        Layout {
+            size: size_of::<GstD3D12StagingMemory>(),
+            alignment: align_of::<GstD3D12StagingMemory>(),
+        },
+    ),
 ];
 
 const RUST_CONSTANTS: &[(&str, &str)] = &[
@@ -458,6 +500,12 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
         "GST_D3D12_CONVERTER_OPT_SRC_ALPHA_MODE",
         "GstD3D12Converter.src-alpha-mode",
     ),
+    ("(gint) GST_D3D12_DECODER_SESSION_REUSE_ALL", "1"),
+    ("(gint) GST_D3D12_DECODER_SESSION_REUSE_DISABLED", "0"),
+    (
+        "(gint) GST_D3D12_DECODER_SESSION_REUSE_WITHOUT_TEXTURES",
+        "2",
+    ),
     (
         "GST_D3D12_DEVICE_HANDLE_CONTEXT_TYPE",
         "gst.d3d12.device.handle",
@@ -471,6 +519,7 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("GST_D3D12_MEMORY_NAME", "D3D12Memory"),
     ("(guint) GST_D3D12_MEMORY_TRANSFER_NEED_DOWNLOAD", "1048576"),
     ("(guint) GST_D3D12_MEMORY_TRANSFER_NEED_UPLOAD", "2097152"),
+    ("GST_D3D12_STAGING_MEMORY_NAME", "D3D12StagingMemory"),
     ("GST_MAP_D3D12", "131072"),
     ("GST_MAP_READ_D3D12", "131073"),
     ("GST_MAP_WRITE_D3D12", "131074"),

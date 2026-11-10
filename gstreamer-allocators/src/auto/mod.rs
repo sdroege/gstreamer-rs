@@ -74,6 +74,9 @@ pub use self::constants::ALLOCATOR_UDMABUF;
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
 pub use self::constants::CAPS_FEATURE_MEMORY_AHARDWAREBUFFER;
 pub use self::constants::CAPS_FEATURE_MEMORY_DMABUF;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub use self::constants::CAPS_FEATURE_MEMORY_IOSURFACE;
 
 pub(crate) mod traits {
     pub use super::phys_memory_allocator::PhysMemoryAllocatorExt;

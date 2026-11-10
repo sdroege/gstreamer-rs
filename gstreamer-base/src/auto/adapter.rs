@@ -32,6 +32,13 @@ impl Adapter {
         unsafe { ffi::gst_adapter_available_fast(self.to_glib_none().0) }
     }
 
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "gst_adapter_buffer_seq_at_offset")]
+    pub fn buffer_seq_at_offset(&self, offset: usize) -> u64 {
+        unsafe { ffi::gst_adapter_buffer_seq_at_offset(self.to_glib_none().0, offset) }
+    }
+
     #[doc(alias = "gst_adapter_clear")]
     pub fn clear(&self) {
         unsafe {
@@ -47,6 +54,21 @@ impl Adapter {
     #[doc(alias = "gst_adapter_dts_at_discont")]
     pub fn dts_at_discont(&self) -> Option<gst::ClockTime> {
         unsafe { from_glib(ffi::gst_adapter_dts_at_discont(self.to_glib_none().0)) }
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "gst_adapter_dts_at_offset")]
+    pub fn dts_at_offset(&self, offset: usize) -> (Option<gst::ClockTime>, u64) {
+        unsafe {
+            let mut distance = std::mem::MaybeUninit::uninit();
+            let ret = from_glib(ffi::gst_adapter_dts_at_offset(
+                self.to_glib_none().0,
+                offset,
+                distance.as_mut_ptr(),
+            ));
+            (ret, distance.assume_init())
+        }
     }
 
     #[doc(alias = "gst_adapter_offset_at_discont")]
@@ -116,6 +138,21 @@ impl Adapter {
     #[doc(alias = "gst_adapter_pts_at_discont")]
     pub fn pts_at_discont(&self) -> Option<gst::ClockTime> {
         unsafe { from_glib(ffi::gst_adapter_pts_at_discont(self.to_glib_none().0)) }
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "gst_adapter_pts_at_offset")]
+    pub fn pts_at_offset(&self, offset: usize) -> (Option<gst::ClockTime>, u64) {
+        unsafe {
+            let mut distance = std::mem::MaybeUninit::uninit();
+            let ret = from_glib(ffi::gst_adapter_pts_at_offset(
+                self.to_glib_none().0,
+                offset,
+                distance.as_mut_ptr(),
+            ));
+            (ret, distance.assume_init())
+        }
     }
 }
 

@@ -233,6 +233,7 @@ pub(crate) mod traits {
     pub use super::multi_file_source::MultiFileSourceExt;
     pub use super::pipeline::GESPipelineExt;
     pub use super::project::ProjectExt;
+    pub use super::source::SourceExt;
     pub use super::test_clip::TestClipExt;
     pub use super::text_overlay::TextOverlayExt;
     pub use super::text_overlay_clip::TextOverlayClipExt;

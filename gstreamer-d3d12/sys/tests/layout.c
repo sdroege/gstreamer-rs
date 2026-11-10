@@ -23,6 +23,7 @@ int main() {
     printf("%s;%zu;%zu\n", "GstD3D12ConverterColorBalance", sizeof(GstD3D12ConverterColorBalance), alignof(GstD3D12ConverterColorBalance));
     printf("%s;%zu;%zu\n", "GstD3D12ConverterMipGen", sizeof(GstD3D12ConverterMipGen), alignof(GstD3D12ConverterMipGen));
     printf("%s;%zu;%zu\n", "GstD3D12ConverterSamplerFilter", sizeof(GstD3D12ConverterSamplerFilter), alignof(GstD3D12ConverterSamplerFilter));
+    printf("%s;%zu;%zu\n", "GstD3D12DecoderSessionReuse", sizeof(GstD3D12DecoderSessionReuse), alignof(GstD3D12DecoderSessionReuse));
     printf("%s;%zu;%zu\n", "GstD3D12DescHeapPool", sizeof(GstD3D12DescHeapPool), alignof(GstD3D12DescHeapPool));
     printf("%s;%zu;%zu\n", "GstD3D12DescHeapPoolClass", sizeof(GstD3D12DescHeapPoolClass), alignof(GstD3D12DescHeapPoolClass));
     printf("%s;%zu;%zu\n", "GstD3D12Device", sizeof(GstD3D12Device), alignof(GstD3D12Device));
@@ -37,5 +38,10 @@ int main() {
     printf("%s;%zu;%zu\n", "GstD3D12MemoryTransfer", sizeof(GstD3D12MemoryTransfer), alignof(GstD3D12MemoryTransfer));
     printf("%s;%zu;%zu\n", "GstD3D12PoolAllocator", sizeof(GstD3D12PoolAllocator), alignof(GstD3D12PoolAllocator));
     printf("%s;%zu;%zu\n", "GstD3D12PoolAllocatorClass", sizeof(GstD3D12PoolAllocatorClass), alignof(GstD3D12PoolAllocatorClass));
+    printf("%s;%zu;%zu\n", "GstD3D12StagingAllocator", sizeof(GstD3D12StagingAllocator), alignof(GstD3D12StagingAllocator));
+    printf("%s;%zu;%zu\n", "GstD3D12StagingAllocatorClass", sizeof(GstD3D12StagingAllocatorClass), alignof(GstD3D12StagingAllocatorClass));
+    printf("%s;%zu;%zu\n", "GstD3D12StagingBufferPool", sizeof(GstD3D12StagingBufferPool), alignof(GstD3D12StagingBufferPool));
+    printf("%s;%zu;%zu\n", "GstD3D12StagingBufferPoolClass", sizeof(GstD3D12StagingBufferPoolClass), alignof(GstD3D12StagingBufferPoolClass));
+    printf("%s;%zu;%zu\n", "GstD3D12StagingMemory", sizeof(GstD3D12StagingMemory), alignof(GstD3D12StagingMemory));
     return 0;
 }

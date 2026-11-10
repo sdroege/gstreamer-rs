@@ -728,6 +728,13 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "GESSourceTrackMapEntry",
+        Layout {
+            size: size_of::<GESSourceTrackMapEntry>(),
+            alignment: align_of::<GESSourceTrackMapEntry>(),
+        },
+    ),
+    (
         "GESTestClip",
         Layout {
             size: size_of::<GESTestClip>(),
