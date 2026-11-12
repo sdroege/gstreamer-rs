@@ -233,6 +233,25 @@ pub trait AnalyticsMetaRefExt<'a>: sealed::Sealed {
         an_meta_id: u32,
         rel_type: RelTypes,
     ) -> AnalyticsMtdIter<'a, T>;
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    // rustdoc-stripper-ignore-next
+    /// Find provenance by its correlation ID and the tensor ID matching `key`.
+    fn find_tensor_provenance(
+        &'a self,
+        key: glib::Quark,
+        correlation_id: std::num::NonZeroI64,
+    ) -> Option<AnalyticsMtdRef<'a, crate::AnalyticsTensorProvenanceMtd>>;
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    // rustdoc-stripper-ignore-next
+    /// Return the provenance for `group_id` if exactly one entry matches.
+    fn find_single_provenance(
+        &'a self,
+        group_id: glib::Quark,
+    ) -> Option<AnalyticsMtdRef<'a, crate::AnalyticsTensorProvenanceMtd>>;
 }
 
 impl<'a> AnalyticsMetaRefExt<'a> for gst::MetaRef<'a, AnalyticsRelationMeta> {
@@ -264,6 +283,35 @@ impl<'a> AnalyticsMetaRefExt<'a> for gst::MetaRef<'a, AnalyticsRelationMeta> {
         rel_type: RelTypes,
     ) -> AnalyticsMtdIter<'a, T> {
         AnalyticsMtdIter::new_direct_related(self, an_meta_id, rel_type.into_glib())
+    }
+
+    #[cfg(feature = "v1_30")]
+    fn find_tensor_provenance(
+        &'a self,
+        key: glib::Quark,
+        correlation_id: std::num::NonZeroI64,
+    ) -> Option<AnalyticsMtdRef<'a, crate::AnalyticsTensorProvenanceMtd>> {
+        self.iter::<crate::AnalyticsTensorProvenanceMtd>()
+            .find(|mtd| {
+                mtd.correlation_id() == correlation_id.get() && mtd.tensor_id() == Some(key)
+            })
+    }
+
+    #[cfg(feature = "v1_30")]
+    fn find_single_provenance(
+        &'a self,
+        group_id: glib::Quark,
+    ) -> Option<AnalyticsMtdRef<'a, crate::AnalyticsTensorProvenanceMtd>> {
+        let mut matches = self
+            .iter::<crate::AnalyticsTensorProvenanceMtd>()
+            .filter(|mtd| mtd.group_id() == Some(group_id));
+
+        let provenance = matches.next()?;
+        if matches.next().is_some() {
+            return None;
+        }
+
+        Some(provenance)
     }
 }
 

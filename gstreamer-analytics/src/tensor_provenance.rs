@@ -258,8 +258,15 @@ mod tests {
         );
         let mut buf = gst::Buffer::new();
         let mut meta = AnalyticsRelationMeta::add(buf.make_mut());
+        let unique_group = glib::Quark::from_str("unique-group");
+        let unique_id = meta
+            .add_tensor_provenance_mtd(unique_group, &tensor)
+            .unwrap()
+            .id();
+
         let provenance = meta.add_tensor_provenance_mtd(group_id, &tensor).unwrap();
-        drop(tensor);
+        let other_correlation_id = std::num::NonZeroI64::new(provenance.correlation_id()).unwrap();
+        let provenance = meta.add_tensor_provenance_mtd(group_id, &tensor).unwrap();
 
         assert_eq!(provenance.group_id(), Some(group_id));
         assert_eq!(provenance.tensor_id(), Some(tensor_id));
@@ -268,11 +275,32 @@ mod tests {
         assert!(provenance.transform_point(1.0, 2.0).is_none());
 
         let id = provenance.id();
+        let correlation_id = std::num::NonZeroI64::new(provenance.correlation_id()).unwrap();
         let mut provenance_mut = meta.mtd_mut::<AnalyticsTensorProvenanceMtd>(id).unwrap();
         let transform = [2.0, 0.0, 10.0, 0.0, 3.0, 20.0, 0.0, 0.0, 1.0];
         provenance_mut.set_spatial_transform(&transform).unwrap();
 
-        let provenance: AnalyticsMtdRef<_> = provenance_mut.into();
+        let meta = buf.meta::<AnalyticsRelationMeta>().unwrap();
+        assert_eq!(
+            meta.find_single_provenance(unique_group).unwrap().id(),
+            unique_id
+        );
+        assert!(meta.find_single_provenance(group_id).is_none());
+        assert!(meta.find_single_provenance(tensor_id).is_none());
+        assert!(
+            meta.find_tensor_provenance(group_id, correlation_id)
+                .is_none()
+        );
+        assert!(
+            meta.find_tensor_provenance(tensor_id, other_correlation_id)
+                .unwrap()
+                .spatial_transform()
+                .is_none()
+        );
+        let provenance = meta
+            .find_tensor_provenance(tensor_id, correlation_id)
+            .unwrap();
+        assert_eq!(provenance.id(), id);
         assert!(provenance.has_spatial_transform());
         assert_eq!(provenance.spatial_transform(), Some(transform));
         assert_eq!(provenance.transform_point(1.0, 2.0).unwrap(), (12.0, 26.0));
