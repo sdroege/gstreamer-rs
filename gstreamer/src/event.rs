@@ -106,6 +106,16 @@ impl EventType {
     pub fn is_sticky_multi(self) -> bool {
         (self.into_glib() as u32) & ffi::GST_EVENT_TYPE_STICKY_MULTI != 0
     }
+
+    // Implemented via gst_event_type_get_flags() because unlike the other
+    // sticky flags, STICKY_FLUSHED is not part of the event type value.
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "GST_EVENT_IS_STICKY_FLUSHED")]
+    #[inline]
+    pub fn is_sticky_flushed(self) -> bool {
+        self.flags().contains(crate::EventTypeFlags::STICKY_FLUSHED)
+    }
 }
 
 impl PartialOrd for EventType {
@@ -229,6 +239,14 @@ impl EventRef {
     #[inline]
     pub fn is_sticky_multi(&self) -> bool {
         self.type_().is_sticky_multi()
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "GST_EVENT_IS_STICKY_FLUSHED")]
+    #[inline]
+    pub fn is_sticky_flushed(&self) -> bool {
+        self.type_().is_sticky_flushed()
     }
 
     #[doc(alias = "get_type")]
