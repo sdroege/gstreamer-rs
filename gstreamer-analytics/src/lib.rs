@@ -51,6 +51,13 @@ mod tensor_list_meta;
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
 pub use crate::tensor_list_meta::*;
 
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+mod tensor_meta_view;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub use crate::tensor_meta_view::*;
+
 mod relation_meta;
 pub use crate::relation_meta::*;
 

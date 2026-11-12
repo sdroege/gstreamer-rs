@@ -5,6 +5,39 @@ use gst::prelude::*;
 
 use crate::Tensor;
 use crate::ffi;
+#[cfg(feature = "v1_28")]
+use crate::{TensorDataType, TensorDimOrder, TensorRef};
+
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+#[derive(Debug, Clone, Copy)]
+pub struct TypedTensorDesc<'a> {
+    pub(crate) id: glib::Quark,
+    pub(crate) data_type: TensorDataType,
+    pub(crate) order: TensorDimOrder,
+    pub(crate) dims: &'a [usize],
+}
+
+#[cfg(feature = "v1_28")]
+impl<'a> TypedTensorDesc<'a> {
+    // rustdoc-stripper-ignore-next
+    /// Use `usize::MAX` for wildcard dimensions.
+    pub const fn new(
+        id: glib::Quark,
+        data_type: TensorDataType,
+        order: TensorDimOrder,
+        dims: &'a [usize],
+    ) -> Self {
+        skip_assert_initialized!();
+
+        Self {
+            id,
+            data_type,
+            order,
+            dims,
+        }
+    }
+}
 
 #[repr(transparent)]
 #[doc(alias = "GstTensorMeta")]
@@ -61,6 +94,13 @@ impl TensorMeta {
         self.as_slice()
             .iter()
             .find(|t| t.id() == id && t.check_type(data_type, order, dims))
+    }
+
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub fn get(&self, desc: &TypedTensorDesc<'_>) -> Option<&TensorRef> {
+        self.typed_tensor(desc.id, desc.data_type, desc.order, desc.dims)
+            .map(AsRef::as_ref)
     }
 }
 
