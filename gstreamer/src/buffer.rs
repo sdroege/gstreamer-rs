@@ -723,6 +723,50 @@ impl BufferRef {
         }
     }
 
+    // rustdoc-stripper-ignore-next
+    /// Find the first meta of type `T` that matches `predicate`.
+    pub fn find_meta<T, F>(&self, mut predicate: F) -> Option<MetaRef<'_, T>>
+    where
+        T: MetaAPI,
+        F: FnMut(&T) -> bool,
+    {
+        self.iter_meta::<T>().find(|meta| predicate(meta))
+    }
+
+    // rustdoc-stripper-ignore-next
+    /// Find the first meta that matches `predicate` and return a mutable reference that can be removed.
+    pub fn find_meta_mut<T, F>(&mut self, mut predicate: F) -> Option<MetaRefMut<'_, T, Standalone>>
+    where
+        T: MetaAPI,
+        F: FnMut(&T) -> bool,
+    {
+        let api = T::meta_api();
+        let mut state = ptr::null_mut();
+
+        loop {
+            unsafe {
+                let meta = if api == glib::Type::INVALID {
+                    ffi::gst_buffer_iterate_meta(self.as_mut_ptr(), &mut state)
+                } else {
+                    ffi::gst_buffer_iterate_meta_filtered(
+                        self.as_mut_ptr(),
+                        &mut state,
+                        api.into_glib(),
+                    )
+                };
+
+                if meta.is_null() {
+                    return None;
+                }
+
+                let meta = meta.cast::<T::GstType>();
+                if predicate(&T::from_ptr(self, meta)) {
+                    return Some(T::from_mut_ptr(self, meta));
+                }
+            }
+        }
+    }
+
     pub fn iter_meta<T: MetaAPI>(&self) -> MetaIter<'_, T> {
         MetaIter::new(self)
     }
@@ -1875,6 +1919,35 @@ mod tests {
         });
 
         assert_eq!(&[ClockTime::ZERO, ClockTime::SECOND][..], &res[..]);
+    }
+
+    #[test]
+    fn test_find_meta_mut_remove() {
+        crate::init().unwrap();
+
+        let mut buffer = Buffer::new();
+        let buffer = buffer.get_mut().unwrap();
+        let reference = crate::Caps::builder("foo/bar").build();
+        for timestamp in [ClockTime::ZERO, ClockTime::SECOND] {
+            crate::ReferenceTimestampMeta::add(buffer, &reference, timestamp, ClockTime::NONE);
+        }
+
+        let matches = |meta: &crate::ReferenceTimestampMeta| meta.timestamp() == ClockTime::SECOND;
+        assert_eq!(
+            buffer.find_meta(matches).unwrap().timestamp(),
+            ClockTime::SECOND
+        );
+        buffer.find_meta_mut(matches).unwrap().remove().unwrap();
+
+        assert!(buffer.find_meta(matches).is_none());
+        assert!(buffer.find_meta_mut(matches).is_none());
+        assert_eq!(
+            buffer
+                .meta::<crate::ReferenceTimestampMeta>()
+                .unwrap()
+                .timestamp(),
+            ClockTime::ZERO,
+        );
     }
 
     #[test]
