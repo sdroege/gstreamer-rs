@@ -174,10 +174,19 @@ mod tests {
             crate::ElementFlags::all(),
             "\"locked-state+sink+source+provide-clock+require-clock+indexable\""
         );
-        check_serialize!(
-            crate::EventTypeFlags::all(),
-            "\"upstream+downstream+serialized+sticky+sticky-multi\""
-        );
+        cfg_if::cfg_if! {
+            if #[cfg(feature = "v1_30")] {
+                check_serialize!(
+                    crate::EventTypeFlags::all(),
+                    "\"upstream+downstream+serialized+sticky+sticky-multi+sticky-flushed\""
+                );
+            } else {
+                check_serialize!(
+                    crate::EventTypeFlags::all(),
+                    "\"upstream+downstream+serialized+sticky+sticky-multi\""
+                );
+            }
+        }
         #[cfg(feature = "v1_20")]
         check_serialize!(crate::GapFlags::all(), "\"data\"");
         check_serialize!(
@@ -269,10 +278,19 @@ mod tests {
         check_serialize!(crate::SerializeFlags::all(), "\"backward-compat\"");
         check_serialize!(crate::StackTraceFlags::all(), "\"full\"");
         check_serialize!(crate::StreamFlags::all(), "\"sparse+select+unselect\"");
-        check_serialize!(
-            crate::StreamType::all(),
-            "\"unknown+audio+video+container+text+metadata\""
-        );
+        cfg_if::cfg_if! {
+            if #[cfg(feature = "v1_28")] {
+                check_serialize!(
+                    crate::StreamType::all(),
+                    "\"unknown+audio+video+container+text+metadata\""
+                );
+            } else {
+                check_serialize!(
+                    crate::StreamType::all(),
+                    "\"unknown+audio+video+container+text\""
+                );
+            }
+        }
     }
 
     #[test]
@@ -361,11 +379,21 @@ mod tests {
             crate::ElementFlags::all(),
             "\"locked-state+sink+source+provide-clock+require-clock+indexable\""
         );
-        check_deserialize!(
-            crate::EventTypeFlags,
-            crate::EventTypeFlags::all(),
-            "\"upstream+downstream+serialized+sticky+sticky-multi\""
-        );
+        cfg_if::cfg_if! {
+            if #[cfg(feature = "v1_30")] {
+                check_deserialize!(
+                    crate::EventTypeFlags,
+                    crate::EventTypeFlags::all(),
+                    "\"upstream+downstream+serialized+sticky+sticky-multi+sticky-flushed\""
+                );
+            } else {
+                check_deserialize!(
+                    crate::EventTypeFlags,
+                    crate::EventTypeFlags::all(),
+                    "\"upstream+downstream+serialized+sticky+sticky-multi\""
+                );
+            }
+        }
         #[cfg(feature = "v1_20")]
         check_deserialize!(crate::GapFlags, crate::GapFlags::all(), "\"data\"");
         check_deserialize!(
@@ -493,11 +521,21 @@ mod tests {
             crate::StreamFlags::all(),
             "\"sparse+select+unselect\""
         );
-        check_deserialize!(
-            crate::StreamType,
-            crate::StreamType::all(),
-            "\"unknown+audio+video+container+text+metadata\""
-        );
+        cfg_if::cfg_if! {
+            if #[cfg(feature = "v1_28")] {
+                check_deserialize!(
+                    crate::StreamType,
+                    crate::StreamType::all(),
+                    "\"unknown+audio+video+container+text+metadata\""
+                );
+            } else {
+                check_deserialize!(
+                    crate::StreamType,
+                    crate::StreamType::all(),
+                    "\"unknown+audio+video+container+text\""
+                );
+            }
+        }
     }
 
     #[test]
