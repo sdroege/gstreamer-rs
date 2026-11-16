@@ -168,7 +168,7 @@ unsafe extern "C" fn tagdemux_identify_tag<T: TagDemuxImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, false, {
+        gst::panic_to_error!(imp, false, {
             match imp.identify_tag(&from_glib_borrow(buffer), from_glib(start_tag)) {
                 Some(size) => {
                     *tag_size = size as u32;
@@ -192,7 +192,7 @@ unsafe extern "C" fn tagdemux_parse_tag<T: TagDemuxImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, ffi::GST_TAG_DEMUX_RESULT_BROKEN_TAG, {
+        gst::panic_to_error!(imp, ffi::GST_TAG_DEMUX_RESULT_BROKEN_TAG, {
             match imp.parse_tag(&from_glib_borrow(buffer), from_glib(start_tag)) {
                 Ok((size, Some(tag_list))) => {
                     *tag_size = size as u32;
@@ -223,7 +223,7 @@ unsafe extern "C" fn tagdemux_merge_tags<T: TagDemuxImpl>(
         let instance = &*(ptr as *mut T::Instance);
         let imp = instance.imp();
 
-        gst::element_panic_to_error!(imp, None, {
+        gst::panic_to_error!(imp, None, {
             imp.merge_tags(
                 Option::<_>::from_glib_borrow(start_tags).as_ref().as_ref(),
                 Option::<_>::from_glib_borrow(end_tags).as_ref().as_ref(),
