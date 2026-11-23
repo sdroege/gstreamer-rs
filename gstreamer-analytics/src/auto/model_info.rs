@@ -63,27 +63,6 @@ impl ModelInfo {
         }
     }
 
-    #[doc(alias = "gst_analytics_modelinfo_get_quark_group_id")]
-    #[doc(alias = "get_quark_group_id")]
-    pub fn quark_group_id(&self) -> glib::Quark {
-        unsafe {
-            from_glib(ffi::gst_analytics_modelinfo_get_quark_group_id(
-                mut_override(self.to_glib_none().0),
-            ))
-        }
-    }
-
-    #[doc(alias = "gst_analytics_modelinfo_get_quark_id")]
-    #[doc(alias = "get_quark_id")]
-    pub fn quark_id(&self, tensor_name: &str) -> glib::Quark {
-        unsafe {
-            from_glib(ffi::gst_analytics_modelinfo_get_quark_id(
-                mut_override(self.to_glib_none().0),
-                tensor_name.to_glib_none().0,
-            ))
-        }
-    }
-
     #[doc(alias = "gst_analytics_modelinfo_get_version")]
     #[doc(alias = "get_version")]
     pub fn version(&self) -> glib::GString {

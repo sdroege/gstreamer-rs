@@ -123,4 +123,27 @@ impl ModelInfo {
             ))
         }
     }
+
+    #[doc(alias = "gst_analytics_modelinfo_get_quark_group_id")]
+    #[doc(alias = "get_quark_group_id")]
+    pub fn quark_group_id(&self) -> Option<glib::Quark> {
+        unsafe {
+            try_from_glib(ffi::gst_analytics_modelinfo_get_quark_group_id(
+                self.to_glib_none().0,
+            ))
+            .ok()
+        }
+    }
+
+    #[doc(alias = "gst_analytics_modelinfo_get_quark_id")]
+    #[doc(alias = "get_quark_id")]
+    pub fn quark_id(&self, tensor_name: &str) -> Option<glib::Quark> {
+        unsafe {
+            try_from_glib(ffi::gst_analytics_modelinfo_get_quark_id(
+                self.to_glib_none().0,
+                tensor_name.to_glib_none().0,
+            ))
+            .ok()
+        }
+    }
 }
