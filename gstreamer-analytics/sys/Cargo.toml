@@ -7,6 +7,9 @@ libc = "0.2"
 [dependencies.glib-sys]
 workspace = true
 
+[dependencies.gobject-sys]
+workspace = true
+
 [dependencies.gstreamer-sys]
 workspace = true
 
