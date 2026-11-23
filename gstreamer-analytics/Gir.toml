@@ -69,6 +69,14 @@ status = "generate"
     manual = true
 
     [[object.function]]
+    name = "get_quark_group_id"
+    manual = true
+
+    [[object.function]]
+    name = "get_quark_id"
+    manual = true
+
+    [[object.function]]
     name = "get_target_ranges"
     manual = true
 
