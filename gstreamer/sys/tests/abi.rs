@@ -1526,6 +1526,7 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     ("(guint) GST_ALLOCATOR_FLAG_NO_COPY", "32"),
     ("GST_ALLOCATOR_SYSMEM", "SystemMemory"),
     ("(guint) GST_BIN_FLAG_LAST", "524288"),
+    ("(guint) GST_BIN_FLAG_NO_AUTO_GHOSTPADS", "65536"),
     ("(guint) GST_BIN_FLAG_NO_RESYNC", "16384"),
     ("(guint) GST_BIN_FLAG_STREAMS_AWARE", "32768"),
     ("(gint) GST_BUFFERING_DOWNLOAD", "1"),

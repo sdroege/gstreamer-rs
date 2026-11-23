@@ -14,6 +14,10 @@ bitflags! {
         const NO_RESYNC = ffi::GST_BIN_FLAG_NO_RESYNC as _;
         #[doc(alias = "GST_BIN_FLAG_STREAMS_AWARE")]
         const STREAMS_AWARE = ffi::GST_BIN_FLAG_STREAMS_AWARE as _;
+        #[cfg(feature = "v1_30")]
+        #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+        #[doc(alias = "GST_BIN_FLAG_NO_AUTO_GHOSTPADS")]
+        const NO_AUTO_GHOSTPADS = ffi::GST_BIN_FLAG_NO_AUTO_GHOSTPADS as _;
     }
 }
 

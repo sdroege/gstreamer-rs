@@ -1400,6 +1400,20 @@ unsafe extern "C" {
         uri: *const c_char,
         nonce: *const c_char,
     ) -> *mut c_char;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_rtsp_generate_digest_auth_response_with_qop(
+        algorithm: *const c_char,
+        method: *const c_char,
+        realm: *const c_char,
+        username: *const c_char,
+        password: *const c_char,
+        uri: *const c_char,
+        nonce: *const c_char,
+        qop: *const c_char,
+        nc: *const c_char,
+        cnonce: *const c_char,
+    ) -> *mut c_char;
     pub fn gst_rtsp_header_allow_multiple(field: GstRTSPHeaderField) -> gboolean;
     pub fn gst_rtsp_header_as_text(field: GstRTSPHeaderField) -> *const c_char;
     pub fn gst_rtsp_message_new(msg: *mut *mut GstRTSPMessage) -> GstRTSPResult;

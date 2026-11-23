@@ -673,6 +673,9 @@ pub const GST_ALLOCATOR_FLAG_LAST: GstAllocatorFlags = 1048576;
 pub type GstBinFlags = c_uint;
 pub const GST_BIN_FLAG_NO_RESYNC: GstBinFlags = 16384;
 pub const GST_BIN_FLAG_STREAMS_AWARE: GstBinFlags = 32768;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub const GST_BIN_FLAG_NO_AUTO_GHOSTPADS: GstBinFlags = 65536;
 pub const GST_BIN_FLAG_LAST: GstBinFlags = 524288;
 
 pub type GstBufferCopyFlags = c_uint;

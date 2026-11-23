@@ -3,6 +3,9 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+use crate::{ModelInfoTensorDirection, TensorDataType};
 use crate::{TensorDimOrder, ffi};
 use glib::translate::*;
 
@@ -63,6 +66,64 @@ impl ModelInfo {
         }
     }
 
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "gst_analytics_modelinfo_get_tensor_data_type")]
+    #[doc(alias = "get_tensor_data_type")]
+    pub fn tensor_data_type(&self, tensor_name: &str) -> Option<TensorDataType> {
+        unsafe {
+            let mut data_type = std::mem::MaybeUninit::uninit();
+            let ret = from_glib(ffi::gst_analytics_modelinfo_get_tensor_data_type(
+                mut_override(self.to_glib_none().0),
+                tensor_name.to_glib_none().0,
+                data_type.as_mut_ptr(),
+            ));
+            if ret {
+                Some(from_glib(data_type.assume_init()))
+            } else {
+                None
+            }
+        }
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "gst_analytics_modelinfo_get_tensor_dims")]
+    #[doc(alias = "get_tensor_dims")]
+    pub fn tensor_dims(&self, tensor_name: &str) -> Option<Vec<i32>> {
+        unsafe {
+            let mut num_dims = std::mem::MaybeUninit::uninit();
+            let mut dims = std::ptr::null_mut();
+            let ret = from_glib(ffi::gst_analytics_modelinfo_get_tensor_dims(
+                mut_override(self.to_glib_none().0),
+                tensor_name.to_glib_none().0,
+                num_dims.as_mut_ptr(),
+                &mut dims,
+            ));
+            if ret {
+                Some(FromGlibContainer::from_glib_full_num(
+                    dims,
+                    num_dims.assume_init() as _,
+                ))
+            } else {
+                None
+            }
+        }
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "gst_analytics_modelinfo_get_tensor_names")]
+    #[doc(alias = "get_tensor_names")]
+    pub fn tensor_names(&self, dir: ModelInfoTensorDirection) -> Vec<glib::GString> {
+        unsafe {
+            FromGlibPtrContainer::from_glib_full(ffi::gst_analytics_modelinfo_get_tensor_names(
+                mut_override(self.to_glib_none().0),
+                dir.into_glib(),
+            ))
+        }
+    }
+
     #[doc(alias = "gst_analytics_modelinfo_get_version")]
     #[doc(alias = "get_version")]
     pub fn version(&self) -> glib::GString {
@@ -79,6 +140,18 @@ impl ModelInfo {
         unsafe {
             from_glib_full(ffi::gst_analytics_modelinfo_load(
                 model_filename.as_ref().to_glib_none().0,
+            ))
+        }
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "gst_analytics_modelinfo_load_from_file")]
+    pub fn load_from_file(filename: impl AsRef<std::path::Path>) -> Option<ModelInfo> {
+        assert_initialized_main_thread!();
+        unsafe {
+            from_glib_full(ffi::gst_analytics_modelinfo_load_from_file(
+                filename.as_ref().to_glib_none().0,
             ))
         }
     }

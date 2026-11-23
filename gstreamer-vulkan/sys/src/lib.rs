@@ -2875,6 +2875,14 @@ unsafe extern "C" {
     pub fn gst_vulkan_get_or_create_image_view(
         image: *mut GstVulkanImageMemory,
     ) -> *mut GstVulkanImageView;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_vulkan_get_or_create_image_view_for_plane(
+        buffer: *mut gst::GstBuffer,
+        info: *const gst_video::GstVideoInfo,
+        plane: c_uint,
+        error: *mut *mut glib::GError,
+    ) -> *mut GstVulkanImageView;
     #[cfg(feature = "v1_24")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_24")))]
     pub fn gst_vulkan_get_or_create_image_view_with_info(

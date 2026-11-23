@@ -687,6 +687,7 @@ pub const GST_VIDEO_CONVERTER_OPT_SRC_WIDTH: &[u8] = b"GstVideoConverter.src-wid
 pub const GST_VIDEO_CONVERTER_OPT_SRC_X: &[u8] = b"GstVideoConverter.src-x\0";
 pub const GST_VIDEO_CONVERTER_OPT_SRC_Y: &[u8] = b"GstVideoConverter.src-y\0";
 pub const GST_VIDEO_CONVERTER_OPT_THREADS: &[u8] = b"GstVideoConverter.threads\0";
+pub const GST_VIDEO_CONVERTER_OPT_USE_FASTPATHS: &[u8] = b"GstVideoConverter.use-fastpaths\0";
 pub const GST_VIDEO_DECODER_MAX_ERRORS: c_int = -1;
 pub const GST_VIDEO_DECODER_SINK_NAME: &[u8] = b"sink\0";
 pub const GST_VIDEO_DECODER_SRC_NAME: &[u8] = b"src\0";

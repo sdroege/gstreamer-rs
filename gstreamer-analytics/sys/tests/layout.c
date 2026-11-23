@@ -21,6 +21,7 @@ int main() {
     printf("%s;%zu;%zu\n", "GstAnalyticsMtdType", sizeof(GstAnalyticsMtdType), alignof(GstAnalyticsMtdType));
     printf("%s;%zu;%zu\n", "GstAnalyticsODMtd", sizeof(GstAnalyticsODMtd), alignof(GstAnalyticsODMtd));
     printf("%s;%zu;%zu\n", "GstAnalyticsOrientationMtd", sizeof(GstAnalyticsOrientationMtd), alignof(GstAnalyticsOrientationMtd));
+    printf("%s;%zu;%zu\n", "GstAnalyticsPropertiesMtd", sizeof(GstAnalyticsPropertiesMtd), alignof(GstAnalyticsPropertiesMtd));
     printf("%s;%zu;%zu\n", "GstAnalyticsRelTypes", sizeof(GstAnalyticsRelTypes), alignof(GstAnalyticsRelTypes));
     printf("%s;%zu;%zu\n", "GstAnalyticsRelationMetaInitParams", sizeof(GstAnalyticsRelationMetaInitParams), alignof(GstAnalyticsRelationMetaInitParams));
     printf("%s;%zu;%zu\n", "GstAnalyticsSegmentationMtd", sizeof(GstAnalyticsSegmentationMtd), alignof(GstAnalyticsSegmentationMtd));

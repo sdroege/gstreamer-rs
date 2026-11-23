@@ -300,6 +300,22 @@ impl ::std::fmt::Debug for GstAnalyticsOrientationMtd {
     }
 }
 
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstAnalyticsPropertiesMtd {
+    pub id: c_uint,
+    pub meta: *mut GstAnalyticsRelationMeta,
+}
+
+impl ::std::fmt::Debug for GstAnalyticsPropertiesMtd {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstAnalyticsPropertiesMtd @ {self:p}"))
+            .field("id", &self.id)
+            .field("meta", &self.meta)
+            .finish()
+    }
+}
+
 #[repr(C)]
 #[allow(dead_code)]
 pub struct _GstAnalyticsRelationMeta {
@@ -650,6 +666,27 @@ unsafe extern "C" {
         mins: *mut *mut c_double,
         maxs: *mut *mut c_double,
     ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_modelinfo_get_tensor_data_type(
+        modelinfo: *mut GstAnalyticsModelInfo,
+        tensor_name: *const c_char,
+        data_type: *mut GstTensorDataType,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_modelinfo_get_tensor_dims(
+        modelinfo: *mut GstAnalyticsModelInfo,
+        tensor_name: *const c_char,
+        num_dims: *mut size_t,
+        dims: *mut *mut c_int,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_modelinfo_get_tensor_names(
+        modelinfo: *mut GstAnalyticsModelInfo,
+        dir: GstAnalyticsModelInfoTensorDirection,
+    ) -> *mut *mut c_char;
     #[cfg(feature = "v1_28")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
     pub fn gst_analytics_modelinfo_get_version(
@@ -659,6 +696,11 @@ unsafe extern "C" {
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
     pub fn gst_analytics_modelinfo_load(
         model_filename: *const c_char,
+    ) -> *mut GstAnalyticsModelInfo;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_modelinfo_load_from_file(
+        filename: *const c_char,
     ) -> *mut GstAnalyticsModelInfo;
     #[cfg(feature = "v1_30")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
@@ -751,6 +793,73 @@ unsafe extern "C" {
     #[cfg(feature = "v1_30")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
     pub fn gst_analytics_orientation_mtd_get_mtd_type() -> GstAnalyticsMtdType;
+
+    //=========================================================================
+    // GstAnalyticsPropertiesMtd
+    //=========================================================================
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_properties_mtd_get_length(mtd: *const GstAnalyticsPropertiesMtd)
+    -> c_uint;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_properties_mtd_get_nth_key(
+        mtd: *const GstAnalyticsPropertiesMtd,
+        index: c_uint,
+    ) -> *const c_char;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_properties_mtd_get_string(
+        mtd: *const GstAnalyticsPropertiesMtd,
+        key: *const c_char,
+    ) -> *const c_char;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_properties_mtd_get_structure(
+        mtd: *const GstAnalyticsPropertiesMtd,
+    ) -> *const gst::GstStructure;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_properties_mtd_get_value(
+        mtd: *const GstAnalyticsPropertiesMtd,
+        key: *const c_char,
+    ) -> *const gobject::GValue;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_properties_mtd_has_key(
+        mtd: *const GstAnalyticsPropertiesMtd,
+        key: *const c_char,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_properties_mtd_remove_key(
+        mtd: *mut GstAnalyticsPropertiesMtd,
+        key: *const c_char,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_properties_mtd_set(
+        mtd: *mut GstAnalyticsPropertiesMtd,
+        first_key: *const c_char,
+        ...
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_properties_mtd_set_string(
+        mtd: *mut GstAnalyticsPropertiesMtd,
+        key: *const c_char,
+        value: *const c_char,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_properties_mtd_set_value(
+        mtd: *mut GstAnalyticsPropertiesMtd,
+        key: *const c_char,
+        value: *const gobject::GValue,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_properties_mtd_get_mtd_type() -> GstAnalyticsMtdType;
 
     //=========================================================================
     // GstAnalyticsRelationMeta
@@ -846,6 +955,12 @@ unsafe extern "C" {
         r: c_float,
         loc_conf_lvl: c_float,
         od_mtd: *mut GstAnalyticsODMtd,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_relation_meta_add_properties_mtd(
+        meta: *mut GstAnalyticsRelationMeta,
+        properties_mtd: *mut GstAnalyticsPropertiesMtd,
     ) -> gboolean;
     #[cfg(feature = "v1_26")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]
@@ -958,6 +1073,13 @@ unsafe extern "C" {
         meta: *mut GstAnalyticsRelationMeta,
         an_meta_id: c_uint,
         rlt: *mut GstAnalyticsOrientationMtd,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_analytics_relation_meta_get_properties_mtd(
+        meta: *mut GstAnalyticsRelationMeta,
+        an_meta_id: c_uint,
+        rlt: *mut GstAnalyticsPropertiesMtd,
     ) -> gboolean;
     pub fn gst_analytics_relation_meta_get_relation(
         meta: *const GstAnalyticsRelationMeta,

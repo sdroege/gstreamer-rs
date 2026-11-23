@@ -294,6 +294,13 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "GstAnalyticsPropertiesMtd",
+        Layout {
+            size: size_of::<GstAnalyticsPropertiesMtd>(),
+            alignment: align_of::<GstAnalyticsPropertiesMtd>(),
+        },
+    ),
+    (
         "GstAnalyticsRelTypes",
         Layout {
             size: size_of::<GstAnalyticsRelTypes>(),
