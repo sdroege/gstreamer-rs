@@ -519,4 +519,21 @@ impl VideoConverterConfig {
             .expect("Wrong type")
             .unwrap_or(1)
     }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn set_use_fastpaths(&mut self, v: bool) {
+        self.0
+            .set(glib::gstr!("GstVideoConverter.use-fastpaths"), v);
+    }
+
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "get_use_fastpaths")]
+    pub fn use_fastpaths(&self) -> bool {
+        self.0
+            .get_optional(glib::gstr!("GstVideoConverter.use-fastpaths"))
+            .expect("Wrong type")
+            .unwrap_or(true)
+    }
 }
