@@ -39,7 +39,7 @@ cargo install --locked cargo-nextest
 if [ "$RUST_VERSION" = "1.92.0" ]; then
     cargo install --locked cargo-c --version 0.10.19+cargo-0.93.0
 else
-    cargo install --locked cargo-c --version 0.10.26+cargo-0.100.0
+    cargo install --locked cargo-c --version 0.10.28+cargo-0.101.0
 fi
 
 if [ "$RUST_VERSION" = "nightly" ]; then
