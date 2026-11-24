@@ -111,7 +111,16 @@ mod tests {
         crate::init().unwrap();
 
         check_serialize!(crate::BinFlags::empty(), "\"\"");
-        check_serialize!(crate::BinFlags::all(), "\"no-resync+streams-aware\"");
+        cfg_if::cfg_if! {
+            if #[cfg(feature = "v1_30")] {
+                check_serialize!(
+                    crate::BinFlags::all(),
+                    "\"no-resync+streams-aware+no-auto-ghostpads\""
+                );
+            } else {
+                check_serialize!(crate::BinFlags::all(), "\"no-resync+streams-aware\"");
+            }
+        }
         check_serialize!(
             crate::BufferCopyFlags::all(),
             "\"flags+timestamps+meta+memory+merge+deep\""
@@ -298,11 +307,21 @@ mod tests {
         crate::init().unwrap();
 
         check_deserialize!(crate::BinFlags, crate::BinFlags::empty(), "\"\"");
-        check_deserialize!(
-            crate::BinFlags,
-            crate::BinFlags::all(),
-            "\"no-resync+streams-aware\""
-        );
+        cfg_if::cfg_if! {
+            if #[cfg(feature = "v1_30")] {
+                check_deserialize!(
+                    crate::BinFlags,
+                    crate::BinFlags::all(),
+                    "\"no-resync+streams-aware+no-auto-ghostpads\""
+                );
+            } else {
+                check_deserialize!(
+                    crate::BinFlags,
+                    crate::BinFlags::all(),
+                    "\"no-resync+streams-aware\""
+                );
+            }
+        }
         check_deserialize!(
             crate::BufferCopyFlags,
             crate::BufferCopyFlags::all(),
