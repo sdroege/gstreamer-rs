@@ -2,7 +2,44 @@
 
 use glib::translate::*;
 
-use crate::{HipEvent, ffi};
+use crate::{HipEvent, HipStream, ffi};
+
+#[doc(alias = "gst_hip_buffer_copy_bytes_into")]
+pub fn buffer_copy_bytes_into(
+    dest: &mut gst::BufferRef,
+    dest_offset: usize,
+    src: &gst::BufferRef,
+    src_offset: usize,
+    size: usize,
+) -> Result<(), glib::BoolError> {
+    skip_assert_initialized!();
+    buffer_copy_bytes_into_full(dest, dest_offset, src, src_offset, size, None)
+}
+
+#[doc(alias = "gst_hip_buffer_copy_bytes_into_full")]
+pub fn buffer_copy_bytes_into_full(
+    dest: &mut gst::BufferRef,
+    dest_offset: usize,
+    src: &gst::BufferRef,
+    src_offset: usize,
+    size: usize,
+    stream: Option<&HipStream>,
+) -> Result<(), glib::BoolError> {
+    skip_assert_initialized!();
+    unsafe {
+        glib::result_from_gboolean!(
+            ffi::gst_hip_buffer_copy_bytes_into_full(
+                dest.as_mut_ptr(),
+                dest_offset,
+                src.as_mut_ptr(),
+                src_offset,
+                size,
+                stream.to_glib_none().0
+            ),
+            "Failed to copy HIP buffer bytes"
+        )
+    }
+}
 
 #[doc(alias = "gst_hip_buffer_copy_into")]
 pub fn buffer_copy_into(

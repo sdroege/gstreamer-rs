@@ -3,7 +3,7 @@
 // from gst-gir-files (https://gitlab.freedesktop.org/gstreamer/gir-files-rs.git)
 // DO NOT EDIT
 
-use crate::{HipDevice, HipFormatSupport, HipStream, HipVendor, ffi};
+use crate::{HipDevice, HipFormatSupport, HipVendor, ffi};
 use glib::{prelude::*, translate::*};
 
 #[doc(alias = "gst_context_new_hip_device")]
@@ -12,48 +12,6 @@ pub fn context_new_hip_device(device: &impl IsA<HipDevice>) -> gst::Context {
     unsafe {
         from_glib_full(ffi::gst_context_new_hip_device(
             device.as_ref().to_glib_none().0,
-        ))
-    }
-}
-
-#[doc(alias = "gst_hip_buffer_copy_bytes_into")]
-pub fn hip_buffer_copy_bytes_into(
-    dest: &gst::Buffer,
-    dest_offset: usize,
-    src: &gst::Buffer,
-    src_offset: usize,
-    size: usize,
-) -> bool {
-    assert_initialized_main_thread!();
-    unsafe {
-        from_glib(ffi::gst_hip_buffer_copy_bytes_into(
-            dest.to_glib_none().0,
-            dest_offset,
-            src.to_glib_none().0,
-            src_offset,
-            size,
-        ))
-    }
-}
-
-#[doc(alias = "gst_hip_buffer_copy_bytes_into_full")]
-pub fn hip_buffer_copy_bytes_into_full(
-    dest: &gst::Buffer,
-    dest_offset: usize,
-    src: &gst::Buffer,
-    src_offset: usize,
-    size: usize,
-    stream: Option<&HipStream>,
-) -> bool {
-    assert_initialized_main_thread!();
-    unsafe {
-        from_glib(ffi::gst_hip_buffer_copy_bytes_into_full(
-            dest.to_glib_none().0,
-            dest_offset,
-            src.to_glib_none().0,
-            src_offset,
-            size,
-            stream.to_glib_none().0,
         ))
     }
 }

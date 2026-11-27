@@ -72,6 +72,14 @@ status = "generate"
     rename = "rtc_load_library"
 
     [[object.function]]
+    name = "hip_buffer_copy_bytes_into"
+    manual = true
+
+    [[object.function]]
+    name = "hip_buffer_copy_bytes_into_full"
+    manual = true
+
+    [[object.function]]
     name = "hip_buffer_copy_into"
     manual = true
 
