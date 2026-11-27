@@ -158,7 +158,6 @@ impl BuffersFormatConstructor for u64 {
 #[derive(PartialEq, Eq, PartialOrd, Ord, Hash, Clone, Copy, Debug, Default)]
 pub struct Bytes(u64);
 impl Bytes {
-    #[allow(non_upper_case_globals)]
     // rustdoc-stripper-ignore-next
     /// 1 kibibyte (1024).
     #[allow(non_upper_case_globals)]

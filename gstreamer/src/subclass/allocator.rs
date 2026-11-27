@@ -172,7 +172,6 @@ mod tests {
 
                     if (*mem).mem.parent.is_null() {
                         alloc::dealloc((*mem).data, (*mem).layout);
-                        ptr::drop_in_place(ptr::addr_of_mut!((*mem).layout));
                     }
                     alloc::dealloc(mem as *mut u8, LAYOUT);
                 }
