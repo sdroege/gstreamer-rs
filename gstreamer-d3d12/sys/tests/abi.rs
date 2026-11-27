@@ -447,6 +447,20 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
             alignment: align_of::<GstD3D12StagingMemory>(),
         },
     ),
+    (
+        "GstD3D12StagingPoolAllocator",
+        Layout {
+            size: size_of::<GstD3D12StagingPoolAllocator>(),
+            alignment: align_of::<GstD3D12StagingPoolAllocator>(),
+        },
+    ),
+    (
+        "GstD3D12StagingPoolAllocatorClass",
+        Layout {
+            size: size_of::<GstD3D12StagingPoolAllocatorClass>(),
+            alignment: align_of::<GstD3D12StagingPoolAllocatorClass>(),
+        },
+    ),
 ];
 
 const RUST_CONSTANTS: &[(&str, &str)] = &[
@@ -491,6 +505,10 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
     (
         "GST_D3D12_CONVERTER_OPT_PSO_SAMPLE_DESC_QUALITY",
         "GstD3D12Converter.pso-sample-desc-quality",
+    ),
+    (
+        "GST_D3D12_CONVERTER_OPT_RETAIN_INPUT_BUFFER",
+        "GstD3D12Converter.retain-input-buffer",
     ),
     (
         "GST_D3D12_CONVERTER_OPT_SAMPLER_FILTER",

@@ -43,5 +43,7 @@ int main() {
     printf("%s;%zu;%zu\n", "GstD3D12StagingBufferPool", sizeof(GstD3D12StagingBufferPool), alignof(GstD3D12StagingBufferPool));
     printf("%s;%zu;%zu\n", "GstD3D12StagingBufferPoolClass", sizeof(GstD3D12StagingBufferPoolClass), alignof(GstD3D12StagingBufferPoolClass));
     printf("%s;%zu;%zu\n", "GstD3D12StagingMemory", sizeof(GstD3D12StagingMemory), alignof(GstD3D12StagingMemory));
+    printf("%s;%zu;%zu\n", "GstD3D12StagingPoolAllocator", sizeof(GstD3D12StagingPoolAllocator), alignof(GstD3D12StagingPoolAllocator));
+    printf("%s;%zu;%zu\n", "GstD3D12StagingPoolAllocatorClass", sizeof(GstD3D12StagingPoolAllocatorClass), alignof(GstD3D12StagingPoolAllocatorClass));
     return 0;
 }

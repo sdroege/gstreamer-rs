@@ -69,6 +69,8 @@ pub const GST_D3D12_CONVERTER_OPT_PSO_SAMPLE_DESC_COUNT: &[u8] =
     b"GstD3D12Converter.pso-sample-desc-count\0";
 pub const GST_D3D12_CONVERTER_OPT_PSO_SAMPLE_DESC_QUALITY: &[u8] =
     b"GstD3D12Converter.pso-sample-desc-quality\0";
+pub const GST_D3D12_CONVERTER_OPT_RETAIN_INPUT_BUFFER: &[u8] =
+    b"GstD3D12Converter.retain-input-buffer\0";
 pub const GST_D3D12_CONVERTER_OPT_SAMPLER_FILTER: &[u8] = b"GstD3D12Converter.sampler-filter\0";
 pub const GST_D3D12_CONVERTER_OPT_SRC_ALPHA_MODE: &[u8] = b"GstD3D12Converter.src-alpha-mode\0";
 pub const GST_D3D12_DEVICE_HANDLE_CONTEXT_TYPE: &[u8] = b"gst.d3d12.device.handle\0";
@@ -443,13 +445,16 @@ pub type GstD3D12PoolAllocatorPrivate = _GstD3D12PoolAllocatorPrivate;
 #[repr(C)]
 pub struct GstD3D12StagingAllocatorClass {
     pub allocator_class: gst::GstAllocatorClass,
-    pub _gst_reserved: [gpointer; 20],
+    pub set_active:
+        Option<unsafe extern "C" fn(*mut GstD3D12StagingAllocator, gboolean) -> gboolean>,
+    pub _gst_reserved: [gpointer; 19],
 }
 
 impl ::std::fmt::Debug for GstD3D12StagingAllocatorClass {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstD3D12StagingAllocatorClass @ {self:p}"))
             .field("allocator_class", &self.allocator_class)
+            .field("set_active", &self.set_active)
             .finish()
     }
 }
@@ -512,6 +517,30 @@ pub struct _GstD3D12StagingMemoryPrivate {
 }
 
 pub type GstD3D12StagingMemoryPrivate = _GstD3D12StagingMemoryPrivate;
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstD3D12StagingPoolAllocatorClass {
+    pub parent_class: GstD3D12StagingAllocatorClass,
+    pub _gst_reserved: [gpointer; 4],
+}
+
+impl ::std::fmt::Debug for GstD3D12StagingPoolAllocatorClass {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstD3D12StagingPoolAllocatorClass @ {self:p}"))
+            .field("parent_class", &self.parent_class)
+            .finish()
+    }
+}
+
+#[repr(C)]
+#[allow(dead_code)]
+pub struct _GstD3D12StagingPoolAllocatorPrivate {
+    _data: [u8; 0],
+    _marker: core::marker::PhantomData<(*mut u8, core::marker::PhantomPinned)>,
+}
+
+pub type GstD3D12StagingPoolAllocatorPrivate = _GstD3D12StagingPoolAllocatorPrivate;
 
 // Classes
 #[derive(Copy, Clone)]
@@ -690,6 +719,24 @@ pub struct GstD3D12StagingBufferPool {
 impl ::std::fmt::Debug for GstD3D12StagingBufferPool {
     fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
         f.debug_struct(&format!("GstD3D12StagingBufferPool @ {self:p}"))
+            .field("parent", &self.parent)
+            .field("device", &self.device)
+            .finish()
+    }
+}
+
+#[derive(Copy, Clone)]
+#[repr(C)]
+pub struct GstD3D12StagingPoolAllocator {
+    pub parent: GstD3D12StagingAllocator,
+    pub device: *mut GstD3D12Device,
+    pub priv_: *mut GstD3D12StagingPoolAllocatorPrivate,
+    pub _gst_reserved: [gpointer; 4],
+}
+
+impl ::std::fmt::Debug for GstD3D12StagingPoolAllocator {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter) -> ::std::fmt::Result {
+        f.debug_struct(&format!("GstD3D12StagingPoolAllocator @ {self:p}"))
             .field("parent", &self.parent)
             .field("device", &self.device)
             .finish()
@@ -1088,6 +1135,12 @@ unsafe extern "C" {
         layouts: gconstpointer,
         total_bytes: size_t,
     ) -> *mut gst::GstMemory;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_d3d12_staging_allocator_set_active(
+        allocator: *mut GstD3D12StagingAllocator,
+        active: gboolean,
+    ) -> gboolean;
 
     //=========================================================================
     // GstD3D12StagingBufferPool
@@ -1102,6 +1155,27 @@ unsafe extern "C" {
     ) -> *mut gst::GstBufferPool;
 
     //=========================================================================
+    // GstD3D12StagingPoolAllocator
+    //=========================================================================
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_d3d12_staging_pool_allocator_get_type() -> GType;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_d3d12_staging_pool_allocator_new(
+        device: *mut GstD3D12Device,
+        num_layouts: c_uint,
+        layouts: gconstpointer,
+        total_bytes: size_t,
+    ) -> *mut GstD3D12StagingPoolAllocator;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_d3d12_staging_pool_allocator_acquire_memory(
+        allocator: *mut GstD3D12StagingPoolAllocator,
+        memory: *mut *mut gst::GstMemory,
+    ) -> gst::GstFlowReturn;
+
+    //=========================================================================
     // Other functions
     //=========================================================================
     pub fn gst_buffer_pool_config_get_d3d12_allocation_params(
@@ -1114,6 +1188,25 @@ unsafe extern "C" {
     pub fn gst_clear_d3d12_cmd_alloc(ca: *mut *mut GstD3D12CmdAlloc);
     pub fn gst_clear_d3d12_desc_heap(heap: *mut *mut GstD3D12DescHeap);
     pub fn gst_clear_d3d12_fence_data(data: *mut *mut GstD3D12FenceData);
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_d3d12_buffer_copy_bytes_into(
+        dest: *mut gst::GstBuffer,
+        dest_offset: size_t,
+        src: *mut gst::GstBuffer,
+        src_offset: size_t,
+        size: size_t,
+    ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_d3d12_buffer_copy_bytes_into_full(
+        dest: *mut gst::GstBuffer,
+        dest_offset: size_t,
+        src: *mut gst::GstBuffer,
+        src_offset: size_t,
+        size: size_t,
+        queue_type: c_int,
+    ) -> gboolean;
     pub fn gst_d3d12_buffer_copy_into(
         dest: *mut gst::GstBuffer,
         src: *mut gst::GstBuffer,
@@ -1191,6 +1284,11 @@ unsafe extern "C" {
         index: c_uint,
         layout: gpointer,
     ) -> gboolean;
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_d3d12_staging_memory_get_resource_handle(
+        mem: *mut GstD3D12StagingMemory,
+    ) -> gpointer;
     #[cfg(feature = "v1_28")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
     pub fn gst_d3d12_staging_memory_set_fence(
