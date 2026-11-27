@@ -66,6 +66,7 @@ int main() {
     printf("%s;%zu;%zu\n", "GstVideoColorVolumeTransformation", sizeof(GstVideoColorVolumeTransformation), alignof(GstVideoColorVolumeTransformation));
     printf("%s;%zu;%zu\n", "GstVideoColorimetry", sizeof(GstVideoColorimetry), alignof(GstVideoColorimetry));
     printf("%s;%zu;%zu\n", "GstVideoContentLightLevel", sizeof(GstVideoContentLightLevel), alignof(GstVideoContentLightLevel));
+    printf("%s;%zu;%zu\n", "GstVideoConvertScaleFixateFlags", sizeof(GstVideoConvertScaleFixateFlags), alignof(GstVideoConvertScaleFixateFlags));
     printf("%s;%zu;%zu\n", "GstVideoCropMeta", sizeof(GstVideoCropMeta), alignof(GstVideoCropMeta));
     printf("%s;%zu;%zu\n", "GstVideoDSCInitializationMeta", sizeof(GstVideoDSCInitializationMeta), alignof(GstVideoDSCInitializationMeta));
     printf("%s;%zu;%zu\n", "GstVideoDSCSelectionMeta", sizeof(GstVideoDSCSelectionMeta), alignof(GstVideoDSCSelectionMeta));

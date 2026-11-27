@@ -771,6 +771,13 @@ pub const GST_VIDEO_CODEC_FRAME_FLAG_FORCE_KEYFRAME_HEADERS: GstVideoCodecFrameF
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_20")))]
 pub const GST_VIDEO_CODEC_FRAME_FLAG_CORRUPTED: GstVideoCodecFrameFlags = 16;
 
+pub type GstVideoConvertScaleFixateFlags = c_uint;
+pub const GST_VIDEO_CONVERTSCALE_FIXATE_FLAG_NONE: GstVideoConvertScaleFixateFlags = 0;
+pub const GST_VIDEO_CONVERTSCALE_FIXATE_FLAG_FORMAT: GstVideoConvertScaleFixateFlags = 1;
+pub const GST_VIDEO_CONVERTSCALE_FIXATE_FLAG_SIZE: GstVideoConvertScaleFixateFlags = 2;
+pub const GST_VIDEO_CONVERTSCALE_FIXATE_FLAG_DEFAULT_COLORIMETRY: GstVideoConvertScaleFixateFlags =
+    4;
+
 pub type GstVideoDecoderRequestSyncPointFlags = c_uint;
 pub const GST_VIDEO_DECODER_REQUEST_SYNC_POINT_DISCARD_INPUT: GstVideoDecoderRequestSyncPointFlags =
     1;
@@ -891,6 +898,16 @@ pub type GstVideoAffineTransformationGetMatrix =
     Option<unsafe extern "C" fn(*mut GstVideoAffineTransformationMeta, *mut c_float) -> gboolean>;
 pub type GstVideoConvertSampleCallback =
     Option<unsafe extern "C" fn(*mut gst::GstSample, *mut glib::GError, gpointer)>;
+pub type GstVideoConvertScaleFormatLossFunc = Option<
+    unsafe extern "C" fn(
+        *mut gst::GstObject,
+        *const GstVideoFormatInfo,
+        *const GstVideoFormatInfo,
+        *const gst::GstCapsFeatures,
+        *const gst::GstStructure,
+        *mut gst::GstStructure,
+    ) -> c_int,
+>;
 pub type GstVideoDmabufSyncHandlerReleaseBuffer = Option<unsafe extern "C" fn(gpointer, gpointer)>;
 pub type GstVideoFormatPack = Option<
     unsafe extern "C" fn(
@@ -5506,6 +5523,17 @@ unsafe extern "C" {
         user_data: gpointer,
         destroy_notify: glib::GDestroyNotify,
     );
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    pub fn gst_video_convertscale_fixate_caps(
+        object: *mut gst::GstObject,
+        direction: gst::GstPadDirection,
+        orientation: GstVideoOrientationMethod,
+        format_loss: GstVideoConvertScaleFormatLossFunc,
+        flags: GstVideoConvertScaleFixateFlags,
+        caps: *mut gst::GstCaps,
+        othercaps: *mut gst::GstCaps,
+    ) -> *mut gst::GstCaps;
     pub fn gst_video_crop_meta_api_get_type() -> GType;
     #[cfg(feature = "v1_26")]
     #[cfg_attr(docsrs, doc(cfg(feature = "v1_26")))]

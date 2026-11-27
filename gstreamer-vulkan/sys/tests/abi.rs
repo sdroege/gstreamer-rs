@@ -511,13 +511,6 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
-        "GstVulkanTimelineSemaphore",
-        Layout {
-            size: size_of::<GstVulkanTimelineSemaphore>(),
-            alignment: align_of::<GstVulkanTimelineSemaphore>(),
-        },
-    ),
-    (
         "GstVulkanTrash",
         Layout {
             size: size_of::<GstVulkanTrash>(),
@@ -583,6 +576,10 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
 ];
 
 const RUST_CONSTANTS: &[(&str, &str)] = &[
+    (
+        "GST_BUFFER_POOL_OPTION_VULKAN_IMAGE_FORCE_MULTIPLANAR_YUV",
+        "GstBufferPoolOptionVulkanImageForceMultiplanarYUV",
+    ),
     (
         "GST_BUFFER_POOL_OPTION_VULKAN_IMAGE_MULTIPLANAR_YUV",
         "GstBufferPoolOptionVulkanImageMultiplanarYUV",

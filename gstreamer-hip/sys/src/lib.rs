@@ -947,6 +947,21 @@ unsafe extern "C" {
     pub fn gst_clear_hip_graphics_resource(resource: *mut *mut GstHipGraphicsResource);
     pub fn gst_clear_hip_stream(stream: *mut *mut GstHipStream);
     pub fn gst_context_new_hip_device(device: *mut GstHipDevice) -> *mut gst::GstContext;
+    pub fn gst_hip_buffer_copy_bytes_into(
+        dest: *mut gst::GstBuffer,
+        dest_offset: size_t,
+        src: *mut gst::GstBuffer,
+        src_offset: size_t,
+        size: size_t,
+    ) -> gboolean;
+    pub fn gst_hip_buffer_copy_bytes_into_full(
+        dest: *mut gst::GstBuffer,
+        dest_offset: size_t,
+        src: *mut gst::GstBuffer,
+        src_offset: size_t,
+        size: size_t,
+        stream: *mut GstHipStream,
+    ) -> gboolean;
     pub fn gst_hip_buffer_copy_into(
         dest: *mut gst::GstBuffer,
         src: *mut gst::GstBuffer,

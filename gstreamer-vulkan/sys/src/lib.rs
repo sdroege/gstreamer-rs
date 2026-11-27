@@ -86,6 +86,8 @@ pub const GST_VULKAN_WINDOW_ERROR_OLD_LIBS: GstVulkanWindowError = 1;
 pub const GST_VULKAN_WINDOW_ERROR_RESOURCE_UNAVAILABLE: GstVulkanWindowError = 2;
 
 // Constants
+pub const GST_BUFFER_POOL_OPTION_VULKAN_IMAGE_FORCE_MULTIPLANAR_YUV: &[u8] =
+    b"GstBufferPoolOptionVulkanImageForceMultiplanarYUV\0";
 pub const GST_BUFFER_POOL_OPTION_VULKAN_IMAGE_MULTIPLANAR_YUV: &[u8] =
     b"GstBufferPoolOptionVulkanImageMultiplanarYUV\0";
 pub const GST_CAPS_FEATURE_MEMORY_VULKAN_BUFFER: &[u8] = b"memory:VulkanBuffer\0";
@@ -832,14 +834,13 @@ pub struct _GstVulkanSwapperPrivate {
 
 pub type GstVulkanSwapperPrivate = _GstVulkanSwapperPrivate;
 
-#[derive(Copy, Clone)]
 #[repr(C)]
+#[allow(dead_code)]
 pub struct GstVulkanTimelineSemaphore {
     pub parent: gst::GstMiniObject,
     pub semaphore: *mut GstVulkanHandle,
-    pub lock: glib::GMutex,
-    pub value: u64,
-    pub _reserved: [gpointer; 4],
+    _truncated_record_marker: c_void,
+    // /*Ignored*/field export_handle_types has incomplete type
 }
 
 impl ::std::fmt::Debug for GstVulkanTimelineSemaphore {

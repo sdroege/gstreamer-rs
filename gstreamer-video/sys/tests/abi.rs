@@ -609,6 +609,13 @@ const RUST_LAYOUTS: &[(&str, Layout)] = &[
         },
     ),
     (
+        "GstVideoConvertScaleFixateFlags",
+        Layout {
+            size: size_of::<GstVideoConvertScaleFixateFlags>(),
+            alignment: align_of::<GstVideoConvertScaleFixateFlags>(),
+        },
+    ),
+    (
         "GstVideoCropMeta",
         Layout {
             size: size_of::<GstVideoCropMeta>(),
@@ -1415,6 +1422,13 @@ const RUST_CONSTANTS: &[(&str, &str)] = &[
         "GST_VIDEO_CONVERTER_OPT_USE_FASTPATHS",
         "GstVideoConverter.use-fastpaths",
     ),
+    (
+        "(guint) GST_VIDEO_CONVERTSCALE_FIXATE_FLAG_DEFAULT_COLORIMETRY",
+        "4",
+    ),
+    ("(guint) GST_VIDEO_CONVERTSCALE_FIXATE_FLAG_FORMAT", "1"),
+    ("(guint) GST_VIDEO_CONVERTSCALE_FIXATE_FLAG_NONE", "0"),
+    ("(guint) GST_VIDEO_CONVERTSCALE_FIXATE_FLAG_SIZE", "2"),
     ("GST_VIDEO_DECODER_MAX_ERRORS", "-1"),
     (
         "(guint) GST_VIDEO_DECODER_REQUEST_SYNC_POINT_CORRUPT_OUTPUT",

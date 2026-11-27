@@ -52,7 +52,6 @@ int main() {
     printf("%s;%zu;%zu\n", "GstVulkanQueueFamilyOps", sizeof(GstVulkanQueueFamilyOps), alignof(GstVulkanQueueFamilyOps));
     printf("%s;%zu;%zu\n", "GstVulkanSwapper", sizeof(GstVulkanSwapper), alignof(GstVulkanSwapper));
     printf("%s;%zu;%zu\n", "GstVulkanSwapperClass", sizeof(GstVulkanSwapperClass), alignof(GstVulkanSwapperClass));
-    printf("%s;%zu;%zu\n", "GstVulkanTimelineSemaphore", sizeof(GstVulkanTimelineSemaphore), alignof(GstVulkanTimelineSemaphore));
     printf("%s;%zu;%zu\n", "GstVulkanTrash", sizeof(GstVulkanTrash), alignof(GstVulkanTrash));
     printf("%s;%zu;%zu\n", "GstVulkanTrashFenceListClass", sizeof(GstVulkanTrashFenceListClass), alignof(GstVulkanTrashFenceListClass));
     printf("%s;%zu;%zu\n", "GstVulkanTrashList", sizeof(GstVulkanTrashList), alignof(GstVulkanTrashList));
