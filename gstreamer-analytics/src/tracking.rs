@@ -118,7 +118,12 @@ mod tests {
     fn tracking() {
         gst::init().unwrap();
 
-        assert_eq!(AnalyticsTrackingMtd::type_name(), "object-tracking");
+        // Renamed the type from "object-tracking" to "tracking" in 1.30.
+        let type_name = AnalyticsTrackingMtd::type_name();
+        assert!(
+            matches!(type_name, "tracking" | "object-tracking"),
+            "Unexpected tracking metadata type name: {type_name}"
+        );
 
         let mut buf = gst::Buffer::new();
         let mut meta = AnalyticsRelationMeta::add(buf.make_mut());

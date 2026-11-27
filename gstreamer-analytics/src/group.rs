@@ -333,7 +333,7 @@ mod tests {
         gst::init().unwrap();
 
         let type_name = AnalyticsGroupMtd::type_name();
-        assert_eq!(type_name, "grouping-mtd");
+        assert_eq!(type_name, "group");
 
         let mut buf = gst::Buffer::new();
         let mut meta = AnalyticsRelationMeta::add(buf.make_mut());

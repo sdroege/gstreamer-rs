@@ -178,7 +178,7 @@ mod tests {
         gst::init().unwrap();
 
         let type_name = AnalyticsKeypointMtd::type_name();
-        assert_eq!(type_name, "keypoint-mtd");
+        assert_eq!(type_name, "keypoint");
 
         let mut buf = gst::Buffer::new();
         let mut meta = AnalyticsRelationMeta::add(buf.make_mut());
