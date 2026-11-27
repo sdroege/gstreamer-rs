@@ -30,6 +30,20 @@ pub use self::d3d12_fence_data_pool::D3D12FenceDataPool;
 mod d3d12_pool_allocator;
 pub use self::d3d12_pool_allocator::D3D12PoolAllocator;
 
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+mod d3d12_staging_allocator;
+#[cfg(feature = "v1_28")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+pub use self::d3d12_staging_allocator::D3D12StagingAllocator;
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+mod d3d12_staging_pool_allocator;
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+pub use self::d3d12_staging_pool_allocator::D3D12StagingPoolAllocator;
+
 mod d3d12_allocation_params;
 pub use self::d3d12_allocation_params::D3D12AllocationParams;
 
@@ -60,4 +74,7 @@ pub(crate) mod traits {
     pub use super::d3d12_desc_heap_pool::D3D12DescHeapPoolExt;
     pub use super::d3d12_device::D3D12DeviceExt;
     pub use super::d3d12_fence_data_pool::D3D12FenceDataPoolExt;
+    #[cfg(feature = "v1_28")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
+    pub use super::d3d12_staging_allocator::D3D12StagingAllocatorExt;
 }

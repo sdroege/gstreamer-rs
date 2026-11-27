@@ -231,3 +231,26 @@ status = "generate"
     [[object.function]]
     name = "acquire_memory"
     manual = true
+
+[[object]]
+name = "GstD3D12.D3D12StagingAllocator"
+status = "generate"
+    [[object.function]]
+    name = "alloc"
+    ignore = true
+
+    [[object.function]]
+    name = "set_active"
+        [object.function.return]
+        bool_return_is_error = "Failed to set the D3D12 staging allocator active state"
+
+[[object]]
+name = "GstD3D12.D3D12StagingPoolAllocator"
+status = "generate"
+    [[object.function]]
+    name = "new"
+    manual = true
+
+    [[object.function]]
+    name = "acquire_memory"
+    manual = true

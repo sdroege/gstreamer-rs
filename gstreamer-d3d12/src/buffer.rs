@@ -49,6 +49,58 @@ pub fn buffer_copy_into_full(
     }
 }
 
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+#[doc(alias = "gst_d3d12_buffer_copy_bytes_into")]
+pub fn buffer_copy_bytes_into(
+    dest: &mut gst::BufferRef,
+    dest_offset: usize,
+    src: &gst::BufferRef,
+    src_offset: usize,
+    size: usize,
+) -> Result<(), glib::BoolError> {
+    skip_assert_initialized!();
+    unsafe {
+        glib::result_from_gboolean!(
+            ffi::gst_d3d12_buffer_copy_bytes_into(
+                dest.as_mut_ptr(),
+                dest_offset,
+                src.as_mut_ptr(),
+                src_offset,
+                size,
+            ),
+            "Failed to copy D3D12 buffer bytes"
+        )
+    }
+}
+
+#[cfg(feature = "v1_30")]
+#[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+#[doc(alias = "gst_d3d12_buffer_copy_bytes_into_full")]
+pub fn buffer_copy_bytes_into_full(
+    dest: &mut gst::BufferRef,
+    dest_offset: usize,
+    src: &gst::BufferRef,
+    src_offset: usize,
+    size: usize,
+    queue_type: D3D12_COMMAND_LIST_TYPE,
+) -> Result<(), glib::BoolError> {
+    skip_assert_initialized!();
+    unsafe {
+        glib::result_from_gboolean!(
+            ffi::gst_d3d12_buffer_copy_bytes_into_full(
+                dest.as_mut_ptr(),
+                dest_offset,
+                src.as_mut_ptr(),
+                src_offset,
+                size,
+                queue_type.0,
+            ),
+            "Failed to copy D3D12 buffer bytes"
+        )
+    }
+}
+
 #[doc(alias = "gst_d3d12_buffer_set_fence")]
 pub fn buffer_set_fence(
     buffer: &mut gst::BufferRef,

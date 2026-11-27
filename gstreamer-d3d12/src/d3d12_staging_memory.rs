@@ -92,6 +92,17 @@ impl D3D12StagingMemoryRef {
         unsafe { from_glib_none(self.0.device) }
     }
 
+    #[cfg(feature = "v1_30")]
+    #[cfg_attr(docsrs, doc(cfg(feature = "v1_30")))]
+    #[doc(alias = "gst_d3d12_staging_memory_get_resource_handle")]
+    #[doc(alias = "get_resource_handle")]
+    pub fn resource_handle(&self) -> ID3D12Resource {
+        unsafe {
+            let raw = ffi::gst_d3d12_staging_memory_get_resource_handle(mut_override(&self.0));
+            ID3D12Resource::from_raw_borrowed(&raw).unwrap().clone()
+        }
+    }
+
     #[inline]
     pub fn map_readable_d3d12(
         &self,

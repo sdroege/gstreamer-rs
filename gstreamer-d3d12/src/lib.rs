@@ -50,6 +50,8 @@ mod d3d12_staging_memory;
 #[cfg(feature = "v1_28")]
 #[cfg_attr(docsrs, doc(cfg(feature = "v1_28")))]
 pub use crate::d3d12_staging_memory::*;
+#[cfg(feature = "v1_30")]
+mod d3d12_staging_pool_allocator;
 
 pub mod prelude {
     #[doc(hidden)]
